@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+
+__FOR_PARENTS__ = {
+    'hudson.plugins.git.UserRemoteConfig',
+}
+
+__SUBSTITUTES__ = {
+    'url': 'url__up__',
+}
