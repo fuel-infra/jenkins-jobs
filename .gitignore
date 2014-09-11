@@ -1,3 +1,7 @@
 *.pyc
 utils/jobsdump/xml_cache
 utils/jobsdump/yaml
+jenkins_job.ini
+*.*~
+\#*.*\#
+.tox

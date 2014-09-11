@@ -1,0 +1,15 @@
+# Jenkins Master plugins required to run jobs
+
+- plugin:
+    id: git
+    description: Git Plugin
+    url: https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin
+    version:  2.2.5
+
+- plugin:
+    id: gerrit-trigger
+    description: Gerrit Trigger Plugin
+    url: https://wiki.jenkins-ci.org/display/JENKINS/Gerrit+Trigger
+    version: 2.11.1
+
+# Any other Jenkins Master data

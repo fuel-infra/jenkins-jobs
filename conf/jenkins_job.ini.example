@@ -1,0 +1,8 @@
+[jenkins]
+user=my_username
+password=my_secret_password
+url=https://my.jenkins.com/
+
+[job_builder]
+ignore_cache=True
+keep_descriptions=False

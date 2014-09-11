@@ -1,0 +1,14 @@
+- job-template:
+    name: 'tox-verify-{name}'
+    concurrent: true
+
+    builders:
+      - shell: 'tox -v'
+
+    scm:
+      - main:
+          name: '{reponame}'
+
+    triggers:
+      - main:
+          project-name: '{reponame}'

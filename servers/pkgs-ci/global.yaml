@@ -1,0 +1,27 @@
+- defaults:
+    name: global
+    description: 'Do not edit this job through the web!'
+    project-type: freestyle
+
+
+- scm:
+    name: main
+    scm:
+      - git:
+         url: ssh://jenkins@review.fuel-infra.org:29418/{name}.git
+         branches:
+          - origin/master
+
+- trigger:
+    name: main
+    triggers:
+      - gerrit:
+          server-name: 'main'
+          silent: false
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: '{project-name}'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '**'
+
