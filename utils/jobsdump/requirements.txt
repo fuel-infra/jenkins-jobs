@@ -1,2 +1,2 @@
-jenkins
+python-jenkins
 PyYAML
