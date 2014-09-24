@@ -2,4 +2,6 @@
     name: 'jenkins-jobs'
     reponame: 'fuel-infra/jenkins-jobs'
     jobs:
-      - 'tox-verify-{name}'
+      - 'tox-verify-{name}':
+              node: 'tox'
+

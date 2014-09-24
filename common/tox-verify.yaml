@@ -1,5 +1,6 @@
 - job-template:
     name: 'tox-verify-{name}'
+    node: '{node}'
     concurrent: true
 
     builders:
