@@ -12,4 +12,10 @@
     url: https://wiki.jenkins-ci.org/display/JENKINS/Gerrit+Trigger
     version: 2.11.1
 
+- plugin:
+    id: description-setter
+    description: Description Setter Plugin
+    url: https://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin
+    version: 1.9
+
 # Any other Jenkins Master data

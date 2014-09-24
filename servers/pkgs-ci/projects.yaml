@@ -5,3 +5,9 @@
       - 'tox-verify-{name}':
               node: 'tox'
 
+- project:
+    name: 'centos'
+    jobs:
+      - 'mirror-local-{name}':
+              node: 'mirror'
+
