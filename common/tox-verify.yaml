@@ -2,14 +2,21 @@
     name: 'tox-verify-{name}'
     node: '{node}'
     concurrent: true
+    reponame: '{reponame}'
 
     builders:
       - shell: 'tox -v'
 
     scm:
       - main:
-          name: '{reponame}'
+          reponame: '{reponame}'
+          repobranch: '$GERRIT_BRANCH'
 
     triggers:
       - main:
           project-name: '{reponame}'
+
+    publishers:
+      - archive:
+          artifacts: '**/test_output/*'
+          allow-empty: 'true'

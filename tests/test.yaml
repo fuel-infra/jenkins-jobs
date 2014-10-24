@@ -1,0 +1,22 @@
+- scm:
+    name: main
+    scm:
+      - git:
+         url: 'ssh://my.url/{reponame}.git'
+         branches:
+          - '{repobranch}'
+
+- job-template:
+    name: 'job-{name}'
+    scm:
+      - main:
+          reponame: '{reponame}'
+          repobranch: '{repobranch}'
+
+- project:
+    name: 'my-project'
+    reponame: 'my-project/my-repo'
+    jobs:
+      - 'job-{name}':
+          repobranch: 'my-branch'
+

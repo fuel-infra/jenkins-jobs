@@ -6,7 +6,8 @@
 
     scm:
       - main:
-          name: 'infra/mirrors'
+          reponame: 'infra/mirrors'
+          repobranch: 'origin/master'
 
     builders:
       - shell: 'bash -x mirror_update.sh {name}'
@@ -15,22 +16,3 @@
     publishers:
       - description-setter:
           regexp: "^Synced.*a href.*"
-
-- job-template:
-    name: 'mirror-local-{name}-freeze'
-    node: '{node}'
-
-    parameters:
-      - string:
-          name: VERSION
-          description: "Version to freeze"
-
-    concurrent: false
-
-    builders:
-      - mirror-freeze
-
-    publishers:
-      - description-setter:
-          regexp: "Freezed.*a href.*"
-
