@@ -20,3 +20,16 @@
       - 'job-{name}':
           repobranch: 'my-branch'
 
+- project:
+    name: systemtest
+    jobs:
+      - '{version-id}.{id}.{dist}.{testgroup}':
+           version-id: '5.1.1'
+           id: 'staging'
+           dist: 'centos'
+           testgroup: 'setup'
+           node: 'systest'
+           repobranch: 'origin/stable/5.1'
+           timeout: '300'
+           description: 'smth'
+

@@ -1,0 +1,71 @@
+
+- job-template:
+    # Variables required:
+    # 
+    # version-id
+    # id
+    # dist
+    # testgroup
+    # description
+    # node
+    # timeout
+    # repobranch
+
+    name: '{version-id}.{id}.{dist}.{testgroup}'
+    block-downstream: false
+    block-upstream: false
+    builders:
+    - shell:
+        !include-raw-escape 'scripts/run_system_test.sh'
+    canRoam: false
+    concurrent: true
+    description: '{description}'
+    disabled: false
+    keepDependencies: false
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+    node: '{node}'
+
+    parameters:
+    - string:
+        name: MAGNET_LINK
+        description: "iso magnet link"
+    - string:
+        name: OPENSTACK_RELEASE
+        default: '{dist}'
+        description: Base distribution
+    - string:
+        name: TEST_GROUP
+        default: '{testgroup}'
+    - string:
+        name: ENV_PREFIX
+        default: '{version-id}.{id}.{dist}.{testgroup}'
+
+    properties:
+    - heavy-job:
+        weight: 8
+
+    publishers:
+    - archive:
+        allowEmptyArchive: true
+        artifacts: '**/nosetests.xml,logs/*'
+        latestOnly: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+
+    scm:
+    - main-git:
+        reponame: 'fuel-main'
+        repobranch: '{repobranch}'
+        
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        writingDescription: false
+    - ansicolor:
+        colormap: xterm

@@ -1,0 +1,13 @@
+- defaults:
+    name: global
+    description: 'Do not edit this job through the web!'
+    project-type: freestyle
+
+- scm:
+    name: main-git
+    scm:
+      - git:
+         url: 'https://github.com/stackforge/{reponame}.git'
+         branches:
+          - '{repobranch}'
+
