@@ -1,0 +1,121 @@
+- job-template:
+    name: '{name}.test_staging_mirror'
+    disabled: true
+    description: |
+      1. Build custom ISO based on mirror candidate.<br><br>
+      2. Run tests for Fuel mirrors candidate builded by<br>
+      <b><a href="/job/{name}.build_staging_mirror/">{name}.build_staging_mirror</a></b>.<br><br>
+      3. Update symlink pointed to last stable version of mirrors if tests successfull.<br><br>
+      See build description of last successful build here or for <b><a href="/job/{name}.set_stable_mirror/">{name}.set_stable_mirror</a></b>
+      for information about last stable mirror version.<br><br>
+      Documentation about mirror staging:<br><br>
+      <a href="https://mirantis.jira.com/wiki/pages/viewpage.action?pageId=176655477">How Fuel staging Fuel Mirrors works</a>,<br>
+      <a href="https://docs.google.com/a/mirantis.com/document/d/1yrOQMOgmzcY8FxXlGLg6v_Um5Sni6snQg5BA4V24mbE/edit#heading=h.mqzzk07485lc">How mirror staging works</a>.<br><br>
+      If you have any questions, contact Devops or OSCI teams via #fuel-devops and #fuel-osci IRC chats.<br>
+    concurrent: true
+    node: mirror
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: FUEL_MAIN_BRANCH
+          default: master
+      - string:
+          name: MIRROR
+          default: '{name}'
+          description: |
+            Autodetected for <b>stable/*</b> branch independent of specified value. 
+            Otherwise specify it. For example: <b>{name}</b>
+      - string:
+          name: MIRROR_VERSION
+          description: "5.1-2014-08-26-115618"
+    builders:
+      - shell:
+          !include-raw-escape builders/test_staging_mirror_1.sh
+      - multijob:
+          name: ISO Building
+          condition: SUCCESSFUL
+          projects:
+            - name: '{name}.staging.iso'
+              kill-phase-on: FAILURE
+              property-file: mirror-staging.txt
+      - copyartifact:
+          project: '{name}.staging.iso'
+          filter: artifacts/magnet_link.txt
+          which-build: last-successful
+      - multijob:
+          name: ISO Testing
+          condition: SUCCESSFUL
+          projects:
+            - name: '{name}.staging.centos.bvt_1'
+              kill-phase-on: FAILURE
+              property-file: mirror-staging.txt
+              current-parameters: true
+            - name: '{name}.staging.ubuntu.bvt_2'
+              kill-phase-on: FAILURE
+              property-file: mirror-staging.txt
+              current-parameters: true
+      - multijob:
+          name: Updating Mirrors stable symlink
+          condition: SUCCESSFUL
+          projects:
+            - name: '{name}.set_stable_mirror'
+              kill-phase-on: FAILURE
+              property-file: mirror-staging.txt
+      - copyartifact:
+          project: '{name}.set_stable_mirror'
+          filter: build_description.txt
+          which-build: last-successful
+      - shell:
+          !include-raw-escape builders/test_staging_mirror_2.sh
+    publishers:
+      - description-setter:
+          regexp: (^[^\s]* is stable.*a href.*)
+          set-for-matrix: false
+      - email-ext:
+          attach-build-log: false
+          body: $DEFAULT_CONTENT
+          compressBuildLog: false
+          configuredTriggers:
+            failure:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            fixed:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            still-failing:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            success:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+          ctype: default
+          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
+          reply-to: $DEFAULT_REPLYTO
+          saveOutput: false
+          subject: $DEFAULT_SUBJECT  

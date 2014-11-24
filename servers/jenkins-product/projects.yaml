@@ -1,0 +1,15 @@
+- project:
+    name: 6.1
+    jobs:
+      - '{name}.all'
+      - '{name}.build_staging_mirror'
+      - '{name}.centos.bvt_1'
+      - '{name}.set_stable_mirror'
+      - '{name}.staging.centos.bvt_1'
+      - '{name}.staging.iso'
+      - '{name}.staging.ubuntu.bvt_2'
+      - '{name}.test_staging_mirror'
+      - '{name}.ubuntu.bvt_2'
+
+- job-group:
+    name: '{name}.swarm'

@@ -1,0 +1,108 @@
+- job-template:
+    name: '{name}.staging.iso'
+    disabled: true
+    builders:
+      - shell:
+          !include-raw-escape builders/staging.iso.sh
+    concurrent: true
+    description: |
+      Build fuel master code on top of staging files/{name}-timestamp Fuel mirror.
+      <p>This ISO is used only to test staging mirror.<p>
+      For "official" {name} iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/{name}.all/">{name}.all</a>"
+    logrotate:
+      artifactDaysToKeep: 90
+      artifactNumToKeep: -1
+      daysToKeep: 90
+      numToKeep: -1
+    node: iso
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            string: iso_builds
+          configVersion: 1
+          enabled: true
+          max-per-node: 1
+          maxConcurrentTotal: 0
+          option: category
+    parameters:
+      - string:
+          default: none
+          name: USE_MIRROR
+    publishers:
+      - archive:
+          allowEmptyArchive: false
+          artifacts: artifacts/*txt, artifacts/*changelog
+          latestOnly: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+      - email-ext:
+          attach-build-log: false
+          body: $DEFAULT_CONTENT
+          compressBuildLog: false
+          configuredTriggers:
+            failure:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            fixed:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            still-failing:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            success:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+          ctype: default
+          recipients: devops+alert@mirantis.com, fuel-osci@mirantis.com
+          reply-to: $DEFAULT_REPLYTO
+          saveOutput: false
+          subject: $DEFAULT_SUBJECT
+    scm:
+      - git:
+          branches:
+            - origin/master
+          clean: false
+          configVersion: 2
+          disable-submodules: false
+          doGenerateSubmoduleConfigurations: false
+          fastpoll: false
+          git-tool: Default
+          ignore-notify: false
+          prune: false
+          recursive-submodules: false
+          remotes:
+            - github:
+                url: $FUELMAIN_REPO
+          skip-tag: false
+          use-author: false
+          wipe-workspace: true
+    wrappers:
+      - ansicolor:
+          colormap: xterm

@@ -1,0 +1,115 @@
+- job-template:
+    name: '{name}.set_stable_mirror'
+    disabled: true
+    builders:
+      - shell:
+          !include-raw-escape builders/set_stable_mirror.sh
+    description: |
+      Update stable symlink target to specified mirror version.<br>
+      If you have any questions, contact OSCI team via #fuel-osci IRC chat.
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 45
+      numToKeep: 100
+    node: mirror
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            string: iso_builds
+          configVersion: 1
+          enabled: false
+          max-per-node: 1
+          maxConcurrentTotal: 0
+          option: category
+    parameters:
+      - text:
+          default: |
+            osci-mirror-kha.kha.mirantis.net
+            osci-mirror-msk.msk.mirantis.net
+            osci-mirror-srt.srt.mirantis.net
+            seed-us1.fuel-infra.org
+            seed-cz1.fuel-infra.org
+          name: RSYNCHOSTS
+      - string:
+          default: 6.0-staging
+          name: STABLE_VERSION
+    publishers:
+      - archive:
+          allowEmptyArchive: false
+          artifacts: build_description.txt
+          latestOnly: false
+      - description-setter:
+          regexp: ^[^\s]* is stable.*a href.*
+          set-for-matrix: false
+      - trigger:
+          project: 6.0.iso
+          threshold: SUCCESS
+      - email-ext:
+          attach-build-log: false
+          body: $DEFAULT_CONTENT
+          compressBuildLog: false
+          configuredTriggers:
+            failure:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            fixed:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            still-failing:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            success:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+          ctype: default
+          recipients: devops+alert@mirantis.com, fuel-osci@mirantis.com
+          reply-to: $DEFAULT_REPLYTO
+          saveOutput: false
+          subject: $DEFAULT_SUBJECT
+    scm:
+      - git:
+          basedir: osci-mirrors
+          branches:
+            - '**'
+          clean: false
+          configVersion: 2
+          disable-submodules: false
+          doGenerateSubmoduleConfigurations: false
+          fastpoll: false
+          git-tool: Default
+          ignore-notify: false
+          prune: false
+          recursive-submodules: false
+          remotes:
+            - review.fuel-infra.org:
+                url: https://review.fuel-infra.org/infra/mirrors
+          skip-tag: false
+          use-author: false
+          wipe-workspace: false

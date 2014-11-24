@@ -18,4 +18,33 @@
     url: https://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin
     version: 1.9
 
+- plugin:
+    id: build-timeout
+    description: Jenkins build timeout plugin
+    url: http://wiki.jenkins-ci.org/display/JENKINS/Build-timeout+Plugin
+    version: 1.12.2
+
+- plugin:
+    id: heavy-job
+    description: This plugin allows you to define "weight" on each job
+    url: https://wiki.jenkins-ci.org/display/JENKINS/Heavy+Job+Plugin
+    version: 1.1
+
+- plugin:
+    id: copyartifact
+    description: Adds a build step to copy artifacts from another project.
+    url: http://wiki.jenkins-ci.org/display/JENKINS/Copy+Artifact+Plugin
+    version: 1.27
+
+- plugin:
+    id: jenkins-multijob-plugin
+    description: This plugin is a MultiJob plugin.
+    url: http://wiki.jenkins-ci.org/display/JENKINS/Multijob+Plugin
+    version: 1.13
+
+- plugin:
+    id: email-ext
+    description: This plugin is a replacement for Jenkins's email publisher
+    url: http://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin
+    version: 2.30.2
 # Any other Jenkins Master data

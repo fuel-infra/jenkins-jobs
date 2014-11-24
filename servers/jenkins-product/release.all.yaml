@@ -1,0 +1,57 @@
+- job-template:
+    name: '{name}.all'
+    disabled: true
+    builders:
+      - shell:
+          !include-raw-escape builders/all.sh
+    description: |
+      Build artifacts, iso, img and upgrade tarball
+    node: upgrade
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            string: iso_builds
+          configVersion: 1
+          enabled: true
+          max-per-node: 1
+          maxConcurrentTotal: 0
+          option: category
+    parameters:
+      - string:
+          name: deep_clean
+          default: 'true'
+          description: Perform deep_clean or not. Default is "true". Set any other value
+            to disable it.
+    publishers:
+      - archive:
+          allowEmptyArchive: false
+          artifacts: artifacts/*.data.txt, artifacts/*.data.html, version.yaml.txt,
+            magnet_link.txt, data_magnet_link.txt, listing.txt
+          latestOnly: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+    scm:
+      - git:
+          branches:
+            - origin/master
+          clean: false
+          configVersion: 2
+          disable-submodules: false
+          doGenerateSubmoduleConfigurations: false
+          fastpoll: false
+          git-tool: Default
+          ignore-notify: false
+          prune: false
+          recursive-submodules: false
+          remotes:
+            - github:
+                url: https://github.com/stackforge/fuel-main.git
+          skip-tag: false
+          use-author: false
+          wipe-workspace: false
+    wrappers:
+      - ansicolor:
+          colormap: xterm

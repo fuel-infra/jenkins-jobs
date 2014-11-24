@@ -1,0 +1,120 @@
+- job-template:
+    name: '{name}.staging.ubuntu.bvt_2'
+    disabled: true
+    builders:
+      - shell:
+          !include-raw-escape builders/staging.ubuntu.bvt_2.sh
+    concurrent: true
+    description: |
+      <p>Build verification test for Ubuntu</p>
+      <pre style="font-size: 10px">
+      Case: deploy_ha_vlan
+       1. Create cluster
+       2. Add 3 nodes with controller roles
+       3. Add 2 nodes with compute roles
+       4. Set up cluster to use Network VLAN manager with 8 networks
+       5. Deploy the cluster
+       6. Run network verification
+       7. Run OSTF
+      </pre>
+      <p>Test duration: around 1h30m</p>
+    keepDependencies: false
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: -1
+    node: custom_bvt
+    properties:
+      - heavy-job:
+          weight: 8
+      - throttle:
+          configVersion: 1
+          enabled: true
+          max-per-node: 1
+          maxConcurrentTotal: 0
+          option: project
+    parameters:
+      - string:
+          default: bvt_2
+          name: TEST_GROUP
+    publishers:
+      - archive:
+          allowEmptyArchive: true
+          artifacts: '**/nosetests.xml,logs/*'
+          latestOnly: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+      - email-ext:
+          attach-build-log: false
+          body: $DEFAULT_CONTENT
+          compressBuildLog: false
+          configuredTriggers:
+            aborted:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            failure:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            fixed:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+            still-failing:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
+          ctype: default
+          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
+          reply-to: $DEFAULT_REPLYTO
+          saveOutput: false
+          subject: $DEFAULT_SUBJECT
+    scm:
+      - git:
+          branches:
+            - origin/master
+          clean: false
+          configVersion: 2
+          disable-submodules: false
+          doGenerateSubmoduleConfigurations: false
+          fastpoll: false
+          git-tool: Default
+          ignore-notify: false
+          prune: false
+          recursive-submodules: false
+          remotes:
+            - github:
+                url: https://github.com/stackforge/fuel-main.git
+          skip-tag: false
+          use-author: false
+          wipe-workspace: false
+    wrappers:
+      - timeout:
+          failBuild: false
+          timeout: 200
+          writingDescription: false
+      - ansicolor:
+          colormap: xterm
