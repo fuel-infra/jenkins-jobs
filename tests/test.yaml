@@ -21,7 +21,7 @@
           repobranch: 'my-branch'
 
 - project:
-    name: systemtest
+    name: system_test
     jobs:
       - '{version-id}.{id}.{dist}.{testgroup}':
            version-id: '5.1.1'
@@ -32,4 +32,17 @@
            repobranch: 'origin/stable/5.1'
            timeout: '300'
            description: 'smth'
+           weight: 1
+
+- project:
+    name: '6.1_swarm'
+    repobranch: 'origin/stable/6.1'
+    version-id: '6.1'
+    jobs:
+      - '{version-id}-{dist}-system_tests':
+           dist: 'Ubuntu'
+      - '{version-id}-{dist}-system_tests':
+           dist: 'CentOS'
+
+
 

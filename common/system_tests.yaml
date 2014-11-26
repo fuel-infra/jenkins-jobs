@@ -1,7 +1,7 @@
 
 - job-template:
     # Variables required:
-    # 
+    #
     # version-id
     # id
     # dist
@@ -10,6 +10,7 @@
     # node
     # timeout
     # repobranch
+    # weight
 
     name: '{version-id}.{id}.{dist}.{testgroup}'
     block-downstream: false
@@ -46,7 +47,7 @@
 
     properties:
     - heavy-job:
-        weight: 8
+        weight: '{weight}'
 
     publishers:
     - archive:
@@ -61,7 +62,7 @@
     - main-git:
         reponame: 'fuel-main'
         repobranch: '{repobranch}'
-        
+
     wrappers:
     - timeout:
         fail: false
@@ -69,3 +70,16 @@
         writingDescription: false
     - ansicolor:
         colormap: xterm
+
+
+- job-group:
+    name: '{version-id}-{dist}-system_tests'
+    node: 'systest'
+    id: 'system_test'
+    jobs:
+      - '{version-id}.{id}.{dist}.{testgroup}':
+          testgroup: 'thread_1'
+          timeout: '800'
+          weight: '8'
+
+
