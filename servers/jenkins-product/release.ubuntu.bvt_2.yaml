@@ -17,7 +17,6 @@
        6. Run network verification
        7. Run OSTF
       </pre>
-    keepDependencies: false
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
@@ -120,25 +119,12 @@
       - git:
           branches:
             - origin/master
-          clean: false
-          configVersion: 2
-          disable-submodules: false
-          doGenerateSubmoduleConfigurations: false
-          fastpoll: false
-          git-tool: Default
-          ignore-notify: false
-          prune: false
-          recursive-submodules: false
           remotes:
             - github:
                 url: https://github.com/stackforge/fuel-main.git
-          skip-tag: false
-          use-author: false
           wipe-workspace: false
     wrappers:
       - timeout:
-          fail: false
           timeout: 200
-          writingDescription: false
       - ansicolor:
           colormap: xterm

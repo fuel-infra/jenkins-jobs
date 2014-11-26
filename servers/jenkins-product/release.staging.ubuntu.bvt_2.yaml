@@ -1,48 +1,65 @@
 - job-template:
-    name: '{name}.staging.iso'
+    name: '{name}.staging.ubuntu.bvt_2'
     disabled: true
     builders:
       - shell:
-          !include-raw-escape builders/staging.iso.sh
+          !include-raw-escape builders/staging.ubuntu.bvt_2.sh
     concurrent: true
     description: |
-      Build fuel master code on top of staging files/{name}-timestamp Fuel mirror.
-      <p>This ISO is used only to test staging mirror.<p>
-      For "official" {name} iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/{name}.all/">{name}.all</a>"
+      <p>Build verification test for Ubuntu</p>
+      <pre style="font-size: 10px">
+      Case: deploy_ha_vlan
+       1. Create cluster
+       2. Add 3 nodes with controller roles
+       3. Add 2 nodes with compute roles
+       4. Set up cluster to use Network VLAN manager with 8 networks
+       5. Deploy the cluster
+       6. Run network verification
+       7. Run OSTF
+      </pre>
+      <p>Test duration: around 1h30m</p>
+    keepDependencies: false
     logrotate:
-      artifactDaysToKeep: 90
+      artifactDaysToKeep: -1
       artifactNumToKeep: -1
-      daysToKeep: 90
+      daysToKeep: 30
       numToKeep: -1
-    node: iso
+    node: custom_bvt
     properties:
       - heavy-job:
-          weight: 1
+          weight: 8
       - throttle:
-          categories:
-            string: iso_builds
           configVersion: 1
           enabled: true
           max-per-node: 1
           maxConcurrentTotal: 0
-          option: category
+          option: project
     parameters:
       - string:
-          default: none
-          name: USE_MIRROR
+          default: bvt_2
+          name: TEST_GROUP
     publishers:
       - archive:
-          allowEmptyArchive: false
-          artifacts: artifacts/*txt, artifacts/*changelog
+          allowEmptyArchive: true
+          artifacts: '**/nosetests.xml,logs/*'
           latestOnly: false
-      - description-setter:
-          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
-          set-for-matrix: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
       - email-ext:
           attach-build-log: false
           body: $DEFAULT_CONTENT
           compressBuildLog: false
           configuredTriggers:
+            aborted:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
             failure:
               attach-build-log: false
               body: $PROJECT_DEFAULT_CONTENT
@@ -70,17 +87,8 @@
               recipients: true
               requester: true
               subject: $PROJECT_DEFAULT_SUBJECT
-            success:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
           ctype: default
-          recipients: devops+alert@mirantis.com, fuel-osci@mirantis.com
+          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
           reply-to: $DEFAULT_REPLYTO
           saveOutput: false
           subject: $DEFAULT_SUBJECT
@@ -88,21 +96,12 @@
       - git:
           branches:
             - origin/master
-          clean: false
-          configVersion: 2
-          disable-submodules: false
-          doGenerateSubmoduleConfigurations: false
-          fastpoll: false
-          git-tool: Default
-          ignore-notify: false
-          prune: false
-          recursive-submodules: false
           remotes:
             - github:
-                url: $FUELMAIN_REPO
-          skip-tag: false
-          use-author: false
-          wipe-workspace: true
+                url: https://github.com/stackforge/fuel-main.git
+          wipe-workspace: false
     wrappers:
+      - timeout:
+          timeout: 200
       - ansicolor:
           colormap: xterm

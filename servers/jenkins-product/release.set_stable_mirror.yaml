@@ -1,30 +1,18 @@
 - job-template:
-    name: '{name}.build_staging_mirror'
+    name: '{name}.set_stable_mirror'
     disabled: true
     builders:
       - shell:
-          !include-raw-escape builders/build_staging_mirror.sh
+          !include-raw-escape builders/set_stable_mirror.sh
     description: |
-      This job builds staging mirror. This mirror is a test candidate, it is not used for ISO builds.<br><br>
-      Mirrors are synced to:<br>
-      <a href="http://osci-mirror-kha.kha.mirantis.net/fwm/files/">osci-mirror-kha.kha.mirantis.net</a><br>
-      <a href="http://osci-mirror-msk.msk.mirantis.net/fwm/files/">osci-mirror-msk.msk.mirantis.net</a><br>
-      <a href="http://osci-mirror-srt.srt.mirantis.net/fwm/files/">osci-mirror-srt.srt.mirantis.net</a><br>
-      <a href="http://mirror.fuel-infra.org/fwm/files/">mirror.fuel-infra.org</a><br><br>
-      Documentation about mirror staging:<br>
-      <a href="https://mirantis.jira.com/wiki/pages/viewpage.action?pageId=176655477">How Fuel staging Fuel Mirrors work</a>,
-      <a href="https://docs.google.com/a/mirantis.com/document/d/1yrOQMOgmzcY8FxXlGLg6v_Um5Sni6snQg5BA4V24mbE/edit#heading=h.mqzzk07485lc">How mirror staging works</a>.<br><br>
-      If you have any questions, contact Devops or OSCI teams via #fuel-devops and #fuel-osci IRC chats.
+      Update stable symlink target to specified mirror version.<br>
+      If you have any questions, contact OSCI team via #fuel-osci IRC chat.
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
       daysToKeep: 45
       numToKeep: 100
     node: mirror
-    parameters:
-      - string:
-          name: YUM_DOWNLOAD_SRC
-          default: 'yes'
     properties:
       - heavy-job:
           weight: 1
@@ -32,28 +20,38 @@
           categories:
             string: iso_builds
           configVersion: 1
-          enabled: true
+          enabled: false
           max-per-node: 1
           maxConcurrentTotal: 0
           option: category
+    parameters:
+      - text:
+          default: |
+            osci-mirror-kha.kha.mirantis.net
+            osci-mirror-msk.msk.mirantis.net
+            osci-mirror-srt.srt.mirantis.net
+            seed-us1.fuel-infra.org
+            seed-cz1.fuel-infra.org
+          name: RSYNCHOSTS
+      - string:
+          default: 6.0-staging
+          name: STABLE_VERSION
     publishers:
+      - archive:
+          allowEmptyArchive: false
+          artifacts: build_description.txt
+          latestOnly: false
       - description-setter:
-          regexp: ^Updated:.*a href.*
+          regexp: ^[^\s]* is stable.*a href.*
           set-for-matrix: false
+      - trigger:
+          project: 6.0.iso
+          threshold: SUCCESS
       - email-ext:
           attach-build-log: false
           body: $DEFAULT_CONTENT
           compressBuildLog: false
           configuredTriggers:
-            aborted:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
             failure:
               attach-build-log: false
               body: $PROJECT_DEFAULT_CONTENT
@@ -81,39 +79,26 @@
               recipients: true
               requester: true
               subject: $PROJECT_DEFAULT_SUBJECT
+            success:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
           ctype: default
           recipients: devops+alert@mirantis.com, fuel-osci@mirantis.com
           reply-to: $DEFAULT_REPLYTO
           saveOutput: false
           subject: $DEFAULT_SUBJECT
-      - archive:
-          allowEmptyArchive: false
-          artifacts: mirror_staging.txt
-          latestOnly: false
-      - trigger-parameterized-builds:
-        - project: 6.0.test_staging_mirror
-          condition: UNSTABLE_OR_BETTER
-          property-file: mirror_staging.txt
-          triggerWithNoParameters: false
     scm:
       - git:
           basedir: osci-mirrors
-          branches: 
+          branches:
             - '**'
-          clean: false
-          configVersion: 2
-          disable-submodules: false
-          doGenerateSubmoduleConfigurations: false
-          fastpoll: false
-          git-tool: Default
-          ignore-notify: false
-          prune: false
-          recursive-submodules: false
           remotes:
             - review.fuel-infra.org:
                 url: https://review.fuel-infra.org/infra/mirrors
-          skip-tag: false
-          use-author: false
           wipe-workspace: false
-    triggers:
-      timed: H 7 * * *

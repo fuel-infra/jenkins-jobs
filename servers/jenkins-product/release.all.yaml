@@ -13,7 +13,6 @@
       - throttle:
           categories:
             string: iso_builds
-          configVersion: 1
           enabled: true
           max-per-node: 1
           maxConcurrentTotal: 0
@@ -33,24 +32,26 @@
       - description-setter:
           regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
           set-for-matrix: false
+      - email:
+          notify-every-unstable-build: true
+          recipients: devops+alert@mirantis.com fuel-osci@mirantis.com
+          send-to-individuals: false
+      - trigger-parameterized-builds:
+        - project: deploy_iso_on_cachers,{name}.smoke,{name}.centos.bvt_1,{name}.ubuntu.bvt_2
+          condition: UNSTABLE_OR_BETTER
+          property-file: magnet_link.txt
+          triggerWithNoParameters: false
+        - project: deploy_iso_on_cachers
+          condition: UNSTABLE_OR_BETTER
+          property-file: upgrade_magnet_link.txt
+          triggerWithNoParameters: false
     scm:
       - git:
           branches:
             - origin/master
-          clean: false
-          configVersion: 2
-          disable-submodules: false
-          doGenerateSubmoduleConfigurations: false
-          fastpoll: false
-          git-tool: Default
-          ignore-notify: false
-          prune: false
-          recursive-submodules: false
           remotes:
             - github:
                 url: https://github.com/stackforge/fuel-main.git
-          skip-tag: false
-          use-author: false
           wipe-workspace: false
     wrappers:
       - ansicolor:

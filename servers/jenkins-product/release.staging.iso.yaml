@@ -1,75 +1,48 @@
 - job-template:
-    name: '{name}.staging.centos.bvt_1'
+    name: '{name}.staging.iso'
     disabled: true
     builders:
       - shell:
-          !include-raw-escape builders/staging.centos.bvt_1.sh
+          !include-raw-escape builders/staging.iso.sh
     concurrent: true
     description: |
-      <p>Build verification test for CentOS</p>
-      <pre style="font-size: 10px">
-      Case 1: deploy_neutron_gre
-       1. Create cluster
-       2. Add 1 node with controller role
-       3. Add 2 nodes with compute role
-       4. Deploy the cluster
-       5. Run network verification
-       6. Run OSTF
-
-      Case 2:  deploy_neutron_vlan_ha
-       1. Create cluster
-       2. Add 3 nodes with controller role
-       3. Add 2 nodes with compute role
-       4. Deploy the cluster
-       5. Run network verification
-       6. Run OSTF
-      </pre>
-      <p>Test duration: 2h30m - 3h10m.</p>
+      Build fuel master code on top of staging files/{name}-timestamp Fuel mirror.
+      <p>This ISO is used only to test staging mirror.<p>
+      For "official" {name} iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/{name}.all/">{name}.all</a>"
     logrotate:
-      artifactDaysToKeep: -1
+      artifactDaysToKeep: 90
       artifactNumToKeep: -1
-      daysToKeep: 30
+      daysToKeep: 90
       numToKeep: -1
-    node: custom_bvt
+    node: iso
     properties:
       - heavy-job:
-          weight: 8
+          weight: 1
       - throttle:
+          categories:
+            string: iso_builds
           configVersion: 1
           enabled: true
           max-per-node: 1
           maxConcurrentTotal: 0
-          option: project
+          option: category
     parameters:
       - string:
-          default: bvt_1
-          name: TEST_GROUP
+          default: none
+          name: USE_MIRROR
     publishers:
       - archive:
-          allowEmptyArchive: true
-          artifacts: '**/nosetests.xml,logs/*'
+          allowEmptyArchive: false
+          artifacts: artifacts/*txt, artifacts/*changelog
           latestOnly: false
-      - logparser:
-          failBuildOnError: false
-          parsingRulesPath: /var/lib/jenkins/fuellib.parser
-          unstableOnWarning: false
-      - junit:
-          keep-long-stdio: false
-          results: '**/nosetests.xml'
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
       - email-ext:
           attach-build-log: false
           body: $DEFAULT_CONTENT
           compressBuildLog: false
           configuredTriggers:
-            aborted:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
             failure:
               attach-build-log: false
               body: $PROJECT_DEFAULT_CONTENT
@@ -97,8 +70,17 @@
               recipients: true
               requester: true
               subject: $PROJECT_DEFAULT_SUBJECT
+            success:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
           ctype: default
-          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
+          recipients: devops+alert@mirantis.com, fuel-osci@mirantis.com
           reply-to: $DEFAULT_REPLYTO
           saveOutput: false
           subject: $DEFAULT_SUBJECT
@@ -106,25 +88,10 @@
       - git:
           branches:
             - origin/master
-          clean: false
-          configVersion: 2
-          disable-submodules: false
-          doGenerateSubmoduleConfigurations: false
-          fastpoll: false
-          git-tool: Default
-          ignore-notify: false
-          prune: false
-          recursive-submodules: false
           remotes:
             - github:
-                url: https://github.com/stackforge/fuel-main.git
-          skip-tag: false
-          use-author: false
-          wipe-workspace: false
+                url: $FUELMAIN_REPO
+          wipe-workspace: true
     wrappers:
-      - timeout:
-          failBuild: false
-          timeout: 210
-          writingDescription: false
       - ansicolor:
           colormap: xterm

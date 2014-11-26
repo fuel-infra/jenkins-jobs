@@ -121,22 +121,11 @@
           branches:
             - origin/master
           clean: true
-          configVersion: 2
-          disable-submodules: false
-          doGenerateSubmoduleConfigurations: false
-          fastpoll: false
-          git-tool: Default
-          ignore-notify: false
-          prune: false
-          recursive-submodules: false
           remotes:
             - github:
                 url: https://github.com/stackforge/fuel-main.git
-          skip-tag: false
-          use-author: false
           wipe-workspace: false
     wrappers:
       - timeout:
           fail: true
           timeout: 200
-          type: absolute

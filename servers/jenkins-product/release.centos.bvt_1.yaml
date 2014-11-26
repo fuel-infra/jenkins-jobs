@@ -1,43 +1,45 @@
 - job-template:
-    name: '{name}.staging.ubuntu.bvt_2'
+    name: '{name}.centos.bvt_1'
     disabled: true
     builders:
       - shell:
-          !include-raw-escape builders/staging.ubuntu.bvt_2.sh
+          !include-raw-escape builders/centos.bvt_1.sh
     concurrent: true
     description: |
-      <p>Build verification test for Ubuntu</p>
+      <p>Build verification test for Centos</p>
       <pre style="font-size: 10px">
-      Case: deploy_ha_vlan
+      Case 1: deploy_neutron_gre
        1. Create cluster
-       2. Add 3 nodes with controller roles
-       3. Add 2 nodes with compute roles
-       4. Set up cluster to use Network VLAN manager with 8 networks
-       5. Deploy the cluster
-       6. Run network verification
-       7. Run OSTF
+       2. Add 1 node with controller role
+       3. Add 2 nodes with compute role
+       4. Deploy the cluster
+       5. Run network verification
+       6. Run OSTF
+      Case 2:  deploy_neutron_vlan_ha
+       1. Create cluster
+       2. Add 3 nodes with controller role
+       3. Add 2 nodes with compute role
+       4. Deploy the cluster
+       5. Run network verification
+       6. Run OSTF
       </pre>
-      <p>Test duration: around 1h30m</p>
-    keepDependencies: false
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
       daysToKeep: 30
-      numToKeep: -1
-    node: custom_bvt
+      numToKeep: 50
+    node: bvt
     properties:
       - heavy-job:
           weight: 8
       - throttle:
-          configVersion: 1
           enabled: true
           max-per-node: 1
           maxConcurrentTotal: 0
           option: project
     parameters:
       - string:
-          default: bvt_2
-          name: TEST_GROUP
+          name: MAGNET_LINK
     publishers:
       - archive:
           allowEmptyArchive: true
@@ -48,7 +50,30 @@
           results: '**/nosetests.xml'
       - email-ext:
           attach-build-log: false
-          body: $DEFAULT_CONTENT
+          body: |
+            Something is wrong with the ISO: it does not pass Build Verification
+            Test for deployment. We need to fix this ASAP.
+
+
+            Please get into the IRC (#fuel-qa) to check if someone is fixing this already,
+            or start fixing it yourself.
+
+
+            When you start working on the issue
+
+            - inform others via this mailing list,
+
+            - set build description for the failied build in Jenkins: add link to corresponding
+            Launchpad bug or any related info.
+
+
+            $BUILD_URL
+
+
+            $BUILD_LOG
+
+
+            $BUILD_URL
           compressBuildLog: false
           configuredTriggers:
             aborted:
@@ -71,7 +96,11 @@
               subject: $PROJECT_DEFAULT_SUBJECT
             fixed:
               attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
+              body: |
+                Test passed. Thanks, everyone.
+
+
+                $BUILD_URL
               compressBuildLog: false
               culprits: false
               developers: false
@@ -88,33 +117,20 @@
               requester: true
               subject: $PROJECT_DEFAULT_SUBJECT
           ctype: default
-          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
+          recipients: devops+alert@mirantis.com,fuel-core-team@mirantis.com
           reply-to: $DEFAULT_REPLYTO
           saveOutput: false
-          subject: $DEFAULT_SUBJECT
+          subject: '[Jenkins] Attention - $DEFAULT_SUBJECT'
     scm:
       - git:
           branches:
             - origin/master
-          clean: false
-          configVersion: 2
-          disable-submodules: false
-          doGenerateSubmoduleConfigurations: false
-          fastpoll: false
-          git-tool: Default
-          ignore-notify: false
-          prune: false
-          recursive-submodules: false
           remotes:
             - github:
                 url: https://github.com/stackforge/fuel-main.git
-          skip-tag: false
-          use-author: false
           wipe-workspace: false
     wrappers:
       - timeout:
-          failBuild: false
-          timeout: 200
-          writingDescription: false
+          timeout: 300
       - ansicolor:
           colormap: xterm

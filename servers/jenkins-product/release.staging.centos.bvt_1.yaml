@@ -1,57 +1,74 @@
 - job-template:
-    name: '{name}.set_stable_mirror'
+    name: '{name}.staging.centos.bvt_1'
     disabled: true
     builders:
       - shell:
-          !include-raw-escape builders/set_stable_mirror.sh
+          !include-raw-escape builders/staging.centos.bvt_1.sh
+    concurrent: true
     description: |
-      Update stable symlink target to specified mirror version.<br>
-      If you have any questions, contact OSCI team via #fuel-osci IRC chat.
+      <p>Build verification test for CentOS</p>
+      <pre style="font-size: 10px">
+      Case 1: deploy_neutron_gre
+       1. Create cluster
+       2. Add 1 node with controller role
+       3. Add 2 nodes with compute role
+       4. Deploy the cluster
+       5. Run network verification
+       6. Run OSTF
+
+      Case 2:  deploy_neutron_vlan_ha
+       1. Create cluster
+       2. Add 3 nodes with controller role
+       3. Add 2 nodes with compute role
+       4. Deploy the cluster
+       5. Run network verification
+       6. Run OSTF
+      </pre>
+      <p>Test duration: 2h30m - 3h10m.</p>
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
-      daysToKeep: 45
-      numToKeep: 100
-    node: mirror
+      daysToKeep: 30
+      numToKeep: -1
+    node: custom_bvt
     properties:
       - heavy-job:
-          weight: 1
+          weight: 8
       - throttle:
-          categories:
-            string: iso_builds
-          configVersion: 1
-          enabled: false
+          enabled: true
           max-per-node: 1
           maxConcurrentTotal: 0
-          option: category
+          option: project
     parameters:
-      - text:
-          default: |
-            osci-mirror-kha.kha.mirantis.net
-            osci-mirror-msk.msk.mirantis.net
-            osci-mirror-srt.srt.mirantis.net
-            seed-us1.fuel-infra.org
-            seed-cz1.fuel-infra.org
-          name: RSYNCHOSTS
       - string:
-          default: 6.0-staging
-          name: STABLE_VERSION
+          default: bvt_1
+          name: TEST_GROUP
     publishers:
       - archive:
-          allowEmptyArchive: false
-          artifacts: build_description.txt
+          allowEmptyArchive: true
+          artifacts: '**/nosetests.xml,logs/*'
           latestOnly: false
-      - description-setter:
-          regexp: ^[^\s]* is stable.*a href.*
-          set-for-matrix: false
-      - trigger:
-          project: 6.0.iso
-          threshold: SUCCESS
+      - logparser:
+          failBuildOnError: false
+          parsingRulesPath: /var/lib/jenkins/fuellib.parser
+          unstableOnWarning: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
       - email-ext:
           attach-build-log: false
           body: $DEFAULT_CONTENT
           compressBuildLog: false
           configuredTriggers:
+            aborted:
+              attach-build-log: false
+              body: $PROJECT_DEFAULT_CONTENT
+              compressBuildLog: false
+              culprits: false
+              developers: false
+              recipients: true
+              requester: true
+              subject: $PROJECT_DEFAULT_SUBJECT
             failure:
               attach-build-log: false
               body: $PROJECT_DEFAULT_CONTENT
@@ -79,37 +96,21 @@
               recipients: true
               requester: true
               subject: $PROJECT_DEFAULT_SUBJECT
-            success:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
           ctype: default
-          recipients: devops+alert@mirantis.com, fuel-osci@mirantis.com
+          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
           reply-to: $DEFAULT_REPLYTO
           saveOutput: false
           subject: $DEFAULT_SUBJECT
     scm:
       - git:
-          basedir: osci-mirrors
           branches:
-            - '**'
-          clean: false
-          configVersion: 2
-          disable-submodules: false
-          doGenerateSubmoduleConfigurations: false
-          fastpoll: false
-          git-tool: Default
-          ignore-notify: false
-          prune: false
-          recursive-submodules: false
+            - origin/master
           remotes:
-            - review.fuel-infra.org:
-                url: https://review.fuel-infra.org/infra/mirrors
-          skip-tag: false
-          use-author: false
+            - github:
+                url: https://github.com/stackforge/fuel-main.git
           wipe-workspace: false
+    wrappers:
+      - timeout:
+          timeout: 210
+      - ansicolor:
+          colormap: xterm

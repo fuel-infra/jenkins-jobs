@@ -118,4 +118,4 @@
           recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
           reply-to: $DEFAULT_REPLYTO
           saveOutput: false
-          subject: $DEFAULT_SUBJECT  
+          subject: $DEFAULT_SUBJECT
