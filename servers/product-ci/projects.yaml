@@ -13,4 +13,45 @@
       - '{name}.ubuntu.bvt_2'
 
 - job-group:
-    name: '{name}.swarm'
+    name: '{version-id}-system_tests-upgrades'
+    id: 'system_test'
+    node: 'systest'
+    timeout: '480'
+    jobs:
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'deploy_neutron_gre_ha'
+          upgrade_testgroup: 'upgrade'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'deploy_neutron_gre'
+          upgrade_testgroup: 'upgrade'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'ceph_multinode_compact'
+          upgrade_testgroup: 'upgrade'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'deploy_neutron_gre_ha'
+          upgrade_testgroup: 'rollback'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'deploy_neutron_gre'
+          upgrade_testgroup: 'rollback'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'ceph_multinode_compact'
+          upgrade_testgroup: 'rollback'
+          weight: '8'
+
+- project:
+    name: 6.0.upgrades
+    version-id: 6.0
+    base_repobranch: 'origin/stable/5.1'
+    upgrade_repobranch: 'origin/master'
+    jobs:
+      - '{version-id}-system_tests-upgrades':
+          dist: 'Ubuntu'
+      - '{version-id}-system_tests-upgrades':
+          dist: 'CentOS'
+
+

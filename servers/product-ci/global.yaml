@@ -5,9 +5,11 @@
 
 - scm:
     name: main-git
+    basedir: ''
     scm:
       - git:
          url: 'https://github.com/stackforge/{reponame}.git'
          branches:
           - '{repobranch}'
+         basedir: '{basedir}'
 

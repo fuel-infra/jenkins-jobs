@@ -1,0 +1,85 @@
+- job-template:
+    # Upgrade test: takes base iso, deploys TEST_GROUP snapshot, then
+    # runs UPGRADE_TEST_GROUP test on this env.
+    #
+    # Variables required:
+    #
+    # version-id
+    # id
+    # dist
+    # testgroup
+    # upgrade_testgroup
+    # description
+    # node
+    # timeout
+    # repobranch
+    # weight
+    name: '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}'
+    block-downstream: false
+    block-upstream: false
+    builders:
+    - shell:
+        !include-raw-escape 'scripts/run_upgrade_system_test.sh'
+    canRoam: false
+    concurrent: true
+    description: '{description}'
+    disabled: false
+    keepDependencies: false
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+    node: '{node}'
+
+    parameters:
+    - string:
+        name: BASE_ISO_MAGNET_LINK
+        description: "Base iso magnet link"
+    - string:
+        name: UPGRADE_TARBALL_MAGNET_LINK
+        description: "Upgrade tarball magnet link"
+    - string:
+        name: OPENSTACK_RELEASE
+        default: '{dist}'
+        description: Base distribution
+    - string:
+        name: TEST_GROUP
+        default: '{testgroup}'
+    - string:
+        name: UPGRADE_TEST_GROUP
+        default: '{upgrade_testgroup}'
+    - string:
+        name: ENV_PREFIX
+        default: '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}'
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
+
+    publishers:
+    - archive:
+        allowEmptyArchive: true
+        artifacts: '**/nosetests.xml,*/logs/*'
+        latestOnly: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+
+    scm:
+    - main-git:
+        reponame: 'fuel-main'
+        repobranch: '{base_repobranch}'
+        basedir: 'BASE'
+    - main-git:
+        reponame: 'fuel-main'
+        repobranch: '{upgrade_repobranch}'
+        basedir: 'UPGRADE'
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        writingDescription: true
+    - ansicolor:
+        colormap: xterm
