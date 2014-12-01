@@ -1,5 +1,5 @@
 - job-template:
-    name: '{name}.all'
+    name: '{version-id}.all'
     disabled: true
     builders:
       - shell:
@@ -15,7 +15,7 @@
             string: iso_builds
           enabled: true
           max-per-node: 1
-          maxConcurrentTotal: 0
+          max-total: 0
           option: category
     parameters:
       - string:
@@ -25,10 +25,10 @@
             to disable it.
     publishers:
       - archive:
-          allowEmptyArchive: false
+          allow-empty: false
           artifacts: artifacts/*.data.txt, artifacts/*.data.html, version.yaml.txt,
             magnet_link.txt, data_magnet_link.txt, listing.txt
-          latestOnly: false
+          latest-only: false
       - description-setter:
           regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
           set-for-matrix: false
@@ -37,7 +37,7 @@
           recipients: devops+alert@mirantis.com fuel-osci@mirantis.com
           send-to-individuals: false
       - trigger-parameterized-builds:
-        - project: deploy_iso_on_cachers,{name}.smoke,{name}.centos.bvt_1,{name}.ubuntu.bvt_2
+        - project: deploy_iso_on_cachers,{version-id}.smoke,{version-id}.centos.bvt_1,{version-id}.ubuntu.bvt_2
           condition: UNSTABLE_OR_BETTER
           property-file: magnet_link.txt
           triggerWithNoParameters: false

@@ -1,5 +1,5 @@
 - job-template:
-    name: '{name}.staging.ubuntu.bvt_2'
+    name: '{version-id}.staging.ubuntu.bvt_2'
     disabled: true
     builders:
       - shell:
@@ -32,7 +32,7 @@
           configVersion: 1
           enabled: true
           max-per-node: 1
-          maxConcurrentTotal: 0
+          max-total: 0
           option: project
     parameters:
       - string:
@@ -40,58 +40,23 @@
           name: TEST_GROUP
     publishers:
       - archive:
-          allowEmptyArchive: true
+          allow-empty: true
           artifacts: '**/nosetests.xml,logs/*'
-          latestOnly: false
+          latest-only: false
       - junit:
           keep-long-stdio: false
           results: '**/nosetests.xml'
       - email-ext:
-          attach-build-log: false
           body: $DEFAULT_CONTENT
-          compressBuildLog: false
-          configuredTriggers:
-            aborted:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            failure:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            fixed:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            still-failing:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-          ctype: default
+          aborted: true
+          failure: true
+          still-failing: true
+          fixed: true
+          send-to:
+            - recipients
+            - requester
           recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
-          reply-to: $DEFAULT_REPLYTO
-          saveOutput: false
-          subject: $DEFAULT_SUBJECT
+          subject: '[Jenkins] $DEFAULT_SUBJECT'
     scm:
       - git:
           branches:

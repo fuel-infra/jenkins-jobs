@@ -18,11 +18,9 @@
     builders:
     - shell:
         !include-raw-escape 'scripts/run_system_test.sh'
-    canRoam: false
     concurrent: true
     description: '{description}'
     disabled: false
-    keepDependencies: false
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
@@ -51,9 +49,9 @@
 
     publishers:
     - archive:
-        allowEmptyArchive: true
+        allow-empty: true
         artifacts: '**/nosetests.xml,logs/*'
-        latestOnly: false
+        latest-only: false
     - junit:
         keep-long-stdio: false
         results: '**/nosetests.xml'
@@ -67,7 +65,7 @@
     - timeout:
         fail: false
         timeout: '{timeout}'
-        writingDescription: false
+        write-description: false
     - ansicolor:
         colormap: xterm
 
@@ -81,5 +79,3 @@
           testgroup: 'thread_1'
           timeout: '800'
           weight: '8'
-
-

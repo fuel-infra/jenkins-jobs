@@ -1,5 +1,5 @@
 - job-template:
-    name: '{name}.smoke'
+    name: '{version-id}.smoke'
     disabled: true
     builders:
       - shell:
@@ -30,21 +30,20 @@
           configVersion: 1
           enabled: true
           max-per-node: 1
-          maxConcurrentTotal: 0
+          max-total: 0
           option: project
     parameters:
       - string:
           name: MAGNET_LINK
     publishers:
       - archive:
-          allowEmptyArchive: false
+          allow-empty: false
           artifacts: '**/nosetests.xml,logs/*'
-          latestOnly: false
+          latest-only: false
       - junit:
           keep-long-stdio: false
           results: '**/nosetests.xml'
       - email-ext:
-          attach-build-log: false
           body: |
             Something is wrong with the ISO: it does not pass smoke test for deployment.
             We need to fix this ASAP.
@@ -69,53 +68,27 @@
 
 
             $BUILD_URL
-          compressBuildLog: false
-          configuredTriggers:
-            aborted:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            failure:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            fixed:
-              attach-build-log: false
-              body: |
-                Test passed. Thanks, everyone.
-
-
-                $BUILD_URL
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            still-failing:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-          ctype: default
+          aborted: true
+          failure: true
+          still-failing: true
+          fixed: false
+          send-to:
+            - recipients
+            - requester
           recipients: devops+alert@mirantis.com,fuel-core-team@mirantis.com
-          reply-to: $DEFAULT_REPLYTO
-          saveOutput: false
-          subject: '[Jenkins] Attention - $DEFAULT_SUBJECT'
+          subject: '[Jenkins] $DEFAULT_SUBJECT'
+      - email-ext:
+          body: |
+            Test passed. Thanks, everyone.
+
+            $BUILD_URL
+          failure: false
+          fixed: true
+          send-to:
+            - recipients
+            - requester
+          recipients: devops+alert@mirantis.com,fuel-core-team@mirantis.com
+          subject: '[Jenkins] $DEFAULT_SUBJECT'
     scm:
       - git:
           branches:

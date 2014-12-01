@@ -1,5 +1,5 @@
 - job-template:
-    name: '{name}.build_staging_mirror'
+    name: '{version-id}.build_staging_mirror'
     disabled: true
     builders:
       - shell:
@@ -33,64 +33,29 @@
             string: iso_builds
           enabled: true
           max-per-node: 1
-          maxConcurrentTotal: 0
+          max-total: 0
           option: category
     publishers:
       - description-setter:
           regexp: ^Updated:.*a href.*
           set-for-matrix: false
       - email-ext:
-          attach-build-log: false
           body: $DEFAULT_CONTENT
-          compressBuildLog: false
-          configuredTriggers:
-            aborted:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            failure:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            fixed:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            still-failing:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-          ctype: default
-          recipients: devops+alert@mirantis.com, fuel-osci@mirantis.com
-          reply-to: $DEFAULT_REPLYTO
-          saveOutput: false
-          subject: $DEFAULT_SUBJECT
+          aborted: true
+          failure: true
+          still-failing: true
+          fixed: true
+          send-to:
+            - recipients
+            - requester
+          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com
+          subject: '[Jenkins] $DEFAULT_SUBJECT'
       - archive:
-          allowEmptyArchive: false
+          allow-empty: false
           artifacts: mirror_staging.txt
-          latestOnly: false
+          latest-only: false
       - trigger-parameterized-builds:
-        - project: '{name}.test_staging_mirror'
+        - project: '{version-id}.test_staging_mirror'
           condition: UNSTABLE_OR_BETTER
           property-file: mirror_staging.txt
           triggerWithNoParameters: false

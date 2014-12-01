@@ -1,16 +1,17 @@
 - project:
-    name: 6.1
+    name: 6.1.main
+    version-id: 6.1
     jobs:
-      - '{name}.all'
-      - '{name}.build_staging_mirror'
-      - '{name}.centos.bvt_1'
-      - '{name}.set_stable_mirror'
-      - '{name}.smoke'
-      - '{name}.staging.centos.bvt_1'
-      - '{name}.staging.iso'
-      - '{name}.staging.ubuntu.bvt_2'
-      - '{name}.test_staging_mirror'
-      - '{name}.ubuntu.bvt_2'
+      - '{version-id}.all'
+      - '{version-id}.build_staging_mirror'
+      - '{version-id}.centos.bvt_1'
+      - '{version-id}.set_stable_mirror'
+      - '{version-id}.smoke'
+      - '{version-id}.staging.centos.bvt_1'
+      - '{version-id}.staging.iso'
+      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.test_staging_mirror'
+      - '{version-id}.ubuntu.bvt_2'
 
 - job-group:
     name: '{version-id}-system_tests-upgrades'

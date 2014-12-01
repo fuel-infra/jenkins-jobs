@@ -1,14 +1,14 @@
 - job-template:
-    name: '{name}.staging.iso'
+    name: '{version-id}.staging.iso'
     disabled: true
     builders:
       - shell:
           !include-raw-escape builders/staging.iso.sh
     concurrent: true
     description: |
-      Build fuel master code on top of staging files/{name}-timestamp Fuel mirror.
+      Build fuel master code on top of staging files/{version-id}-timestamp Fuel mirror.
       <p>This ISO is used only to test staging mirror.<p>
-      For "official" {name} iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/{name}.all/">{name}.all</a>"
+      For "official" {version-id} iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/{version-id}.all/">{version-id}.all</a>
     logrotate:
       artifactDaysToKeep: 90
       artifactNumToKeep: -1
@@ -24,7 +24,7 @@
           configVersion: 1
           enabled: true
           max-per-node: 1
-          maxConcurrentTotal: 0
+          max-total: 0
           option: category
     parameters:
       - string:
@@ -32,58 +32,23 @@
           name: USE_MIRROR
     publishers:
       - archive:
-          allowEmptyArchive: false
+          allow-empty: false
           artifacts: artifacts/*txt, artifacts/*changelog
-          latestOnly: false
+          latest-only: false
       - description-setter:
           regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
           set-for-matrix: false
       - email-ext:
-          attach-build-log: false
           body: $DEFAULT_CONTENT
-          compressBuildLog: false
-          configuredTriggers:
-            failure:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            fixed:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            still-failing:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-            success:
-              attach-build-log: false
-              body: $PROJECT_DEFAULT_CONTENT
-              compressBuildLog: false
-              culprits: false
-              developers: false
-              recipients: true
-              requester: true
-              subject: $PROJECT_DEFAULT_SUBJECT
-          ctype: default
-          recipients: devops+alert@mirantis.com, fuel-osci@mirantis.com
-          reply-to: $DEFAULT_REPLYTO
-          saveOutput: false
-          subject: $DEFAULT_SUBJECT
+          aborted: true
+          failure: true
+          still-failing: true
+          fixed: true
+          send-to:
+            - recipients
+            - requester
+          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com
+          subject: '[Jenkins] $DEFAULT_SUBJECT'
     scm:
       - git:
           branches:
