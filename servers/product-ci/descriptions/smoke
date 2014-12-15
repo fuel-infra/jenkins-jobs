@@ -1,0 +1,11 @@
+<pre>
+Scenario: deploy_simple_cinder
+ 1. Create cluster
+ 2. Add 1 node with controller role
+ 3. Add 1 node with compute role
+ 4. Add 1 node with cinder role
+ 5. Deploy the cluster
+ 6. Validate cluster was set up correctly, there are no dead
+ services, there are no errors in logs
+ 7. Run OSTF
+</pre>

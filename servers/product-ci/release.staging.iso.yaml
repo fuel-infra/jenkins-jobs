@@ -1,6 +1,5 @@
 - job-template:
     name: '{version-id}.staging.iso'
-    disabled: true
     builders:
       - shell:
           !include-raw-escape builders/staging.iso.sh
@@ -11,25 +10,20 @@
       For "official" {version-id} iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/{version-id}.all/">{version-id}.all</a>
     logrotate:
       artifactDaysToKeep: 90
-      artifactNumToKeep: -1
       daysToKeep: 90
-      numToKeep: -1
     node: iso
     properties:
       - heavy-job:
           weight: 1
       - throttle:
           categories:
-            string: iso_builds
-          configVersion: 1
-          enabled: true
+            - iso_builds
           max-per-node: 1
-          max-total: 0
           option: category
     parameters:
       - string:
-          default: none
-          name: USE_MIRROR
+          name: MIRROR_BASE
+          description: For example, http://osci-mirror-msk.msk.mirantis.net/fwm/files/$MIRROR_VERSION
     publishers:
       - archive:
           allow-empty: false
@@ -38,25 +32,9 @@
       - description-setter:
           regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
           set-for-matrix: false
-      - email-ext:
-          body: $DEFAULT_CONTENT
-          aborted: true
-          failure: true
-          still-failing: true
-          fixed: true
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com
     scm:
-      - git:
-          branches:
-            - origin/master
-          remotes:
-            - github:
-                url: $FUELMAIN_REPO
-          wipe-workspace: true
-    wrappers:
-      - ansicolor:
-          colormap: xterm
+      - stackforge:
+          branch: '{branch}'
+          repo: fuel-main

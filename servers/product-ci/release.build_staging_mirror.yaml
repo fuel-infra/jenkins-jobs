@@ -1,57 +1,41 @@
 - job-template:
     name: '{version-id}.build_staging_mirror'
-    disabled: true
     builders:
       - shell:
           !include-raw-escape builders/build_staging_mirror.sh
-    description: |
-      This job builds staging mirror. This mirror is a test candidate, it is not used for ISO builds.<br><br>
-      Mirrors are synced to:<br>
-      <a href="http://osci-mirror-kha.kha.mirantis.net/fwm/files/">osci-mirror-kha.kha.mirantis.net</a><br>
-      <a href="http://osci-mirror-msk.msk.mirantis.net/fwm/files/">osci-mirror-msk.msk.mirantis.net</a><br>
-      <a href="http://osci-mirror-srt.srt.mirantis.net/fwm/files/">osci-mirror-srt.srt.mirantis.net</a><br>
-      <a href="http://mirror.fuel-infra.org/fwm/files/">mirror.fuel-infra.org</a><br><br>
-      Documentation about mirror staging:<br>
-      <a href="https://mirantis.jira.com/wiki/pages/viewpage.action?pageId=176655477">How Fuel staging Fuel Mirrors work</a>,
-      <a href="https://docs.google.com/a/mirantis.com/document/d/1yrOQMOgmzcY8FxXlGLg6v_Um5Sni6snQg5BA4V24mbE/edit#heading=h.mqzzk07485lc">How mirror staging works</a>.<br><br>
-      If you have any questions, contact Devops or OSCI teams via #fuel-devops and #fuel-osci IRC chats.
+    description:
+      !include-raw descriptions/build_staging_mirror
     logrotate:
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
       daysToKeep: 45
       numToKeep: 100
     node: mirror
     parameters:
       - string:
+          name: extra_commits
+          description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
+      - string:
           name: YUM_DOWNLOAD_SRC
           default: 'yes'
+      - string:
+          name: mirror
+          default: '{version-id}'
+      - string:
+          name: EXTRA_DEB_REPOS
+          default: '{extra-deb-repos}'
     properties:
       - heavy-job:
           weight: 1
       - throttle:
           categories:
-            string: iso_builds
-          enabled: true
+            - iso_builds
           max-per-node: 1
-          max-total: 0
           option: category
     publishers:
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com
       - description-setter:
           regexp: ^Updated:.*a href.*
-          set-for-matrix: false
-      - email-ext:
-          body: $DEFAULT_CONTENT
-          aborted: true
-          failure: true
-          still-failing: true
-          fixed: true
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
       - archive:
-          allow-empty: false
           artifacts: mirror_staging.txt
           latest-only: false
       - trigger-parameterized-builds:
@@ -60,13 +44,9 @@
           property-file: mirror_staging.txt
           triggerWithNoParameters: false
     scm:
-      - git:
-          basedir: osci-mirrors
-          branches:
-            - '**'
-          remotes:
-            - review.fuel-infra.org:
-                url: https://review.fuel-infra.org/infra/mirrors
-          wipe-workspace: false
+      - stackforge:
+          branch: '{branch}'
+          repo: fuel-main
+      - osci-mirrors
     triggers:
-      timed: H 7 * * *
+      - timed: '{timer}'

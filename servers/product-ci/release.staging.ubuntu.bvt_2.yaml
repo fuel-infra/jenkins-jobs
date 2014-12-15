@@ -1,72 +1,33 @@
 - job-template:
     name: '{version-id}.staging.ubuntu.bvt_2'
-    disabled: true
     builders:
-      - shell:
-          !include-raw-escape builders/staging.ubuntu.bvt_2.sh
+      - systest
     concurrent: true
-    description: |
-      <p>Build verification test for Ubuntu</p>
-      <pre style="font-size: 10px">
-      Case: deploy_ha_vlan
-       1. Create cluster
-       2. Add 3 nodes with controller roles
-       3. Add 2 nodes with compute roles
-       4. Set up cluster to use Network VLAN manager with 8 networks
-       5. Deploy the cluster
-       6. Run network verification
-       7. Run OSTF
-      </pre>
-      <p>Test duration: around 1h30m</p>
-    keepDependencies: false
+    description:
+      !include-raw descriptions/ubuntu.bvt_2
     logrotate:
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
       daysToKeep: 30
-      numToKeep: -1
     node: custom_bvt
     properties:
       - heavy-job:
           weight: 8
       - throttle:
-          configVersion: 1
-          enabled: true
           max-per-node: 1
-          max-total: 0
           option: project
     parameters:
-      - string:
-          default: bvt_2
-          name: TEST_GROUP
+      - systest:
+          dist: Ubuntu
+          testgroup: bvt_2
+          version-id: '{version-id}'
+          id: '{id}'
     publishers:
-      - archive:
-          allow-empty: true
-          artifacts: '**/nosetests.xml,logs/*'
-          latest-only: false
-      - junit:
-          keep-long-stdio: false
-          results: '**/nosetests.xml'
-      - email-ext:
-          body: $DEFAULT_CONTENT
-          aborted: true
-          failure: true
-          still-failing: true
-          fixed: true
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
+      - nosetests
+      - email-default:
+          mail-to: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
     scm:
-      - git:
-          branches:
-            - origin/master
-          remotes:
-            - github:
-                url: https://github.com/stackforge/fuel-main.git
-          wipe-workspace: false
+      - stackforge:
+          branch: '{branch}'
+          repo: fuel-main
     wrappers:
       - timeout:
           timeout: 200
-      - ansicolor:
-          colormap: xterm

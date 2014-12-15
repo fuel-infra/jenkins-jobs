@@ -1,25 +1,11 @@
 - job-template:
     name: '{version-id}.smoke'
-    disabled: true
     builders:
-      - shell:
-          !include-raw-escape builders/smoke.sh
+      - systest
     concurrent: true
-    description: |
-      <pre>
-      Scenario: deploy_simple_cinder
-       1. Create cluster
-       2. Add 1 node with controller role
-       3. Add 1 node with compute role
-       4. Add 1 node with cinder role
-       5. Deploy the cluster
-       6. Validate cluster was set up correctly, there are no dead
-       services, there are no errors in logs
-       7. Run OSTF
-      </pre>
+    description:
+      !include-raw descriptions/smoke
     logrotate:
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
       daysToKeep: 30
       numToKeep: 50
     node: smoke
@@ -27,77 +13,24 @@
       - heavy-job:
           weight: 4
       - throttle:
-          configVersion: 1
-          enabled: true
           max-per-node: 1
-          max-total: 0
           option: project
     parameters:
-      - string:
-          name: MAGNET_LINK
+      - systest:
+          dist: CentOS
+          testgroup: deploy_simple_cinder
+          version-id: '{version-id}'
+          id: '{id}'
     publishers:
-      - archive:
-          allow-empty: false
-          artifacts: '**/nosetests.xml,logs/*'
-          latest-only: false
-      - junit:
-          keep-long-stdio: false
-          results: '**/nosetests.xml'
-      - email-ext:
-          body: |
-            Something is wrong with the ISO: it does not pass smoke test for deployment.
-            We need to fix this ASAP.
-
-
-            Please get into the IRC (#fuel-qa) to check if someone is fixing this already,
-            or start fixing it yourself.
-
-
-            When you start working on the issue
-
-            - inform others via this mailing list,
-
-            - set build description for the failied build in Jenkins: add link to corresponding
-            Launchpad bug or any related info.
-
-
-            $BUILD_URL
-
-
-            $BUILD_LOG
-
-
-            $BUILD_URL
-          aborted: true
-          failure: true
-          still-failing: true
-          fixed: false
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-core-team@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
-      - email-ext:
-          body: |
-            Test passed. Thanks, everyone.
-
-            $BUILD_URL
-          failure: false
-          fixed: true
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-core-team@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
+      - nosetests
+      - email-systest:
+          body-failed:
+            !include-raw notifications/smoke.failed
+          mail-to: devops+alert@mirantis.com,fuel-core-team@mirantis.com
     scm:
-      - git:
-          branches:
-            - origin/master
-          clean: true
-          remotes:
-            - github:
-                url: https://github.com/stackforge/fuel-main.git
-          wipe-workspace: false
+      - stackforge:
+          branch: '{branch}'
+          repo: fuel-main
     wrappers:
       - timeout:
           fail: true

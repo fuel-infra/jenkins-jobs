@@ -1,0 +1,17 @@
+<p>Build verification test for Centos</p>
+<pre style="font-size: 10px">
+Case 1: deploy_neutron_gre
+ 1. Create cluster
+ 2. Add 1 node with controller role
+ 3. Add 2 nodes with compute role
+ 4. Deploy the cluster
+ 5. Run network verification
+ 6. Run OSTF
+Case 2:  deploy_neutron_vlan_ha
+ 1. Create cluster
+ 2. Add 3 nodes with controller role
+ 3. Add 2 nodes with compute role
+ 4. Deploy the cluster
+ 5. Run network verification
+ 6. Run OSTF
+</pre>

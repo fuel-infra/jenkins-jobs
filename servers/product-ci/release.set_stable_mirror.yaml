@@ -1,6 +1,5 @@
 - job-template:
     name: '{version-id}.set_stable_mirror'
-    disabled: true
     builders:
       - shell:
           !include-raw-escape builders/set_stable_mirror.sh
@@ -8,22 +7,12 @@
       Update stable symlink target to specified mirror version.<br>
       If you have any questions, contact OSCI team via #fuel-osci IRC chat.
     logrotate:
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
       daysToKeep: 45
       numToKeep: 100
     node: mirror
     properties:
       - heavy-job:
           weight: 1
-      - throttle:
-          categories:
-            string: iso_builds
-          configVersion: 1
-          enabled: false
-          max-per-node: 1
-          max-total: 0
-          option: category
     parameters:
       - text:
           default: |
@@ -34,7 +23,6 @@
             seed-cz1.fuel-infra.org
           name: RSYNCHOSTS
       - string:
-          default: '{version-id}-staging'
           name: STABLE_VERSION
     publishers:
       - archive:
@@ -43,27 +31,10 @@
           latest-only: false
       - description-setter:
           regexp: ^[^\s]* is stable.*a href.*
-          set-for-matrix: false
       - trigger:
-          project: '{version-id}.iso'
+          project: '{version-id}.all'
           threshold: SUCCESS
-      - email-ext:
-          body: $DEFAULT_CONTENT
-          aborted: true
-          failure: true
-          still-failing: true
-          fixed: true
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com
     scm:
-      - git:
-          basedir: osci-mirrors
-          branches:
-            - '**'
-          remotes:
-            - review.fuel-infra.org:
-                url: https://review.fuel-infra.org/infra/mirrors
-          wipe-workspace: false
+      - osci-mirrors

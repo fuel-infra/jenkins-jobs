@@ -12,4 +12,3 @@
          branches:
           - '{repobranch}'
          basedir: '{basedir}'
-

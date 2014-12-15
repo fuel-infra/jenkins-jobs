@@ -1,0 +1,2 @@
+ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER
+dos.py erase $ENV_NAME

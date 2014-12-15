@@ -1,0 +1,111 @@
+########################################################################
+# Section: Builders
+########################################################################
+- builder:
+    name: systest
+    builders:
+      - shell:
+          !include-raw builders/run_system_test.sh
+      - shell:
+          !include-raw builders/erase_env.sh
+########################################################################
+# Section: Parameters
+########################################################################
+- parameter:
+    name: systest
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          description: "iso magnet link"
+      - string:
+          name: OPENSTACK_RELEASE
+          default: '{dist}'
+          description: Base distribution
+      - string:
+          name: TEST_GROUP
+          default: '{testgroup}'
+      - string:
+          name: ENV_PREFIX
+          default: '{version-id}.{id}.{dist}.{testgroup}'
+########################################################################
+# Section: Properties
+########################################################################
+- property:
+    name: bvt
+    properties:
+      - heavy-job:
+          weight: 8
+      - throttle:
+          max-per-node: 1
+          option: project
+########################################################################
+# Section: Publishers
+########################################################################
+- publisher:
+    name: email-systest
+    publishers:
+      - email-ext:
+          body: '{body-failed}'
+          aborted: true
+          failure: true
+          still-failing: true
+          fixed: false
+          send-to:
+            - recipients
+            - requester
+          recipients: '{mail-to}'
+          subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+      - email-ext:
+          body:
+            !include-raw notifications/test.passed
+          failure: false
+          fixed: true
+          send-to:
+            - recipients
+            - requester
+          recipients: '{mail-to}'
+          subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+- publisher:
+    name: email-default
+    publishers:
+      - email-ext:
+          body: $DEFAULT_CONTENT
+          aborted: true
+          failure: true
+          still-failing: true
+          fixed: true
+          send-to:
+            - recipients
+            - requester
+          recipients: '{mail-to}'
+          subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+- publisher:
+    name: nosetests
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml,logs/*'
+          latest-only: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+########################################################################
+# Section: SCM
+########################################################################
+- scm:
+    name: stackforge
+    scm:
+      - git:
+          url: 'https://github.com/stackforge/{repo}.git'
+          branches:
+            - 'origin/{branch}'
+          wipe-workspace: false
+- scm:
+    name: osci-mirrors
+    scm:
+      - git:
+          basedir: osci-mirrors
+          url: https://review.fuel-infra.org/infra/mirrors
+          branches:
+            - origin/master
+          wipe-workspace: false

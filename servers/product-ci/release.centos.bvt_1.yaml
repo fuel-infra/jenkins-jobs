@@ -1,31 +1,11 @@
 - job-template:
     name: '{version-id}.centos.bvt_1'
-    disabled: true
     builders:
-      - shell:
-          !include-raw-escape builders/centos.bvt_1.sh
+      - systest
     concurrent: true
-    description: |
-      <p>Build verification test for Centos</p>
-      <pre style="font-size: 10px">
-      Case 1: deploy_neutron_gre
-       1. Create cluster
-       2. Add 1 node with controller role
-       3. Add 2 nodes with compute role
-       4. Deploy the cluster
-       5. Run network verification
-       6. Run OSTF
-      Case 2:  deploy_neutron_vlan_ha
-       1. Create cluster
-       2. Add 3 nodes with controller role
-       3. Add 2 nodes with compute role
-       4. Deploy the cluster
-       5. Run network verification
-       6. Run OSTF
-      </pre>
+    description:
+      !include-raw descriptions/centos.bvt_1
     logrotate:
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
       daysToKeep: 30
       numToKeep: 50
     node: bvt
@@ -33,77 +13,24 @@
       - heavy-job:
           weight: 8
       - throttle:
-          enabled: true
           max-per-node: 1
-          max-total: 0
           option: project
     parameters:
-      - string:
-          name: MAGNET_LINK
+      - systest:
+          dist: CentOS
+          testgroup: bvt_1
+          version-id: '{version-id}'
+          id: '{id}'
     publishers:
-      - archive:
-          allow-empty: true
-          artifacts: '**/nosetests.xml,logs/*'
-          latest-only: false
-      - junit:
-          keep-long-stdio: false
-          results: '**/nosetests.xml'
-      - email-ext:
-          body: |
-            Something is wrong with the ISO: it does not pass Build Verification
-            Test for deployment. We need to fix this ASAP.
-
-
-            Please get into the IRC (#fuel-qa) to check if someone is fixing this already,
-            or start fixing it yourself.
-
-
-            When you start working on the issue
-
-            - inform others via this mailing list,
-
-            - set build description for the failied build in Jenkins: add link to corresponding
-            Launchpad bug or any related info.
-
-
-            $BUILD_URL
-
-
-            $BUILD_LOG
-
-
-            $BUILD_URL
-          aborted: true
-          failure: true
-          still-failing: true
-          fixed: false
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-core-team@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
-      - email-ext:
-          body: |
-            Test passed. Thanks, everyone.
-
-            $BUILD_URL
-          failure: false
-          fixed: true
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-core-team@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
+      - nosetests
+      - email-systest:
+          body-failed:
+            !include-raw notifications/bvt.failed
+          mail-to: devops+alert@mirantis.com,fuel-core-team@mirantis.com
     scm:
-      - git:
-          branches:
-            - origin/master
-          remotes:
-            - github:
-                url: https://github.com/stackforge/fuel-main.git
-          wipe-workspace: false
+      - stackforge:
+          branch: '{branch}'
+          repo: fuel-main
     wrappers:
       - timeout:
           timeout: 300
-      - ansicolor:
-          colormap: xterm

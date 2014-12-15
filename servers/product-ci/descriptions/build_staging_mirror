@@ -1,0 +1,10 @@
+This job builds staging mirror. This mirror is a test candidate, it is not used for ISO builds.<br><br>
+Mirrors are synced to:<br>
+<a href="http://osci-mirror-kha.kha.mirantis.net/fwm/files/">osci-mirror-kha.kha.mirantis.net</a><br>
+<a href="http://osci-mirror-msk.msk.mirantis.net/fwm/files/">osci-mirror-msk.msk.mirantis.net</a><br>
+<a href="http://osci-mirror-srt.srt.mirantis.net/fwm/files/">osci-mirror-srt.srt.mirantis.net</a><br>
+<a href="http://mirror.fuel-infra.org/fwm/files/">mirror.fuel-infra.org</a><br><br>
+Documentation about mirror staging:<br>
+<a href="https://mirantis.jira.com/wiki/pages/viewpage.action?pageId=176655477">How Fuel staging Fuel Mirrors work</a>,
+<a href="https://docs.google.com/a/mirantis.com/document/d/1yrOQMOgmzcY8FxXlGLg6v_Um5Sni6snQg5BA4V24mbE/edit#heading=h.mqzzk07485lc">How mirror staging works</a>.<br><br>
+If you have any questions, contact Devops or OSCI teams via #fuel-devops and #fuel-osci IRC chats.

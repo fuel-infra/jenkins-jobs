@@ -1,5 +1,3 @@
-# sample script to check that brackets aren't escaped
-# when using the include-raw application yaml tag
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin:$PATH
 
 export FEATURE_GROUPS=mirantis
@@ -10,94 +8,60 @@ export UPGRADE_TARBALL_NAME=fuel-$PROD_VER-upgrade-$BUILD_NUMBER-$BUILD_ID
 export ARTIFACT_NAME=fuel-$PROD_VER-artifacts-$BUILD_NUMBER-$BUILD_ID
 export ARTIFACT_DIFF_NAME=fuel-$PROD_VER-diff-$BUILD_NUMBER-$BUILD_ID
 
+
 # Available choices: msk srt usa hrk none
 export USE_MIRROR=msk
 
-export BUILD_DIR=$\{WORKSPACE\}/../tmp/$\{JOB_NAME\}/build
+export BUILD_DIR=${WORKSPACE}/../tmp/${JOB_NAME}/build
 export LOCAL_MIRROR=${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror
 
 export ARTS_DIR=${WORKSPACE}/artifacts
-export DEPS_DIR=${BUILD_DIR}/deps
-
-# PRODUCT_VERSION=6.0 BASE_VERSION=5.1.1 UPGRADE_VERSIONS=${PRODUCT_VERSION}:${BASE_VERSION}"
-export BASE_VERSION=5.1.1
-
-
-###1) make deep_clean
-test "$deep_clean" = "true" && make deep_clean
-# we need to clean arts_dir, if it's outside build_dir
 rm -rf ${ARTS_DIR}
 
-
-####2) build iso img and artifacts for the next jobs
-make iso img bootstrap docker puppet centos-repo ubuntu-repo version-yaml openstack-yaml
-
-
-####2.1) prepare artifacts for publishing
-cd ${ARTS_DIR}
-tar cvf "${ARTIFACT_NAME}.tar" bootstrap.tar.gz centos-repo.tar ubuntu-repo.tar puppet.tgz openstack.yaml version.yaml fuel-images.tar.lrz
-
-
-####3) generating diff repo artifacts
-# remove old artifacts, if any exists
+export DEPS_DIR=${BUILD_DIR}/deps
 rm -rf "${DEPS_DIR}"
 
-## all arts from 5.1.1, because we need them for diff mirror too
-export DEPS_DATA_DIR="$DEPS_DIR/5.1.1"
+#########################################
+
+test "$deep_clean" = "true" && make deep_clean
+
+echo "STEP 0. PROD_VER=${PROD_VER} BASE_VERSION=${BASE_VERSION} UPGRADE_VERSIONS=${PROD_VER}:${BASE_VERSION}"
+
+#########################################
+
+echo "STEP 1. Get artifacts from ${BASE_VERSION}"
+export DEPS_DATA_DIR="$DEPS_DIR/${BASE_VERSION}"
 mkdir -p "${DEPS_DATA_DIR}"
 
-export DATA_MAGNET_LINK=`curl -s 'http://jenkins-product.srt.mirantis.net:8080/job/5.1.1.all/lastSuccessfulBuild/artifact/artifacts_magnet_link.txt' | sed 's~.*MAGNET_LINK=~~'`
+DATA_URL="http://jenkins-product.srt.mirantis.net:8080/job/${BASE_VERSION}.all"
+DATA_BUILD_NUMBER=`curl -s "${DATA_URL}/lastSuccessfulBuild/buildNumber"`
+echo "$DATA_URL/$DATA_BUILD_NUMBER" > $WORKSPACE/data_build_url.txt
+export DATA_MAGNET_LINK=`curl -s "${DATA_URL}/${DATA_BUILD_NUMBER}/artifact/artifacts_magnet_link.txt" | sed 's~.*MAGNET_LINK=~~'`
 
 DATA_FILE=`seedclient-wrapper -dvm "${DATA_MAGNET_LINK}" --force-set-symlink -o "${DEPS_DATA_DIR}"`
 tar xvf "${DATA_FILE}" -C "${DEPS_DATA_DIR}"
 
+#########################################
 
-## arts from 6.0 we already have it from this job
-export DEPS_DATA_DIR="$DEPS_DIR/6.0"
-mkdir -p "${DEPS_DATA_DIR}"
+echo "STEP 2. Make everything"
+make UPGRADE_VERSIONS="${PROD_VER}:${BASE_VERSION}" BASE_VERSION=${BASE_VERSION} iso img upgrade-lrzip bootstrap docker centos-repo ubuntu-repo centos-diff-repo ubuntu-diff-repo version-yaml openstack-yaml
 
-mv bootstrap.tar.gz "${DEPS_DATA_DIR}"
-mv centos-repo.tar "${DEPS_DATA_DIR}"
-mv ubuntu-repo.tar "${DEPS_DATA_DIR}"
-mv puppet.tgz "${DEPS_DATA_DIR}"
-mv openstack.yaml "${DEPS_DATA_DIR}"
-mv version.yaml "${DEPS_DATA_DIR}"
-mv fuel-images.tar.lrz "${DEPS_DATA_DIR}"
+#########################################
 
-# building targets
-cd ${WORKSPACE}
-make centos-diff-repo ubuntu-diff-repo puppet version-yaml openstack-yaml BASE_VERSION=5.1.1
+echo "STEP 3. Pack artifacts"
+cd ${ARTS_DIR}
+tar cvf "${ARTIFACT_NAME}.tar" bootstrap.tar.gz centos-repo.tar ubuntu-repo.tar puppet.tgz openstack.yaml version.yaml fuel-images.tar.lrz
 
+#########################################
 
-####3.1) preparing diff artifacts for publishing
+echo "STEP 4. Pack diffs"
 cd ${ARTS_DIR}
 tar cvf "${ARTIFACT_DIFF_NAME}.tar" puppet.tgz version.yaml openstack.yaml diff*
 
+#########################################
 
-####4) generate upgrade tarball
-cd ${ARTS_DIR}
+echo "STEP 5. Publish everything"
 
-## we already have 5.1.1
-#export DEPS_DATA_DIR="$DEPS_DIR/5.1.1"
-
-## arts from 6.0-5.1_diff, we build it one step before
-export DEPS_DATA_DIR="$DEPS_DIR/6.0"
-# remove previous artifacts (from full job), because for diff we need to put diff-mirrors here
-rm -rf "${DEPS_DATA_DIR}"
-
-mkdir -p "${DEPS_DATA_DIR}"
-
-mv diff-* "${DEPS_DATA_DIR}"
-mv puppet.tgz "${DEPS_DATA_DIR}"
-mv openstack.yaml "${DEPS_DATA_DIR}"
-mv version.yaml "${DEPS_DATA_DIR}"
-
-# building targets
-cd ${WORKSPACE}
-make upgrade-lrzip UPGRADE_VERSIONS="6.0:5.1.1" BASE_VERSION=5.1.1
-
-
-####5) publish artifacts
 export LOCAL_STORAGE='/var/www/fuelweb-iso'
 export HTTP_ROOT="http://`hostname -f`/fuelweb-iso"
 
@@ -106,7 +70,6 @@ for artifact in `ls fuel-*`
 do
  ${WORKSPACE}/utils/jenkins/process_artifacts.sh $artifact
 done
-
 
 cd ${WORKSPACE}
 
@@ -119,8 +82,10 @@ grep MAGNET_LINK ${ARTS_DIR}/fuel-*-diff-*.data.txt > ${WORKSPACE}/diff_magnet_l
 grep MAGNET_LINK ${ARTS_DIR}/fuel-*-artifacts-*.data.txt > ${WORKSPACE}/artifacts_magnet_link.txt
 grep MAGNET_LINK ${ARTS_DIR}/fuel-*upgrade-*.data.txt > ${WORKSPACE}/upgrade_magnet_link.txt
 
+#########################################
 
-# Generate build description
+echo "STEP 6. Generate build description"
+
 ISO_MAGNET_LINK=`grep MAGNET_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/MAGNET_LINK=//'`
 ISO_HTTP_LINK=`grep HTTP_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_LINK=//'`
 ISO_HTTP_TORRENT=`grep HTTP_TORRENT ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_TORRENT=//'`

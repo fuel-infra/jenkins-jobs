@@ -1,81 +1,33 @@
 - job-template:
     name: '{version-id}.staging.centos.bvt_1'
-    disabled: true
     builders:
-      - shell:
-          !include-raw-escape builders/staging.centos.bvt_1.sh
+      - systest
     concurrent: true
-    description: |
-      <p>Build verification test for CentOS</p>
-      <pre style="font-size: 10px">
-      Case 1: deploy_neutron_gre
-       1. Create cluster
-       2. Add 1 node with controller role
-       3. Add 2 nodes with compute role
-       4. Deploy the cluster
-       5. Run network verification
-       6. Run OSTF
-
-      Case 2:  deploy_neutron_vlan_ha
-       1. Create cluster
-       2. Add 3 nodes with controller role
-       3. Add 2 nodes with compute role
-       4. Deploy the cluster
-       5. Run network verification
-       6. Run OSTF
-      </pre>
-      <p>Test duration: 2h30m - 3h10m.</p>
+    description:
+      !include-raw descriptions/centos.bvt_1
     logrotate:
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
       daysToKeep: 30
-      numToKeep: -1
     node: custom_bvt
     properties:
       - heavy-job:
           weight: 8
       - throttle:
-          enabled: true
           max-per-node: 1
-          max-total: 0
           option: project
     parameters:
-      - string:
-          default: bvt_1
-          name: TEST_GROUP
+      - systest:
+          dist: CentOS
+          testgroup: bvt_1
+          version-id: '{version-id}'
+          id: '{id}'
     publishers:
-      - archive:
-          allow-empty: true
-          artifacts: '**/nosetests.xml,logs/*'
-          latest-only: false
-      - logparser:
-          fail-on-error: false
-          parse-rules: '/var/lib/jenkins/fuellib.parser'
-          unstable-on-warning: false
-      - junit:
-          keep-long-stdio: false
-          results: '**/nosetests.xml'
-      - email-ext:
-          body: $DEFAULT_CONTENT
-          aborted: true
-          failure: true
-          still-failing: true
-          fixed: true
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
+      - nosetests
+      - email-default:
+          mail-to: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
     scm:
-      - git:
-          branches:
-            - origin/master
-          remotes:
-            - github:
-                url: https://github.com/stackforge/fuel-main.git
-          wipe-workspace: false
+      - stackforge:
+          branch: '{branch}'
+          repo: fuel-main
     wrappers:
       - timeout:
           timeout: 210
-      - ansicolor:
-          colormap: xterm

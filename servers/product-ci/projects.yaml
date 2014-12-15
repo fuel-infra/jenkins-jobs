@@ -1,17 +1,92 @@
 - project:
-    name: 6.1.main
+    name: 6.1
     version-id: 6.1
+    branch: master
+    base-version: 5.1.1
     jobs:
-      - '{version-id}.all'
-      - '{version-id}.build_staging_mirror'
+      - 6.1.main
+      - 6.1.staging
+- job-group:
+    name: 6.1.main
+    id: main
+    jobs:
+      - '{version-id}.all':
+          timer: 'H 22 * * *'
       - '{version-id}.centos.bvt_1'
-      - '{version-id}.set_stable_mirror'
-      - '{version-id}.smoke'
-      - '{version-id}.staging.centos.bvt_1'
-      - '{version-id}.staging.iso'
-      - '{version-id}.staging.ubuntu.bvt_2'
-      - '{version-id}.test_staging_mirror'
       - '{version-id}.ubuntu.bvt_2'
+      - '{version-id}.smoke'
+- job-group:
+    name: 6.1.staging
+    id: staging
+    jobs:
+      - '{version-id}.build_staging_mirror':
+          extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-6.1/ precise-security main universe multiverse restricted'
+          timer: 'H 7 * * *'
+      - '{version-id}.staging.iso'
+      - '{version-id}.staging.centos.bvt_1'
+      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.set_stable_mirror'
+      - '{version-id}.test_staging_mirror'
+
+- project:
+    name: master
+    version-id: master
+    branch: master
+    base-version: 5.1.1
+    jobs:
+      - master.main
+      - master.staging
+- job-group:
+    name: master.main
+    id: main
+    jobs:
+      - '{version-id}.all':
+          timer: 'H 22 */3 * *'
+      - '{version-id}.centos.bvt_1'
+      - '{version-id}.ubuntu.bvt_2'
+      - '{version-id}.smoke'
+- job-group:
+    name: master.staging
+    id: staging
+    jobs:
+      - '{version-id}.build_staging_mirror':
+          extra-deb-repos: ''
+          timer: 'H 7 */3 * *'
+      - '{version-id}.staging.iso'
+      - '{version-id}.staging.centos.bvt_1'
+      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.set_stable_mirror'
+      - '{version-id}.test_staging_mirror'
+
+- project:
+    name: 5.1.2
+    version-id: 5.1.2
+    branch: stable/5.1
+    base-version: 5.1
+    jobs:
+      - 5.1.2.main
+      - 5.1.2.staging
+- job-group:
+    name: 5.1.2.main
+    id: main
+    jobs:
+      - '{version-id}.all':
+          timer: 'H 20 * * *'
+      - '{version-id}.centos.bvt_1'
+      - '{version-id}.ubuntu.bvt_2'
+      - '{version-id}.smoke'
+- job-group:
+    name: 5.1.2.staging
+    id: staging
+    jobs:
+      - '{version-id}.build_staging_mirror':
+          extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-5.1.1/ precise-security main universe multiverse restricted'
+          timer: 'H 5 * * *'
+      - '{version-id}.staging.iso'
+      - '{version-id}.staging.centos.bvt_1'
+      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.set_stable_mirror'
+      - '{version-id}.test_staging_mirror'
 
 - job-group:
     name: '{version-id}-system_tests-upgrades'
@@ -46,5 +121,3 @@
           dist: 'Ubuntu'
       - '{version-id}-system_tests-upgrades':
           dist: 'CentOS'
-
-

@@ -1,23 +1,23 @@
 - job-template:
     name: '{version-id}.all'
-    disabled: true
     builders:
       - shell:
           !include-raw-escape builders/all.sh
     description: |
       Build artifacts, iso, img and upgrade tarball
-    node: upgrade
+    node: iso
     properties:
       - heavy-job:
           weight: 1
       - throttle:
           categories:
-            string: iso_builds
-          enabled: true
+            - iso_builds
           max-per-node: 1
-          max-total: 0
           option: category
     parameters:
+      - string:
+          name: BASE_VERSION
+          default: '{base-version}'
       - string:
           name: deep_clean
           default: 'true'
@@ -27,15 +27,13 @@
       - archive:
           allow-empty: false
           artifacts: artifacts/*.data.txt, artifacts/*.data.html, version.yaml.txt,
-            magnet_link.txt, data_magnet_link.txt, listing.txt
+            *magnet_link.txt, listing.txt, artifacts/*changelog, data_build_url.txt
           latest-only: false
       - description-setter:
           regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
           set-for-matrix: false
-      - email:
-          notify-every-unstable-build: true
-          recipients: devops+alert@mirantis.com fuel-osci@mirantis.com
-          send-to-individuals: false
+      - email-default:
+          mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
       - trigger-parameterized-builds:
         - project: deploy_iso_on_cachers,{version-id}.smoke,{version-id}.centos.bvt_1,{version-id}.ubuntu.bvt_2
           condition: UNSTABLE_OR_BETTER
@@ -46,13 +44,8 @@
           property-file: upgrade_magnet_link.txt
           triggerWithNoParameters: false
     scm:
-      - git:
-          branches:
-            - origin/master
-          remotes:
-            - github:
-                url: https://github.com/stackforge/fuel-main.git
-          wipe-workspace: false
-    wrappers:
-      - ansicolor:
-          colormap: xterm
+      - stackforge:
+          branch: '{branch}'
+          repo: fuel-main
+    triggers:
+      - timed: '{timer}'

@@ -1,25 +1,11 @@
 - job-template:
     name: '{version-id}.ubuntu.bvt_2'
-    disabled: true
     builders:
-      - shell:
-          !include-raw-escape builders/ubuntu.bvt_2.sh
+      - systest
     concurrent: true
-    description: |
-      <p>Build verification test for Ubuntu</p>
-      <pre style="font-size: 10px">
-      Case: deploy_ha_vlan
-       1. Create cluster
-       2. Add 3 nodes with controller roles
-       3. Add 2 nodes with compute roles
-       4. Set up cluster to use Network VLAN manager with 8 networks
-       5. Deploy the cluster
-       6. Run network verification
-       7. Run OSTF
-      </pre>
+    description:
+      !include-raw descriptions/ubuntu.bvt_2
     logrotate:
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
       daysToKeep: 30
       numToKeep: 50
     node: bvt
@@ -27,78 +13,24 @@
       - heavy-job:
           weight: 8
       - throttle:
-          configVersion: 1
-          enabled: true
           max-per-node: 1
-          max-total: 0
           option: project
     parameters:
-      - string:
-          name: MAGNET_LINK
+      - systest:
+          dist: Ubuntu
+          testgroup: bvt_2
+          version-id: '{version-id}'
+          id: '{id}'
     publishers:
-      - archive:
-          allow-empty: true
-          artifacts: '**/nosetests.xml,logs/*'
-          latest-only: false
-      - junit:
-          keep-long-stdio: false
-          results: '**/nosetests.xml'
-      - email-ext:
-          body: |
-            Something is wrong with the ISO: it does not pass Build Verification
-            Test for deployment. We need to fix this ASAP.
-
-
-            Please get into the IRC (#fuel-qa) to check if someone is fixing this already,
-            or start fixing it yourself.
-
-
-            When you start working on the issue
-
-            - inform others via this mailing list,
-
-            - set build description for the failied build in Jenkins: add link to corresponding
-            Launchpad bug or any related info.
-
-
-            $BUILD_URL
-
-
-            $BUILD_LOG
-
-
-            $BUILD_URL
-          aborted: true
-          failure: true
-          still-failing: true
-          fixed: false
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-core-team@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
-      - email-ext:
-          body: |
-            Test passed. Thanks, everyone.
-
-            $BUILD_URL
-          failure: false
-          fixed: true
-          send-to:
-            - recipients
-            - requester
-          recipients: devops+alert@mirantis.com,fuel-core-team@mirantis.com
-          subject: '[Jenkins] $DEFAULT_SUBJECT'
+      - nosetests
+      - email-systest:
+          body-failed:
+            !include-raw notifications/bvt.failed
+          mail-to: devops+alert@mirantis.com,fuel-core-team@mirantis.com
     scm:
-      - git:
-          branches:
-            - origin/master
-          remotes:
-            - github:
-                url: https://github.com/stackforge/fuel-main.git
-          wipe-workspace: false
+      - stackforge:
+          branch: '{branch}'
+          repo: fuel-main
     wrappers:
       - timeout:
           timeout: 200
-      - ansicolor:
-          colormap: xterm
