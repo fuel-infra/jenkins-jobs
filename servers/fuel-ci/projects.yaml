@@ -1,0 +1,21 @@
+- project:
+    name: community.all
+    jobs:
+      - '{version-id}-community.all':
+          version-id: 6.1
+          release: 6.1
+          base-version: 5.1.1
+          branch: master
+          timer: 'H 5 * * *'
+      - '{version-id}-community.all':
+          version-id: 6.0
+          release: 6.0
+          base-version: 5.1.1
+          branch: stable/6.0
+          timer: 'H 3 * * *'
+      - '{version-id}-community.all':
+          version-id: 5.1.2
+          release: 5.1
+          base-version: 5.1
+          branch: stable/5.1
+          timer: 'H 1 * * *'
