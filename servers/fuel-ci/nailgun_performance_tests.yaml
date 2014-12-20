@@ -1,0 +1,35 @@
+- job:
+    builders:
+      - shell:
+          !include-raw builders/nailgun_performance_tests.sh
+    description: "Nailgun performance tests. Uses venv with python2.6"
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    name: nailgun_performance_tests
+    node: fuel-web-master
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - one-nailgun-db-per-node
+          max-per-node: 1
+          option: category
+    publishers:
+      - email:
+          recipients: fuel-core-team@mirantis.com devops+alert@mirantis.com
+          send-to-individuals: false
+      - archive:
+          artifacts: results/tests/*, results/last/*, results/results/*
+    scm:
+      - git:
+          url: https://review.openstack.org/stackforge/fuel-web.git
+          branches:
+            - '*/master'
+    triggers:
+      - timed: '0 8,20 * * *'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 45
