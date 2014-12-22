@@ -1,0 +1,65 @@
+- job:
+    name: verify-fuel-web
+    builders:
+      - shell:
+          !include-raw builders/verify-fuel-web.sh
+    description: |
+      Test requests for fuel-web master branch
+
+      Uses venv with python2.6
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: fuel-web-master
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: PIP_OPTION
+      - string:
+          name: NPM_CONFIG_PREFIX
+          default: '/home/jenkins/npm'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - one-nailgun-db-per-node
+          max-per-node: 1
+          option: category
+    publishers:
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml,**/nailgun.xml,**/fuelclient.xml,**/fuelupgrade.xml,**/fuelupgradedownloader.xml,**/shotgun.xml'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-web.git
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-web
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/6.0'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/5.1'
+      - timed: '0 11 * * *'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
