@@ -33,7 +33,7 @@
           projects:
             - name: '{version-id}.staging.iso'
               kill-phase-on: FAILURE
-              property-file: mirror-staging.txt
+              property-file: mirror_staging.txt
       - copyartifact:
           project: '{version-id}.staging.iso'
           filter: artifacts/magnet_link.txt
