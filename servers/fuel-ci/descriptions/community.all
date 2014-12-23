@@ -1,0 +1,6 @@
+Build:
+<ul>
+  <li>{version-id} iso, img</li>
+  <li>upgrade_tarball</li>
+  <li>artifacts</li>
+</ul>

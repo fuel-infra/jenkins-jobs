@@ -1,0 +1,70 @@
+- job-template:
+    name: '{version-id}-community.all'
+    builders:
+      - shell:
+          !include-raw-escape builders/community.all.sh
+    concurrent: true
+    description:
+      !include-raw descriptions/community.all
+    logrotate:
+      artifactDaysToKeep: 10
+      artifactNumToKeep: 10
+      daysToKeep: 10
+      numToKeep: 10
+    node: build
+    properties:
+      - heavy-job:
+          weight: 2
+    parameters:
+      - string:
+          name: BASE_VERSION
+          default: '{base-version}'
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: version.yaml.txt, *torrent_link.txt, artifacts/*changelog
+          latest-only: false
+      - email:
+          notify-every-unstable-build: false
+          recipients: devops+alert@mirantis.com
+          send-to-individuals: false
+      - naginator:
+          max-retries: 3
+          rerun-if-unstable: false
+          delay:
+            fixed:
+              delay: 60
+      - trigger-parameterized-builds:
+        - project: publish_fuel_community_iso
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            ISO_ID={version-id}-$BUILD_NUMBER-$BUILD_ID
+            UPGRADE_ID={version-id}-upgrade-$BUILD_NUMBER-$BUILD_ID
+            ARTIFACTS_DIR=$WORKSPACE/artifacts
+            RELEASE={release}
+            FUEL_MAIN_BRANCH={branch}
+            BUILD=fuel-community-{version-id}-$BUILD_NUMBER-$BUILD_ID
+        - project: fuel_communiy_build_reports
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            RELEASE={release}
+            BUILD=fuel-community-{version-id}-$BUILD_NUMBER-$BUILD_ID
+            STAGE=build
+            VALUE=ok
+        - project: fuel_communiy_build_reports
+          condition: FAILED
+          predefined-parameters: |
+            RELEASE={release}
+            BUILD=fuel-community-{version-id}-$BUILD_NUMBER-$BUILD_ID
+            STAGE=build
+            VALUE=fail
+    scm:
+      - git:
+          url: 'https://github.com/stackforge/fuel-main.git'
+          branches:
+            - 'origin/{branch}'
+    triggers:
+      - timed: '{timer}'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
