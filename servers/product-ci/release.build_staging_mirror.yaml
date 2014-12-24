@@ -2,6 +2,8 @@
     name: '{version-id}.build_staging_mirror'
     builders:
       - shell:
+          !include-raw-escape builders/update_reprepro.sh
+      - shell:
           !include-raw-escape builders/build_staging_mirror.sh
     description:
       !include-raw descriptions/build_staging_mirror
@@ -10,6 +12,10 @@
       numToKeep: 100
     node: mirror
     parameters:
+      - string:
+          name: REPOS
+          default: 'ubuntu-fuel-{version-id}-stable'
+          description: 'Space delimited list of ubuntu repos to create reprepro repo'
       - string:
           name: extra_commits
           description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
@@ -50,3 +56,6 @@
       - osci-mirrors
     triggers:
       - timed: '{timer}'
+    wrappers:
+      - ssh-agent-credentials:
+          user: '5b151a58-4b65-4d13-87a1-883d52020e2d'
