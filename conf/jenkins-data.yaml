@@ -47,4 +47,10 @@
     description: This plugin is a replacement for Jenkins's email publisher
     url: http://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin
     version: 2.30.2
+
+- plugin:
+    id: ssh-agent
+    description: This plugin allows you to provide SSH credentials to builds via a ssh-agent in Jenkins.
+    url: https://wiki.jenkins-ci.org/display/JENKINS/SSH+Agent+Plugin
+    version: 1.4.1
 # Any other Jenkins Master data
