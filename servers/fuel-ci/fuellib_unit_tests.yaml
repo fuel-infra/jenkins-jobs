@@ -1,0 +1,48 @@
+- job:
+    name: fuellib_unit_tests
+    builders:
+      - shell:
+          !include-raw builders/fuellib_unit_tests.sh
+    concurrent: true
+    description: Runs ./utils/jenkins/fuel_unit_tests.sh
+    logrotate:
+      artifactDaysToKeep: 30
+    node: fuel-library-unit-tests
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-library.git
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-library
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 20
+          write-description: true
