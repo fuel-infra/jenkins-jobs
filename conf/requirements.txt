@@ -1,1 +1,1 @@
-jenkins-job-builder==1.0.0
+jenkins-job-builder==1.1.0
