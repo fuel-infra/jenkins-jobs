@@ -80,13 +80,46 @@
     id: staging
     jobs:
       - '{version-id}.build_staging_mirror':
-          extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-5.1.1/ precise-security main universe multiverse restricted'
+          extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-5.1.2/ precise-security main universe multiverse restricted'
           timer: 'H 5 * * *'
       - '{version-id}.staging.iso'
       - '{version-id}.staging.centos.bvt_1'
       - '{version-id}.staging.ubuntu.bvt_2'
       - '{version-id}.set_stable_mirror'
       - '{version-id}.test_staging_mirror'
+
+- project:
+    name: 6.0.1
+    version-id: 6.0.1
+    branch: stable/6.0
+    base-version: 5.1.1
+    jobs:
+      - 6.0.1.main
+      - 6.0.1.staging
+
+- job-group:
+    name: 6.0.1.main
+    id: main
+    jobs:
+      - '{version-id}.all':
+          timer: 'H 20 * * *'
+      - '{version-id}.centos.bvt_1'
+      - '{version-id}.ubuntu.bvt_2'
+      - '{version-id}.smoke'
+- job-group:
+    name: 6.0.1.staging
+    id: staging
+    jobs:
+      - '{version-id}.build_staging_mirror':
+          extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-6.0.1/ precise-security main universe multiverse restricted'
+          timer: 'H 5 * * *'
+      - '{version-id}.staging.iso'
+      - '{version-id}.staging.centos.bvt_1'
+      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.set_stable_mirror'
+      - '{version-id}.test_staging_mirror'
+
+
 
 - job-group:
     name: '{version-id}-system_tests-upgrades'
