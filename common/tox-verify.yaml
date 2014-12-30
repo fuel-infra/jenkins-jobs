@@ -7,6 +7,10 @@
     builders:
       - shell: 'tox -v'
 
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: refs/heads/master
     scm:
       - main:
           reponame: '{reponame}'
@@ -18,5 +22,5 @@
 
     publishers:
       - archive:
-          artifacts: '**/test_output/*'
+          artifacts: 'output/**'
           allow-empty: 'true'

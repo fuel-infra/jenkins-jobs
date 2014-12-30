@@ -7,17 +7,20 @@
     name: main
     scm:
       - git:
-         url: 'ssh://pkgs-ci@review.fuel-infra.org:29418/{reponame}.git'
-         credentials-id: pkgs-ci
+         remotes:
+           - gerrit:
+               url: 'ssh://pkgs-ci@review.fuel-infra.org:29418/{reponame}.git'
+               refspec: '$GERRIT_REFSPEC'
+               credentials-id: 'b6e7ab07-8d36-4d6b-9a58-68d03ecf484d'
          branches:
           - '{repobranch}'
+         choosing-strategy: gerrit
 
 - trigger:
     name: main
     triggers:
       - gerrit:
           server-name: 'main'
-          silent: true
           projects:
             - project-compare-type: 'PLAIN'
               project-pattern: '{project-name}'
