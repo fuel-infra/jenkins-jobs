@@ -36,7 +36,7 @@
       - description-setter:
           regexp: ^Updated:.*a href.*
       - archive:
-          artifacts: mirror_staging.txt osci-mirrors/sync-diff-*.log
+          artifacts: mirror_staging.txt, osci-mirrors/sync-diff-*.log
           latest-only: false
       - trigger-parameterized-builds:
         - project: '{version-id}.test_staging_mirror'
