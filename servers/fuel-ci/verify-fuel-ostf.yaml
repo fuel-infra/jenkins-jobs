@@ -1,0 +1,60 @@
+- job:
+    name: verify-fuel-ostf
+    builders:
+      - shell:
+          !include-raw builders/verify-fuel-ostf.sh
+    description: |
+      Test requests for fuel-ostf
+
+      Uses venv with python2.6
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: verify-fuel-ostf
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: PIP_OPTION
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          max-per-node: 1
+          option: project
+    publishers:
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-ostf.git
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-ostf
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/6.0'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/5.1'
+      - timed: '0 12 * * *'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
