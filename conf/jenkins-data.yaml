@@ -43,6 +43,12 @@
     version: 1.13
 
 - plugin:
+    id: envinject
+    description: This plugin makes it possible to set an environment for the builds.
+    url: https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin
+    version:  1.89
+
+- plugin:
     id: email-ext
     description: This plugin is a replacement for Jenkins's email publisher
     url: http://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin
@@ -59,4 +65,5 @@
     description: Adds extended functionality to Choice parameter
     url: https://wiki.jenkins-ci.org/display/JENKINS/Extended+Choice+Parameter+plugin
     version: 0.34
+=======
 # Any other Jenkins Master data
