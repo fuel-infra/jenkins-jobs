@@ -19,6 +19,11 @@
       - string:
           name: BASE_VERSION
           default: '{base-version}'
+      - string:
+          name: deep_clean
+          default: 'true'
+          description: Perform deep_clean or not. Default is "true". Set any other value
+            to disable it.
     publishers:
       - archive:
           allow-empty: true
