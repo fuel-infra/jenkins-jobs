@@ -60,15 +60,6 @@ tar cvf "${ARTIFACT_DIFF_NAME}.tar" puppet.tgz version.yaml openstack.yaml diff*
 
 echo "STEP 5. Publish everything"
 
-export LOCAL_STORAGE='/var/www/fuelweb-iso'
-export HTTP_ROOT="http://`hostname -f`/fuelweb-iso"
-
-cd ${ARTS_DIR}
-for artifact in `ls fuel-*`
-do
- ${WORKSPACE}/utils/jenkins/process_artifacts.sh $artifact
-done
-
 cd ${WORKSPACE}
 
 cp $LOCAL_MIRROR/*changelog ${ARTS_DIR}/ || true
