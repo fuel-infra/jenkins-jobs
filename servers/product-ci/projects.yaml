@@ -149,3 +149,19 @@
       - '{version-id}.staging.ubuntu.bvt_2'
       - '{version-id}.set_stable_mirror'
       - '{version-id}.test_staging_mirror'
+
+- project:
+    name: custom_iso
+    jobs:
+      - 'custom_{version-id}_iso':
+          version-id: 5.0
+          branch: stable/5.0
+      - 'custom_{version-id}_iso':
+          version-id: 5.1
+          branch: stable/5.1
+      - 'custom_{version-id}_iso':
+          version-id: 6.0
+          branch: stable/6.0
+      - 'custom_{version-id}_iso':
+          version-id: 6.1
+          branch: master
