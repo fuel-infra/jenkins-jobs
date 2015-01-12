@@ -43,11 +43,11 @@
           condition: SUCCESSFUL
           projects:
             - name: '{version-id}.staging.centos.bvt_1'
-              kill-phase-on: FAILURE
+              kill-phase-on: NEVER
               property-file: artifacts/magnet_link.txt
               current-parameters: true
             - name: '{version-id}.staging.ubuntu.bvt_2'
-              kill-phase-on: FAILURE
+              kill-phase-on: NEVER
               property-file: artifacts/magnet_link.txt
               current-parameters: true
       - multijob:
