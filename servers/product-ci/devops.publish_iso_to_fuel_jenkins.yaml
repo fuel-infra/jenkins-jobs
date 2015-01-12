@@ -1,0 +1,47 @@
+- job:
+    name: 'publish_iso_to_fuel_jenkins'
+    description: Export iso to fuel-jenkins slaves
+    builders:
+      - shell: |
+          for slave in $SLAVES; do
+           rsync -v -L -e ssh /var/www/fuelweb-iso/fuel-${version}-${number}-*.iso jenkins@${slave}:~/workspace/iso/
+          done
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: number
+          description: iso number
+      - choice:
+          name: version
+          choices:
+            - 'master'
+            - '6.1'
+            - '6.0'
+            - '5.1.1'
+            - '5.1'
+            - '5.0'
+            - '4.1'
+            - 'gerrit-5.0'
+          description: "iso version"
+      - extended-choice:
+          name: SLAVES
+          description: 'Select Fuel-CI slave for uploading ISO'
+          type: 'multi-select'
+          value: ci-slave01.fuel-infra.org,ci-slave02.fuel-infra.org,ci-slave03.fuel-infra.org,ci-slave04.fuel-infra.org,ci-slave05.fuel-infra.org,ci-slave06.fuel-infra.org,ci-slave07.fuel-infra.org,pkgsci-slave01.fuel-infra.org
+          default-value: ci-slave01.fuel-infra.org
+          visible-item-count: 10
+      - node:
+          name: NODE
+          description: "Select slave"
+    wrappers:
+      - ssh-agent-credentials:
+          user: '5b151a58-4b65-4d13-87a1-883d52020e2d'
+    publishers:
+      - description-setter:
+          description: $version $number to $slaves
+      - email-ext:
+          recipients: 'devops+info@mirantis.com'
+          subject: 'Fuel CI ISO update'
+          content-type: text

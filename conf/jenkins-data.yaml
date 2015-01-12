@@ -53,4 +53,10 @@
     description: This plugin allows you to provide SSH credentials to builds via a ssh-agent in Jenkins.
     url: https://wiki.jenkins-ci.org/display/JENKINS/SSH+Agent+Plugin
     version: 1.4.1
+
+- plugin:
+    id: extended-choice-parameter
+    description: Adds extended functionality to Choice parameter
+    url: https://wiki.jenkins-ci.org/display/JENKINS/Extended+Choice+Parameter+plugin
+    version: 0.34
 # Any other Jenkins Master data
