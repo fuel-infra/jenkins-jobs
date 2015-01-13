@@ -25,11 +25,11 @@ rm -rf "${DEPS_DIR}"
 
 test "$deep_clean" = "true" && make deep_clean
 
-echo "STEP 0. PROD_VER=${PROD_VER} BASE_VERSION=${BASE_VERSION} UPGRADE_VERSIONS=${PROD_VER}:${BASE_VERSION}"
+echo "STEP 0. PROD_VER=${PROD_VER} BASE_VERSION=${BASE_VERSION} UPGRADE_VERSIONS=${PROD_VER}:${BASE_VERSION} (`date -u`)"
 
 #########################################
 
-echo "STEP 1. Get artifacts from ${BASE_VERSION}"
+echo "STEP 1. Get artifacts from ${BASE_VERSION} (`date -u`)"
 export DEPS_DATA_DIR="$DEPS_DIR/${BASE_VERSION}"
 mkdir -p "${DEPS_DATA_DIR}"
 
@@ -38,29 +38,30 @@ DATA_BUILD_NUMBER=`curl -s "${DATA_URL}/lastSuccessfulBuild/buildNumber"`
 echo "$DATA_URL/$DATA_BUILD_NUMBER" > $WORKSPACE/data_build_url.txt
 export DATA_MAGNET_LINK=`curl -s "${DATA_URL}/${DATA_BUILD_NUMBER}/artifact/artifacts_magnet_link.txt" | sed 's~.*MAGNET_LINK=~~'`
 
-DATA_FILE=`seedclient-wrapper -dvm "${DATA_MAGNET_LINK}" --force-set-symlink -o "${DEPS_DATA_DIR}"`
-tar xvf "${DATA_FILE}" -C "${DEPS_DATA_DIR}"
+echo "STEP 1.1. download and extract artifacts (`date -u`)"
+DATA_FILE=`/usr/bin/time seedclient-wrapper -dvm "${DATA_MAGNET_LINK}" --force-set-symlink -o "${DEPS_DATA_DIR}"`
+/usr/bin/time tar xvf "${DATA_FILE}" -C "${DEPS_DATA_DIR}"
 
 #########################################
 
-echo "STEP 2. Make everything"
-make UPGRADE_VERSIONS="${PROD_VER}:${BASE_VERSION}" BASE_VERSION=${BASE_VERSION} iso img upgrade-lrzip bootstrap docker centos-repo ubuntu-repo centos-diff-repo ubuntu-diff-repo version-yaml openstack-yaml
+echo "STEP 2. Make everything (`date -u`)"
+/usr/bin/time make UPGRADE_VERSIONS="${PROD_VER}:${BASE_VERSION}" BASE_VERSION=${BASE_VERSION} iso img upgrade-lrzip bootstrap docker centos-repo ubuntu-repo centos-diff-repo ubuntu-diff-repo version-yaml openstack-yaml
 
 #########################################
 
-echo "STEP 3. Pack artifacts"
+echo "STEP 3. Pack artifacts (`date -u`)"
 cd ${ARTS_DIR}
-tar cvf "${ARTIFACT_NAME}.tar" bootstrap.tar.gz centos-repo.tar ubuntu-repo.tar puppet.tgz openstack.yaml version.yaml fuel-images.tar.lrz
+/usr/bin/time tar cvf "${ARTIFACT_NAME}.tar" bootstrap.tar.gz centos-repo.tar ubuntu-repo.tar puppet.tgz openstack.yaml version.yaml fuel-images.tar.lrz
 
 #########################################
 
-echo "STEP 4. Pack diffs"
+echo "STEP 4. Pack diffs (`date -u`)"
 cd ${ARTS_DIR}
-tar cvf "${ARTIFACT_DIFF_NAME}.tar" puppet.tgz version.yaml openstack.yaml diff*
+/usr/bin/time tar cvf "${ARTIFACT_DIFF_NAME}.tar" puppet.tgz version.yaml openstack.yaml diff*
 
 #########################################
 
-echo "STEP 5. Publish everything"
+echo "STEP 5. Publish everything (`date -u`)"
 
 export LOCAL_STORAGE='/var/www/fuelweb-iso'
 export HTTP_ROOT="http://`hostname -f`/fuelweb-iso"
@@ -68,7 +69,7 @@ export HTTP_ROOT="http://`hostname -f`/fuelweb-iso"
 cd ${ARTS_DIR}
 for artifact in `ls fuel-*`
 do
- ${WORKSPACE}/utils/jenkins/process_artifacts.sh $artifact
+  /usr/bin/time ${WORKSPACE}/utils/jenkins/process_artifacts.sh $artifact
 done
 
 cd ${WORKSPACE}
@@ -84,10 +85,12 @@ grep MAGNET_LINK ${ARTS_DIR}/fuel-*upgrade-*.data.txt > ${WORKSPACE}/upgrade_mag
 
 #########################################
 
-echo "STEP 6. Generate build description"
+echo "STEP 6. Generate build description (`date -u`)"
 
 ISO_MAGNET_LINK=`grep MAGNET_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/MAGNET_LINK=//'`
 ISO_HTTP_LINK=`grep HTTP_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_LINK=//'`
 ISO_HTTP_TORRENT=`grep HTTP_TORRENT ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_TORRENT=//'`
 
 echo "<a href="$ISO_HTTP_LINK">ISO download link</a> <a href="$ISO_HTTP_TORRENT">ISO torrent link</a><br>${ISO_MAGNET_LINK}<br>"
+
+echo "BUILD FINISHED. (`date -u`)"
