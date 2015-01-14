@@ -1,0 +1,333 @@
+- job-template:
+    name: '{env}-env-clean-up'
+    description: 'Cleanup ENV {env}'
+    display-name: '01 Cleanup ENV {env}'
+    node: master
+    logrotate:
+      daysToKeep: 60
+      numToKeep: 100
+    properties:
+      - throttle:
+          categories:
+            - ENV_{env}
+          max-total: 1
+          option: category
+    wrappers:
+        - timestamps
+        - ansicolor:
+            colormap: xterm
+        - locks:
+            - ENV_{env}
+    scm:
+        - main-git
+    builders:
+        - shell:
+             |
+             export BUILD_NUMBER=1
+             export ENV_NUMBER={env}
+             export FUEL_IP=172.16.44.$ENV_NUMBER
+             export DELETE_ENV=true
+             $WORKSPACE/jenkins/deploy_cluster/deploy_cluster.sh
+    publishers:
+        - email-ext-main
+
+- job-template:
+    name: '{env}-env-deploy-fuel'
+    description: 'Deploy Fuel on ENV {env}'
+    display-name: '02 Deploy Fuel on ENV {env}'
+    node: scale-lab-master-new
+    logrotate:
+      daysToKeep: 60
+      numToKeep: 100
+    properties:
+      - throttle:
+          categories:
+            - ENV_{env}
+          max-total: 1
+          option: category
+    wrappers:
+        - timestamps
+        - ansicolor:
+            colormap: xterm
+    scm:
+        - main-git
+    parameters:
+        - string:
+            name: ISO_CUSTOM_URL
+            description:
+                !include-raw descriptions/ISO_CUSTOM_URL
+    builders:
+        - shell:
+             |
+             export FUEL_IP=172.16.44.{env}
+             export VLAN={env}
+             $WORKSPACE/jenkins/deploy_fuel.sh
+    publishers:
+        - email-ext-main
+
+- job-template:
+    name: '{env}-env-deploy-cluster'
+    description: 'Deploy cluster on ENV {env}'
+    display-name: '03 Deploy cluster on ENV {env}'
+    node: master
+    logrotate:
+      daysToKeep: 200
+      numToKeep: 300
+    properties:
+      - throttle:
+          categories:
+            - ENV_{env}
+          max-total: 1
+          option: category
+    wrappers:
+        - timestamps
+        - ansicolor:
+            colormap: xterm
+    scm:
+        - main-git
+    parameters:
+        - string:
+            name: CONTROLLER_COUNT
+            default: '3'
+        - string:
+            name: COMPUTE_COUNT
+            default: '97'
+        - choice:
+            name: MAIN_OS
+            choices:
+                - 'ubuntu'
+                - 'centos'
+        - choice:
+            name: MURANO
+            choices:
+                - 'false'
+                - 'true'
+        - choice:
+            name: SAHARA
+            choices:
+                - 'false'
+                - 'true'
+        - choice:
+            name: CEILOMETER
+            choices:
+                - 'false'
+                - 'true'
+        - choice:
+            name: VOLUMES_LVM
+            choices:
+                - 'true'
+                - 'false'
+        - choice:
+            name: VOLUMES_CEPH
+            choices:
+                - 'false'
+                - 'true'
+        - choice:
+            name: IMAGES_CEPH
+            choices:
+                - 'false'
+                - 'true'
+        - choice:
+            name: EPHEMERAL_CEPH
+            choices:
+                - 'false'
+                - 'true'
+        - choice:
+            name: DEBUG
+            choices:
+                - 'true'
+                - 'false'
+        - choice:
+            name: NOVA_QUOTA
+            choices:
+                - 'false'
+                - 'true'
+        - string:
+            name: POWER_ON_DELAY
+            default: '7'
+    builders:
+        - shell:
+             |
+             export ENV_NUMBER={env}
+             export FUEL_IP=172.16.44.{env}
+             export MANAGEMENT_VLAN={env}0
+             export STORAGE_VLAN={env}1
+             export PUBLIC_RANGE={public_ip}
+             export FLOATING_RANGE={floating_ip}
+             $WORKSPACE/jenkins/deploy_cluster/deploy_cluster.sh
+
+    publishers:
+        - email-ext
+
+- job-template:
+    name: '{env}-env-prepare-master'
+    description: 'Prepare tests on the Fuel on ENV {env}'
+    display-name: '04 Prepare tests on Fuel on ENV {env}'
+    node: master
+    logrotate:
+      daysToKeep: 60
+      numToKeep: 100
+    properties:
+      - throttle:
+          categories:
+            - ENV_{env}
+          max-total: 1
+          option: category
+    wrappers:
+        - timestamps
+        - ansicolor:
+            colormap: xterm
+    scm:
+        - main-git
+    builders:
+        - shell:
+             |
+             export FUEL_IP=172.16.44.{env}
+             cd $WORKSPACE
+             ./jenkins/deploy_rally_tempest.sh $WORKSPACE
+    publishers:
+        - email-ext-main
+
+- job-template:
+    name: '{env}_env_run_tempest'
+    description: 'Run tempest tests on ENV {env}'
+    display-name: '05 Run tempest tests on ENV {env}'
+    node: master
+    logrotate:
+      daysToKeep: 60
+      numToKeep: 100
+    properties:
+      - throttle:
+          categories:
+            - ENV_{env}
+          max-total: 1
+          option: category
+    wrappers:
+        - timestamps
+        - ansicolor:
+            colormap: xterm
+        - locks:
+            - ENV_{env}
+    scm:
+        - main-git
+    builders:
+        - shell:
+             |
+             export FUEL_IP=172.16.44.{env}
+             $WORKSPACE/jenkins/run_tests.sh -r tempest
+    publishers:
+        - email-ext
+        - junit:
+            results: '*.xml'
+
+- job-template:
+    name: '{env}_env_run_rally'
+    description: 'Run rally tests on ENV {env}'
+    display-name: '06 Run rally tests on ENV {env}'
+    node: master
+    logrotate:
+      daysToKeep: 60
+      numToKeep: 100
+    properties:
+      - throttle:
+          categories:
+            - ENV_{env}
+          max-total: 1
+          option: category
+    wrappers:
+        - timestamps
+        - ansicolor:
+            colormap: xterm
+    scm:
+        - main-git
+    parameters:
+        - choice:
+            name: LOAD_FACTOR
+            choices:
+                - '1'
+                - '2'
+                - '3'
+                - '4'
+                - '5'
+    builders:
+        - shell:
+             |
+             export FUEL_IP=172.16.44.{env}
+             $WORKSPACE/jenkins/run_tests.sh -r rally
+    publishers:
+        - email-ext-main
+        - junit:
+            results: '*.xml'
+
+- job-template:
+    name: '{env}_env_run_rally_light'
+    description: 'Run light rally tests on ENV {env}'
+    display-name: '07 Run light rally tests on ENV {env}'
+    node: master
+    logrotate:
+      daysToKeep: 60
+      numToKeep: 100
+    properties:
+      - throttle:
+          categories:
+            - ENV_{env}
+          max-total: 1
+          option: category
+    wrappers:
+        - timestamps
+        - ansicolor:
+            colormap: xterm
+    scm:
+        - main-git
+    builders:
+        - shell:
+             |
+             export SMOKE=1
+             export FUEL_IP=172.16.44.{env}
+             $WORKSPACE/jenkins/run_tests.sh -r rally
+    publishers:
+        - email-ext-main
+        - junit:
+            results: '*.xml'
+
+- job-template:
+    name: '{env}_env_run_rally_custom'
+    description: 'Run custom rally tests on ENV {env}'
+    display-name: '08 Run custom rally tests on ENV {env}'
+    node: master
+    logrotate:
+      daysToKeep: 60
+      numToKeep: 100
+    properties:
+      - throttle:
+          categories:
+            - ENV_{env}
+          max-total: 1
+          option: category
+    wrappers:
+        - timestamps
+        - ansicolor:
+            colormap: xterm
+    scm:
+        - main-git
+    parameters:
+        - string:
+            name: TESTS
+            description: 'Tests path'
+        - choice:
+            name: LOAD_FACTOR
+            choices:
+                - '1'
+                - '2'
+                - '3'
+                - '4'
+                - '5'
+    builders:
+        - shell:
+             |
+             export FUEL_IP=172.16.44.{env}
+             $WORKSPACE/jenkins/run_tests.sh -r rally -t $TESTS
+    publishers:
+        - email-ext
+        - junit:
+            results: '*.xml'
