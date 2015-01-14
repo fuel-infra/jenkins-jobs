@@ -8,3 +8,5 @@ Documentation about mirror staging:<br><br>
 <a href="https://mirantis.jira.com/wiki/pages/viewpage.action?pageId=176655477">How Fuel staging Fuel Mirrors works</a>,<br>
 <a href="https://docs.google.com/a/mirantis.com/document/d/1yrOQMOgmzcY8FxXlGLg6v_Um5Sni6snQg5BA4V24mbE/edit#heading=h.mqzzk07485lc">How mirror staging works</a>.<br><br>
 If you have any questions, contact Devops or OSCI teams via #fuel-devops and #fuel-osci IRC chats.<br>
+<br/>
+If the job is failing, it is responsibility of a team on duty to drive fixing the job. See <a href="https://mirantis.jira.com/wiki/display/OC/Staging+Mirror+Duty">Staging Mirror Duty</a> page for the duty schedule.
