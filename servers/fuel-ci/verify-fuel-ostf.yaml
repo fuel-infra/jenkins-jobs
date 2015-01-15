@@ -40,12 +40,8 @@
             - project-compare-type: PLAIN
               project-pattern: stackforge/fuel-ostf
               branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/6.0'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/5.1'
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
       - timed: '0 12 * * *'
     wrappers:
       - ansicolor:
