@@ -3,7 +3,7 @@
     builders:
       - shell:
           !include-raw './builders/verify-fuel-docs.sh'
-    description: 'Test requests on gerrit'
+    description: 'Check that we dont add more warnings. /image\.py.*rescaling/ and /pdf\/pdf_.*rst/ warnings are ignored'
     logrotate:
       artifactDaysToKeep: 30
       daysToKeep: 100
