@@ -1,0 +1,63 @@
+- job-template:
+    name: '{version-id}.fuel-library.{dist}.{testgroup}'
+    builders:
+      - inject: # default env variables
+          properties-content: |
+            DISTRIBUTION={dist}
+            OPENSTACK_RELEASE={dist}
+            TEST_GROUP={testgroup}
+            BRANCH={branch}
+      - inject: # overrides
+          override-build-parameters: true
+          properties-content: '{properties}'
+      - shell:
+          !include-raw-escape builders/fuel-library-review.sh
+    concurrent: true
+    description: '{description}'
+    logrotate:
+      artifactDaysToKeep: 30
+    node: '{version-id}_{dist}'
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/{branch}'
+    properties:
+      - heavy-job:
+          weight: '{weight}'
+      - throttle:
+          max-per-node: 1
+          option: project
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'logs/${{BUILD_NUMBER}}/*.tar.gz,logs/${{BUILD_NUMBER}}/sys_test.log'
+          latest-only: false
+      - description-setter:
+          regexp: 'Description string: (.*)'
+          regexp-for-failed: '(ERROR: (.*))'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-library.git
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-library
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: '{branch}'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 120
+          write-description: true

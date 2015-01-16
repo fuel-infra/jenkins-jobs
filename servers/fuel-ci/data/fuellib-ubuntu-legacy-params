@@ -1,0 +1,2 @@
+OPENSTACK_RELEASE=Ubuntu
+TEST_NAME=fuelweb_test.integration.test_node:TestNode.test_simple_cluster_flat

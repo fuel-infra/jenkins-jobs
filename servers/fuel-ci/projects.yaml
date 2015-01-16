@@ -25,3 +25,119 @@
           data-magnet-link:
             !include-raw data/community-5.1-artifacts
           timer: 'H 1 * * *'
+
+- project:
+    name: fuel-library-review
+    jobs:
+      - fuel-library-review-master
+      - fuel-library-review-6.0
+      - fuel-library-review-5.1
+      - fuel-library-review-5.0
+      - fuel-library-review-4.1
+
+- job-group:
+    name: fuel-library-review-master
+    version-id: 'master'
+    branch: 'master'
+    weight: 6
+    properties: |
+      SYNC_DEPL_TASKS=true
+    jobs:
+      - '{version-id}.fuel-library.{dist}.{testgroup}':
+          description:
+            !include-raw descriptions/fuellib-ubuntu
+          dist: 'ubuntu'
+          testgroup: 'ha_neutron_vlan'
+      - '{version-id}.fuel-library.{dist}.{testgroup}':
+          description:
+            !include-raw descriptions/fuellib-centos
+          dist: 'centos'
+          testgroup: 'ha_nova_vlan'
+
+- job-group:
+    name: fuel-library-review-6.0
+    version-id: 6.0
+    branch: 'stable/6.0'
+    jobs:
+      - '{version-id}.fuel-library.{dist}.{testgroup}':
+          description:
+            !include-raw descriptions/fuellib-ubuntu-legacy
+          dist: 'ubuntu'
+          testgroup: 'deploy_ha_vlan'
+          weight: 6
+          properties:
+            !include-raw data/fuellib-ubuntu-legacy-params
+      - '{version-id}.fuel-library.{dist}.{testgroup}':
+          description:
+            !include-raw descriptions/fuellib-centos-legacy
+          dist: 'centos'
+          testgroup: 'deploy_neutron_gre'
+          weight: 3
+          properties:
+            !include-raw data/fuellib-centos-legacy-params
+
+- job-group:
+    name: fuel-library-review-5.1
+    version-id: 5.1
+    branch: 'stable/5.1'
+    jobs:
+      - '{version-id}.fuel-library.{dist}.{testgroup}':
+          description:
+            !include-raw descriptions/fuellib-ubuntu-legacy
+          dist: 'ubuntu'
+          testgroup: 'deploy_ha_vlan'
+          weight: 6
+          properties:
+            !include-raw data/fuellib-ubuntu-legacy-params
+      - '{version-id}.fuel-library.{dist}.{testgroup}':
+          description:
+            !include-raw descriptions/fuellib-centos-legacy
+          dist: 'centos'
+          testgroup: 'deploy_neutron_gre'
+          weight: 3
+          properties:
+            !include-raw data/fuellib-centos-legacy-params
+
+- job-group:
+    name: fuel-library-review-5.0
+    version-id: 5.0
+    branch: 'stable/5.0'
+    jobs:
+      - '{version-id}.fuel-library.{dist}.{testgroup}':
+          description:
+            !include-raw descriptions/fuellib-ubuntu-legacy
+          dist: 'ubuntu'
+          testgroup: 'deploy_ha_vlan'
+          weight: 6
+          properties:
+            !include-raw data/fuellib-ubuntu-legacy-params
+      - '{version-id}.fuel-library.{dist}.{testgroup}':
+          description:
+            !include-raw descriptions/fuellib-centos-legacy
+          dist: 'centos'
+          testgroup: 'deploy_neutron_gre'
+          weight: 3
+          properties:
+            !include-raw data/fuellib-centos-legacy-params
+
+- job-group:
+    name: fuel-library-review-4.1
+    version-id: 4.1
+    branch: 'stable/4.1'
+    jobs:
+      - '{version-id}.fuel-library.{dist}.{testgroup}':
+          description:
+            !include-raw descriptions/fuellib-ubuntu-legacy
+          dist: 'ubuntu'
+          testgroup: 'test_pullrequest'
+          weight: 3
+          properties:
+            !include-raw data/fuellib-ubuntu-legacy-params
+      - '{version-id}.fuel-library.{dist}.{testgroup}':
+          description:
+            !include-raw descriptions/fuellib-centos-legacy
+          dist: 'centos'
+          testgroup: 'test_pullrequest'
+          weight: 3
+          properties:
+            !include-raw data/fuellib-centos-legacy-params
