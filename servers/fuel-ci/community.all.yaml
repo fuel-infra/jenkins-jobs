@@ -49,14 +49,14 @@
             RELEASE={release}
             FUEL_MAIN_BRANCH={branch}
             BUILD=fuel-community-{version-id}-$BUILD_NUMBER-$BUILD_ID
-        - project: fuel_communiy_build_reports
+        - project: fuel_community_build_reports
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
             RELEASE={release}
             BUILD=fuel-community-{version-id}-$BUILD_NUMBER-$BUILD_ID
             STAGE=build
             VALUE=ok
-        - project: fuel_communiy_build_reports
+        - project: fuel_community_build_reports
           condition: FAILED
           predefined-parameters: |
             RELEASE={release}

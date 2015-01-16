@@ -1,0 +1,50 @@
+- job:
+    name: 'publish_fuel_community_iso'
+    builders:
+      - shell:
+          !include-raw builders/publish_fuel_community_iso.sh
+    concurrent: true
+    logrotate:
+      daysToKeep: 20
+      numToKeep: 20
+    node: build
+    parameters:
+      - string:
+          name: ISO_ID
+          description: $release-$BUILD_NUMBER-$BUILD_ID from upstream iso build
+      - string:
+          name: UPGRADE_ID
+          description: $release-upgrade-$BUILD_NUMBER-$BUILD_ID from upstream job
+      - string:
+          name: ARTIFACTS_DIR
+          description: "Path to artifacts, that should be published, for example: /home/jenkins/workspace/6.0-community.all/artifacts"
+      - string:
+          name: RELEASE
+      - string:
+          name: BUILD
+    publishers:
+      - description-setter:
+          regexp: ".*META: (.*<a href=.*a> <a href=.*a> <a href=.*a>)"
+      - email:
+          notify-every-unstable-build: false
+          recipients: devops+alert@mirantis.com
+          send-to-individuals: false
+      - trigger-parameterized-builds:
+        - project: fuel_community.centos.bvt_1, fuel_community.ubuntu.bvt_2
+          condition: UNSTABLE_OR_BETTER
+          current-parameters: true
+          predefined-parameters: |
+            ISO_TORRENT=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.iso.torrent
+        - project: fuel_community_build_reports
+          condition: UNSTABLE_OR_BETTER
+          current-parameters: true
+          predefined-parameters: |
+            STAGE=publish
+            VALUE=ok
+            DESCRIPTION=<a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.iso.torrent>ISO</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.img.torrent>IMG</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$UPGRADE_ID.tar.lrz.torrent>UPGD</a>
+        - project: fuel_community_build_reports
+          condition: FAILED
+          current-parameters: true
+          predefined-parameters: |
+            STAGE=publish
+            VALUE=fail
