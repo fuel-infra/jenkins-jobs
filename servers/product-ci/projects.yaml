@@ -12,9 +12,11 @@
     jobs:
       - '{version-id}.all':
           timer: 'H 22 * * *'
+          trigger-builds: 'deploy_iso_on_cachers,6.1.centos.smoke_nova,6.1.ubuntu.smoke_neutron,6.1.centos.bvt_1,6.1.ubuntu.bvt_2'
       - '{version-id}.centos.bvt_1'
       - '{version-id}.ubuntu.bvt_2'
-      - '{version-id}.smoke'
+      - '{version-id}.centos.smoke_nova'
+      - '{version-id}.ubuntu.smoke_neutron'
 - job-group:
     name: 6.1.staging
     id: staging
@@ -42,6 +44,7 @@
     jobs:
       - '{version-id}.all':
           timer: 'H 22 */3 * *'
+          trigger-builds: 'deploy_iso_on_cachers,master.smoke,master.centos.bvt_1,master.ubuntu.bvt_2'
       - '{version-id}.centos.bvt_1'
       - '{version-id}.ubuntu.bvt_2'
       - '{version-id}.smoke'
@@ -72,6 +75,7 @@
     jobs:
       - '{version-id}.all':
           timer: 'H 20 * * *'
+          trigger-builds: 'deploy_iso_on_cachers,5.1.2.smoke,5.1.2.centos.bvt_1,5.1.2.ubuntu.bvt_2'
       - '{version-id}.centos.bvt_1'
       - '{version-id}.ubuntu.bvt_2'
       - '{version-id}.smoke'
@@ -103,6 +107,7 @@
     jobs:
       - '{version-id}.all':
           timer: 'H 20 * * *'
+          trigger-builds: 'deploy_iso_on_cachers,6.0.1.smoke,6.0.1.centos.bvt_1,6.0.1.ubuntu.bvt_2'
       - '{version-id}.centos.bvt_1'
       - '{version-id}.ubuntu.bvt_2'
       - '{version-id}.smoke'
