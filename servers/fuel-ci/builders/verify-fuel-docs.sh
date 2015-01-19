@@ -2,6 +2,14 @@
 
 set -ex
 
+VENV=/home/jenkins/${WORKSPACE}_VENV
+
+virtualenv ${VENV}
+source ${VENV}/bin/activate || exit 1
+
+pip install -r requirements.txt
+
+
 ERRORS=0
 WARNS=0
 PREV_WARNS=0
