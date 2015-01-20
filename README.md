@@ -1,5 +1,5 @@
-Structure
-=========
+Repo Structure
+==============
 
 ``conf/jenkins-data.yaml``
 
@@ -23,8 +23,7 @@ Structure
 
 ``common/``
 
-  Common templates. To use templates make symlink from corresponding
-  Jenkins master folder.
+  Common templates.
 
   The following objects can be used in templates definition:
 
@@ -38,7 +37,19 @@ Structure
 
   Tox tests configuration. Running command::
 
-    tox -v <jenkins-master-id>
+    tox -v
 
-  produces all XML files for specified Jenkins master and puts them
-  into ``<tox_env>/test_output`` folder.
+  produces all XML files for all Jenkins instances and puts them
+  into ``./output/<jenkins-master-id`` folder.
+
+Review Checklist
+================
+
+Simple CI jobs
+--------------
+
+* Job description exists
+* Concurrent and throttle parameters are set
+* Empty run with timer is configured
+* Job is tested for all supported stable branches
+* Job uses its own label
