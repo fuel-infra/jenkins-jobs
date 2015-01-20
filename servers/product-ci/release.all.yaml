@@ -35,7 +35,7 @@
       - email-default:
           mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
       - trigger-parameterized-builds:
-        - project: deploy_iso_on_cachers,{version-id}.smoke,{version-id}.centos.bvt_1,{version-id}.ubuntu.bvt_2
+        - project: '{trigger-builds}'
           condition: UNSTABLE_OR_BETTER
           property-file: magnet_link.txt
           triggerWithNoParameters: false
