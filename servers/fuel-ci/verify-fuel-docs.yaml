@@ -8,7 +8,7 @@
       artifactDaysToKeep: 30
       daysToKeep: 100
     node: fuel-web-docs
-    concurrent-build: false
+    concurrent: true
     parameters:
       - string:
           name: GERRIT_REFSPEC

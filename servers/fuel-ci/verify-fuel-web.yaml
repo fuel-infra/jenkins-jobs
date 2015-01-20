@@ -11,6 +11,7 @@
       artifactDaysToKeep: 30
       daysToKeep: 30
     node: fuel-web-master
+    concurrent: true
     parameters:
       - string:
           name: GERRIT_REFSPEC
@@ -32,6 +33,8 @@
       - junit:
           keep-long-stdio: false
           results: '**/nosetests.xml,**/nailgun.xml,**/fuelclient.xml,**/fuelupgrade.xml,**/fuelupgradedownloader.xml,**/shotgun.xml'
+      - description-setter:
+          regexp-for-failed: '(Failed tests: (.*))'
     scm:
       - git:
           branches:

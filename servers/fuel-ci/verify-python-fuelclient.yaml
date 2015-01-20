@@ -11,6 +11,7 @@
       artifactDaysToKeep: 30
       daysToKeep: 30
     node: fuel-web-master
+    concurrent: true
     parameters:
       - string:
           name: GERRIT_REFSPEC
