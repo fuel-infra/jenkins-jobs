@@ -1,0 +1,58 @@
+- job:
+    name: verify-python-fuelclient
+    builders:
+      - shell:
+          !include-raw builders/verify-python-fuelclient.sh
+    description: |
+      Test requests for python-fuelclient
+
+      Uses venv with python2.6
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: fuel-web-master
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: PIP_OPTION
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - one-nailgun-db-per-node
+          max-per-node: 1
+          option: category
+    publishers:
+      - junit:
+          keep-long-stdio: false
+          results: '**/fuelclient.xml'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/python-fuelclient.git
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/python-fuelclient
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+      - timed: '0 13 * * *'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
