@@ -5,10 +5,10 @@
           !include-raw builders/fuellib_review_master_node.sh
     concurrent: true
     description: |
-      Runs deploy_simple_flat test group with:
-      CUSTOM_ENV=true
-      BUILD_IMAGES=true
-      UPLOAD_MANIFESTS=true
+      Runs deploy_simple_flat test group with:<br>
+      CUSTOM_ENV=true<br>
+      BUILD_IMAGES=true<br>
+      UPLOAD_MANIFESTS=true<br>
       UPLOAD_MANIFESTS_PATH=/home/jenkins/workspace/${JOB_NAME}/deployment/puppet/
     logrotate:
       artifactDaysToKeep: 30
@@ -32,6 +32,11 @@
                 refspec: $GERRIT_REFSPEC
                 url: https://review.openstack.org/stackforge/fuel-library.git
           choosing-strategy: gerrit
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'logs/${BUILD_NUMBER}/*.tar.gz,logs/${BUILD_NUMBER}/sys_test.log'
+          latest-only: false
     triggers:
       - gerrit:
           trigger-on:
