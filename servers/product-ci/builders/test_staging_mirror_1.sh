@@ -10,5 +10,6 @@ echo "MIRROR = ${MIRROR}" > $WORKSPACE/mirror_staging.txt
 echo "MIRROR_VERSION = ${MIRROR_VERSION}" >> $WORKSPACE/mirror_staging.txt
 echo "STABLE_VERSION = ${MIRROR_VERSION}" >> $WORKSPACE/mirror_staging.txt
 echo "MIRROR_BASE = http://${MIRROR_HOST}/fwm/files/${MIRROR_VERSION}" >> $WORKSPACE/mirror_staging.txt
+echo "fuelmain_gerrit_commit = ${extra_commits}" >> $WORKSPACE/mirror_staging.txt
 
 rm -f build_description.*
