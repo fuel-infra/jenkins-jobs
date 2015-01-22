@@ -36,7 +36,9 @@ mkdir -p "${DEPS_DATA_DIR}"
 DATA_URL="http://jenkins-product.srt.mirantis.net:8080/job/${BASE_VERSION}.all"
 DATA_BUILD_NUMBER=`curl -s "${DATA_URL}/lastSuccessfulBuild/buildNumber"`
 echo "$DATA_URL/$DATA_BUILD_NUMBER" > $WORKSPACE/data_build_url.txt
-export DATA_MAGNET_LINK=`curl -s "${DATA_URL}/${DATA_BUILD_NUMBER}/artifact/artifacts_magnet_link.txt" | sed 's~.*MAGNET_LINK=~~'`
+if [ -z "${DATA_MAGNET_LINK}" ]; then
+  export DATA_MAGNET_LINK=`curl -s "${DATA_URL}/${DATA_BUILD_NUMBER}/artifact/artifacts_magnet_link.txt" | sed 's~.*MAGNET_LINK=~~'`
+fi
 
 echo "STEP 1.1. download and extract artifacts (`date -u`)"
 DATA_FILE=`/usr/bin/time seedclient-wrapper -dvm "${DATA_MAGNET_LINK}" --force-set-symlink -o "${DEPS_DATA_DIR}"`

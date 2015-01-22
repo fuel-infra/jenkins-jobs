@@ -3,6 +3,8 @@
     version-id: 6.1
     branch: master
     base-version: 6.0
+    data-magnet-link:
+       !include-raw data/6.0-artifacts
     jobs:
       - 6.1.main
       - 6.1.staging
@@ -35,6 +37,7 @@
     version-id: master
     branch: master
     base-version: 5.1.1
+    data-magnet-link: ''
     jobs:
       - master.main
       - master.staging
@@ -66,6 +69,7 @@
     version-id: 5.1.2
     branch: stable/5.1
     base-version: 5.1
+    data-magnet-link: ''
     jobs:
       - 5.1.2.main
       - 5.1.2.staging
@@ -97,6 +101,7 @@
     version-id: 6.0.1
     branch: stable/6.0
     base-version: 5.1.1
+    data-magnet-link: ''
     jobs:
       - 6.0.1.main
       - 6.0.1.staging
