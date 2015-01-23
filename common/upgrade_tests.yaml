@@ -1,19 +1,34 @@
 - job-template:
-    # Upgrade test: takes base iso, deploys TEST_GROUP snapshot, then
+    # Upgrade test. Takes base iso, deploys TEST_GROUP snapshot, then
     # runs UPGRADE_TEST_GROUP test on this env.
     #
     # Variables required:
     #
     # version-id
+    #     Versioned identificator of the Fuel ISO or tarball used in this job.
+    #     For example: ``6.1``, ``6.1-community``, ``6.0-icehouse``.
     # id
+    #     Any string, name of the job. Use only [a-z_-] symbols.
     # dist
+    #     OPENSTACK_RELEASE variable. 'centos' or 'ubuntu'.
     # testgroup
+    #     Initial test group. It is used for base deployment.
     # upgrade_testgroup
+    #     Test group for upgrade test. Upgrade tarball will be used.
     # description
+    #     Job description.
     # node
+    #     Jenkins slave label.
     # timeout
-    # repobranch
+    #     Job timeout.
+    # base_iso_magnet_link
+    #     Magnet link for base iso.
+    # base_repobranch
+    #     Branch of the fuel-main/ repo, used for base deployment stage.
+    # upgrade_repobranch
+    #     Branch of the fuel-main/ repo, used for running upgrade test.
     # weight
+    #     Job weight
     name: '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}'
     block-downstream: false
     block-upstream: false
@@ -33,6 +48,7 @@
     parameters:
     - string:
         name: BASE_ISO_MAGNET_LINK
+        default: '{base_iso_magnet_link}'
         description: "Base iso magnet link"
     - string:
         name: UPGRADE_TARBALL_MAGNET_LINK
@@ -63,6 +79,9 @@
     - junit:
         keep-long-stdio: false
         results: '**/nosetests.xml'
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
 
     scm:
     - main-git:

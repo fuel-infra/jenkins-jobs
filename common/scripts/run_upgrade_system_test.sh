@@ -1,10 +1,10 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 VENV_PATH=/home/jenkins/venv-nailgun-tests
 export CONNECTION_STRING='qemu+tcp://127.0.0.1:16509/system'
-export ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER
+export ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER.$BUILD_ID
 
 rm -rf logs/*
 
@@ -19,6 +19,9 @@ echo "Description string: $TEST_GROUP on $VERSION_STRING"
 export MAKE_SNAPSHOT=false
 
 export TARBALL_PATH=`seedclient-wrapper -d -m "${UPGRADE_TARBALL_MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}"`
+
+VERSION_STRING=`basename $TARBALL_PATH | cut -d '-' -f 2-4`
+echo "Description string: $VERSION_STRING"
 
 export UPGRADE_FUEL_FROM=`basename $ISO_PATH | cut -d '-' -f 2`
 export UPGRADE_FUEL_TO=`basename $TARBALL_PATH | cut -d '-' -f 2`

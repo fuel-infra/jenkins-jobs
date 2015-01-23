@@ -1,21 +1,47 @@
 
 - job-template:
+    # General system test. Downloads ISO image via magnet link
+    # and runs system test with specified test group.
+    #
+    # Uses predefined ``main-git`` macros for access to ``fuel-main/`` repository.
+    #
     # Variables required:
     #
     # version-id
+    #     Versioned identificator of the Fuel ISO or tarball used in this job.
+    #     For example: ``6.1``, ``6.1-community``, ``6.0-icehouse``.
     # id
+    #     Any string, name of the job. Use only [a-z_-] symbols.
     # dist
+    #     OPENSTACK_RELEASE variable. 'centos' or 'ubuntu'.
     # testgroup
+    #     Test group used as --group parameter in system_test.sh
     # description
+    #     Job description
     # node
+    #     Jenkins slave label
     # timeout
+    #     Job timeout
     # repobranch
+    #     Branch of the fuel-main/ repo
     # weight
-
+    #     Job weight
+    # properties
+    #     List of strings "VAR=value".
+    #     These variables will be injected in job environment before the build
     name: '{version-id}.{id}.{dist}.{testgroup}'
     block-downstream: false
     block-upstream: false
     builders:
+    - inject: # default env variables
+        properties-content: |
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          ENV_PREFIX={version-id}.{id}.{dist}.{testgroup}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          IMAGE_PROVISIONING=true
+    - inject: # overrides
+        properties-content: '{properties}'
     - shell:
         !include-raw-escape 'scripts/run_system_test.sh'
     concurrent: true
@@ -32,16 +58,6 @@
     - string:
         name: MAGNET_LINK
         description: "iso magnet link"
-    - string:
-        name: OPENSTACK_RELEASE
-        default: '{dist}'
-        description: Base distribution
-    - string:
-        name: TEST_GROUP
-        default: '{testgroup}'
-    - string:
-        name: ENV_PREFIX
-        default: '{version-id}.{id}.{dist}.{testgroup}'
 
     properties:
     - heavy-job:
@@ -55,11 +71,15 @@
     - junit:
         keep-long-stdio: false
         results: '**/nosetests.xml'
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
 
     scm:
     - main-git:
         reponame: 'fuel-main'
         repobranch: '{repobranch}'
+        basedir: ''
 
     wrappers:
     - timeout:
@@ -68,14 +88,3 @@
         write-description: false
     - ansicolor:
         colormap: xterm
-
-
-- job-group:
-    name: '{version-id}-{dist}-system_tests'
-    node: 'systest'
-    id: 'system_test'
-    jobs:
-      - '{version-id}.{id}.{dist}.{testgroup}':
-          testgroup: 'thread_1'
-          timeout: '800'
-          weight: '8'

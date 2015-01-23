@@ -1,0 +1,98 @@
+- job-group:
+    name: '{version-id}-system_tests-upgrades'
+    id: 'system_test'
+    node: 'systest'
+    timeout: '480'
+    jobs:
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'deploy_neutron_gre_ha'
+          upgrade_testgroup: 'upgrade'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'ceph_multinode_compact'
+          upgrade_testgroup: 'upgrade'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'deploy_neutron_gre_ha'
+          upgrade_testgroup: 'rollback'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'deploy_neutron_gre'
+          upgrade_testgroup: 'rollback'
+          weight: '8'
+
+- job-group:
+   name: '{version-id}-swarm'
+   id: 'system_test'
+   repobranch: 'origin/master'
+   description: 'Swarm test group'
+   node: 'systest'
+   timeout: '480'
+   properties: ''
+   weight: '8'
+   jobs:
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'setup' # test job, not included in runner
+         weight: '4'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_1'
+         weight: '4'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_2'
+         weight: '4'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_3'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_4'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_5'
+         properties: 'ADMIN_NODE_MEMORY=3072'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_7'
+         properties: |
+           MULTIPLE_NETWORKS=true
+           FUEL_STATS_ENABLED=true
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'bonding_ha'
+         properties: 'BONDING=true'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'bonding_simple'
+         weight: '4'
+         properties: 'BONDING=true'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'cluster_actions'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_destructive'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'huge_environments'
+         weight: '20'
+         properties: |
+           SLAVE_NODE_CPU=2
+           SLAVE_NODE_MEMORY=3072
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'image_based'
+         properties: 'IMAGE_PROVISIONING=true'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'known_issues'
+#     - '{version-id}.{id}.{dist}.{testgroup}':
+#         testgroup: 'plugins'
+#         properties: |
+#           GLUSTER_CLUSTER_ENDPOINT=172.18.2.184:/data
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'services_ha'
+         weight: '12'
+         properties: |
+           SLAVE_NODE_MEMORY=6144
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'services_simple'
+         weight: '12'
+         properties: |
+           SLAVE_NODE_MEMORY=6144
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
