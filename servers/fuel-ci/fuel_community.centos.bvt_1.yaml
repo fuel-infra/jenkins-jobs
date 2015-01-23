@@ -1,5 +1,5 @@
 - job:
-    name: 'community.ubuntu.bvt_2'
+    name: 'fuel_community.centos.bvt_1'
     builders:
       - shell:
           !include-raw builders/run_system_test.sh
@@ -7,7 +7,7 @@
           dos.py erase ${JOB_NAME}_system_test
     concurrent: true
     description:
-      !include-raw descriptions/community.ubuntu.bvt_2
+      !include-raw descriptions/community.centos.bvt_1
     node: bvt
     properties:
       - heavy-job:
@@ -18,10 +18,10 @@
           description: ISO torrent file uri
       - string:
           name: TEST_GROUP
-          default: 'bvt_2'
+          default: 'bvt_1'
       - string:
           name: OPENSTACK_RELEASE
-          default: 'Ubuntu'
+          default: 'CentOS'
       - string:
           name: RELEASE
       - string:
@@ -50,11 +50,11 @@
           condition: UNSTABLE_OR_BETTER
           current-parameters: true
           predefined-parameters: |
-            STAGE=bvt_2
+            STAGE=bvt_1
             VALUE=ok
         - project: fuel_community_build_reports
           condition: FAILED
           current-parameters: true
           predefined-parameters: |
-            STAGE=bvt_2
+            STAGE=bvt_1
             VALUE=fail
