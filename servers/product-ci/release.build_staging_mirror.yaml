@@ -26,6 +26,9 @@
           name: mirror
           default: '{version-id}'
       - string:
+          name: purge_packages
+          default: 'yes'
+      - string:
           name: EXTRA_DEB_REPOS
           default: '{extra-deb-repos}'
     properties:
