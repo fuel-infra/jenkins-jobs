@@ -2,7 +2,7 @@
     name: 'fuel_community_build_reports'
     builders:
       - shell: |
-          /usr/local/bin/release-update.py -r "${RELEASE}" -b "${BUILD}" -s "${STAGE}" -v "${VALUE}" -d "${DESCRIPTION}"
+          /usr/bin/release-update.py -r "${RELEASE}" -b "${BUILD}" -s "${STAGE}" -v "${VALUE}" -d "${DESCRIPTION}"
     node: reports
     parameters:
       - string:
