@@ -8,7 +8,7 @@
           branch: master
           timer: 'H 5 * * *'
       - '{version-id}-community.all':
-          version-id: 6.0
+          version-id: 6.0.1
           release: 6.0
           base-version: 5.1.1
           branch: stable/6.0
