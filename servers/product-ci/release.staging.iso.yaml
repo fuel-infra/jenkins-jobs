@@ -24,6 +24,9 @@
       - string:
           name: MIRROR_BASE
           description: For example, http://osci-mirror-msk.msk.mirantis.net/fwm/files/$MIRROR_VERSION
+      - string:
+          name: fuelmain_gerrit_commit
+          description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
     publishers:
       - archive:
           allow-empty: false

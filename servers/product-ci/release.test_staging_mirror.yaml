@@ -24,6 +24,9 @@
       - string:
           name: MIRROR_BASE
           description: http://osci-mirror-msk.msk.mirantis.net/fwm/files/6.1-2014-12-10-175744
+      - string:
+          name: extra_commits
+          description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
     builders:
       - shell:
           !include-raw-escape builders/test_staging_mirror_1.sh
