@@ -1,0 +1,12 @@
+1. Build custom ISO based on Ubuntu upstream mirror candidate.<br/>
+2. Run tests for Ubuntu upstream mirrors candidate builded by<br>
+<b><a href="http://osci-jenkins.srt.mirantis.net:8080/view/mirrors/job/mirrors-local-msk-ubuntu/">mirrors-local-msk-ubuntu</a></b>.<br><br>
+3. To be implemented: Update symlink pointed to last stable version of Ubuntu upstream mirror if tests successfull.<br><br>
+See build description of last successful build here or for <b><a href="/job/{version-id}.set_ubuntu_upstream_mirror/">{version-id}.set_ubuntu_upstream_mirror</a></b>
+for information about last stable mirror version.<br><br>
+
+Documentation about mirror staging:<br><br>
+<a href="https://mirantis.jira.com/wiki/pages/viewpage.action?pageId=176655477">How Fuel staging Fuel Mirrors works</a>,<br>
+<a href="https://docs.google.com/a/mirantis.com/document/d/1yrOQMOgmzcY8FxXlGLg6v_Um5Sni6snQg5BA4V24mbE/edit#heading=h.mqzzk07485lc">How mirror staging works</a>.<br><br>
+If you have any questions about Jenkins side, contact Devops or OSCI teams via #fuel-devops and #fuel-osci IRC chats.<br>
+For any questions on topic of this job contact Pavel Boldin pboldin[at]mirantis.com.<br>
