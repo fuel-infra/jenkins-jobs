@@ -20,6 +20,9 @@
           name: BASE_VERSION
           default: '{base-version}'
       - string:
+          name: DATA_MAGNET_LINK
+          default: '{data-magnet-link}'
+      - string:
           name: deep_clean
           default: 'true'
           description: Perform deep_clean or not. Default is "true". Set any other value

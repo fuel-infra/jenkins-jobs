@@ -34,8 +34,9 @@ mkdir -p "${DEPS_DATA_DIR}"
 DATA_URL="https://fuel-jenkins.mirantis.com/job/${BASE_VERSION}-community.all"
 DATA_BUILD_NUMBER=`curl -s "${DATA_URL}/lastSuccessfulBuild/buildNumber"`
 echo "$DATA_URL/$DATA_BUILD_NUMBER" > $WORKSPACE/data_build_url.txt
-export DATA_MAGNET_LINK=`curl -s "${DATA_URL}/${DATA_BUILD_NUMBER}/artifact/artifacts_torrent_link.txt" | sed 's~.*MAGNET_LINK=~~'`
-
+if [ -z "${DATA_MAGNET_LINK}" ]; then
+  export DATA_MAGNET_LINK=`curl -s "${DATA_URL}/${DATA_BUILD_NUMBER}/artifact/artifacts_torrent_link.txt" | sed 's~.*MAGNET_LINK=~~'`
+fi
 DATA_FILE=`seedclient-wrapper -dvm "${DATA_MAGNET_LINK}" --force-set-symlink -o "${DEPS_DATA_DIR}"`
 tar xvf "${DATA_FILE}" -C "${DEPS_DATA_DIR}"
 

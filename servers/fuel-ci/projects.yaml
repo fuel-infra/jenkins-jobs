@@ -6,16 +6,22 @@
           release: 6.1
           base-version: 6.0
           branch: master
+          data-magnet-link:
+            !include-raw data/community-6.0-artifacts
           timer: 'H 5 * * *'
       - '{version-id}-community.all':
           version-id: 6.0.1
           release: 6.0
           base-version: 5.1.1
           branch: stable/6.0
+          data-magnet-link:
+            !include-raw data/community-5.1.1-artifacts
           timer: 'H 3 * * *'
       - '{version-id}-community.all':
           version-id: 5.1.2
           release: 5.1
           base-version: 5.1
           branch: stable/5.1
+          data-magnet-link:
+            !include-raw data/community-5.1-artifacts
           timer: 'H 1 * * *'
