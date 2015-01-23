@@ -1,0 +1,17 @@
+########################################################################
+#
+# Section: Publishers
+########################################################################
+- publisher:
+    name: email-default
+    publishers:
+      - email-ext:
+          body: 'The build has been triggered without GERRIT_CHANGE_URL and failed.
+            Something is wrong with the merged code'
+          send-to:
+            - recipients
+          recipients: 'devops+alert@mirantis.net'
+          subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+          presend-script:
+            !include-raw 'email_ext_groovy.inc'
+          failure: true
