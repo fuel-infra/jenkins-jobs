@@ -1,0 +1,34 @@
+- job:
+    name: verify-fuel-main
+    builders:
+      - shell:
+          !include-raw './builders/verify-fuel-main.sh'
+    description: 'Runs tests on fuel-main'
+    node: flake8
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          url: 'https://review.openstack.org/stackforge/fuel-main'
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+    triggers:
+      - timed: '0 2 * * *'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'stackforge/fuel-main'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+    publishers:
+      - email-default
