@@ -51,7 +51,6 @@
         - project: '{version-id}.test_staging_mirror'
           condition: UNSTABLE_OR_BETTER
           property-file: mirror_staging.txt
-          triggerWithNoParameters: false
     scm:
       - stackforge:
           branch: '{branch}'

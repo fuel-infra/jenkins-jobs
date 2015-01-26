@@ -41,11 +41,9 @@
         - project: '{trigger-builds}'
           condition: UNSTABLE_OR_BETTER
           property-file: magnet_link.txt
-          triggerWithNoParameters: false
         - project: deploy_iso_on_cachers
           condition: UNSTABLE_OR_BETTER
           property-file: upgrade_magnet_link.txt
-          triggerWithNoParameters: false
     scm:
       - stackforge:
           branch: '{branch}'
