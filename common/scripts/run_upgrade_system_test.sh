@@ -2,9 +2,16 @@
 
 set -ex
 
+# Set proper Openstack Release
+if [[ ${OPENSTACK_RELEASE} == 'centos' ]]; then
+	export OPENSTACK_RELEASE=CentOS
+elif [[ ${OPENSTACK_RELEASE} == 'ubuntu' ]]; then
+	export OPENSTACK_RELEASE=Ubuntu
+fi
+
 VENV_PATH=/home/jenkins/venv-nailgun-tests
 export CONNECTION_STRING='qemu+tcp://127.0.0.1:16509/system'
-export ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER.$BUILD_ID
+export ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER
 
 rm -rf logs/*
 
