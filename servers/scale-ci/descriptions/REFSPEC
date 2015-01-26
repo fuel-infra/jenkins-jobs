@@ -1,0 +1,11 @@
+Add refspec for review. <span style="color: red;">Leave default for master branch</span>
+<br>
+On example:
+<br>
+for review <a href="https://gerrit.mirantis.com/#/c/38297">38297</a>, patch set 4
+<br>
+the refspec is <span style="color: red;">refs/changes/97/38297/4</span>
+<br>
+This refspec you can take on review page (click to 'Download' on the top right and select 'Checkout')
+<br>
+Link look like 'git fetch ssh://sgalkin@gerrit.mirantis.com:29418/mos-scale/mos-scale <span style="color: red;">refs/changes/97/38297/4</span> && git checkout FETCH_HEAD'
