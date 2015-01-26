@@ -24,6 +24,7 @@
     id: staging
     jobs:
       - '{version-id}.build_staging_mirror':
+          repo: '6.1-stable'
           extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-6.1/ precise-security main universe multiverse restricted'
           timer: 'H 7 * * *'
       - '{version-id}.staging.iso'
@@ -56,6 +57,7 @@
     id: staging
     jobs:
       - '{version-id}.build_staging_mirror':
+          repo: 'master'
           extra-deb-repos: ''
           timer: 'H 7 */3 * *'
       - '{version-id}.staging.iso'
@@ -88,6 +90,7 @@
     id: staging
     jobs:
       - '{version-id}.build_staging_mirror':
+          repo: '5.1.2-stable'
           extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-5.1.2/ precise-security main universe multiverse restricted'
           timer: 'H 5 * * *'
       - '{version-id}.staging.iso'
@@ -121,6 +124,7 @@
     id: staging
     jobs:
       - '{version-id}.build_staging_mirror':
+          repo: '6.0.1-stable'
           extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-6.0.1/ precise-security main universe multiverse restricted'
           timer: 'H 5 * * *'
       - '{version-id}.staging.iso'
@@ -128,4 +132,3 @@
       - '{version-id}.staging.ubuntu.bvt_2'
       - '{version-id}.set_stable_mirror'
       - '{version-id}.test_staging_mirror'
-
