@@ -2,7 +2,7 @@
     name: 'fuel_community_build_reports'
     builders:
       - shell: |
-          /usr/bin/release-update.py -r "${RELEASE}" -b "${BUILD}" -s "${STAGE}" -v "${VALUE}" -d "${DESCRIPTION}"
+          /usr/bin/release-update.py -r "${RELEASE}" -b "${BUILD}" -s "${STAGE}" -v "${VALUE}" -d "${DESCRIPTION}" -u "${REPORTED_JOB_URL}"
     node: reports
     parameters:
       - string:
@@ -15,8 +15,10 @@
           name: VALUE
       - text:
           name: DESCRIPTION
+      - string:
+          name: REPORTED_JOB_URL
     publishers:
       - email:
-          notify-every-unstable-build: false
+          notify-every-unstable-build: true
           recipients: devops+alert@mirantis.com
           send-to-individuals: false

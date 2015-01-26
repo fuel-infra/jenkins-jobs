@@ -52,9 +52,11 @@
           predefined-parameters: |
             STAGE=bvt_1
             VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
         - project: fuel_community_build_reports
           condition: FAILED
           current-parameters: true
           predefined-parameters: |
             STAGE=bvt_1
             VALUE=fail
+            REPORTED_JOB_URL=$BUILD_URL

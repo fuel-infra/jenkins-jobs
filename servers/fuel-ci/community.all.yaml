@@ -59,6 +59,7 @@
             BUILD=fuel-community-{version-id}-$BUILD_NUMBER-$BUILD_ID
             STAGE=build
             VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
         - project: fuel_community_build_reports
           condition: FAILED
           predefined-parameters: |
@@ -66,6 +67,7 @@
             BUILD=fuel-community-{version-id}-$BUILD_NUMBER-$BUILD_ID
             STAGE=build
             VALUE=fail
+            REPORTED_JOB_URL=$BUILD_URL
     scm:
       - git:
           url: 'https://github.com/stackforge/fuel-main.git'
