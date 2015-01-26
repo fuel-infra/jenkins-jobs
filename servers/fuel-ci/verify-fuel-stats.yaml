@@ -1,0 +1,43 @@
+- job:
+    name: verify-fuel-stats
+    builders:
+      - shell:
+          !include-raw './builders/verify-fuel-stats.sh'
+    concurrent: true
+    description: "Runs tox -v"
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: verify-fuel-stats
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          refspec: $GERRIT_REFSPEC
+          url: 'https://review.openstack.org/stackforge/fuel-stats'
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'stackforge/fuel-stats'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          server-name: defaultServer
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 10
+          write-description: true
+      - ansicolor:
+          colormap: css
