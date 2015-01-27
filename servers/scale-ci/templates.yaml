@@ -20,6 +20,19 @@
             - ENV_{env}
     scm:
         - main-git
+    parameters:
+        - string:
+            name: REFSPEC
+            default: '+refs/heads/*:refs/remotes/origin/*'
+            description:
+                !include-raw descriptions/REFSPEC
+        - choice:
+            name: BRANCH
+            description:
+                !include-raw descriptions/BRANCH
+            choices:
+                - 'origin/master'
+                - 'FETCH_HEAD'
     builders:
         - shell:
              |
@@ -56,6 +69,18 @@
             name: ISO_CUSTOM_URL
             description:
                 !include-raw descriptions/ISO_CUSTOM_URL
+        - string:
+            name: REFSPEC
+            default: '+refs/heads/*:refs/remotes/origin/*'
+            description:
+                !include-raw descriptions/REFSPEC
+        - choice:
+            name: BRANCH
+            description:
+                !include-raw descriptions/BRANCH
+            choices:
+                - 'origin/master'
+                - 'FETCH_HEAD'
     builders:
         - shell:
              |
@@ -87,64 +112,95 @@
         - main-git
     parameters:
         - string:
+            name: REFSPEC
+            default: '+refs/heads/*:refs/remotes/origin/*'
+            description:
+                !include-raw descriptions/REFSPEC
+        - choice:
+            name: BRANCH
+            description:
+                !include-raw descriptions/BRANCH
+            choices:
+                - 'origin/master'
+                - 'FETCH_HEAD'
+        - string:
             name: CONTROLLER_COUNT
             default: '3'
+            description: "Number of controllers"
         - string:
             name: COMPUTE_COUNT
-            default: '97'
+            default: '{compute_nodes}'
+            description: "Number of compute nodes"
         - choice:
             name: MAIN_OS
             choices:
                 - 'ubuntu'
                 - 'centos'
+            description: "Operating system for all nodes"
         - choice:
             name: MURANO
             choices:
                 - 'false'
                 - 'true'
+            description: "Install Murano - The application catalog"
         - choice:
             name: SAHARA
             choices:
                 - 'false'
                 - 'true'
+            description: "Install Sahara - provision and manage Hadoop clusters"
         - choice:
             name: CEILOMETER
             choices:
                 - 'false'
                 - 'true'
+            description: "Telemetry Service that provides a Single Point Of Contact for billing systems"
         - choice:
             name: VOLUMES_LVM
             choices:
-                - 'true'
                 - 'false'
+                - 'true'
+            description: "Cinder LVM over iSCSI for volumes"
         - choice:
             name: VOLUMES_CEPH
             choices:
-                - 'false'
                 - 'true'
+                - 'false'
+            description: "Ceph RBD for volumes (Cinder)"
         - choice:
             name: IMAGES_CEPH
             choices:
-                - 'false'
                 - 'true'
+                - 'false'
+            description: "Ceph RBD for images"
         - choice:
             name: EPHEMERAL_CEPH
             choices:
-                - 'false'
                 - 'true'
+                - 'false'
+            description: "Ceph RBD for ephemeral volumes (NOVA)"
+        - choice:
+            name: OBJECTS_CEPH
+            choices:
+                - 'true'
+                - 'false'
+            description: "Ceph RadosGW for objects"
         - choice:
             name: DEBUG
             choices:
                 - 'true'
                 - 'false'
+            description: "Enable debug messages"
         - choice:
             name: NOVA_QUOTA
             choices:
                 - 'false'
                 - 'true'
+            description: "Enable quotas on compute nodes"
         - string:
             name: POWER_ON_DELAY
             default: '7'
+            description: "Delay between nodes power on"
     builders:
         - shell:
              |
@@ -155,9 +211,8 @@
              export PUBLIC_RANGE={public_ip}
              export FLOATING_RANGE={floating_ip}
              $WORKSPACE/jenkins/deploy_cluster/deploy_cluster.sh
-
     publishers:
-        - email-ext
+        - email-ext-main
 
 - job-template:
     name: '{env}-env-prepare-master'
@@ -179,6 +234,23 @@
             colormap: xterm
     scm:
         - main-git
+    parameters:
+        - string:
+            name: REFSPEC
+            default: '+refs/heads/*:refs/remotes/origin/*'
+            description:
+                !include-raw descriptions/REFSPEC
+        - choice:
+            name: BRANCH
+            description:
+                !include-raw descriptions/BRANCH
+            choices:
+                - 'origin/master'
+                - 'FETCH_HEAD'
+        - string:
+            name: RALLY_DATABASE
+            default: 'sqlite:////opt/stack/.venv/database/rally.sqlite'
+            description: 'Path (URL) to Rally database in terms of SQLAlchemy'
     builders:
         - shell:
              |
@@ -210,6 +282,19 @@
             - ENV_{env}
     scm:
         - main-git
+    parameters:
+        - string:
+            name: REFSPEC
+            default: '+refs/heads/*:refs/remotes/origin/*'
+            description:
+                !include-raw descriptions/REFSPEC
+        - choice:
+            name: BRANCH
+            description:
+                !include-raw descriptions/BRANCH
+            choices:
+                - 'origin/master'
+                - 'FETCH_HEAD'
     builders:
         - shell:
              |
@@ -241,6 +326,18 @@
     scm:
         - main-git
     parameters:
+        - string:
+            name: REFSPEC
+            default: '+refs/heads/*:refs/remotes/origin/*'
+            description:
+                !include-raw descriptions/REFSPEC
+        - choice:
+            name: BRANCH
+            description:
+                !include-raw descriptions/BRANCH
+            choices:
+                - 'origin/master'
+                - 'FETCH_HEAD'
         - choice:
             name: LOAD_FACTOR
             choices:
@@ -279,6 +376,19 @@
             colormap: xterm
     scm:
         - main-git
+    parameters:
+        - string:
+            name: REFSPEC
+            default: '+refs/heads/*:refs/remotes/origin/*'
+            description:
+                !include-raw descriptions/REFSPEC
+        - choice:
+            name: BRANCH
+            description:
+                !include-raw descriptions/BRANCH
+            choices:
+                - 'origin/master'
+                - 'FETCH_HEAD'
     builders:
         - shell:
              |
@@ -311,6 +421,18 @@
     scm:
         - main-git
     parameters:
+        - string:
+            name: REFSPEC
+            default: '+refs/heads/*:refs/remotes/origin/*'
+            description:
+                !include-raw descriptions/REFSPEC
+        - choice:
+            name: BRANCH
+            description:
+                !include-raw descriptions/BRANCH
+            choices:
+                - 'origin/master'
+                - 'FETCH_HEAD'
         - string:
             name: TESTS
             description: 'Tests path'

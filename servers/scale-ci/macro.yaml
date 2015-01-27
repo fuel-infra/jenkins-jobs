@@ -4,12 +4,27 @@
         - email-ext:
             body:
                 !include-raw notifications/email.body
-            failure: true
-            fixed: true
+            always: true
+            failure: false
+            pre-build: true
             send-to:
                 - recipients
                 - requester
-            recipients: sgalkin@mirantis.com
+            recipients: mos-scale@mirantis.com
+            subject: '[SCALE Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+
+- publisher:
+    name: email-ext-main-without-pre
+    publishers:
+        - email-ext:
+            body:
+                !include-raw notifications/email.body
+            always: true
+            failure: false
+            send-to:
+                - recipients
+                - requester
+            recipients: mos-scale@mirantis.com
             subject: '[SCALE Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
 
 - scm:
@@ -18,5 +33,7 @@
         - git:
             url: 'ssh://mos-scale-jenkins@gerrit.mirantis.com:29418/mos-scale/mos-scale'
             credentials-id: '1d23f779-691a-41df-bc66-20bd36580e32'
+            wipe-workspace: false
             branches:
-                - origin/master
+                - "${BRANCH}"
+            refspec: "${REFSPEC}"

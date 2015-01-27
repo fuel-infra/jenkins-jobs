@@ -31,8 +31,21 @@
               results:
                 - unstable
                 - success
+    parameters:
+        - string:
+            name: REFSPEC
+            default: '+refs/heads/*:refs/remotes/origin/*'
+            description:
+                !include-raw descriptions/REFSPEC
+        - choice:
+            name: BRANCH
+            description:
+                !include-raw descriptions/BRANCH
+            choices:
+                - 'origin/master'
+                - 'FETCH_HEAD'
     builders:
         - shell:
              !include-raw-escape scripts/generate_page.sh
     publishers:
-        - email-ext-main
+        - email-ext-main-without-pre
