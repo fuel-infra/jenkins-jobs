@@ -14,7 +14,7 @@
     parameters:
       - string:
           name: REPOS
-          default: 'ubuntu-fuel-{version-id}-stable'
+          default: 'ubuntu-fuel-{repo}'
           description: 'Space delimited list of ubuntu repos to create reprepro repo'
       - string:
           name: extra_commits
