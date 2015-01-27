@@ -32,6 +32,7 @@
           value: ci-slave01.fuel-infra.org,ci-slave02.fuel-infra.org,ci-slave03.fuel-infra.org,ci-slave04.fuel-infra.org,ci-slave05.fuel-infra.org,ci-slave06.fuel-infra.org,ci-slave07.fuel-infra.org,pkgsci-slave01.fuel-infra.org
           default-value: ci-slave01.fuel-infra.org
           visible-item-count: 10
+          multi-select-delimiter: ' '
       - node:
           name: NODE
           description: "Select slave"
