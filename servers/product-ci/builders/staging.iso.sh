@@ -8,7 +8,6 @@ fi
 PROD_VER=`grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2`
 
 export LANG="C"
-export UBUNTU_MIRROR=http://mirrors.msk.mirantis.net/ubuntu
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin:$PATH
 
 export ISO_NAME=fuel-staging-$PROD_VER-$BUILD_NUMBER-$BUILD_ID

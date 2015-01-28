@@ -34,6 +34,23 @@
       - '{version-id}.test_staging_mirror'
 
 - project:
+    name: 6.1-ubuntu
+    version-id: 6.1-ubuntu
+    branch: master
+    base-version: 6.1
+    jobs:
+      - 6.1-ubuntu.ubuntu_upstream
+- job-group:
+    name: 6.1-ubuntu.ubuntu_upstream
+    id: ubuntu_upstream
+    jobs:
+      - '{version-id}.test_ubuntu_upstream_mirror':
+          timer: 'H 7 * * *'
+      - '{version-id}.staging.iso'
+      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.set_ubuntu_stable_mirror'
+
+- project:
     name: master
     version-id: master
     branch: master
