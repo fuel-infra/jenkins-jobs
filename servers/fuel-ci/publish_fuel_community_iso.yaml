@@ -41,6 +41,7 @@
           predefined-parameters: |
             STAGE=publish
             VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
             DESCRIPTION=<a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.iso.torrent>ISO</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.img.torrent>IMG</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$UPGRADE_ID.tar.lrz.torrent>UPGD</a>
         - project: fuel_community_build_reports
           condition: FAILED
@@ -48,3 +49,4 @@
           predefined-parameters: |
             STAGE=publish
             VALUE=fail
+            REPORTED_JOB_URL=$BUILD_URL
