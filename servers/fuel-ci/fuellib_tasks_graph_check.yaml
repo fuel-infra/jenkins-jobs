@@ -15,6 +15,7 @@
     publishers:
       - description-setter:
           regexp: (\s+.* seconds)
+          regexp-for-failed: (\s+.* seconds)
     properties:
       - heavy-job:
           weight: 1
