@@ -5,7 +5,8 @@
           !include-raw builders/fuellib_review_master_node.sh
     concurrent: true
     description: |
-      Runs deploy_simple_flat test group with:<br>
+      Runs test_pullrequest test group with:<br>
+      DEPLOYMENT_MODE="ha_compact"<br>
       CUSTOM_ENV=true<br>
       BUILD_IMAGES=true<br>
       UPLOAD_MANIFESTS=true<br>
