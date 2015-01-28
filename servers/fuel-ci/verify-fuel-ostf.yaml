@@ -50,3 +50,5 @@
           fail: true
           write-description: true
           timeout: 45
+    publishers:
+      - email-default
