@@ -4,7 +4,7 @@
       - systest
     concurrent: true
     description:
-      !include-raw descriptions/ubuntu.bvt_2
+      !include-raw descriptions/staging.ubuntu.bvt_2
     logrotate:
       daysToKeep: 30
     node: custom_bvt

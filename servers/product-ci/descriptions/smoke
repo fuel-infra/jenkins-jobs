@@ -9,3 +9,8 @@ Scenario: deploy_simple_cinder
  services, there are no errors in logs
  7. Run OSTF
 </pre>
+
+<p>
+  <b>Ownership:</b> Issues with this job are tracked by QA team.
+<p>
+  <b>Contacts:</b> #fuel-qa

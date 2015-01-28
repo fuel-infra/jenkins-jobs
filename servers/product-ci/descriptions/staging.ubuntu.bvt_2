@@ -9,8 +9,7 @@ Case: deploy_ha_vlan
  6. Run network verification
  7. Run OSTF
 </pre>
-
 <p>
-  <b>Ownership:</b> Issues with this job are tracked by QA team.
+  <b>Ownership:</b> MOS team. If the job is failing, it is responsibility of a team on duty to drive fixing the job. See <a href="https://mirantis.jira.com/wiki/display/OC/Staging+Mirror+Duty">Staging Mirror Duty</a> page for the duty schedule.
 <p>
-  <b>Contacts:</b> #fuel-qa
+  <b>Contacts:</b> mos-engineering@mirantis.com, #fuel-devops.
