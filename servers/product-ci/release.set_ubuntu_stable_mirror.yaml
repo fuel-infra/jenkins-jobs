@@ -30,7 +30,7 @@
           name: STABLE_VERSION
     publishers:
       - archive:
-          allow-empty: false
+          allow-empty: true
           artifacts: build_description.txt
           latest-only: false
       - description-setter:
