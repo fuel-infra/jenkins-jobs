@@ -1,0 +1,61 @@
+- job:
+    name: stackforge-verify-fuel-web
+    builders:
+        - shell:
+            !include-raw './builders/stackforge-verify-fuel-web.sh'
+    concurrent: true
+    description: |
+        Test requests for fuel-web repository <p>Uses venv with python2.6
+        <p>WARNING: Only stable stable/4.1 and stable/5.0 branches
+        <p>For master branch see <a href="https://fuel-jenkins.mirantis.com/view/fuel-web/job/verify-fuel-web/">verify-fuel-web</a> job.
+    node: fuel-web-stable
+    parameters:
+        - string:
+            name: GERRIT_REFSPEC
+            default: 'stable/5.0'
+    properties:
+        - heavy-job:
+            weight: 1
+        - throttle:
+            categories:
+                - one-nailgun-db-per-node
+            enabled: true
+            max-per-node: 1
+            max-total: 0
+            option: category
+    publishers:
+        - archive:
+            allow-empty: true
+            artifacts: '**/.tox/*/log/*.log,**/.tox/log/**'
+            latest-only: false
+        - junit:
+            keep-long-stdio: false
+            results: '**/nosetests.xml,**/nailgun.xml,**/fuelclient.xml,**/fuelupgrade.xml,**/fuelupgradedownloader.xml,**/shotgun.xml'
+        - description-setter:
+            regexp-for-failed: '(Failed tests: (.*))'
+    scm:
+        - git:
+            branches:
+                - $GERRIT_BRANCH
+            refspec: $GERRIT_REFSPEC
+            url: 'https://review.openstack.org/stackforge/fuel-web'
+            choosing-strategy: gerrit
+    wrappers:
+        - timeout:
+            fail: true
+            timeout: 45
+            write-description: true
+        - ansicolor:
+            colormap: xterm
+    triggers:
+        - gerrit:
+            trigger-on:
+                - patchset-created-event
+            projects:
+                - project-compare-type: PLAIN
+                  project-pattern: 'stackforge/fuel-web'
+                  branches:
+                    - branch-compare-type: PLAIN
+                      branch-pattern: 'stable/4.1'
+                    - branch-compare-type: PLAIN
+                      branch-pattern: 'stable/5.0'
