@@ -76,7 +76,7 @@
            SLAVE_NODE_MEMORY=3072
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'image_based'
+         testgroup: 'repeatable_image_based'
          properties: 'IMAGE_PROVISIONING=true'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'known_issues'
