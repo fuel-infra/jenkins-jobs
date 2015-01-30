@@ -1,5 +1,11 @@
 - job:
     builders:
+      - copyartifact:
+          project: 'nailgun_performance_tests'
+          filter: nailgun/nailgun_perf_test_report.csv
+          which-build: permalink
+          permalink: last
+          optional: true
       - shell:
           !include-raw builders/nailgun_performance_tests.sh
     description: "Nailgun performance tests. Uses venv with python2.6"
@@ -21,7 +27,7 @@
           recipients: fuel-core-team@mirantis.com devops+alert@mirantis.com
           send-to-individuals: false
       - archive:
-          artifacts: results/tests/*, results/last/*, results/results/*
+          artifacts: results/tests/*, results/last/*, results/results/*, nailgun/nailgun_perf_test_report.csv
     scm:
       - git:
           url: https://review.openstack.org/stackforge/fuel-web.git
