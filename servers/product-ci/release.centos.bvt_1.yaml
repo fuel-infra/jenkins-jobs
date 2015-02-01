@@ -25,7 +25,7 @@
       - email-systest:
           body-failed:
             !include-raw notifications/bvt.failed
-          mail-to: devops+alert@mirantis.com,fuel-core-team@mirantis.com
+          mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
     scm:
       - stackforge:
           branch: '{branch}'
