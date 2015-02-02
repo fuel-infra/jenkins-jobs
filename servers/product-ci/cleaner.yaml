@@ -1,0 +1,32 @@
+- job:
+    name: cleaner
+    builders:
+      - shell:
+          !include-raw './builders/cleaner.py'
+    description: |
+      This job will iterate through a list of available environments for a specified<br>
+      VENV location, using dos.py command. Check if environment is not the last one<br>
+      used for specific build and is old enought to be removed.<br><br>
+      VENV parameter - environment where dos.py is executed<br>
+      Minimal times parameters (in days, for different job types): STAGING, SYSTEM_TEST, OTHER.
+    concurrent: true
+    parameters:
+        - node:
+            name: NODE
+            allowed-multiselect: true
+        - string:
+            name: VENV
+            default: '/home/jenkins/venv-nailgun-tests'
+        - string:
+            name: STAGING
+            default: '2'
+        - string:
+            name: SYSTEMTEST
+            default: '2'
+        - string:
+            name: OTHER
+            default: '2'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 5
