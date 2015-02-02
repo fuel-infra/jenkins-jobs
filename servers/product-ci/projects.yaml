@@ -165,3 +165,6 @@
       - 'custom_{version-id}_iso':
           version-id: 6.1
           branch: master
+      - 'custom_trusty_{version-id}_iso':
+          version-id: 6.1
+          branch: master
