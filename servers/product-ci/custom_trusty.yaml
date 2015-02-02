@@ -34,7 +34,7 @@
           default: 'bp/support-ubuntu-trusty'
       - string:
           name: OSTF_COMMIT
-          default: 'bp/support-ubuntu-trusty'
+          default: '{branch}'
       - string:
           name: PYTHON_FUELCLIENT_COMMIT
           default: '{branch}'
