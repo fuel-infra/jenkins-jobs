@@ -1,0 +1,72 @@
+- job-template:
+    name: '{release}.{name}.build-deb-deps'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: '{build-node}'
+    logrotate:
+      daysToKeep: 100
+    wrappers:
+      - ci-build-deb
+    parameters:
+      - string:
+          name: GERRIT_USER
+          default: 'ci-build-deb'
+      - string:
+          name: GERRIT_VOTE
+          default: '1'
+      - string:
+          name: OBSURL
+          default: 'https://obs-1.mirantis.com'
+      - string:
+          name: OBSAPI
+          default: '-A https://obs-1.mirantis.com'
+      - dependencies-build:
+          version-id: '{version-id}'
+          openstack-id: '{openstack-id}'
+          prjprefix: '{prjprefix}'
+          prjsuffix: '{prjsuffix}'
+          updates: '{updates}'
+          last_stage: '{last_stage}'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-branch}'
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-ci-status-repo}'
+          scm-basedir: '{scm-ci-status-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-ci-status-branch}'
+    triggers:
+      - fuel-infra-deps-submit:
+          code-project: 'packages/trusty/**'
+          branch: '{version-id}'
+    builders:
+      - shell:
+          !include-raw-escape builders/ci.status.report.start.sh
+      - shell:
+          !include-raw-escape builders/mos.reset.vote.sh
+      - shell:
+          !include-raw-escape builders/mos.build.deb.deps.sh
+      - shell:
+          !include-raw-escape builders/mos.deb.reprepro.sh
+      - shell:
+          !include-raw-escape builders/mos.vote.sh
+    publishers:
+      - post-tasks:
+        - matches:
+            - log-text: Building
+              operator: AND
+          script:
+            !include-raw-escape builders/ci.status.report.stop.sh
+      - archive:
+           artifacts: '**/buildlog.txt'
+           allow-empty: true
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: true

@@ -1,0 +1,310 @@
+########################################################################
+# Section: Wrappers
+########################################################################
+- wrapper:
+    name: openstack-ci-jenkins
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+
+- wrapper:
+    name: ci-build-deb
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+            - '817edea8-b597-4a6e-9aeb-bad57b109e66'
+
+- wrapper:
+    name: ci-build-rpm
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+            - '9654daf3-36d4-4998-909e-c4085330b8e7'
+
+- wrapper:
+    name: vm-check-install-rpm
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+            - '06bc7ed4-3174-4c49-bb54-63a301874199'
+            - 'e074d15f-e006-4435-8836-c792c431a270'
+
+- wrapper:
+    name: vm-check-install-deb
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+            - '11acbe7e-c816-478d-b484-04adf29f4888'
+            - 'e074d15f-e006-4435-8836-c792c431a270'
+
+- wrapper:
+    name: vm-check-install-trusty
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+            - '11acbe7e-c816-478d-b484-04adf29f4888'
+            - '9b8a6644-23be-4e82-9a2f-a26c62df8955'
+
+- wrapper:
+    name: openstack-ci-packtest-rpm
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '1c17f649-550f-440e-a0ad-994de8417e67'
+            - 'efa71805-f1ea-4ad4-9f26-32277f8bcc7a'
+
+- wrapper:
+    name: openstack-ci-packtest-deb
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '1c17f649-550f-440e-a0ad-994de8417e67'
+            - '4c78c2d6-a0d6-49b7-a398-d728a1b6a85c'
+
+- wrapper:
+    name: osci-jenkins-reporter
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '35fc8f47-a728-4d5a-bfeb-9338089f31fa'
+
+########################################################################
+# Section: Triggers
+########################################################################
+- trigger:
+    name: fuel-infra-request
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: '{spec-project}'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{branch}'
+              file-paths:
+                - compare-type: 'ANT'
+                  pattern: '{files}'
+            - project-compare-type: 'ANT'
+              project-pattern: '{code-project}'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{branch}'
+          server-name: fuel-infra
+          silent: true
+
+- trigger:
+    name: fuel-infra-deps-request
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: '{code-project}'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{branch}'
+          server-name: fuel-infra
+          silent: true
+
+- trigger:
+    name: fuel-infra-submit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: '{spec-project}'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{branch}'
+              file-paths:
+                - compare-type: 'ANT'
+                  pattern: '{files}'
+            - project-compare-type: 'ANT'
+              project-pattern: '{code-project}'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{branch}'
+          server-name: fuel-infra
+          silent: true
+
+- trigger:
+    name: fuel-infra-deps-submit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: '{code-project}'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{branch}'
+          server-name: fuel-infra
+          silent: true
+
+- trigger:
+    name: openstack-fuel-request
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: '{spec-project}'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{branch}'
+              file-paths:
+                - compare-type: 'ANT'
+                  pattern: '{files}'
+          silent: true
+          server-name: review.openstack.org
+
+- trigger:
+    name: openstack-fuel-submit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: '{spec-project}'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{branch}'
+              file-paths:
+                - compare-type: 'ANT'
+                  pattern: '{files}'
+          silent: true
+          server-name: review.openstack.org
+
+########################################################################
+# Section: SCM
+########################################################################
+- scm:
+    name: fuel-infra
+    scm:
+      - git:
+          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/{scm-repo}.git'
+          basedir: '{scm-basedir}'
+          credentials-id: '{scm-credentials-id}'
+          skip-tag: true
+          branches:
+            - '{scm-branch}'
+          wipe-workspace: false
+
+- scm:
+    name: fuel-qa
+    scm:
+      - git:
+          url: 'http://git.openstack.org/stackforge/fuel-qa.git'
+          basedir: 'fuel-qa'
+          branches:
+            - 'origin/master'
+          wipe-workspace: false
+
+#########################################################################
+## Section: Parameters
+########################################################################
+- parameter:
+    name: openstack-build
+    parameters:
+      - string:
+          name: URL
+          default: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/'
+      - string:
+          name: PROJECTNAME
+          default: '{prjprefix}fuel-{version-id}{prjsuffix}'
+      - string:
+          name: PACKAGENAME
+          default: ''
+      - string:
+          name: SOURCEBRANCH
+          default: 'openstack-ci/fuel-{version-id}/{openstack-id}'
+      - string:
+          name: SOURCECHANGEID
+          default: ''
+      - string:
+          name: SPECBRANCH
+          default: 'openstack-ci/fuel-{version-id}/{openstack-id}'
+      - string:
+          name: SPECCHANGEID
+          default: ''
+      - string:
+          name: PRJPREFIX
+          default: '{prjprefix}'
+      - string:
+          name: PRJSUFFIX
+          default: '{prjsuffix}'
+      - bool:
+          name: UPDATES
+          default: '{updates}'
+      - bool:
+          name: LAST_STAGE
+          default: '{last_stage}'
+
+- parameter:
+    name: dependencies-build
+    parameters:
+      - string:
+          name: URL
+          default: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/'
+      - string:
+          name: PROJECTNAME
+          default: '{prjprefix}fuel-{version-id}{prjsuffix}'
+      - string:
+          name: PACKAGENAME
+          default: ''
+      - string:
+          name: SOURCEBRANCH
+          default: '{version-id}'
+      - string:
+          name: SOURCECHANGEID
+          default: ''
+      - string:
+          name: PRJPREFIX
+          default: '{prjprefix}'
+      - string:
+          name: PRJSUFFIX
+          default: '{prjsuffix}'
+      - bool:
+          name: UPDATES
+          default: '{updates}'
+      - bool:
+          name: LAST_STAGE
+          default: '{last_stage}'
+
+- parameter:
+    name: packtest
+    parameters:
+      - string:
+          name: DISPLAY_NAME
+          default: 'Check package for installation in environment'
+      - string:
+          name: TEST_GROUP
+          default: 'deploy_ha_one_controller_flat'
+      - string:
+          name: DEPLOYMENT_MODE
+          default: 'ha_compact'
+      - bool:
+          name: NEUTRON_ENABLE
+          default: false
+          description: 'If True: Neutron, If False: Nova network'
+      - string:
+          name: NEUTRON_SEGMENT_TYPE
+          default: 'vlan'
+          description: 'gre|vlan'
+      - string:
+          name: KEEP_BEFORE
+          default: 'yes'

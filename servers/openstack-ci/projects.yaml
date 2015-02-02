@@ -1,0 +1,59 @@
+- project:
+    name: 'mos'
+    release: 6.1
+    version-id: 6.1
+    openstack-id: 2014.2
+    fuel-branch: 'master'
+    updates: false
+    prjsuffix: '-stable'
+    build-node: 'osci-fuel-meta-ubuntu'
+    mailto: 'dburmistrov@mirantis.com'
+    is-disabled: ''
+    scm-user: 'openstack-ci-jenkins'
+    scm-repo: 'infra/obs'
+    scm-ci-status-repo: 'infra/ci_status'
+    scm-basedir: ''
+    scm-ci-status-basedir: 'ci_status'
+    scm-credentials-id: '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+    scm-branch: 'origin/master-updates'
+    scm-ci-status-branch: 'origin/master'
+    install-build-node: 'install-tests'
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'origin/master'
+    packtest-build-node: 'package-testing'
+    jobs:
+      - '{release}.{name}.rpm':
+          prjprefix: 'centos-'
+          last_stage: true
+      - '{release}.{name}.deb':
+          prjprefix: 'trusty-'
+          last_stage: true
+      - '{release}.{name}.build-fuel-rpm':
+          prjprefix: 'centos-'
+      - '{release}.{name}.build-fuel-deb':
+          prjprefix: 'trusty-'
+      - '{release}.{name}.lint'
+
+- job-group:
+    name: '{release}.{name}.rpm'
+    jobs:
+      - '{release}.{name}.build-rpm-request':
+          last_stage: false
+      - '{release}.{name}.build-rpm':
+      - '{release}.{name}.build-rpm-deps-request':
+          last_stage: false
+      - '{release}.{name}.build-rpm-deps':
+      - '{release}.{name}.install-rpm':
+      - '{release}.{name}.deploy-rpm':
+
+- job-group:
+    name: '{release}.{name}.deb'
+    jobs:
+      - '{release}.{name}.build-deb-request':
+          last_stage: false
+      - '{release}.{name}.build-deb':
+      - '{release}.{name}.build-deb-deps-request':
+          last_stage: false
+      - '{release}.{name}.build-deb-deps':
+      - '{release}.{name}.install-deb':
+      - '{release}.{name}.deploy-deb':

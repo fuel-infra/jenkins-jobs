@@ -1,0 +1,58 @@
+- job-template:
+    name: '{release}.{name}.deploy-rpm'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: '{packtest-build-node}'
+    logrotate:
+      daysToKeep: 100
+    wrappers:
+      - openstack-ci-packtest-rpm
+    parameters:
+      - string:
+          name: GERRIT_REVIEWER
+          default: 'openstack-ci-packtest-rpm'
+      - string:
+          name: OBSURL
+          default: 'https://osci-obs.vm.mirantis.net'
+      - string:
+          name: OBSAPI
+          default: '-A https://osci-obs.vm.mirantis.net:444'
+      - string:
+          name: ENV_PREFIX
+          default: 'centos'
+          description: 'ubuntu|centos'
+      - packtest:
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{install-scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{install-scm-branch}'
+      - fuel-qa:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-ci-status-repo}'
+          scm-basedir: '{scm-ci-status-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-ci-status-branch}'
+    builders:
+      - shell:
+          !include-raw-escape builders/ci.status.report.start.sh
+      - shell:
+          !include-raw-escape builders/mos.deploy.sh
+    publishers:
+      - post-tasks:
+        - matches:
+            - log-text: Building
+              operator: AND
+          script:
+            !include-raw-escape builders/ci.status.report.stop.sh
+      - archive:
+          artifacts: 'fuel-qa/**/nosetests.xml,fuel-qa/logs/*'
+          allow-empty: true
+#      - email:
+#          recipients: ''
+#          notify-every-unstable-build: false
+#          send-to-individuals: true
