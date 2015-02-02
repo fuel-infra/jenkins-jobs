@@ -1,0 +1,148 @@
+- job-template:
+    name: 'custom_trusty_{version-id}_iso'
+    builders:
+      - shell:
+          !include-raw-escape builders/custom.sh
+    concurrent: true
+    description:
+      !include-raw descriptions/custom.iso
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    node: custom_iso
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    parameters:
+      - string:
+          name: make_args
+          default: '-j2'
+          description: Additional make arguments
+      - string:
+          name: FUELLIB_COMMIT
+          default: 'bp/support-ubuntu-trusty'
+      - string:
+          name: NAILGUN_COMMIT
+          default: 'bp/support-ubuntu-trusty'
+      - string:
+          name: ASTUTE_COMMIT
+          default: 'bp/support-ubuntu-trusty'
+      - string:
+          name: OSTF_COMMIT
+          default: 'bp/support-ubuntu-trusty'
+      - string:
+          name: PYTHON_FUELCLIENT_COMMIT
+          default: '{branch}'
+      - string:
+          name: FUELMAIN_COMMIT
+          default: 'bp/support-ubuntu-trusty'
+      - string:
+          name: FUELLIB_REPO
+          default: 'https://github.com/asheplyakov/fuel-library.git'
+      - string:
+          name: NAILGUN_REPO
+          default: 'https://github.com/asheplyakov/fuel-web.git'
+      - string:
+          name: ASTUTE_REPO
+          default: 'https://github.com/asheplyakov/fuel-astute.git'
+      - string:
+          name: OSTF_REPO
+          default: 'https://github.com/stackforge/fuel-ostf.git'
+      - string:
+          name: PYTHON_FUELCLIENT_REPO
+          default: 'https://github.com/stackforge/python-fuelclient.git'
+      - string:
+          name: FUELMAIN_REPO
+          default: 'https://github.com/asheplyakov/fuel-main.git'
+      - choice:
+          name: USE_MIRROR
+          choices:
+            - none
+            - msk
+            - srt
+            - usa
+            - hrk
+      - string:
+          name: MIRROR_UBUNTU
+          default: 'http://ru.archive.ubuntu.com/ubuntu'
+      - string:
+          name: MIRROR_UBUNTU_SECURITY
+          default: 'http://ru.archive.ubuntu.com/ubuntu'
+      - string:
+          name: fuelmain_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-main gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: nailgun_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-web gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: astute_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-astute gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: ostf_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-ostf gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuellib_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-library gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: python_fuelclient_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in python-fuelclient gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: EXTRA_RPM_REPOS
+          default: ''
+          description: Additional repository rpm package. For example, repos1,url_for_repos1
+      - string:
+          name: EXTRA_DEB_REPOS
+          default: ''
+          description: Additional repositories for deb packages. Use full string separated by "|"
+            excluding 'deb' word. Example "URL <path> <dist> <section>|URL2..."
+      - string:
+          name: MIRANTIS
+          default: 'yes'
+          description: yes or no. Deprecated.
+      - string:
+          name: FEATURE_GROUPS
+          default: 'mirantis'
+          description: https://github.com/stackforge/fuel-specs/blob/master/specs/5.1/feature-groups.rst
+      - string:
+          name: MIRROR_BASE
+          default: ''
+          description: http://osci-mirror-srt.srt.mirantis.net/fwm/files/6.0-2014-10-08-123456
+    scm:
+      - git:
+          url: '$FUELMAIN_REPO'
+          branches:
+            - 'origin/{branch}'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: artifacts/*txt, artifacts/*changelog
+          latest-only: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'
+      - trigger-parameterized-builds:
+          - project: deploy_iso_on_cachers
+            condition: UNSTABLE_OR_BETTER
+            property-file: "artifacts/magnet_link.txt"
