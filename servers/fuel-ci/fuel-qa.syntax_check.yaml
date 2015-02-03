@@ -1,0 +1,45 @@
+- job:
+    name: fuel-qa.syntax_check
+    builders:
+      - shell: |
+          #!/bin/bash
+          set -ex
+          ./run_tests.sh
+    description: 'Runs ./run_tests.sh'
+    node: flake8
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-qa.git
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-qa
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 15
