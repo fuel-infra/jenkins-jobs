@@ -15,8 +15,12 @@
       - '{version-id}.all':
           timer: 'H 22 * * *'
           trigger-builds: 'deploy_iso_on_cachers,6.1.centos.smoke_nova,6.1.ubuntu.smoke_neutron,6.1.centos.bvt_1,6.1.ubuntu.bvt_2'
-      - '{version-id}.centos.bvt_1'
-      - '{version-id}.ubuntu.bvt_2'
+      - '{version-id}.centos.bvt_1':
+          description:
+            !include-raw descriptions/centos.bvt_1
+      - '{version-id}.ubuntu.bvt_2':
+          description:
+            !include-raw descriptions/ubuntu.bvt_2
       - '{version-id}.centos.smoke_nova'
       - '{version-id}.ubuntu.smoke_neutron'
 - job-group:
@@ -28,8 +32,12 @@
           extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-6.1/ precise-security main universe multiverse restricted'
           timer: 'H 7 * * *'
       - '{version-id}.staging.iso'
-      - '{version-id}.staging.centos.bvt_1'
-      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.staging.centos.bvt_1':
+          description:
+            !include-raw descriptions/staging.centos.bvt_1
+      - '{version-id}.staging.ubuntu.bvt_2':
+          description:
+            !include-raw descriptions/staging.ubuntu.bvt_2
       - '{version-id}.set_stable_mirror'
       - '{version-id}.test_staging_mirror'
 
@@ -47,7 +55,9 @@
       - '{version-id}.test_ubuntu_upstream_mirror':
           timer: 'H 7 * * *'
       - '{version-id}.staging.iso'
-      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.staging.ubuntu.bvt_2':
+          description:
+            !include-raw descriptions/staging.ubuntu.bvt_2
       - '{version-id}.set_ubuntu_stable_mirror'
 
 - project:
@@ -66,8 +76,12 @@
       - '{version-id}.all':
           timer: 'H 22 */3 * *'
           trigger-builds: 'deploy_iso_on_cachers,master.smoke,master.centos.bvt_1,master.ubuntu.bvt_2'
-      - '{version-id}.centos.bvt_1'
-      - '{version-id}.ubuntu.bvt_2'
+      - '{version-id}.centos.bvt_1':
+          description:
+            !include-raw descriptions/centos.bvt_1
+      - '{version-id}.ubuntu.bvt_2':
+          description:
+            !include-raw descriptions/ubuntu.bvt_2
       - '{version-id}.smoke'
 - job-group:
     name: master.staging
@@ -78,8 +92,12 @@
           extra-deb-repos: ''
           timer: 'H 7 */3 * *'
       - '{version-id}.staging.iso'
-      - '{version-id}.staging.centos.bvt_1'
-      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.staging.centos.bvt_1':
+          description:
+            !include-raw descriptions/staging.centos.bvt_1
+      - '{version-id}.staging.ubuntu.bvt_2':
+          description:
+            !include-raw descriptions/staging.ubuntu.bvt_2
       - '{version-id}.set_stable_mirror'
       - '{version-id}.test_staging_mirror'
 
@@ -99,8 +117,12 @@
       - '{version-id}.all':
           timer: 'H 20 * * *'
           trigger-builds: 'deploy_iso_on_cachers,5.1.2.smoke,5.1.2.centos.bvt_1,5.1.2.ubuntu.bvt_2'
-      - '{version-id}.centos.bvt_1'
-      - '{version-id}.ubuntu.bvt_2'
+      - '{version-id}.centos.bvt_1':
+          description:
+            !include-raw descriptions/centos.bvt_1-legacy
+      - '{version-id}.ubuntu.bvt_2':
+          description:
+            !include-raw descriptions/ubuntu.bvt_2-legacy
       - '{version-id}.smoke'
 - job-group:
     name: 5.1.2.staging
@@ -111,8 +133,12 @@
           extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-5.1.2/ precise-security main universe multiverse restricted'
           timer: 'H 5 * * *'
       - '{version-id}.staging.iso'
-      - '{version-id}.staging.centos.bvt_1'
-      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.staging.centos.bvt_1':
+          description:
+            !include-raw descriptions/staging.centos.bvt_1-legacy
+      - '{version-id}.staging.ubuntu.bvt_2':
+          description:
+            !include-raw descriptions/staging.ubuntu.bvt_2-legacy
       - '{version-id}.set_stable_mirror'
       - '{version-id}.test_staging_mirror'
 
@@ -133,8 +159,12 @@
       - '{version-id}.all':
           timer: 'H 20 * * *'
           trigger-builds: 'deploy_iso_on_cachers,6.0.1.smoke,6.0.1.centos.bvt_1,6.0.1.ubuntu.bvt_2'
-      - '{version-id}.centos.bvt_1'
-      - '{version-id}.ubuntu.bvt_2'
+      - '{version-id}.centos.bvt_1':
+          description:
+            !include-raw descriptions/centos.bvt_1-legacy
+      - '{version-id}.ubuntu.bvt_2':
+          description:
+            !include-raw descriptions/ubuntu.bvt_2-legacy
       - '{version-id}.smoke'
 - job-group:
     name: 6.0.1.staging
@@ -145,8 +175,12 @@
           extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-6.0.1/ precise-security main universe multiverse restricted'
           timer: 'H 5 * * *'
       - '{version-id}.staging.iso'
-      - '{version-id}.staging.centos.bvt_1'
-      - '{version-id}.staging.ubuntu.bvt_2'
+      - '{version-id}.staging.centos.bvt_1':
+          description:
+            !include-raw descriptions/staging.centos.bvt_1-legacy
+      - '{version-id}.staging.ubuntu.bvt_2':
+          description:
+            !include-raw descriptions/staging.ubuntu.bvt_2-legacy
       - '{version-id}.set_stable_mirror'
       - '{version-id}.test_staging_mirror'
 
