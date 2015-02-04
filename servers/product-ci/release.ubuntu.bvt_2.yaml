@@ -1,6 +1,8 @@
 - job-template:
     name: '{version-id}.ubuntu.bvt_2'
     builders:
+      - inject:
+          properties-content: '{custom-parameters}'
       - systest
     concurrent: true
     description: '{description}'

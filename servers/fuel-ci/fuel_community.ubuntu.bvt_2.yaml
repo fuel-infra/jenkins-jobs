@@ -23,6 +23,9 @@
           name: OPENSTACK_RELEASE
           default: 'Ubuntu'
       - string:
+          name: NEUTRON_ENABLE
+          default: 'true'
+      - string:
           name: RELEASE
       - string:
           name: BUILD
