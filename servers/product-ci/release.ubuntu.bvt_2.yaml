@@ -3,8 +3,7 @@
     builders:
       - systest
     concurrent: true
-    description:
-      !include-raw descriptions/ubuntu.bvt_2
+    description: '{description}'
     logrotate:
       daysToKeep: 30
       numToKeep: 50

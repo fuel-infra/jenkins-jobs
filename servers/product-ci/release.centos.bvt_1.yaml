@@ -3,8 +3,7 @@
     builders:
       - systest
     concurrent: true
-    description:
-      !include-raw descriptions/centos.bvt_1
+    description: '{description}'
     logrotate:
       daysToKeep: 30
       numToKeep: 50
