@@ -9,7 +9,7 @@
           upgrade_testgroup: 'upgrade'
           weight: '8'
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
-          testgroup: 'ceph_multinode_compact'
+          testgroup: 'ceph_ha_one_controller_compact'
           upgrade_testgroup: 'upgrade'
           weight: '8'
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
@@ -59,7 +59,7 @@
            BONDING=true
            INTERFACE_MODEL='e1000'
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'bonding_simple'
+         testgroup: 'bonding_ha_one_controller'
          weight: '4'
          properties: |
            BONDING=true
@@ -96,7 +96,7 @@
            SLAVE_NODE_MEMORY=6144
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'services_simple'
+         testgroup: 'services_ha_one_controller'
          weight: '12'
          properties: |
            SLAVE_NODE_MEMORY=6144
