@@ -1,0 +1,36 @@
+- job:
+    name: fuel.test_impact
+    builders:
+      - shell:
+          !include-raw builders/fuel.test_impact.sh
+    concurrent: true
+    description: 'Inform QA team if TestImpact is in commit message'
+    logrotate:
+      artifactDaysToKeep: 30
+    properties:
+      - heavy-job:
+          weight: 1
+    publishers:
+      - email-ext:
+          body: |
+            Guys, attention! We have to implement a new test
+            $GERRIT_CHANGE_URL
+          send-to:
+            - recipients
+          recipients: 'mos-qa@mirantis.net'
+          subject: '[Jenkins] TestImpact'
+          failure: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: ANT
+              project-pattern: 'stackforge/fuel**'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          silent: true
+    wrappers:
+      - timeout:
+          timeout: 3
