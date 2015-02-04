@@ -76,3 +76,8 @@
     description: Adds timestamps to the Console Output.
     url: https://wiki.jenkins-ci.org/display/JENKINS/Timestamper
     version: 1.5.15
+
+- plugin: log-parser
+    description: Parse the console output and highlight error/warning/info lines
+    url: https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin
+    version: 1.0.8

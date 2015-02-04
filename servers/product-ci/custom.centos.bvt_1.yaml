@@ -1,0 +1,63 @@
+- job:
+    name: 'custom.centos.bvt_1'
+    builders:
+      - shell:
+          !include-raw builders/run_system_test.sh
+    concurrent: true
+    description:
+      !include-raw descriptions/custom.centos.bvt_1
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    node: custom_bvt
+    properties:
+      - heavy-job:
+          weight: 8
+      - throttle:
+          categories:
+            - custom_bvt
+          max-per-node: 1
+          option: category
+    parameters:
+      - string:
+          name: MAGNET_LINK
+      - string:
+          name: TEST_GROUP
+          default: 'bvt_1'
+      - string:
+          name: OPENSTACK_RELEASE
+          default: 'CentOS'
+      - choice:
+          name: FUEL_MAIN_BRANCH
+          description: Branch of fuel-main repo, which is used to run system tests.
+          choices:
+              - master
+              - stable/6.0
+              - stable/5.1
+              - stable/5.0
+              - stable/4.1
+    scm:
+      - git:
+          url: 'https://github.com/stackforge/fuel-main.git'
+          branches:
+            - 'origin/$FUEL_MAIN_BRANCH'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 210
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml,logs/*'
+          latest-only: false
+      - logparser:
+          parse-rules: '/var/lib/jenkins/fuellib.parser'
+          unstable-on-warning: false
+          fail-on-error: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'

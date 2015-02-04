@@ -1,0 +1,24 @@
+<h3>Build verification test for Ubuntu</h3>
+
+<h4>master branch</h4>
+<pre style="font-size: 10px">
+Case: ha_neutron_ceph
+1. Create cluster
+2. Add 3 nodes with controller and ceph OSD roles
+3. Add 1 node with ceph OSD roles
+4. Add 2 nodes with compute and ceph OSD roles
+5. Deploy the cluster
+6. Check ceph status
+</pre>
+
+<h4>stable/** branch</h4>
+<pre style="font-size: 10px">
+Case: deploy_ha_vlan
+1. Create cluster
+2. Add 3 nodes with controller roles
+3. Add 2 nodes with compute roles
+4. Set up cluster to use Network VLAN manager with 8 networks
+5. Deploy the cluster
+6. Run network verification
+7. Run OSTF
+</pre>
