@@ -81,3 +81,9 @@
     description: Parse the console output and highlight error/warning/info lines
     url: https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin
     version: 1.0.8
+
+- plugin:
+    id: htmlpublisher
+    description: This plugin publishes HTML reports
+    url: https://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin
+    version: 1.3
