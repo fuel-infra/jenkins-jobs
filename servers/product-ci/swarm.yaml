@@ -52,18 +52,18 @@
          properties: |
            MULTIPLE_NETWORKS=true
            FUEL_STATS_ENABLED=true
-           INTERFACE_MODEL='e1000'
+           INTERFACE_MODEL=e1000
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'bonding_ha'
          properties: |
            BONDING=true
-           INTERFACE_MODEL='e1000'
+           INTERFACE_MODEL=e1000
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'bonding_ha_one_controller'
          weight: '4'
          properties: |
            BONDING=true
-           INTERFACE_MODEL='e1000'
+           INTERFACE_MODEL=e1000
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'cluster_actions'
      - '{version-id}.{id}.{dist}.{testgroup}':
