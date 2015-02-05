@@ -36,6 +36,10 @@
               - stable/5.1
               - stable/5.0
               - stable/4.1
+      - string:
+          name: ENV_PREFIX
+          default: custom.centos.bvt_1
+          description: Define env prefix name. This paramter should not be changed
     scm:
       - git:
           url: 'https://github.com/stackforge/fuel-main.git'

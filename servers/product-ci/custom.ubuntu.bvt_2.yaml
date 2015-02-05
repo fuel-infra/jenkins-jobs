@@ -39,6 +39,10 @@
               - stable/5.1
               - stable/5.0
               - stable/4.1
+      - string:
+          name: ENV_PREFIX
+          default: custom.ubuntu.bvt_2
+          description: Define env prefix name. This paramter should not be changed
     scm:
       - git:
           url: 'https://github.com/stackforge/fuel-main.git'
