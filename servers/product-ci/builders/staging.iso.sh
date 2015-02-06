@@ -47,7 +47,7 @@ if [ "$PATCHING_DATA" ] && [ "$PATCHING_DATA" != "none" ]; then
   add_make_target='upgrade-lrzip'
 fi
 
-make $make_args iso img version-yaml $add_make_target
+make ${make_args} iso img version-yaml $add_make_target
 
 cd ${ARTS_DIR}
 

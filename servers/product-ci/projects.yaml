@@ -13,6 +13,7 @@
     id: main
     jobs:
       - '{version-id}.all':
+          make-args: '-j8 -l10'
           timer: 'H 22 * * *'
           trigger-builds: 'deploy_iso_on_cachers,6.1.centos.smoke_nova,6.1.ubuntu.smoke_neutron,6.1.centos.bvt_1,6.1.ubuntu.bvt_2'
       - '{version-id}.centos.bvt_1':
@@ -33,7 +34,8 @@
           repo: '6.1-stable'
           extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-6.1/ precise-security main universe multiverse restricted'
           timer: 'H 7 * * *'
-      - '{version-id}.staging.iso'
+      - '{version-id}.staging.iso':
+          make-args: '-j8 -l10'
       - '{version-id}.staging.centos.bvt_1':
           description:
             !include-raw descriptions/staging.centos.bvt_1
@@ -58,7 +60,8 @@
     jobs:
       - '{version-id}.test_ubuntu_upstream_mirror':
           timer: 'H 7 * * *'
-      - '{version-id}.staging.iso'
+      - '{version-id}.staging.iso':
+          make-args: ''
       - '{version-id}.staging.ubuntu.bvt_2':
           description:
             !include-raw descriptions/staging.ubuntu.bvt_2
@@ -80,7 +83,8 @@
     id: main
     jobs:
       - '{version-id}.all':
-          timer: 'H 22 */3 * *'
+          make-args: '-j8 -l10'
+          timer: 'H 23 * * *'
           trigger-builds: 'deploy_iso_on_cachers,master.smoke,master.centos.bvt_1,master.ubuntu.bvt_2'
       - '{version-id}.centos.bvt_1':
           description:
@@ -99,7 +103,8 @@
           repo: 'master'
           extra-deb-repos: ''
           timer: 'H 7 */3 * *'
-      - '{version-id}.staging.iso'
+      - '{version-id}.staging.iso':
+          make-args: '-j8 -l10'
       - '{version-id}.staging.centos.bvt_1':
           description:
             !include-raw descriptions/staging.centos.bvt_1
@@ -125,6 +130,7 @@
     id: main
     jobs:
       - '{version-id}.all':
+          make-args: ''
           timer: 'H 20 * * *'
           trigger-builds: 'deploy_iso_on_cachers,5.1.2.smoke,5.1.2.centos.bvt_1,5.1.2.ubuntu.bvt_2'
       - '{version-id}.centos.bvt_1':
@@ -143,7 +149,8 @@
           repo: '5.1.2-stable'
           extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-5.1.2/ precise-security main universe multiverse restricted'
           timer: 'H 5 * * *'
-      - '{version-id}.staging.iso'
+      - '{version-id}.staging.iso':
+          make-args: ''
       - '{version-id}.staging.centos.bvt_1':
           description:
             !include-raw descriptions/staging.centos.bvt_1-legacy
@@ -169,6 +176,7 @@
     id: main
     jobs:
       - '{version-id}.all':
+          make-args: ''
           timer: 'H 20 * * *'
           trigger-builds: 'deploy_iso_on_cachers,6.0.1.smoke,6.0.1.centos.bvt_1,6.0.1.ubuntu.bvt_2'
       - '{version-id}.centos.bvt_1':
@@ -187,7 +195,8 @@
           repo: '6.0.1-stable'
           extra-deb-repos: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-6.0.1/ precise-security main universe multiverse restricted'
           timer: 'H 5 * * *'
-      - '{version-id}.staging.iso'
+      - '{version-id}.staging.iso':
+          make-args: ''
       - '{version-id}.staging.centos.bvt_1':
           description:
             !include-raw descriptions/staging.centos.bvt_1-legacy

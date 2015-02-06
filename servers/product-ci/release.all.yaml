@@ -26,6 +26,10 @@
           default: 'true'
           description: Perform deep_clean or not. Default is "true". Set any other value
             to disable it.
+      - string:
+          name: make_args
+          default: '{make-args}'
+          description: Additional make arguments
     publishers:
       - archive:
           allow-empty: false
