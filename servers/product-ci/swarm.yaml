@@ -9,7 +9,7 @@
           upgrade_testgroup: 'upgrade'
           weight: '8'
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
-          testgroup: 'ceph_ha_one_controller_compact'
+          testgroup: 'ceph_multinode_compact'
           upgrade_testgroup: 'upgrade'
           weight: '8'
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
