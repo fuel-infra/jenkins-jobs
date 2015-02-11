@@ -27,6 +27,9 @@
           default: 'true'
           description: Perform deep_clean or not. Default is "true". Set any other value
             to disable it.
+      - string:
+          name: FUEL_COMMITS
+          description: Path to version.yaml with commit ids of Fuel components.
     publishers:
       - archive:
           allow-empty: true

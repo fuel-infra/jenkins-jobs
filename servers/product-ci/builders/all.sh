@@ -95,4 +95,11 @@ ISO_HTTP_TORRENT=`grep HTTP_TORRENT ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_TORR
 
 echo "<a href="$ISO_HTTP_LINK">ISO download link</a> <a href="$ISO_HTTP_TORRENT">ISO torrent link</a><br>${ISO_MAGNET_LINK}<br>"
 
+if [ "${trigger_community_build}" = "true" ]; then
+  scp ${WORKSPACE}/version.yaml.txt build1.fuel-infra.org:/home/jenkins/workspace/fuel_commits/${PROD_VER}-${BUILD_NUMBER}.yaml
+  curl -X POST https://fuel-jenkins.mirantis.com/job/${PROD_VER}-community.all/buildWithParameters\?FUEL_COMMITS\=${PROD_VER}-${BUILD_NUMBER}.yaml \
+  --user product-ci:${AUTH_TOKEN}
+fi
+
 echo "BUILD FINISHED. (`date -u`)"
+
