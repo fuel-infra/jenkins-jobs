@@ -1,11 +1,5 @@
 - job:
     builders:
-      - copyartifact:
-          project: 'nailgun_performance_tests'
-          filter: nailgun/nailgun_perf_test_report.csv
-          which-build: permalink
-          permalink: last
-          optional: true
       - shell:
           !include-raw builders/nailgun_performance_tests.sh
     description: "Nailgun performance tests. Uses venv with python2.6"
