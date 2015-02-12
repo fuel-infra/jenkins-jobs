@@ -30,6 +30,9 @@
           name: make_args
           default: '{make-args}'
           description: Additional make arguments
+      - string:
+          name: trigger_community_build
+          description: If set to "true" will trigger community build with the same commits
     publishers:
       - archive:
           allow-empty: false
@@ -54,3 +57,10 @@
           repo: fuel-main
     triggers:
       - timed: '{timer}'
+    wrappers:
+      - inject-passwords:
+          job-passwords:
+            - name: AUTH_TOKEN
+              password: qqoROvm6of+nv77TXCRgaXvuyVhvUMOsL7ofOGnyxHDsHSWKk7puJYN+zZBeWhJ0
+      - ssh-agent-credentials:
+          user: '5b151a58-4b65-4d13-87a1-883d52020e2d'
