@@ -84,11 +84,8 @@
     jobs:
       - '{version-id}.all':
           make-args: ''
-          timer: 'H 23 * * *'
-          trigger-builds: 'deploy_iso_on_cachers,master.smoke,master.centos.bvt_1,master.ubuntu.bvt_2'
-      - '{version-id}.centos.bvt_1':
-          description:
-            !include-raw descriptions/centos.bvt_1
+          timer: 'H 23 */3 * *'
+          trigger-builds: 'deploy_iso_on_cachers,master.smoke,master.ubuntu.bvt_2'
       - '{version-id}.ubuntu.bvt_2':
           description:
             !include-raw descriptions/ubuntu.bvt_2
@@ -99,15 +96,8 @@
     name: master.staging
     id: staging
     jobs:
-      - '{version-id}.build_staging_mirror':
-          repo: 'master'
-          extra-deb-repos: ''
-          timer: 'H 7 */3 * *'
       - '{version-id}.staging.iso':
           make-args: ''
-      - '{version-id}.staging.centos.bvt_1':
-          description:
-            !include-raw descriptions/staging.centos.bvt_1
       - '{version-id}.staging.ubuntu.bvt_2':
           description:
             !include-raw descriptions/staging.ubuntu.bvt_2
