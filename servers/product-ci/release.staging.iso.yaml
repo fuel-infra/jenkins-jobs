@@ -41,6 +41,23 @@
           set-for-matrix: false
       - email-default:
           mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com
+      - trigger-parameterized-builds:
+        - project: fuel_build_reports
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            RELEASE={release}
+            BUILD=fuel-{version-id}-$BUILD_NUMBER
+            STAGE=build
+            VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
+        - project: fuel_build_reports
+          condition: FAILED
+          predefined-parameters: |
+            RELEASE={release}
+            BUILD=fuel-{version-id}-$BUILD_NUMBER
+            STAGE=build
+            VALUE=fail
+            REPORTED_JOB_URL=$BUILD_URL
     scm:
       - stackforge:
           branch: '{branch}'
