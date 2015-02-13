@@ -21,8 +21,7 @@ export UPLOAD_MANIFESTS=true
 export UPLOAD_MANIFESTS_PATH=/home/jenkins/workspace/${JOB_NAME}/deployment/puppet/
 export CUSTOM_ENV=true
 export BUILD_IMAGES=true
-export DEPLOYMENT_MODE="ha_compact"
-export TEST_GROUP="test_pullrequest"
+export TEST_GROUP="smoke_neutron"
 
 VERSION_STRING=`readlink ${ISO_PATH} | cut -d '-' -f 2-3`
 echo "Description string: ${VERSION_STRING}"
