@@ -18,7 +18,7 @@
           option: category
     publishers:
       - email:
-          recipients: fuel-core-team@mirantis.com devops+alert@mirantis.com
+          recipients: ksambor@mirantis.com,devops+alert@mirantis.com
           send-to-individuals: false
       - archive:
           artifacts: results/tests/*, results/last/*, results/results/*, nailgun/nailgun_perf_test_report.csv
