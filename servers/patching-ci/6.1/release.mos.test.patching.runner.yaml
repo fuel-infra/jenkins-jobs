@@ -1,0 +1,90 @@
+- job-template:
+    name: '{release}.{name}.test-runner'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: '{build-node}'
+    logrotate:
+      daysToKeep: 100
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 30
+          write-description: true
+      - test-patching-runner
+    parameters:
+      - string:
+          name: GERRIT_TOPIC
+          default: ''
+      - string:
+          name: OPENSTACK_PROJECTS
+          default: '^stackforge/fuel-.*'
+      - string:
+          name: OPENSTACK_BRANCH
+          default: 'stable/6.1'
+      - string:
+          name: FUELINFRA_PROJECTS
+          default: '^.*'
+      - string:
+          name: FUELINFRA_BRANCH
+          default: 'openstack-ci/fuel-6.1/2014.2'
+      - string:
+          name: GERRIT_HOSTS
+          description: "Available Gerrit instances (format: host:port:user)"
+          default: 'review.fuel-infra.org:29418:openstack-ci-jenkins,review.openstack.org:29418:fuel-osci-bot'
+      - string:
+          name: ENABLED_ENV_CUSTOM_TESTS
+          default: 'true'
+      - string:
+          name: ENABLED_MASTER_CUSTOM_TESTS
+          default: 'false'
+      - string:
+          name: fuelqa_gerrit_commit
+          default: 'none'
+      - string:
+          name: patchingtests_gerrit_commit
+          default: 'none'
+      - string:
+          name: MAGNET_LINK
+          default: 'magnet:?xt=urn:btih:cd2ab866cb1810ff1b0ddeee4ad0f0147a2f3891&dn=fuel-6.1-521-2015-06-08%5F06-13-27.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-mnv.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fmc0n5-msk.msk.mirantis.net%2Ffuelweb-iso%2Ffuel-6.1-521-2015-06-08%5F06-13-27.iso'
+      - string:
+          name: PYTHON_VENV
+          default: '/home/jenkins/venv-nailgun-tests-2.9/'
+      - string:
+          name: KEEP_BEFORE
+          default: 'yes'
+    scm:
+      - git:
+          url: 'https://review.fuel-infra.org/patching-tests.git'
+          branches:
+            - 'master'
+          skip-tag: true
+          basedir: patching-tests
+    builders:
+      - shell:
+          !include-raw-escape builders/mos.test.patching.fetch_gerrit_commits.sh
+      - shell:
+          !include-raw-escape builders/mos.test.patching.runner.py
+      - trigger-builds:
+          - project: '{release}.{name}.test-deb'
+            current-parameters: true
+            property-file: 'parameters.txt'
+          - project: '{release}.{name}.test-rpm'
+            current-parameters: true
+            property-file: 'parameters.txt'
+          - project: '{release}.{name}.test-ubuntu-master'
+            current-parameters: true
+            property-file: 'parameters.txt'
+          - project: '{release}.{name}.test-centos-master'
+            current-parameters: true
+            property-file: 'parameters.txt'
+    publishers:
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: true
+      - description-setter:
+          regexp: (<a href=.*])
+          set-for-matrix: false

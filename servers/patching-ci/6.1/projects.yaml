@@ -1,0 +1,26 @@
+- project:
+    name: 'patching'
+    release: 6.1
+    version-id: 6.1
+    openstack-id: 2014.2.2
+    fuel-branch: 'stable/6.1'
+    prjsuffix: '-stable'
+    build-node: ''
+    mailto: 'devops+alert@mirantis.com'
+    is-disabled: ''
+    jobs:
+      - '{release}.{name}.test-runner'
+      - '{release}.{name}.rpm'
+      - '{release}.{name}.deb'
+
+- job-group:
+    name: '{release}.{name}.rpm'
+    jobs:
+      - '{release}.{name}.test-rpm':
+      - '{release}.{name}.test-centos-master':
+
+- job-group:
+    name: '{release}.{name}.deb'
+    jobs:
+      - '{release}.{name}.test-deb':
+      - '{release}.{name}.test-ubuntu-master':

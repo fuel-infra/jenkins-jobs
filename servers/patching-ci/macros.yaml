@@ -1,0 +1,65 @@
+########################################################################
+# Section: Wrappers
+########################################################################
+- wrapper:
+    name: ci-patching-deb
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '427848ec-3170-4921-a3f8-0edaa307bd7f'
+
+- wrapper:
+    name: ci-patching-rpm
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - 'e5017f36-814d-4f91-acf3-044c3dd51eb7'
+
+- wrapper:
+    name: test-patching-runner
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '55e5d902-b1dc-4d09-a809-7b6c8413c853'
+
+- wrapper:
+    name: ci-patching-master-ubuntu
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - 'dfdc295d-b6c5-4ef7-aeda-c0c722f93fa3'
+
+- wrapper:
+    name: ci-patching-master-centos
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '5b900bb8-2b72-4023-ab4f-ddf20f5290c1'
+
+########################################################################
+# Section: SCM
+########################################################################
+- scm:
+    name: fuel-qa
+    scm:
+      - git:
+          url: 'https://github.com/stackforge/fuel-qa.git'
+          basedir: 'fuel-qa'
+          branches:
+            - 'stable/6.1'
+          wipe-workspace: false
+########################################################################
+# Section: Publishers
+########################################################################
+- publisher:
+    name: nosetests
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'fuel-qa/nosetests.xml,fuel-qa/logs/*'
+          latest-only: false
+      - xunit:
+          types:
+              - junit:
+                  pattern: "fuel-qa/nosetests.xml"
+                  skip-if-no-test-files: true

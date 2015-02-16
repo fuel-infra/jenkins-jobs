@@ -1,0 +1,105 @@
+- job-template:
+    name: '{release}.{name}.test-deb'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: false
+    logrotate:
+      daysToKeep: 100
+    properties:
+      - heavy-job:
+          weight: 8
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 600
+          write-description: true
+      - ci-patching-deb
+    parameters:
+      - string:
+          name: fuelqa_gerrit_commit
+          default: 'none'
+      - string:
+          name: patchingtests_gerrit_commit
+          default: 'none'
+      - string:
+          name: BUG_ID
+          default: ''
+      - string:
+          name: MAGNET_LINK
+          default: ''
+      - string:
+          name: FUEL_MILESTONE
+          default: '6.1'
+      - string:
+          name: TEST_GROUP
+          default: 'patching_environment'
+      - string:
+          name: ENV_PREFIX
+          default: 'ubuntu'
+      - string:
+          name: OSCI_OBS_REPOS_CENTOS
+          default: 'http://osci-obs.vm.mirantis.net:82'
+      - string:
+          name: OSCI_OBS_REPOS_UBUNTU
+          default: 'http://obs-1.mirantis.com:82'
+      - string:
+          name: KEEP_BEFORE
+          default: 'yes'
+      - string:
+          name: GERRIT_REVIEWER
+          default: ci-patching-deb
+      - string:
+          name: PYTHON_VENV
+          default: '/home/jenkins/venv-nailgun-tests-2.9/'
+      - string:
+          name: GERRIT_HOST1
+          default: ''
+      - string:
+          name: GERRIT_HOST2
+          default: ''
+      - string:
+          name: GERRIT_CHANGES_NUMBERS1
+          default: ''
+      - string:
+          name: GERRIT_CHANGES_NUMBERS2
+          default: ''
+      - string:
+          name: GERRIT_HOSTS_COUNT
+          default: '2'
+      - string:
+          name: CUSTOM_TESTS
+          default: '2'
+      - string:
+          name: ENABLE_VAR
+          default: 'ENABLED_DEB_PATCHING'
+      - string:
+          name: ENABLED_DEB_PATCHING
+          default: 'true'
+      - string:
+          name: ENABLE_CUSTOM_VAR
+          default: 'ENABLED_ENV_CUSTOM_TESTS'
+      - string:
+          name: ENABLED_ENV_CUSTOM_TESTS
+          default: 'true'
+    scm:
+      - git:
+          url: 'https://github.com/stackforge/fuel-qa.git'
+          branches:
+            - 'origin/stable/6.1'
+          skip-tag: true
+          basedir: fuel-qa
+      - git:
+          url: 'https://review.fuel-infra.org/patching-tests.git'
+          branches:
+            - 'master'
+          skip-tag: true
+          basedir: patching-tests
+    builders:
+      - shell:
+          !include-raw-escape builders/mos.test.patching.fetch_gerrit_commits.sh
+      - shell:
+          !include-raw-escape builders/mos.test.patching.sh
+    publishers:
+      - nosetests
