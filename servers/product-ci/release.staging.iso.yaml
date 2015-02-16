@@ -8,6 +8,12 @@
       Build fuel master code on top of staging files/{version-id}-timestamp Fuel mirror.
       <p>This ISO is used only to test staging mirror.<p>
       For "official" {version-id} iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/{version-id}.all/">{version-id}.all</a>
+
+      <p>
+        Owned by: Fuel OSCI Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #fuel-osci, #fuel-devops<br/>
+      </p>
     logrotate:
       artifactDaysToKeep: 90
       daysToKeep: 90

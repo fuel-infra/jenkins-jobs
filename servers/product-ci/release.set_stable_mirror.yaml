@@ -5,7 +5,12 @@
           !include-raw-escape builders/set_stable_mirror.sh
     description: |
       Update stable symlink target to specified mirror version.<br>
-      If you have any questions, contact OSCI team via #fuel-osci IRC chat.
+
+      <p>
+        Owned by: Fuel OSCI Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #fuel-osci<br/>
+      </p>
     logrotate:
       daysToKeep: 45
       numToKeep: 100

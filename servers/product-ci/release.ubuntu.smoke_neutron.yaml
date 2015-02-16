@@ -5,6 +5,12 @@
     concurrent: true
     description: |
       Run tests with smoke_neutron test group.
+
+      <p>
+        Owned by: Fuel QA Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #fuel-qa<br/>
+      </p>
     logrotate:
       daysToKeep: 30
       numToKeep: 50
