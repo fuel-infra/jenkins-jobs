@@ -50,6 +50,7 @@
       - trigger-parameterized-builds:
         - project: fuel_build_reports
           condition: UNSTABLE_OR_BETTER
+          property-file: status_description.txt
           predefined-parameters: |
             RELEASE={release}
             BUILD=fuel-{version-id}-$BUILD_NUMBER
