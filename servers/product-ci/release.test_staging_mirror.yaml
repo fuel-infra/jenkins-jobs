@@ -49,10 +49,12 @@
               kill-phase-on: NEVER
               property-file: artifacts/magnet_link.txt
               current-parameters: true
+              predefined-parameters: '{status-build-number}=${status-build-number}'
             - name: '{version-id}.staging.ubuntu.bvt_2'
               kill-phase-on: NEVER
               property-file: artifacts/magnet_link.txt
               current-parameters: true
+              predefined-parameters: '{status-build-number}=${status-build-number}'
       - multijob:
           name: Updating Mirrors stable symlink
           condition: SUCCESSFUL
@@ -60,6 +62,7 @@
             - name: '{version-id}.set_stable_mirror'
               kill-phase-on: FAILURE
               property-file: mirror_staging.txt
+              predefined-parameters: '{status-build-number}=${status-build-number}'
       - copyartifact:
           project: '{version-id}.set_stable_mirror'
           filter: build_description.txt

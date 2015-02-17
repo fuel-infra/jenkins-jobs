@@ -30,7 +30,7 @@
     name: 6.1.staging
     id: staging
     release: 6.1
-    status-build-number: '$6_1_STAGING_ISO_BUILD_NUMBER'
+    status-build-number: '6_1_STAGING_ISO_BUILD_NUMBER'
     jobs:
       - '{version-id}.build_staging_mirror':
           repo: '6.1-stable'
@@ -60,7 +60,7 @@
     name: 6.1-ubuntu.ubuntu_upstream
     id: ubuntu_upstream
     release: 6.1-ubuntu
-    status-build-number: '$6_1_UBUNTU_STAGING_ISO_BUILD_NUMBER'
+    status-build-number: '6_1_UBUNTU_STAGING_ISO_BUILD_NUMBER'
     jobs:
       - '{version-id}.test_ubuntu_upstream_mirror':
           timer: 'H 7 * * *'
@@ -100,7 +100,7 @@
     name: master.staging
     id: staging
     release: master
-    status-build-number: '$MASTER_STAGING_ISO_BUILD_NUMBER'
+    status-build-number: 'MASTER_STAGING_ISO_BUILD_NUMBER'
     jobs:
       - '{version-id}.staging.iso':
           make-args: ''
@@ -141,7 +141,7 @@
     name: 5.1.2.staging
     id: staging
     release: 5.1
-    status-build-number: '$5_1_2_STAGING_ISO_BUILD_NUMBER'
+    status-build-number: '5_1_2_STAGING_ISO_BUILD_NUMBER'
     jobs:
       - '{version-id}.build_staging_mirror':
           repo: '5.1.2-stable'
@@ -189,7 +189,7 @@
     name: 6.0.1.staging
     id: staging
     release: 6.0
-    status-build-number: '$6_0_1_STAGING_ISO_BUILD_NUMBER'
+    status-build-number: '6_0_1_STAGING_ISO_BUILD_NUMBER'
     jobs:
       - '{version-id}.build_staging_mirror':
           repo: '6.0.1-stable'

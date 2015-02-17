@@ -44,7 +44,7 @@
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
             RELEASE={release}
-            BUILD=fuel-{version-id}-{status-build-number}
+            BUILD=fuel-{version-id}-${status-build-number}
             STAGE=publish
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
@@ -52,7 +52,7 @@
           condition: FAILED
           predefined-parameters: |
             RELEASE={release}
-            BUILD=fuel-{version-id}-{status-build-number}
+            BUILD=fuel-{version-id}-${status-build-number}
             STAGE=publish
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL
