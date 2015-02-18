@@ -21,7 +21,7 @@
           recipients: ksambor@mirantis.com,devops+alert@mirantis.com
           send-to-individuals: false
       - archive:
-          artifacts: results/tests/*, results/last/*, results/results/*, nailgun/nailgun_perf_test_report.csv
+          artifacts: results/tests/*, results/last/*, results/results/*, nailgun/nailgun_perf_test_report.csv, nailgun/failed_tests.txt
     scm:
       - git:
           url: https://review.openstack.org/stackforge/fuel-web.git
