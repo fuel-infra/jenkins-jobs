@@ -136,6 +136,9 @@
           set-for-matrix: false
       - email-ext:
           default-subject: '$DEFAULT_SUBJECT'
+          always: true
+          send-to:
+            - requester
       - trigger-parameterized-builds:
           - project: deploy_iso_on_cachers
             condition: UNSTABLE_OR_BETTER
