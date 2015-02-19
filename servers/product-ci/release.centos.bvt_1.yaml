@@ -1,6 +1,8 @@
 - job-template:
     name: '{version-id}.centos.bvt_1'
     builders:
+      - inject:
+          properties-content: '{custom-parameters}'
       - systest
     concurrent: true
     description: '{description}'
@@ -29,7 +31,7 @@
     scm:
       - stackforge:
           branch: '{branch}'
-          repo: fuel-main
+          repo: '{testreponame}'
     wrappers:
       - timeout:
           timeout: 300
