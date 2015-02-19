@@ -2,9 +2,11 @@
 
 set -ex
 
-source /home/jenkins/venv-nailgun-tests/bin/activate
+VENV_PATH=${VENV_PATH:-/home/jenkins/venv-nailgun-tests}
 
-ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER.$BUILD_ID
+source ${VENV_PATH}/bin/activate
+
+ENV_NAME=${ENV_PREFIX}.${BUILD_NUMBER}.${BUILD_ID}
 ENV_NAME=${ENV_NAME:0:68}
 
-dos.py erase $ENV_NAME
+dos.py erase ${ENV_NAME}

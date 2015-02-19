@@ -22,10 +22,16 @@
     #     Jenkins slave label
     # timeout
     #     Job timeout
+    # reponame
+    #     Name of the repository with system tests code
     # repobranch
-    #     Branch of the fuel-main/ repo
+    #     Branch of the repository
+    # venvpath
+    #     Path to virtual env with fuel-devops installed (VENV_PATH)
     # weight
     #     Job weight
+    # default_pool
+    #     Default network pool (POOL_DEFAULT)
     # properties
     #     List of strings "VAR=value".
     #     These variables will be injected in job environment before the build
@@ -35,6 +41,8 @@
     builders:
     - inject: # default env variables
         properties-content: |
+          VENV_PATH={venvpath}
+          POOL_DEFAULT={default_pool}
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
           ENV_PREFIX={version-id}.{id}.{dist}.{testgroup}
@@ -79,7 +87,7 @@
 
     scm:
     - main-git:
-        reponame: 'fuel-main'
+        reponame: '{reponame}'
         repobranch: '{repobranch}'
         basedir: ''
 
