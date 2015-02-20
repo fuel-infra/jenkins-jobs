@@ -1,0 +1,57 @@
+- job:
+    name: verify-fuel-library-python
+    builders:
+      - shell:
+          !include-raw builders/verify-fuel-library-python.sh
+    description: |
+      Tests and linters for Python code in fuel-library
+
+      Uses fuel-library/utils/jenkins/python_run_tests.sh
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: verify-fuel-library-python
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: PIP_OPTION
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          max-per-node: 1
+          option: project
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-library.git
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-library
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+      - timed: '0 12 * * *'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+    publishers:
+      - description-setter:
+          regexp-for-failed: '(Failed tests: (.*))'
+      - email-default
