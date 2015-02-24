@@ -36,6 +36,7 @@
           description: Additional make arguments
       - string:
           name: fuelmain_gerrit_commit
+          default: 'none'
           description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
     publishers:
       - archive:
