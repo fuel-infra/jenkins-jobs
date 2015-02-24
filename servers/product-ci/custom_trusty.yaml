@@ -21,7 +21,7 @@
     parameters:
       - string:
           name: make_args
-          default: '-j2'
+          default: '-j4'
           description: Additional make arguments
       - string:
           name: FUELLIB_COMMIT
@@ -73,6 +73,12 @@
       - string:
           name: MIRROR_UBUNTU_SECURITY
           default: 'http://ru.archive.ubuntu.com/ubuntu'
+      - string:
+          name: YUM_REPOS
+          default: proprietary
+      - string:
+          name: MIRROR_CENTOS
+          default: 'http://mirror.fuel-infra.org/fwm/6.1/centos/'
       - string:
           name: fuelmain_gerrit_commit
           default: 'none'
