@@ -20,4 +20,6 @@ VENV=${WORKSPACE}_VENV
 virtualenv -p python2.6 ${VENV}
 source ${VENV}/bin/activate || exit 1
 
+pip install "tox>=1.8"
+
 /bin/bash ${WORKSPACE}/utils/jenkins/python_run_tests.sh
