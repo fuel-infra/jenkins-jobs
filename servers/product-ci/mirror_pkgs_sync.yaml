@@ -1,0 +1,59 @@
+- job:
+    name: mirror_pkgs_sync
+    node: mirror_pkgs_sync
+    description: |
+        This job will fetch remote upstream repos for selected distributions to version<br>
+        It and serve it using http and rsync protocols. Includes simple rsync and selective<br>
+        fetch using releases and sections when using Debian mirror structure.<br><br>
+        Default variable (MIRRORS) set multiple additional external targets in different locations.<br><br>
+        Related bug: <a href=https://review.openstack.org/148279>#148279</a><br>
+        Maintenance contacts: #fuel-devops
+    builders:
+      - shell:
+          !include-raw './builders/mirror_pkgs_sync.sh'
+    parameters:
+        - string:
+            name: MIRRORS
+            default: 'rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync/pkgs|rsync://osci-mirror-msk.msk.mirantis.net/mirror-sync/pkgs|rsync://osci-mirror-srt.srt.mirantis.net/mirror-sync/pkgs|rsync://osci-mirror-kha.kha.mirantis.net/mirror-sync/pkgs|rsync://mirror.seed-us1.fuel-infra.org/mirror-sync/pkgs|rsync://mirror.seed-cz1.fuel-infra.org/mirror-sync/pkgs|'
+            description: 'List of other rsync mirrors to synchronize. ("|" separate values)'
+        - string:
+            name: DEFAULT_URL
+            default: 'http://mirror-pkgs.vm.mirantis.net'
+            description: 'URL of main mirror.'
+        - string:
+            name: DST_PREFIX
+            default: '/var/www/mirror'
+            description: 'Path of main mirror.'
+        - string:
+            name: TMP_PREFIX
+            default: '/tmp'
+            description: 'Path of temporary directory. (should be located at the sime partition as main mirror)'
+        - string:
+            name: DST_DIR
+            default: 'ubuntu{version}'
+            description: 'Destination directory on main mirror. ({version} gets automatically managed)'
+        - string:
+            name: SRC_URL
+            default: 'debmirror://mirror.vutbr.cz/ubuntu/archive/'
+            description: 'Url to make mirror of. (rsync or debmirror protocol)'
+        - string:
+            name: SECTIONS
+            default: 'main,restricted,universe,multiverse,main/debian-installer,restricted/debian-installer,universe/debian-installer,multiverse/debian-installer'
+            description: 'List of sections used to make mirror. (only when using debmirror)'
+        - string:
+            name: DISTRIBUTIONS
+            default: 'trusty,trusty-security,trusty-updates,trusty-proposed'
+            description: 'List of distributions to make mirror. (only when using debmirror)'
+        - string:
+            name: INST_DISTRIBUTIONS
+            default: 'trusty,trusty-updates,trusty-proposed'
+            description: 'List of installer distributions to include in mirror. (only when using debmirror)'
+    triggers:
+        - timed: '30 7 * * *'
+    publishers:
+      - description-setter:
+          regexp: ^\[mirror\](.*)
+          regexp-for-failed: ^\[mirror\](.*)
+          set-for-matrix: true
+      - email:
+          recipients: devops+alert@mirantis.com
