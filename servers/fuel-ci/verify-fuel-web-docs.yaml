@@ -1,0 +1,58 @@
+- job:
+    name: verify-fuel-web-docs
+    builders:
+      - shell:
+          !include-raw './builders/verify-fuel-web-docs.sh'
+    concurrent: true
+    description: 'Test requests on gerrit'
+    logrotate:
+      artifactDaysToKeep: 30
+      artifactNumToKeep: 100
+      daysToKeep: 30
+      numToKeep: 100
+    node: fuel-web
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          enabled: true
+          max-per-node: 1
+          max-total: 0
+          option: project
+    publishers:
+      - html-publisher:
+          allow-missing: true
+          keep-all: true
+          dir: 'docs/_build/html'
+          files: 'index.html'
+          name: 'Fuel Development Docs build results'
+      - email-default
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          url: 'https://review.openstack.org/stackforge/fuel-web'
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+    triggers:
+        - timed: '0 2 * * *'
+        - gerrit:
+            trigger-on:
+              - patchset-created-event
+            projects:
+              - project-compare-type: PLAIN
+                project-pattern: 'stackforge/fuel-web'
+                branches:
+                  - branch-compare-type: ANT
+                    branch-pattern: '**'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 15
+          write-description: true
+      - ansicolor:
+          colormap: xterm
