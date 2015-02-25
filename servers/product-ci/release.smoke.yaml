@@ -1,6 +1,8 @@
 - job-template:
     name: '{version-id}.smoke'
     builders:
+      - inject:
+          properties-content: '{custom-parameters}'
       - systest
     concurrent: true
     description:
@@ -30,7 +32,7 @@
     scm:
       - stackforge:
           branch: '{branch}'
-          repo: fuel-main
+          repo: '{testreponame}'
     wrappers:
       - timeout:
           fail: true

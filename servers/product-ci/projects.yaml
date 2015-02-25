@@ -2,12 +2,14 @@
     name: 6.1
     version-id: 6.1
     branch: master
+    testreponame: 'fuel-qa'
     base-version: 6.0
     data-magnet-link:
        !include-raw data/6.0-artifacts
     jobs:
       - 6.1.main
       - 6.1.staging
+
 - job-group:
     name: 6.1.main
     id: main
@@ -19,13 +21,21 @@
       - '{version-id}.centos.bvt_1':
           description:
             !include-raw descriptions/centos.bvt_1
+          custom-parameters: |
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
       - '{version-id}.ubuntu.bvt_2':
           description:
             !include-raw descriptions/ubuntu.bvt_2
           custom-parameters: |
             NEUTRON_ENABLE=true
-      - '{version-id}.centos.smoke_nova'
-      - '{version-id}.ubuntu.smoke_neutron'
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+      - '{version-id}.centos.smoke_nova':
+          custom-parameters: |
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+      - '{version-id}.ubuntu.smoke_neutron':
+          custom-parameters: |
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+
 - job-group:
     name: 6.1.staging
     id: staging
@@ -41,11 +51,14 @@
       - '{version-id}.staging.centos.bvt_1':
           description:
             !include-raw descriptions/staging.centos.bvt_1
+          custom-parameters: |
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
       - '{version-id}.staging.ubuntu.bvt_2':
           description:
             !include-raw descriptions/staging.ubuntu.bvt_2
           custom-parameters: |
             NEUTRON_ENABLE=true
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
       - '{version-id}.set_stable_mirror'
       - '{version-id}.test_staging_mirror'
 
@@ -53,6 +66,7 @@
     name: 6.1-ubuntu
     version-id: 6.1-ubuntu
     branch: master
+    testreponame: 'fuel-qa'
     base-version: 6.1
     jobs:
       - 6.1-ubuntu.ubuntu_upstream
@@ -71,12 +85,14 @@
             !include-raw descriptions/staging.ubuntu.bvt_2
           custom-parameters: |
             NEUTRON_ENABLE=true
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
       - '{version-id}.set_ubuntu_stable_mirror'
 
 - project:
     name: master
     version-id: master
     branch: master
+    testreponame: 'fuel-qa'
     base-version: 5.1.1
     data-magnet-link: ''
     jobs:
@@ -95,7 +111,10 @@
             !include-raw descriptions/ubuntu.bvt_2
           custom-parameters: |
             NEUTRON_ENABLE=true
-      - '{version-id}.smoke'
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+      - '{version-id}.smoke':
+         custom-parameters: |
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
 - job-group:
     name: master.staging
     id: staging
@@ -109,6 +128,7 @@
             !include-raw descriptions/staging.ubuntu.bvt_2
           custom-parameters: |
             NEUTRON_ENABLE=true
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
       - '{version-id}.set_stable_mirror'
       - '{version-id}.test_staging_mirror'
 
@@ -116,6 +136,7 @@
     name: 5.1.2
     version-id: 5.1.2
     branch: stable/5.1
+    testreponame: 'fuel-main'
     base-version: 5.1
     data-magnet-link: ''
     jobs:
@@ -130,13 +151,15 @@
           timer: 'H 20 * * *'
           trigger-builds: 'deploy_iso_on_cachers,5.1.2.smoke,5.1.2.centos.bvt_1,5.1.2.ubuntu.bvt_2'
       - '{version-id}.centos.bvt_1':
+          custom-parameters: ''
           description:
             !include-raw descriptions/centos.bvt_1-legacy
       - '{version-id}.ubuntu.bvt_2':
           description:
             !include-raw descriptions/ubuntu.bvt_2-legacy
           custom-parameters: ''
-      - '{version-id}.smoke'
+      - '{version-id}.smoke':
+          custom-parameters: ''
 - job-group:
     name: 5.1.2.staging
     id: staging
@@ -150,6 +173,7 @@
       - '{version-id}.staging.iso':
           make-args: ''
       - '{version-id}.staging.centos.bvt_1':
+          custom-parameters: ''
           description:
             !include-raw descriptions/staging.centos.bvt_1-legacy
       - '{version-id}.staging.ubuntu.bvt_2':
@@ -163,6 +187,7 @@
     name: 6.0.1
     version-id: 6.0.1
     branch: stable/6.0
+    testreponame: 'fuel-main'
     base-version: 5.1.1
     data-magnet-link: ''
     jobs:
@@ -178,13 +203,15 @@
           timer: 'H 20 * * *'
           trigger-builds: 'deploy_iso_on_cachers,6.0.1.smoke,6.0.1.centos.bvt_1,6.0.1.ubuntu.bvt_2'
       - '{version-id}.centos.bvt_1':
+          custom-parameters: ''
           description:
             !include-raw descriptions/centos.bvt_1-legacy
       - '{version-id}.ubuntu.bvt_2':
           description:
             !include-raw descriptions/ubuntu.bvt_2-legacy
           custom-parameters: ''
-      - '{version-id}.smoke'
+      - '{version-id}.smoke':
+          custom-parameters: ''
 - job-group:
     name: 6.0.1.staging
     id: staging
@@ -198,6 +225,7 @@
       - '{version-id}.staging.iso':
           make-args: ''
       - '{version-id}.staging.centos.bvt_1':
+          custom-parameters: ''
           description:
             !include-raw descriptions/staging.centos.bvt_1-legacy
       - '{version-id}.staging.ubuntu.bvt_2':
