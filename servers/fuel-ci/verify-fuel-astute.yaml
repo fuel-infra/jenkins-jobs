@@ -1,0 +1,50 @@
+- job:
+    name: verify-fuel-astute
+    builders:
+    - shell:
+        !include-raw './builders/verify-fuel-astute.sh'
+    concurrent: true
+    description: 'Test requests on gerrit'
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: verify-fuel-astute
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          enabled: true
+          max-per-node: 1
+          max-total: 0
+          option: project
+    publishers:
+      - email-default
+      - ruby-metrics:
+          report-dir: 'coverage/rcov'
+          target:
+            - code-coverage:
+                healthy: 80
+                unhealthy: 0
+                unstable: 0
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          url: 'https://review.openstack.org/stackforge/fuel-astute'
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+    triggers:
+      - timed: '0 2 * * *'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'stackforge/fuel-astute'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
