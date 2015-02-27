@@ -1,0 +1,32 @@
+- job:
+    builders:
+      - shell:
+          !include-raw './builders/test-requirements-deb.sh'
+    name: test-requirements-deb
+    node: test-deb-reqs
+    parameters:
+      - string:
+          name: GERRIT_BRANCH
+          default: 'master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          refspec: $GERRIT_REFSPEC
+          url: 'https://review.openstack.org/stackforge/fuel-main'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'stackforge/fuel-main'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+              file-paths:
+                - compare-type: ANT
+                  pattern: '**/requirements-deb.txt'
