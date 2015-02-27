@@ -2,7 +2,7 @@
     builders:
       - shell:
           !include-raw builders/nailgun_performance_tests.sh
-    description: "<p>Nailgun performance tests. Uses venv with python2.6</p><p>See <a href=\"http://fuel-perf-test-visualizer.vm.mirantis.net\">http://fuel-perf-test-visualizer.vm.mirantis.net</a> for detailed nailgun performance data.</p>"
+    description: "Nailgun performance tests. Uses venv with python2.6"
     logrotate:
       artifactDaysToKeep: 30
       daysToKeep: 30
