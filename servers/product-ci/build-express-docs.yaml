@@ -1,0 +1,53 @@
+- job:
+    name: build-express-docs
+    builders:
+      - shell:
+          !include-raw './builders/build-express-docs.sh'
+    description: |
+      Build Mirantis OpenStack Express docs for all branches and publish them to <a
+      href="http://docs.mirantis.com">docs.mirantis.com</a>
+      <p>Work In Progress
+      <p>Contacts: #fuel-devops
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 100
+    node: docs
+    concurrent: false
+    properties:
+      - heavy-job:
+          weight: 1
+
+    parameters:
+      - string:
+          name: GIT_BRANCH
+          default: origin/master
+
+    scm:
+      - git:
+          url: 'ssh+git://git@github.com/Mirantis/express-docs'
+    triggers:
+      - timed: "H */3 * * *"
+
+    wrappers:
+      - ssh-agent-credentials:
+          user: 'cd5f77bc-9ab1-41a9-8b22-48eed709647a'
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+    publishers:
+      - html-publisher:
+          name: 'MOX Docs build results'
+          dir: '_build/html'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+      - description-setter:
+          regexp: 'Description string: (.*)'
+          regexp-for-failed: 'Description string: (.*)'
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'devops+alert@mirantis.com'
+          send-to-individuals: false

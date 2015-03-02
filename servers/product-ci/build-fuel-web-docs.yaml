@@ -1,0 +1,58 @@
+- job:
+    name: build-fuel-web-docs
+    builders:
+      - shell:
+          !include-raw './builders/build-fuel-web-docs.sh'
+    description: |
+      Build docs from master branch of fuel-web repository and publish them to <a
+      href="http://docs.mirantis.com">docs.mirantis.com</a>
+      <p>Work In Progress
+      <p>Contacts: #fuel-devops
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 100
+    node: docs
+    concurrent: false
+    parameters:
+      - string:
+          name: GERRIT_BRANCH
+          default: 'master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          url: 'https://git.openstack.org/stackforge/fuel-web.git'
+          branches:
+            - 'origin/$GERRIT_BRANCH'
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'stackforge/fuel-web'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          silent: true
+
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+    publishers:
+      - html-publisher:
+          name: 'Fuel Dev Docs build results'
+          dir: 'docs/_build/html'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'devops+alert@mirantis.com'
+          send-to-individuals: false
