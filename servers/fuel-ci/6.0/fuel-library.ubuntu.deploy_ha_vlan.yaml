@@ -1,30 +1,32 @@
-- job-template:
-    name: '{version-id}.fuel-library.{dist}.{testgroup}'
+- job:
+    name: '6.0.fuel-library.ubuntu.deploy_ha_vlan'
     builders:
       - inject: # default env variables
           properties-content: |
-            DISTRIBUTION={dist}
-            OPENSTACK_RELEASE={dist}
-            TEST_GROUP={testgroup}
-            BRANCH={branch}
+            DISTRIBUTION=ubuntu
+            OPENSTACK_RELEASE=ubuntu
+            TEST_GROUP=deploy_ha_vlan
+            BRANCH=stable/6.0
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
       - inject: # overrides
           override-build-parameters: true
-          properties-content: '{properties}'
+          properties-content:
+            !include-raw data/6.0.fuellib-ubuntu-legacy-params
       - shell:
-          !include-raw-escape builders/fuel-library-review.sh
+          !include-raw builders/fuel-library-review.sh
     concurrent: true
-    description: '{description}'
+    description:
+      !include-raw descriptions/fuellib-ubuntu-legacy
     logrotate:
       artifactDaysToKeep: 30
-    node: '{version-id}_{dist}'
+    node: '6.0_ubuntu'
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/{branch}'
+          default: 'refs/heads/stable/6.0'
     properties:
       - heavy-job:
-          weight: '{weight}'
+          weight: '6'
       - throttle:
           max-per-node: 1
           option: project
@@ -32,7 +34,7 @@
       - email-default
       - archive:
           allow-empty: true
-          artifacts: 'logs/${{BUILD_NUMBER}}/*'
+          artifacts: 'logs/${BUILD_NUMBER}/*'
           latest-only: false
       - description-setter:
           regexp: 'Description string: (.*)'
@@ -56,7 +58,7 @@
               project-pattern: stackforge/fuel-library
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: '{branch}'
+                  branch-pattern: 'stable/6.0'
     wrappers:
       - ansicolor:
           colormap: xterm

@@ -1,0 +1,84 @@
+- job:
+    name: '6.0.1-community.all'
+    builders:
+      - shell:
+          !include-raw builders/community.all.sh
+    concurrent: true
+    description:
+      !include-raw descriptions/6.0.1.community.all
+    logrotate:
+      artifactDaysToKeep: 10
+      artifactNumToKeep: 10
+      daysToKeep: 10
+      numToKeep: 10
+    node: build
+    properties:
+      - heavy-job:
+          weight: 2
+    parameters:
+      - string:
+          name: BASE_VERSION
+          default: '5.1.1'
+      - string:
+          name: DATA_MAGNET_LINK
+          default:
+            !include-raw data/community-5.1.1-artifacts
+      - string:
+          name: deep_clean
+          default: 'true'
+          description: Perform deep_clean or not. Default is "true". Set any other value
+            to disable it.
+      - string:
+          name: FUEL_COMMITS
+          description: Path to version.yaml with commit ids of Fuel components.
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: version.yaml.txt, listing.txt, *torrent_link.txt, artifacts/*changelog
+          latest-only: false
+      - email:
+          notify-every-unstable-build: false
+          recipients: devops+alert@mirantis.com
+          send-to-individuals: false
+      - naginator:
+          max-retries: 3
+          rerun-if-unstable: false
+          delay:
+            fixed:
+              delay: 60
+      - trigger-parameterized-builds:
+        - project: publish_fuel_community_iso
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            ISO_ID=6.0.1-$BUILD_NUMBER-$BUILD_ID
+            UPGRADE_ID=6.0.1-upgrade-$BUILD_NUMBER-$BUILD_ID
+            ARTIFACTS_DIR=$WORKSPACE/artifacts
+            RELEASE=6.0
+            FUEL_MAIN_BRANCH=stable/6.0
+            BUILD=fuel-community-6.0.1-$BUILD_NUMBER-$BUILD_ID
+        - project: fuel_community_build_reports
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            RELEASE=6.0
+            BUILD=fuel-community-6.0.1-$BUILD_NUMBER-$BUILD_ID
+            STAGE=build
+            VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
+        - project: fuel_community_build_reports
+          condition: FAILED
+          predefined-parameters: |
+            RELEASE=6.0
+            BUILD=fuel-community-6.0.1-$BUILD_NUMBER-$BUILD_ID
+            STAGE=build
+            VALUE=fail
+            REPORTED_JOB_URL=$BUILD_URL
+    scm:
+      - git:
+          url: 'https://github.com/stackforge/fuel-main.git'
+          branches:
+            - 'origin/stable/6.0'
+    triggers:
+      - timed: 'H 3 * * *'
+    wrappers:
+      - ansicolor:
+          colormap: xterm

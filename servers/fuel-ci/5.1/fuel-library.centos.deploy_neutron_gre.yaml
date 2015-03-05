@@ -1,0 +1,68 @@
+- job:
+    name: '5.1.fuel-library.centos.deploy_neutron_gre'
+    builders:
+      - inject: # default env variables
+          properties-content: |
+            DISTRIBUTION=centos
+            OPENSTACK_RELEASE=centos
+            TEST_GROUP=deploy_neutron_gre
+            BRANCH=stable/5.1
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+      - inject: # overrides
+          override-build-parameters: true
+          properties-content:
+            !include-raw data/5.1.fuellib-centos-legacy-params
+      - shell:
+          !include-raw builders/fuel-library-review.sh
+    concurrent: true
+    description:
+      !include-raw descriptions/fuellib-centos-legacy
+    logrotate:
+      artifactDaysToKeep: 30
+    node: '5.1_centos'
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/stable/5.1'
+    properties:
+      - heavy-job:
+          weight: '3'
+      - throttle:
+          max-per-node: 1
+          option: project
+    publishers:
+      - email-default
+      - archive:
+          allow-empty: true
+          artifacts: 'logs/${BUILD_NUMBER}/*'
+          latest-only: false
+      - description-setter:
+          regexp: 'Description string: (.*)'
+          regexp-for-failed: '(ERROR: (.*))'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-library.git
+          choosing-strategy: gerrit
+    triggers:
+      - timed: 'H 2 * * *'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-library
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/5.1'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 120
+          write-description: true

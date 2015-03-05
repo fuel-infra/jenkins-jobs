@@ -1,8 +1,8 @@
-- job-template:
-    name: '{version-id}-community.all'
+- job:
+    name: '6.1-community.all'
     builders:
       - shell:
-          !include-raw-escape builders/community.all.sh
+          !include-raw builders/community.all.sh
     concurrent: true
     description:
       !include-raw descriptions/community.all
@@ -18,10 +18,11 @@
     parameters:
       - string:
           name: BASE_VERSION
-          default: '{base-version}'
+          default: '6.0'
       - string:
           name: DATA_MAGNET_LINK
-          default: '{data-magnet-link}'
+          default:
+            !include-raw data/community-6.0-artifacts
       - string:
           name: deep_clean
           default: 'true'
@@ -49,25 +50,25 @@
         - project: publish_fuel_community_iso
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
-            ISO_ID={version-id}-$BUILD_NUMBER-$BUILD_ID
-            UPGRADE_ID={version-id}-upgrade-$BUILD_NUMBER-$BUILD_ID
+            ISO_ID=6.1-$BUILD_NUMBER-$BUILD_ID
+            UPGRADE_ID=6.1-upgrade-$BUILD_NUMBER-$BUILD_ID
             ARTIFACTS_DIR=$WORKSPACE/artifacts
-            RELEASE={release}
-            FUEL_MAIN_BRANCH={branch}
-            BUILD=fuel-community-{version-id}-$BUILD_NUMBER-$BUILD_ID
+            RELEASE=6.1
+            FUEL_MAIN_BRANCH=master
+            BUILD=fuel-community-6.1-$BUILD_NUMBER-$BUILD_ID
         - project: fuel_community_build_reports
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
-            RELEASE={release}
-            BUILD=fuel-community-{version-id}-$BUILD_NUMBER-$BUILD_ID
+            RELEASE=6.1
+            BUILD=fuel-community-6.1-$BUILD_NUMBER-$BUILD_ID
             STAGE=build
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
         - project: fuel_community_build_reports
           condition: FAILED
           predefined-parameters: |
-            RELEASE={release}
-            BUILD=fuel-community-{version-id}-$BUILD_NUMBER-$BUILD_ID
+            RELEASE=6.1
+            BUILD=fuel-community-6.1-$BUILD_NUMBER-$BUILD_ID
             STAGE=build
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL
@@ -75,9 +76,9 @@
       - git:
           url: 'https://github.com/stackforge/fuel-main.git'
           branches:
-            - 'origin/{branch}'
+            - 'origin/master'
     triggers:
-      - timed: '{timer}'
+      - timed: 'H 5 * * *'
     wrappers:
       - ansicolor:
           colormap: xterm
