@@ -17,7 +17,9 @@ export UPGRADE_TARBALL_NAME=fuel-staging-${PROD_VER}-upgrade-${BUILD_NUMBER}-${B
 
 export BUILD_DIR=${WORKSPACE}/../tmp/${JOB_NAME}/build
 export LOCAL_MIRROR=${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror
+
 export ARTS_DIR=${WORKSPACE}/artifacts
+rm -rf ${ARTS_DIR}
 
 # Checking gerrit commits for fuel-main
 if [ "${fuelmain_gerrit_commit}" != "none" ] ; then
