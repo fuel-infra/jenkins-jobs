@@ -14,7 +14,6 @@ fi
 export LOGS_DIR=/home/jenkins/workspace/${JOB_NAME}/logs/${BUILD_NUMBER}
 export UPLOAD_MANIFESTS=true
 export UPLOAD_MANIFESTS_PATH=/home/jenkins/workspace/${JOB_NAME}/deployment/puppet/
-export VENV_PATH=/home/jenkins/venv-nailgun-tests
 
 BRANCH_ID=`echo ${BRANCH##*/} | sed 's:\.:_:g'`
 
