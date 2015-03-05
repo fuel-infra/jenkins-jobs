@@ -9,12 +9,12 @@ if grep -q -iE "Fuel-CI:\s+disable" gerrit_commit_message.txt; then
   exit -1
 fi
 
-export FUEL_MAIN_PATH="/home/jenkins/workspace/fuel-main/master_node_test/master"
+export FUEL_MAIN_PATH="/home/jenkins/workspace/fuel-main/env_masternode-default/master"
 export SYSTEM_TESTS="${FUEL_MAIN_PATH}/utils/jenkins/system_tests.sh"
 export ENV_NAME="fuellib_review_master_node"
 export ISO_PATH="/home/jenkins/workspace/iso/fuel_master.iso"
 export LOGS_DIR=/home/jenkins/workspace/${JOB_NAME}/logs/${BUILD_NUMBER}
-export VENV_PATH=/home/jenkins/venv-nailgun-tests
+export VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
 
 #test params
 export UPLOAD_MANIFESTS=true
