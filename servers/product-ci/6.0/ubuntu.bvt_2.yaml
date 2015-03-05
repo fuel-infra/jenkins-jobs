@@ -1,0 +1,38 @@
+- job:
+    name: '6.0.1.ubuntu.bvt_2'
+    builders:
+      - inject:
+          properties-content: ''
+      - systest
+    concurrent: true
+    description:
+      !include-raw descriptions/6.0.1.ubuntu.bvt_2
+    logrotate:
+      daysToKeep: 30
+      numToKeep: 50
+    node: bvt
+    properties:
+      - heavy-job:
+          weight: 8
+      - throttle:
+          max-per-node: 1
+          option: project
+    parameters:
+      - systest:
+          dist: Ubuntu
+          testgroup: bvt_2
+          version-id: '6.0.1'
+          id: 'main'
+    publishers:
+      - nosetests
+      - email-systest:
+          body-failed:
+            !include-raw notifications/bvt.failed
+          mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
+    scm:
+      - stackforge:
+          branch: 'stable/6.0'
+          repo: 'fuel-main'
+    wrappers:
+      - timeout:
+          timeout: 200

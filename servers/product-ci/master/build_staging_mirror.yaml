@@ -1,0 +1,68 @@
+- job:
+    name: 'master.build_staging_mirror'
+    builders:
+      - shell:
+          !include-raw builders/update_reprepro.sh
+      - shell:
+          !include-raw builders/build_master_staging_mirror.sh
+    description:
+      !include-raw descriptions/master.build_staging_mirror
+    logrotate:
+      daysToKeep: 45
+      numToKeep: 100
+    node: mirror
+    parameters:
+      - string:
+          name: REPOS
+          default: 'ubuntu-fuel-master'
+          description: 'Space delimited list of ubuntu repos to create reprepro repo'
+      - string:
+          name: extra_commits
+          default: 'refs/changes/44/149944/1'
+          description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
+      - string:
+          name: YUM_DOWNLOAD_SRC
+          default: 'yes'
+      - string:
+          name: mirror
+          default: 'master'
+      - string:
+          name: purge_packages
+          default: 'yes'
+      - string:
+          name: EXTRA_DEB_REPOS
+          default: ''
+      - string:
+          name: ostf_gerrit_commit
+          default: ''
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    publishers:
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com
+      - description-setter:
+          regexp: ^Updated:.*a href.*
+      - archive:
+          artifacts: mirror_staging.txt, osci-mirrors/pkgs-sync-diff-*.log
+          latest-only: false
+      - trigger-parameterized-builds:
+        - project: 'master.test_staging_mirror'
+          condition: UNSTABLE_OR_BETTER
+          property-file: mirror_staging.txt
+    scm:
+      - stackforge:
+          branch: 'master'
+          repo: fuel-main
+      - osci-mirrors
+    triggers:
+      - timed: 'H 7 */3 * *'
+    wrappers:
+      - ssh-agent-credentials:
+          user: '5b151a58-4b65-4d13-87a1-883d52020e2d'
+

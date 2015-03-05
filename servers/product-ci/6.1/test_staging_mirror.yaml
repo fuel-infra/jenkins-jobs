@@ -1,0 +1,77 @@
+- job:
+    name: '6.1.test_staging_mirror'
+    project-type: multijob
+    description:
+      !include-raw descriptions/6.1.test_staging_mirror
+    concurrent: true
+    node: mirror
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: FUEL_MAIN_BRANCH
+          default: master
+      - string:
+          name: MIRROR
+          default: '6.1'
+          description: |
+            Autodetected for <b>stable/*</b> branch independent of specified value. 
+            Otherwise specify it. For example: <b>6.1</b>
+      - string:
+          name: MIRROR_VERSION
+          description: "5.1-2014-08-26-115618"
+      - string:
+          name: MIRROR_BASE
+          description: http://osci-mirror-msk.msk.mirantis.net/fwm/files/6.1-2014-12-10-175744
+      - string:
+          name: extra_commits
+          description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
+    builders:
+      - shell:
+          !include-raw builders/test_staging_mirror_1.sh
+      - multijob:
+          name: ISO Building
+          condition: SUCCESSFUL
+          projects:
+            - name: '6.1.staging.iso'
+              kill-phase-on: FAILURE
+              property-file: mirror_staging.txt
+      - copyartifact:
+          project: '6.1.staging.iso'
+          filter: artifacts/magnet_link.txt
+          which-build: last-successful
+      - multijob:
+          name: ISO Testing
+          condition: SUCCESSFUL
+          projects:
+            - name: '6.1.staging.centos.bvt_1'
+              kill-phase-on: NEVER
+              property-file: artifacts/magnet_link.txt
+              current-parameters: true
+              predefined-parameters: '6_1_STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
+            - name: '6.1.staging.ubuntu.bvt_2'
+              kill-phase-on: NEVER
+              property-file: artifacts/magnet_link.txt
+              current-parameters: true
+              predefined-parameters: '6_1_STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
+      - multijob:
+          name: Updating Mirrors stable symlink
+          condition: SUCCESSFUL
+          projects:
+            - name: '6.1.set_stable_mirror'
+              kill-phase-on: FAILURE
+              property-file: mirror_staging.txt
+              predefined-parameters: '6_1_STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
+      - copyartifact:
+          project: '6.1.set_stable_mirror'
+          filter: build_description.txt
+          which-build: last-successful
+      - shell:
+          !include-raw builders/test_staging_mirror_2.sh
+    publishers:
+      - description-setter:
+          regexp: (^[^\s]* is stable.*a href.*)
+          set-for-matrix: false
+      - email-default:
+          mail-to: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com,mos-engineering@mirantis.com

@@ -1,0 +1,52 @@
+- job:
+    name: '6.0.1.staging.ubuntu.bvt_2'
+    builders:
+      - inject:
+          properties-content: ''
+      - systest
+    concurrent: true
+    description:
+      !include-raw descriptions/6.0.1.staging.ubuntu.bvt_2
+    logrotate:
+      daysToKeep: 30
+    node: custom_bvt
+    properties:
+      - heavy-job:
+          weight: 8
+      - throttle:
+          max-per-node: 1
+          option: project
+    parameters:
+      - systest:
+          dist: Ubuntu
+          testgroup: bvt_2
+          version-id: '6.0.1'
+          id: 'staging'
+    publishers:
+      - nosetests
+      - email-default:
+          mail-to: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
+      - trigger-parameterized-builds:
+        - project: fuel_build_reports
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            RELEASE=6.0
+            BUILD=fuel-6.0.1-$6_0_1_STAGING_ISO_BUILD_NUMBER
+            STAGE=bvt_2
+            VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
+        - project: fuel_build_reports
+          condition: FAILED
+          predefined-parameters: |
+            RELEASE=6.0
+            BUILD=fuel-6.0.1-$6_0_1_STAGING_ISO_BUILD_NUMBER
+            STAGE=bvt_2
+            VALUE=fail
+            REPORTED_JOB_URL=$BUILD_URL
+    scm:
+      - stackforge:
+          branch: 'stable/6.0'
+          repo: 'fuel-main'
+    wrappers:
+      - timeout:
+          timeout: 200

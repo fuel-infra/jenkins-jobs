@@ -1,0 +1,39 @@
+- job:
+    name: '6.0.1.smoke'
+    builders:
+      - inject:
+          properties-content: ''
+      - systest
+    concurrent: true
+    description:
+      !include-raw descriptions/6.0.1.smoke
+    logrotate:
+      daysToKeep: 30
+      numToKeep: 50
+    node: smoke
+    properties:
+      - heavy-job:
+          weight: 4
+      - throttle:
+          max-per-node: 1
+          option: project
+    parameters:
+      - systest:
+          dist: CentOS
+          testgroup: deploy_simple_cinder
+          version-id: '6.0.1'
+          id: 'main'
+    publishers:
+      - nosetests
+      - email-systest:
+          body-failed:
+            !include-raw notifications/smoke.failed
+          mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
+    scm:
+      - stackforge:
+          branch: 'stable/6.0'
+          repo: 'fuel-main'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 200

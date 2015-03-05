@@ -1,0 +1,63 @@
+- job:
+    name: '5.1.2.build_staging_mirror'
+    builders:
+      - shell:
+          !include-raw builders/update_reprepro.sh
+      - shell:
+          !include-raw builders/build_staging_mirror.sh
+    description:
+      !include-raw descriptions/5.1.2.build_staging_mirror
+    logrotate:
+      daysToKeep: 45
+      numToKeep: 100
+    node: mirror
+    parameters:
+      - string:
+          name: REPOS
+          default: 'ubuntu-fuel-5.1.2-stable'
+          description: 'Space delimited list of ubuntu repos to create reprepro repo'
+      - string:
+          name: extra_commits
+          description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
+      - string:
+          name: YUM_DOWNLOAD_SRC
+          default: 'yes'
+      - string:
+          name: mirror
+          default: '5.1.2'
+      - string:
+          name: purge_packages
+          default: 'yes'
+      - string:
+          name: EXTRA_DEB_REPOS
+          default: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-5.1.2/ precise-security main universe multiverse restricted'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    publishers:
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com
+      - description-setter:
+          regexp: ^Updated:.*a href.*
+      - archive:
+          artifacts: mirror_staging.txt, osci-mirrors/pkgs-sync-diff-*.log
+          latest-only: false
+      - trigger-parameterized-builds:
+        - project: '5.1.2.test_staging_mirror'
+          condition: UNSTABLE_OR_BETTER
+          property-file: mirror_staging.txt
+    scm:
+      - stackforge:
+          branch: 'stable/5.1'
+          repo: fuel-main
+      - osci-mirrors
+    triggers:
+      - timed: 'H 5 * * *'
+    wrappers:
+      - ssh-agent-credentials:
+          user: '5b151a58-4b65-4d13-87a1-883d52020e2d'

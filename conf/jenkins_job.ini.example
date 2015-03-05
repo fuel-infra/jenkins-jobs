@@ -6,4 +6,5 @@ url=https://my.jenkins.com/
 [job_builder]
 ignore_cache=True
 keep_descriptions=False
+recursive=True
 include_path=.:scripts

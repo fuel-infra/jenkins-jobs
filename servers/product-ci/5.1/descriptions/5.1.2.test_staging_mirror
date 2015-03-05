@@ -1,0 +1,15 @@
+Test mirror built by <a href="/job/5.1.2.build_staging_mirror/">5.1.2.build_staging_mirror</a>
+<ol>
+  <li>build custom ISO</li>
+  <li>run tests</li>
+  <li>update symlink pointed to last stable version of mirrors if tests successfull</li>
+</ol>
+<p>
+  See build description of last successful build here or for <b><a href="/job/5.1.2.set_stable_mirror/">5.1.2.set_stable_mirror</a></b>
+for information about last stable mirror version
+<p>
+  <b>Docs:</b> <a href="https://mirantis.jira.com/wiki/pages/viewpage.action?pageId=176655477">How staging Fuel Mirrors work</a>, <a href="https://docs.google.com/a/mirantis.com/document/d/1yrOQMOgmzcY8FxXlGLg6v_Um5Sni6snQg5BA4V24mbE/edit#heading=h.mqzzk07485lc">How mirror staging works</a>.
+<p>
+  <b>Ownership:</b> MOS team. If the job is failing, it is responsibility of a team on duty to drive fixing the job. See <a href="https://mirantis.jira.com/wiki/display/OC/Staging+Mirror+Duty">Staging Mirror Duty</a> page for the duty schedule.
+<p>
+  <b>Contacts:</b> mos-engineering@mirantis.com, #fuel-devops.
