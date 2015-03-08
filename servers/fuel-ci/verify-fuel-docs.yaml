@@ -26,6 +26,7 @@
                 url: https://review.openstack.org/stackforge/fuel-docs.git
           choosing-strategy: gerrit
     triggers:
+      - timed: 'H 2 * * *'
       - gerrit:
           trigger-on:
             - patchset-created-event
@@ -45,6 +46,7 @@
       - ssh-agent-credentials:
           user: 'e0991f76-20e6-4617-9f6d-cf85600789fe'
     publishers:
+      - email-default
       - html-publisher:
           name: 'Fuel Docs build results'
           dir: '_build/html'

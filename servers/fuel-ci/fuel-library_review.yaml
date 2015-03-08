@@ -29,6 +29,7 @@
           max-per-node: 1
           option: project
     publishers:
+      - email-default
       - archive:
           allow-empty: true
           artifacts: 'logs/${{BUILD_NUMBER}}/*'
@@ -46,6 +47,7 @@
                 url: https://review.openstack.org/stackforge/fuel-library.git
           choosing-strategy: gerrit
     triggers:
+      - timed: 'H 2 * * *'
       - gerrit:
           trigger-on:
             - patchset-created-event

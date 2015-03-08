@@ -30,6 +30,7 @@
           max-per-node: 1
           option: category
     publishers:
+      - email-default
       - junit:
           keep-long-stdio: false
           results: '**/nosetests.xml,**/nailgun.xml,**/fuelclient.xml,**/fuelupgrade.xml,**/fuelupgradedownloader.xml,**/shotgun.xml'

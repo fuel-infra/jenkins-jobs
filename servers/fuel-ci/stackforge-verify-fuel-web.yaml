@@ -24,6 +24,7 @@
             max-total: 0
             option: category
     publishers:
+        - email-default
         - archive:
             allow-empty: true
             artifacts: '**/.tox/*/log/*.log,**/.tox/log/**'
@@ -48,6 +49,7 @@
         - ansicolor:
             colormap: xterm
     triggers:
+        - timed: 'H 2 * * *'
         - gerrit:
             trigger-on:
                 - patchset-created-event

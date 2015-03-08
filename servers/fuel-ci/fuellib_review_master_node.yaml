@@ -33,11 +33,13 @@
                 url: https://review.openstack.org/stackforge/fuel-library.git
           choosing-strategy: gerrit
     publishers:
+      - email-default
       - archive:
           allow-empty: true
           artifacts: 'logs/${BUILD_NUMBER}/*'
           latest-only: false
     triggers:
+      - timed: 'H 2 * * *'
       - gerrit:
           trigger-on:
             - patchset-created-event

@@ -24,6 +24,7 @@
           url: 'https://review.openstack.org/stackforge/fuel-stats'
           choosing-strategy: gerrit
     triggers:
+      - timed: 'H 2 * * *'
       - gerrit:
           trigger-on:
             - patchset-created-event
@@ -41,3 +42,5 @@
           write-description: true
       - ansicolor:
           colormap: css
+    publishers:
+      - email-default

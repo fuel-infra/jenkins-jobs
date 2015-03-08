@@ -25,6 +25,7 @@
                 url: https://review.openstack.org/stackforge/fuel-library.git
           choosing-strategy: gerrit
     triggers:
+      - timed: 'H 2 * * *'
       - gerrit:
           trigger-on:
             - patchset-created-event
@@ -41,3 +42,5 @@
           fail: true
           timeout: 20
           write-description: true
+    publishers:
+      - email-default
