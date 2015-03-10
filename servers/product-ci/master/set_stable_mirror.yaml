@@ -61,5 +61,13 @@
             STAGE=publish
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL
+        - project: fuel_ci-status_reports
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            RELEASE=master
+            BUILD=fuel-master-$MASTER_STAGING_ISO_BUILD_NUMBER
+            STAGE=publish
+            VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
     scm:
       - osci-mirrors
