@@ -31,7 +31,7 @@
     publishers:
       - archive:
           allow-empty: true
-          artifacts: 'logs/${{BUILD_NUMBER}}/*.tar.gz,logs/${{BUILD_NUMBER}}/sys_test.log'
+          artifacts: 'logs/${{BUILD_NUMBER}}/*'
           latest-only: false
       - description-setter:
           regexp: 'Description string: (.*)'
