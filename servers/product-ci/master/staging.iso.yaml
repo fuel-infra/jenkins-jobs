@@ -65,6 +65,15 @@
             STAGE=build
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL
+        - project: fuel_ci-status_reports
+          condition: UNSTABLE_OR_BETTER
+          property-file: artifacts/status_description.txt
+          predefined-parameters: |
+            RELEASE=master
+            BUILD=fuel-master-$BUILD_NUMBER
+            STAGE=build
+            VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
     scm:
       - stackforge:
           branch: 'master'

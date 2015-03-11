@@ -55,6 +55,14 @@
         - project: deploy_iso_on_cachers
           condition: UNSTABLE_OR_BETTER
           property-file: upgrade_magnet_link.txt
+        - project: fuel_ci-status_reports
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            RELEASE=5.1
+            BUILD=fuel-5.1.2-$BUILD_NUMBER
+            STAGE=build
+            VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
     scm:
       - stackforge:
           branch: 'stable/5.1'
