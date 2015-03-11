@@ -2,7 +2,7 @@
 
 set -ex
 
-VENV=/home/jenkins/${WORKSPACE}_VENV
+VENV=${WORKSPACE}_VENV
 
 virtualenv ${VENV}
 source ${VENV}/bin/activate || exit 1
