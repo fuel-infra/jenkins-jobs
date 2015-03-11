@@ -49,7 +49,7 @@
       - email-default:
           mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
       - trigger-parameterized-builds:
-        - project: 'deploy_iso_on_cachers,master.smoke,master.ubuntu.bvt_2'
+        - project: 'deploy_iso_on_cachers,master.ubuntu.smoke_neutron,master.ubuntu.bvt_2'
           condition: UNSTABLE_OR_BETTER
           property-file: magnet_link.txt
         - project: deploy_iso_on_cachers

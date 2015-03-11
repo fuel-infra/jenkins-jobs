@@ -1,13 +1,19 @@
 - job:
-    name: 'master.smoke'
+    name: 'master.ubuntu.smoke_neutron'
     builders:
       - inject:
           properties-content: |
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
       - systest
     concurrent: true
-    description:
-      !include-raw descriptions/master.smoke
+    description: |
+      Run tests with smoke_neutron test group.
+
+      <p>
+        Owned by: Fuel QA Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #fuel-qa<br/>
+      </p>
     logrotate:
       daysToKeep: 30
       numToKeep: 50
@@ -20,8 +26,8 @@
           option: project
     parameters:
       - systest:
-          dist: CentOS
-          testgroup: deploy_simple_cinder
+          dist: 'ubuntu'
+          testgroup: 'smoke_neutron'
           version-id: 'master'
           id: 'main'
     publishers:
@@ -37,4 +43,4 @@
     wrappers:
       - timeout:
           fail: true
-          timeout: 200
+          timeout: 120

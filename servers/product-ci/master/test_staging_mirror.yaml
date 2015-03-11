@@ -45,11 +45,6 @@
           name: ISO Testing
           condition: SUCCESSFUL
           projects:
-            - name: 'master.staging.centos.bvt_1'
-              kill-phase-on: NEVER
-              property-file: artifacts/magnet_link.txt
-              current-parameters: true
-              predefined-parameters: 'MASTER_STAGING_ISO_BUILD_NUMBER=$MASTER_STAGING_ISO_BUILD_NUMBER'
             - name: 'master.staging.ubuntu.bvt_2'
               kill-phase-on: NEVER
               property-file: artifacts/magnet_link.txt
