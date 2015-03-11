@@ -21,6 +21,19 @@ export LOCAL_MIRROR=${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror
 export ARTS_DIR=${WORKSPACE}/artifacts
 rm -rf ${ARTS_DIR}
 
+rm -f ${WORKSPACE}/version.yaml
+
+if [ "$USE_STABLE_MOS_FOR_STAGING" = "true" ]; then
+    curl -sS ${JENKINS_URL}/job/6.1.all/lastSuccessfulBuild/artifact/version.yaml.txt > ${WORKSPACE}/version.yaml
+    export VERSIONS=$(cat ${WORKSPACE}/version.yaml)
+    export NAILGUN_COMMIT=$(echo -e "$VERSIONS" | awk '/nailgun_sha:/ {print $NF}')
+    export PYTHON_FUELCLIENT_COMMIT=$(echo -e "$VERSIONS" | awk '/python-fuelclient_sha:/ {print $NF}')
+    export ASTUTE_COMMIT=$(echo -e "$VERSIONS" | awk '/astute_sha:/ {print $NF}')
+    export FUELLIB_COMMIT=$(echo -e "$VERSIONS" | awk '/fuellib_sha:/ {print $NF}')
+    export OSTF_COMMIT=$(echo -e "$VERSIONS" | awk '/ostf_sha:/ {print $NF}')
+    export FUELMAIN_COMMIT=${FUELMAIN_COMMIT:-$(echo -e "$VERSIONS" | awk '/fuelmain_sha:/ {print $NF}')}
+fi
+
 # Checking gerrit commits for fuel-main
 if [ "${fuelmain_gerrit_commit}" != "none" ] ; then
   for commit in ${fuelmain_gerrit_commit} ; do
