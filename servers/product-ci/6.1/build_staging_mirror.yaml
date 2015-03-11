@@ -31,6 +31,10 @@
       - string:
           name: EXTRA_DEB_REPOS
           default: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-6.1/ precise-security main universe multiverse restricted'
+      - bool:
+          name: USE_STABLE_MOS_FOR_STAGING
+          default: true
+          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/6.1.all/lastSuccessfulBuild/artifact/version.yaml.txt">6.1.all</a>. Will used "master" otherwise.'
     properties:
       - heavy-job:
           weight: 1

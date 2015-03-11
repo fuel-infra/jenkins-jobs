@@ -37,6 +37,10 @@
           name: fuelmain_gerrit_commit
           default: 'none'
           description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
+      - bool:
+          name: USE_STABLE_MOS_FOR_STAGING
+          default: true
+          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/6.1.all/lastSuccessfulBuild/artifact/version.yaml.txt">6.1.all</a>. Will used "master" otherwise.'
     publishers:
       - archive:
           allow-empty: false
