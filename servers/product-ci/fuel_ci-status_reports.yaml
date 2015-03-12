@@ -22,6 +22,9 @@
       - string:
           name: DELTA
           default: '1'
+      - bool:
+          name: LAST_STAGE
+          default: false
     scm:
       - git:
           url: https://$CIREPORT_USER:$CIREPORT_PASSWORD@review.fuel-infra.org/infra/ci_status
@@ -36,3 +39,5 @@
     wrappers:
       - inject-passwords:
           global: true
+      - ssh-agent-credentials:
+          user: '60262544-8924-4718-aa4e-7e629cc2f5d3'
