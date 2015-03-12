@@ -61,7 +61,7 @@
           repo: fuel-main
       - osci-mirrors
     triggers:
-      - timed: 'H 7 * * *'
+      - timed: 'H */6 * * *'
     wrappers:
       - ssh-agent-credentials:
           user: '5b151a58-4b65-4d13-87a1-883d52020e2d'
