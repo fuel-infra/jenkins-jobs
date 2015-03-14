@@ -87,3 +87,9 @@
     description: This plugin publishes HTML reports
     url: https://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin
     version: 1.3
+
+- plugin:
+    id: rubyMetrics
+    description: Ruby metric reports for Jenkins. Rcov, Rails stats, Rails notes and Flog.
+    url: https://wiki.jenkins-ci.org/display/JENKINS/RubyMetrics+plugin
+    version: 1.6.3
