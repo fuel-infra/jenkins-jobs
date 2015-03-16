@@ -1,0 +1,48 @@
+- job:
+    name: verify-fuel-devops
+    builders:
+      - shell:
+          !include-raw builders/verify-fuel-devops.sh
+    description: |
+      Runs 'tox -v' for stackforge/fuel-devops repo
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: verify-fuel-devops
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          refspec: $GERRIT_REFSPEC
+          url: 'https://review.openstack.org/stackforge/fuel-devops'
+          choosing-strategy: gerrit
+
+    triggers:
+      - timed: 'H 2 * * *'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'stackforge/fuel-devops'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 10
+          write-description: true
+      - ansicolor:
+          colormap: css
+    publishers:
+      - email-default
+
+
