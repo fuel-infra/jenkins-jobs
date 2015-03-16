@@ -1,5 +1,5 @@
 - job:
-    name: 'custom.ubuntu.bvt_2'
+    name: 'old.custom.ubuntu.bvt_2'
     builders:
       - shell:
           !include-raw builders/run_system_test.sh
@@ -34,14 +34,13 @@
           name: FUEL_MAIN_BRANCH
           description: Branch of fuel-main repo, which is used to run system tests.
           choices:
-              - master
               - stable/6.0
               - stable/5.1
               - stable/5.0
               - stable/4.1
       - string:
           name: ENV_PREFIX
-          default: custom.ubuntu.bvt_2
+          default: old.custom.ubuntu.bvt_2
           description: Define env prefix name. This paramter should not be changed
     scm:
       - git:
@@ -68,3 +67,6 @@
           results: '**/nosetests.xml'
       - email-ext:
           default-subject: '$DEFAULT_SUBJECT'
+          always: true
+          send-to:
+            - requester

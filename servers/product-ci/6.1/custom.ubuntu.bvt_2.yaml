@@ -1,0 +1,59 @@
+- job:
+    name: '6.1.custom.ubuntu.bvt_2'
+    builders:
+      - shell:
+          !include-raw builders/run_system_test.sh
+    concurrent: true
+    description:
+      !include-raw descriptions/custom.ubuntu.bvt_2
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    node: custom_bvt
+    properties:
+      - heavy-job:
+          weight: 8
+    parameters:
+      - string:
+          name: MAGNET_LINK
+      - string:
+          name: TEST_GROUP
+          default: 'bvt_2'
+      - string:
+          name: OPENSTACK_RELEASE
+          default: 'Ubuntu'
+      - string:
+          name: NEUTRON_ENABLE
+          default: 'true'
+      - string:
+          name: ENV_PREFIX
+          default: 6.1.custom.ubuntu.bvt_2
+          description: Define env prefix name. This parameter should not be changed
+    scm:
+      - git:
+          url: 'https://github.com/stackforge/fuel-qa.git'
+          branches:
+            - 'origin/master'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 210
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml,logs/*'
+          latest-only: false
+      - logparser:
+          parse-rules: '/var/lib/jenkins/fuellib.parser'
+          unstable-on-warning: false
+          fail-on-error: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'
+          always: true
+          send-to:
+            - requester
