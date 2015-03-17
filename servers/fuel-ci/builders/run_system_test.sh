@@ -2,7 +2,6 @@
 
 set -ex
 
-export VENV_PATH=/home/jenkins/venv-nailgun-tests
 rm -rf logs/*
 
 ISO_PATH=`seedclient.py -d -m "${ISO_TORRENT}" -v --force-set-symlink -o "${WORKSPACE}"`

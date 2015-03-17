@@ -32,9 +32,18 @@
       - string:
           name: FUEL_MAIN_BRANCH
           default: 'master'
+      - string:
+          name: VENV_PATH
+          default: /home/jenkins/venv-nailgun-tests-2.9
+      - choice:
+          name: TESTS_REPO
+          description: Whether fuel-qa or fuel-main repo should be used for bvt run.
+          choices:
+              - fuel-qa
+              - fuel-main
     scm:
       - git:
-          url: 'https://github.com/stackforge/fuel-main.git'
+          url: 'https://github.com/stackforge/$TESTS_REPO.git'
           branches:
             - 'origin/$FUEL_MAIN_BRANCH'
     publishers:
