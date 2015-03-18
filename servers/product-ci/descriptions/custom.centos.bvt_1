@@ -1,21 +1,5 @@
 <h3>Build verification test for Centos</h3>
 
-<h4>master branch</h4>
-<pre style="font-size: 10px">
-Case: ha_nova_vlan
-1. Create cluster
-2. Add 3 nodes with controller roles
-3. Add 2 nodes with compute roles
-4. Set up cluster to use Network VLAN manager with 8 networks
-5. Deploy the cluster
-6. Validate cluster was set up correctly, there are no dead
-services, there are no errors in logs
-7. Run network verification
-8. Run OSTF
-9. Create snapshot
-</pre>
-
-<h4>stable/** branch</h4>
 <pre style="font-size: 10px">
 Case 1: deploy_neutron_gre
 1. Create cluster
@@ -33,3 +17,9 @@ Case 2:  deploy_neutron_vlan_ha
 5. Run network verification
 6. Run OSTF
 </pre>
+<p>
+<font color="red">This job is for stable/6.0 and earlier branches.</font>
+<p>
+For 6.1 version use <a href="http://jenkins-product.srt.mirantis.net:8080/view/custom_iso/job/6.1.custom.centos.bvt_1/">6.1.custom.centos.bvt_1</a>.
+<p>
+
