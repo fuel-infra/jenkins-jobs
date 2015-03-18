@@ -1,8 +1,8 @@
-- job:
-    name: verify-python-fuelclient
+- job-template:
+    name: '{prefix}-python-fuelclient'
     builders:
       - shell:
-          !include-raw builders/verify-python-fuelclient.sh
+          !include-raw-escape builders/verify-python-fuelclient.sh
     description: |
       Test requests for python-fuelclient
 
@@ -27,7 +27,7 @@
           max-per-node: 1
           option: category
     publishers:
-      - email-default
+      - 'email-{email-type}'
       - junit:
           keep-long-stdio: false
           results: '**/fuelclient.xml'
@@ -37,13 +37,13 @@
             - $GERRIT_BRANCH
           remotes:
             - gerrit:
-                refspec: $GERRIT_REFSPEC
+                refspec: '{refspec}'
                 url: https://review.openstack.org/stackforge/python-fuelclient.git
           choosing-strategy: gerrit
     triggers:
       - gerrit:
           trigger-on:
-            - patchset-created-event
+            - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: stackforge/python-fuelclient
@@ -58,3 +58,18 @@
           fail: true
           write-description: true
           timeout: 45
+
+- project:
+    name: dualcheck-python-fuelclient
+    jobs:
+      - '{prefix}-python-fuelclient':
+          prefix: verify
+          trigger-on: patchset-created-event
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+      - '{prefix}-python-fuelclient':
+          prefix: gate
+          trigger-on: change-merged-event
+          email-type: alert-on-merge
+          refspec: refs/heads/$GERRIT_BRANCH
+

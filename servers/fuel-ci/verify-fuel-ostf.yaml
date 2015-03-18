@@ -1,8 +1,8 @@
-- job:
-    name: verify-fuel-ostf
+- job-template:
+    name: '{prefix}-fuel-ostf'
     builders:
       - shell:
-          !include-raw builders/verify-fuel-ostf.sh
+          !include-raw-escape builders/verify-fuel-ostf.sh
     description: |
       Test requests for fuel-ostf
 
@@ -29,13 +29,13 @@
             - $GERRIT_BRANCH
           remotes:
             - gerrit:
-                refspec: $GERRIT_REFSPEC
+                refspec: '{refspec}'
                 url: https://review.openstack.org/stackforge/fuel-ostf.git
           choosing-strategy: gerrit
     triggers:
       - gerrit:
           trigger-on:
-            - patchset-created-event
+            - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: stackforge/fuel-ostf
@@ -51,4 +51,19 @@
           write-description: true
           timeout: 45
     publishers:
-      - email-default
+      - 'email-{email-type}'
+
+- project:
+    name: dualcheck-fuel-ostf
+    jobs:
+      - '{prefix}-fuel-ostf':
+          prefix: verify
+          trigger-on: patchset-created-event
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+      - '{prefix}-fuel-ostf':
+          prefix: gate
+          trigger-on: change-merged-event
+          email-type: alert-on-merge
+          refspec: refs/heads/$GERRIT_BRANCH
+

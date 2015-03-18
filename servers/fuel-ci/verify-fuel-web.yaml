@@ -1,8 +1,8 @@
-- job:
-    name: verify-fuel-web
+- job-template:
+    name: '{prefix}-fuel-web'
     builders:
       - shell:
-          !include-raw builders/verify-fuel-web.sh
+          !include-raw-escape builders/verify-fuel-web.sh
     description: |
       Test requests for fuel-web master branch
 
@@ -30,7 +30,7 @@
           max-per-node: 1
           option: category
     publishers:
-      - email-default
+      - 'email-{email-type}'
       - junit:
           keep-long-stdio: false
           results: '**/nosetests.xml,**/nailgun.xml,**/fuelclient.xml,**/fuelupgrade.xml,**/fuelupgradedownloader.xml,**/shotgun.xml'
@@ -42,13 +42,13 @@
             - $GERRIT_BRANCH
           remotes:
             - gerrit:
-                refspec: $GERRIT_REFSPEC
+                refspec: '{refspec}'
                 url: https://review.openstack.org/stackforge/fuel-web.git
           choosing-strategy: gerrit
     triggers:
       - gerrit:
           trigger-on:
-            - patchset-created-event
+            - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: stackforge/fuel-web
@@ -67,3 +67,18 @@
           fail: true
           write-description: true
           timeout: 45
+
+- project:
+    name: dualcheck-fuel-web
+    jobs:
+      - '{prefix}-fuel-web':
+          prefix: verify
+          trigger-on: patchset-created-event
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+      - '{prefix}-fuel-web':
+          prefix: gate
+          trigger-on: change-merged-event
+          email-type: alert-on-merge
+          refspec: refs/heads/$GERRIT_BRANCH
+

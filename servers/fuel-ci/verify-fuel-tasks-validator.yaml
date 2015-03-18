@@ -1,8 +1,8 @@
-- job:
-    name: verify-fuel-tasks-validator
+- job-template:
+    name: '{prefix}-fuel-tasks-validator'
     builders:
       - shell:
-          !include-raw builders/verify-fuel-tasks-validator.sh
+          !include-raw-escape builders/verify-fuel-tasks-validator.sh
     description: |
       Tests and linters for fuel-tasks-validator
 
@@ -30,13 +30,13 @@
             - $GERRIT_BRANCH
           remotes:
             - gerrit:
-                refspec: $GERRIT_REFSPEC
+                refspec: '{refspec}'
                 url: https://review.openstack.org/stackforge/fuel-tasks-validator.git
           choosing-strategy: gerrit
     triggers:
       - gerrit:
           trigger-on:
-            - patchset-created-event
+            - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: stackforge/fuel-tasks-validator
@@ -54,4 +54,19 @@
     publishers:
       - description-setter:
           regexp-for-failed: '(Failed tests: (.*))'
-      - email-default
+      - 'email-{email-type}'
+
+- project:
+    name: dualcheck-fuel-task-validator
+    jobs:
+      - '{prefix}-fuel-tasks-validator':
+          prefix: verify
+          trigger-on: patchset-created-event
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+      - '{prefix}-fuel-tasks-validator':
+          prefix: gate
+          trigger-on: change-merged-event
+          email-type: alert-on-merge
+          refspec: refs/heads/$GERRIT_BRANCH
+

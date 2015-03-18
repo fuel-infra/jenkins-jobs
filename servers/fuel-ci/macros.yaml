@@ -15,3 +15,13 @@
           presend-script:
             !include-raw 'email_ext_groovy.inc'
           failure: true
+- publisher:
+    name: email-alert-on-merge
+    publishers:
+      - email-ext:
+          body: $DEFAULT_CONTENT
+          send-to:
+            - recipients
+          recipients: '$GERRIT_CHANGE_OWNER_EMAIL'
+          subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+          failure: true
