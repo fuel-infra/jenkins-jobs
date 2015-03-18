@@ -1,0 +1,24 @@
+- job:
+    name: 'publish_partner_iso'
+    description: |
+      This job will publish torrent file from MAGNET_LINK parameter provided to partnershare web service. This will allow partner access to selected file.
+    builders:
+      - shell:
+          !include-raw builders/publish_partner_iso.sh
+    concurrent: true
+    logrotate:
+      daysToKeep: 20
+      numToKeep: 20
+    node: publish_partner_iso
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          description: Magnet link which is going to be downloaded.
+      - string:
+          name: DST_HOST
+          default: 'partnershare@partnershare.fuel-infra.org'
+          description: Destination host.
+      - string:
+          name: DST_DIR
+          default: '/var/www/partnershare'
+          description: Destination directory.
