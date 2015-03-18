@@ -4,20 +4,27 @@
           !include-raw './builders/test-requirements-deb.sh'
     name: test-requirements-deb
     node: test-deb-reqs
-    parameters:
-      - string:
-          name: GERRIT_BRANCH
-          default: 'master'
     properties:
       - heavy-job:
           weight: 1
+      - throttle:
+          max-per-node: 1
+          option: project
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
     scm:
       - git:
           branches:
             - $GERRIT_BRANCH
-          refspec: $GERRIT_REFSPEC
-          url: 'https://review.openstack.org/stackforge/fuel-main'
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-main.git
+          choosing-strategy: gerrit
     triggers:
+      - timed: 'H 2 * * *'
       - gerrit:
           trigger-on:
             - patchset-created-event
@@ -30,3 +37,5 @@
               file-paths:
                 - compare-type: ANT
                   pattern: '**/requirements-deb.txt'
+    publishers:
+      - email-default
