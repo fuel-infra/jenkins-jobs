@@ -5,6 +5,9 @@ Repo Structure
 
   List of Jenkins plugins required to run jobs defined in this repo
   and other general Jenkins requirements.
+  Please note that 'jenkins-jobs test' call requires list of plugins
+  either from Jenkins instance (in .ini file) or provided via
+  '-p' option.
 
 ``conf/jenkins_job.ini.example``
 
@@ -41,6 +44,13 @@ Repo Structure
 
   produces all XML files for all Jenkins instances and puts them
   into ``./output/<jenkins-master-id`` folder.
+
+``utils/dump_plugins.py``
+
+  Dumps jenkins-job-builder compatible list of plugins
+  from Jenkins instance.
+
+
 
 Review Checklist
 ================

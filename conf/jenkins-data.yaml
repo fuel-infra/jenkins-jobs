@@ -1,95 +1,1083 @@
-# Jenkins Master plugins required to run jobs
-
-- plugin:
-    id: git
-    description: Git Plugin
-    url: https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin
-    version:  2.2.5
-
-- plugin:
-    id: gerrit-trigger
-    description: Gerrit Trigger Plugin
-    url: https://wiki.jenkins-ci.org/display/JENKINS/Gerrit+Trigger
-    version: 2.11.1
-
-- plugin:
-    id: description-setter
-    description: Description Setter Plugin
-    url: https://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin
-    version: 1.9
-
-- plugin:
-    id: build-timeout
-    description: Jenkins build timeout plugin
-    url: http://wiki.jenkins-ci.org/display/JENKINS/Build-timeout+Plugin
-    version: 1.12.2
-
-- plugin:
-    id: heavy-job
-    description: This plugin allows you to define "weight" on each job
-    url: https://wiki.jenkins-ci.org/display/JENKINS/Heavy+Job+Plugin
-    version: 1.1
-
-- plugin:
-    id: copyartifact
-    description: Adds a build step to copy artifacts from another project.
-    url: http://wiki.jenkins-ci.org/display/JENKINS/Copy+Artifact+Plugin
-    version: 1.27
-
-- plugin:
-    id: jenkins-multijob-plugin
-    description: This plugin is a MultiJob plugin.
-    url: http://wiki.jenkins-ci.org/display/JENKINS/Multijob+Plugin
-    version: 1.13
-
-- plugin:
-    id: envinject
-    description: This plugin makes it possible to set an environment for the builds.
-    url: https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin
-    version:  1.89
-
-- plugin:
-    id: email-ext
-    description: This plugin is a replacement for Jenkins's email publisher
-    url: http://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin
-    version: 2.30.2
-
-- plugin:
-    id: ssh-agent
-    description: This plugin allows you to provide SSH credentials to builds via a ssh-agent in Jenkins.
-    url: https://wiki.jenkins-ci.org/display/JENKINS/SSH+Agent+Plugin
-    version: 1.4.1
-
-- plugin:
-    id: extended-choice-parameter
-    description: Adds extended functionality to Choice parameter
-    url: https://wiki.jenkins-ci.org/display/JENKINS/Extended+Choice+Parameter+plugin
-    version: 0.34
-
-- plugin:
-    id: ansicolor
-    description: This plugin adds support for ANSI escape sequences, including color, to Console Output.
-    url: https://wiki.jenkins-ci.org/display/JENKINS/AnsiColor+Plugin
-    version: 0.4.1
-
-- plugin: timestamper
-    description: Adds timestamps to the Console Output.
-    url: https://wiki.jenkins-ci.org/display/JENKINS/Timestamper
-    version: 1.5.15
-
-- plugin: log-parser
-    description: Parse the console output and highlight error/warning/info lines
-    url: https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin
-    version: 1.0.8
-
-- plugin:
-    id: htmlpublisher
-    description: This plugin publishes HTML reports
-    url: https://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin
-    version: 1.3
-
-- plugin:
-    id: rubyMetrics
-    description: Ruby metric reports for Jenkins. Rcov, Rails stats, Rails notes and Flog.
-    url: https://wiki.jenkins-ci.org/display/JENKINS/RubyMetrics+plugin
-    version: 1.6.3
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: PAM Authentication plugin
+  pinned: false
+  shortName: pam-auth
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/PAM+Authentication+Plugin
+  version: '1.1'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: script-security, version: '1.13'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Matrix Project Plugin
+  pinned: false
+  shortName: matrix-project
+  supportsDynamicLoad: MAYBE
+  url: https://wiki.jenkins-ci.org/display/JENKINS/Matrix+Project+Plugin
+  version: 1.4.1
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: ant, version: '1.0'}
+  - {optional: false, shortName: javadoc, version: '1.0'}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Jenkins Translation Assistance plugin
+  pinned: false
+  shortName: translation
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Translation+Assistance+Plugin
+  version: '1.10'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Credentials Plugin
+  pinned: false
+  shortName: credentials
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Credentials+Plugin
+  version: '1.18'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: ssh-credentials, version: 1.6.1}
+  - {optional: false, shortName: credentials, version: 1.9.4}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Jenkins SSH Slaves plugin
+  pinned: false
+  shortName: ssh-slaves
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/SSH+Slaves+plugin
+  version: '1.9'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Jenkins Subversion Plug-in
+  pinned: false
+  shortName: subversion
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Subversion+Plugin
+  version: '1.54'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: mailer, version: '1.7'}
+  - {optional: false, shortName: javadoc, version: '1.0'}
+  - {optional: true, shortName: token-macro, version: '1.1;resolution:=optional'}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Maven Integration plugin
+  pinned: false
+  shortName: maven-plugin
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Maven+Project+Plugin
+  version: 2.7.1
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Javadoc Plugin
+  pinned: false
+  shortName: javadoc
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Javadoc+Plugin
+  version: '1.1'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: credentials, version: 1.16.1}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: SSH Credentials Plugin
+  pinned: false
+  shortName: ssh-credentials
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/SSH+Credentials+Plugin
+  version: '1.10'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: LDAP Plugin
+  pinned: false
+  shortName: ldap
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/LDAP+Plugin
+  version: '1.6'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Script Security Plugin
+  pinned: false
+  shortName: script-security
+  supportsDynamicLoad: MAYBE
+  url: https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Plugin
+  version: '1.13'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: External Monitor Job Type Plugin
+  pinned: false
+  shortName: external-monitor-job
+  supportsDynamicLoad: MAYBE
+  url: https://wiki.jenkins-ci.org/display/JENKINS/Monitoring+external+jobs
+  version: '1.4'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Ant Plugin
+  pinned: false
+  shortName: ant
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Ant+Plugin
+  version: '1.2'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Matrix Authorization Strategy Plugin
+  pinned: false
+  shortName: matrix-auth
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Matrix+Authorization+Strategy+Plugin
+  version: '1.1'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Jenkins Mailer Plugin
+  pinned: false
+  shortName: mailer
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Mailer
+  version: '1.11'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies: []
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: JUnit Plugin
+  pinned: false
+  shortName: junit
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/JUnit+Plugin
+  version: 1.2-beta-4
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Jenkins CVS Plug-in
+  pinned: false
+  shortName: cvs
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/CVS+Plugin
+  version: '2.11'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Windows Slaves Plugin
+  pinned: false
+  shortName: windows-slaves
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Windows+Slaves+Plugin
+  version: '1.0'
+- active: true
+  backupVersion: null
+  bundled: true
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: OWASP Markup Formatter Plugin
+  pinned: false
+  shortName: antisamy-markup-formatter
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/OWASP+Markup+Formatter+Plugin
+  version: '1.1'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Green Balls
+  pinned: false
+  shortName: greenballs
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Green+Balls
+  version: '1.14'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: ant, version: '1.0'}
+  - {optional: false, shortName: javadoc, version: '1.0'}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Log Parser Plugin
+  pinned: false
+  shortName: log-parser
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.hudson-ci.org/display/HUDSON/Log+Parser+Plugin
+  version: 1.0.8
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: token-macro, version: 1.5.1}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Jenkins build timeout plugin
+  pinned: false
+  shortName: build-timeout
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Build-timeout+Plugin
+  version: 1.14.1
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: maven-plugin, version: '1.445'}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Environment Injector Plugin
+  pinned: false
+  shortName: envinject
+  supportsDynamicLoad: MAYBE
+  url: https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin
+  version: '1.90'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: maven-plugin, version: '2.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Jenkins Job Configuration History Plugin
+  pinned: false
+  shortName: jobConfigHistory
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/JobConfigHistory+Plugin
+  version: '2.10'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: ant, version: '1.0'}
+  - {optional: false, shortName: javadoc, version: '1.0'}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Jenkins jQuery plugin
+  pinned: false
+  shortName: jquery
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/jQuery+Plugin
+  version: 1.7.2-1
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: ant, version: '1.0'}
+  - {optional: false, shortName: javadoc, version: '1.0'}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Heavy Job Plugin
+  pinned: false
+  shortName: heavy-job
+  supportsDynamicLoad: MAYBE
+  url: https://wiki.jenkins-ci.org/display/JENKINS/Heavy+Job+Plugin
+  version: '1.1'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: token-macro, version: '1.9'}
+  - {optional: false, shortName: jquery, version: 1.7.2-1}
+  - {optional: true, shortName: parameterized-trigger, version: '2.22;resolution:=optional'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Node and Label parameter plugin
+  pinned: false
+  shortName: nodelabelparameter
+  supportsDynamicLoad: MAYBE
+  url: https://wiki.jenkins-ci.org/display/JENKINS/NodeLabel+Parameter+Plugin
+  version: 1.5.1
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: matrix-project, version: '1.2'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Naginator
+  pinned: false
+  shortName: naginator
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Naginator+Plugin
+  version: '1.14'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Token Macro Plugin
+  pinned: false
+  shortName: token-macro
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin
+  version: '1.10'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: ant, version: '1.0'}
+  - {optional: false, shortName: javadoc, version: '1.0'}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: HTML Publisher plugin
+  pinned: false
+  shortName: htmlpublisher
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin
+  version: '1.3'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: envinject, version: '1.90'}
+  - {optional: false, shortName: token-macro, version: '1.10'}
+  - {optional: false, shortName: conditional-buildstep, version: 1.3.3}
+  - {optional: false, shortName: maven-plugin, version: '2.6'}
+  - {optional: false, shortName: parameterized-trigger, version: '2.25'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Jenkins Multijob plugin
+  pinned: false
+  shortName: jenkins-multijob-plugin
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Multijob+Plugin
+  version: '1.16'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: maven-plugin, version: 1.480.3}
+  - {optional: false, shortName: run-condition, version: '1.0'}
+  - {optional: false, shortName: token-macro, version: 1.5.1}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: conditional-buildstep
+  pinned: false
+  shortName: conditional-buildstep
+  supportsDynamicLoad: MAYBE
+  url: https://wiki.jenkins-ci.org/display/JENKINS/Conditional+BuildStep+Plugin
+  version: 1.3.3
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: true, shortName: rebuild, version: '1.1;resolution:=optional'}
+  - {optional: true, shortName: git, version: '1.2.0;resolution:=optional'}
+  - {optional: true, shortName: git-client, version: '1.4.2;resolution:=optional'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Gerrit Trigger
+  pinned: false
+  shortName: gerrit-trigger
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Gerrit+Trigger
+  version: 2.12.0
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Timestamper
+  pinned: false
+  shortName: timestamper
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Timestamper
+  version: 1.5.15
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: credentials, version: '1.20'}
+  - {optional: false, shortName: git-client, version: 1.15.0}
+  - {optional: false, shortName: scm-api, version: '0.2'}
+  - {optional: false, shortName: matrix-project, version: '1.4'}
+  - {optional: false, shortName: ssh-credentials, version: '1.10'}
+  - {optional: false, shortName: mailer, version: '1.11'}
+  - {optional: true, shortName: token-macro, version: '1.10;resolution:=optional'}
+  - {optional: true, shortName: parameterized-trigger, version: '2.4;resolution:=optional'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Jenkins GIT plugin
+  pinned: false
+  shortName: git
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin
+  version: 2.3.4
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Jenkins Multiple SCMs plugin
+  pinned: false
+  shortName: multiple-scms
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin
+  version: '0.3'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: token-macro, version: 1.5.1}
+  - {optional: false, shortName: ant, version: '1.0'}
+  - {optional: false, shortName: javadoc, version: '1.0'}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Run Condition Plugin
+  pinned: false
+  shortName: run-condition
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Run+Condition+Plugin
+  version: '1.0'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: ant, version: '1.0'}
+  - {optional: false, shortName: javadoc, version: '1.0'}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: AnsiColor
+  pinned: false
+  shortName: ansicolor
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/AnsiColor+Plugin
+  version: 0.4.1
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: credentials, version: 1.16.1}
+  - {optional: false, shortName: ssh-credentials, version: 1.7.1}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: SSH Agent Plugin
+  pinned: false
+  shortName: ssh-agent
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/SSH+Agent+Plugin
+  version: '1.5'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: rake, version: 1.8.0}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: RubyMetrics plugin for Jenkins
+  pinned: false
+  shortName: rubyMetrics
+  supportsDynamicLoad: MAYBE
+  url: https://wiki.jenkins-ci.org/display/JENKINS/RubyMetrics+plugin
+  version: 1.6.3
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Rebuilder
+  pinned: false
+  shortName: rebuild
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Rebuild+Plugin
+  version: '1.22'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Jenkins description setter plugin
+  pinned: false
+  shortName: description-setter
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin
+  version: '1.9'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: matrix-project, version: '1.4'}
+  - {optional: true, shortName: maven-plugin, version: '2.7.1;resolution:=optional'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Copy Artifact Plugin
+  pinned: false
+  shortName: copyartifact
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Copy+Artifact+Plugin
+  version: '1.34'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: SCM API Plugin
+  pinned: false
+  shortName: scm-api
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/SCM+API+Plugin
+  version: '0.2'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: token-macro, version: '1.10'}
+  - {optional: false, shortName: script-security, version: '1.6'}
+  - {optional: false, shortName: mailer, version: '1.5'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Email Extension Plugin
+  pinned: false
+  shortName: email-ext
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin
+  version: '2.39'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: true, shortName: conditional-buildstep, version: '1.3.1;resolution:=optional'}
+  - {optional: true, shortName: subversion, version: '1.25;resolution:=optional'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Jenkins Parameterized Trigger plugin
+  pinned: false
+  shortName: parameterized-trigger
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Trigger+Plugin
+  version: '2.25'
+- active: false
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: mailer, version: '1.9'}
+  downgradable: false
+  enabled: false
+  hasUpdate: false
+  longName: Job and Slave ownership plugin
+  pinned: false
+  shortName: ownership
+  supportsDynamicLoad: MAYBE
+  url: https://wiki.jenkins-ci.org/display/JENKINS/Ownership+Plugin
+  version: '0.6'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Jenkins Rake plugin
+  pinned: false
+  shortName: rake
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Rake+Plugin
+  version: 1.8.0
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: ant, version: '1.0'}
+  - {optional: false, shortName: javadoc, version: '1.0'}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: Jenkins Throttle Concurrent Builds Plug-in
+  pinned: false
+  shortName: throttle-concurrents
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Throttle+Concurrent+Builds+Plugin
+  version: 1.8.4
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: ssh-credentials, version: '1.10'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Jenkins GIT client plugin
+  pinned: false
+  shortName: git-client
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Git+Client+Plugin
+  version: 1.15.0
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: true
+  longName: Jenkins Self-Organizing Swarm Plug-in Modules
+  pinned: false
+  shortName: swarm
+  supportsDynamicLoad: MAYBE
+  url: http://wiki.jenkins-ci.org/display/JENKINS/Swarm+Plugin
+  version: '1.15'
+- active: true
+  backupVersion: null
+  bundled: false
+  deleted: false
+  dependencies:
+  - {optional: false, shortName: ant, version: '1.0'}
+  - {optional: false, shortName: javadoc, version: '1.0'}
+  - {optional: false, shortName: external-monitor-job, version: '1.0'}
+  - {optional: false, shortName: ldap, version: '1.0'}
+  - {optional: false, shortName: pam-auth, version: '1.0'}
+  - {optional: false, shortName: mailer, version: '1.2'}
+  - {optional: false, shortName: matrix-auth, version: 1.0.2}
+  - {optional: false, shortName: windows-slaves, version: '1.0'}
+  - {optional: false, shortName: antisamy-markup-formatter, version: '1.0'}
+  - {optional: false, shortName: matrix-project, version: '1.0'}
+  - {optional: false, shortName: junit, version: '1.0'}
+  downgradable: false
+  enabled: true
+  hasUpdate: false
+  longName: anything-goes-formatter
+  pinned: false
+  shortName: anything-goes-formatter
+  supportsDynamicLoad: MAYBE
+  url: https://wiki.jenkins-ci.org/pages/viewpage.action?pageId=60915753
+  version: '1.0'
