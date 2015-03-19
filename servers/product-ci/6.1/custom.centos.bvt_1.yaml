@@ -26,6 +26,12 @@
           name: ENV_PREFIX
           default: 6.1.custom.centos.bvt_1
           description: Define env prefix name. This parameter should not be changed
+      - choice:
+          name: IMAGE_PROVISIONING
+          description: Export parameter.
+          choices:
+              - 'true'
+              - 'false'
     scm:
       - git:
           url: 'https://github.com/stackforge/fuel-qa.git'
