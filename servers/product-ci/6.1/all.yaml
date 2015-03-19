@@ -51,12 +51,15 @@
       - email-default:
           mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
       - trigger-parameterized-builds:
-        - project: 'deploy_iso_on_cachers,6.1.centos.smoke_nova,6.1.ubuntu.smoke_neutron,6.1.centos.bvt_1,6.1.ubuntu.bvt_2'
-          condition: UNSTABLE_OR_BETTER
+
+        - project: 'deploy_iso_on_cachers'
           property-file: magnet_link.txt
+          condition: UNSTABLE_OR_BETTER
+
         - project: deploy_iso_on_cachers
           condition: UNSTABLE_OR_BETTER
           property-file: upgrade_magnet_link.txt
+
         - project: fuel_ci-status_reports
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
@@ -65,6 +68,12 @@
             STAGE=build
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
+
+        - project: '6.1.test_all'
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            UPSTREAM_BUILD_URL=$BUILD_URL
+            UPSTREAM_BUILD_NUMBER=$BUILD_NUMBER
     scm:
       - stackforge:
           branch: 'master'
@@ -78,3 +87,49 @@
               password: qqoROvm6of+nv77TXCRgaXvuyVhvUMOsL7ofOGnyxHDsHSWKk7puJYN+zZBeWhJ0
       - ssh-agent-credentials:
           user: '5b151a58-4b65-4d13-87a1-883d52020e2d'
+
+- job:
+    name: '6.1.test_all'
+    description: |
+      Trigger tests for fresh ISO
+      <p>
+        Owned by: Fuel QA Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #fuel-qa, #fuel-devops<br/>
+      </p>
+
+    concurrent: true
+    node: runner
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: UPSTREAM_JOB_URL
+          default: '${JENKINS_URL}job/6.1.all/'
+          description: URL of ISO build
+      - string:
+          name: UPSTREAM_BUILD_NUMBER
+          default: 'lastSuccessfulBuild'
+    builders:
+      - shell:
+          !include-raw builders/test_all.sh
+      - trigger-builds:
+        - project: '6.1.centos.bvt_1,6.1.ubuntu.bvt_2,6.1.centos.smoke_nova,6.1.ubuntu.smoke_neutron'
+          condition: UNSTABLE_OR_BETTER
+          property-file: magnet_link.txt
+          block: true
+    publishers:
+      - email-systest:
+          body-failed:
+            !include-raw notifications/test_all.failed
+          mail-to: 'devops+alert@mirantis.com, mos-qa@mirantis.com'
+      - description-setter:
+          regexp: |
+            'Description string: (.*)'
+          set-for-matrix: false
+      - archive:
+          allow-empty: false
+          artifacts: iso_build_url.txt
+          latest-only: false
+
