@@ -1,6 +1,6 @@
 rm -rf logs/*
 
-export VENV_PATH=${VENV_PATH:-/home/jenkins/venv-nailgun-tests}
+export VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
 
 ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER.$BUILD_ID
 ENV_NAME=${ENV_NAME:0:68}
