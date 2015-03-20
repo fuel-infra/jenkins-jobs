@@ -25,16 +25,47 @@ rm -f ${WORKSPACE}/version.yaml
 
 if [ "${USE_STABLE_MOS_FOR_STAGING}" = "true" ]; then
 
-    JENKINS_STABLE_ISO_JOB="${MIRROR}.test_all"
-    JENKINS_STABLE_ISO_JOB_URL="${JENKINS_URL}job/${JENKINS_STABLE_ISO_JOB}"
+    export JENKINS_STABLE_ISO_JOB="${MIRROR}.test_all"
+    export JENKINS_STABLE_ISO_JOB_URL="${JENKINS_URL}job/${JENKINS_STABLE_ISO_JOB}/"
 
     # Getting url for last stable iso build
-    JENKINS_STABLE_ISO_BUILD_URL="$(curl -fsS ${JENKINS_STABLE_ISO_JOB_URL}/lastSuccessfulBuild/artifact/iso_build_url.txt \
-        | awk -F '[ =]' '{print $NF}')"
+    JENKINS_STABLE_ISO_BUILD_URL=$(python -c "
+import json
+import os
+import urllib2
+import urlparse
+
+def geturl(url, suffix='api/json'):
+    try:
+        u = urllib2.urlopen(urlparse.urljoin(url, suffix))
+    except urllib2.HTTPError as e:
+        raise Exception('{} {} when trying to '
+                        'GET {}'.format(e.code, e.msg, e.url))
+    else:
+        info = u.read()
+
+    try:
+        info = json.loads(info)
+    except:
+        pass
+    return info
+
+jenkins_stable_iso_job_url = os.environ.get('JENKINS_STABLE_ISO_JOB_URL')
+job_info = geturl(jenkins_stable_iso_job_url)
+
+iso_urls = list()
+for build in job_info.get('builds'):
+    build_info = geturl(build['url'])
+    if build_info.get('result') == 'SUCCESS':
+        iso_build_url = geturl(build['url'], 'artifact/iso_build_url.txt')
+        iso_urls.append(iso_build_url.split('=')[-1].strip())
+
+print(sorted(iso_urls)[-1])
+")
 
     # geting of last stable iso commits
-    curl -fsS ${JENKINS_STABLE_ISO_BUILD_URL}artifact/version.yaml.txt > ${WORKSPACE}/version.yaml
-    export VERSIONS=$(cat ${WORKSPACE}/version.yaml)
+    curl -fsS ${JENKINS_STABLE_ISO_BUILD_URL}artifact/version.yaml.txt > ${WORKSPACE:-.}/version.yaml
+    export VERSIONS=$(cat ${WORKSPACE:-.}/version.yaml)
     export NAILGUN_COMMIT=$(echo -e "$VERSIONS" | awk '/nailgun_sha:/ {print $NF}')
     export PYTHON_FUELCLIENT_COMMIT=$(echo -e "$VERSIONS" | awk '/python-fuelclient_sha:/ {print $NF}')
     export ASTUTE_COMMIT=$(echo -e "$VERSIONS" | awk '/astute_sha:/ {print $NF}')
