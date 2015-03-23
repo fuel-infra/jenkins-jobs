@@ -111,13 +111,17 @@
       - string:
           name: UPSTREAM_BUILD_NUMBER
           default: 'lastSuccessfulBuild'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: 'latest'
+          description: Use ubuntu-<timestamp> or latest for latest mirror available.
     builders:
       - shell:
           !include-raw builders/test_all.sh
       - trigger-builds:
         - project: '6.1.centos.bvt_1,6.1.ubuntu.bvt_2,6.1.centos.smoke_nova,6.1.ubuntu.smoke_neutron'
           condition: UNSTABLE_OR_BETTER
-          property-file: magnet_link.txt
+          property-file: properties_file.txt
           block: true
     publishers:
       - email-systest:
@@ -130,6 +134,6 @@
           set-for-matrix: false
       - archive:
           allow-empty: false
-          artifacts: iso_build_url.txt
+          artifacts: '*.txt'
           latest-only: false
 
