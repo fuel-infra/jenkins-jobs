@@ -1,5 +1,3 @@
-rm -rf ${WORKSPACE}/.build
-
 find . -name '*.erb' | xargs -P1 -L1 -I '%' erb -P -x -T '-' % | ruby -c
 find . -name '*.pp' | xargs -P1 -L1 puppet parser validate --verbose
 find . -name '*.pp' | xargs -P1 -L1 puppet-lint \
