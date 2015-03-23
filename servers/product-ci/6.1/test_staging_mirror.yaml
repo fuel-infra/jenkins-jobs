@@ -45,18 +45,20 @@
           project: '6.1.staging.iso'
           filter: artifacts/magnet_link.txt
           which-build: last-successful
+      - shell:
+          !include-raw builders/test_staging_mirror_1.5.sh
       - multijob:
           name: ISO Testing
           condition: SUCCESSFUL
           projects:
             - name: '6.1.staging.centos.bvt_1'
               kill-phase-on: NEVER
-              property-file: artifacts/magnet_link.txt
+              property-file: properties_file.txt
               current-parameters: true
               predefined-parameters: '6_1_STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
             - name: '6.1.staging.ubuntu.bvt_2'
               kill-phase-on: NEVER
-              property-file: artifacts/magnet_link.txt
+              property-file: properties_file.txt
               current-parameters: true
               predefined-parameters: '6_1_STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
       - multijob:
@@ -77,5 +79,9 @@
       - description-setter:
           regexp: (^[^\s]* is stable.*a href.*)
           set-for-matrix: false
+      - archive:
+          allow-empty: false
+          artifacts: 'properties_file.txt, mirror_staging.txt'
+          latest-only: false
       - email-default:
-          mail-to: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com,mos-engineering@mirantis.com
+          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com, mos-qa@mirantis.com, mos-engineering@mirantis.com
