@@ -1,0 +1,56 @@
+- job:
+    builders:
+      - shell:
+          !include-raw 'scripts/prepare_env.sh'
+    concurrent: true
+    description: |
+      Creates a python virtual environment for system tests. Stores additional images.<br><br>
+      For 6.1 and above environments choose 2.9.x DevOps version from fuel-qa repository and old, 2.5.x from fuel-main for prior to 6.1.
+    logrotate:
+      daysToKeep: 14
+    name: prepare_env
+    parameters:
+      - bool:
+          name: 'update_devops_2_9_x'
+          default: true
+      - bool:
+          name: 'update_devops_2_5_x'
+          default: false
+      - bool:
+          name: 'download_images'
+          default: false
+      - node:
+          name: NODE
+          allowed-multiselect: true
+      - string:
+          name: CLOUD_FEDORA
+          default: 'magnet:?xt=urn:btih:edf7287187fe35e94aaa6cf973c04fbc6700433f&dn=cloud-fedora.qcow2&tr=http%3A%2F%2Fseed-qa.msk.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fsrv07-srt.srt.mirantis.net%2Fcloud-images%2Fcloud-fedora.qcow2&ws=http%3A%2F%2Fsrv08-srt.srt.mirantis.net%2Fcloud-images%2Fcloud-fedora.qcow2&ws=http%3A%2F%2Fsrv11-msk.msk.mirantis.net%2Fcloud-images%2Fcloud-fedora.qcow2'
+      - string:
+          name: SAVANNA_IMAGE
+          default: 'magnet:?xt=urn:btih:e94b9329993230e7d448767ce96acb6048643a2e&dn=savanna-0.3-vanilla-1.2.1-ubuntu-13.04.qcow2&tr=http%3A%2F%2Fseed-qa.msk.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fsrv07-srt.srt.mirantis.net%2Fcloud-images%2Fsavanna-0.3-vanilla-1.2.1-ubuntu-13.04.qcow2&ws=http%3A%2F%2Fsrv08-srt.srt.mirantis.net%2Fcloud-images%2Fsavanna-0.3-vanilla-1.2.1-ubuntu-13.04.qcow2&ws=http%3A%2F%2Fsrv11-msk.msk.mirantis.net%2Fcloud-images%2Fsavanna-0.3-vanilla-1.2.1-ubuntu-13.04.qcow2'
+          description: ''
+      - string:
+          name: F17_IMAGE
+          default: 'magnet:?xt=urn:btih:e116e33c89c8cfa4ab6c00b126c8a1b7c4632a94&dn=F17-x86%5F64-cfntools.qcow2&tr=http%3A%2F%2Fseed-qa.msk.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fsrv07-srt.srt.mirantis.net%2Fcloud-images%2FF17-x86%5F64-cfntools.qcow2&ws=http%3A%2F%2Fsrv08-srt.srt.mirantis.net%2Fcloud-images%2FF17-x86%5F64-cfntools.qcow2&ws=http%3A%2F%2Fsrv11-msk.msk.mirantis.net%2Fcloud-images%2FF17-x86%5F64-cfntools.qcow2'
+      - string:
+          name: MURANO_IMAGE
+          default: 'magnet:?xt=urn:btih:958fdb29989853ec74a84940558dd3d84bff91b6&dn=ubuntu%5F14%5F04-murano-agent%5Fstable%5Fjuno.qcow2&tr=http%3A%2F%2Fseed-qa.msk.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Ffuel-storage.srt.mirantis.net%2Fcloud-images%2Fubuntu%5F14%5F04-murano-agent%5Fstable%5Fjuno.qcow2'
+          description: 'Image for Murano tests'
+      - string:
+          name: MURANO_IMAGE_26_02_15
+          default: 'magnet:?xt=urn:btih:2dc0bae9f53fc5216126d2b9a2a2450da60055f7&dn=ubuntu%5F14%5F04-murano-agent%5Fstable%5Fjuno%5F26%5F02%5F15.qcow2&tr=http%3A%2F%2Fseed-qa.msk.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Ffuel-storage.srt.mirantis.net%2Fcloud-images%2Fubuntu%5F14%5F04-murano-agent%5Fstable%5Fjuno%5F26%5F02%5F15.qcow2'
+      - string:
+          name: SAHARA_JUNO_HDP
+          default: 'magnet:?xt=urn:btih:9fce644f8ac249f357ee35630724fcc850091c37&dn=sahara-juno-hdp-2.0.6-centos-6.5.qcow2&tr=http%3A%2F%2Fseed-qa.msk.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Ffuel-storage.srt.mirantis.net%2Fcloud-images%2Fsahara-juno-hdp-2.0.6-centos-6.5.qcow2'
+          description: 'https://bugs.launchpad.net/fuel/+bug/1413183'
+      - string:
+          name: SAHARA_JUNO_VANILLA
+          default: 'magnet:?xt=urn:btih:02b1c9666009c793d06655d61de3d8dd85ca7118&dn=sahara-juno-vanilla-2.4.1-ubuntu-14.04.qcow2&tr=http%3A%2F%2Fseed-qa.msk.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Ffuel-storage.srt.mirantis.net%2Fcloud-images%2Fsahara-juno-vanilla-2.4.1-ubuntu-14.04.qcow2'
+          description: 'https://bugs.launchpad.net/fuel/+bug/1413183'
+    publishers:
+      - email:
+          notify-every-unstable-build: false
+          recipients: 'devops+alert@mirantis.com'
+    wrappers:
+      - timeout:
+          timeout: 60
