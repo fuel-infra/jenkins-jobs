@@ -26,6 +26,26 @@
           name: NEUTRON_ENABLE
           default: 'true'
       - string:
+          name: UBUNTU_MIRROR_ID
+          default: latest-stable
+          description: |
+            'latest' - latest available; 'latest-stable' - mirror from successful run of 6.1.test_all job; 'ubuntu-2015-01-01-030500'
+      - string:
+          name: MIRROR_UBUNTU
+          default:
+          description: |
+            If empty, it will be set automatically based on UBUNTU_MIRROR_ID value.
+            <p>
+            deb http://../ubuntu trusty main universe multiverse|deb http://../ubuntu trusty-updates main universe multiverse|deb http://../ubuntu trusty-security main universe multiverse|deb http://../ubuntu trusty-proposed main universe multiverse
+      - string:
+          name: EXTRA_DEB_REPOS
+          default: ''
+          description: 'deb http://... trusty main'
+      - string:
+          name: EXTRA_DEB_REPOS_PRIORITY
+          default: '1052'
+
+      - string:
           name: ENV_PREFIX
           default: 6.1.custom.ubuntu.bvt_2
           description: Define env prefix name. This parameter should not be changed
