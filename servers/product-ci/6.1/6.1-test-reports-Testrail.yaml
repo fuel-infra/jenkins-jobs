@@ -1,0 +1,30 @@
+- job:
+    name: '6.1-test-reports-Testrail'
+    builders:
+      - shell:
+          !include-raw builders/6.1-test-reports-Testrail.sh
+
+    node: testrail
+    publishers:
+      - email:
+          recipients: ishamrai@mirantis.com, devops+alert@mirantis.com
+
+    triggers:
+      - timed: 'H */2 * * *'
+
+    scm:
+     - main-git:
+          reponame: 'fuel-qa'
+          repobranch: ''
+          basedir: ''
+
+
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
+
+    publishers:
+      - description-setter:
+          regexp: '^.*Report URL:\s*(.*)'
+          description: '<a href="\1">TestRail Report URL</a>'
