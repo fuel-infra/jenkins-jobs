@@ -1,3 +1,7 @@
+#!/bin/bash
+
+set -ex
+
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin:${PATH}
 
 ACT=0
