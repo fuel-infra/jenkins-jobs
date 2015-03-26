@@ -1,0 +1,34 @@
+- job:
+    name: 'label_job_manager'
+    node: master
+    description: |
+      This is an example job which used label_job_manager groovy script,
+      for adding/removing labels from Jenkins Slave Nodes (explicitly specified
+      or randomly selected).
+    builders:
+      - system-groovy:
+          command:
+            !include-raw './builders/label_job_manager.groovy'
+    parameters:
+      - choice:
+          name: ACTION
+          choices:
+            - REMOVE_LABEL
+            - ADD_LABEL
+          description: "Choose action to perform"
+      - string:
+          name: LABEL_NAME
+      - string:
+          name: NODE
+          description: |
+            Pass node names (one ore more) on which action should be performed.
+            Set here a number of nodes, which you want to be selected randomly, when RANDOM_NODES
+            is set to True.
+      - bool:
+          name: RANDOM_NODES
+          description: |
+            Select this option if you want to randomly choose nodes.
+            Remember to specify the number of how many to select using the
+            `NODE` parameter.
+          default: false
+
