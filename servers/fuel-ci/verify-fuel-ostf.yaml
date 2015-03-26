@@ -31,7 +31,7 @@
             - gerrit:
                 refspec: '{refspec}'
                 url: https://review.openstack.org/stackforge/fuel-ostf.git
-          choosing-strategy: gerrit
+          choosing-strategy: '{choosing-strategy}'
     triggers:
       - gerrit:
           trigger-on:
@@ -42,7 +42,7 @@
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
-      - timed: '0 12 * * *'
+      - timed: '{timed}'
     wrappers:
       - ansicolor:
           colormap: css
@@ -61,9 +61,13 @@
           trigger-on: patchset-created-event
           email-type: default
           refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+          timed: '0 12 * * *'
       - '{prefix}-fuel-ostf':
           prefix: gate
           trigger-on: change-merged-event
           email-type: alert-on-merge
           refspec: refs/heads/$GERRIT_BRANCH
+          choosing-strategy: default
+          timed: ''
 
