@@ -11,12 +11,12 @@
       Minimal times parameters (in days, for different job types): STAGING, SYSTEM_TEST, OTHER.
     concurrent: true
     parameters:
-        - node:
-            name: NODE
-            allowed-multiselect: true
-        - string:
-            name: VENV
-            default: '/home/jenkins/venv-nailgun-tests'
+        - bool:
+            name: 'DEVOPS_2_9'
+            default: true
+        - bool:
+            name: 'DEVOPS_2_5'
+            default: true
         - string:
             name: STAGING
             default: '2'
@@ -30,3 +30,17 @@
       - timeout:
           fail: true
           timeout: 5
+
+- job:
+    name: 'cleaner-on-labels'
+    node: 'runner'
+    parameters:
+      - string:
+          name: 'LABEL'
+          default: 'systest'
+    builders:
+      - trigger-builds:
+        - project: 'cleaner'
+          parameter-factories:
+            - factory: allnodesforlabel
+              node-label: $LABEL
