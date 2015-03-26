@@ -105,14 +105,6 @@
             Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
             Example: <b> foo,http://my.cool.repo/rpm   bar,ftp://repo.foo </b>
       - string:
-          name: EXTRA_DEB_REPOS
-          default: ''
-          description: |
-            Additional Ubuntu repos. Each repo must consist of an url, dist and section parts.<br>
-            Repos must be separated by bar <b>|</b>, for example: <b> URL1 path dist section|URL2 path dist section|...</b><br>
-            For example: <b>http://mrr.lcl raring main|http://mirror.yandex.ru/ubuntu precise
-            main|http://osci-obs.vm.mirantis.net:82/mox-ubuntu-fuel-6.0-stable/ubuntu/ ./</b>
-      - string:
           name: MIRANTIS
           default: 'yes'
           description: yes or no. Deprecated.
