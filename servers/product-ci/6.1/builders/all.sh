@@ -1,5 +1,7 @@
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin:$PATH
 
+echo STARTED_TIME="`date -u +'%Y-%m-%dT%H:%M:%S'`" > ci_status_params.txt
+
 export FEATURE_GROUPS=mirantis
 
 PROD_VER=`grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2`
@@ -103,3 +105,4 @@ fi
 
 echo "BUILD FINISHED. (`date -u`)"
 
+echo FINISHED_TIME="`date -u +'%Y-%m-%dT%H:%M:%S'`" >> ci_status_params.txt

@@ -67,6 +67,7 @@
             REPORTED_JOB_URL=$BUILD_URL
         - project: fuel_ci-status_reports
           condition: UNSTABLE_OR_BETTER
+          property-file: ci_status_params.txt
           predefined-parameters: |
             RELEASE=6.0
             BUILD=fuel-6.0.1-$BUILD_NUMBER
