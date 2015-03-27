@@ -56,8 +56,8 @@ def last_build_timestamp(jobs, job_name):
 
 # remove environment
 def local_remove_env(dos_path, env_name):
-    print 'Removing: ', dos_path, env_name
-    #subprocess.check_output([dos_path, 'erase', env_name])
+    print 'Removing: %s' % env_name
+    subprocess.check_output([dos_path, 'erase', env_name])
 
 # cleaner itself
 for devops_path in devops:

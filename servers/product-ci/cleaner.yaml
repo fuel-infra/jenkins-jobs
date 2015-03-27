@@ -11,6 +11,9 @@
       Minimal times parameters (in days, for different job types): STAGING, SYSTEM_TEST, OTHER.
     concurrent: true
     parameters:
+        - node:
+            name: NODE
+            allowed-multiselect: true
         - bool:
             name: 'DEVOPS_2_9'
             default: true
@@ -44,3 +47,4 @@
           parameter-factories:
             - factory: allnodesforlabel
               node-label: $LABEL
+              name: 'NODE'
