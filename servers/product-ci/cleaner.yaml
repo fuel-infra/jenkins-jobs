@@ -25,7 +25,7 @@
             default: '2'
         - string:
             name: SYSTEMTEST
-            default: '2'
+            default: '1'
         - string:
             name: OTHER
             default: '2'
@@ -40,7 +40,9 @@
     parameters:
       - string:
           name: 'LABEL'
-          default: 'systest'
+          default: 'cleanable'
+    triggers:
+      - timed: '0 1 * * *'
     builders:
       - trigger-builds:
         - project: 'cleaner'
