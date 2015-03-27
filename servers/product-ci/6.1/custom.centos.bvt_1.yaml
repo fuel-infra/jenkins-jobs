@@ -34,7 +34,7 @@
               - 'false'
     scm:
       - git:
-          url: 'https://github.com/stackforge/fuel-qa.git'
+          url: 'https://git.openstack.org/stackforge/fuel-qa.git'
           branches:
             - 'origin/master'
     wrappers:

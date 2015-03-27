@@ -3,7 +3,7 @@
     builders:
       - shell:
           !include-raw './builders/build-vpnaas-plugin.sh'
-    description: '<a href=https://github.com/stackforge/fuel-plugin-neutron-vpnaas>Build VPNaaS plugin from fuel-plugins project</a>'
+    description: '<a href=https://git.openstack.org/stackforge/fuel-plugin-neutron-vpnaas>Build VPNaaS plugin from fuel-plugins project</a>'
     logrotate:
       numToKeep: 10
     node: tpi71

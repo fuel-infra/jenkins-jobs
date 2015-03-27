@@ -43,22 +43,22 @@
           default: 'master'
       - string:
           name: FUELLIB_REPO
-          default: 'https://github.com/stackforge/fuel-library.git'
+          default: 'https://git.openstack.org/stackforge/fuel-library.git'
       - string:
           name: NAILGUN_REPO
-          default: 'https://github.com/stackforge/fuel-web.git'
+          default: 'https://git.openstack.org/stackforge/fuel-web.git'
       - string:
           name: ASTUTE_REPO
-          default: 'https://github.com/stackforge/fuel-astute.git'
+          default: 'https://git.openstack.org/stackforge/fuel-astute.git'
       - string:
           name: OSTF_REPO
-          default: 'https://github.com/stackforge/fuel-ostf.git'
+          default: 'https://git.openstack.org/stackforge/fuel-ostf.git'
       - string:
           name: PYTHON_FUELCLIENT_REPO
-          default: 'https://github.com/stackforge/python-fuelclient.git'
+          default: 'https://git.openstack.org/stackforge/python-fuelclient.git'
       - string:
           name: FUELMAIN_REPO
-          default: 'https://github.com/stackforge/fuel-main.git'
+          default: 'https://git.openstack.org/stackforge/fuel-main.git'
       - choice:
           name: USE_MIRROR
           choices:
@@ -111,7 +111,7 @@
       - string:
           name: FEATURE_GROUPS
           default: 'mirantis'
-          description: https://github.com/stackforge/fuel-specs/blob/master/specs/5.1/feature-groups.rst
+          description: https://git.openstack.org/stackforge/fuel-specs/blob/master/specs/5.1/feature-groups.rst
       - string:
           name: MIRROR_BASE
           default: ''

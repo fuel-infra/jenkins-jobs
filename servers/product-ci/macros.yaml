@@ -96,7 +96,7 @@
     name: stackforge
     scm:
       - git:
-          url: 'https://github.com/stackforge/{repo}.git'
+          url: 'https://git.openstack.org/stackforge/{repo}.git'
           branches:
             - 'origin/{branch}'
           wipe-workspace: false
