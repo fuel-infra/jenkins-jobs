@@ -3,7 +3,10 @@
     builders:
       - shell:
           !include-raw builders/run_system_test.sh
-      - shell:
+      - shell: |
+          #!/bin/bash
+          set -ex
+          source ${VENV_PATH}/bin/activate
           dos.py erase ${JOB_NAME}_system_test
     concurrent: true
     description:
