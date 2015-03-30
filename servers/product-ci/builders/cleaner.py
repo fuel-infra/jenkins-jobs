@@ -107,6 +107,10 @@ for devops_path in devops:
             if (server_latest_ts - local_timestamp) > datetime.timedelta(hours=5):
                 print '- this build is safe to remove'
                 local_remove_env(dos_path, env_name)
+            # safety delta of 2 days (for builds created before applying new devops version)
+            elif (local_timestamp - server_latest_ts) > datetime.timedelta(days=2):
+                print '- this build is safe to remove (has wrong env date)'
+                local_remove_env(dos_path, env_name)
             else:
                 print '- this build is not safe to remove (too close to the most recent build)'
         else:
