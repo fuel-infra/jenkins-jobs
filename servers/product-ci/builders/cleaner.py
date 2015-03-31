@@ -87,8 +87,12 @@ for devops_path in devops:
             print '- environment is env_* - skipping'
             continue
         env_lifetime_days = get_lifetime(env_name)
+        # if older then 10 days - just delete
+        if (datetime.datetime.now() - local_timestamp) > datetime.timedelta(days=10):
+            print '- this build is safe to remove (older then 10 days)'
+            local_remove_env(dos_path, env_name)
         # if lifetime expired - check if ready to erase
-        if (datetime.datetime.now() - local_timestamp) > datetime.timedelta(days=env_lifetime_days):
+        elif (datetime.datetime.now() - local_timestamp) > datetime.timedelta(days=env_lifetime_days):
             print '- old enough to be analysed (%s)' % local_timestamp
             print '- looking for a job by name (%s)' % env_name
             server_side_job = server_get_job_by_name(jobs, env_name)
