@@ -22,6 +22,10 @@
       - string:
           name: DELTA
           default: '1'
+      - string:
+          name: STARTED_TIME
+      - string:
+          name: FINISHED_TIME
       - bool:
           name: LAST_STAGE
           default: false
