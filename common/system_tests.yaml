@@ -96,5 +96,7 @@
         fail: false
         timeout: '{timeout}'
         write-description: false
+    - inject-passwords:
+        global: true
     - ansicolor:
         colormap: xterm

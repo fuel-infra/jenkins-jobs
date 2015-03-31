@@ -69,12 +69,20 @@
          properties: |
            SLAVE_NODE_MEMORY=6144
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+           EXTERNAL_MONGO_URLS="172.18.10.137,172.18.10.138,172.18.10.139"
+           EXTERNAL_MONGO_USER="ceilometer"
+           EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+           EXTERNAL_MONGO_REPL_SET="ceilometer"
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha_one_controller'
          weight: '12'
          properties: |
            SLAVE_NODE_MEMORY=6144
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+           EXTERNAL_MONGO_URLS="172.18.10.137,172.18.10.138,172.18.10.139"
+           EXTERNAL_MONGO_USER="ceilometer"
+           EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+           EXTERNAL_MONGO_REPL_SET="ceilometer"
 
 - project:
     name: 6.1.upgrades
