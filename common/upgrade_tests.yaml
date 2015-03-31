@@ -89,7 +89,7 @@
         repobranch: '{base_repobranch}'
         basedir: 'BASE'
     - main-git:
-        reponame: 'fuel-main'
+        reponame: 'fuel-qa'
         repobranch: '{upgrade_repobranch}'
         basedir: 'UPGRADE'
 
