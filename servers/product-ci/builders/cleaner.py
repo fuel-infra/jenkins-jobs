@@ -89,7 +89,7 @@ for devops_path in devops:
         env_lifetime_days = get_lifetime(env_name)
         # if older then 10 days - just delete
         if (datetime.datetime.now() - local_timestamp) > datetime.timedelta(days=10):
-            print '- this build is safe to remove (older then 10 days)'
+            print '- this build is safe to remove (%s - older then 10 days)' % local_timestamp
             local_remove_env(dos_path, env_name)
         # if lifetime expired - check if ready to erase
         elif (datetime.datetime.now() - local_timestamp) > datetime.timedelta(days=env_lifetime_days):
