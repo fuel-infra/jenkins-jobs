@@ -91,6 +91,7 @@
 
 - job:
     name: '6.1.test_all'
+    project-type: multijob
     description: |
       Trigger tests for fresh ISO
       <p>
@@ -119,11 +120,22 @@
     builders:
       - shell:
           !include-raw builders/test_all.sh
-      - trigger-builds:
-        - project: '6.1.centos.bvt_1,6.1.ubuntu.bvt_2,6.1.centos.smoke_nova,6.1.ubuntu.smoke_neutron'
-          condition: UNSTABLE_OR_BETTER
-          property-file: properties_file.txt
-          block: true
+      - multijob:
+          name: Run_BVT_and_Smoke
+          condition: ALWAYS
+          projects:
+            - name: '6.1.centos.bvt_1'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+            - name: '6.1.ubuntu.bvt_2'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+            - name: '6.1.centos.smoke_nova'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+            - name: '6.1.ubuntu.smoke_neutron'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
     publishers:
       - email-systest:
           body-failed:
