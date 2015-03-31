@@ -34,6 +34,8 @@
            MULTIPLE_NETWORKS=true
            FUEL_STATS_ENABLED=true
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_non_func_1'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'bonding_ha'
          properties: |
            BONDING=true
