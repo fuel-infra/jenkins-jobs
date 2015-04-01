@@ -11,7 +11,7 @@ export TESTRAIL_PASSWORD=${TESTRAIL_PASSWORD}
 source /home/jenkins/venv-nailgun-tests-2.9/bin/activate
 export SwarmRunnerName='6.1.swarm.runner'
 export Smoke_BVT='6.1.all'
-export TestrailCMDPath="fuel-qa/fuelweb_test/testrail/report.py"
+export TestrailCMDPath="fuelweb_test/testrail/report.py"
 
 # TEPMORARY(START)
 # Report tests results from Smoke/BVT
