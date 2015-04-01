@@ -15,7 +15,7 @@
     scm:
       - main-git:
           reponame: 'fuel-main'
-          repobranch: ''
+          repobranch: 'origin/stable/6.0'
           basedir: ''
 
 
