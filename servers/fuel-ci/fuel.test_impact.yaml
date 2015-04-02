@@ -31,6 +31,7 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           silent: true
+          readable-message: true
     wrappers:
       - timeout:
           timeout: 3

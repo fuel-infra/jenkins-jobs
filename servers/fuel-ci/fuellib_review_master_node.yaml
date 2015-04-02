@@ -49,6 +49,7 @@
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'
+          readable-message: true
     wrappers:
       - ansicolor:
           colormap: xterm
