@@ -1,0 +1,20 @@
+- job:
+    name: 'testrail_reports'
+    description:
+      !include-raw descriptions/testrail_reports
+    builders:
+      - shell:
+          !include-raw './builders/testrail_reports.sh'
+    node: testrail
+    publishers:
+      - email:
+          recipients: devops+alert@mirantis.com
+    scm:
+      - main-git:
+          reponame: 'fuel-qa'
+          repobranch: 'origin/master'
+          basedir: ''
+    wrappers:
+      - inject-passwords:
+          global: true
+          mask-password-params: true
