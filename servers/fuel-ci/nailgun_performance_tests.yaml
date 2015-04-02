@@ -1,4 +1,5 @@
 - job:
+    name: nailgun_performance_tests
     builders:
       - shell:
           !include-raw builders/nailgun_performance_tests.sh
@@ -6,7 +7,6 @@
     logrotate:
       artifactDaysToKeep: 30
       daysToKeep: 30
-    name: nailgun_performance_tests
     node: fuel-web-master
     properties:
       - heavy-job:
@@ -29,6 +29,63 @@
             - '*/master'
     triggers:
       - timed: '0 8,20 * * *'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 45
+
+- job:
+    name: verify-nailgun_performance_tests
+    builders:
+      - shell:
+          !include-raw builders/nailgun_performance_tests.sh
+    description: |
+      Verify nailgun performance tests for patches.
+      Uses artifacts from "nailgun_performance_tests" and do not store it's own.
+      Uses venv with python2.6"
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: fuel-web-master
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - one-nailgun-db-per-node
+          max-per-node: 1
+          option: category
+    publishers:
+      - email:
+          recipients: ksambor@mirantis.com, skalinowski@mirantis.com, devops+alert@mirantis.com
+          send-to-individuals: false
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-web.git
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-web
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+              file-paths:
+                - compare-type: ANT
+                  pattern: nailgun/nailgun/test/performance/**
+      - timed: '0 9 * * *'
     wrappers:
       - timeout:
           fail: true
