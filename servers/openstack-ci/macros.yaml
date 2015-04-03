@@ -91,6 +91,8 @@
                   branch-pattern: '{branch}'
               file-paths:
                 - compare-type: 'ANT'
+                  pattern: 'tests/**'
+                - compare-type: 'ANT'
                   pattern: '{files}'
             - project-compare-type: 'ANT'
               project-pattern: '{code-project}'
