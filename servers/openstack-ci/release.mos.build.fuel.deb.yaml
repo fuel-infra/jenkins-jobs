@@ -1,0 +1,88 @@
+- job-template:
+    name: '{release}.{name}.build-fuel-deb'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: false
+    node: osci-fuel-meta-ubuntu
+    logrotate:
+      daysToKeep: 100
+    wrappers:
+      - openstack-ci-jenkins
+    parameters:
+      - string:
+          name: PROJECTNAME
+          default: 'fuel-{release}'
+      - string:
+          name: PROJECT_VERSION
+          default: '{release}'
+      - string:
+          name: OBSURL
+          default: 'https://obs-1.mirantis.com'
+      - string:
+          name: OBSAPI
+          default: '-A https://obs-1.mirantis.com'
+      - string:
+          name:  PRJPREFIX
+          default: '{prjprefix}'
+      - string:
+          name:  PRJSUFFIX
+          default: '{prjsuffix}'
+      - bool:
+          name: UPDATES
+          default: '{updates}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: 'stackforge/fuel-astute'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+              file-paths:
+                - compare-type: 'ANT'
+                  pattern: 'mcagents/**'
+            - project-compare-type: 'ANT'
+              project-pattern: 'stackforge/fuel-main'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+              file-paths:
+                - compare-type: 'ANT'
+                  pattern: 'packages/deb/specs/**'
+            - project-compare-type: 'ANT'
+              project-pattern: 'stackforge/fuel-web'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+              file-paths:
+                - compare-type: 'PLAIN'
+                  pattern: 'bin/fencing-agent.rb'
+                - compare-type: 'PLAIN'
+                  pattern: 'bin/agent'
+                - compare-type: 'PLAIN'
+                  pattern: 'bin/nailgun-agent.cron'
+                - compare-type: 'ANT'
+                  pattern: 'network_checker/**'
+                - compare-type: 'ANT'
+                  pattern: 'tasklib/**'
+          silent: true
+          server-name: review.openstack.org
+    builders:
+      - shell:
+          !include-raw-escape builders/release.build.fuel.deb.sh
+    publishers:
+      - description-setter:
+          regexp: '^Packages: .*$'
+          regexp-for-failed: '^Packages: .*$'
+      - junit:
+          results: '*.xml'
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: true
+    #   - archive:
+    #       artifacts: '**/buildlog.txt'
+    #       allow-empty: true
+
