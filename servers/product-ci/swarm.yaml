@@ -3,6 +3,7 @@
     id: 'system_test'
     node: 'systest'
     timeout: '480'
+    properties: ''
     jobs:
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre_ha'
@@ -11,6 +12,12 @@
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'ceph_multinode_compact'
           upgrade_testgroup: 'upgrade'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'ceph_multinode_compact_neutron'
+          upgrade_testgroup: 'upgrade'
+          properties: |
+            NEUTRON_ENABLE=true
           weight: '8'
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre_ha'

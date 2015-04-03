@@ -33,6 +33,8 @@
     block-downstream: false
     block-upstream: false
     builders:
+    - inject: # overrides
+        properties-content: '{properties}'
     - shell:
         !include-raw-escape 'scripts/run_upgrade_system_test.sh'
     concurrent: true
