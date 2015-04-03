@@ -6,8 +6,12 @@
     name: email-default
     publishers:
       - email-ext:
-          body: 'The build has been triggered without GERRIT_CHANGE_URL and failed.
-            Something is wrong with the merged code'
+          body: |
+            The build has been triggered without GERRIT_CHANGE_URL and failed.
+            Something is wrong with the merged code
+
+            $BUILD_URL
+
           send-to:
             - recipients
           recipients: 'devops+alert@mirantis.net'
@@ -22,6 +26,6 @@
           body: $DEFAULT_CONTENT
           send-to:
             - recipients
-          recipients: '$GERRIT_CHANGE_OWNER_EMAIL'
+          recipients: '$GERRIT_CHANGE_OWNER_EMAIL, devops+fuel-ci-gating@mirantis.com'
           subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
           failure: true
