@@ -66,6 +66,11 @@
       - archive:
           artifacts: '**/*.xml'
           allow-empty: true
+      - trigger-parameterized-builds:
+          - project: '{release}.{name}.abort-package-testing'
+            condition: FAILED
+            current-parameters: true
+            predefined-parameters: ABORT_MODE=on-install-fail
 #      - email:
 #          recipients: ''
 #          notify-every-unstable-build: false

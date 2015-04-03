@@ -33,6 +33,7 @@
       - '{release}.{name}.build-fuel-deb':
           prjprefix: 'trusty-'
       - '{release}.{name}.lint'
+      - '{release}.{name}.abort-package-testing'
 
 - job-group:
     name: '{release}.{name}.rpm'
