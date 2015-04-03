@@ -1,0 +1,91 @@
+- project:
+    name: plugin_name #There should be your plugin mame
+    path_to_fuel_iso: $PWD #There should be a path to FuelISO
+    plugin_repo: plugin_repo #There should be your plugin repo short name
+    email_to: emails_list #There should be list of emails separated by comma
+    jobs:
+      - 'prepare_env'
+      - '{name}.build'
+      - '{name}.deploy'
+
+- job-template:
+    name: 'prepare_env'
+    workspace: '/home/jenkins/fuel-qa'
+    triggers:
+      - timed: "@midnight"
+    builders:
+      - shell:
+          !include-raw './builders/prepare_env.sh'
+    description: 'Prepare environment to testing'
+    logrotate:
+      numToKeep: 10
+    publishers:
+      - email:
+          notify-every-unstable-build: true
+          recipients: '{email_to}'
+
+- job-template:
+    name: '{name}.build'
+    builders:
+      - shell:
+          !include-raw './builders/syntax-build-plugin.sh'
+    description: '<a href=https://github.com/stackforge/{plugin_repo}>Build {name} plugin from fuel-plugins project</a>'
+    logrotate:
+      numToKeep: 10
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          name: ''
+          refspec: $GERRIT_REFSPEC
+          url: 'https://review.openstack.org/stackforge/{plugin_repo}'
+          choosing-strategy: gerrit
+          clean:
+            before: true
+          skip-tag: true
+          wipe-workspace: false
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event:
+                exclude-drafts: true
+                exclude-trivial-rebase: true
+                exclude-no-code-change: true
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/{plugin_repo}'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '**'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+          silent: true
+          escape-quotes: true
+          trigger-for-unreviewed-patches: true
+          server-name: 'review.openstack.org'
+    publishers:
+      - archive:
+          artifacts: '*.rpm'
+      - email:
+          notify-every-unstable-build: true
+          recipients: '{email_to}'
+
+- job-template:
+    name: '{name}.deploy'
+    workspace: '/home/jenkins/fuel-qa'
+    builders:
+      - copyartifact:
+          project: '{name}.build'
+          which-build: last-successful
+      - shell:
+          !include-raw './builders/syntax-build-plugin.sh'
+    description: 'Deploy {name} plugin to prepared environment'
+    logrotate:
+      numToKeep: 10
+    publishers:
+      - email:
+          notify-every-unstable-build: true
+          recipients: '{email_to}'
