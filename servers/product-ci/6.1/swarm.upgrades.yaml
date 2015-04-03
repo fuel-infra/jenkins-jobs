@@ -1,8 +1,13 @@
 - job-group:
-    name: '{version-id}-system_tests-upgrades'
+    name: '6.1-system_tests-upgrades'
+    version-id: '6.1'
     id: 'system_test'
     node: 'systest'
     timeout: '480'
+    base_repobranch: 'origin/stable/6.0'
+    base_iso_magnet_link:
+        !include-raw ../data/6.0-iso
+    upgrade_repobranch: 'origin/master'
     properties: ''
     jobs:
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
