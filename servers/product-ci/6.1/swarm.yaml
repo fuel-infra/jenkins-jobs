@@ -1,0 +1,15 @@
+- project:
+    name: 6.1.upgrades
+    jobs:
+      - '6.1-system_tests-upgrades':
+          dist: 'ubuntu'
+      - '6.1-system_tests-upgrades':
+          dist: 'centos'
+
+- project:
+    name: 6.1.systest
+    jobs:
+      - '6.1-swarm':
+          dist: 'centos'
+      - '6.1-swarm':
+          dist: 'ubuntu'
