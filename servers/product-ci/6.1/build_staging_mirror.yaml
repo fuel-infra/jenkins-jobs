@@ -49,7 +49,7 @@
       - description-setter:
           regexp: ^Updated:.*a href.*
       - archive:
-          artifacts: mirror_staging.txt, osci-mirrors/pkgs-sync-diff-*.log
+          artifacts: mirror_staging.txt, osci-mirrors/pkgs-sync-diff-*.log, *changelog
           latest-only: false
       - trigger-parameterized-builds:
         - project: '6.1.test_staging_mirror'
