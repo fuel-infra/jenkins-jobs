@@ -15,6 +15,7 @@
           users:
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '817edea8-b597-4a6e-9aeb-bad57b109e66'
+            - '35fc8f47-a728-4d5a-bfeb-9338089f31fa'
 
 - wrapper:
     name: ci-build-rpm
@@ -23,6 +24,7 @@
           users:
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '9654daf3-36d4-4998-909e-c4085330b8e7'
+            - '35fc8f47-a728-4d5a-bfeb-9338089f31fa'
 
 - wrapper:
     name: vm-check-install-rpm
