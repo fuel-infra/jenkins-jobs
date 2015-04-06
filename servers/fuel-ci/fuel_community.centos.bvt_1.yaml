@@ -1,6 +1,16 @@
 - job:
     name: 'fuel_community.centos.bvt_1'
     builders:
+      - shell: |
+          #!/bin/bash
+          set -ex
+          source /home/jenkins/venv-nailgun-tests/bin/activate
+          dos.py erase ${JOB_NAME}_system_test || echo "Nothing to erase"
+          deactivate
+
+          source /home/jenkins/venv-nailgun-tests-2.9/bin/activate
+          dos.py erase ${JOB_NAME}_system_test || echo "Nothing to erase"
+          deactivate
       - shell:
           !include-raw builders/run_system_test.sh
       - shell: |
