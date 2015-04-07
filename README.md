@@ -50,7 +50,11 @@ Repo Structure
   Dumps jenkins-job-builder compatible list of plugins
   from Jenkins instance.
 
+  ``utils/gerritsetup.groovy``
 
+  Standalone util to configure Gerrit Trigger plugin on a Jenkins Master.
+  Allows to create a new gerrit server with preconfigured settings, along
+  with adjusting gerrit's global settings.
 
 Review Checklist
 ================
