@@ -31,7 +31,6 @@ if [ $RESULT -eq 0 ] && [ -f "project.envfile" ] ; then
 fi
 
 GERRIT_CMD=gerrit\ review\ $GERRIT_CHANGE_NUMBER,$GERRIT_PATCHSET_NUMBER\ \'--message="$GERRIT_MESSAGE"\'\ --verified\ ${VOTE}
-echo $GERRIT_MESSAGE
 
 TRIES=5
 while true; do
@@ -40,5 +39,20 @@ while true; do
   ((--TRIES)) || :
   sleep 5
 done
+
+##
+## Vote for corresponding CR
+##
+source corr.setenvfile || :
+if [ -n "$CORR_CHANGE_NUMBER" ] ; then
+    GERRIT_CMD=gerrit\ review\ $CORR_CHANGE_NUMBER,$CORR_PATCHSET_NUMBER\ \'--message="$GERRIT_MESSAGE"\'\ --verified\ ${VOTE}
+    TRIES=5
+    while true; do
+        [ "$TRIES" == "0" ] && exit 1
+        vote && break
+        ((--TRIES)) || :
+        sleep 5
+    done
+fi
 
 [ $RESULT -ne 0 ] && exit 1 || :

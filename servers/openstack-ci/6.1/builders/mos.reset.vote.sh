@@ -18,3 +18,20 @@ while true; do
   ((--TRIES)) || :
   sleep 5
 done
+
+##
+## Reset vote for corresponding CR
+##
+source corr.setenvfile || :
+if [ -n "$CORR_CHANGE_NUMBER" ] ; then
+    GERRIT_CMD=gerrit\ review\ $CORR_CHANGE_NUMBER,$CORR_PATCHSET_NUMBER\ \'--message="$GERRIT_MESSAGE"\'\ --verified\ 0
+    TRIES=5
+    while true; do
+        [ "$TRIES" == "0" ] && exit 1
+        vote && break
+        ((--TRIES)) || :
+        sleep 5
+    done
+fi
+
+exit 0
