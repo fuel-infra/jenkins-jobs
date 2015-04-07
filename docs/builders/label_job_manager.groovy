@@ -33,10 +33,8 @@ void remove_label(String node_name=null, String labels=null)
       slave -> slave.nodeName.equals(node)
     }
     for (String label : _labels) {
-      println(label)
       label = slave.labelString.replaceAll(/(^|\W)($label)($|\W)/, "\$1$repl\$3")
       slave.setLabelString(label)
-      println(label)
     }
   }
 }
@@ -56,7 +54,6 @@ void add_label(String node_name=null, String labels=null)
     slave = hudson.model.Hudson.instance.slaves.find {
       slave -> slave.nodeName.equals(node)
     }
-    println(slave.name)
     for(String label : _labels) {
       pattern = /.*\b$label\b.*/
       _old_label = slave.getLabelString()
@@ -72,7 +69,7 @@ String choose_nodes(int nodes)
 {
   def iter = 0
   def pick_nodes = true
-  node_value = ''
+  def node_value = ''
   def pattern = ''
   def _slave = ''
 
@@ -96,14 +93,13 @@ String choose_nodes(int nodes)
         pick_nodes = false
         break
       }
+      iter += 1
     }
-    iter += 1
   }
-  println("Choosen Nodes are: " + node_value)
   return node_value
 }
 
-if(rand_value == true) {
+if(rand_value == "true") {
   if(node_value.isNumber()) {
       node_value = choose_nodes(node_value.toInteger())
     } else {
@@ -120,3 +116,5 @@ else if (action == "REMOVE_LABEL") {
 else {
   throw new NotAllParametersPassed()
 }
+
+println("Selected nodes were: " + node_value)
