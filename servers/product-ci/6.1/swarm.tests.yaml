@@ -1,5 +1,5 @@
 - job-group:
-   name: '6.1-swarm'
+   name: '6.1-system_tests'
    version-id: '6.1'
    id: 'system_test'
    repobranch: 'origin/master'
@@ -64,6 +64,7 @@
            SLAVE_NODE_MEMORY=3072
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
          timeout: '600'
+         node: 'huge-systest'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'repeatable_image_based'
          properties: 'CLASSIC_PROVISIONING=false'
