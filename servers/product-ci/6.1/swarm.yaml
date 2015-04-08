@@ -31,7 +31,7 @@
     parameters:
     builders:
       - shell:
-          !include-raw-escape builders/swarm.timer.sh
+          !include-raw builders/swarm.timer.sh
     triggers:
       - timed: '0 2 * * *'
     publishers:
