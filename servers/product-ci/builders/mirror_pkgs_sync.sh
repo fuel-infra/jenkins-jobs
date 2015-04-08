@@ -7,7 +7,7 @@ DEBMIRROR_OPTS="-a amd64,i386 --di-arch=amd64 -method=rsync --no-check-gpg --pro
 
 RSYNC_PATH=/usr/bin/rsync
 RSYNC_OPTS="-av --delete"
-RSYNC_REMOTE_OPTS="-aH --delete"
+RSYNC_REMOTE_OPTS="-aH"
 
 OUTPUT="[mirror]"
 
@@ -30,14 +30,14 @@ DATE=$(date +%F-%H%M%S)
 TMP_DIR=$(mktemp -d -p ${TMP_PREFIX})
 
 # get prefix for DST_DIR
-PREFIX_DIR=$(echo ${DST_DIR} | cut -f 1 -d {)
+PREFIX_DIR=$(echo ${DST_DIR} | cut -f 1 -d %)
 
 # latest link for current mirror
 LATEST_LINK="${DST_PREFIX}/${PREFIX_DIR}-latest"
 
 # get rsync destination and link-dest parameters
-RSYNC_DEST="${DST_PREFIX}/$(echo ${DST_DIR} | sed -e s/{version}/-${DATE}/g)"
-LAST_DEST="${DST_PREFIX}/$(echo ${DST_DIR} | sed -e s/{version}/-latest/g)"
+RSYNC_DEST="${DST_PREFIX}/$(echo ${DST_DIR} | sed -e s/%version%/-${DATE}/g)"
+LAST_DEST="${DST_PREFIX}/$(echo ${DST_DIR} | sed -e s/%version%/-latest/g)"
 
 # if older version exists, use hardlink switch
 if [ -d ${LAST_DEST} ]
@@ -73,13 +73,17 @@ then
   rm -f ${LATEST_LINK}
   ln -s ${PREFIX_DIR}-${DATE} ${LATEST_LINK}
   echo "${DEFAULT_URL}/${PREFIX_DIR}-${DATE}" > ${LATEST_LINK}.htm
-  OUTPUT+="<a href=${DEFAULT_URL}/${PREFIX_DIR}-${DATE}>$(echo ${DST_DIR} | sed -e s/{version}/-latest/g)</a><br>"
+  OUTPUT+="<a href=${DEFAULT_URL}/${PREFIX_DIR}-${DATE}>$(echo ${DST_DIR} | sed -e s/%version%/-latest/g)</a><br>"
 else
   echo "ERROR: Mirroring of ${RSYNC_DEST} failed!"
   rm -rf ${TMP_DIR}
+  exit 1
 fi
 
 echo ${OUTPUT}
+
+# make temporary file for switching repos
+TMP_SYNC=$(mktemp -p ${TMP_PREFIX})
 
 # synchronize all mirrors
 i=1
@@ -91,13 +95,17 @@ do
   TMPSYNC_DIR=$(mktemp -d -p ${TMP_PREFIX})
   HOST=$(echo ${MIRROR} | cut -f 3 -d '/')
   URL=$(echo ${MIRROR} | cut -f 5- -d '/')
-  cp -P ${LATEST_LINK} $TMPSYNC_DIR/
+  cp -P ${LATEST_LINK} ${TMPSYNC_DIR}/
   echo "http://${HOST}/${URL}/${PREFIX_DIR}-${DATE}" > \
     ${TMPSYNC_DIR}/${PREFIX_DIR}-latest.htm
-  ${RSYNC_PATH} ${RSYNC_REMOTE_OPTS} --exclude '*-latest' --exclude '*-latest.htm' \
-    ${DST_PREFIX}/ ${MIRROR} && ${RSYNC_PATH} -av ${TMPSYNC_DIR}/ ${MIRROR} || STATUS=${?}
-  rm -rf ${TMPSYNC_DIR}
+  ${RSYNC_PATH} ${RSYNC_REMOTE_OPTS} ${RSYNC_DEST} ${MIRROR} && \
+    echo ${RSYNC_PATH} -av ${TMPSYNC_DIR}/ ${MIRROR} >> ${TMP_SYNC} || STATUS=${?}
+  echo rm -rf ${TMPSYNC_DIR} >> ${TMP_SYNC}
 done
+
+# update links on all mirrors
+source ${TMP_SYNC}
+rm ${TMP_SYNC}
 
 if [ ${STATUS} -ne -1 ]
 then
