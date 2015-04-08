@@ -15,7 +15,7 @@
     scm-basedir: ''
     scm-ci-status-basedir: 'ci_status'
     scm-credentials-id: '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
-    scm-branch: 'origin/master-updates'
+    scm-branch: 'origin/master'
     scm-ci-status-branch: 'origin/master'
     install-build-node: 'install-tests'
     install-scm-repo: 'infra/ci-test-request'
