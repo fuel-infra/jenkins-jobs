@@ -13,6 +13,9 @@
           name: GERRIT_REVIEWER
           default: 'openstack-ci-packtest-rpm'
       - string:
+          name: GERRIT_VOTE
+          default: '2'
+      - string:
           name: OBSURL
           default: 'https://osci-obs.vm.mirantis.net'
       - string:
@@ -41,7 +44,11 @@
       - shell:
           !include-raw-escape builders/ci.status.report.start.sh
       - shell:
+          !include-raw-escape builders/mos.reset.vote.sh
+      - shell:
           !include-raw-escape builders/mos.deploy.sh
+      - shell:
+          !include-raw-escape builders/mos.vote.sh
     publishers:
       - post-tasks:
         - matches:
