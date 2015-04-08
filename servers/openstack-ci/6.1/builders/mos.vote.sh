@@ -9,6 +9,8 @@ vote() {
 
 source setenvfile
 [ -n "$GERRIT_REVIEWER" ] && GERRIT_USER=$GERRIT_REVIEWER
+[ -n "$GERRIT_INSTALL_VOTE" ] && GERRIT_VOTE=$GERRIT_INSTALL_VOTE
+[ -n "$GERRIT_DEPLOY_VOTE" ] && GERRIT_VOTE=$GERRIT_DEPLOY_VOTE
 rm -f setenvfile
 
 if [ $RESULT -eq 0 ]; then

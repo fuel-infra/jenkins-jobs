@@ -15,7 +15,7 @@
           name: GERRIT_REVIEWER
           default: 'vm-check-install-rpm'
       - string:
-          name: GERRIT_VOTE
+          name: GERRIT_INSTALL_VOTE
           default: '1'
       - string:
           name: REQUEST
