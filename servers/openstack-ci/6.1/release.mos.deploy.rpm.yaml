@@ -13,7 +13,7 @@
           name: GERRIT_REVIEWER
           default: 'openstack-ci-packtest-rpm'
       - string:
-          name: GERRIT_VOTE
+          name: GERRIT_DEPLOY_VOTE
           default: '2'
       - string:
           name: OBSURL
