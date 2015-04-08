@@ -98,7 +98,9 @@ do
   cp -P ${LATEST_LINK} ${TMPSYNC_DIR}/
   echo "http://${HOST}/${URL}/${PREFIX_DIR}-${DATE}" > \
     ${TMPSYNC_DIR}/${PREFIX_DIR}-latest.htm
-  ${RSYNC_PATH} ${RSYNC_REMOTE_OPTS} ${RSYNC_DEST} ${MIRROR} && \
+  ${RSYNC_PATH} -v ${RSYNC_REMOTE_OPTS} \
+    --include "${PREFIX_DIR}-*/***" \
+    --exclude "*" ${DST_PREFIX}/ ${MIRROR} && \
     echo ${RSYNC_PATH} -av ${TMPSYNC_DIR}/ ${MIRROR} >> ${TMP_SYNC} || STATUS=${?}
   echo rm -rf ${TMPSYNC_DIR} >> ${TMP_SYNC}
 done
