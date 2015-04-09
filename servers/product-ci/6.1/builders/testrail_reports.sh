@@ -2,9 +2,16 @@
 
 set -ex
 
-export TESTRAIL_TEST_SUITE="Smoke/BVT"
-export TESTRAIL_URL="https://mirantis.testrail.com"
-ISO_BUID=$(echo ${ISO_BUILD_URL%/*}|awk -F/ '{ print $NF }')
+source "${VENV_PATH}/bin/activate"
 
-python fuelweb_test/testrail/report.py --manual --verbose --job-name 6.1.test_all --build-number ${ISO_BUILD}
+if [ -z "$TESTRAIL_TEST_SUITE" -o -z "$TESTRAIL_URL" ]; then
+  echo 1>&2 'ERROR! Some TestRail parameters are not set, default values will be used!'
+  exit 1
+fi
 
+OPTIONS="--verbose"
+if [ -n "$MANUAL" ]; then
+  OPTIONS+=" --manual"
+fi
+
+python fuelweb_test/testrail/report.py  "${OPTIONS}" --job-name "${TESTS_RUNNER}" --build-number "${BUILD_NUMBER}"
