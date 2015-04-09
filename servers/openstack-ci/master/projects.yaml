@@ -1,0 +1,49 @@
+- project:
+    name: 'master.mos'
+    release: master
+    version-id: master
+    build-node: 'osci-fuel-meta-ubuntu'
+    install-build-node: 'install-tests'
+    daysToKeep: 10
+    scm-user: 'openstack-ci-jenkins'
+    scm-credentials-id: '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+    scm-repo: 'infra/obs'
+    scm-branch: 'origin/master'
+    scm-basedir: ''
+    scm-ci-status-repo: 'infra/ci_status'
+    scm-ci-status-branch: 'origin/master'
+    scm-ci-status-basedir: 'ci_status'
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'origin/master'
+    mailto: 'atsamutali@mirantis.com'
+    is-disabled: ''
+    jobs:
+      - 'master.mos.rpm':
+          prjprefix: 'centos-'
+          last_stage: true
+      - 'master.mos.deb':
+          prjprefix: 'trusty-'
+          last_stage: true
+      - 'master.mos.lint'
+
+- job-group:
+    name: 'master.mos.rpm'
+    jobs:
+      - 'master.mos.build-rpm-request':
+          last_stage: false
+      - 'master.mos.build-rpm'
+      - 'master.mos.build-rpm-deps-request':
+          last_stage: false
+      - 'master.mos.build-rpm-deps'
+      - 'master.mos.install-rpm'
+
+- job-group:
+    name: 'master.mos.deb'
+    jobs:
+      - 'master.mos.build-deb-request':
+          last_stage: false
+      - 'master.mos.build-deb'
+      - 'master.mos.build-deb-deps-request':
+          last_stage: false
+      - 'master.mos.build-deb-deps'
+      - 'master.mos.install-deb'

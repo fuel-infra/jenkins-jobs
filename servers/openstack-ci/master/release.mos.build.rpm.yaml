@@ -1,0 +1,64 @@
+- job-template:
+    name: 'master.mos.build-rpm'
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: '{build-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    wrappers:
+      - ci-build-rpm
+    parameters:
+      - string:
+          name: GERRIT_USER
+          default: 'ci-build-rpm'
+      - string:
+          name: GERRIT_VOTE
+          default: '1'
+      - string:
+          name: OBSURL
+          default: 'https://osci-obs.vm.mirantis.net'
+      - string:
+          name: OBSAPI
+          default: '-A https://osci-obs.vm.mirantis.net:444'
+      - openstack-build-master:
+          prjprefix: '{prjprefix}'
+          version-id: '{version-id}'
+          last_stage: '{last_stage}'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-branch}'
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-ci-status-repo}'
+          scm-basedir: '{scm-ci-status-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-ci-status-branch}'
+    triggers:
+      - fuel-infra-submit:
+          code-project: 'openstack/**'
+          spec-project: 'openstack-build/**'
+          branch: master
+          files: 'rpm/**'
+    builders:
+      - shell:
+          !include-raw-escape builders/ci.status.report.start.sh
+      - shell:
+          !include-raw-escape builders/mos.build.rpm.sh
+    publishers:
+      - post-tasks:
+        - matches:
+            - log-text: Building
+              operator: AND
+          script:
+            !include-raw-escape builders/ci.status.report.stop.sh
+      - archive:
+          artifacts: '**/buildlog.txt,**/buildresult.xml'
+          allow-empty: true
+      - email:
+          recipients: ''
+          notify-every-unstable-build: false
+          send-to-individuals: true

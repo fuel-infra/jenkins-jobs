@@ -218,7 +218,7 @@
             - 'origin/master'
           wipe-workspace: false
 
-#########################################################################
+########################################################################
 ## Section: Parameters
 ########################################################################
 - parameter:
@@ -285,6 +285,38 @@
       - bool:
           name: UPDATES
           default: '{updates}'
+      - bool:
+          name: LAST_STAGE
+          default: '{last_stage}'
+
+- parameter:
+    name: openstack-build-master
+    parameters:
+      - string:
+          name: URL
+          default: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/'
+      - string:
+          name: PRJPREFIX
+          default: '{prjprefix}'
+      - string:
+          name: PROJECTNAME
+          default: '{prjprefix}fuel-{version-id}'
+      - bool:
+          name: LAST_STAGE
+          default: '{last_stage}'
+
+- parameter:
+    name: dependencies-build-master
+    parameters:
+      - string:
+          name: URL
+          default: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/'
+      - string:
+          name: PRJPREFIX
+          default: '{prjprefix}'
+      - string:
+          name: PROJECTNAME
+          default: '{prjprefix}fuel-{version-id}'
       - bool:
           name: LAST_STAGE
           default: '{last_stage}'
