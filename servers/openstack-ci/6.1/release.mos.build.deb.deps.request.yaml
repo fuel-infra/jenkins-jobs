@@ -59,8 +59,12 @@
       - trigger-builds:
           - project: '{release}.{name}.install-deb'
             current-parameters: true
+            property-file: 'project.envfile,tests.envfile'
+            property-file-fail-on-missing: false
           - project: '{release}.{name}.deploy-deb'
             current-parameters: true
+            property-file: 'project.envfile,tests.envfile'
+            property-file-fail-on-missing: false
             predefined-parameters: 'BRANCH=${{SOURCEBRANCH}}'
     publishers:
       - post-tasks:

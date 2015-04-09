@@ -64,12 +64,12 @@
       - trigger-builds:
           - project: '{release}.{name}.install-deb'
             current-parameters: true
-            property-file: 'corr.setenvfile'
+            property-file: 'corr.setenvfile,project.envfile,tests.envfile'
             property-file-fail-on-missing: false
           - project: '{release}.{name}.deploy-deb'
             current-parameters: true
             predefined-parameters: 'BRANCH=${{GERRIT_BRANCH}}'
-            property-file: 'corr.setenvfile'
+            property-file: 'corr.setenvfile,project.envfile,tests.envfile'
             property-file-fail-on-missing: false
     publishers:
        - post-tasks:
