@@ -84,7 +84,7 @@
           timeout: 1200
     builders:
       - shell: # Get description from MAGNET_LINK variable
-          !include-raw-escape builders/get_version_from_magnet.sh
+          !include-raw builders/get_version_from_magnet.sh
       - multijob:
           name: 'Run system tests'
           condition: COMPLETED
