@@ -154,7 +154,7 @@
           predefined-parameters: |
             TESTS_RUNNER=$JOB_NAME
             BUILD_NUMBER=$BUILD_NUMBER
-            VENV_PATH="/home/jenkins/venv-nailgun-tests-2.9"
-            TESTRAIL_TEST_SUITE="Smoke/BVT"
-            TESTRAIL_URL="https://mirantis.testrail.com"
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+            TESTRAIL_TEST_SUITE=Smoke/BVT
+            TESTRAIL_URL=https://mirantis.testrail.com
             MANUAL=true

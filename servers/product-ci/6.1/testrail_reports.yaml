@@ -38,3 +38,7 @@
       - inject-passwords:
           global: true
           mask-password-params: true
+    publishers:
+      - description-setter:
+          regexp: '^.*Report URL:\s*(.*)'
+          description: '<a href="\1">TestRail Report URL</a>'
