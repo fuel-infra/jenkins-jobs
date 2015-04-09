@@ -51,6 +51,8 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'cluster_actions'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'cic_maintenance_mode'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive'

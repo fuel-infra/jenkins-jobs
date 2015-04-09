@@ -117,6 +117,9 @@
             - name: '6.1.system_test.centos.cluster_actions'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '6.1.system_test.centos.cic_maintenance_mode'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '6.1.system_test.centos.ha_neutron'
               current-parameters: true
               kill-phase-on: NEVER
@@ -170,6 +173,9 @@
               current-parameters: true
               kill-phase-on: NEVER
             - name: '6.1.system_test.ubuntu.cluster_actions'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '6.1.system_test.ubuntu.cic_maintenance_mode'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '6.1.system_test.ubuntu.ha_neutron'
