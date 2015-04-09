@@ -132,6 +132,9 @@
             - name: '6.1.system_test.centos.repeatable_image_based'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '6.1.system_test.centos.classic_provisioning'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '6.1.system_test.centos.known_issues'
               current-parameters: true
               kill-phase-on: NEVER
@@ -188,6 +191,9 @@
               current-parameters: true
               kill-phase-on: NEVER
             - name: '6.1.system_test.ubuntu.repeatable_image_based'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '6.1.system_test.ubuntu.classic_provisioning'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '6.1.system_test.ubuntu.known_issues'
