@@ -5,7 +5,7 @@
     concurrent: true
     node: '{install-build-node}'
     logrotate:
-      daysToKeep: 100
+      daysToKeep: '{daysToKeep}'
     wrappers:
       - vm-check-install-trusty
       - pre-scm-buildstep:

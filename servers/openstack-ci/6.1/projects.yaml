@@ -9,6 +9,7 @@
     build-node: 'osci-fuel-meta-ubuntu'
     mailto: 'dburmistrov@mirantis.com'
     is-disabled: ''
+    daysToKeep: 10
     scm-user: 'openstack-ci-jenkins'
     scm-repo: 'infra/obs'
     scm-ci-status-repo: 'infra/ci_status'

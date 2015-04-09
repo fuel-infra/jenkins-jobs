@@ -5,7 +5,7 @@
     concurrent: false
     node: osci-fuel-meta-ubuntu
     logrotate:
-      daysToKeep: 100
+      daysToKeep: '{daysToKeep}'
     wrappers:
       - openstack-ci-jenkins
     parameters:

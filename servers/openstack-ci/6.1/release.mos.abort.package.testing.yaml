@@ -5,7 +5,7 @@
     concurrent: true
     node: master
     logrotate:
-      daysToKeep: 100
+      daysToKeep: '{daysToKeep}'
     parameters:
       - string:
           name: ABORT_MODE

@@ -5,7 +5,7 @@
     concurrent: true
     node: '{packtest-build-node}'
     logrotate:
-      daysToKeep: 100
+      daysToKeep: '{daysToKeep}'
     wrappers:
       - openstack-ci-packtest-deb
     parameters:
