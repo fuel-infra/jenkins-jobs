@@ -1,6 +1,11 @@
 #!/bin/bash -ex
 export GERRIT_USER="openstack-ci-jenkins"
-RELEASE=`echo $SOURCEBRANCH | egrep -o 'fuel-[0-9.]*' | egrep -o '[0-9.]*' | cat `
+GERRIT_BRANCH=${GERRIT_BRANCH:-"$SOURCEBRANCH"}
+if echo $GERRIT_BRANCH | grep fuel ; then
+     RELEASE=`echo $GERRIT_BRANCH | egrep -o 'fuel-[0-9.]*' | egrep -o '[0-9.]*' | cat`
+else RELEASE=$GERRIT_BRANCH
+fi
+
 if [ `echo $JOB_NAME | grep deb` ] ; then
    if [ "$RELEASE" == "6.1" ] ; then export REQUEST_TYPE="Trusty" ; else export REQUEST_TYPE="Precise" ; fi ; DISTR="deb" ;
 elif [ `echo $JOB_NAME | grep rpm` ] ; then export REQUEST_TYPE="Centos6" ; DISTR="rpm" ;
