@@ -19,9 +19,7 @@ export VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
 #test params
 export UPLOAD_MANIFESTS=true
 export UPLOAD_MANIFESTS_PATH=/home/jenkins/workspace/${JOB_NAME}/deployment/puppet/
-export CUSTOM_ENV=true
-export BUILD_IMAGES=true
-export TEST_GROUP="smoke_neutron"
+export TEST_GROUP="hiera_deploy"
 
 VERSION_STRING=`readlink ${ISO_PATH} | cut -d '-' -f 2-3`
 echo "Description string: ${VERSION_STRING}"

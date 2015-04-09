@@ -5,9 +5,7 @@
           !include-raw builders/fuellib_review_master_node.sh
     concurrent: true
     description: |
-      Runs smoke_neutron test group with:<br>
-      CUSTOM_ENV=true<br>
-      BUILD_IMAGES=true<br>
+      Runs hiera_deploy test group with:<br>
       UPLOAD_MANIFESTS=true<br>
       UPLOAD_MANIFESTS_PATH=/home/jenkins/workspace/${JOB_NAME}/deployment/puppet/
     logrotate:
