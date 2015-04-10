@@ -49,7 +49,7 @@ echo "ENV VARIABLES START"
 printenv
 echo "ENV VARIABLES END"
 
-make $make_args iso img version-yaml
+make $make_args iso version-yaml
 
 #########################################
 

@@ -98,7 +98,7 @@ make deep_clean
 
 echo "STEP 1. Make everything"
 
-make ${make_args} iso img version-yaml ${add_make_target}
+make ${make_args} iso version-yaml ${add_make_target}
 
 #########################################
 
@@ -130,9 +130,8 @@ grep MAGNET_LINK ${ARTS_DIR}/*iso.data.txt > ${ARTS_DIR}/magnet_link.txt
 ISO_MAGNET_LINK=$(grep MAGNET_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/MAGNET_LINK=//')
 ISO_HTTP_LINK=$(grep HTTP_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_LINK=//')
 ISO_HTTP_TORRENT=$(grep HTTP_TORRENT ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_TORRENT=//')
-IMG_HTTP_TORRENT=$(grep HTTP_TORRENT ${ARTS_DIR}/*img.data.txt | sed 's/HTTP_TORRENT=//')
 
-echo "DESCRIPTION=<a href=${ISO_HTTP_TORRENT}>ISO</a> <a href=${IMG_HTTP_TORRENT}>IMG</a>" > ${ARTS_DIR}/status_description.txt
+echo "DESCRIPTION=<a href=${ISO_HTTP_TORRENT}>ISO</a>" > ${ARTS_DIR}/status_description.txt
 
 echo "<a href="${ISO_HTTP_LINK}">ISO download link</a> <a href="${ISO_HTTP_TORRENT}">ISO torrent link</a><br>${ISO_MAGNET_LINK}<br>"
 
