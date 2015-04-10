@@ -32,6 +32,7 @@
             - gerrit:
                 refspec: '{refspec}'
                 url: https://review.openstack.org/stackforge/fuel-library.git
+          timeout: 20
           choosing-strategy: '{choosing-strategy}'
     triggers:
       - gerrit:
