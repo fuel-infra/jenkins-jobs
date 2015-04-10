@@ -2,9 +2,7 @@
 
 set -ex
 
-echo "${GERRIT_CHANGE_COMMIT_MESSAGE}" | base64 -d > gerrit_commit_message.txt 2>/dev/null || true
-
-if grep -q -iE "Fuel-CI:\s+disable" gerrit_commit_message.txt; then
+if echo "${GERRIT_CHANGE_COMMIT_MESSAGE}" | grep -q -iE "Fuel-CI:\s+disable"; then
   echo "Fuel CI check disabled"
   exit -1
 fi

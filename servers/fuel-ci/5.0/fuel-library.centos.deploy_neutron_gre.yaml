@@ -59,6 +59,7 @@
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/5.0'
+          readable-message: true
     wrappers:
       - ansicolor:
           colormap: xterm
