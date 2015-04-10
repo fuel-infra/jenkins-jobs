@@ -23,7 +23,7 @@
     triggers:
       - gerrit:
           trigger-on:
-            - patchset-created-event
+            - change-merged-event
           projects:
             - project-compare-type: ANT
               project-pattern: 'stackforge/fuel**'
