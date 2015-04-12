@@ -42,7 +42,7 @@
           name: 'LABEL'
           default: 'cleanable'
     triggers:
-      - timed: '0 1 * * *'
+      - timed: '0 */5 * * *'
     builders:
       - trigger-builds:
         - project: 'cleaner'
