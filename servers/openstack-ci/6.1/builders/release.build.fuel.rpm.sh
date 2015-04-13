@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-source .debug-default || :
+[ -f .debug-default ] && source .debug-default
 
 [ -z "$GERRIT_USER" ] && GERRIT_USER='openstack-ci-jenkins'
 [ -z "$PRJSUFFIX" ] && PRJSUFFIX="-stable"
