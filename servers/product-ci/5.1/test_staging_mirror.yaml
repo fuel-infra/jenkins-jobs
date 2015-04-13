@@ -27,6 +27,9 @@
       - string:
           name: extra_commits
           description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
+      - string:
+          name: BUILD_MIRROR_URL
+          description: 'http://jenkins-product.srt.mirantis.net:8080/job/5.1.2.build_staging_mirror/100/'
     builders:
       - shell:
           !include-raw builders/test_staging_mirror_1.sh

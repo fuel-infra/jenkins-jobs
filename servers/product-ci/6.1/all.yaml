@@ -39,6 +39,9 @@
       - string:
           name: trigger_community_build
           description: If set to "true" will trigger community build with the same commits
+      - string:
+          name: BUILD_MIRROR_URL
+          description: 'http://jenkins-product.srt.mirantis.net:8080/job/6.1.build_staging_mirror/266/'
     publishers:
       - archive:
           allow-empty: false
@@ -82,6 +85,7 @@
           predefined-parameters: |
             UPSTREAM_BUILD_URL=$BUILD_URL
             UPSTREAM_BUILD_NUMBER=$BUILD_NUMBER
+            BUILD_MIRROR_URL=$BUILD_MIRROR_URL
     scm:
       - stackforge:
           branch: 'master'
@@ -125,6 +129,9 @@
           name: UBUNTU_MIRROR_ID
           default: 'latest'
           description: Use ubuntu-<timestamp> or latest for latest mirror available.
+      - string:
+          name: BUILD_MIRROR_URL
+          description: 'http://jenkins-product.srt.mirantis.net:8080/job/6.1.build_staging_mirror/266/'
     builders:
       - shell:
           !include-raw builders/test_all.sh

@@ -25,6 +25,7 @@ echo "MIRROR_VERSION = ${MIRROR_VERSION}" >>$PARAM_FILE
 echo "STABLE_VERSION = ${MIRROR_VERSION}" >>$PARAM_FILE
 echo "MIRROR_BASE = $MIRROR_BASE" >>$PARAM_FILE
 echo "fuelmain_gerrit_commit = ${extra_commits}" >>$PARAM_FILE
+echo "BUILD_MIRROR_URL = ${BUILD_MIRROR_URL}" >> $PARAM_FILE
 
 if [ -n "$MIRROR_UBUNTU" ]; then
     echo "MIRROR_UBUNTU = $MIRROR_UBUNTU" >>$PARAM_FILE

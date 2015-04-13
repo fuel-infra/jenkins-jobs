@@ -27,6 +27,8 @@
       - string:
           name: ENV_PREFIX
           default: '{version-id}.{id}.{dist}.{testgroup}'
+      - string:
+          name: BUILD_MIRROR_URL
 ########################################################################
 # Section: Properties
 ########################################################################
