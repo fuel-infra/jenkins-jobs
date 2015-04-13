@@ -1,15 +1,15 @@
 - job:
-    name: 'publish_partner_iso'
+    name: 'publish_for_partners'
     description: |
       This job will publish torrent file from MAGNET_LINK parameter provided to partnershare web service. This will allow partner access to selected file.
     builders:
       - shell:
-          !include-raw builders/publish_partner_iso.sh
+          !include-raw builders/publish_for_partners.sh
     concurrent: true
     logrotate:
       daysToKeep: 20
       numToKeep: 20
-    node: publish_partner_iso
+    node: publish_for_partners
     parameters:
       - string:
           name: MAGNET_LINK
