@@ -35,6 +35,7 @@
           prjprefix: 'trusty-'
       - '{release}.{name}.lint'
       - '{release}.{name}.abort-package-testing'
+      - '{release}.{name}.ci-status.report'
 
 - job-group:
     name: '{release}.{name}.rpm'
