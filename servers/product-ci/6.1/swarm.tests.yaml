@@ -86,10 +86,10 @@
            SLAVE_NODE_CPU=2
            KVM_USE=true
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
-           EXTERNAL_MONGO_URLS="172.18.10.137,172.18.10.138,172.18.10.139"
-           EXTERNAL_MONGO_USER="ceilometer"
+           EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
+           EXTERNAL_MONGO_USER=ceilometer
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
-           EXTERNAL_MONGO_REPL_SET="ceilometer"
+           EXTERNAL_MONGO_REPL_SET=ceilometer
          timeout: '1200'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha_one_controller'
@@ -100,8 +100,8 @@
            SLAVE_NODE_CPU=2
            KVM_USE=true
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
-           EXTERNAL_MONGO_URLS="172.18.10.137,172.18.10.138,172.18.10.139"
-           EXTERNAL_MONGO_USER="ceilometer"
+           EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
+           EXTERNAL_MONGO_USER=ceilometer
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
-           EXTERNAL_MONGO_REPL_SET="ceilometer"
+           EXTERNAL_MONGO_REPL_SET=ceilometer
          timeout: '1200'
