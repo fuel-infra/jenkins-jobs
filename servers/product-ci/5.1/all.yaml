@@ -49,12 +49,22 @@
       - email-default:
           mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
       - trigger-parameterized-builds:
+
         - project: 'deploy_iso_on_cachers,5.1.2.smoke,5.1.2.centos.bvt_1,5.1.2.ubuntu.bvt_2'
           condition: UNSTABLE_OR_BETTER
           property-file: magnet_link.txt
+
+        - project: trigger-external-events
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            ISO_VERSION=5.1.2
+            BUILD=fuel-5.1.2-$BUILD_NUMBER
+            REPORTED_JOB_URL=$BUILD_URL
+
         - project: deploy_iso_on_cachers
           condition: UNSTABLE_OR_BETTER
           property-file: upgrade_magnet_link.txt
+
         - project: fuel_ci-status_reports
           condition: UNSTABLE_OR_BETTER
           property-file: ci_status_params.txt

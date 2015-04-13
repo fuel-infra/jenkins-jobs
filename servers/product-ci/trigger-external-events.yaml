@@ -1,0 +1,27 @@
+- job:
+    name: 'trigger-external-events'
+    builders:
+      - shell:
+          !include-raw builders/trigger-external-events.sh
+    description: |
+      Trigger events on external Jenkins instances
+
+      <p>
+        Owned by: Fuel Devops Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #fuel-devops<br/>
+      </p>
+    node: runner
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: ISO_VERSION
+          default: '6.1'
+    publishers:
+      - description-setter:
+          regexp: 'Description string: (.*)'
+          set-for-matrix: false
+      - email-default:
+          mail-to: 'devops+alert@mirantis.com'
