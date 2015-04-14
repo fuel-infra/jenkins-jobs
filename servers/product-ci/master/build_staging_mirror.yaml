@@ -4,7 +4,9 @@
       - shell:
           !include-raw builders/update_reprepro.sh
       - shell:
-          !include-raw builders/build_master_staging_mirror.sh
+          !include-raw builders/build_staging_mirror_1.sh
+      - shell:
+          !include-raw builders/build_staging_mirror_2.sh
     description:
       !include-raw descriptions/master.build_staging_mirror
     logrotate:
@@ -49,12 +51,21 @@
       - description-setter:
           regexp: ^Updated:.*a href.*
       - archive:
-          artifacts: mirror_staging.txt, osci-mirrors/pkgs-sync-diff-*.log
+          artifacts: mirror_staging.txt, osci-mirrors/pkgs-sync-diff-*.log, *changelog*
           latest-only: false
       - trigger-parameterized-builds:
         - project: 'master.test_staging_mirror'
           condition: UNSTABLE_OR_BETTER
           property-file: mirror_staging.txt
+        - project: fuel_ci-status_reports
+          condition: UNSTABLE_OR_BETTER
+          property-file: artifacts/status_description.txt
+          predefined-parameters: |
+            RELEASE=master
+            BUILD=fuel-master-$BUILD_NUMBER
+            STAGE=build
+            VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
     scm:
       - stackforge:
           branch: 'master'
