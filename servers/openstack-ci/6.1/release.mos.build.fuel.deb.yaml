@@ -83,6 +83,6 @@
           notify-every-unstable-build: false
           send-to-individuals: true
     #   - archive:
-    #       artifacts: '**/buildlog.txt'
+    #       artifacts: '**/buildlog.txt, **/buildresult.xml'
     #       allow-empty: true
 

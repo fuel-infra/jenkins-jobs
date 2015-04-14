@@ -70,7 +70,7 @@
            script:
              !include-raw-escape builders/ci.status.report.stop.sh
        - archive:
-           artifacts: '**/buildlog.txt,**/buildresult.xml'
+           artifacts: '**/buildlog.txt, **/buildresult.xml'
            allow-empty: true
        - email:
            recipients: ''
