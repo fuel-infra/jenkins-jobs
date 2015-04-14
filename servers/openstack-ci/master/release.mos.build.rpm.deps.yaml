@@ -1,6 +1,6 @@
 - job-template:
     name: 'master.mos.build-rpm-deps'
-    disabled: '{is-disabled}'
+    disabled: true
     concurrent: true
     node: '{build-node}'
     logrotate:

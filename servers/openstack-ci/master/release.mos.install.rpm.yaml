@@ -1,6 +1,6 @@
 - job-template:
     name: 'master.mos.install-rpm'
-    disabled: '{is-disabled}'
+    disabled: true
     concurrent: true
     node: '{install-build-node}'
     logrotate:
