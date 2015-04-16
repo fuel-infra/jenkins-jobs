@@ -49,7 +49,7 @@ DATA_FILE=`/usr/bin/time seedclient-wrapper -dvm "${DATA_MAGNET_LINK}" --force-s
 #########################################
 
 echo "STEP 2. Make everything (`date -u`)"
-/usr/bin/time make ${make_args} UPGRADE_VERSIONS="${PROD_VER}:${BASE_VERSION}" BASE_VERSION=${BASE_VERSION} iso img upgrade-lrzip bootstrap docker centos-repo ubuntu-repo centos-diff-repo ubuntu-diff-repo version-yaml openstack-yaml
+/usr/bin/time make ${make_args} UPGRADE_VERSIONS="${PROD_VER}:${BASE_VERSION}" BASE_VERSION=${BASE_VERSION} iso upgrade-lrzip bootstrap docker centos-repo ubuntu-repo centos-diff-repo ubuntu-diff-repo version-yaml openstack-yaml
 
 #########################################
 
