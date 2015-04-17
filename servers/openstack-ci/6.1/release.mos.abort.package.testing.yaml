@@ -6,8 +6,6 @@
     node: master
     logrotate:
       daysToKeep: '{daysToKeep}'
-    wrappers:
-      - openstack-ci-jenkins
     parameters:
       - string:
           name: ABORT_MODE
@@ -18,9 +16,6 @@
       - string:
           name: JENKINS_PASSWORD
           default: Nak0kaya
-      - string:
-          name: GERRIT_REVIEWER_ABORT
-          default: openstack-ci-jenkins
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
