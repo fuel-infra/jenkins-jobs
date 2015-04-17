@@ -13,13 +13,6 @@ export SwarmRunnerName='6.1.swarm.runner'
 export Smoke_BVT='6.1.all'
 export TestrailCMDPath="fuelweb_test/testrail/report.py"
 
-# TEPMORARY(START)
-# Report tests results from Smoke/BVT
-ISO_NUMBER=$(curl -s "${JENKINS_URL}job/${SwarmRunnerName}/lastBuild/api/xml?xpath=/multiJobBuild/action/parameter&wrapper=name" | sed -rn 's/.*\bfuel-[0-9](\.[0-9])*-([0-9]+)-[0-9]+.*/\2/p')
-export TESTRAIL_TEST_SUITE='Smoke/BVT'
-python ${TestrailCMDPath} -m -v -j "${Smoke_BVT}" -N "${ISO_NUMBER}"
-# TEPMORARY(END)
-
 # Report tests results from swarm
 
 export TESTRAIL_TEST_SUITE='Swarm 6.1'

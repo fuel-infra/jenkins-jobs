@@ -1,6 +1,12 @@
 - job:
     name: '6.1-test-reports-Testrail'
     builders:
+      - inject:
+           properties-content: |
+             TESTS_RUNNER=6.1.swarm.runner
+
+      - shell:
+          !include-raw builders/6.1-test-reports-Testrail-upload_cases.sh
       - shell:
           !include-raw builders/6.1-test-reports-Testrail.sh
 
