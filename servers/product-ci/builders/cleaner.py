@@ -7,33 +7,20 @@ import re
 import subprocess
 import urllib
 
-def url2json(url):
-    """ get dictonary from url (json parser) """
-    return json.loads(urllib.urlopen(url).read())
-
-def get_environment_prefix(job_url):
-    """ check environment prefix, return None if not available """
-    job_data = url2json('%s/api/json' % job_url)
-    for property in job_data['property']:
-        if 'parameterDefinitions' in property.keys():
-            for parameter in property['parameterDefinitions']:
-                if parameter['defaultParameterValue']['name'] == 'ENV_PREFIX':
-                    return parameter['defaultParameterValue']['value']
-
 class Cleaner():
     def __init__(self):
-        # get main view url
-        jenkins_all_url = '%s/view/All/api/json' % os.environ['JENKINS_URL']
-
-        # create dictionary (job_name -> [env_prefix, url]) of jobs
-        self.jobs={}
-        for job in url2json(jenkins_all_url)[u'jobs']:
-            job_name = job[u'name']
-            job_url = job['url']
-            env_prefix = get_environment_prefix(job_url)
-            # only add job if ENV_PREFIX exists in job description
-            if env_prefix:
-                self.jobs[str(job_name)] = [env_prefix, job_url]
+        # create dictionary ([env_prefix, last_timestamp]) of prefixes
+        self.prefixes={}
+        for job_definition in open('jobs.txt', 'r').readlines():
+            job_name, env_prefix, last_ts_txt = job_definition.split(' ')
+            # strip new line
+            last_ts_txt = last_ts_txt.strip()
+            # catch never run jobs
+            if last_ts_txt == 'None':
+                continue
+            last_ts = datetime.datetime.fromtimestamp(float(last_ts_txt)/1000)
+            self.prefixes[env_prefix] = {'job_name': job_name,
+                                       'last_timestamp': last_ts,}
 
         # prepare list of devops envs to iterate
         self.devops = []
@@ -75,13 +62,13 @@ class Cleaner():
                 # if lifetime expired - check if ready to erase
                 elif (datetime.datetime.now() - local_timestamp) > datetime.timedelta(days=env_lifetime_days):
                     print '- old enough to be analysed (%s)' % local_timestamp
-                    print '- looking for a job by name (%s)' % env_name
-                    server_side_job = self.server_get_job_by_name(env_name)
-                    if not server_side_job:
+                    print '- looking for a prefix by name (%s)' % env_name
+                    env_prefix = self.get_prefix_by_env_name(env_name)
+                    if not env_prefix:
                         print '- server job not found'
                         continue
-                    print '- found job (%s)' % server_side_job
-                    server_latest_ts = self.get_last_build_timestamp(server_side_job)
+                    print '- found owner job (%s)' % self.prefixes[env_prefix]['job_name']
+                    server_latest_ts = self.prefixes[env_prefix]['last_timestamp']
                     print '- local_timestamp = %s' % local_timestamp
                     print '- server_latest_ts = %s' % server_latest_ts
                     # safety delta of 5 hours
@@ -103,25 +90,16 @@ class Cleaner():
             if re.match(pair[0], env):
                 return pair[1]
 
-    def get_last_build_timestamp(self, job_name):
-        """ check latest build timestamp """
-        job_data = url2json('%s/api/json' % self.jobs[job_name][1])
-        last_build_url = job_data[u'lastBuild'][u'url']
-        last_build_data = url2json('%s/api/json' % last_build_url)
-        return datetime.datetime.fromtimestamp(last_build_data[u'timestamp']/1000)
-
-    def server_get_job_by_name(self, env_name):
+    def get_prefix_by_env_name(self, env_name):
         """ get server job by local (probably suffixed) name """
-        all_jobs = self.jobs.keys()
+        all_prefixes = self.prefixes.keys()
         # catch empty job list
-        if not len(all_jobs):
+        if not len(all_prefixes):
             return None
-        all_jobs.sort(key=len, reverse=True)
-        for job_name in all_jobs:
-            env_prefix = self.jobs[job_name][0]
-            # verify first, if worth of scoring
+        all_prefixes.sort(key=len, reverse=True)
+        for env_prefix in all_prefixes:
             if env_name.startswith(env_prefix):
-                return job_name
+                return env_prefix
 
     def local_remove_env(self, dos_path, env_name):
         print 'Removing: %s' % env_name

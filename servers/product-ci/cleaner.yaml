@@ -1,6 +1,10 @@
 - job:
     name: cleaner
     builders:
+      - copyartifact:
+          project: 'cleaner-on-labels'
+          filter: jobs.txt
+          which-build: last-successful
       - shell:
           !include-raw './builders/cleaner.py'
     description: |
@@ -44,9 +48,20 @@
     triggers:
       - timed: '0 */5 * * *'
     builders:
+      - shell:
+          !include-raw './builders/cleaner_jobs.py'
       - trigger-builds:
         - project: 'cleaner'
           parameter-factories:
             - factory: allnodesforlabel
               node-label: $LABEL
               name: 'NODE'
+      - shell:
+          !include-raw './builders/cleaner_dups.py'
+    publishers:
+      - archive:
+          artifacts: '*.txt'
+          allow-empty: 'true'
+          fingerprint: true
+      - email:
+          recipients: devops+alert@mirantis.com
