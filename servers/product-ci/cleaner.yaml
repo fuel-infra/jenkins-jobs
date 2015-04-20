@@ -4,7 +4,7 @@
       - copyartifact:
           project: 'cleaner-on-labels'
           filter: jobs.txt
-          which-build: last-successful
+          which-build: workspace-latest
       - shell:
           !include-raw './builders/cleaner.py'
     description: |
