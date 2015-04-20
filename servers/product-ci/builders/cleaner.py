@@ -5,7 +5,6 @@ import json
 import os
 import re
 import subprocess
-import urllib
 
 class Cleaner():
     def __init__(self):
