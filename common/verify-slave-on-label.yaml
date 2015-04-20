@@ -1,0 +1,42 @@
+- job:
+    name: 'verify-slave-on-label'
+    concurrent: true
+    description: |
+      This is a helper job for checking if specified job should be ran
+      on a targeted Jenkins Slave node. Triggers specific job on a selected node,
+      to test if jobs code from master branch build there. On success it will
+      trigger add/remove helper job to set specific label on a tested node.
+    parameters:
+      - node:
+          name: NODE_NAME
+          description: |
+            Specify where this job and tested job should be ran on.
+          allowed-multiselect: true
+          ignore-offline-nodes: true
+      - string:
+          name: JOB_NAME
+          description: |
+            Jobs name which should be tested on a slave. Example:
+            verify-fuel-web
+      - string:
+          name: LABEL_NAME
+          description: |
+            Jobs label, which shall be set on a slave. Example:
+            verify-fuel-web
+    builders:
+      - shell:
+          printenv
+      - trigger-builds:
+        - project: $JOB_NAME
+          same-node: true
+          block: true
+      - trigger-builds:
+        - project: 'label_job_manager'
+          predefined-parameters: |
+            ACTION=ADD_LABEL
+            LABEL_NAME=$LABEL_NAME
+            NODE=$NODE_NAME
+          block: true
+    publishers:
+      - description-setter:
+          description: '$NODE_NAME: $LABEL_NAME'
