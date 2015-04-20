@@ -94,7 +94,8 @@
             - name: AUTH_TOKEN
               password: qqoROvm6of+nv77TXCRgaXvuyVhvUMOsL7ofOGnyxHDsHSWKk7puJYN+zZBeWhJ0
       - ssh-agent-credentials:
-          user: '5b151a58-4b65-4d13-87a1-883d52020e2d'
+          users:
+            - '5b151a58-4b65-4d13-87a1-883d52020e2d'
 
 - job:
     name: '6.1.test_all'

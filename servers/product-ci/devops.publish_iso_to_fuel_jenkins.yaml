@@ -38,7 +38,8 @@
           description: "Select slave"
     wrappers:
       - ssh-agent-credentials:
-          user: '5b151a58-4b65-4d13-87a1-883d52020e2d'
+          users:
+            - '5b151a58-4b65-4d13-87a1-883d52020e2d'
     publishers:
       - description-setter:
           description: $version $number to $slaves

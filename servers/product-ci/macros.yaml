@@ -100,7 +100,8 @@
           branches:
             - 'origin/{branch}'
           wipe-workspace: false
-          clean: true
+          clean:
+            before: true
 - scm:
     name: osci-mirrors
     scm:

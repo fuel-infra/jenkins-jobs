@@ -44,4 +44,5 @@
       - inject-passwords:
           global: true
       - ssh-agent-credentials:
-          user: '60262544-8924-4718-aa4e-7e629cc2f5d3'
+          users:
+            - '60262544-8924-4718-aa4e-7e629cc2f5d3'
