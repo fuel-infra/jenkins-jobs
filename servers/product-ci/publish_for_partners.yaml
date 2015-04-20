@@ -1,7 +1,8 @@
 - job:
     name: 'publish_for_partners'
     description: |
-      This job will publish torrent file from MAGNET_LINK parameter provided to partnershare web service. This will allow partner access to selected file.
+      This job will publish torrent file from MAGNET_LINK parameter provided to partnershare web service. This will allow partner access to selected file.<br><br>
+      <b>Howto: <a href=https://mirantis.jira.com/wiki/display/PRD/Publish+file+for+partners>Wiki</a></b>
     builders:
       - shell:
           !include-raw builders/publish_for_partners.sh
@@ -22,3 +23,7 @@
           name: DST_DIR
           default: '/var/www/partnershare'
           description: Destination directory.
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+              - '9693fdb2-ec38-406a-b718-46d7b0e46db3'
