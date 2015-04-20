@@ -1,2 +1,2 @@
-git+https://git.openstack.org/openstack-infra/jenkins-job-builder.git@a09c4422ded
+jenkins-job-builder==1.2.0
 jenkins-job-builder-naginator==0.0.1
