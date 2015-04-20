@@ -45,7 +45,6 @@
           POOL_DEFAULT={default_pool}
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
-          ENV_PREFIX={version-id}.{id}.{dist}.{testgroup}
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
     - inject: # overrides
         properties-content: '{properties}'
@@ -67,6 +66,10 @@
     - string:
         name: MAGNET_LINK
         description: "iso magnet link"
+    - string:
+        name: ENV_PREFIX
+        default: '{version-id}.{id}.{dist}.{testgroup}'
+        description: 'Environment prefix'
 
     properties:
     - heavy-job:
