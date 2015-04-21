@@ -55,13 +55,13 @@ echo "STEP 2. Make everything (`date -u`)"
 
 echo "STEP 3. Pack artifacts (`date -u`)"
 cd ${ARTS_DIR}
-/usr/bin/time tar cvf "${ARTIFACT_NAME}.tar" bootstrap.tar.gz centos-repo.tar ubuntu-repo.tar puppet.tgz openstack.yaml version.yaml fuel-images.tar.*
+/usr/bin/time tar cvf "${ARTIFACT_NAME}.tar" bootstrap.tar.gz centos-repo.tar ubuntu-repo.tar openstack.yaml version.yaml fuel-images.tar.*
 
 #########################################
 
 echo "STEP 4. Pack diffs (`date -u`)"
 cd ${ARTS_DIR}
-/usr/bin/time tar cvf "${ARTIFACT_DIFF_NAME}.tar" puppet.tgz version.yaml openstack.yaml diff*
+/usr/bin/time tar cvf "${ARTIFACT_DIFF_NAME}.tar" version.yaml openstack.yaml diff*
 
 #########################################
 
