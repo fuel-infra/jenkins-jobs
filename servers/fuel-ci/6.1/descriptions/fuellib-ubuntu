@@ -5,4 +5,3 @@ Runs <a href="http://docs.mirantis.com/fuel-dev/devops.html#environment-creation
   UPLOAD_MANIFESTS=true
   UPLOAD_MANIFESTS_PATH=/path/to/fuel-library/deployment/puppet/
 </pre>
-<p>
