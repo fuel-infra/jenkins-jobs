@@ -15,7 +15,7 @@ export UPLOAD_MANIFESTS_PATH=/home/jenkins/workspace/${JOB_NAME}/deployment/pupp
 
 BRANCH_ID=`echo ${BRANCH##*/} | sed 's:\.:_:g'`
 
-export WORKSPACE="/home/jenkins/workspace/fuel-main/env_${DISTRIBUTION}-default/${BRANCH}"
+export WORKSPACE="/home/jenkins/workspace/fuel-main/env_${DISTRIBUTION}-${BRANCH_ID}"
 export SYSTEM_TESTS="${WORKSPACE}/utils/jenkins/system_tests.sh"
 export ENV_NAME="env_${DISTRIBUTION}-${BRANCH_ID}"
 export ISO_PATH="/home/jenkins/workspace/iso/fuel_${BRANCH_ID}.iso"

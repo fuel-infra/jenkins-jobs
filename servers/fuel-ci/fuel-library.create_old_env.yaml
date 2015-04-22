@@ -1,5 +1,5 @@
 - job:
-    name: 'devops.6.1.fuel-library.create_env'
+    name: 'devops.fuel-library.create_old_env'
     concurrent: true
     description:
       !include-raw descriptions/fuel-library.create_env
@@ -15,11 +15,11 @@
     parameters:
       - string:
           name: ENV_PREFIXES
-          default: 'env_ubuntu env_centos env_masternode env_granular_ubuntu env_granular_centos'
+          default: 'env_ubuntu env_centos'
           description: 'List of env prefixes to create'
       - string:
           name: BRANCH
-          default: master
+          default: stable/6.0
       - string:
           name: ISO_ID
           default: default
@@ -30,11 +30,11 @@
           allowed-multiselect: true
       - string:
           name: SHA
-          default: master
-          description: 'Commit SHA of fuel-qa repository'
+          default: stable/6.0
+          description: 'Commit SHA of fuel-main repository'
       - string:
           name: VENV_PATH
-          default: /home/jenkins/venv-nailgun-tests-2.9
+          default: /home/jenkins/venv-nailgun-tests
       - bool:
           name: UPDATE_VENV
           default: false
@@ -42,10 +42,10 @@
 
     scm:
       - git:
-          url: 'https://git.openstack.org/stackforge/fuel-qa.git'
+          url: 'https://git.openstack.org/stackforge/fuel-main.git'
           branches:
             - $SHA
-          basedir: fuel-qa
+          basedir: fuel-main
 
     builders:
       - shell:

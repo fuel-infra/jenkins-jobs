@@ -9,9 +9,9 @@ fi
 
 export MIRROR_UBUNTU="$(curl -sSf "${JENKINS_URL}job/master_env/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt")"
 
-export FUEL_MAIN_PATH="/home/jenkins/workspace/fuel-main/env_masternode-default/master"
+export FUEL_MAIN_PATH="/home/jenkins/workspace/fuel-main/env_masternode-master"
 export SYSTEM_TESTS="${FUEL_MAIN_PATH}/utils/jenkins/system_tests.sh"
-export ENV_NAME="fuellib_review_master_node"
+export ENV_NAME="env_masternode-master"
 export ISO_PATH="/home/jenkins/workspace/iso/fuel_master.iso"
 export LOGS_DIR=/home/jenkins/workspace/${JOB_NAME}/logs/${BUILD_NUMBER}
 export VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9

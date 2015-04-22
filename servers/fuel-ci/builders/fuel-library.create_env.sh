@@ -30,7 +30,7 @@ mkdir -p "/home/jenkins/workspace/fuel-main/"
 
 for ENV_PREFIX in ${ENV_PREFIXES}; do
     rm -rf "/home/jenkins/workspace/fuel-main/${ENV_PREFIX}-${ENV_POSTFIX}"
-    cp -r fuel-qa/ "/home/jenkins/workspace/fuel-main/${ENV_PREFIX}-${ENV_POSTFIX}"
+    cp -r fuel-main/ "/home/jenkins/workspace/fuel-main/${ENV_PREFIX}-${ENV_POSTFIX}"
     dos.py erase "${ENV_PREFIX}-${ENV_POSTFIX}" || echo "Nothing to erase"
 done
 
