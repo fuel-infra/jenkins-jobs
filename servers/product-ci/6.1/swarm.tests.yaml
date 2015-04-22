@@ -10,7 +10,7 @@
    node: 'systest'
    timeout: '480'
    properties: ''
-   weight: '8'
+   weight: '7'
    jobs:
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'setup' # test job, not included in runner
@@ -79,7 +79,7 @@
          testgroup: 'known_issues'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha'
-         weight: '12'
+         weight: '11'
          node: 'services-systest'
          properties: |
            SLAVE_NODE_MEMORY=6144
@@ -93,7 +93,7 @@
          timeout: '1200'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha_one_controller'
-         weight: '12'
+         weight: '11'
          node: 'services-systest'
          properties: |
            SLAVE_NODE_MEMORY=6144
