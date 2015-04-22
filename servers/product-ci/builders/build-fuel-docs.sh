@@ -4,7 +4,16 @@ set -ex
 
 echo "Description string: $GERRIT_BRANCH"
 
+VENV="${WORKSPACE}_VENV"
+
+virtualenv "${VENV}"
+source "${VENV}/bin/activate" || exit 1
+
+pip install -r requirements.txt
+
 make clean html pdf
+
+deactivate
 
 # Publishing
 
