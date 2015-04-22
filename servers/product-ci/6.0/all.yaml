@@ -37,6 +37,9 @@
       - string:
           name: trigger_community_build
           description: If set to "true" will trigger community build with the same commits
+      - string:
+          name: BUILD_MIRROR_URL
+          description: 'http://jenkins-product.srt.mirantis.net:8080/job/6.0.1.build_staging_mirror/100/'
     publishers:
       - archive:
           allow-empty: false
