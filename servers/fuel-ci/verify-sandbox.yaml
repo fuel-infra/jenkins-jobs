@@ -1,0 +1,25 @@
+- job:
+    name: verify-sandbox
+    disabled: true
+    description: |
+      Purpose of this job is to test current Jenkins Gerrits configuration,
+    node: verify-sandbox
+    properties:
+      - heavy-job:
+          weight: 1
+    builders:
+      - shell:
+          !include-raw './builders/verify-sandbox.sh'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - change-abandoned-event
+            - change-merged-event
+            - change-restored-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'openstack-dev/ci-sandbox'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
