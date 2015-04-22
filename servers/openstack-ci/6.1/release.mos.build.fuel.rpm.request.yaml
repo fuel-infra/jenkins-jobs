@@ -1,0 +1,87 @@
+- job-template:
+    name: '{release}.{name}.build-fuel-rpm-request'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: false
+    node: osci-fuel-meta-ubuntu
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    wrappers:
+      - openstack-ci-jenkins
+    parameters:
+      - string:
+          name: PROJECTNAME
+          default: 'fuel-{release}'
+      - string:
+          name: PROJECT_VERSION
+          default: '{release}'
+      - string:
+          name: OBSURL
+          default: 'https://osci-obs.vm.mirantis.net'
+      - string:
+          name: OBSAPI
+          default: '-A https://osci-obs.vm.mirantis.net:444'
+      - string:
+          name:  PRJPREFIX
+          default: '{prjprefix}'
+      - string:
+          name:  PRJSUFFIX
+          default: '{prjsuffix}'
+      - bool:
+          name: UPDATES
+          default: '{updates}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event:
+                exclude-drafts: true
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: 'stackforge/python-fuelclient'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'ANT'
+              project-pattern: 'stackforge/fuel-ostf'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'ANT'
+              project-pattern: 'stackforge/fuel-astute'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'ANT'
+              project-pattern: 'stackforge/fuel-main'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'ANT'
+              project-pattern: 'stackforge/fuel-web'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'ANT'
+              project-pattern: 'stackforge/fuel-library'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+          silent: true
+          server-name: review.openstack.org
+    builders:
+      - shell:
+          !include-raw-escape builders/release.build.fuel.rpm.sh
+    publishers:
+      - description-setter:
+          regexp: '^Packages: .*$'
+          regexp-for-failed: '^Packages: .*$'
+      - junit:
+          results: '*.xml'
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: true
+    #   - archive:
+    #       artifacts: '**/buildlog.txt'
+    #       allow-empty: true
+

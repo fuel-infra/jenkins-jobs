@@ -33,6 +33,10 @@
           prjprefix: 'centos-'
       - '{release}.{name}.build-fuel-deb':
           prjprefix: 'trusty-'
+      - '{release}.{name}.build-fuel-rpm-request':
+          prjprefix: 'centos-'
+      - '{release}.{name}.build-fuel-deb-request':
+          prjprefix: 'trusty-'
       - '{release}.{name}.lint'
       - '{release}.{name}.abort-package-testing'
       - '{release}.{name}.ci-status.report'

@@ -129,6 +129,7 @@ switch_to_changeset () {
 
 get_build_status() {
   local PRJNAME=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}${UPDATES_SUFFIX}
+  [ "$GERRIT_STATUS" == "NEW" ] && PRJNAME="${PRJNAME}-${GERRIT_CHANGE_NUMBER}"
   local REPONAME=`osc $OBSAPI meta prj $PRJNAME | egrep -o "repository name=\"[a-z]+\"" | cut -d'"' -f2`
   local ARCH="x86_64"
 
@@ -172,7 +173,7 @@ fill_buildresult () {
         local failcnt=1
         local builddetails="Timeout reached. Last build status: $buildstat"
     fi
-    [[ $reponame == "centos" ]] && local pkgtype=RPM || local pkgtype=DEB
+    [ "$reponame" == "centos" ] && local pkgtype=RPM || local pkgtype=DEB
     echo "<testsuite name=\"Package build\" tests=\"Package build\" errors=\"0\" failures=\"$failcnt\" skip=\"0\">"
     echo -n "<testcase classname=\"$pkgtype\" name=\"$packagename\" time=\"0\""
     if [[ $failcnt == 0 ]]; then
@@ -192,37 +193,38 @@ fill_buildresult () {
     echo "</testsuite>"
 }
 
-create_updates_project() {
-  local STBLPRJ=$1
-  local UPDSPRJ=${STBLPRJ}${UPDATES_SUFFIX}
-  # Check if updates project already exist
-  local IS_UPD_EXIST=1
-  osc $OBSAPI meta prj ubuntu-fuel-6.1-stable &>/dev/null || IS_UPD_EXIST=0
+create_project() {
+  local PARENTPRJ=$1
+  local NEWPRJ=$2
+  local COMMENT=$3 || :
+  [ "$COMMENT" == "" ] && local COMMENT="Child project for ${PARENTPRJ}"
+  # Check if new project already exist
+  local IS_PRJ_EXIST=1
+  osc $OBSAPI meta prj $NEWPRJ &>/dev/null || IS_UPD_EXIST=0
 
-  # Create updates project
+  # Create project
   if [ "$IS_UPD_EXIST" == "0" ]; then
-    local conffile="${WRKDIR}/create_updates_project_config.xml"
-    osc $OBSAPI meta prj $STBLPRJ > $conffile || error "Something went wrong"
+    local conffile="${WRKDIR}/create_project_config.xml"
+    osc $OBSAPI meta prj $PARENTPRJ > $conffile || error "Something went wrong"
     local reponame=`cat $conffile | egrep -o "repository name=\"[a-z]+\"" | cut -d'"' -f2`
-    local stablepath='<path project="'$STBLPRJ'" repository="'$reponame'"/>'
-    sed -i "s|$STBLPRJ|$UPDSPRJ|" $conffile
-    sed -i "s|<title.*|<title>Updates repo for $STBLPRJ</title>|" $conffile
-    [ -n "$stablepath" ] && sed -i "/repository name/a$stablepath" $conffile
-    info "Creating new project $UPDSPRJ"
-    osc $OBSAPI meta prj -F $conffile $UPDSPRJ || error "Something went wrong"
+    local parentpath='<path project="'$PARENTPRJ'" repository="'$reponame'"/>'
+    sed -i "s|$PARENTPRJ|$NEWPRJ|" $conffile
+    sed -i "s|<title.*|<title>${COMMENT}</title>|" $conffile
+    [ -n "$parentpath" ] && sed -i "/repository name/a$parentpath" $conffile
+    info "Creating new project $NEWPRJ"
+    osc $OBSAPI meta prj -F $conffile $NEWPRJ || error "Something went wrong"
     rm -f $conffile
-    local prjconffile="${WRKDIR}/copy_prjconf_from_stableprj_config.xml"
-    osc $OBSAPI meta prjconf $STBLPRJ > $prjconffile || error "Something went wrong"
-    osc $OBSAPI meta prjconf -F $prjconffile $UPDSPRJ || error "Something went wrong"
+    local prjconffile="${WRKDIR}/copy_prjconf_from_parentprj_config.xml"
+    osc $OBSAPI meta prjconf $PARENTPRJ > $prjconffile || error "Something went wrong"
+    osc $OBSAPI meta prjconf -F $prjconffile $NEWPRJ || error "Something went wrong"
     rm -f $prjconffile
   fi
 }
 
-
 create_package() {
-  local PRJNAME=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}${UPDATES_SUFFIX}
-  [ "$UPDATES" == "true" ] && create_updates_project ${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}
-  # Create package if it doesn't exst
+  local PRJNAME=$1
+  local PACKAGENAME=$2
+  # Create package if it doesn't exist
   local conffile="$WRKDIR/create_package_config.xml"
   if ! osc $OBSAPI meta pkg $PRJNAME $PACKAGENAME &>/dev/null
   then
@@ -239,8 +241,15 @@ EOF
 }
 
 push_package_to_obs () {
+  local MAINPRJ=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}
+  [ "$UPDATES" == "true" ] && create_project ${MAINPRJ} ${MAINPRJ}${UPDATES_SUFFIX} "Updates repo for ${MAINPRJ}"
   local PRJNAME=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}${UPDATES_SUFFIX}
-  create_package
+  if [ "$GERRIT_STATUS" == "NEW" ] ; then
+      local CRSUFFIX="-$GERRIT_CHANGE_NUMBER"
+      local PRJNAME=${PRJNAME}${CRSUFFIX}
+      create_project ${MAINPRJ}${UPDATES_SUFFIX} ${PRJNAME} "Package $PACKAGENAME from changeset"
+  fi
+  create_package $PRJNAME $PACKAGENAME
   local tmpdir="$WRKDIR/obs"
   [ -e "$tmpdir" ] && rm -rf $tmpdir
   mkdir -p $tmpdir
@@ -347,75 +356,43 @@ prepare_rpm_source () {
     [ -n "$1" ] && local PACKAGENAME=$1 && shift
     [ -n "$1" ] && local SPECFILE=$1 && shift
     [ -n "$1" ] && local SRCPATH=$1 && shift
-    [ -n "$1" ] && local SPECFILESSRC=$1 && shift
-    [ -n "$1" ] && local SPECFILESDST=$1
-    case $PACKAGENAME in
-        "ruby21-rubygem-astute")
-            pushd $SRCPATH &>/dev/null
-            gem build astute.gemspec
-            mv *.gem ${WRKDIR}/dst/
-            popd &>/dev/null
-            ;;
-        "nailgun")
-            job_lock ${SRCPATH}.lock set
-            pushd $SRCPATH &>/dev/null
-            npm install --cache ${HOME}/npm-cache
-            #grunt build --static-dir=static_compressed
-            ./node_modules/.bin/gulp build --static-dir=compressed_static
-            rm -rf static
-            mv compressed_static static
-            python setup.py sdist -d ${WRKDIR}/dst/
-            popd &>/dev/null
-            job_lock ${SRCPATH}.lock unset
-            ;;
-        * )
-            pushd $SRCPATH &>/dev/null
-            # If it's python source - prepare python egg tarball
-            [ -f "setup.py" ] && python setup.py sdist -d ${WRKDIR}/dst/ || :
-            # If there is additional source files - prepare it
-            if [ -n "$SPECFILESSRC" ] ; then
-                FILESNUM=`echo $SPECFILESSRC | grep -o "|" | wc -l`
-                FILESNUM=$(( $FILESNUM + 1 ))
-                for (( i=1; i<=$FILESNUM; i++ )); do
-                  srcfile=`echo $SPECFILESSRC | cut -d "|" -f $i`
-                  dstfile=${WRKDIR}/dst/`echo $SPECFILESDST | cut -d "|" -f $i`
-                  # if dst file is tarball - pack src folder content
-                  if [ "${dstfile##*.}" == "gz" ] ; then
-                      pushd $srcfile &>/dev/null
-                      tar -czf $dstfile *
-                      popd &>/dev/null
-                  else
-                      cp -R $srcfile $dstfile
-                  fi
-                done
-            fi
-            popd &>/dev/null
-            ;;
-    esac
+    pushd $SRCPATH &>/dev/null
+    local version=`rpm -q --specfile $SPECFILE  --queryformat '%{VERSION}\n' | head -1`
+    message=`git log -n 1 | tail -n +5 | sed 's|^ *||'`
+    git archive --format tar --worktree-attributes HEAD > ${WRKDIR}/dst/${PACKAGENAME}.tar
+    git rev-parse HEAD > ${WRKDIR}/dst/version.txt
+    pushd ${WRKDIR}/dst &>/dev/null
+    tar -rf ${PACKAGENAME}.tar version.txt
+    gzip -9 ${PACKAGENAME}.tar
+    mv ${PACKAGENAME}.tar.gz ${PACKAGENAME}-${version}.tar.gz
+    [ -f version.txt ] && rm -f version.txt
+    popd &>/dev/null
+    popd &>/dev/null
 }
 
 build_rpm_fuel () {
     [ -n "$1" ] && local PACKAGENAME=$1 && shift
     [ -n "$1" ] && local SRCREPO=$1 && shift
-    [ -n "$1" ] && local SPECREPO=$1 && shift
     [ -n "$1" ] && local SPECFILE=$1 && shift
     [ -n "$1" ] && local SRCPATH=$1 && shift
     [ -n "$1" ] && local SPECFILESSRC=$1 && shift
     [ -n "$1" ] && local SPECFILESDST=$1
+    [ "$GERRIT_STATUS" == "NEW" ] && local CRSUFFIX="-${GERRIT_CHANGE_NUMBER}"
     PACKAGES="$PACKAGES $PACKAGENAME"
-    local RPMSPECFILES="${PACKAGENAME}-spec/$SPECFILE"
+    local RPMSPECFILES="${PACKAGENAME}-src/$SPECFILE"
     local PRJNAME=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}
     local REPONAME=`osc $OBSAPI meta prj $PRJNAME | egrep -o "repository name=\"[a-z]+\"" | cut -d'"' -f2`
-    #local ARCH=`osc $OBSAPI meta prj $PRJNAME | grep "<arch>" | awk -F'[<>]' '{print $3}'`
-    fetch_upstream $PACKAGENAME $SRCREPO $SPECREPO
+    fetch_upstream $PACKAGENAME $SRCREPO
 
     [ -d $WRKDIR/dst ] && rm -rf $WRKDIR/dst
     mkdir -p $WRKDIR/dst
+
     local specfile=''
     for specfile in $RPMSPECFILES; do
       cp $specfile ${WRKDIR}/dst
     done
     specfile=`find ${WRKDIR}/dst/ -name *.spec`
+
     binpackagenames=`rpm -q --specfile $specfile --queryformat "%{NAME}-%{VERSION} "`
 
     EXTRAREPO="repo1,http://${OBSURL##*/}:82/${PRJNAME}/${REPONAME}"
@@ -424,133 +401,63 @@ build_rpm_fuel () {
 
     get_revision rpm "$EXTRAREPO" "$binpackagenames"
     local release="fuel${PROJECT_VERSION}.mos${revision}"
+    #pushd ${PACKAGENAME}-src/ &>/dev/null
+    #local release="`git rev-list --no-merges HEAD |wc -l`"
+    #[ "$GERRIT_STATUS" == "MERGED" ] && release="${release}.1" || release="${release}.0"
+    #local release="${release}.git`git rev-parse --short HEAD`"
+    #popd &>/dev/null
     sed -i "s/Release:.*$/Release: ${release}/" $specfile
     prepare_rpm_source $PACKAGENAME $specfile ${PACKAGENAME}-src/$SRCPATH $SPECFILESSRC $SPECFILESDST
     #------------------
     # Push files to OBS
     #------------------
     push_package_to_obs
-    rm -rf ${PACKAGENAME}-src || :
-    rm -rf ${PACKAGENAME}-spec || :
+    [ -d "${PACKAGENAME}-src" ] && rm -rf ${PACKAGENAME}-src
     #--------------------------
     # Wait for building package
     #--------------------------
     echo
     echo "Starting build of $PACKAGENAME"
-    echo "$OBSURL/package/live_build_log?arch=x86_64&package=$PACKAGENAME&project=${PRJNAME}${UPDATES_SUFFIX}&repository=centos"
-    info "To abort build copy this URL to browser: $OBSURL/package/abort_build?arch=x86_64&project=${PRJNAME}${UPDATES_SUFFIX}&repo=centos&package=${PACKAGENAME}REMOVEME"
+    echo "$OBSURL/package/live_build_log?arch=x86_64&package=$PACKAGENAME&project=${PRJNAME}${UPDATES_SUFFIX}${CRSUFFIX}&repository=${REPONAME}"
+    info "To abort build copy this URL to browser: $OBSURL/package/abort_build?arch=x86_64&project=${PRJNAME}${UPDATES_SUFFIX}${CRSUFFIX}&repo=${REPONAME}&package=${PACKAGENAME}REMOVEME"
     get_build_status
-    info "Repository URL: http:/${OBSURL#*/}:82/${PRJNAME}${UPDATES_SUFFIX}/centos"
+    info "Repository URL: http:/${OBSURL#*/}:82/${PRJNAME}${UPDATES_SUFFIX}${CRSUFFIX}/${REPONAME}"
 }
 
 main () {
-  REQUEST_PROJECT=$GERRIT_PROJECT
+  [ -f .debug-default ] && source .debug-default
   SOURCEBRANCH=$GERRIT_BRANCH
   SPECBRANCH=$GERRIT_BRANCH
   SOURCECHANGEID=$GERRIT_REFSPEC
   SPECCHANGEID=$GERRIT_REFSPEC
-
-  [ -d 'request-src' ] && rm -rf request-src
-  fetch_upstream request $REQUEST_PROJECT
-  unset SOURCECHANGEID
-  pushd request-src &>/dev/null
-  message=`git log -n 1 | tail -n +5 | sed 's|^ *||'`
-  CHANGED_FILES=`git diff --name-only HEAD~1`
-  popd &>/dev/null
-  [ -d 'request-src' ] && rm -rf request-src
-
   GERRIT_STATUS="NEW"
   if [ -n "$GERRIT_REFSPEC" ]; then
      request_is_merged $GERRIT_REFSPEC && GERRIT_STATUS="MERGED"
   fi
   FAILED_PACKAGES=''
   SUCCEEED_PACKAGES=''
-  rm -f *.xml || :
-  local packages=''
-  for file in $CHANGED_FILES ; do
-      case $REQUEST_PROJECT in
-          "stackforge/fuel-main" )
-              case $file in
-                fuelmenu/* ) local package=fuelmenu.spec ;;
-                * ) local package=`echo $file | cut -d'/' -f4` ;;
-              esac
-              ;;
-          "stackforge/fuel-web" )
-              case $file in
-                  "bin/fencing-agent.rb|bin/fencing-agent.cron" ) local package=fencing-agent.spec ;;
-                  "bin/agent"|"bin/nailgun-agent.cron" ) local package=nailgun-agent.spec ;;
-                  network_checker/* ) local package=nailgun-net-check.spec ;;
-                  tasklib/* ) local package=python-tasklib.spec ;;
-                  fuel_agent/* ) local package=fuel-agent.spec ;;
-                  nailgun/* ) local package=nailgun.spec ;;
-                  shotgun/* ) local package=shotgun.spec ;;
-              esac
-              ;;
-          "stackforge/fuel-astute")
-              case $file in
-                mcagents/* ) local package="nailgun-mcagents.spec ruby21-nailgun-mcagents.spec";;
-                * ) local package=ruby21-rubygem-astute.spec ;;
-              esac
-              ;;
-          "stackforge/fuel-ostf" ) local package=fuel-ostf.spec ;;
-          "stackforge/python-fuelclient" ) local package=python-fuelclient.spec ;;
-          #"stackforge/fuel-tasks-validator" ) local package=stackforge/fuel-tasks-validator.spec ;;
-      esac
-      [ "`echo "$packages" | egrep \" $package( |$)\" | wc -l`" == "0" ] && packages="$packages $package"
-  done
-  local package=''
-  for package in $packages ; do
-      case $package in
-          'fuelmenu.spec')
-              build_rpm_fuel fuelmenu stackforge/fuel-web stackforge/fuel-main packages/rpm/specs/fuelmenu.spec fuelmenu
-              ;;
-          'python-fuelclient.spec')
-              build_rpm_fuel python-fuelclient stackforge/python-fuelclient stackforge/fuel-main packages/rpm/specs/python-fuelclient.spec
-              ;;
-          'shotgun.spec')
-              build_rpm_fuel shotgun stackforge/fuel-web stackforge/fuel-main packages/rpm/specs/shotgun.spec shotgun
-              ;;
-          'nailgun.spec')
-              build_rpm_fuel nailgun stackforge/fuel-web stackforge/fuel-main packages/rpm/specs/nailgun.spec nailgun
-              ;;
-          'fuel-agent.spec')
-              build_rpm_fuel fuel-agent stackforge/fuel-web stackforge/fuel-main packages/rpm/specs/fuel-agent.spec fuel_agent \
-                   "etc/fuel-agent/fuel-agent.conf.sample|cloud-init-templates" "fuel-agent.conf|fuel-agent-cloud-init-templates.tar.gz"
-              ;;
-          'python-tasklib.spec')
-              build_rpm_fuel python-tasklib stackforge/fuel-web stackforge/fuel-main packages/rpm/specs/python-tasklib.spec tasklib
-              ;;
-          'nailgun-net-check.spec')
-              build_rpm_fuel nailgun-net-check stackforge/fuel-web stackforge/fuel-main packages/rpm/specs/nailgun-net-check.spec network_checker
-              ;;
-          'nailgun-agent.spec')
-              build_rpm_fuel nailgun-agent stackforge/fuel-web stackforge/fuel-main packages/rpm/specs/nailgun-agent.spec bin \
-                   "agent|nailgun-agent.cron" "agent|nailgun-agent.cron"
-              ;;
-          'fencing-agent.spec')
-              build_rpm_fuel fencing-agent stackforge/fuel-web stackforge/fuel-main packages/rpm/specs/fencing-agent.spec bin \
-                   "fencing-agent.cron|fencing-agent.rb" "fencing-agent.cron|fencing-agent.rb"
-              ;;
-          'nailgun-mcagents.spec')
-              build_rpm_fuel nailgun-mcagents stackforge/fuel-astute stackforge/fuel-main packages/rpm/specs/nailgun-mcagents.spec "/" \
-                  "mcagents" "mcagents.tar.gz"
-              ;;
-          'ruby21-rubygem-astute.spec')
-              build_rpm_fuel ruby21-rubygem-astute stackforge/fuel-astute stackforge/fuel-main packages/rpm/specs/ruby21-rubygem-astute.spec
-              ;;
-          'fuel-ostf.spec')
-              build_rpm_fuel fuel-ostf stackforge/fuel-ostf stackforge/fuel-main packages/rpm/specs/fuel-ostf.spec
-              ;;
-          'ruby21-nailgun-mcagents.spec')
-              build_rpm_fuel ruby21-nailgun-mcagents stackforge/fuel-astute stackforge/fuel-main packages/rpm/specs/ruby21-nailgun-mcagents.spec "/" \
-                  "mcagents" "nailgun-mcagents.tar.gz"
-              ;;
-          #'fuel-tasks-validator.spec' )
-          #    build_rpm_fuel fuel-tasks-validator stackforge/fuel-tasks-validator stackforge/fuel-main packages/rpm/specs/fuel-tasks-validator.spec
-          #    ;;
+  rm -f *.xml
+  case $GERRIT_PROJECT in
+      "stackforge/fuel-ostf" )
+          build_rpm_fuel fuel-ostf stackforge/fuel-ostf specs/fuel-ostf.spec
+          ;;
+      "stackforge/python-fuelclient" )
+          build_rpm_fuel python-fuelclient stackforge/python-fuelclient specs/python-fuelclient.spec
+          ;;
+      "stackforge/fuel-astute" )
+          build_rpm_fuel astute stackforge/fuel-astute specs/astute.spec
+          ;;
+      "stackforge/fuel-web" )
+          build_rpm_fuel nailgun stackforge/fuel-web specs/nailgun.spec
+          ;;
+      "stackforge/fuel-library" )
+          build_rpm_fuel fuel-library6.1 stackforge/fuel-library specs/fuel-library6.1.spec
+          ;;
+      "stackforge/fuel-main" )
+          build_rpm_fuel fuel-main stackforge/fuel-main specs/fuel-main.spec
+          ;;
+  esac
 
-      esac
-  done
   if [ -n "$FAILED_PACKAGES" ] ; then
       echo "Packages: $FAILED_PACKAGES"
       exit 1

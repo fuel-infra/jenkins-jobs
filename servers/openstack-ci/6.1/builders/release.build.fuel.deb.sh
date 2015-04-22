@@ -129,6 +129,7 @@ switch_to_changeset () {
 
 get_build_status() {
   local PRJNAME=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}${UPDATES_SUFFIX}
+  [ "$GERRIT_STATUS" == "NEW" ] && PRJNAME="${PRJNAME}-${GERRIT_CHANGE_NUMBER}"
   local REPONAME=`osc $OBSAPI meta prj $PRJNAME | egrep -o "repository name=\"[a-z]+\"" | cut -d'"' -f2`
   local ARCH="x86_64"
 
@@ -192,37 +193,38 @@ fill_buildresult () {
     echo "</testsuite>"
 }
 
-create_updates_project() {
-  local STBLPRJ=$1
-  local UPDSPRJ=${STBLPRJ}${UPDATES_SUFFIX}
-  # Check if updates project already exist
-  local IS_UPD_EXIST=1
-  osc $OBSAPI meta prj ubuntu-fuel-6.1-stable &>/dev/null || IS_UPD_EXIST=0
+create_project() {
+  local PARENTPRJ=$1
+  local NEWPRJ=$2
+  local COMMENT=$3 || :
+  [ "$COMMENT" == "" ] && local COMMENT="Child project for ${PARENTPRJ}"
+  # Check if new project already exist
+  local IS_PRJ_EXIST=1
+  osc $OBSAPI meta prj $NEWPRJ &>/dev/null || IS_UPD_EXIST=0
 
-  # Create updates project
+  # Create project
   if [ "$IS_UPD_EXIST" == "0" ]; then
-    local conffile="${WRKDIR}/create_updates_project_config.xml"
-    osc $OBSAPI meta prj $STBLPRJ > $conffile || error "Something went wrong"
+    local conffile="${WRKDIR}/create_project_config.xml"
+    osc $OBSAPI meta prj $PARENTPRJ > $conffile || error "Something went wrong"
     local reponame=`cat $conffile | egrep -o "repository name=\"[a-z]+\"" | cut -d'"' -f2`
-    local stablepath='<path project="'$STBLPRJ'" repository="'$reponame'"/>'
-    sed -i "s|$STBLPRJ|$UPDSPRJ|" $conffile
-    sed -i "s|<title.*|<title>Updates repo for $STBLPRJ</title>|" $conffile
-    [ -n "$stablepath" ] && sed -i "/repository name/a$stablepath" $conffile
-    info "Creating new project $UPDSPRJ"
-    osc $OBSAPI meta prj -F $conffile $UPDSPRJ || error "Something went wrong"
+    local parentpath='<path project="'$PARENTPRJ'" repository="'$reponame'"/>'
+    sed -i "s|$PARENTPRJ|$NEWPRJ|" $conffile
+    sed -i "s|<title.*|<title>${COMMENT}</title>|" $conffile
+    [ -n "$parentpath" ] && sed -i "/repository name/a$parentpath" $conffile
+    info "Creating new project $NEWPRJ"
+    osc $OBSAPI meta prj -F $conffile $NEWPRJ || error "Something went wrong"
     rm -f $conffile
-    local prjconffile="${WRKDIR}/copy_prjconf_from_stableprj_config.xml"
-    osc $OBSAPI meta prjconf $STBLPRJ > $prjconffile || error "Something went wrong"
-    osc $OBSAPI meta prjconf -F $prjconffile $UPDSPRJ || error "Something went wrong"
+    local prjconffile="${WRKDIR}/copy_prjconf_from_parentprj_config.xml"
+    osc $OBSAPI meta prjconf $PARENTPRJ > $prjconffile || error "Something went wrong"
+    osc $OBSAPI meta prjconf -F $prjconffile $NEWPRJ || error "Something went wrong"
     rm -f $prjconffile
   fi
 }
 
-
 create_package() {
-  local PRJNAME=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}${UPDATES_SUFFIX}
-  [ "$UPDATES" == "true" ] && create_updates_project ${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}
-  # Create package if it doesn't exst
+  local PRJNAME=$1
+  local PACKAGENAME=$2
+  # Create package if it doesn't exist
   local conffile="$WRKDIR/create_package_config.xml"
   if ! osc $OBSAPI meta pkg $PRJNAME $PACKAGENAME &>/dev/null
   then
@@ -240,7 +242,6 @@ EOF
 
 generate_dsc () {
   #Some magic with sed and awk
-  #local DSCFILE="${MYOUTDIR}/$1_${fullver#*:}.dsc"
   local DSCFILE=$1
   local DEBIAN_FOLDER=$2
   local TARBALL_FOLDER=$3
@@ -248,8 +249,8 @@ generate_dsc () {
   echo "Format: 3.0 (quilt)" > "$DSCFILE"
   cat ${DEBIAN_FOLDER}/control | grep -E '^Source' >> "$DSCFILE"
   echo -n "Binary: " >> "$DSCFILE"
-  cat ${DEBIAN_FOLDER}/control | grep Pack | awk '{print $2}' | sed -e :a -e "/$/N; s/\n/, /; ta" >> "$DSCFILE"
-  cat ${DEBIAN_FOLDER}/control | grep Archi | tail -1 >> "$DSCFILE"
+  cat ${DEBIAN_FOLDER}/control | grep "^Package:" | awk '{print $2}' | sed -e :a -e "/$/N; s/\n/, /; ta" >> "$DSCFILE"
+  cat ${DEBIAN_FOLDER}/control | grep "^Architecture" | tail -1 >> "$DSCFILE"
   echo -n "Version: " >> "$DSCFILE"
   cat ${DEBIAN_FOLDER}/changelog | head -1 | awk -F '[(,)]' '{ print $2 }' >> "$DSCFILE"
   #echo $fullver >> "$DSCFILE"
@@ -303,8 +304,15 @@ generate_dsc () {
 }
 
 push_package_to_obs () {
+  local MAINPRJ=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}
+  [ "$UPDATES" == "true" ] && create_project ${MAINPRJ} ${MAINPRJ}${UPDATES_SUFFIX} "Updates repo for ${MAINPRJ}"
   local PRJNAME=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}${UPDATES_SUFFIX}
-  create_package
+  if [ "$GERRIT_STATUS" == "NEW" ] ; then
+      local CRSUFFIX="-$GERRIT_CHANGE_NUMBER"
+      local PRJNAME=${PRJNAME}${CRSUFFIX}
+      create_project ${MAINPRJ}${UPDATES_SUFFIX} ${PRJNAME} "Package $PACKAGENAME from changeset"
+  fi
+  create_package $PRJNAME $PACKAGENAME
   local tmpdir="$WRKDIR/obs"
   [ -e "$tmpdir" ] && rm -rf $tmpdir
   mkdir -p $tmpdir
@@ -407,56 +415,17 @@ request_is_merged () {
   return $result
 }
 
-prepare_deb_source () {
-    [ -n "$1" ] && local PACKAGENAME=$1 && shift
-    [ -n "$1" ] && local VERSION=$1 && shift
-    [ -n "$1" ] && local SPECFILE=$1 && shift
-    [ -n "$1" ] && local SRCPATH=$1 && shift
-    [ -n "$1" ] && local SPECFILESSRC=$1 && shift
-    [ -n "$1" ] && local SPECFILESDST=$1
-    case $PACKAGENAME in
-        * )
-            pushd $SRCPATH &>/dev/null
-            # If it's python source - prepare python egg tarball
-            #[ -f "setup.py" ] && python setup.py sdist -d ${WRKDIR}/dst/ || :
-            #mkdir -p ${WRKDIR}/dst/src/${PACKAGENAME}-${VERSION}
-            [ -f "setup.py" ] && cp -R * ${WRKDIR}/dst/src/
-            # If there is additional source files - prepare it
-            if [ -n "$SPECFILESSRC" ] ; then
-                FILESNUM=`echo $SPECFILESSRC | grep -o "|" | wc -l`
-                FILESNUM=$(( $FILESNUM + 1 ))
-                for (( i=1; i<=$FILESNUM; i++ )); do
-                  srcfile=`echo $SPECFILESSRC | cut -d "|" -f $i`
-                  dstfile=${WRKDIR}/dst/src/`echo $SPECFILESDST | cut -d "|" -f $i`
-                  # if dst file is tarball - pack src folder content
-                  if [ "${dstfile##*.}" == "gz" ] ; then
-                      pushd $srcfile &>/dev/null
-                      tar -czf $dstfile *
-                      popd &>/dev/null
-                  else
-                      cp -R $srcfile $dstfile
-                  fi
-                done
-            fi
-            popd &>/dev/null
-            ;;
-    esac
-}
-
 build_deb_fuel () {
+    # build_deb_fuel packagename srcrepo specpath
     [ -n "$1" ] && local PACKAGENAME=$1 && shift
     [ -n "$1" ] && local SRCREPO=$1 && shift
-    [ -n "$1" ] && local SPECREPO=$1 && shift
-    [ -n "$1" ] && local SPECFILE=$1 && shift
-    [ -n "$1" ] && local SRCPATH=$1 && shift
-    [ -n "$1" ] && local SPECFILESSRC=$1 && shift
-    [ -n "$1" ] && local SPECFILESDST=$1
+    [ -n "$1" ] && local SPECPATH=$1 && shift
+    [ "$GERRIT_STATUS" == "NEW" ] && local CRSUFFIX="-${GERRIT_CHANGE_NUMBER}"
     PACKAGES="$PACKAGES $PACKAGENAME"
-    local DEBSPECFILES="${PACKAGENAME}-spec/$SPECFILE/debian"
+    local DEBSPECFILES="${PACKAGENAME}-src/$SPECPATH/debian"
     local PRJNAME=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}
     local REPONAME=`osc $OBSAPI meta prj $PRJNAME | egrep -o "repository name=\"[a-z]+\"" | cut -d'"' -f2`
-    #local ARCH=`osc $OBSAPI meta prj $PRJNAME | grep "<arch>" | awk -F'[<>]' '{print $3}'`
-    fetch_upstream $PACKAGENAME $SRCREPO $SPECREPO
+    fetch_upstream $PACKAGENAME $SRCREPO
 
     [ -d $WRKDIR/dst ] && rm -rf $WRKDIR/dst
     mkdir -p $WRKDIR/dst/src
@@ -471,23 +440,27 @@ build_deb_fuel () {
     local binpackagenames="`cat ${WRKDIR}/dst/debian/control | grep ^Package | cut -d' ' -f 2 | tr '\n' ' '`"
     local epochnumber=`cat ${WRKDIR}/dst/debian/changelog | head -1 | grep -o "(.:" | sed 's|(||'`
 
-    prepare_deb_source $PACKAGENAME $version $DEBSPECFILES ${PACKAGENAME}-src/$SRCPATH $SPECFILESSRC $SPECFILESDST
+    rsync -aPt --exclude '.git*' ${PACKAGENAME}-src/ $WRKDIR/dst/src/
+    pushd ${PACKAGENAME}-src/ &>/dev/null
+    message=`git log -n 1 | tail -n +5 | sed 's|^ *||'`
+    #local release="r`git rev-list --no-merges HEAD |wc -l`"
+    #local release="${release}~g`git rev-parse --short HEAD`"
+    popd &>/dev/null
 
     EXTRAREPO="http://${OBSURL##*/}:82/${PRJNAME}/${REPONAME} /"
-    #[ "$UPDATES" == 'true' ] && EXTRAREPO="${EXTRAREPO}|http://${OBSURL##*/}:82/${PRJNAME}${UPDATES_SUFFIX}/${REPONAME} /"
+    [ "$UPDATES" == 'true' ] && EXTRAREPO="${EXTRAREPO}|http://${OBSURL##*/}:82/${PRJNAME}${UPDATES_SUFFIX}/${REPONAME} /"
     export EXTRAREPO
 
     get_revision deb "$EXTRAREPO" "$binpackagenames"
     local release="fuel${PROJECT_VERSION}+${revision}"
     local fullver=${epochnumber}${version}-${release}
 
-    #DEBFULLNAME=$author DEBEMAIL=$email dch -b --force-distribution -v "$fullver" "$message"
     sed -i "s| (.*) | (${fullver}) |" ${WRKDIR}/dst/debian/changelog
     TAR_SPECNAME="${debpackagename}_${fullver#*:}.debian.tar.gz"
     pushd ${WRKDIR}/dst/ &>/dev/null
     tar --owner=root --group=root -czf ${WRKDIR}/dst/${TAR_SPECNAME} --exclude-vcs debian
     cd src
-    TAR_ORIGNAME="${PACKAGENAME}_${version#*:}.orig.tar.gz"
+    TAR_ORIGNAME="${debpackagename}_${version#*:}.orig.tar.gz"
     tar --owner=root --group=root -czf ${WRKDIR}/dst/${TAR_ORIGNAME} --exclude-vcs *
 
     popd &>/dev/null
@@ -497,86 +470,44 @@ build_deb_fuel () {
     # Push files to OBS
     #------------------
     push_package_to_obs
-    rm -rf ${PACKAGENAME}-src || :
-    rm -rf ${PACKAGENAME}-spec || :
+    rm -rf ${PACKAGENAME}-src
+    rm -rf ${PACKAGENAME}-spec
     #--------------------------
     # Wait for building package
     #--------------------------
     echo
     echo "Starting build of $PACKAGENAME"
-    echo "$OBSURL/package/live_build_log?arch=x86_64&package=$PACKAGENAME&project=${PRJNAME}${UPDATES_SUFFIX}&repository=ubuntu"
-    info "To abort build copy this URL to browser: $OBSURL/package/abort_build?arch=x86_64&project=${PRJNAME}${UPDATES_SUFFIX}&repo=ubuntu&package=${PACKAGENAME}REMOVEME"
+    echo "$OBSURL/package/live_build_log?arch=x86_64&package=$PACKAGENAME&project=${PRJNAME}${UPDATES_SUFFIX}${CRSUFFIX}&repository=${REPONAME}"
+    info "To abort build copy this URL to browser: $OBSURL/package/abort_build?arch=x86_64&project=${PRJNAME}${UPDATES_SUFFIX}${CRSUFFIX}&repo=${REPONAME}&package=${PACKAGENAME}REMOVEME"
     get_build_status
-    info "Repository URL: http:/${OBSURL#*/}:82/${PRJNAME}${UPDATES_SUFFIX}/ubuntu"
+    info "Repository URL: http:/${OBSURL#*/}:82/${PRJNAME}${UPDATES_SUFFIX}${CRSUFFIX}/${REPONAME}"
 }
 
 main () {
-  REQUEST_PROJECT=$GERRIT_PROJECT
+  [ -f .debug-default ] && source .debug-default
   SOURCEBRANCH=$GERRIT_BRANCH
   SPECBRANCH=$GERRIT_BRANCH
   SOURCECHANGEID=$GERRIT_REFSPEC
   SPECCHANGEID=$GERRIT_REFSPEC
-
-  [ -d 'request-src' ] && rm -rf request-src
-  fetch_upstream request $REQUEST_PROJECT
-  unset SOURCECHANGEID
-  pushd request-src &>/dev/null
-  message=`git log -n 1 | tail -n +5 | sed 's|^ *||'`
-  CHANGED_FILES=`git diff --name-only HEAD~1`
-  popd &>/dev/null
-  [ -d 'request-src' ] && rm -rf request-src
-
   GERRIT_STATUS="NEW"
   if [ -n "$GERRIT_REFSPEC" ]; then
      request_is_merged $GERRIT_REFSPEC && GERRIT_STATUS="MERGED"
   fi
   FAILED_PACKAGES=''
   SUCCEEED_PACKAGES=''
-  rm -f *.xml || :
-  local packages=''
-  for file in $CHANGED_FILES ; do
-      case $REQUEST_PROJECT in
-          "stackforge/fuel-main" )
-              local package=`echo $file | cut -d'/' -f4`
-              ;;
-          "stackforge/fuel-web" )
-              case $file in
-                  "bin/fencing-agent.rb" ) local package=fencing-agent ;;
-                  "bin/agent"|"bin/nailgun-agent.cron" ) local package=nailgun-agent ;;
-                  network_checker/* ) local package=nailgun-net-check ;;
-                  tasklib/* ) local package=python-tasklib ;;
-              esac
-              ;;
-          "stackforge/fuel-astute")
-              case $file in
-                mcagents/* ) local package=nailgun-mcagents ;;
-              esac
-      esac
-      [ "`echo "$packages" | egrep \" $package( |$)\" | wc -l`" == "0" ] && packages="$packages $package"
-  done
-  local package=''
-  for package in $packages; do
-      case $package in
-          'fencing-agent' )
-              build_deb_fuel $package stackforge/fuel-web stackforge/fuel-main packages/deb/specs/$package bin \
-                  "fencing-agent.rb" "fencing-agent.rb"
-              ;;
-          'nailgun-agent' )
-              build_deb_fuel $package stackforge/fuel-web stackforge/fuel-main packages/deb/specs/$package bin \
-                  "agent|nailgun-agent.cron" "agent|../debian/nailgun-agent.cron.d"
-              ;;
-          'nailgun-mcagents' )
-              build_deb_fuel $package stackforge/fuel-astute stackforge/fuel-main packages/deb/specs/$package / \
-                  "mcagents" "mcagents.tar.gz"
-              ;;
-          'nailgun-net-check' )
-              build_deb_fuel $package stackforge/fuel-web stackforge/fuel-main packages/deb/specs/$package network_checker
-              ;;
-          'python-tasklib' )
-              build_deb_fuel $package stackforge/fuel-web stackforge/fuel-main packages/deb/specs/$package tasklib
-              ;;
-      esac
-  done
+  rm -f *.xml
+  case $GERRIT_PROJECT in
+      "stackforge/fuel-astute" )
+          build_deb_fuel fuel-astute stackforge/fuel-astute
+          ;;
+      "stackforge/fuel-web" )
+          build_deb_fuel nailgun stackforge/fuel-web
+          ;;
+      "stackforge/fuel-library" )
+          build_deb_fuel fuel-library stackforge/fuel-library
+          ;;
+  esac
+
   if [ -n "$FAILED_PACKAGES" ] ; then
       echo "Packages: $FAILED_PACKAGES"
       exit 1
