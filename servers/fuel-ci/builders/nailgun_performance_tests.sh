@@ -14,11 +14,11 @@ pushd nailgun > /dev/null
 
 download_artifacts() {
   echo "Looking for artifacts in ${1}"
-  wget -q "https://fuel-jenkins.mirantis.com/job/nailgun_performance_tests/${1}/artifact/nailgun/nailgun_perf_test_report.csv"
+  wget -q "${JENKINS_URL}job/nailgun_performance_tests/${1}/artifact/nailgun/nailgun_perf_test_report.csv"
   return $?
 }
 
-lastCompletedBuild=`wget -q https://fuel-jenkins.mirantis.com/job/nailgun_performance_tests/lastCompletedBuild/buildNumber -O -`
+lastCompletedBuild=$(wget -q "${JENKINS_URL}job/nailgun_performance_tests/lastCompletedBuild/buildNumber" -O -)
 echo "Last completed build: ${lastCompletedBuild}"
 
 artifactsFound=0

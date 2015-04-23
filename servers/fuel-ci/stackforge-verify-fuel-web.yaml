@@ -7,7 +7,7 @@
     description: |
         Test requests for fuel-web repository <p>Uses venv with python2.6
         <p>WARNING: Only stable stable/4.1 and stable/5.0 branches
-        <p>For master branch see <a href="https://fuel-jenkins.mirantis.com/view/fuel-web/job/verify-fuel-web/">verify-fuel-web</a> job.
+        <p>For master branch see <a href="https://ci.fuel-infra.org/view/fuel-web/job/verify-fuel-web/">verify-fuel-web</a> job.
     node: fuel-web-stable
     parameters:
         - string:

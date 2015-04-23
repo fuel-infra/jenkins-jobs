@@ -5,7 +5,7 @@
         !include-raw './builders/merged-fuel-specs.sh'
     description: |
       Build stackforge/fuel-specs repo on merge.
-      <p>Built specs are available under <a href="https://fuel-jenkins.mirantis.com/job/merged-fuel-specs/Fuel_Development_Specs_build_results">Fuel_Development_Specs_build_results</a> link.
+      <p>Built specs are available under <a href="https://ci.fuel-infra.org/job/merged-fuel-specs/Fuel_Development_Specs_build_results">Fuel_Development_Specs_build_results</a> link.
     logrotate:
       artifactDaysToKeep: 30
       artifactNumToKeep: 5
