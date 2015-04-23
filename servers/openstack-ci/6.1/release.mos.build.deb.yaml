@@ -52,6 +52,8 @@
           files: 'trusty/debian/**'
     builders:
       - shell:
+          !include-raw-escape builders/mos.remove.junk.files.sh
+      - shell:
           !include-raw-escape builders/ci.status.report.start.sh
       - shell:
           !include-raw-escape builders/mos.reset.vote.sh
