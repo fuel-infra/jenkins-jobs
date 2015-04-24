@@ -1,0 +1,13 @@
+- job-template:
+    name: '{release}.{name}.comment-abort'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: master
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    wrappers:
+      - comment-abort-users
+    builders:
+      - shell:
+          !include-raw-escape builders/mos.comment.abort.sh

@@ -39,6 +39,7 @@
           prjprefix: 'trusty-'
       - '{release}.{name}.lint'
       - '{release}.{name}.abort-package-testing'
+      - '{release}.{name}.comment-abort'
       - '{release}.{name}.ci-status.report'
 
 - job-group:

@@ -76,6 +76,16 @@
           users:
             - '35fc8f47-a728-4d5a-bfeb-9338089f31fa'
 
+- wrapper:
+    name: comment-abort-users
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '4c78c2d6-a0d6-49b7-a398-d728a1b6a85c'
+            - 'efa71805-f1ea-4ad4-9f26-32277f8bcc7a'
+            - '11acbe7e-c816-478d-b484-04adf29f4888'
+            - '06bc7ed4-3174-4c49-bb54-63a301874199'
+
 ########################################################################
 # Section: Triggers
 ########################################################################

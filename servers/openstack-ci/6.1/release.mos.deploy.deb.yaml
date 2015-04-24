@@ -62,6 +62,16 @@
               operator: AND
           script:
             !include-raw-escape builders/ci.status.report.stop.sh
+      - trigger-parameterized-builds:
+          - project: '{release}.{name}.comment-abort'
+            predefined-parameters: |
+              UPSTREAM_JOB_NAME=$JOB_NAME
+              UPSTREAM_BUILD_URL=$BUILD_URL
+              GERRIT_USER=$GERRIT_REVIEWER
+              GERRIT_HOST=$GERRIT_HOST
+              GERRIT_PORT=$GERRIT_PORT
+              GERRIT_CHANGE_NUMBER=$GERRIT_CHANGE_NUMBER
+              GERRIT_PATCHSET_NUMBER=$GERRIT_PATCHSET_NUMBER
       - archive:
           artifacts: 'fuel-qa/**/nosetests.xml,fuel-qa/logs/*'
           allow-empty: true

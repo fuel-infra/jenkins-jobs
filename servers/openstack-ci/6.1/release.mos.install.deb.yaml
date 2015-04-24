@@ -70,7 +70,18 @@
           - project: '{release}.{name}.abort-package-testing'
             condition: FAILED
             current-parameters: true
-            predefined-parameters: ABORT_MODE=on-install-fail
+            predefined-parameters: |
+              ABORT_MODE=on-install-fail
+      - trigger-parameterized-builds:
+          - project: '{release}.{name}.comment-abort'
+            predefined-parameters: |
+              UPSTREAM_JOB_NAME=$JOB_NAME
+              UPSTREAM_BUILD_URL=$BUILD_URL
+              GERRIT_USER=$GERRIT_REVIEWER
+              GERRIT_HOST=$GERRIT_HOST
+              GERRIT_PORT=$GERRIT_PORT
+              GERRIT_CHANGE_NUMBER=$GERRIT_CHANGE_NUMBER
+              GERRIT_PATCHSET_NUMBER=$GERRIT_PATCHSET_NUMBER
 #      - email:
 #          recipients: ''
 #          notify-every-unstable-build: false
