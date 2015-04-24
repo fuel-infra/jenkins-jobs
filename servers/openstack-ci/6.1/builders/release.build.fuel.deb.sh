@@ -128,8 +128,8 @@ switch_to_changeset () {
 }
 
 get_build_status() {
-  local PRJNAME=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}${UPDATES_SUFFIX}
-  [ "$GERRIT_STATUS" == "NEW" ] && PRJNAME="${PRJNAME}-${GERRIT_CHANGE_NUMBER}"
+  [ -n "$1" ] && local PRJNAME=$1 && shift
+  [ -n "$1" ] && local PACKAGENAME=$1
   local REPONAME=`osc $OBSAPI meta prj $PRJNAME | egrep -o "repository name=\"[a-z]+\"" | cut -d'"' -f2`
   local ARCH="x86_64"
 
@@ -306,11 +306,19 @@ generate_dsc () {
 push_package_to_obs () {
   local MAINPRJ=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}
   [ "$UPDATES" == "true" ] && create_project ${MAINPRJ} ${MAINPRJ}${UPDATES_SUFFIX} "Updates repo for ${MAINPRJ}"
-  local PRJNAME=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}${UPDATES_SUFFIX}
+  local MAINPRJ=${PRJPREFIX}${PROJECTNAME}${PRJSUFFIX}${UPDATES_SUFFIX}
+  local PRJNAME=${MAINPRJ}
   if [ "$GERRIT_STATUS" == "NEW" ] ; then
-      local CRSUFFIX="-$GERRIT_CHANGE_NUMBER"
+      if [ -z "$LP_BUG" ] ; then
+          CRSUFFIX="-${GERRIT_CHANGE_NUMBER}"
+      else
+          CRSUFFIX="-LP${LP_BUG}"
+          create-symlink-repo $PRJNAME LP$LP_BUG $GERRIT_CHANGE_NUMBER
+      fi
       local PRJNAME=${PRJNAME}${CRSUFFIX}
-      create_project ${MAINPRJ}${UPDATES_SUFFIX} ${PRJNAME} "Package $PACKAGENAME from changeset"
+      create_project ${MAINPRJ} ${PRJNAME} "Package $PACKAGENAME from changeset"
+  else
+      remove_changeset_project $PRJNAME $GERRIT_CHANGE_NUMBER $LP_BUG
   fi
   create_package $PRJNAME $PACKAGENAME
   local tmpdir="$WRKDIR/obs"
@@ -415,6 +423,47 @@ request_is_merged () {
   return $result
 }
 
+remove_changeset_project() {
+  [ -n "$1" ] && local _PRJNAME=$1 && shift
+  [ -n "$1" ] && local _CHANGENUMBER=$1 && shift
+  [ -n "$1" ] && local _LPBUG=$1
+  local OBSHOST=${OBSURL##*/}
+  if [ "$GERRIT_STATUS" == "MERGED" ] ; then
+    [ -n "$_CHANGENUMBER" ] && local CHANGESETPROJECT=`osc $OBSAPI ls / | grep "\-${_CHANGENUMBER}$" | grep ${_PRJNAME} || :`
+    [ -n "$_LPBUG" ] && local LPBUGPROJECT=`osc $OBSAPI ls / | grep "\-LP${_LPBUG}$" | grep ${_PRJNAME} || :`
+    remove-symlink-repo $CHANGESETPROJECT
+    # Do not remove LP bug project if there is synlinks to it.
+    [ -n "$LPBUGPROJECT" ] \
+        && local _linkcount=`ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $OBSHOST \
+           "find -L /srv/obs/repos -maxdepth 1 -xtype l -samefile /srv/obs/repos/$LPBUGPROJECT | wc -l" 2>/dev/null`
+    [ "$_linkcount" != "0" ] && unset LPBUGPROJECT
+    info "Remove projects $CHANGESETPROJECT $LPBUGPROJECT due to merged status"
+    for prj in $CHANGESETPROJECT $LPBUGPROJECT; do
+      if [ ! -z "$prj" ]; then
+         osc $OBSAPI rdelete -f -r $prj -m "Patchset merged into master" || :
+      fi
+    done
+  fi
+}
+
+create-symlink-repo() {
+  [ -n "$1" ] && local _MASTERPRJ=$1 && shift
+  [ -n "$1" ] && local _LPBUG=$1 && shift
+  [ -n "$1" ] && local _CHANGENUMBER=$1
+  local OBSHOST=${OBSURL##*/}
+  echo "sudo rm -rf /srv/obs/repos/${_MASTERPRJ}-${_CHANGENUMBER} ;
+        sudo ln -s /srv/obs/repos/${_MASTERPRJ}-${_LPBUG} /srv/obs/repos/${_MASTERPRJ}-${_CHANGENUMBER} ;
+        sudo chown -R obsrun:obsrun /srv/obs/repos/${_MASTERPRJ}-${_CHANGENUMBER} " \
+           | ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $OBSHOST
+}
+
+remove-symlink-repo() {
+  [ -n "$1" ] && local _repo=$1
+  local OBSHOST=${OBSURL##*/}
+  [ -n "$_repo" ] \
+      && ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $OBSHOST "[ -L \"/srv/obs/repos/${_repo}\" ] && sudo rm -f /srv/obs/repos/${_repo} " || :
+}
+
 build_deb_fuel () {
     # build_deb_fuel packagename srcrepo specpath
     [ -n "$1" ] && local PACKAGENAME=$1 && shift
@@ -470,8 +519,7 @@ build_deb_fuel () {
     # Push files to OBS
     #------------------
     push_package_to_obs
-    rm -rf ${PACKAGENAME}-src
-    rm -rf ${PACKAGENAME}-spec
+    [ -d "${PACKAGENAME}-src" ] && rm -rf ${PACKAGENAME}-src
     #--------------------------
     # Wait for building package
     #--------------------------
@@ -479,7 +527,7 @@ build_deb_fuel () {
     echo "Starting build of $PACKAGENAME"
     echo "$OBSURL/package/live_build_log?arch=x86_64&package=$PACKAGENAME&project=${PRJNAME}${UPDATES_SUFFIX}${CRSUFFIX}&repository=${REPONAME}"
     info "To abort build copy this URL to browser: $OBSURL/package/abort_build?arch=x86_64&project=${PRJNAME}${UPDATES_SUFFIX}${CRSUFFIX}&repo=${REPONAME}&package=${PACKAGENAME}REMOVEME"
-    get_build_status
+    get_build_status ${PRJNAME}${UPDATES_SUFFIX}${CRSUFFIX} $PACKAGENAME
     info "Repository URL: http:/${OBSURL#*/}:82/${PRJNAME}${UPDATES_SUFFIX}${CRSUFFIX}/${REPONAME}"
 }
 
@@ -493,9 +541,13 @@ main () {
   if [ -n "$GERRIT_REFSPEC" ]; then
      request_is_merged $GERRIT_REFSPEC && GERRIT_STATUS="MERGED"
   fi
+  LP_BUG=`echo "$GERRIT_TOPIC" | egrep -o "bug/[0-9]+" | cut -d'/' -f2`
+  [ -z "$LP_BUG" ] \
+      && LP_BUG=`echo $GERRIT_CHANGE_COMMIT_MESSAGE | base64 -d | egrep -i -o "(closes|partial|related)-bug: ?#?[0-9]+" | sort -u | head -1 | awk -F'[: #]' '{print $NF}'`
   FAILED_PACKAGES=''
   SUCCEEED_PACKAGES=''
   rm -f *.xml
+
   case $GERRIT_PROJECT in
       "stackforge/fuel-astute" )
           build_deb_fuel fuel-astute stackforge/fuel-astute
