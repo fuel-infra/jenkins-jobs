@@ -1,0 +1,41 @@
+- job:
+    name: 'jenkins-jobs.check_shell'
+    description: |
+            <h2>Run shellchek against *.sh files</h2>
+            <h3>Job currently running in non-voting mode</h3>
+    concurrent: true
+    node: 'shellcheck'
+    builders:
+      - shell:
+          !include-raw builders/check_shell.sh
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.fuel-infra.org/fuel-infra/jenkins-jobs.git
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'fuel-infra/jenkins-jobs'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
