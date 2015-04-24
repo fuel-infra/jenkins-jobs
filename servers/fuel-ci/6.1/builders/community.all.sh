@@ -63,13 +63,13 @@ make UPGRADE_VERSIONS="${PROD_VER}:${BASE_VERSION}" BASE_VERSION=${BASE_VERSION}
 
 echo "STEP 3. Pack artifacts"
 cd ${ARTS_DIR}
-tar cvf "${ARTIFACT_NAME}.tar" bootstrap.tar.gz centos-repo.tar ubuntu-repo.tar puppet.tgz openstack.yaml version.yaml fuel-images.tar.*
+tar cvf "${ARTIFACT_NAME}.tar" bootstrap.tar.gz centos-repo.tar ubuntu-repo.tar openstack.yaml version.yaml fuel-images.tar.*
 
 #########################################
 
 echo "STEP 4. Pack diffs"
 cd ${ARTS_DIR}
-tar cvf "${ARTIFACT_DIFF_NAME}.tar" puppet.tgz version.yaml openstack.yaml diff*
+tar cvf "${ARTIFACT_DIFF_NAME}.tar" version.yaml openstack.yaml diff*
 
 #########################################
 
