@@ -17,8 +17,12 @@
           description: Magnet link which is going to be downloaded.
       - string:
           name: DST_HOST
-          default: 'partnershare@share.fuel-infra.org'
+          default: 'share.fuel-infra.org'
           description: Destination host.
+      - string:
+          name: DST_USERNAME
+          default: 'partnershare'
+          description: Remote user.
       - string:
           name: DST_DIR
           default: '/var/www/partnershare'
