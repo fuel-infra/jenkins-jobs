@@ -32,3 +32,9 @@
           testgroup: 'deploy_neutron_gre'
           upgrade_testgroup: 'rollback'
           weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'ceph_multinode_compact_neutron'
+          upgrade_testgroup: 'rollback'
+          properties: |
+            NEUTRON_ENABLE=true
+          weight: '8'

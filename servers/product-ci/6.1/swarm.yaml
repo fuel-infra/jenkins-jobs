@@ -242,3 +242,9 @@
             - name: '6.1.system_test.ubuntu.deploy_neutron_gre.rollback'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '6.1.system_test.ubuntu.ceph_multinode_compact_neutron.rollback'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '6.1.system_test.centos.ceph_multinode_compact_neutron.rollback'
+              current-parameters: true
+              kill-phase-on: NEVER
