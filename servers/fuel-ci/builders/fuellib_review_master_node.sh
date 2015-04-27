@@ -7,7 +7,7 @@ if echo "${GERRIT_CHANGE_COMMIT_MESSAGE}" | grep -q -iE "Fuel-CI:\s+disable"; th
   exit -1
 fi
 
-export MIRROR_UBUNTU="$(curl -sSf https://fuel-jenkins.mirantis.com/view/devops/job/master_env/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt)"
+export MIRROR_UBUNTU="$(curl -sSf "${JENKINS_URL}job/master_env/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt")"
 
 export FUEL_MAIN_PATH="/home/jenkins/workspace/fuel-main/env_masternode-default/master"
 export SYSTEM_TESTS="${FUEL_MAIN_PATH}/utils/jenkins/system_tests.sh"
