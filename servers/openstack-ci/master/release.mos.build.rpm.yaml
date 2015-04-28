@@ -1,6 +1,6 @@
 - job-template:
     name: 'master.mos.build-rpm'
-    disabled: '{is-disabled}'
+    disabled: true
     concurrent: true
     node: '{build-node}'
     logrotate:
@@ -47,7 +47,11 @@
       - shell:
           !include-raw-escape builders/ci.status.report.start.sh
       - shell:
+          !include-raw-escape builders/mos.reset.vote.sh
+      - shell:
           !include-raw-escape builders/mos.build.rpm.sh
+      - shell:
+          !include-raw-escape builders/mos.vote.sh
     publishers:
       - post-tasks:
         - matches:
