@@ -4,7 +4,7 @@
       - shell:
           !include-raw builders/all.sh
     description: |
-      Build artifacts: iso, img and upgrade tarball
+      Build artifacts: iso and upgrade tarball
 
       <p>
         Owned by: Fuel OSCI Team<br/>
@@ -21,13 +21,6 @@
           max-per-node: 1
           option: category
     parameters:
-      - string:
-          name: BASE_VERSION
-          default: '6.0'
-      - string:
-          name: DATA_MAGNET_LINK
-          default:
-            !include-raw data/6.0-artifacts
       - string:
           name: deep_clean
           default: 'true'
