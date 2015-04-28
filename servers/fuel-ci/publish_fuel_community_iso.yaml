@@ -24,7 +24,7 @@
           name: BUILD
     publishers:
       - description-setter:
-          regexp: ".*META: (.*<a href=.*a> <a href=.*a> <a href=.*a>)"
+          regexp: "^META: (.*)"
       - email:
           notify-every-unstable-build: false
           recipients: devops+alert@mirantis.com
