@@ -35,55 +35,36 @@
           trigger-on:
             - change-merged-event
           projects:
-            - project-compare-type: 'ANT'
+            - project-compare-type: 'PLAIN'
               project-pattern: 'stackforge/python-fuelclient'
               branches:
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
-            - project-compare-type: 'ANT'
+            - project-compare-type: 'PLAIN'
               project-pattern: 'stackforge/fuel-ostf'
               branches:
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
-            - project-compare-type: 'ANT'
+            - project-compare-type: 'PLAIN'
               project-pattern: 'stackforge/fuel-astute'
               branches:
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
-            - project-compare-type: 'ANT'
+            - project-compare-type: 'PLAIN'
               project-pattern: 'stackforge/fuel-main'
               branches:
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
-              file-paths:
-                - compare-type: 'ANT'
-                  pattern: 'packages/rpm/specs/**'
-                - compare-type: 'ANT'
-                  pattern: 'fuelmenu/**'
-            - project-compare-type: 'ANT'
+            - project-compare-type: 'PLAIN'
               project-pattern: 'stackforge/fuel-web'
               branches:
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
-              file-paths:
-                - compare-type: 'PLAIN'
-                  pattern: 'bin/fencing-agent.rb'
-                - compare-type: 'PLAIN'
-                  pattern: 'bin/fencing-agent.cron'
-                - compare-type: 'PLAIN'
-                  pattern: 'bin/agent'
-                - compare-type: 'PLAIN'
-                  pattern: 'bin/nailgun-agent.cron'
-                - compare-type: 'ANT'
-                  pattern: 'network_checker/**'
-                - compare-type: 'ANT'
-                  pattern: 'tasklib/**'
-                - compare-type: 'ANT'
-                  pattern: 'fuel_agent/**'
-                - compare-type: 'ANT'
-                  pattern: 'nailgun/**'
-                - compare-type: 'ANT'
-                  pattern: 'shotgun/**'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/fuel-library'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
           silent: true
           server-name: review.openstack.org
     builders:

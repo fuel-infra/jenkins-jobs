@@ -35,38 +35,21 @@
           trigger-on:
             - change-merged-event
           projects:
-            - project-compare-type: 'ANT'
+            - project-compare-type: 'PLAIN'
               project-pattern: 'stackforge/fuel-astute'
               branches:
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
-              file-paths:
-                - compare-type: 'ANT'
-                  pattern: 'mcagents/**'
-            - project-compare-type: 'ANT'
+            - project-compare-type: 'PLAIN'
               project-pattern: 'stackforge/fuel-main'
               branches:
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
-              file-paths:
-                - compare-type: 'ANT'
-                  pattern: 'packages/deb/specs/**'
-            - project-compare-type: 'ANT'
+            - project-compare-type: 'PLAIN'
               project-pattern: 'stackforge/fuel-web'
               branches:
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
-              file-paths:
-                - compare-type: 'PLAIN'
-                  pattern: 'bin/fencing-agent.rb'
-                - compare-type: 'PLAIN'
-                  pattern: 'bin/agent'
-                - compare-type: 'PLAIN'
-                  pattern: 'bin/nailgun-agent.cron'
-                - compare-type: 'ANT'
-                  pattern: 'network_checker/**'
-                - compare-type: 'ANT'
-                  pattern: 'tasklib/**'
           silent: true
           server-name: review.openstack.org
     builders:
