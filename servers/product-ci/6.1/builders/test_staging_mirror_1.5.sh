@@ -20,3 +20,4 @@ echo "MIRROR_UBUNTU=deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb
 
 cat ubuntu_mirror_id.txt mirror_ubuntu.txt artifacts/magnet_link.txt > properties_file.txt
 echo "BUILD_MIRROR_URL = ${BUILD_MIRROR_URL}" >> properties_file.txt
+echo "USE_STABLE_MOS_FOR_STAGING = ${USE_STABLE_MOS_FOR_STAGING}" >> properties_file.txt
