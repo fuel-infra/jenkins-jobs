@@ -58,6 +58,8 @@
           silent: true
     builders:
       - shell:
+          !include-raw-escape builders/mos.remove.junk.files.sh
+      - shell:
           !include-raw-escape builders/mos.reset.vote.sh
       - shell:
           !include-raw-escape builders/mos.lint.sh
