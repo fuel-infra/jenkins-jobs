@@ -20,13 +20,6 @@
           option: category
     parameters:
       - string:
-          name: BASE_VERSION
-          default: '6.0'
-      - string:
-          name: DATA_MAGNET_LINK
-          default:
-            !include-raw data/6.0-artifacts
-      - string:
           name: make_args
           default: ''
           description: Additional make arguments
