@@ -5,8 +5,8 @@ set -ex
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin:$PATH
 
 PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
-export ISO_NAME="fuel-${PROD_VER}-${BUILD_NUMBER}-${BUILD_ID}"
-export UPGRADE_TARBALL_NAME="fuel-${PROD_VER}-upgrade-${BUILD_NUMBER}-${BUILD_ID}"
+export ISO_NAME="fuel-gerrit-${PROD_VER}-${BUILD_NUMBER}-${BUILD_ID}"
+export UPGRADE_TARBALL_NAME="fuel-gerrit-${PROD_VER}-upgrade-${BUILD_NUMBER}-${BUILD_ID}"
 
 export BUILD_DIR="${WORKSPACE}/../tmp/${JOB_NAME}/build"
 export LOCAL_MIRROR="${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror"
