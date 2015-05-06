@@ -130,6 +130,9 @@
           branches:
             - 'origin/stable/6.0'
     wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
       - ansicolor:
           colormap: xterm
     publishers:
