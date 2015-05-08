@@ -24,7 +24,7 @@
           default: '6.1-ubuntu'
           name: MIRROR
       - string:
-          default: 'osci-mirror-kha.kha.mirantis.net osci-mirror-msk.msk.mirantis.net osci-mirror-srt.srt.mirantis.net seed-us1.fuel-infra.org seed-cz1.fuel-infra.org'
+          default: 'osci-mirror-kha.kha.mirantis.net osci-mirror-msk.msk.mirantis.net osci-mirror-poz.infra.mirantis.net osci-mirror-srt.srt.mirantis.net seed-us1.fuel-infra.org seed-cz1.fuel-infra.org'
           name: RSYNCHOSTS
       - string:
           name: STABLE_VERSION
