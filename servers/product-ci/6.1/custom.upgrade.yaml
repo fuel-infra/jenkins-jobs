@@ -1,5 +1,5 @@
 - job:
-    name: 'custom_6.1_upgrade'
+    name: '6.1.custom.iso.upgrade'
     builders:
       - shell:
           !include-raw builders/custom.upgrade.sh
