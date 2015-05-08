@@ -1,0 +1,40 @@
+- job-group:
+    name: '7.0-system_tests-upgrades'
+    version-id: '7.0'
+    id: 'system_test'
+    node: 'systest'
+    timeout: '480'
+    base_repobranch: 'origin/stable/6.1'
+    base_iso_magnet_link:
+        !include-raw ../data/6.1-iso
+    upgrade_repobranch: 'origin/master'
+    properties: ''
+    jobs:
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'deploy_neutron_gre_ha'
+          upgrade_testgroup: 'upgrade'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'ceph_multinode_compact'
+          upgrade_testgroup: 'upgrade'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'ceph_multinode_compact_neutron'
+          upgrade_testgroup: 'upgrade'
+          properties: |
+            NEUTRON_ENABLE=true
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'deploy_neutron_gre_ha'
+          upgrade_testgroup: 'rollback'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'deploy_neutron_gre'
+          upgrade_testgroup: 'rollback'
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+          testgroup: 'ceph_multinode_compact_neutron'
+          upgrade_testgroup: 'rollback'
+          properties: |
+            NEUTRON_ENABLE=true
+          weight: '8'

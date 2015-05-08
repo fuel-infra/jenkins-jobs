@@ -1,0 +1,53 @@
+- job:
+    name: '7.0.staging.centos.bvt_1'
+    builders:
+      - inject:
+          properties-content: |
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+      - systest
+    concurrent: true
+    description:
+      !include-raw descriptions/staging.centos.bvt_1
+    logrotate:
+      daysToKeep: 30
+    node: custom_bvt
+    properties:
+      - heavy-job:
+          weight: 8
+      - throttle:
+          max-per-node: 1
+          option: project
+    parameters:
+      - systest:
+          dist: CentOS
+          testgroup: bvt_1
+          version-id: '7.0'
+          id: 'staging'
+    publishers:
+      - nosetests
+      - email-default:
+          mail-to: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
+      - trigger-parameterized-builds:
+        - project: fuel_build_reports
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            RELEASE=7.0
+            BUILD=fuel-7.0-$STAGING_ISO_BUILD_NUMBER
+            STAGE=bvt_1
+            VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
+        - project: fuel_build_reports
+          condition: FAILED
+          predefined-parameters: |
+            RELEASE=7.0
+            BUILD=fuel-7.0-$STAGING_ISO_BUILD_NUMBER
+            STAGE=bvt_1
+            VALUE=fail
+            REPORTED_JOB_URL=$BUILD_URL
+    scm:
+      - stackforge:
+          branch: 'master'
+          repo: 'fuel-qa'
+    wrappers:
+      - timeout:
+          timeout: 210
