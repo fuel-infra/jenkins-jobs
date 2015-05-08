@@ -58,12 +58,12 @@
               kill-phase-on: NEVER
               property-file: properties_file.txt
               current-parameters: true
-              predefined-parameters: '6_1_STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
+              predefined-parameters: 'STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
             - name: '6.1.staging.ubuntu.bvt_2'
               kill-phase-on: NEVER
               property-file: properties_file.txt
               current-parameters: true
-              predefined-parameters: '6_1_STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
+              predefined-parameters: 'STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
       - multijob:
           name: Updating Mirrors stable symlink
           condition: SUCCESSFUL
@@ -71,7 +71,7 @@
             - name: '6.1.set_stable_mirror'
               kill-phase-on: FAILURE
               property-file: mirror_staging.txt
-              predefined-parameters: '6_1_STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
+              predefined-parameters: 'STAGING_ISO_BUILD_NUMBER=$6_1_STAGING_ISO_BUILD_NUMBER'
       - copyartifact:
           project: '6.1.set_stable_mirror'
           filter: build_description.txt

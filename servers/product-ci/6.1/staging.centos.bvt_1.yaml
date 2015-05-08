@@ -32,7 +32,7 @@
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
             RELEASE=6.1
-            BUILD=fuel-6.1-$6_1_STAGING_ISO_BUILD_NUMBER
+            BUILD=fuel-6.1-$STAGING_ISO_BUILD_NUMBER
             STAGE=bvt_1
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
@@ -40,7 +40,7 @@
           condition: FAILED
           predefined-parameters: |
             RELEASE=6.1
-            BUILD=fuel-6.1-$6_1_STAGING_ISO_BUILD_NUMBER
+            BUILD=fuel-6.1-$STAGING_ISO_BUILD_NUMBER
             STAGE=bvt_1
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL
