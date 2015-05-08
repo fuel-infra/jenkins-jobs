@@ -7,7 +7,7 @@
       - systest
     concurrent: true
     description:
-      !include-raw descriptions/6.1.centos.bvt_1
+      !include-raw descriptions/centos.bvt_1
     logrotate:
       daysToKeep: 30
       numToKeep: 50

@@ -6,7 +6,7 @@
       - shell:
           !include-raw builders/build_staging_mirror.sh
     description:
-      !include-raw descriptions/6.1.build_staging_mirror
+      !include-raw descriptions/build_staging_mirror
     logrotate:
       daysToKeep: 45
       numToKeep: 100

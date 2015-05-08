@@ -7,7 +7,7 @@
       - systest
     concurrent: true
     description:
-      !include-raw descriptions/6.1.staging.centos.bvt_1
+      !include-raw descriptions/staging.centos.bvt_1
     logrotate:
       daysToKeep: 30
     node: custom_bvt

@@ -2,7 +2,7 @@
     name: '6.1.test_staging_mirror'
     project-type: multijob
     description:
-      !include-raw descriptions/6.1.test_staging_mirror
+      !include-raw descriptions/test_staging_mirror
     concurrent: true
     node: mirror
     properties:
