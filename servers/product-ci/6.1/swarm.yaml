@@ -138,7 +138,7 @@
             - name: '6.1.system_test.centos.known_issues'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '6.1.system_test.centos.plugins'
+            - name: '6.1.system_test.centos.fuel_plugins'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '6.1.system_test.centos.services_ha'
@@ -199,7 +199,7 @@
             - name: '6.1.system_test.ubuntu.known_issues'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '6.1.system_test.ubuntu.plugins'
+            - name: '6.1.system_test.ubuntu.fuel_plugins'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '6.1.system_test.ubuntu.services_ha'
