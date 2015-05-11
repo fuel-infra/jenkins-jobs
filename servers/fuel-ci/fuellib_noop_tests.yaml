@@ -40,6 +40,7 @@
             failed: true
             unstable: true
             notbuilt: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - ansicolor:
           colormap: xterm

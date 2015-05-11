@@ -61,3 +61,4 @@
                       branch-pattern: 'stable/4.1'
                     - branch-compare-type: PLAIN
                       branch-pattern: 'stable/5.0'
+            custom-url: '* $JOB_NAME $BUILD_URL'

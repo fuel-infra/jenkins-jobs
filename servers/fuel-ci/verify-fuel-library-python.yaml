@@ -44,6 +44,7 @@
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
       - ansicolor:

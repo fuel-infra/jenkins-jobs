@@ -32,6 +32,7 @@
                   branch-pattern: '**'
           silent: true
           readable-message: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - timeout:
           timeout: 3

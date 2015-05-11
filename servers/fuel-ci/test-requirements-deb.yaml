@@ -37,5 +37,6 @@
               file-paths:
                 - compare-type: ANT
                   pattern: '**/requirements-deb.txt'
+          custom-url: '* $JOB_NAME $BUILD_URL'
     publishers:
       - email-default

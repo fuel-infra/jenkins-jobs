@@ -50,6 +50,7 @@
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
       - ansicolor:

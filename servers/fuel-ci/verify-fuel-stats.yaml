@@ -35,6 +35,7 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           server-name: defaultServer
+          custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - timeout:
           fail: true

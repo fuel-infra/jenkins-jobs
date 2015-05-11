@@ -37,5 +37,6 @@
               file-paths:
                 - compare-type: ANT
                   pattern: '**/requirements-rpm.txt'
+          custom-url: '* $JOB_NAME $BUILD_URL'
     publishers:
       - email-default

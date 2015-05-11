@@ -60,6 +60,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/4.1'
           readable-message: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - ansicolor:
           colormap: xterm
