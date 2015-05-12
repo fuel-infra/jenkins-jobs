@@ -17,13 +17,6 @@
           weight: 2
     parameters:
       - string:
-          name: BASE_VERSION
-          default: '6.0'
-      - string:
-          name: DATA_MAGNET_LINK
-          default:
-            !include-raw data/community-6.0-artifacts
-      - string:
           name: deep_clean
           default: 'true'
           description: Perform deep_clean or not. Default is "true". Set any other value
