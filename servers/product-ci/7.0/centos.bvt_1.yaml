@@ -1,0 +1,39 @@
+- job:
+    name: '7.0.centos.bvt_1'
+    builders:
+      - inject:
+          properties-content: |
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+      - systest
+    concurrent: true
+    description:
+      !include-raw descriptions/centos.bvt_1
+    logrotate:
+      daysToKeep: 30
+      numToKeep: 50
+    node: bvt
+    properties:
+      - heavy-job:
+          weight: 8
+      - throttle:
+          max-per-node: 1
+          option: project
+    parameters:
+      - systest:
+          dist: CentOS
+          testgroup: bvt_1
+          version-id: '7.0'
+          id: 'main'
+    publishers:
+      - nosetests
+      - email-systest:
+          body-failed:
+            !include-raw notifications/bvt.failed
+          mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
+    scm:
+      - stackforge:
+          branch: 'master'
+          repo: 'fuel-qa'
+    wrappers:
+      - timeout:
+          timeout: 300

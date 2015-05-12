@@ -1,0 +1,90 @@
+- job:
+    name: '7.0.test_staging_mirror'
+    project-type: multijob
+    description:
+      !include-raw descriptions/test_staging_mirror
+    concurrent: true
+    node: mirror
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: FUEL_MAIN_BRANCH
+          default: master
+      - string:
+          name: MIRROR
+          default: '7.0'
+          description: |
+            Autodetected for <b>stable/*</b> branch independent of specified value. 
+            Otherwise specify it. For example: <b>7.0</b>
+      - string:
+          name: MIRROR_VERSION
+          description: "5.1-2014-08-26-115618"
+      - string:
+          name: MIRROR_BASE
+          description: http://osci-mirror-msk.msk.mirantis.net/fwm/files/7.0-2014-12-10-175744
+      - string:
+          name: extra_commits
+          description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
+      - string:
+          name: BUILD_MIRROR_URL
+          description: 'http://jenkins-product.srt.mirantis.net:8080/job/7.0.build_staging_mirror/123/'
+      - bool:
+          name: USE_STABLE_MOS_FOR_STAGING
+          default: true
+          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/7.0.all/lastSuccessfulBuild/artifact/version.yaml.txt">7.0.all</a>. Will used "master" otherwise.'
+    builders:
+      - shell:
+          !include-raw builders/test_staging_mirror_1.sh
+      - multijob:
+          name: ISO Building
+          condition: SUCCESSFUL
+          projects:
+            - name: '7.0.staging.iso'
+              kill-phase-on: FAILURE
+              property-file: mirror_staging.txt
+      - copyartifact:
+          project: '7.0.staging.iso'
+          filter: artifacts/magnet_link.txt
+          which-build: last-successful
+      - shell:
+          !include-raw builders/test_staging_mirror_1.5.sh
+      - multijob:
+          name: ISO Testing
+          condition: SUCCESSFUL
+          projects:
+            - name: '7.0.staging.centos.bvt_1'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+              current-parameters: true
+              predefined-parameters: 'STAGING_ISO_BUILD_NUMBER=$7_0_STAGING_ISO_BUILD_NUMBER'
+            - name: '7.0.staging.ubuntu.bvt_2'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+              current-parameters: true
+              predefined-parameters: 'STAGING_ISO_BUILD_NUMBER=$7_0_STAGING_ISO_BUILD_NUMBER'
+      - multijob:
+          name: Updating Mirrors stable symlink
+          condition: SUCCESSFUL
+          projects:
+            - name: '7.0.set_stable_mirror'
+              kill-phase-on: FAILURE
+              property-file: mirror_staging.txt
+              predefined-parameters: 'STAGING_ISO_BUILD_NUMBER=$7_0_STAGING_ISO_BUILD_NUMBER'
+      - copyartifact:
+          project: '7.0.set_stable_mirror'
+          filter: build_description.txt
+          which-build: last-successful
+      - shell:
+          !include-raw builders/test_staging_mirror_2.sh
+    publishers:
+      - description-setter:
+          regexp: (^[^\s]* is stable.*a href.*)
+          set-for-matrix: false
+      - archive:
+          allow-empty: false
+          artifacts: 'properties_file.txt, mirror_staging.txt'
+          latest-only: false
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com, mos-qa@mirantis.com, mos-engineering@mirantis.com

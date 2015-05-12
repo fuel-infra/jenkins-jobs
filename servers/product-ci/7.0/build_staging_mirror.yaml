@@ -1,0 +1,69 @@
+- job:
+    name: '7.0.build_staging_mirror'
+    builders:
+      - shell:
+          !include-raw builders/update_reprepro.sh
+      - shell:
+          !include-raw builders/build_staging_mirror.sh
+    description:
+      !include-raw descriptions/build_staging_mirror
+    logrotate:
+      daysToKeep: 45
+      numToKeep: 100
+    node: mirror
+    parameters:
+      - string:
+          name: REPOS
+          default: 'ubuntu-fuel-7.0-stable'
+          description: 'Space delimited list of ubuntu repos to create reprepro repo'
+      - string:
+          name: extra_commits
+          description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
+      - string:
+          name: YUM_DOWNLOAD_SRC
+          default: 'yes'
+      - string:
+          name: mirror
+          default: '7.0'
+      - string:
+          name: purge_packages
+          default: 'yes'
+      - string:
+          name: EXTRA_DEB_REPOS
+          default: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-7.0/ precise-security main universe multiverse restricted'
+      - bool:
+          name: USE_STABLE_MOS_FOR_STAGING
+          default: true
+          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/7.0.all/lastSuccessfulBuild/artifact/version.yaml.txt">7.0.all</a>. Will used "master" otherwise.'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    publishers:
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com
+      - description-setter:
+          regexp: ^Updated:.*a href.*
+      - archive:
+          artifacts: mirror_staging.txt, osci-mirrors/pkgs-sync-diff-*.log, *changelog
+          latest-only: false
+      - trigger-parameterized-builds:
+        - project: '7.0.test_staging_mirror'
+          condition: UNSTABLE_OR_BETTER
+          property-file: mirror_staging.txt
+    scm:
+      - stackforge:
+          branch: 'master'
+          repo: fuel-main
+      - osci-mirrors
+# FIXME - timer disabled
+#    triggers:
+#      - timed: 'H */6 * * *'
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '5b151a58-4b65-4d13-87a1-883d52020e2d'
