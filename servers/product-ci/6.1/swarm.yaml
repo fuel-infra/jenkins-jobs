@@ -147,7 +147,10 @@
             - name: '6.1.system_test.centos.services_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '6.1.system_test.centos.thread_non_func_1_usb'
+            - name: '6.1.system_test.centos.thread_non_func_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '6.1.system_test.centos.thread_usb'
               current-parameters: true
               kill-phase-on: NEVER
             # Ubuntu
@@ -208,7 +211,10 @@
             - name: '6.1.system_test.ubuntu.services_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '6.1.system_test.ubuntu.thread_non_func_1_usb'
+            - name: '6.1.system_test.ubuntu.thread_non_func_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '6.1.system_test.ubuntu.thread_usb'
               current-parameters: true
               kill-phase-on: NEVER
             # Upgrades
