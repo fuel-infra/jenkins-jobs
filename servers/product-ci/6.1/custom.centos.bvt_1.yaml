@@ -36,7 +36,7 @@
       - git:
           url: 'https://git.openstack.org/stackforge/fuel-qa.git'
           branches:
-            - 'origin/master'
+            - 'origin/stable/6.1'
     wrappers:
       - ansicolor:
           colormap: xterm

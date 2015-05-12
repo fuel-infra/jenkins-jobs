@@ -7,7 +7,7 @@
     base_repobranch: 'origin/stable/6.0'
     base_iso_magnet_link:
         !include-raw ../data/6.0-iso
-    upgrade_repobranch: 'origin/master'
+    upgrade_repobranch: 'origin/stable/6.1'
     properties: ''
     jobs:
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':

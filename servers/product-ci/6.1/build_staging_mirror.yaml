@@ -13,6 +13,7 @@
       daysToKeep: 45
       numToKeep: 100
     node: mirror
+    disabled: true
     parameters:
       - string:
           name: REPOS
@@ -36,7 +37,7 @@
       - bool:
           name: USE_STABLE_MOS_FOR_STAGING
           default: true
-          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/6.1.all/lastSuccessfulBuild/artifact/version.yaml.txt">6.1.all</a>. Will used "master" otherwise.'
+          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/6.1.all/lastSuccessfulBuild/artifact/version.yaml.txt">6.1.all</a>. Will used "stable/6.1" otherwise.'
     properties:
       - heavy-job:
           weight: 1
@@ -68,11 +69,9 @@
             REPORTED_JOB_URL=$BUILD_URL
     scm:
       - stackforge:
-          branch: 'master'
+          branch: 'stable/6.1'
           repo: fuel-main
       - osci-mirrors
-    triggers:
-      - timed: 'H */6 * * *'
     wrappers:
       - ssh-agent-credentials:
           users:

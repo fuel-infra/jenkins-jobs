@@ -5,7 +5,7 @@
           !include-raw builders/staging.iso.sh
     concurrent: true
     description: |
-      Build fuel master code on top of staging files/6.1-timestamp Fuel mirror.
+      Build fuel stable/6.1 code on top of staging files/6.1-timestamp Fuel mirror.
       <p>This ISO is used only to test staging mirror.<p>
       For "official" 6.1 iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/6.1.all/">6.1.all</a>
 
@@ -40,7 +40,7 @@
       - bool:
           name: USE_STABLE_MOS_FOR_STAGING
           default: true
-          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/6.1.all/lastSuccessfulBuild/artifact/version.yaml.txt">6.1.all</a>. Will used "master" otherwise.'
+          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/6.1.all/lastSuccessfulBuild/artifact/version.yaml.txt">6.1.all</a>. Will use "stable/6.1" otherwise.'
     publishers:
       - archive:
           allow-empty: false
@@ -89,7 +89,7 @@
             REPORTED_JOB_URL=$BUILD_URL
     scm:
       - stackforge:
-          branch: 'master'
+          branch: 'stable/6.1'
           repo: fuel-main
     wrappers:
       - timeout:
