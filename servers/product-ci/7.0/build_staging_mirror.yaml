@@ -2,8 +2,6 @@
     name: '7.0.build_staging_mirror'
     builders:
       - shell:
-          !include-raw builders/update_reprepro.sh
-      - shell:
           !include-raw builders/build_staging_mirror.sh
     description:
       !include-raw descriptions/build_staging_mirror
