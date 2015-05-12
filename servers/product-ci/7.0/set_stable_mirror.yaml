@@ -66,3 +66,7 @@
             REPORTED_JOB_URL=$BUILD_URL
     scm:
       - osci-mirrors
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 320

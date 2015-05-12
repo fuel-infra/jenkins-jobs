@@ -16,7 +16,7 @@
           name: MIRROR
           default: '6.0.1'
           description: |
-            Autodetected for <b>stable/*</b> branch independent of specified value. 
+            Autodetected for <b>stable/*</b> branch independent of specified value.
             Otherwise specify it. For example: <b>6.0.1</b>
       - string:
           name: MIRROR_VERSION
@@ -78,3 +78,7 @@
           set-for-matrix: false
       - email-default:
           mail-to: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com,mos-engineering@mirantis.com
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 320
