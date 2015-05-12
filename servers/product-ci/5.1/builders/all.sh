@@ -99,8 +99,8 @@ echo "<a href="$ISO_HTTP_LINK">ISO download link</a> <a href="$ISO_HTTP_TORRENT"
 
 if [ "${trigger_community_build}" = "true" ]; then
   scp ${WORKSPACE}/version.yaml.txt build1.fuel-infra.org:/home/jenkins/workspace/fuel_commits/${PROD_VER}-${BUILD_NUMBER}.yaml
-  curl -X POST https://fuel-jenkins.mirantis.com/job/${PROD_VER}-community.all/buildWithParameters\?FUEL_COMMITS\=${PROD_VER}-${BUILD_NUMBER}.yaml \
-  --user product-ci:${AUTH_TOKEN}
+  curl -X POST https://ci.fuel-infra.org/job/${PROD_VER}-community.all/buildWithParameters\?FUEL_COMMITS\=${PROD_VER}-${BUILD_NUMBER}.yaml \
+  --user product-ci:${FUEL_CI_API_TOKEN}
 fi
 
 echo "BUILD FINISHED. (`date -u`)"
