@@ -83,10 +83,13 @@
       - stackforge:
           branch: 'master'
           repo: fuel-main
-# FIXME - timer disabled 
+# FIXME - timer disabled
 #    triggers:
 #      - timed: 'H 22 * * *'
     wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
       - inject-passwords:
           job-passwords:
             - name: AUTH_TOKEN

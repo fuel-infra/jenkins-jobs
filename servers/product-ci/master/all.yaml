@@ -71,6 +71,9 @@
     triggers:
       - timed: 'H 23 */3 * *'
     wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
       - inject-passwords:
           job-passwords:
             - name: AUTH_TOKEN
