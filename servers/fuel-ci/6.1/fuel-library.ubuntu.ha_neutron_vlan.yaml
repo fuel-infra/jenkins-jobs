@@ -16,7 +16,7 @@
           !include-raw builders/fuel-library-review.sh
     concurrent: true
     description:
-      !include-raw descriptions/6.1.fuellib-ubuntu
+      !include-raw descriptions/fuellib-ubuntu
     logrotate:
       artifactDaysToKeep: 30
     node: 'master_ubuntu'
