@@ -1,0 +1,43 @@
+- job:
+    name: 'build-fuel-plugins'
+    builders:
+      - shell:
+          !include-raw-escape builders/build-fuel-plugins.sh
+    description: |
+      Build plugins for fuel-plugins project <a href=https://github.com/stackforge/fuel-plugins>github.com/stackforge/fuel-plugins</a>
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: build-fuel-plugins
+    concurrent: true
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          max-per-node: 1
+          option: project
+    publishers:
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'devops+alert@mirantis.com'
+          send-to-individuals: false
+      - archive:
+          allow-empty: true
+          artifacts: 'built_plugins/*.fp, built_plugins/*.rpm'
+          latest-only: false
+      - description-setter:
+          regexp: '(<a href=.*a>)'
+    scm:
+      - git:
+          branches:
+            - 'origin/master'
+          url: https://review.openstack.org/stackforge/fuel-plugins.git
+    triggers:
+      - timed: '0 0 * * *'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 10
