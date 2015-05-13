@@ -52,6 +52,11 @@
                   branch-pattern: 'master'
           readable-message: true
           custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
     wrappers:
       - ansicolor:
           colormap: xterm
