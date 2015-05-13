@@ -1,0 +1,23 @@
+- job-template:
+    name: 'master.mos-new.autobuild'
+    disabled: '{is-disabled}'
+    project-type: multijob
+    concurrent: false
+    node: '{build-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    triggers:
+      - timed: H 23 * * *
+    builders:
+      - multijob:
+          name: Build
+          projects:
+            - name: master.mos-new.autobuild-deb
+              kill-phase-on: NEVER
+            - name: master.mos-new.autobuild-rpm
+              kill-phase-on: NEVER
+    publishers:
+      - email:
+          recipients: dburmistrov@mirantis.com atsamutali@mirantis.com
+          notify-every-unstable-build: true
+          send-to-individuals: false

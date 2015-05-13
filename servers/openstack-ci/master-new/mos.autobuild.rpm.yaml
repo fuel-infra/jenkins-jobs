@@ -1,0 +1,30 @@
+- job-template:
+    name: 'master.mos-new.autobuild-rpm'
+    disabled: '{is-disabled}'
+    concurrent: false
+    node: '{build-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    parameters:
+      - autobuild-all
+    builders:
+      - shell:
+          !include-raw-escape builders/mos.autobuild.all.sh
+      - trigger-builds:
+          - project: 'master.mos-new.build-rpm'
+            parameter-factories:
+              - factory: filebuild
+                file-pattern: properties-*
+                no-files-found-action: FAIL
+            block: true
+            block-thresholds:
+              build-step-failure-threshold: never
+      - shell:
+          !include-raw-escape builders/mos.autobuild.junit.sh
+    publishers:
+      - junit:
+          results: overall.xml
+      - email:
+          recipients: dburmistrov@mirantis.com atsamutali@mirantis.com
+          notify-every-unstable-build: true
+          send-to-individuals: false

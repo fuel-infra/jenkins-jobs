@@ -1,0 +1,42 @@
+- parameter:
+    name: autobuild-all
+    parameters:
+      - text:
+          name: PACKAGE_LIST
+          default: |
+            ceilometer
+            cinder
+            glance
+            glance_store
+            heat
+            horizon
+            keystone
+            murano
+            murano-dashboard
+            neutron
+            nova
+            oslo.concurrency
+            oslo.config
+            oslo.db
+            oslo.i18n
+            oslo.messaging
+            oslo.rootwrap
+            oslo.serialization
+            oslo.utils
+            oslo.vmware
+            oslosphinx
+            oslotest
+            python-barbicanclient
+            python-ceilometerclient
+            python-cinderclient
+            python-glanceclient
+            python-heatclient
+            python-keystoneclient
+            python-muranoclient
+            python-neutronclient
+            python-novaclient
+            python-saharaclient
+            python-swiftclient
+            python-troveclient
+            sahara
+            swift
