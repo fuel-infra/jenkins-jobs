@@ -1,0 +1,70 @@
+- job:
+    name: 'devops.6.1.fuel-library.create_docker_env'
+    concurrent: true
+    description: |
+      Create docker env for building packages
+    logrotate:
+      artifactDaysToKeep: 2
+      daysToKeep: 2
+      numToKeep: 2
+    node: build
+    properties:
+      - heavy-job:
+          weight: '2'
+      - throttle:
+          max-per-node: 1
+          option: project
+
+    parameters:
+      - string:
+          name: PRODUCT_VERSION
+          default: '6.1'
+          description: 'Define version mirror to use on env creation'
+      - string:
+          name: CENTOS_MIRROR
+          default: ''
+          description: 'Default will be used: http://mirror.fuel-infra.org'
+      - string:
+          name: UBUNTU_MIRROR
+          default: ''
+          description: 'Default will be used: http://mirror.fuel-infra.org'
+      - string:
+          name: SAVE_DOCKER_IMAGE
+          default: 'yes'
+          description: 'Save docker image as artifact. yes - will store image, need for further deployment on slaves'
+      - string:
+          name: fuelmain_gerrit_commit
+          default: refs/changes/85/167985/23
+          description: 'Temporary parameter while code is not merged to fuel-main'
+      - string:
+          name: JENKINS_UID
+          default: '1000'
+          description: 'Define Jenkins UID, who is going to build packages. Need for setting proper file permissions'
+      - string:
+          name: JENKINS_GID
+          default: '1000'
+          description: 'Define Jenkins GID, who is going to build packages. Need for setting proper file permissions'
+
+    scm:
+      - git:
+          url: 'https://git.openstack.org/stackforge/fuel-main.git'
+          branches:
+            - refs/remotes/origin/master
+
+    builders:
+      - inject: # default env variables
+          properties-content: |
+            JENKINS_USER=jenkins
+            JENKINS_GROUP=jenkins
+      - shell:
+          !include-raw builders/fuel-library.devops.create_docker_env.sh
+
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'artifacts/*.xz'
+          latest-only: false
