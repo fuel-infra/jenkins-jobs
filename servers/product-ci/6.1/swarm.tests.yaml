@@ -36,6 +36,7 @@
          properties: |
            MULTIPLE_NETWORKS=true
            FUEL_STATS_ENABLED=true
+           FUEL_STATS_CHECK=true
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'thread_usb'
          properties: |
