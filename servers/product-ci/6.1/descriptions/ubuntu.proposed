@@ -1,0 +1,15 @@
+<p>Build verification test with trusty-proposed repository enabled</p>
+<pre style="font-size: 10px">
+Case: ha_neutron_ceph
+1. Create cluster
+2. Add 3 nodes with controller and ceph OSD roles
+3. Add 1 node with ceph OSD roles
+4. Add 2 nodes with compute and ceph OSD roles
+5. Deploy the cluster
+6. Check ceph status
+</pre>
+
+<p>
+  <b>Ownership:</b> Issues with this job are tracked by MOS-Linux team.
+<p>
+  <b>Contacts:</b> #mos-linux
