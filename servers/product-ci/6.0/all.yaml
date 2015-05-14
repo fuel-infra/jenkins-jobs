@@ -26,6 +26,7 @@
           default: '5.1.1'
       - string:
           name: DATA_MAGNET_LINK
+          default: !include-raw ../data/5.1.1-artifacts
       - string:
           name: deep_clean
           default: 'true'
