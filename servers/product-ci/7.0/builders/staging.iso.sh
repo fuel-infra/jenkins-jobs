@@ -98,6 +98,7 @@ make deep_clean
 
 echo "STEP 1. Make everything"
 
+export USE_MIRROR=msk
 make ${make_args} iso version-yaml ${add_make_target}
 
 #########################################
