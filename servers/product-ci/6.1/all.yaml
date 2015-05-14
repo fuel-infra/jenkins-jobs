@@ -84,7 +84,7 @@
           branch: 'master'
           repo: fuel-main
     triggers:
-      - timed: 'H 22 * * *'
+      - timed: 'H 20 * * *'
     wrappers:
       - timeout:
           timeout: 120
