@@ -53,7 +53,7 @@ def product_ci(label=None, names=None):
 def fuel_ci(label=None, names=None):
     env.user = 'root'
 
-    J = Jenkins('http://fuel-jenkins.mirantis.com')
+    J = Jenkins('https://ci.fuel-infra.org')
     env.hosts = J.list_nodes(label, names)
 
     print "\n".join(env.hosts)

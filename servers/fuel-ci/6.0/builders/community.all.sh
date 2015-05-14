@@ -45,7 +45,7 @@ echo "STEP 1. Get artifacts from ${BASE_VERSION}"
 export DEPS_DATA_DIR="$DEPS_DIR/${BASE_VERSION}"
 mkdir -p "${DEPS_DATA_DIR}"
 
-DATA_URL="https://fuel-jenkins.mirantis.com/job/${BASE_VERSION}-community.all"
+DATA_URL="${JENKINS_URL}job/${BASE_VERSION}-community.all"
 DATA_BUILD_NUMBER=`curl -s "${DATA_URL}/lastSuccessfulBuild/buildNumber"`
 echo "$DATA_URL/$DATA_BUILD_NUMBER" > $WORKSPACE/data_build_url.txt
 if [ -z "${DATA_MAGNET_LINK}" ]; then
