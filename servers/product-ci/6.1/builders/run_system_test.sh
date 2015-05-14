@@ -3,7 +3,38 @@
 set -ex
 
 TEST_ISO_JOB_URL="${JENKINS_URL}job/6.1.test_all/"
-MIRROR_HOST="http://mirror-pkgs.vm.mirantis.net/pkgs/"
+
+###################### Get MIRROR HOST ###############
+
+LOCATION=${`facter location`:-bud}
+
+case "${LOCATION}" in
+    srt)
+        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/pkgs/"
+        ;;
+    msk)
+        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/pkgs/"
+        ;;
+    kha)
+        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/pkgs/"
+        ;;
+    poz)
+        MIRROR_HOST="http://osci-mirror-poz.poz.mirantis.net/pkgs/"
+        ;;
+    bud)
+        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
+        ;;
+    bud-ext)
+        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
+        ;;
+    mnv)
+        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/pkgs/"
+        ;;
+    *)
+        MIRROR_HOST="http://mirror.fuel-infra.org/pkgs/"
+esac
+
+###################### Get MIRROR_UBUNTU ###############
 
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
 
