@@ -2,7 +2,7 @@
     name: 'build-fuel-plugins'
     builders:
       - shell:
-          !include-raw-escape builders/build-fuel-plugins.sh
+          !include-raw './builders/build-fuel-plugins.sh'
     description: |
       Build plugins for fuel-plugins project <a href=https://github.com/stackforge/fuel-plugins>github.com/stackforge/fuel-plugins</a>
     logrotate:
@@ -33,7 +33,7 @@
             - 'origin/master'
           url: https://review.openstack.org/stackforge/fuel-plugins.git
     triggers:
-      - timed: '0 0 * * *'
+      - timed: '0 22 * * *'
     wrappers:
       - ansicolor:
           colormap: xterm
