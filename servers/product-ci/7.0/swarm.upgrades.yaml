@@ -13,10 +13,14 @@
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre_ha'
           upgrade_testgroup: 'upgrade'
+          properties: |
+            KEYSTONE_PASSWORD=newpass
           weight: '8'
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'ceph_multinode_compact'
           upgrade_testgroup: 'upgrade'
+          properties: |
+            KEYSTONE_PASSWORD=newpass
           weight: '8'
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'ceph_multinode_compact_neutron'
@@ -27,10 +31,14 @@
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre_ha'
           upgrade_testgroup: 'rollback'
+          properties: |
+            KEYSTONE_PASSWORD=newpass
           weight: '8'
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre'
           upgrade_testgroup: 'rollback'
+          properties: |
+            KEYSTONE_PASSWORD=newpass
           weight: '8'
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'ceph_multinode_compact_neutron'
