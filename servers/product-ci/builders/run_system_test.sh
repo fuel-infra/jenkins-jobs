@@ -4,7 +4,7 @@ set -ex
 
 ###################### Get MIRROR HOST ###############
 
-LOCATION_FACT=$(facter location)
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
 LOCATION=${LOCATION_FACT:-bud}
 
 case "${LOCATION}" in

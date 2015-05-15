@@ -6,7 +6,7 @@ TEST_ISO_JOB_URL="${JENKINS_URL}job/6.1.test_all/"
 
 ###################### Get MIRROR HOST ###############
 
-LOCATION_FACT=$(facter location)
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
 LOCATION=${LOCATION_FACT:-bud}
 
 case "${LOCATION}" in
