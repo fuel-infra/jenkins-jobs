@@ -1,0 +1,8 @@
+- project:
+    name: 6.1.plugins
+    jobs:
+      - '6.1.system_test.{dist}.fuel_plugins':
+          dist: 'ubuntu'
+      - '6.1.system_test.{dist}.fuel_plugins':
+          dist: 'centos'
+

@@ -1,0 +1,57 @@
+- job-template:
+    name: '6.1.system_test.{dist}.fuel_plugins'
+    builders:
+      - inject:
+          properties-content: |
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+            OPENSTACK_RELEASE={dist}
+            TEST_GROUP=fuel_plugins
+            CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+            CLASSIC_PROVISIONING=false
+            EXAMPLE_PLUGIN_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example-1.0.0.fp
+      - shell:
+          !include-raw-escape 'scripts/run_plugins_system_test.sh'
+    disabled: false
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+    node: 'systest'
+    concurrent: true
+    description: '6.1 swarm test group'
+    properties:
+      - heavy-job:
+          weight: 8
+    scm:
+      - stackforge:
+          branch: 'master'
+          repo: 'fuel-qa'
+    parameters:
+    - string:
+        name: MAGNET_LINK
+        description: "iso magnet link"
+    - string:
+        name: ENV_PREFIX
+        default: '6.1.system_test.{dist}.fuel_plugins'
+        description: 'Environment prefix'
+    publishers:
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '480'
+        write-description: false
+    - inject-passwords:
+        global: true
+    - ansicolor:
+        colormap: xterm

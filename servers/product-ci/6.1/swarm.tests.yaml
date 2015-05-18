@@ -86,8 +86,6 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'known_issues'
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'fuel_plugins'
-     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha'
          weight: '11'
          node: 'services-systest'
