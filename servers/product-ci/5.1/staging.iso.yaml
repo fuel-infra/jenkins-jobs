@@ -78,3 +78,7 @@
       - stackforge:
           branch: 'stable/5.1'
           repo: fuel-main
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 60

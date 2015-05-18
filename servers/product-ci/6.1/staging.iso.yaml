@@ -82,3 +82,7 @@
       - stackforge:
           branch: 'master'
           repo: fuel-main
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 120

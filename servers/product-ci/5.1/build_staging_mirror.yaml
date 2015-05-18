@@ -59,6 +59,9 @@
     triggers:
       - timed: 'H 5 * * *'
     wrappers:
+      - timeout:
+          timeout: 240
+          fail: true
       - ssh-agent-credentials:
           users:
             - '5b151a58-4b65-4d13-87a1-883d52020e2d'
