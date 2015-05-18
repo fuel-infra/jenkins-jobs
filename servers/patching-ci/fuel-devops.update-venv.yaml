@@ -1,0 +1,41 @@
+- job:
+    name: 'fuel-devops.update_venv'
+    concurrent: true
+    description: Update fuel-devops virtual environment
+    logrotate:
+      artifactDaysToKeep: 30
+    properties:
+      - heavy-job:
+          weight: '1'
+      - throttle:
+          max-per-node: 1
+          option: project
+
+    parameters:
+      - node:
+          name: NODE
+          description: "Select slave"
+          ignore-offline-nodes: true
+          allowed-multiselect: true
+      - string:
+          name: REQS_PATH
+          default: 'https://raw.githubusercontent.com/stackforge/fuel-qa/master/fuelweb_test/requirements.txt'
+      - string:
+          name: VENV_PATH
+          default: '/home/jenkins/venv-nailgun-tests-2.9'
+
+    builders:
+      - shell:
+          !include-raw builders/update_venv.sh
+
+    publishers:
+      - description-setter:
+          string: "'Description string: (.*)'"
+
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 10
+          write-description: true
