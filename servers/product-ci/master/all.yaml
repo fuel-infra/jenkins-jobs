@@ -75,9 +75,7 @@
           timeout: 120
           fail: true
       - inject-passwords:
-          job-passwords:
-            - name: AUTH_TOKEN
-              password: qqoROvm6of+nv77TXCRgaXvuyVhvUMOsL7ofOGnyxHDsHSWKk7puJYN+zZBeWhJ0
+          global: true
       - ssh-agent-credentials:
           users:
             - '5b151a58-4b65-4d13-87a1-883d52020e2d'
