@@ -1,0 +1,57 @@
+- job-template:
+    name: '{prefix}-linkcheck'
+    node: 'linkcheck'
+    builders:
+      - copyartifact:
+          project: '{prefix}-linkcheck'
+          filter: 'make_output.txt'
+          which-build: last-successful
+          optional: true
+      - inject:
+          properties-content: |
+            REQUIREMENTS={requirements}
+            MAKEDIR={makedir}
+            REGEX={exclude_regex}
+      - shell:
+          !include-raw-escape './builders/linkcheck.sh'
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    description: |
+      Run 'make linkcheck' for documentation in {prefix} repository.
+      Generates diff with previous run.
+    concurrent: true
+    scm:
+      - git:
+          branches:
+            - 'master'
+          url: '{url}'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 30
+    triggers:
+      - timed: '0 1 * * *'
+    publishers:
+      - archive:
+          artifacts: 'make_output.txt, difference.txt, missing.txt'
+          allow-empty: 'true'
+          fingerprint: true
+      - email:
+          recipients: devops+alert@mirantis.com
+
+- project:
+    name: 'multi-linkcheck'
+    jobs:
+      - '{prefix}-linkcheck':
+          prefix: 'fuel-web'
+          url: 'https://review.openstack.org/stackforge/fuel-web'
+          requirements: 'nailgun/test-requirements.txt'
+          exclude_regex: 'working'
+          makedir: 'docs'
+      - '{prefix}-linkcheck':
+          prefix: 'fuel-docs'
+          url: 'https://review.openstack.org/stackforge/fuel-docs'
+          requirements: 'requirements.txt'
+          exclude_regex: 'ok|redirect'
+          makedir: '.'
