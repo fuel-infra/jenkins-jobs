@@ -56,6 +56,11 @@ Repo Structure
   Master. Allows to create a new gerrit server with preconfigured
   settings, along with adjusting gerrit's global settings.
 
+``utils/generic_labelmanager/labelmanager.py``
+
+  Tool for managing Jenkins Slave labels. Allows to add, remove or restore
+  labels from a specific nodes or randomly selected.
+
 Code Guidelines
 ===============
 
