@@ -66,13 +66,8 @@
           name: UPGRADE_TARBALL_MAGNET_LINK
           description: 'Upgrade tarball magnet link'
       - string:
-          name: MIRROR_UBUNTU
-          default: 'deb http://mirror-pkgs.vm.mirantis.net/ubuntu-latest trusty main universe multiverse|deb http://mirror-pkgs.vm.mirantis.net/ubuntu-latest trusty-updates main universe multiverse|deb http://mirror-pkgs.vm.mirantis.net/ubuntu-latest trusty-security main universe multiverse'
-          description: 'Upstream Ubuntu mirror setup'
-      - string:
           name: UBUNTU_MIRROR_ID
           default: 'ubuntu-latest'
-          description: 'WARNING: Not used at the moment'
     publishers:
       - description-setter:
           regexp: "'Description string: (.*)'"
