@@ -1,0 +1,36 @@
+- job:
+    name: 'compare_repos'
+    concurrent: true
+    description: |
+      Made for comparing 2 different RPM or DEB repositories with a report as outcome.
+    logrotate:
+      artifactDaysToKeep: 7
+    node: compare_repos
+
+    parameters:
+      - choice:
+          name: TYPE
+          description: Please choose a repository type RPM or DEB.
+          choices:
+            - RPM
+            - DEB
+
+      - string:
+          name: OLD
+          default: 'http://osci-obs.vm.mirantis.net:82/centos-fuel-6.0-stable'
+          description: Specify URL of the old(basic) repository.
+
+      - string:
+          name: NEW
+          default: 'http://osci-obs.vm.mirantis.net:82/centos-fuel-6.2-stable'
+          description: Specify URL of the new(change) repository.
+
+    builders:
+      - shell:
+          !include-raw './builders/compare_repos.sh'
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'raw_report.list'
+          latest-only: true
