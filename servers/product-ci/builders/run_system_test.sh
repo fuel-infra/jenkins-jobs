@@ -6,6 +6,7 @@ set -ex
 
 LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
 LOCATION=${LOCATION_FACT:-bud}
+UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
 
 case "${LOCATION}" in
     srt)
