@@ -1,0 +1,58 @@
+- job-template:
+    name: '7.0.mos-new.abort-package-testing'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: master
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    parameters:
+      - string:
+          name: ABORT_MODE
+          default: on-new-patchset
+      - string:
+          name: JENKINS_USER
+          default: osci-jenkins-robot
+      - string:
+          name: JENKINS_PASSWORD
+          default: Nak0kaya
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{install-scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{install-scm-branch}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: 'openstack-build/**'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{ops-branch}'
+            - project-compare-type: 'ANT'
+              project-pattern: 'openstack/**'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{ops-branch}'
+            - project-compare-type: 'ANT'
+              project-pattern: 'packages/trusty/*'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{deps-branch}'
+            - project-compare-type: 'ANT'
+              project-pattern: 'packages/centos6/*'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{deps-branch}'
+          server-name: fuel-infra
+          silent: true
+    builders:
+      - shell:
+          !include-raw-escape builders/abort.package.testing.sh
+    publishers:
+       - email:
+           recipients: atsamutali@mirantis.com

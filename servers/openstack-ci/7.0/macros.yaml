@@ -1,0 +1,61 @@
+- publisher:
+    name: pkgname-as-desc
+    publishers:
+      - description-setter:
+          regexp: '(PACKAGENAME=)(.+)'
+          regexp-for-failed: '(PACKAGENAME=)(.+)'
+          description: '\2'
+          description-for-failed: '\2'
+
+- parameter:
+    name: autobuild-all
+    parameters:
+      - text:
+          name: PACKAGE_LIST
+          default: |
+            ceilometer
+            cinder
+            glance
+            glance_store
+            heat
+            horizon
+            keystone
+            murano
+            murano-dashboard
+            neutron
+            nova
+            oslo.concurrency
+            oslo.config
+            oslo.db
+            oslo.i18n
+            oslo.messaging
+            oslo.rootwrap
+            oslo.serialization
+            oslo.utils
+            oslo.vmware
+            oslosphinx
+            oslotest
+            python-barbicanclient
+            python-ceilometerclient
+            python-cinderclient
+            python-glanceclient
+            python-heatclient
+            python-keystoneclient
+            python-muranoclient
+            python-neutronclient
+            python-novaclient
+            python-saharaclient
+            python-swiftclient
+            python-troveclient
+            sahara
+            swift
+
+- scm:
+    name: fuel-qa-7.0
+    scm:
+      - git:
+          url: 'http://git.openstack.org/stackforge/fuel-qa.git'
+          basedir: 'fuel-qa'
+          branches:
+            - 'origin/master'
+          wipe-workspace: false

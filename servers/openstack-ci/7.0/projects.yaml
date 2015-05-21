@@ -1,0 +1,104 @@
+- project:
+    name: '7.0.mos'
+    project-name: mos
+    release: 7.0
+    ops-release: 2015.1.0
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+    install-node: 'install-tests'
+    packtest-build-node: 'package-testing'
+    daysToKeep: 10
+    scm-user: 'openstack-ci-jenkins'
+    scm-credentials-id: '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+    scm-repo: 'infra/obs'
+    scm-branch: 'origin/feature/new-build-system'
+    scm-basedir: ''
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'origin/master'
+    ops-code-prj: 'openstack/**'
+    ops-spec-prj: 'openstack-build/**'
+    ops-branch: 'openstack-ci/fuel-7.0/2015.1.0'
+    ops-fuel-branch: 'openstack-ci/fuel/centos6/juno'
+    component-path-fuel: 'fuel/'
+    component-path-cluster: 'cluster/'
+    # original scheme should be:
+    #cluster-rpm-deps-code-project: '{project-name}/packages/{component-path-cluster}centos7/**'
+    #cluster-deb-deps-code-project: '{project-name}/packages/{component-path-cluster}trusty/**'
+    #fuel-rpm-deps-code-project: '{project-name}/packages/{component-path-fuel}centos6/**'
+    # changed in order to backward compatibility with current 7.0 source scheme
+    cluster-rpm-deps-code-project: 'packages/centos7/**'
+    cluster-deb-deps-code-project: 'packages/trusty/**'
+    fuel-rpm-deps-code-project: 'packages/centos6/**'
+    deps-branch: '7.0'
+    fuel-branch: master
+    mailto: 'fuel-osci+ci-packaging@mirantis.com'
+    repo-host: '172.18.160.74'
+    repo-path-prefix: 'osci/'
+    repo-request-path-prefix: 'osci/review/'
+    base-path: 'base/'
+    updates-path: 'updates/'
+    security-path: 'security/'
+    is-updates: ''
+    is-disabled: ''
+    jobs:
+      - '7.0.mos-new.rpm'
+      - '7.0.mos-new.deb'
+      - '7.0.mos-new.publisher'
+      - '7.0.mos-new.fuel'
+      - '7.0.mos-new.install-rpm'
+      - '7.0.mos-new.install-deb'
+      - '7.0.mos-new.deploy-rpm'
+      - '7.0.mos-new.deploy-deb'
+      - '7.0.mos-new.maintain'
+      - '7.0.mos-new.abort-package-testing'
+      - '7.0.mos-new.comment-abort'
+
+- job-group:
+    name: '7.0.mos-new.rpm'
+    jobs:
+      - '7.0.mos-new.build-rpm':
+          distro: centos7
+      - '7.0.mos-new.build-rpm-request':
+          distro: centos7
+      - '7.0.mos-new.build-rpm-deps':
+          distro: centos7
+      - '7.0.mos-new.build-rpm-deps-request':
+          distro: centos7
+
+- job-group:
+    name: '7.0.mos-new.deb'
+    jobs:
+      - '7.0.mos-new.build-deb':
+          distro: trusty
+      - '7.0.mos-new.build-deb-request':
+          distro: trusty
+      - '7.0.mos-new.build-deb-deps':
+          distro: trusty
+      - '7.0.mos-new.build-deb-deps-request':
+          distro: trusty
+
+- job-group:
+    name: '7.0.mos-new.fuel'
+    jobs:
+      - '7.0.mos-new.fuel.build-rpm':
+          distro: centos6
+      - '7.0.mos-new.fuel.build-rpm-request':
+          distro: centos6
+      - '7.0.mos-new.fuel.build-deb':
+          distro: trusty
+      - '7.0.mos-new.fuel.build-deb-request':
+          distro: trusty
+      - '7.0.mos-new.fuel.build-rpm-deps':
+          distro: centos6
+      - '7.0.mos-new.fuel.build-rpm-deps-request':
+          distro: centos6
+      - '7.0.mos-new.fuel.build-ops':
+          distro: centos6
+      - '7.0.mos-new.fuel.build-ops-request':
+          distro: centos6
+
+- job-group:
+    name: '7.0.mos-new.maintain'
+    jobs:
+      - '7.0.mos-new.maintain.starter'
+      - '7.0.mos-new.maintain.worker'

@@ -2,6 +2,12 @@
 # Section: Wrappers
 ########################################################################
 - wrapper:
+    name: jenkins
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '98ec5f09-5ff1-476a-b1da-69e87186eaea'
+- wrapper:
     name: openstack-ci-jenkins
     wrappers:
       - ssh-agent-credentials:

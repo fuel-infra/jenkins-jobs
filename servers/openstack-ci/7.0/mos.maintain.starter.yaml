@@ -1,0 +1,23 @@
+- job-template:
+    name: '7.0.mos-new.maintain.starter'
+    disabled: '{is-disabled}'
+    concurrent: false
+    node: '{build-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    triggers:
+      - timed: '@midnight'
+    builders:
+      - trigger-builds:
+          - project: '7.0.mos-new.maintain.worker'
+            parameter-factories:
+              - factory: allnodesforlabel
+                name: 'reBuilder-build-hosts'
+                node-label: '{build-node}'
+                ignore-offline-nodes: true
+            block: false
+    publishers:
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: false
