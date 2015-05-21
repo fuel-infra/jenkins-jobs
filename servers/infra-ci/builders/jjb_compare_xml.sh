@@ -5,10 +5,10 @@ set -ex
 GITHEAD=$(git rev-parse HEAD)
 OUT_DIR=${WORKSPACE}/output
 LOGFILE=${OUT_DIR}/jobs-diff.log
-BLOCKED="[blocked]\<br\>"
-CHANGED="[changed]\<br\>"
-ADDED="[added]\<br\>"
-REMOVED="[removed]\<br\>"
+BLOCKED="[blocked]<br>"
+CHANGED="[changed]<br>"
+ADDED="[added]<br>"
+REMOVED="[removed]<br>"
 RESULT=''
 BLOCKLIST=blocklist
 STAT=0
