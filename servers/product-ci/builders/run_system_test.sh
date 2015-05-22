@@ -2,6 +2,8 @@
 
 set -ex
 
+echo STARTED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" > ci_status_params.txt
+
 ###################### Get MIRROR HOST ###############
 
 LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
@@ -55,6 +57,6 @@ export VENV_PATH=${VENV_PATH:-/home/jenkins/venv-nailgun-tests}
 
 ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER.$BUILD_ID
 ENV_NAME=${ENV_NAME:0:68}
-ISO_PATH=`seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}"`
+ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
 sh -x "utils/jenkins/system_tests.sh" -t test -w "$WORKSPACE" -e "$ENV_NAME" -o --group="$TEST_GROUP" -i "$ISO_PATH"

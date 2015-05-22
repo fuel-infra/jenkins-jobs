@@ -20,7 +20,6 @@
           description: 'Space delimited list of ubuntu repos to create reprepro repo'
       - string:
           name: extra_commits
-          default: 'refs/changes/44/149944/1'
           description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
       - string:
           name: YUM_DOWNLOAD_SRC
