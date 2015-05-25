@@ -18,7 +18,8 @@
 
           set -ex
 
-          sudo /usr/bin/puppet agent -tvd
+          sudo /usr/bin/puppet agent -vd --onetime --no-daemonize --noop
+          sudo /usr/bin/puppet agent -vd --onetime --no-daemonize
 
           echo "Description string: $(cat /var/lib/puppet/gitrevision.txt)"
 
@@ -27,3 +28,6 @@
       - description-setter:
           regexp: "'Description string: (.*)'"
           regexp-for-failed: "'Description string: (.*)'"
+    wrappers:
+        - ansicolor:
+            colormap: xterm
