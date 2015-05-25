@@ -88,6 +88,9 @@
             - name: '6.1.system_test.centos.thread_1'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '6.1.system_test.centos.ceph_ha_one_controller'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '6.1.system_test.centos.thread_2'
               current-parameters: true
               kill-phase-on: NEVER
@@ -150,6 +153,9 @@
               kill-phase-on: NEVER
             # Ubuntu
             - name: '6.1.system_test.ubuntu.thread_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '6.1.system_test.ubuntu.ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '6.1.system_test.ubuntu.thread_2'
