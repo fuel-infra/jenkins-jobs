@@ -8,6 +8,8 @@
       daysToKeep: '{daysToKeep}'
     wrappers:
       - ci-build-deb
+      - inject-passwords:
+          global: true
     parameters:
       - string:
           name: GERRIT_USER
@@ -54,6 +56,8 @@
           !include-raw-escape builders/mos.build.deb.deps.sh
       - shell:
           !include-raw-escape builders/mos.deb.reprepro.sh
+      - shell:
+          !include-raw-escape builders/mos.patching.report.sh
       - shell:
           !include-raw-escape builders/mos.vote.sh
     publishers:
