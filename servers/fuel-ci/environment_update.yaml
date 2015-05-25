@@ -1,0 +1,29 @@
+- job:
+    name: environment_update
+    concurrent: true
+    description: |
+      Puppet run on slaves
+    properties:
+      - heavy-job:
+          weight: 3
+    parameters:
+      - node:
+         name: NODE
+         description: "Select slave"
+         ignore-offline-nodes: true
+         allowed-multiselect: true
+    builders:
+      - shell: |
+          #!/bin/bash
+
+          set -ex
+
+          sudo /usr/bin/puppet -tvd
+
+          echo "Description string: $(cat /var/lib/puppet/gitrevision.txt)"
+
+    publishers:
+      - email-default
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+          regexp-for-failed: "'Description string: (.*)'"
