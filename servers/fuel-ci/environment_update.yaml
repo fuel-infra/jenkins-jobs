@@ -18,7 +18,7 @@
 
           set -ex
 
-          sudo /usr/bin/puppet -tvd
+          sudo /usr/bin/puppet agent -tvd
 
           echo "Description string: $(cat /var/lib/puppet/gitrevision.txt)"
 
