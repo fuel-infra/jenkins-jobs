@@ -69,6 +69,8 @@ then
   # make directory and move temporary repo
   mkdir -p ${RSYNC_DEST}
   mv -T ${TMP_DIR} ${RSYNC_DEST}
+  # enforce creation date if mirror was not changed
+  touch ${RSYNC_DEST}
   # update latest link
   rm -f ${LATEST_LINK}
   ln -s ${PREFIX_DIR}-${DATE} ${LATEST_LINK}
