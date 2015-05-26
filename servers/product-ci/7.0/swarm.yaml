@@ -148,6 +148,9 @@
             - name: '7.0.system_test.centos.services_ha'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.services_ha.ceilometer'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '7.0.system_test.centos.services_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
@@ -210,6 +213,9 @@
               current-parameters: true
               kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.services_ha'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.services_ha.ceilometer'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.services_ha_one_controller'
