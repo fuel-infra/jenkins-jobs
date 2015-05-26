@@ -24,7 +24,10 @@
           echo "Description string: $(cat /var/lib/puppet/gitrevision.txt)"
 
     publishers:
-      - email-default
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'devops+alert@mirantis.com'
+          send-to-individuals: false
       - description-setter:
           regexp: "'Description string: (.*)'"
           regexp-for-failed: "'Description string: (.*)'"
