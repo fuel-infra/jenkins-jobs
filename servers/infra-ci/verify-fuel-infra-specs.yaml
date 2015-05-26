@@ -1,0 +1,53 @@
+- job:
+    name: verify-fuel-infra-specs
+    builders:
+      - shell:
+          !include-raw './builders/verify-fuel-infra-specs.sh'
+    description: 'This job builds documentation of fuel-infra/specs and archives it.'
+    logrotate:
+      numToKeep: 100
+      daysToKeep: 90
+    node: fuel-infra-specs
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://infra-ci@review.fuel-infra.org:29418/fuel-infra/specs'
+                credentials-id: '70105253-c857-4463-a927-f47307911e45'
+          choosing-strategy: gerrit
+    triggers:
+      - timed: 'H 2 * * *'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: fuel-infra/specs
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 10
+    publishers:
+      - html-publisher:
+          name: 'fuel-infra specs build results'
+          dir: 'build/html'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+          wrapper-name: 'htmlpublisher-wrapper.html'
