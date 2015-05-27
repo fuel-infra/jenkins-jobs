@@ -13,6 +13,10 @@
           !include-raw-escape './builders/mirror_pkgs_sync.sh'
     parameters:
         - string:
+            name: MAX_DAYS
+            default: '30'
+            description: 'Maximum lifetime of snapshot.'
+        - string:
             name: MIRRORS
             default: 'rsync://osci-mirror-msk.msk.mirantis.net/mirror-sync/pkgs|rsync://osci-mirror-srt.srt.mirantis.net/mirror-sync/pkgs|rsync://osci-mirror-kha.kha.mirantis.net/mirror-sync/pkgs|rsync://mirror.seed-us1.fuel-infra.org/mirror-sync/pkgs|rsync://mirror.seed-cz1.fuel-infra.org/mirror-sync/pkgs|rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync/pkgs|'
             description: 'List of other rsync mirrors to synchronize. ("|" separate values)'

@@ -7,7 +7,7 @@ DEBMIRROR_OPTS=(-a amd64,i386 --di-arch=amd64 -method=rsync --no-check-gpg --pro
 
 RSYNC_PATH=/usr/bin/rsync
 RSYNC_OPTS=(-av --delete)
-RSYNC_REMOTE_OPTS=(-aH)
+RSYNC_REMOTE_OPTS=(-aH --delete)
 
 OUTPUT="[mirror]"
 
@@ -81,6 +81,27 @@ else
 fi
 
 echo "${OUTPUT}"
+
+# clean mirrors older then 30 days
+find "${DST_PREFIX}" -maxdepth 1 -mindepth 1 -type d | while read line
+do
+  # parse date from directory name
+  snapshot_date=$(echo "$line" | tail -c 18 | cut -d - -f -3)
+  snapshot_time_not_separated=$(echo "$line" | tail -c 7)
+  snapshot_time="${snapshot_time_not_separated:0:2}:"
+  snapshot_time+="${snapshot_time_not_separated:2:2}:"
+  snapshot_time+="${snapshot_time_not_separated:4:2}"
+  snapshot_fulltime="$snapshot_date $snapshot_time"
+  snapshot_unix=$(date -d "$snapshot_fulltime" +%s)
+  # check if snapshot should be removed
+  current_unix=$(date +%s)
+  age=$((current_unix - snapshot_unix))
+  if [ ${age} -gt $((MAX_DAYS*24*60*60)) ]
+  then
+    echo "Removing snapshot: ${line}"
+    rm -rf "${line}"
+  fi
+done
 
 # prepare post-synchronization script
 TMP_SYNC=$(mktemp -p "${TMP_PREFIX}")
