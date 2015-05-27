@@ -59,6 +59,7 @@
          testgroup: 'cic_maintenance_mode'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron'
+         timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive'
          properties: |
