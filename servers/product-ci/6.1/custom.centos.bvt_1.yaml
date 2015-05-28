@@ -44,11 +44,6 @@
           fail: true
           timeout: 210
     publishers:
-      - postbuildscript:
-          generic-script:
-             - 'scripts/fuel_logs.sh'
-          script-only-if-succeeded: True
-          script-only-if-failed: True
       - archive:
           allow-empty: true
           artifacts: '**/nosetests.xml,logs/*'
