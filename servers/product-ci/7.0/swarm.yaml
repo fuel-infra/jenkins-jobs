@@ -130,7 +130,10 @@
             - name: '7.0.system_test.centos.ha_neutron_destructive'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.huge_environments'
+            - name: '7.0.system_test.centos.huge_ha_neutron'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.huge_ha_nova'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '7.0.system_test.centos.repeatable_image_based'
@@ -197,7 +200,10 @@
             - name: '7.0.system_test.ubuntu.ha_neutron_destructive'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.huge_environments'
+            - name: '7.0.system_test.ubuntu.huge_ha_neutron'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.huge_ha_nova'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.repeatable_image_based'
