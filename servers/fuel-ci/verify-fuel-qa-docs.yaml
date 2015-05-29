@@ -1,0 +1,63 @@
+- job:
+    name: verify-fuel-qa-docs
+    builders:
+      - shell:
+          !include-raw './builders/verify-fuel-qa-docs.sh'
+    description: 'Check that we dont add more warnings.'
+    logrotate:
+      numToKeep: 100
+      daysToKeep: 90
+    node: fuel-qa-docs
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-qa.git
+          choosing-strategy: gerrit
+    triggers:
+      - timed: 'H 2 * * *'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-qa
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+      - ssh-agent-credentials:
+          users:
+            - 'e0991f76-20e6-4617-9f6d-cf85600789fe'
+    publishers:
+      - email-default
+      - html-publisher:
+          name: 'Fuel QA Docs build results'
+          dir: 'doc/_build/html'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+          wrapper-name: 'htmlpublisher-wrapper.html'
