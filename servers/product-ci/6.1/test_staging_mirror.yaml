@@ -91,4 +91,4 @@
     wrappers:
       - timeout:
           fail: true
-          timeout: 320
+          timeout: 480
