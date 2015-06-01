@@ -1,0 +1,27 @@
+- job:
+    name: 'healthcheck'
+    node: 'healthcheck'
+    builders:
+      - shell:
+          !include-raw './builders/healthcheck.py'
+    description: |
+      This job checks an output of other important jobs and generates raport.
+    concurrent: true
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 5
+    triggers:
+      - timed: '0 * * * *'
+    publishers:
+      - archive:
+          artifacts: 'raw-*'
+          allow-empty: true
+          fingerprint: true
+      - html-publisher:
+          name: 'Failed jobs'
+          dir: '.'
+          files: 'failed.html'
+          keep-all: true
+          allow-missing: true
+          wrapper-name: 'htmlpublisher-wrapper.html'
