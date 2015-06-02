@@ -19,7 +19,7 @@ fi
 
 echo "MARK: checking OBS and upstream repos..."
 rm -rf /var/tmp/yum-"${USER}"*/*
-RES=$(repoquery --repofrompath=upstream,http://mirror.centos.org/centos/6/os/x86_64/ --repofrompath==obs,http://mirror.fuel-infra.org/osci/"${REPO_NAME}"/centos/ --whatprovides --nvr -q "${PACKAGES}")
+RES=$(repoquery --repofrompath=upstream,http://mirror.centos.org/centos/6/os/x86_64/ --repofrompath==obs,http://mirror.fuel-infra.org/osci/"${REPO_NAME}"/centos/ --whatprovides --nvr -q ${PACKAGES})
 if [ X"${RES}" = X"" ]; then
 	echo "MARK: FAILURE. Requested packages were not found in both OBS and upstream repos."
 	OVERALL_STATUS=1
