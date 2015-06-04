@@ -31,4 +31,14 @@
             Remember to specify the number of how many to select using the
             `NODE` parameter.
           default: false
-
+    publishers:
+      - description-setter:
+          regexp: (^\[Action\].*)
+      - archive:
+          artifacts: '*.txt'
+          allow-empty: 'true'
+          fingerprint: false
+    wrappers:
+      - timeout:
+          timeout: 2
+          fail: true
