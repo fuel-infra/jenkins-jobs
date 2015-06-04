@@ -31,6 +31,8 @@
          testgroup: 'thread_3'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'thread_4'
+         properties: |
+           SLAVE_NODE_MEMORY=2560
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'thread_5'
