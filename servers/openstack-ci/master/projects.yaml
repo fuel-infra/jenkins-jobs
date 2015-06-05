@@ -16,7 +16,7 @@
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/master'
     mailto: 'atsamutali@mirantis.com'
-    is-disabled: ''
+    is-disabled: true
     jobs:
       - 'master.mos.rpm':
           prjprefix: 'centos-'
