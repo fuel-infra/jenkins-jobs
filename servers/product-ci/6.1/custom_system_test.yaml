@@ -14,25 +14,8 @@
           !include-raw './builders/custom_system_test.sh'
     parameters:
       - string:
-          name: MAKE_SNAPSHOT
-          default: 'false'
-      - string:
-          name: FUEL_QA_COMMIT
-          default: 'master'
-      - string:
-          name: fuel_qa_gerrit_commit
-          default: 'none'
-          description: 'Refspecs for commits in fuel-qa gerrit separated with spaces.
-            For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
-      - text:
-          name: ADDITIONAL_PARAMETERS
-      - string:
           name: MAGNET_LINK
           description: Magnet link for the ISO file
-      - string:
-          name: CUSTOM_TEST_GROUP
-          description: Specify the name of a custom test group which is not present on the TEST_GROUP list.
-            This will override the TEST_GROUP variable value.
       - choice:
           name: OPENSTACK_RELEASE
           choices:
@@ -40,6 +23,7 @@
             - Ubuntu
       - choice:
           name: TEST_GROUP
+          description: Choose TEST_GROUP from the list or use CUSTOM_TEST_GROUP field below.
           choices:
             - backup_restore_master_base
             - bonding_neutron
@@ -116,6 +100,28 @@
             - node_deletion_check
             - smoke_neutron
             - smoke_nova
+      - string:
+          name: CUSTOM_TEST_GROUP
+          description: Specify the name of a custom test group which is not present on the TEST_GROUP list.
+            This will override the TEST_GROUP variable value.
+
+      - string:
+          name: FUEL_QA_COMMIT
+          default: 'master'
+      - string:
+          name: fuel_qa_gerrit_commit
+          default: 'none'
+          description: 'Refspecs for commits in fuel-qa gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
+      - text:
+          name: ADDITIONAL_PARAMETERS
+          description: |
+            NAME1=VALUE1</br>
+            NAME1=VALUE1
+      - string:
+          name: MAKE_SNAPSHOT
+          default: 'false'
+
     properties:
       - heavy-job:
           weight: 8
