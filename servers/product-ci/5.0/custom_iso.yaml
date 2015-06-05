@@ -148,7 +148,3 @@
           always: true
           send-to:
             - requester
-      - trigger-parameterized-builds:
-          - project: deploy_iso_on_cachers
-            condition: UNSTABLE_OR_BETTER
-            property-file: "artifacts/magnet_link.txt"
