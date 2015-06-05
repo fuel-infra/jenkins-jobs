@@ -84,7 +84,7 @@ fi
 
 echo ${OUTPUT}
 
-# make temporary file for switching repos
+# prepare post-synchronization script
 TMP_SYNC=$(mktemp -p ${TMP_PREFIX})
 
 # synchronize all mirrors
@@ -108,7 +108,12 @@ do
 done
 
 # update links on all mirrors
-source ${TMP_SYNC}
+if [ ${STATUS} -eq -1 ]
+then
+  source ${TMP_SYNC}
+fi
+
+# delete post-synchronization script
 rm ${TMP_SYNC}
 
 if [ ${STATUS} -ne -1 ]
