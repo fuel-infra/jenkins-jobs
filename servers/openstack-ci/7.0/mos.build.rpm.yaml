@@ -42,9 +42,18 @@
       - string:
           name: SPEC_BRANCH
           default: '{ops-branch}'
+      - string:
+          name: DISPLAY_NAME
+          default: "Build rpm package on primary repository"
+      - string:
+          name: REQUEST_TYPE
+          default: "Centos7"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
+      - bool:
+          name: LAST_STAGE
+          default: '{last_stage}'
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
@@ -52,6 +61,12 @@
           scm-basedir: '{scm-basedir}'
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{scm-branch}'
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-ci-status-client-repo}'
+          scm-basedir: '{scm-ci-status-client-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-ci-status-client-branch}'
     triggers:
       - fuel-infra-submit:
           code-project: '{ops-code-prj}'
@@ -59,8 +74,8 @@
           branch: '{ops-branch}'
           files: '{distro}/rpm/**'
     builders:
-     # - shell:
-     #      !include-raw-escape builders/ci.status.report.start.sh
+      - shell:
+          !include-raw-escape builders/ci.status.report.start.sh
       - shell: |
           #!/bin/bash -ex
           # Remove junk files
@@ -96,6 +111,12 @@
           !include-raw-escape builders/mos.vote.sh
     publishers:
       - pkgname-as-desc
+      - post-tasks:
+         - matches:
+            - log-text: Building
+              operator: AND
+           script:
+              !include-raw-escape builders/ci.status.report.stop.sh
       - archive:
            artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
            allow-empty: true
