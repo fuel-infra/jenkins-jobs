@@ -23,7 +23,8 @@
             - Ubuntu
       - choice:
           name: TEST_GROUP
-          description: Choose TEST_GROUP from the list or use CUSTOM_TEST_GROUP field below.
+          description: |
+            Choose TEST_GROUP from the list or use CUSTOM_TEST_GROUP field below.
           choices:
             - backup_restore_master_base
             - bonding_neutron
@@ -102,9 +103,21 @@
             - smoke_nova
       - string:
           name: CUSTOM_TEST_GROUP
-          description: Specify the name of a custom test group which is not present on the TEST_GROUP list.
-            This will override the TEST_GROUP variable value.
-
+          description: |
+            Specify the name of a custom test group which
+            is not present on the TEST_GROUP list. This will override
+            the TEST_GROUP variable value.
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: latest-stable
+          description: |
+            'latest' - latest available; 'latest-stable' - mirror from successful run of 6.1.test_all job; 'ubuntu-2015-01-01-030500'
+      - string:
+          name: MIRROR_UBUNTU
+          description: |
+            If empty, it will be set automatically based on UBUNTU_MIRROR_ID value.
+            <p>
+            deb http://../ubuntu trusty main universe multiverse|deb http://../ubuntu trusty-updates main universe multiverse|deb http://../ubuntu trusty-security main universe multiverse|deb http://../ubuntu trusty-proposed main universe multiverse
       - string:
           name: FUEL_QA_COMMIT
           default: 'master'
@@ -121,6 +134,10 @@
       - string:
           name: MAKE_SNAPSHOT
           default: 'false'
+      - string:
+          name: ENV_PREFIX
+          default: 6.1.custom_system_test
+          description: Define env prefix name. This parameter should not be changed
 
     properties:
       - heavy-job:
