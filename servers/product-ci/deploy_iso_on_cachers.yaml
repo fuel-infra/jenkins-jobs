@@ -1,0 +1,22 @@
+- job:
+    builders:
+      - multijob:
+          name: 'iso_deployer'
+          projects:
+            - name: 'iso_deployer'
+              current-parameters: true
+              node-label: 'iso_cacher'
+    concurrent: true
+    description: |
+      Deploy ISO on cachers in remote locations.
+    name: deploy_iso_on_cachers
+    node: runner
+    parameters:
+      - string:
+          name: MAGNET_LINK
+    publishers:
+      - email-ext:
+          attach-build-log: true
+          body: $DEFAULT_CONTENT
+          recipients: devops+alert@mirantis.com
+          subject: $DEFAULT_SUBJECT
