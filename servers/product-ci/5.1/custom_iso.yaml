@@ -5,7 +5,7 @@
           !include-raw builders/custom.sh
     concurrent: true
     description:
-      !include-raw descriptions/5.1.2.custom.iso
+      !include-raw descriptions/custom.iso
     logrotate:
       artifactDaysToKeep: 90
       daysToKeep: 90

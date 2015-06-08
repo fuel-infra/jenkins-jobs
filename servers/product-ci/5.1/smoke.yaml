@@ -6,7 +6,7 @@
       - systest
     concurrent: true
     description:
-      !include-raw descriptions/5.1.2.smoke
+      !include-raw descriptions/smoke
     logrotate:
       daysToKeep: 30
       numToKeep: 50

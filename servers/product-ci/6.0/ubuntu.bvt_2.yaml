@@ -6,7 +6,7 @@
       - systest
     concurrent: true
     description:
-      !include-raw descriptions/6.0.1.ubuntu.bvt_2
+      !include-raw descriptions/ubuntu.bvt_2
     logrotate:
       daysToKeep: 30
       numToKeep: 50
