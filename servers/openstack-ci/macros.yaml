@@ -225,7 +225,7 @@
           url: 'http://git.openstack.org/stackforge/fuel-qa.git'
           basedir: 'fuel-qa'
           branches:
-            - 'origin/master'
+            - 'origin/stable/6.1'
           wipe-workspace: false
 
 ########################################################################
