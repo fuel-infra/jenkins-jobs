@@ -1,0 +1,30 @@
+- job:
+    name: 'devops.master.fuel-library.deploy_docker_env_on_slaves'
+    concurrent: true
+    description: |
+      Deploy docker environment on slaves
+    logrotate:
+      artifactDaysToKeep: 50
+      daysToKeep: 50
+      numToKeep: 50
+    properties:
+      - heavy-job:
+          weight: '1'
+      - throttle:
+          max-per-node: 1
+          option: project
+
+    parameters:
+      - node:
+          name: NODE
+          description: "Select slave"
+          ignore-offline-nodes: true
+          allowed-multiselect: true
+
+    builders:
+      - shell:
+          !include-raw builders/fuel-library.devops.deploy_docker_env_on_slaves.sh
+
+    wrappers:
+      - ansicolor:
+          colormap: xterm

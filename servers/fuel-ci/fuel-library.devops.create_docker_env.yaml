@@ -1,5 +1,5 @@
 - job:
-    name: 'devops.6.1.fuel-library.create_docker_env'
+    name: 'devops.master.fuel-library.create_docker_env'
     concurrent: true
     description: |
       Create docker env for building packages
@@ -18,7 +18,7 @@
     parameters:
       - string:
           name: PRODUCT_VERSION
-          default: '6.1'
+          default: '7.0'
           description: 'Define version mirror to use on env creation'
       - string:
           name: CENTOS_MIRROR
