@@ -36,6 +36,8 @@
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/6.1'
           custom-url: '* $JOB_NAME $BUILD_URL'
           skip-vote:
             successful: true
