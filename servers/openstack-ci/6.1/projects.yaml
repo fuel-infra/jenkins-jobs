@@ -3,7 +3,7 @@
     release: 6.1
     version-id: 6.1
     openstack-id: 2014.2
-    fuel-branch: 'master'
+    fuel-branch: 'origin/stable/6.1'
     updates: false
     prjsuffix: '-stable'
     build-node: 'osci-fuel-meta-ubuntu'
@@ -16,11 +16,11 @@
     scm-basedir: ''
     scm-ci-status-basedir: 'ci_status'
     scm-credentials-id: '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
-    scm-branch: 'origin/master'
+    scm-branch: 'origin/stable/6.1'
     scm-ci-status-branch: 'origin/master'
     install-build-node: 'install-tests'
     install-scm-repo: 'infra/ci-test-request'
-    install-scm-branch: 'origin/master'
+    install-scm-branch: 'origin/stable/6.1'
     packtest-build-node: 'package-testing'
     jobs:
       - '{release}.{name}.rpm':
