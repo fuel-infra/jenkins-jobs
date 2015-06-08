@@ -16,7 +16,7 @@ rm -rf "${ARTS_DIR}"
 cd fuel-main
 
 # use commit from fuel-library in order to build library package
-if [ "${GERRIT_REFSPEC}" !=  "refs/heads/master" ]; then
+if [ "${GERRIT_REFSPEC}" !=  "refs/heads/stable/6.1" ]; then
   export FUELLIB_GERRIT_COMMIT="${GERRIT_REFSPEC}"
 fi
 
@@ -48,21 +48,21 @@ cp -rv "${BUILD_DIR}/repos/version.yaml" "${ARTS_DIR}/version.yaml.txt"
 
 # build rpm packages
 for pkg in ${BUILD_RPM_PACKAGES}; do
-  docker run --privileged --rm -v ${SOURCE_PATH}/${pkg}:/opt/sandbox/SOURCES \
-           -v ${RPM_SPEC_PATH}/${pkg}/specs/${pkg}.spec:/opt/sandbox/${pkg}.spec \
-           -v ${RPM_RESULT_DIR}:/opt/sandbox/RPMS \
+  docker run --privileged --rm -v "${SOURCE_PATH}/${pkg}:/opt/sandbox/SOURCES" \
+           -v "${RPM_SPEC_PATH}/${pkg}/specs/${pkg}.spec:/opt/sandbox/${pkg}.spec" \
+           -v "${RPM_RESULT_DIR}:/opt/sandbox/RPMS" \
            -u ${UID} \
-           fuel/rpmbuild_env /bin/bash /opt/sandbox/build_rpm_in_docker.sh
+           fuel-6.1/rpmbuild_env /bin/bash /opt/sandbox/build_rpm_in_docker.sh
 done
 
 # build deb packages
 for pkg in ${BUILD_DEB_PACKAGES}; do
   docker run --rm -u ${UID} \
-           -v ${SOURCE_PATH}/${pkg}:/opt/sandbox/SOURCES \
-           -v ${DEB_RESULT_DIR}:/opt/sandbox/DEB \
-           fuel/debbuild_env /bin/bash /opt/sandbox/build_deb_in_docker.sh
+           -v "${SOURCE_PATH}/${pkg}:/opt/sandbox/SOURCES" \
+           -v "${DEB_RESULT_DIR}:/opt/sandbox/DEB" \
+           fuel-6.1/debbuild_env /bin/bash /opt/sandbox/build_deb_in_docker.sh
 done
 
 # preparing artifacts
-find ${RPM_RESULT_DIR} -type f -name '*.rpm' -exec cp -v {} ${ARTS_DIR} \;
-find ${DEB_RESULT_DIR} -type f -name '*.deb' -exec cp -v {} ${ARTS_DIR} \;
+find "${RPM_RESULT_DIR}" -type f -name '*.rpm' -exec cp -v {} "${ARTS_DIR}" \;
+find "${DEB_RESULT_DIR}" -type f -name '*.deb' -exec cp -v {} "${ARTS_DIR}" \;

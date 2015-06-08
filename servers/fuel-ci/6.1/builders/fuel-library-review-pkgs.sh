@@ -4,7 +4,7 @@ set -ex
 
 #common params
 
-export MIRROR_UBUNTU="$(curl -sSf "${JENKINS_URL}job/devops.master.env/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt")"
+export MIRROR_UBUNTU="$(curl -sSf "${JENKINS_URL}job/devops.6.1.env/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt")"
 
 
 export LOGS_DIR="/home/jenkins/workspace/${JOB_NAME}/logs/${BUILD_NUMBER}"
@@ -16,7 +16,8 @@ export LOCAL_MIRROR_CENTOS='/var/www/nailgun/centos/auxiliary/'
 export EXTRA_RPM_REPOS_PRIORITY=15
 export EXTRA_DEB_REPOS_PRIORITY=1100
 
-BRANCH_ID=$(echo ${BRANCH##*/} | sed 's:\.:_:g')
+BRANCH_ID=${BRANCH##*/}
+BRANCH_ID=${BRANCH_ID//./_}
 
 export WORKSPACE="/home/jenkins/workspace/fuel-main/env_${DISTRIBUTION}-${BRANCH_ID}"
 export SYSTEM_TESTS="${WORKSPACE}/utils/jenkins/system_tests.sh"

@@ -1,46 +1,36 @@
 - job:
-    name: '6.1.fuel-library.pkgs.centos.ha_nova_vlan'
+    name: '6.1.fuel-library.pkgs.master_node'
     builders:
-      - inject: # default env variables
-          properties-content: |
-            DISTRIBUTION=centos
-            OPENSTACK_RELEASE=centos
-            TEST_GROUP=ha_nova_vlan
-            BRANCH=stable/6.1
-            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
-      - inject: # overrides
-          override-build-parameters: true
-          properties-content: |
-            SYNC_DEPL_TASKS=true
       - shell:
           !include-raw builders/fuel-library-build-pkgs.sh
       - shell:
-          !include-raw builders/fuel-library-review-pkgs.sh
+          !include-raw builders/fuellib_review_pkgs_master_node.sh
     concurrent: true
-    description:
-      !include-raw descriptions/fuellib-centos-pkgs
+    description: |
+      Runs smoke_neutron test group with:<br>
+      CUSTOM_ENV=true<br>
+      BUILD_IMAGES=true<br>
+      UPDATE_FUEL=true<br>
+      UPDATE_FUEL_PATH=${WORKSPACE}/packages/<br>
+      UBUNTU_RELEASE='auxiliary'<br>
+      LOCAL_MIRROR_UBUNTU='/var/www/nailgun/ubuntu/auxiliary/'<br>
+      LOCAL_MIRROR_CENTOS='/var/www/nailgun/centos/auxiliary/'<br>
+      EXTRA_RPM_REPOS_PRIORITY=15<br>
+      EXTRA_DEB_REPOS_PRIORITY=1100<br>
+      TEST_GROUP="smoke_neutron"
     logrotate:
       artifactDaysToKeep: 30
-    node: '6.1_centos'
+    node: 6.1_master_node_test
     parameters:
       - string:
           name: GERRIT_REFSPEC
           default: 'refs/heads/stable/6.1'
     properties:
-      - heavy-job:
-          weight: '6'
       - throttle:
           max-per-node: 1
           option: project
-    publishers:
-      - email-default
-      - archive:
-          allow-empty: true
-          artifacts: 'logs/${BUILD_NUMBER}/*,packages/*'
-          latest-only: false
-      - description-setter:
-          regexp: 'Description string: (.*)'
-          regexp-for-failed: '(ERROR: (.*))'
+      - heavy-job:
+          weight: 6
     scm:
       - git:
           branches:
@@ -56,6 +46,12 @@
           branches:
             - 'origin/stable/6.1'
           basedir: 'fuel-main'
+    publishers:
+      - email-default
+      - archive:
+          allow-empty: true
+          artifacts: 'logs/${BUILD_NUMBER}/*,packages/*'
+          latest-only: false
     triggers:
       - timed: 'H 2 * * *'
       - gerrit:
@@ -74,5 +70,5 @@
           colormap: xterm
       - timeout:
           fail: true
-          timeout: 150
+          timeout: 200
           write-description: true

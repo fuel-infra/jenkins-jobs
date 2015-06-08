@@ -19,7 +19,7 @@
           description: 'List of env prefixes to create'
       - string:
           name: BRANCH
-          default: master
+          default: stable/6.1
       - string:
           name: ISO_ID
           default: default

@@ -35,6 +35,8 @@
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/6.1'
           skip-vote:
             successful: true
             failed: true
