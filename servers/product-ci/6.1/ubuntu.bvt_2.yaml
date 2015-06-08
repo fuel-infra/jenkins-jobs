@@ -33,7 +33,7 @@
           mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
     scm:
       - stackforge:
-          branch: 'master'
+          branch: 'stable/6.1'
           repo: 'fuel-qa'
     wrappers:
       - timeout:

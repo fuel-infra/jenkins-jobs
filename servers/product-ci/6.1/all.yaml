@@ -12,6 +12,7 @@
         Maintenance contacts: #fuel-osci, #fuel-devops<br/>
       </p>
     node: iso
+    disabled: true
     properties:
       - heavy-job:
           weight: 1
@@ -81,10 +82,8 @@
             BUILD_MIRROR_URL=$BUILD_MIRROR_URL
     scm:
       - stackforge:
-          branch: 'master'
+          branch: 'stable/6.1'
           repo: fuel-main
-    triggers:
-      - timed: 'H 20 * * *'
     wrappers:
       - timeout:
           timeout: 120

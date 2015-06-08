@@ -15,7 +15,7 @@ export ARTS_DIR="${WORKSPACE}/artifacts"
 rm -rf "${ARTS_DIR}"
 
 # Checking gerrit commits for fuel-main
-if [ "${FUELMAIN_COMMIT}" != "master" ] ; then
+if [ "${FUELMAIN_COMMIT}" != "stable/6.1" ] ; then
     git checkout ${FUELMAIN_COMMIT}
 fi
 

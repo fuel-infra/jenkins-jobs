@@ -5,7 +5,7 @@ set -ex
 echo STARTED_TIME="`date -u +'%Y-%m-%dT%H:%M:%S'`" > ci_status_params.txt
 
 # Checking gerrit commits for fuel-main
-if [ "${FUELMAIN_COMMIT}" != "master" ] ; then
+if [ "${FUELMAIN_COMMIT}" != "stable/6.1" ] ; then
     git checkout "${FUELMAIN_COMMIT}"
 fi
 

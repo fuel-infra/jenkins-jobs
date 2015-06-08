@@ -2,7 +2,7 @@
    name: '6.1-system_tests'
    version-id: '6.1'
    id: 'system_test'
-   repobranch: 'origin/master'
+   repobranch: 'origin/stable/6.1'
    reponame: 'fuel-qa'
    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
    default_pool: '10.109.0.0/16:24'
