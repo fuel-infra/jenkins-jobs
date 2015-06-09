@@ -3,7 +3,7 @@
     release: 6.1
     version-id: 6.1
     openstack-id: 2014.2
-    fuel-branch: 'origin/stable/6.1'
+    fuel-branch: 'stable/6.1'
     updates: false
     prjsuffix: '-stable'
     build-node: 'osci-fuel-meta-ubuntu'
