@@ -8,7 +8,7 @@ TARBALL_NAME=fuel-community-${UPGRADE_ID}
 seedclient.py -pvf "${ARTIFACTS_DIR}/${ISO_NAME}.iso" --tracker-url=http://retracker.local:80/announce,http://seed-us1.fuel-infra.org:8080/announce,http://seed-cz1.fuel-infra.org:8080/announce --http-root=http://seed-cz1.fuel-infra.org/fuelweb-iso,http://seed-us1.fuel-infra.org/fuelweb-iso --seed-host=seed-us1.fuel-infra.org:17333,seed-cz1.fuel-infra.org:17333
 
 # we don't have img artifact for >6.1
-if [ "${RELEASE}" != "6.1" ]; then
+if [ -f "${ARTIFACTS_DIR}/${ISO_NAME}.img" ]; then
   seedclient.py -pvf "${ARTIFACTS_DIR}/${ISO_NAME}.img" --tracker-url=http://retracker.local:80/announce,http://seed-us1.fuel-infra.org:8080/announce,http://seed-cz1.fuel-infra.org:8080/announce --http-root=http://seed-cz1.fuel-infra.org/fuelweb-iso,http://seed-us1.fuel-infra.org/fuelweb-iso --seed-host=seed-us1.fuel-infra.org:17333,seed-cz1.fuel-infra.org:17333
 fi
 

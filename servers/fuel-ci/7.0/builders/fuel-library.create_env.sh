@@ -35,5 +35,3 @@ for ENV_PREFIX in ${ENV_PREFIXES}; do
     cp -r fuel-qa/ "/home/jenkins/workspace/fuel-main/${ENV_PREFIX}-${ENV_POSTFIX}"
     dos.py erase "${ENV_PREFIX}-${ENV_POSTFIX}" || echo "Nothing to erase"
 done
-
-
