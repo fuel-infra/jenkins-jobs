@@ -32,9 +32,6 @@ TMP_DIR=$(mktemp -d -p ${TMP_PREFIX})
 # get prefix for DST_DIR
 PREFIX_DIR=$(echo ${DST_DIR} | cut -f 1 -d %)
 
-# latest link for current mirror
-LATEST_LINK="${DST_PREFIX}/${PREFIX_DIR}-latest"
-
 # get rsync destination and link-dest parameters
 RSYNC_DEST="${DST_PREFIX}/$(echo ${DST_DIR} | sed -e s/%version%/-${DATE}/g)"
 LAST_DEST="${DST_PREFIX}/$(echo ${DST_DIR} | sed -e s/%version%/-latest/g)"
@@ -71,10 +68,6 @@ then
   mv -T ${TMP_DIR} ${RSYNC_DEST}
   # enforce creation date if mirror was not changed
   touch ${RSYNC_DEST}
-  # update latest link
-  rm -f ${LATEST_LINK}
-  ln -s ${PREFIX_DIR}-${DATE} ${LATEST_LINK}
-  echo "${DEFAULT_URL}/${PREFIX_DIR}-${DATE}" > ${LATEST_LINK}.htm
   OUTPUT+="<a href=${DEFAULT_URL}/${PREFIX_DIR}-${DATE}>$(echo ${DST_DIR} | sed -e s/%version%/-latest/g)</a><br>"
 else
   echo "ERROR: Mirroring of ${RSYNC_DEST} failed!"
@@ -87,6 +80,9 @@ echo ${OUTPUT}
 # prepare post-synchronization script
 TMP_SYNC=$(mktemp -p ${TMP_PREFIX})
 
+# latest name
+LATEST_NAME="${PREFIX_DIR}-latest"
+
 # synchronize all mirrors
 i=1
 while [ ! -z "$(echo ${MIRRORS} | cut -f ${i} -d '|')" ]
@@ -97,7 +93,7 @@ do
   TMPSYNC_DIR=$(mktemp -d -p ${TMP_PREFIX})
   HOST=$(echo ${MIRROR} | cut -f 3 -d '/')
   URL=$(echo ${MIRROR} | cut -f 5- -d '/')
-  cp -P ${LATEST_LINK} ${TMPSYNC_DIR}/
+  ln -s ${PREFIX_DIR}-${DATE} ${TMPSYNC_DIR}/${LATEST_NAME}
   echo "http://${HOST}/${URL}/${PREFIX_DIR}-${DATE}" > \
     ${TMPSYNC_DIR}/${PREFIX_DIR}-latest.htm
   ${RSYNC_PATH} -v ${RSYNC_REMOTE_OPTS} \
@@ -107,9 +103,15 @@ do
   echo rm -rf ${TMPSYNC_DIR} >> ${TMP_SYNC}
 done
 
-# update links on all mirrors
+# update links on main node and all satellite mirrors
 if [ ${STATUS} -eq -1 ]
 then
+  # update link on main mirror
+  rm -f ${DST_PREFIX}/${LATEST_NAME}
+  ln -s ${PREFIX_DIR}-${DATE} ${DST_PREFIX}/${LATEST_NAME}
+  # update index on main mirror
+  echo "${DEFAULT_URL}/${PREFIX_DIR}-${DATE}" > ${LATEST_LINK}.htm
+  # update indexes and symlinks on satallite mirrors
   source ${TMP_SYNC}
 fi
 
