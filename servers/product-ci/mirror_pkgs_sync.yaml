@@ -49,7 +49,7 @@
             default: '{inst_distributions}'
             description: 'List of installer distributions to include in mirror. (only when using debmirror)'
     triggers:
-        - timed: '30 7 * * *'
+        - timed: '0 17 * * *'
     publishers:
       - description-setter:
           regexp: ^\[mirror\](.*)

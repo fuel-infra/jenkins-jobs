@@ -3,7 +3,7 @@
 set -ex
 
 DEBMIRROR=/usr/bin/debmirror
-DEBMIRROR_OPTS="-a amd64,i386 --di-arch=amd64 -method=rsync --no-check-gpg --progress --nosource --rsync-extra=indices --exclude=i386.deb --exclude-deb-section=games"
+DEBMIRROR_OPTS="-a amd64,i386 --di-arch=amd64 -method=rsync --no-check-gpg --progress --nosource --rsync-extra=indices,trace --exclude=i386.deb --exclude-deb-section=games"
 
 RSYNC_PATH=/usr/bin/rsync
 RSYNC_OPTS="-av --delete"
@@ -39,8 +39,8 @@ LAST_DEST="${DST_PREFIX}/$(echo ${DST_DIR} | sed -e s/%version%/-latest/g)"
 # if older version exists, use hardlink switch
 if [ -d ${LAST_DEST} ]
 then
-  shopt -s dotglob
-  cp -al ${LAST_DEST}/* ${TMP_DIR}
+  # copy everything except project dir using hardlinks
+  cp -al $(find -H ${LAST_DEST} -mindepth 1 -maxdepth 1 -not -name project) ${TMP_DIR}
 fi
 
 STATUS=-1
@@ -55,6 +55,8 @@ then
   HOST=$(echo ${SRC_URL} | cut -f 3 -d '/')
   URL=$(echo ${SRC_URL} | cut -f 4- -d '/')
   ${DEBMIRROR} ${DEBMIRROR_OPTS} -s ${SECTIONS} -h ${HOST} -r /${URL} -d ${DISTRIBUTIONS} --di-dist=${INST_DISTRIBUTIONS} ${TMP_DIR} || STATUS=${?}
+  # remove .temp directory
+  rm -rf ${TMP_DIR}/.temp
 else
   # run rsync
   ${RSYNC_PATH} ${RSYNC_OPTS} ${SRC_URL} ${TMP_DIR} || STATUS=${?}
@@ -110,7 +112,7 @@ then
   rm -f ${DST_PREFIX}/${LATEST_NAME}
   ln -s ${PREFIX_DIR}-${DATE} ${DST_PREFIX}/${LATEST_NAME}
   # update index on main mirror
-  echo "${DEFAULT_URL}/${PREFIX_DIR}-${DATE}" > ${LATEST_LINK}.htm
+  echo "${DEFAULT_URL}/${PREFIX_DIR}-${DATE}" > ${DST_PREFIX}/${LATEST_NAME}.htm
   # update indexes and symlinks on satallite mirrors
   source ${TMP_SYNC}
 fi
