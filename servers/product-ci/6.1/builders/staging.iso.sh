@@ -71,7 +71,7 @@ print(sorted(iso_urls)[-1])
     export NAILGUN_COMMIT=$(echo -e "$VERSIONS" | awk '/nailgun_sha:/ {print $NF}')
     export PYTHON_FUELCLIENT_COMMIT=$(echo -e "$VERSIONS" | awk '/python-fuelclient_sha:/ {print $NF}')
     export ASTUTE_COMMIT=$(echo -e "$VERSIONS" | awk '/astute_sha:/ {print $NF}')
-    export FUELLIB_COMMIT=$(echo -e "$VERSIONS" | awk '/fuellib_sha:/ {print $NF}')
+    export FUELLIB_COMMIT=$(echo -e "$VERSIONS" | awk '/fuel-library_sha:/ {print $NF}')
     export OSTF_COMMIT=$(echo -e "$VERSIONS" | awk '/ostf_sha:/ {print $NF}')
     export FUELMAIN_COMMIT=${FUELMAIN_COMMIT:-$(echo -e "$VERSIONS" | awk '/fuelmain_sha:/ {print $NF}')}
 fi
