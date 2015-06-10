@@ -17,7 +17,7 @@
     scm-ci-status-client-basedir: 'ci-status-client'
     scm-credentials-id: '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
     scm-branch: 'origin/stable/6.1'
-    scm-ci-status-client-branch: 'stable/6.1'
+    scm-ci-status-client-branch: 'origin/stable/6.1'
     install-build-node: 'install-tests'
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/stable/6.1'
