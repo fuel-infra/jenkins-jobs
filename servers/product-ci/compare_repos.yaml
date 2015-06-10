@@ -6,6 +6,13 @@
     logrotate:
       artifactDaysToKeep: 7
     node: compare_repos
+    scm:
+      - git:
+          url: 'https://review.fuel-infra.org/infra/ci-test-request.git'
+          branches:
+            - 'master'
+          wipe-workspace: true
+
 
     parameters:
       - choice:

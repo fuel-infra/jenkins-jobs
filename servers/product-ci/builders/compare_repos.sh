@@ -2,15 +2,14 @@
 
 # usage: ./compare_repos BASE_URL_OLD_REPO BASE_URL_NEW_REPO
 # example: ./compare_repos http://osci-obs.vm.mirantis.net:82/ubuntu-fuel-6.0.1-stable http://osci-obs.vm.mirantis.net:82/ubuntu-fuel-6.1-stable
-# repodiff require 'yum-utills' package installed.
 
 set -ex
 
 # variables
 WGET=$(/usr/bin/which wget)
 JOIN=$(/usr/bin/which join)
-REPODIFF=$(/usr/bin/which repodiff)
 DPKG=$(/usr/bin/which dpkg)
+SED=$(/usr/bin/which sed)
 
 if [[ $TYPE == "DEB" ]]; then
 
@@ -75,14 +74,20 @@ if [[ $TYPE == "DEB" ]]; then
   echo -e "Updated Packages:\n"
 
   awk '{
-    if ($4 == "upgraded" || $4 == "downgraded") print $1": "$1"_"$2" > "$1"_"$3;
+    if ($4 == "upgraded") print $1": "$1"_"$2" > "$1"_"$3;
   }' raw_report.list
 
-  echo -e "\n"
-  echo -e "Summary:\n"
-  echo -e "Added Packages: $(grep -c 'new_package' raw_report.list)"
-  echo -e "Removed Packages: $(grep -c 'removed' raw_report.list)"
-  echo -e "Modified Packages: $(grep -c 'upgraded\|downgraded' raw_report.list)"
+  echo -e "Downgraded Packages:\n"
+
+  awk '{
+    if ($4 == "downgraded") print $1": "$1"_"$2" > "$1"_"$3;
+  }' raw_report.list
+
+  echo "Summary:"
+  echo "Added Packages: $(grep -c 'new_package' raw_report.list)"
+  echo "Removed Packages: $(grep -c 'removed' raw_report.list)"
+  echo "Upgraded Packages: $(grep -c 'upgraded' raw_report.list)"
+  echo "Downgraded Packages: $(grep -c 'downgraded' raw_report.list)"
 
 fi
 
@@ -90,6 +95,7 @@ fi
 if [[ $TYPE == "RPM" ]]; then
 
   echo "Type is RPM"
-  $REPODIFF --simple --old="$OLD/centos" --new="$NEW/centos"
+
+  misc/repodiff.py --archlist=x86_64 --quiet --downgrade --simple --old="$OLD/centos" --new="$NEW/centos" | $SED '/^New/{n;N;d}' > raw_report.list
 
 fi
