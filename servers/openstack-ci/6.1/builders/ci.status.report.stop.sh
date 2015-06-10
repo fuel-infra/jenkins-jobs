@@ -1,2 +1,2 @@
 #!/bin/bash -ex
-ci_status/ci-status-report.sh stop
+ci-status-client/ci-status-report.sh stop

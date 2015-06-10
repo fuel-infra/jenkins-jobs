@@ -38,10 +38,10 @@
           scm-branch: '{install-scm-branch}'
       - fuel-infra:
           scm-user: '{scm-user}'
-          scm-repo: '{scm-ci-status-repo}'
-          scm-basedir: '{scm-ci-status-basedir}'
+          scm-repo: '{scm-ci-status-client-repo}'
+          scm-basedir: '{scm-ci-status-client-basedir}'
           scm-credentials-id: '{scm-credentials-id}'
-          scm-branch: '{scm-ci-status-branch}'
+          scm-branch: '{scm-ci-status-client-branch}'
     builders:
       - shell:
           !include-raw-escape builders/ci.status.report.start.sh
