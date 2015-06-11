@@ -3,7 +3,7 @@
 set -ex
 
 DEBMIRROR=/usr/bin/debmirror
-DEBMIRROR_OPTS="-a amd64,i386 --di-arch=amd64 -method=rsync --no-check-gpg --progress --nosource --rsync-extra=indices,trace --exclude=i386.deb --exclude-deb-section=games"
+DEBMIRROR_OPTS="-a amd64,i386 --di-arch=amd64 -method=rsync --no-check-gpg --progress --nosource --rsync-extra=indices,trace --exclude=i386.deb --exclude-deb-section=games --checksums"
 
 RSYNC_PATH=/usr/bin/rsync
 RSYNC_OPTS="-av --delete"
