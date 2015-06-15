@@ -1,7 +1,0 @@
-Runs <a href="http://docs.mirantis.com/fuel-dev/devops.html#environment-creation-via-devops-fuel-main">system_test.sh</a> with '--group=ha_nova_vlan' and parameters:<p>
-<pre>
-  SYNC_DEPL_TASKS=true
-  OPENSTACK_RELEASE=centos
-  UPLOAD_MANIFESTS=true
-  UPLOAD_MANIFESTS_PATH=/path/to/fuel-library/deployment/puppet/
-</pre>

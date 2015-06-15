@@ -22,6 +22,14 @@
           name: RELEASE
       - string:
           name: BUILD
+      - string:
+          name: VENV_PATH
+          description: |
+            Defined in upstream job, but in manual re-triggering should be defined explicitly:<br>
+              <ul>
+                <li>/home/jenkins/venv-nailgun-tests-2.9 for ISO >= 6.1</li>
+                <li>/home/jenkins/venv-nailgun-tests for ISO <= 6.0</li>
+              </ul>
     publishers:
       - description-setter:
           regexp: "^META: (.*)"

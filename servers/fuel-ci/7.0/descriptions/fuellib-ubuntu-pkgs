@@ -1,0 +1,12 @@
+Runs <a href="http://docs.mirantis.com/fuel-dev/devops.html#environment-creation-via-devops-fuel-main">system_test.sh</a> with '--group=ha_neutron_vlan' and parameters:<p>
+<pre>
+  SYNC_DEPL_TASKS=true
+  OPENSTACK_RELEASE=ubuntu
+  UPDATE_FUEL=true
+  UPDATE_FUEL_PATH=${WORKSPACE}/packages/
+  UBUNTU_RELEASE='auxiliary'
+  LOCAL_MIRROR_UBUNTU='/var/www/nailgun/ubuntu/auxiliary/'
+  LOCAL_MIRROR_CENTOS='/var/www/nailgun/centos/auxiliary/'
+  EXTRA_RPM_REPOS_PRIORITY=15
+  EXTRA_DEB_REPOS_PRIORITY=1100
+</pre>

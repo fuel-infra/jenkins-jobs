@@ -1,0 +1,66 @@
+- job:
+    name: 'devops.master.fuel-library.create_env'
+    concurrent: true
+    description:
+      !include-raw descriptions/fuel-library.create_env
+    logrotate:
+      artifactDaysToKeep: 30
+    properties:
+      - heavy-job:
+          weight: '1'
+      - throttle:
+          max-per-node: 1
+          option: project
+
+    parameters:
+      - string:
+          name: ENV_PREFIXES
+          default: 'env_ubuntu env_centos env_masternode env_granular_ubuntu env_granular_centos'
+          description: 'List of env prefixes to create'
+      - string:
+          name: BRANCH
+          default: master
+      - string:
+          name: ISO_ID
+          default: default
+      - node:
+          name: NODE
+          description: "Select slave"
+          ignore-offline-nodes: true
+          allowed-multiselect: true
+      - string:
+          name: SHA
+          default: master
+          description: 'Commit SHA of fuel-qa repository'
+      - string:
+          name: VENV_PATH
+          default: /home/jenkins/venv-nailgun-tests-2.9
+      - bool:
+          name: UPDATE_VENV
+          default: false
+          description: 'If true VENV_PATH will be recreated from scratch'
+
+    scm:
+      - git:
+          url: 'https://git.openstack.org/stackforge/fuel-qa.git'
+          branches:
+            - $SHA
+          basedir: fuel-qa
+
+    builders:
+      - shell:
+          !include-raw builders/update_venv.sh
+      - shell:
+          !include-raw builders/fuel-library.create_env.sh
+
+    publishers:
+      - description-setter:
+          string: "'Description string: (.*)'"
+
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 10
+          write-description: true
