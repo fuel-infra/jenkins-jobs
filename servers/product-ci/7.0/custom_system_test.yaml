@@ -107,6 +107,14 @@
             Specify the name of a custom test group which
             is not present on the TEST_GROUP list. This will override
             the TEST_GROUP variable value.
+      - choice:
+          name: NETWORK_MODE
+          choices:
+            - Nova
+            - Neutron/VLAN
+            - Neutron/GRE
+          description: |
+            Network mode selection will be applied only if net mode is not hard codded in the test.
       - string:
           name: UBUNTU_MIRROR_ID
           default: latest

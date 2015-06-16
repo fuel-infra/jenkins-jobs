@@ -54,6 +54,20 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
     export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-proposed main universe multiverse"
 fi
 
+if [[ "${NETWORK_MODE}" == "Nova" ]]; then
+  export NEUTRON_ENABLE="false"
+fi
+
+if [[ "${NETWORK_MODE}" == "Neutron/VLAN" ]]; then
+  export NEUTRON_ENABLE="true"
+  export NEUTRON_SEGMENT_TYPE="vlan"
+fi
+
+if [[ "${NETWORK_MODE}" == "Neutron/GRE" ]]; then
+  export NEUTRON_ENABLE="true"
+  export NEUTRON_SEGMENT_TYPE="gre"
+fi
+
 # Checking gerrit commits for fuel-qa
 if [[ "${fuel_qa_gerrit_commit}" != "none" ]] ; then
   for commit in ${fuel_qa_gerrit_commit} ; do
