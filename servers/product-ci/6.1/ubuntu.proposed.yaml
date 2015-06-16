@@ -22,7 +22,7 @@
           name: MAGNET_LINK
       - string:
           name: TEST_GROUP
-          default: 'ubuntu_proposed'
+          default: 'bvt_2'
       - string:
           name: OPENSTACK_RELEASE
           default: 'Ubuntu'
