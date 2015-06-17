@@ -1,6 +1,9 @@
-find . -name '*.erb' | xargs -P1 -L1 -I '%' erb -P -x -T '-' % | ruby -c
-find . -name '*.pp' | xargs -P1 -L1 puppet parser validate --verbose
-find . -name '*.pp' | xargs -P1 -L1 puppet-lint \
+#!/bin/bash
+set -ex
+
+find . -name '*.erb' -print0 | xargs -0 -P1 -L1 -I '%' erb -P -x -T '-' % | ruby -c
+find . -name '*.pp' -print0 | xargs -0 -P1 -L1 puppet parser validate --verbose
+find . -name '*.pp' -print0 | xargs -0 -r -P1 -L1 puppet-lint \
           --fail-on-warnings \
           --with-context \
           --with-filename \

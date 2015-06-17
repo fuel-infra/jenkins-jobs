@@ -1,0 +1,49 @@
+- job-template:
+    name: 'fuel-plugin.{plugin_name}.build'
+    builders:
+      - shell:
+          !include-raw-escape './builders/build-plugin.sh'
+    description: '<a href=https://github.com/stackforge/{plugin_repo}>Build {plugin_name} plugin from fuel-plugins project</a>'
+    logrotate:
+      numToKeep: 10
+    node: plugins-ci
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: refs/heads/master
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          name: ''
+          refspec: $GERRIT_REFSPEC
+          url: 'https://review.openstack.org/stackforge/{plugin_repo}'
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/{plugin_repo}'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '**'
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: 'recheck'
+          readable-message: true
+          custom-url: '* $JOB_NAME http://ci-logs.fuel-infra.org/tpi-ci/$JOB_NAME/$BUILD_ID'
+          server-name: 'review.openstack.org'
+    publishers:
+      - archive:
+          artifacts: '*.rpm,*.txt'
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'ibelikov@mirantis.com, {email_to}'
+      - trigger-parameterized-builds:
+        - project: fuel-plugins.publish_logs
+          current-parameters: true
+          predefined-parameters: |
+            REPORTED_JOB_URL=$BUILD_URL
+            REPORTED_JOB_NAME=$JOB_NAME
+            REPORTED_BUILD_ID=$BUILD_ID
