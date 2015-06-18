@@ -63,7 +63,7 @@
             BUILD=fuel-7.0-$BUILD_NUMBER
             STAGE=build
             VALUE=ok
-            REPORTED_JOB_URL=$BUILD_URL 
+            REPORTED_JOB_URL=$BUILD_URL
     scm:
       - stackforge:
           branch: 'master'
