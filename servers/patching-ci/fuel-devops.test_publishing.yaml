@@ -1,0 +1,38 @@
+- job:
+    name: 'fuel-devops.test_publishing'
+    concurrent: true
+    description: Test publishing artifacts to ci-logs
+    logrotate:
+      artifactDaysToKeep: 30
+    properties:
+      - heavy-job:
+          weight: '1'
+      - throttle:
+          max-per-node: 1
+          option: project
+
+    parameters:
+      - node:
+          name: NODE
+          description: "Select slave"
+          ignore-offline-nodes: true
+          allowed-multiselect: true
+
+    builders:
+      - shell:
+          !include-raw builders/test_publishing.sh
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'fuel-qa/nosetests.xml,fuel-qa/logs/*'
+          latest-only: false
+      - publish_to_external
+
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 10
+          write-description: true

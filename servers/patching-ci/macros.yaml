@@ -63,3 +63,14 @@
               - junit:
                   pattern: "fuel-qa/nosetests.xml"
                   skip-if-no-test-files: true
+
+- publisher:
+    name: publish_to_external
+    publishers:
+      - trigger-parameterized-builds:
+        - project: fuel-devops.publish_build_to_external
+          current-parameters: true
+          predefined-parameters: |
+            REPORTED_JOB_URL=$BUILD_URL
+            REPORTED_JOB_NAME=$JOB_NAME
+            REPORTED_BUILD_ID=$BUILD_ID
