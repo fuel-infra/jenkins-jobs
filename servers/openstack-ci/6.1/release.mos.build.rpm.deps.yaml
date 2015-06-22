@@ -49,6 +49,8 @@
       - shell:
           !include-raw-escape builders/mos.build.rpm.deps.sh
       - shell:
+          !include-raw-escape builders/mos.build.security-updates.sh
+      - shell:
           !include-raw-escape builders/mos.patching.report.sh
       - shell:
           !include-raw-escape builders/mos.vote.sh
