@@ -73,7 +73,7 @@
           branches:
             - 'origin/master'
     triggers:
-      - timed: 'H 5 * * *'
+      - timed: 'H 4 * * *'
     wrappers:
       - ansicolor:
           colormap: xterm
