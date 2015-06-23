@@ -4,7 +4,7 @@
     version-id: 6.1
     openstack-id: 2014.2
     fuel-branch: 'stable/6.1'
-    updates: false
+    updates: true
     prjsuffix: '-stable'
     build-node: 'osci-fuel-meta-ubuntu'
     mailto: 'dburmistrov@mirantis.com'
