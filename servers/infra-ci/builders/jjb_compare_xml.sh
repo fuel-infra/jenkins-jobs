@@ -40,14 +40,14 @@ if [[ ${DIFF} -eq 1 ]]; then
       # Do exact job name match when checking with blocklist.
       GREP=$(grep -Fxq "${JOB_NAME}" "${BL}"; echo "${?}")
       if [[ ${GREP} -eq 0 ]]; then
-        BLOCKED+=${JOB_NAME}\<br\>
+        BLOCKED+=${JOB_ENV}/${JOB_NAME}\<br\>
         STAT=1
       # If grep returned 2 then there was no such blockfile.
       elif [[ ${GREP} -eq 2 ]]; then
           echo Error. There is no such blockfile.
           exit 2
       else
-        CHANGED+=${JOB_NAME}\<br\>
+        CHANGED+=${JOB_ENV}/${JOB_NAME}\<br\>
       fi
     done
   done
@@ -60,13 +60,14 @@ if [[ ${DIFF} -eq 1 ]]; then
   # Now find added/removed Jobs...
   for JOB in $(awk '/Only in/ {print $3$4}' "${LOGFILE}"); do
     ON=$(echo  "${JOB}"|awk -F/ '{print $7}')
-    JOB=$(echo  "${JOB}"|awk -F: '{print $2}')
+    JOB_NAME=$(echo  "${JOB}"| awk -F: '{print $2}')
+    JOB_ENV=$(echo "${JOB}" | awk -F "/" '{print $(NF?NF-0:0)}' | cut -f1 -d ':')
     if [[ ${ON} = 'old' ]]; then
       REMOVE=1
-      REMOVED+=${JOB}\<br\>
+      REMOVED+=${JOB_ENV}/${JOB_NAME}\<br\>
     elif [[ ${ON} = 'new' ]]; then
       ADD=1
-      ADDED+=${JOB}\<br\>
+      ADDED+=${JOB_ENV}/${JOB_NAME}\<br\>
     fi
   done
   # And print added/removed if any.
