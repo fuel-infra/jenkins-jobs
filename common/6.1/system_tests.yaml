@@ -1,0 +1,102 @@
+
+- job-template:
+    # General system test. Downloads ISO image via magnet link
+    # and runs system test with specified test group.
+    #
+    # Uses predefined ``main-git`` macros for access to ``fuel-main/`` repository.
+    #
+    # Variables required:
+    #
+    # version-id
+    #     Versioned identificator of the Fuel ISO or tarball used in this job.
+    #     For example: ``6.1``, ``6.1-community``, ``6.0-icehouse``.
+    # id
+    #     Any string, name of the job. Use only [a-z_-] symbols.
+    # dist
+    #     OPENSTACK_RELEASE variable. 'centos' or 'ubuntu'.
+    # testgroup
+    #     Test group used as --group parameter in system_test.sh
+    # description
+    #     Job description
+    # node
+    #     Jenkins slave label
+    # timeout
+    #     Job timeout
+    # reponame
+    #     Name of the repository with system tests code
+    # repobranch
+    #     Branch of the repository
+    # venvpath
+    #     Path to virtual env with fuel-devops installed (VENV_PATH)
+    # weight
+    #     Job weight
+    # default_pool
+    #     Default network pool (POOL_DEFAULT)
+    # properties
+    #     List of strings "VAR=value".
+    #     These variables will be injected in job environment before the build
+    name: '6.1.{id}.{dist}.{testgroup}'
+    block-downstream: false
+    block-upstream: false
+    builders:
+    - inject: # default env variables
+        properties-content: |
+          VENV_PATH={venvpath}
+          POOL_DEFAULT={default_pool}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+    - inject: # overrides
+        properties-content: '{properties}'
+    - shell:
+        !include-raw-escape 'scripts/run_system_test.sh'
+    concurrent: true
+    description: '{description}'
+    disabled: false
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+    node: '{node}'
+
+    parameters:
+    - string:
+        name: MAGNET_LINK
+        description: "iso magnet link"
+    - string:
+        name: ENV_PREFIX
+        default: '6.1.{id}.{dist}.{testgroup}'
+        description: 'Environment prefix'
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
+
+    publishers:
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+
+    scm:
+    - main-git:
+        reponame: '{reponame}'
+        repobranch: '{repobranch}'
+        basedir: ''
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - inject-passwords:
+        global: true
+    - ansicolor:
+        colormap: xterm
