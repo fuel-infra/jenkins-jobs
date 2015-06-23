@@ -1,8 +1,8 @@
-- job:
-    name: verify-fuel-docs
+- job-template:
+    name: '{prefix}-fuel-docs'
     builders:
       - shell:
-          !include-raw './builders/verify-fuel-docs.sh'
+          !include-raw-escape './builders/verify-fuel-docs.sh'
     description: 'Check that we dont add more warnings. /image\.py.*rescaling/ and /pdf\/pdf_.*rst/ warnings are ignored'
     logrotate:
       numToKeep: 100
@@ -22,14 +22,14 @@
             - $GERRIT_BRANCH
           remotes:
             - gerrit:
-                refspec: $GERRIT_REFSPEC
+                refspec: '{refspec}'
                 url: https://review.openstack.org/stackforge/fuel-docs.git
-          choosing-strategy: gerrit
+          choosing-strategy: '{choosing-strategy}'
     triggers:
-      - timed: 'H 2 * * *'
+      - timed: '{timed}'
       - gerrit:
           trigger-on:
-            - patchset-created-event
+            - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: stackforge/fuel-docs
@@ -48,7 +48,7 @@
           users:
             - 'e0991f76-20e6-4617-9f6d-cf85600789fe'
     publishers:
-      - email-default
+      - 'email-{email-type}'
       - html-publisher:
           name: 'Fuel Docs build results'
           dir: '_build/html'
@@ -56,3 +56,21 @@
           keep-all: true
           allow-missing: true
           wrapper-name: 'htmlpublisher-wrapper.html'
+
+- project:
+    name: dualcheck-fuel-docs
+    jobs:
+      - '{prefix}-fuel-docs':
+          prefix: verify
+          trigger-on: patchset-created-event
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+          timed: 'H 2 * * *'
+      - '{prefix}-fuel-docs':
+          prefix: gate
+          trigger-on: change-merged-event
+          email-type: alert-on-merge
+          refspec: refs/heads/$GERRIT_BRANCH
+          choosing-strategy: default
+          timed: ''
