@@ -24,13 +24,13 @@
 
       - string:
           name: OLD
-          default: 'http://osci-obs.vm.mirantis.net:82/centos-fuel-6.0-stable'
-          description: Specify URL of the old(basic) repository.
+          default: 'http://mirror.fuel-infra.org/fwm/6.0/centos/os/x86_64'
+          description: Specify URL to metadata of the old(basic) repository.
 
       - string:
           name: NEW
-          default: 'http://osci-obs.vm.mirantis.net:82/centos-fuel-6.2-stable'
-          description: Specify URL of the new(change) repository.
+          default: 'http://mirror.fuel-infra.org/fwm/6.1/centos/os/x86_64'
+          description: Specify URL to metadata of the new(change) repository.
 
     builders:
       - shell:

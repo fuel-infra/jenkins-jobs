@@ -1,7 +1,10 @@
 #!/bin/bash
-
-# usage: ./compare_repos BASE_URL_OLD_REPO BASE_URL_NEW_REPO
-# example: ./compare_repos http://osci-obs.vm.mirantis.net:82/ubuntu-fuel-6.0.1-stable http://osci-obs.vm.mirantis.net:82/ubuntu-fuel-6.1-stable
+# usage: ./compare_repos.sh DEB/RPM OLD_URL NEW_URL
+#
+# for DEB type of mirror specify URL where file 'Release' has been located
+#   example: http://fuel-repository.mirantis.com/fwm/6.1/ubuntu/dists/mos6.1
+# for RPM type of mirror specify URL where folder 'repodata' has been located
+#   example: http://fuel-repository.mirantis.com/fwm/6.0/centos/os/x86_64
 
 set -ex
 
@@ -16,10 +19,10 @@ if [[ $TYPE == "DEB" ]]; then
   echo "Type is DEB"
 
   # download and simplyfy of the files list
-  $WGET -q "$OLD/ubuntu/Packages" -O old_raw_list
+  $WGET -q "$OLD/Packages" -O old_raw_list
   grep -A2 'Package:' old_raw_list | grep -v 'Source\|Architecture' | awk -F": "  'ORS=NR%3?" ":"\n" {print $2,$4}' | sort > old_list
 
-  $WGET -q "$NEW/ubuntu/Packages" -O new_raw_list
+  $WGET -q "$NEW/Packages" -O new_raw_list
   grep -A2 'Package:' new_raw_list | grep -v 'Source\|Architecture' | awk -F": "  'ORS=NR%3?" ":"\n" {print $2,$4}'  > new_list
 
   # join 2 lists in one
@@ -96,6 +99,6 @@ if [[ $TYPE == "RPM" ]]; then
 
   echo "Type is RPM"
 
-  misc/repodiff.py --archlist=x86_64 --quiet --downgrade --simple --old="$OLD/centos" --new="$NEW/centos" | $SED '/^New/{n;N;d}' > raw_report.list
+  misc/repodiff.py --archlist=x86_64 --quiet --downgrade --simple --old="$OLD" --new="$NEW" | $SED '/^New/{n;N;d}' > raw_report.list
 
 fi
