@@ -103,3 +103,4 @@
           !include-raw-escape builders/mos.test.patching.sh
     publishers:
       - nosetests
+      - publish_to_external
