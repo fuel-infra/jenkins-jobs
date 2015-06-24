@@ -41,6 +41,12 @@
           name: ENABLED_MASTER_CUSTOM_TESTS
           default: 'false'
       - string:
+          name: ENABLED_TESTS_WITH_UPDATES
+          default: 'true'
+      - string:
+          name: ENABLED_TESTS_WITHOUT_UPDATES
+          default: 'false'
+      - string:
           name: fuelqa_gerrit_commit
           default: 'none'
       - string:
@@ -78,6 +84,18 @@
             current-parameters: true
             property-file: 'parameters.txt'
           - project: '{release}.{name}.test-centos-master'
+            current-parameters: true
+            property-file: 'parameters.txt'
+          - project: '{release}.{name}.ga.test-deb'
+            current-parameters: true
+            property-file: 'parameters.txt'
+          - project: '{release}.{name}.ga.test-rpm'
+            current-parameters: true
+            property-file: 'parameters.txt'
+          - project: '{release}.{name}.ga.test-ubuntu-master'
+            current-parameters: true
+            property-file: 'parameters.txt'
+          - project: '{release}.{name}.ga.test-centos-master'
             current-parameters: true
             property-file: 'parameters.txt'
     publishers:

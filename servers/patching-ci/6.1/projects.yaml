@@ -12,15 +12,73 @@
       - '{release}.{name}.test-runner'
       - '{release}.{name}.rpm'
       - '{release}.{name}.deb'
-
 - job-group:
     name: '{release}.{name}.rpm'
     jobs:
-      - '{release}.{name}.test-rpm':
-      - '{release}.{name}.test-centos-master':
-
+      - '{release}.patching.{test_name}':
+          test_name: 'test-rpm'
+          testgroup: 'patching_environment'
+          envprefix: 'centos'
+          reviewer: 'ci-patching-rpm'
+          disable_updates: 'false'
+          enablevar: 'ENABLED_RPM_PATCHING'
+          enable_custom_var: 'ENABLED_ENV_CUSTOM_TESTS'
+      - '{release}.patching.{test_name}':
+          test_name: 'test-centos-master'
+          testgroup: 'patching_master_tests'
+          envprefix: 'centos'
+          reviewer: 'ci-patching-master-centos'
+          disable_updates: 'false'
+          enablevar: 'ENABLED_CENTOS_MASTER_PATCHING'
+          enable_custom_var: 'ENABLED_MASTER_CUSTOM_TESTS'
+      - '{release}.patching.{test_name}':
+          test_name: 'ga.test-rpm'
+          testgroup: 'patching_environment'
+          envprefix: 'centos'
+          reviewer: 'ci-patching-rpm'
+          disable_updates: 'true'
+          enablevar: 'ENABLED_RPM_GA_PATCHING'
+          enable_custom_var: 'ENABLED_ENV_CUSTOM_TESTS'
+      - '{release}.patching.{test_name}':
+          test_name: 'ga.test-centos-master'
+          testgroup: 'patching_master_tests'
+          envprefix: 'centos'
+          reviewer: 'ci-patching-master-centos'
+          disable_updates: 'true'
+          enablevar: 'ENABLED_CENTOS_MASTER_GA_PATCHING'
+          enable_custom_var: 'ENABLED_MASTER_CUSTOM_TESTS'
 - job-group:
     name: '{release}.{name}.deb'
     jobs:
-      - '{release}.{name}.test-deb':
-      - '{release}.{name}.test-ubuntu-master':
+      - '{release}.patching.{test_name}':
+          test_name: 'test-deb'
+          testgroup: 'patching_environment'
+          envprefix: 'ubuntu'
+          reviewer: 'ci-patching-deb'
+          disable_updates: 'false'
+          enablevar: 'ENABLED_DEB_PATCHING'
+          enable_custom_var: 'ENABLED_ENV_CUSTOM_TESTS'
+      - '{release}.patching.{test_name}':
+          test_name: 'test-ubuntu-master'
+          testgroup: 'patching_master_tests'
+          envprefix: 'ubuntu'
+          reviewer: 'ci-patching-master-ubuntu'
+          disable_updates: 'false'
+          enablevar: 'ENABLED_UBUNTU_MASTER_PATCHING'
+          enable_custom_var: 'ENABLED_MASTER_CUSTOM_TESTS'
+      - '{release}.patching.{test_name}':
+          test_name: 'ga.test-deb'
+          testgroup: 'patching_environment'
+          envprefix: 'ubuntu'
+          reviewer: 'ci-patching-deb'
+          disable_updates: 'true'
+          enablevar: 'ENABLED_DEB_GA_PATCHING'
+          enable_custom_var: 'ENABLED_ENV_CUSTOM_TESTS'
+      - '{release}.patching.{test_name}':
+          test_name: 'ga.test-ubuntu-master'
+          testgroup: 'patching_master_tests'
+          envprefix: 'ubuntu'
+          reviewer: 'ci-patching-master-ubuntu'
+          disable_updates: 'true'
+          enablevar: 'ENABLED_UBUNTU_MASTER_GA_PATCHING'
+          enable_custom_var: 'ENABLED_MASTER_CUSTOM_TESTS'

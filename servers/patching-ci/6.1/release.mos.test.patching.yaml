@@ -1,5 +1,5 @@
 - job-template:
-    name: '{release}.{name}.test-deb'
+    name: '{release}.patching.{test_name}'
     project-type: freestyle
     disabled: '{is-disabled}'
     concurrent: false
@@ -15,7 +15,7 @@
           fail: true
           timeout: 600
           write-description: true
-      - ci-patching-deb
+      - '{reviewer}'
     parameters:
       - string:
           name: fuelqa_gerrit_commit
@@ -31,13 +31,13 @@
           default: ''
       - string:
           name: FUEL_MILESTONE
-          default: '6.1'
+          default: '{release}'
       - string:
           name: TEST_GROUP
-          default: 'patching_environment'
+          default: '{testgroup}'
       - string:
           name: ENV_PREFIX
-          default: 'ubuntu'
+          default: '{envprefix}'
       - string:
           name: OSCI_OBS_REPOS_CENTOS
           default: 'http://osci-obs.vm.mirantis.net:82'
@@ -45,11 +45,14 @@
           name: OSCI_OBS_REPOS_UBUNTU
           default: 'http://obs-1.mirantis.com:82'
       - string:
+          name: REPOS_SUFFIX
+          default: 'stable-updates'
+      - string:
           name: KEEP_BEFORE
           default: 'yes'
       - string:
           name: GERRIT_REVIEWER
-          default: ci-patching-deb
+          default: '{reviewer}'
       - string:
           name: PYTHON_VENV
           default: '/home/jenkins/venv-nailgun-tests-2.9/'
@@ -72,16 +75,43 @@
           name: CUSTOM_TESTS
           default: '2'
       - string:
+          name: PATCHING_DISABLE_UPDATES
+          default: '{disable_updates}'
+      - string:
           name: ENABLE_VAR
-          default: 'ENABLED_DEB_PATCHING'
+          default: '{enablevar}'
+      - string:
+          name: ENABLE_CUSTOM_VAR
+          default: '{enable_custom_var}'
+      - string:
+          name: ENABLED_RPM_PATCHING
+          default: 'true'
+      - string:
+          name: ENABLED_CENTOS_MASTER_PATCHING
+          default: 'true'
+      - string:
+          name: ENABLED_RPM_GA_PATCHING
+          default: 'true'
+      - string:
+          name: ENABLED_CENTOS_MASTER_GA_PATCHING
+          default: 'true'
       - string:
           name: ENABLED_DEB_PATCHING
           default: 'true'
       - string:
-          name: ENABLE_CUSTOM_VAR
-          default: 'ENABLED_ENV_CUSTOM_TESTS'
+          name: ENABLED_UBUNTU_MASTER_PATCHING
+          default: 'true'
+      - string:
+          name: ENABLED_DEB_GA_PATCHING
+          default: 'true'
+      - string:
+          name: ENABLED_UBUNTU_MASTER_GA_PATCHING
+          default: 'true'
       - string:
           name: ENABLED_ENV_CUSTOM_TESTS
+          default: 'true'
+      - string:
+          name: ENABLED_MASTER_CUSTOM_TESTS
           default: 'true'
     scm:
       - git:
@@ -93,7 +123,7 @@
       - git:
           url: 'https://review.fuel-infra.org/patching-tests.git'
           branches:
-            - 'master'
+            - 'origin/stable/6.1'
           skip-tag: true
           basedir: patching-tests
     builders:

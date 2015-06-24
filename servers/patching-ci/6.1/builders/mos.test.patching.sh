@@ -142,8 +142,8 @@ if [[ ${#GERRIT_HOSTS[@]} -gt 0 ]]; then
     for GERRIT_HOST in "${GERRIT_HOSTS[@]}"; do
         IFS=','
         for GERRIT_CHANGE_NUMBER in ${GERRIT_REVIEWS[${GERRIT_HOST}]}; do
-            UBUNTU_REPO_NAME="trusty-fuel-${FUEL_MILESTONE}-stable-updates"
-            CENTOS_REPO_NAME="centos-fuel-${FUEL_MILESTONE}-stable-updates"
+            UBUNTU_REPO_NAME="trusty-fuel-${FUEL_MILESTONE}-${REPOS_SUFFIX}"
+            CENTOS_REPO_NAME="centos-fuel-${FUEL_MILESTONE}-${REPOS_SUFFIX}"
             unset IFS
             if check_project_packages "${GERRIT_HOST}" "${GERRIT_PORTS[${GERRIT_HOST}]}" "${GERRIT_USERS[${GERRIT_HOST}]}" "${GERRIT_CHANGE_NUMBER}"; then
                 if [ "${REPO_TYPE}" == "trusty" ]; then
@@ -171,7 +171,13 @@ for REPO in "${PATCHING_MIRRORS_ARRAY[@]}"; do
   fi
 done
 
-ENV_NAME="${TEST_GROUP}-${ENV_PREFIX}-${FUEL_MILESTONE}"
+if ${PATCHING_DISABLE_UPDATES}; then
+    ENV_SUFFIX="ga"
+else
+    ENV_SUFFIX="updates"
+fi
+
+ENV_NAME="${TEST_GROUP}-${ENV_PREFIX}-${FUEL_MILESTONE}-${ENV_SUFFIX}"
 
 if [ -n "${MAGNET_LINK}" ]; then
     ISO_PATH="$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")"
@@ -210,6 +216,7 @@ export PATCHING_MIRRORS="${PATCHING_MIRRORS_ARRAY[*]}"
 export PATCHING_MASTER_MIRRORS="${PATCHING_MASTER_MIRRORS_ARRAY[*]}"
 export PATCHING_APPLY_TESTS="${WORKSPACE}/patching-tests/"
 export PATCHING_BUG_ID="${BUG_ID}"
+export PATCHING_DISABLE_UPDATES=${PATCHING_DISABLE_UPDATES}
 
 source "${VENV_PATH}/bin/activate"
 if dos.py list | grep -q "${ENV_NAME}"; then
