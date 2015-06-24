@@ -341,78 +341,79 @@ push_package_to_obs () {
   [ -e "$tmpdir" ] && rm -rf $tmpdir
 }
 
-get_revision() {
-  [ -n "$1" ] && local REPO_TYPE=$1
-  shift
-  [ -n "$1" ] && local EXTRAREPO=$1
-  shift
-  [ -n "$1" ] && local binpackagenames=$1
-  revision=0
-  case $REPO_TYPE in
-      rpm) # CentOS repo
-           local yumdir=yumtest
-           [ -d $yumdir ] && rm -rf $yumdir
-           mkdir -p $yumdir/cache $yumdir/repos.d
-           echo "#" > $yumdir/repos.d/test.repo
-           cat > $yumdir/yum.conf<<EOL
-[main]
-cachedir=$yumdir/cache/
-reposdir=$yumdir/repos.d/
-keepcache=0
-debuglevel=2
-logfile=$yumdir/yum.log
-exactarch=1
-obsoletes=1
-EOL
-           local opts="-c $yumdir/yum.conf"
-           if [ -n "$EXTRAREPO" ] ; then
-              local CMD="sed -i"
-              local OIFS="$IFS"
-              IFS='|'
-              for repo in $EXTRAREPO ; do
-                IFS="$OIFS"
-                local reponame=${repo%%,*}
-                local repourl=${repo##*,}
-                CMD="$CMD -e \"$ i[${reponame}]\nname=${reponame}\nbaseurl=${repourl}\ngpgcheck=0\nenabled=1\nskip_if_unavailable=1\n\""
-                IFS='|'
-              done
-              IFS="$OIFS"
-              CMD="$CMD $yumdir/repos.d/test.repo"
-              [ -n "$CMD" ] && eval $CMD
-           fi
-           yum $opts clean all &>/dev/null
-           revision=`LANGUAGE=C yum $opts info $binpackagenames | grep "^Release" | awk '{print $NF}' | sort -u | head -1 | egrep -o '[0-9]+$' || :`
-           [ -d $yumdir ] && rm -rf $yumdir
-           ;;
-      deb) # Ubuntu repo
-           aptdir=${WRKDIR}/apttest
-           [ -d $aptdir ] && rm -rf $aptdir
-           mkdir -p $aptdir/cache $aptdir/sources/parts $aptdir/lists
-           touch $aptdir/status
-           if [ -n "$EXTRAREPO" ] ; then
-              local OIFS="$IFS"
-              IFS='|'
-              for repo in $EXTRAREPO ; do
-                IFS="$OIFS"
-                echo "deb $repo" >> $aptdir/sources/sources.list
-                IFS='|'
-              done
-              IFS="$OIFS"
-           fi
-           opts="-o Dir::Etc::SourceParts=${aptdir}/sources/parts
-                 -o Dir::Etc::SourceList=${aptdir}/sources/sources.list
-                 -o Dir::State::Lists=${aptdir}/lists
-                 -o Dir::State::status=${aptdir}/status
-                 -o Dir::Cache=${aptdir}/cache"
-           apt-get $opts update || :
-           revision=`LANG=C apt-cache $opts policy $binpackagenames | grep "Candidate" | awk -F': ' '{print $2}' | sort -u | egrep -o '[0-9]+$' | head -1 || :`
-           [ -n "$aptdir" ] && rm -rf $aptdir
-           ;;
-  esac
-  [ -z "$revision" ] && revision=0
-  # Increment revision
-  revision=$(( $revision + 1 ))
-}
+# Deprecated. git rev-list count used instead
+#get_revision() {
+#  [ -n "$1" ] && local REPO_TYPE=$1
+#  shift
+#  [ -n "$1" ] && local EXTRAREPO=$1
+#  shift
+#  [ -n "$1" ] && local binpackagenames=$1
+#  revision=0
+#  case $REPO_TYPE in
+#      rpm) # CentOS repo
+#           local yumdir=yumtest
+#           [ -d $yumdir ] && rm -rf $yumdir
+#           mkdir -p $yumdir/cache $yumdir/repos.d
+#           echo "#" > $yumdir/repos.d/test.repo
+#           cat > $yumdir/yum.conf<<EOL
+#[main]
+#cachedir=$yumdir/cache/
+#reposdir=$yumdir/repos.d/
+#keepcache=0
+#debuglevel=2
+#logfile=$yumdir/yum.log
+#exactarch=1
+#obsoletes=1
+#EOL
+#           local opts="-c $yumdir/yum.conf"
+#           if [ -n "$EXTRAREPO" ] ; then
+#              local CMD="sed -i"
+#              local OIFS="$IFS"
+#              IFS='|'
+#              for repo in $EXTRAREPO ; do
+#                IFS="$OIFS"
+#                local reponame=${repo%%,*}
+#                local repourl=${repo##*,}
+#                CMD="$CMD -e \"$ i[${reponame}]\nname=${reponame}\nbaseurl=${repourl}\ngpgcheck=0\nenabled=1\nskip_if_unavailable=1\n\""
+#                IFS='|'
+#              done
+#              IFS="$OIFS"
+#              CMD="$CMD $yumdir/repos.d/test.repo"
+#              [ -n "$CMD" ] && eval $CMD
+#           fi
+#           yum $opts clean all &>/dev/null
+#           revision=`LANGUAGE=C yum $opts info $binpackagenames | grep "^Release" | awk '{print $NF}' | sort -u | head -1 | egrep -o '[0-9]+$' || :`
+#           [ -d $yumdir ] && rm -rf $yumdir
+#           ;;
+#      deb) # Ubuntu repo
+#           aptdir=${WRKDIR}/apttest
+#           [ -d $aptdir ] && rm -rf $aptdir
+#           mkdir -p $aptdir/cache $aptdir/sources/parts $aptdir/lists
+#           touch $aptdir/status
+#           if [ -n "$EXTRAREPO" ] ; then
+#              local OIFS="$IFS"
+#              IFS='|'
+#              for repo in $EXTRAREPO ; do
+#                IFS="$OIFS"
+#                echo "deb $repo" >> $aptdir/sources/sources.list
+#                IFS='|'
+#              done
+#              IFS="$OIFS"
+#           fi
+#           opts="-o Dir::Etc::SourceParts=${aptdir}/sources/parts
+#                 -o Dir::Etc::SourceList=${aptdir}/sources/sources.list
+#                 -o Dir::State::Lists=${aptdir}/lists
+#                 -o Dir::State::status=${aptdir}/status
+#                 -o Dir::Cache=${aptdir}/cache"
+#           apt-get $opts update || :
+#           revision=`LANG=C apt-cache $opts policy $binpackagenames | grep "Candidate" | awk -F': ' '{print $2}' | sort -u | egrep -o '[0-9]+$' | head -1 || :`
+#           [ -n "$aptdir" ] && rm -rf $aptdir
+#           ;;
+#  esac
+#  [ -z "$revision" ] && revision=0
+#  # Increment revision
+#  revision=$(( $revision + 1 ))
+#}
 
 request_is_merged () {
   local REF=$1
@@ -500,8 +501,14 @@ build_deb_fuel () {
     [ "$UPDATES" == 'true' ] && EXTRAREPO="${EXTRAREPO}|http://${OBSURL##*/}:82/${PRJNAME}${UPDATES_SUFFIX}/${REPONAME} /"
     export EXTRAREPO
 
-    get_revision deb "$EXTRAREPO" "$binpackagenames"
-    local release="fuel${PROJECT_VERSION}+${revision}"
+    #get_revision deb "$EXTRAREPO" "$binpackagenames"
+    #local release="fuel${PROJECT_VERSION}+${revision}"
+
+    # Get revision as commit count
+    local release=`git --git-dir $(pwd)/${PACKAGENAME}-src/.git rev-list --no-merges HEAD | wc -l`
+    [ "$GERRIT_STATUS" == "MERGED" ] && release="${release}.1" || release="${release}.2"
+    [ "$GERRIT_STATUS" != "MERGED" ] && [ -n "$GERRIT_CHANGE_NUMBER" ] && release="${release}.gerrit${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}"
+    [ "$GERRIT_STATUS" != "MERGED" ] && release="${release}.git`git --git-dir $(pwd)/${PACKAGENAME}-src/.git rev-parse --short HEAD`"
     local fullver=${epochnumber}${version}-${release}
 
     sed -i "s| (.*) | (${fullver}) |" ${WRKDIR}/dst/debian/changelog
