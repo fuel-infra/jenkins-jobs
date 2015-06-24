@@ -39,6 +39,13 @@ if [ -n "${FUEL_COMMITS}" ] && [ -f "/home/jenkins/workspace/fuel_commits/${FUEL
   export PYTHON_FUELCLIENT_COMMIT=$(fgrep python-fuelclient_sha ${FUEL_COMMITS}|cut -d\" -f2)
 fi
 
+echo "Checkout fuel-main"
+
+if [ -n "${FUELMAIN_COMMIT}" ] ; then
+    git checkout ${FUELMAIN_COMMIT}
+fi
+
+
 #########################################
 
 echo "STEP 1. Get artifacts from ${BASE_VERSION}"
