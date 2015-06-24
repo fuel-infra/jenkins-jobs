@@ -142,8 +142,8 @@ if [[ ${#GERRIT_HOSTS[@]} -gt 0 ]]; then
     for GERRIT_HOST in "${GERRIT_HOSTS[@]}"; do
         IFS=','
         for GERRIT_CHANGE_NUMBER in ${GERRIT_REVIEWS[${GERRIT_HOST}]}; do
-            UBUNTU_REPO_NAME="trusty-fuel-${FUEL_MILESTONE}-stable"
-            CENTOS_REPO_NAME="centos-fuel-${FUEL_MILESTONE}-stable"
+            UBUNTU_REPO_NAME="trusty-fuel-${FUEL_MILESTONE}-stable-updates"
+            CENTOS_REPO_NAME="centos-fuel-${FUEL_MILESTONE}-stable-updates"
             unset IFS
             if check_project_packages "${GERRIT_HOST}" "${GERRIT_PORTS[${GERRIT_HOST}]}" "${GERRIT_USERS[${GERRIT_HOST}]}" "${GERRIT_CHANGE_NUMBER}"; then
                 if [ "${REPO_TYPE}" == "trusty" ]; then
