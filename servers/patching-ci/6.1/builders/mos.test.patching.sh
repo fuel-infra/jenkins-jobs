@@ -89,7 +89,7 @@ function check_project_packages {
 function trap_err {
     if shopt -o -q errexit
     then
-        gerrit_review -m "'* ${JOB_NAME} ${BUILD_URL} : FAILURE'" --verified=-1
+        gerrit_review -m "'* ${JOB_NAME} ${LOGS_BASEURL}${JOB_NAME}/${BUILD_ID} : FAILURE'" --verified=-1
     fi
 }
 
@@ -119,7 +119,7 @@ for GERRIT_ID in $(seq 1 "${GERRIT_HOSTS_COUNT}"); do
 done
 
 if ! eval \$${ENABLE_VAR}; then
-    gerrit_review --message "'* ${JOB_NAME} ${BUILD_URL} : SKIPPED'" --verified "0"
+    gerrit_review --message "'* ${JOB_NAME} ${LOGS_BASEURL}${JOB_NAME}/${BUILD_ID} : SKIPPED'" --verified "0"
     exit 0
 fi
 
@@ -166,7 +166,7 @@ fi
 for REPO in "${PATCHING_MIRRORS_ARRAY[@]}"; do
   if [[ "$(curl -s -w %\{http_code\} ${REPO} -o /dev/null)" == "404" ]]; then
       echo "*** ERROR: Custom repository ${REPO} does not exist!"
-      gerrit_review --message "'* ${JOB_NAME} ${BUILD_URL} : FAILURE'" --verified "-1"
+      gerrit_review --message "'* ${JOB_NAME} ${LOGS_BASEURL}${JOB_NAME}/${BUILD_ID} : FAILURE'" --verified "-1"
       exit 1
   fi
 done
@@ -200,11 +200,11 @@ for GERRIT_HOST in "${GERRIT_HOSTS[@]}"; do
 done
 
 if ! "${CHECK_REVIEWS_BUGS}"; then
-    gerrit_review --message "'* ${JOB_NAME} ${BUILD_URL} : FAILURE (no bug id)'" --verified "-1"
+    gerrit_review --message "'* ${JOB_NAME} ${LOGS_BASEURL}${JOB_NAME}/${BUILD_ID} : FAILURE (no bug id)'" --verified "-1"
     exit 1
 fi
 
-gerrit_review --message "'* ${JOB_NAME} ${BUILD_URL} : STARTED using ISO=${ISO_VERSION}'"
+gerrit_review --message "'* ${JOB_NAME} ${LOGS_BASEURL}${JOB_NAME}/${BUILD_ID} : STARTED using ISO=${ISO_VERSION}'"
 
 export PATCHING_MIRRORS="${PATCHING_MIRRORS_ARRAY[*]}"
 export PATCHING_MASTER_MIRRORS="${PATCHING_MASTER_MIRRORS_ARRAY[*]}"
@@ -244,6 +244,6 @@ for EXIT_CODE in ${TESTS_EXIT_CODES[@]}; do
 done
 
 case "${TESTS_EXIT_CODE}" in
-    0)   gerrit_review --message "'* ${JOB_NAME} ${BUILD_URL} : SUCCESS'" --verified "+1"; exit 0;;
-    *)   gerrit_review --message "'* ${JOB_NAME} ${BUILD_URL} : FAILURE'" --verified "-1"; exit 1;;
+    0)   gerrit_review --message "'* ${JOB_NAME} ${LOGS_BASEURL}${JOB_NAME}/${BUILD_ID} : SUCCESS'" --verified "+1"; exit 0;;
+    *)   gerrit_review --message "'* ${JOB_NAME} ${LOGS_BASEURL}${JOB_NAME}/${BUILD_ID} : FAILURE'" --verified "-1"; exit 1;;
 esac

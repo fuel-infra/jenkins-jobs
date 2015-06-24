@@ -97,6 +97,7 @@
           skip-tag: true
           basedir: patching-tests
     builders:
+      - logs-url
       - shell:
           !include-raw-escape builders/mos.test.patching.fetch_gerrit_commits.sh
       - shell:
