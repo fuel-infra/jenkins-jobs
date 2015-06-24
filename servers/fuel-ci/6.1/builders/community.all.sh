@@ -27,11 +27,17 @@ echo "Check version.yaml for Fuel commit ids (if present)"
 if [ -n "${FUEL_COMMITS}" ] && [ -f "/home/jenkins/workspace/fuel_commits/${FUEL_COMMITS}" ]; then
   export FUEL_COMMITS=/home/jenkins/workspace/fuel_commits/${FUEL_COMMITS}
   export ASTUTE_COMMIT=$(fgrep astute_sha ${FUEL_COMMITS}|cut -d\" -f2)
-  export FUELLIB_COMMIT=$(fgrep fuellib_sha ${FUEL_COMMITS}|cut -d\" -f2)
+  export FUELLIB_COMMIT=$(fgrep fuel-library_sha ${FUEL_COMMITS}|cut -d\" -f2)
   export FUELMAIN_COMMIT=$(fgrep fuelmain_sha ${FUEL_COMMITS}|cut -d\" -f2)
   export NAILGUN_COMMIT=$(fgrep nailgun_sha ${FUEL_COMMITS}|cut -d\" -f2)
   export OSTF_COMMIT=$(fgrep ostf_sha ${FUEL_COMMITS}|cut -d\" -f2)
   export PYTHON_FUELCLIENT_COMMIT=$(fgrep python-fuelclient_sha ${FUEL_COMMITS}|cut -d\" -f2)
+fi
+
+echo "Checkout fuel-main"
+
+if [ -n "${FUELMAIN_COMMIT}" ] ; then
+    git checkout ${FUELMAIN_COMMIT}
 fi
 
 #########################################
