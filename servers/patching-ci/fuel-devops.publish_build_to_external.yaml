@@ -27,6 +27,7 @@
           target: logs/
           which-build: upstream-build
           flatten: true
+          optional: true
 
     wrappers:
       - ansicolor:
