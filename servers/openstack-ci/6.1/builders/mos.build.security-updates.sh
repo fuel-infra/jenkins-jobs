@@ -8,7 +8,6 @@ source setenvfile
 [ $(echo "$GERRIT_CHANGE_COMMIT_MESSAGE" | base64 -d | grep -c "$SECUPDATETAG") -eq 0 ] && exit 0
 
 source project.envfile
-rm -f project.envfile
 
 PACKAGES=$(osc $OBSAPI api /build/$PROJECTNAME/$REPONAME/$ARCH/$PACKAGENAME | grep "binary filename" | cut -d'"' -f2 | egrep -v "_(buildenv|statistics)$" | tr '\n' ' ')
 OBSSERVER=`echo "$OBSAPI" | cut -d'/' -f3 | cut -d':' -f1`
