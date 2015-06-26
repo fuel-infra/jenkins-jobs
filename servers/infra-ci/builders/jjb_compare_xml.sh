@@ -11,7 +11,7 @@ ADDED="[added]<br>"
 REMOVED="[removed]<br>"
 RESULT=''
 BLOCKLIST=blocklist
-STAT=0
+BLOCK=0
 
 # First generate output from BASE_COMMIT vars value
 git checkout "${BASE_COMMIT}"
@@ -40,21 +40,22 @@ if [[ ${DIFF} -eq 1 ]]; then
       # Do exact job name match when checking with blocklist.
       GREP=$(grep -Fxq "${JOB_NAME}" "${BL}"; echo "${?}")
       if [[ ${GREP} -eq 0 ]]; then
+        BLOCK=1
         BLOCKED+=${JOB_ENV}/${JOB_NAME}\<br\>
-        STAT=1
       # If grep returned 2 then there was no such blockfile.
       elif [[ ${GREP} -eq 2 ]]; then
           echo Error. There is no such blockfile.
           exit 2
       else
+        CHANGE=1
         CHANGED+=${JOB_ENV}/${JOB_NAME}\<br\>
       fi
     done
   done
   # Print Blocked or Changed jobs.
-  if [[ ${STAT} -eq 1 ]]; then
+  if [[ ${BLOCK} -eq 1 ]]; then
     RESULT+=${BLOCKED}
-  else
+  elif [[ ${CHANGE} -eq 1 ]]; then
     RESULT+=${CHANGED}
   fi
   # Now find added/removed Jobs...
@@ -79,4 +80,4 @@ if [[ ${DIFF} -eq 1 ]]; then
   fi
 fi
 echo "${RESULT}"
-exit ${STAT}
+exit "${BLOCK}"
