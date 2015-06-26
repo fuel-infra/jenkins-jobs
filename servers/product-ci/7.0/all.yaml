@@ -113,6 +113,26 @@
       - heavy-job:
           weight: 1
     parameters:
+      - bool:
+          name: 'SKIP_CENTOS.BVT_1'
+          default: false
+          description: |
+            Select to skip build of 7.0.centos.bvt_1 job
+      - bool:
+          name: 'SKIP_UBUNTU.BVT_2'
+          default: false
+          description: |
+            Select to skip build of 7.0.ubuntu.bvt_2
+      - bool:
+          name: 'SKIP_CENTOS.SMOKE_NOVA'
+          default: false
+          description: |
+            Select to skip build of 7.0.centos.smoke_nova
+      - bool:
+          name: 'SKIP_UBUNTU.SMOKE_NEUTRON'
+          default: false
+          description: |
+            Select to skip build of 7.0.ubuntu.smoke_neutron
       - string:
           name: UPSTREAM_JOB_URL
           default: '${JENKINS_URL}job/7.0.all/'
@@ -137,15 +157,19 @@
             - name: '7.0.centos.bvt_1'
               kill-phase-on: NEVER
               property-file: properties_file.txt
+              enable-condition: '"${SKIP_CENTOS.BVT_1}" == "false"'
             - name: '7.0.ubuntu.bvt_2'
               kill-phase-on: NEVER
               property-file: properties_file.txt
+              enable-condition: '"${SKIP_UBUNTU.BVT_2}" == "false"'
             - name: '7.0.centos.smoke_nova'
               kill-phase-on: NEVER
               property-file: properties_file.txt
+              enable-condition: '"${SKIP_CENTOS.SMOKE_NOVA}" == "false"'
             - name: '7.0.ubuntu.smoke_neutron'
               kill-phase-on: NEVER
               property-file: properties_file.txt
+              enable-condition: '"${SKIP_UBUNTU.SMOKE_NEUTRON}" == "false"'
     publishers:
       - email-systest:
           body-failed:
