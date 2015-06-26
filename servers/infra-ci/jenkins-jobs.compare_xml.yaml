@@ -31,5 +31,5 @@
           artifacts: 'output/**'
           allow-empty: 'true'
       - description-setter:
-          regexp: (^\[changed\].*)
+          regexp: (^\[(?!blocked)[a-z]*\].*)
           regexp-for-failed: (^\[blocked\].*)
