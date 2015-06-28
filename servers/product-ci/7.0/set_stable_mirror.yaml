@@ -1,6 +1,11 @@
 - job:
     name: '7.0.set_stable_mirror'
     builders:
+      - copyartifact:
+          project: '6.1.set_stable_mirror'
+          filter: 'build_files.txt'
+          which-build: last-successful
+          optional: true
       - shell:
           !include-raw builders/set_stable_mirror.sh
     description: |
@@ -30,7 +35,7 @@
     publishers:
       - archive:
           allow-empty: false
-          artifacts: build_description.txt
+          artifacts: build_*.txt
           latest-only: false
       - description-setter:
           regexp: ^[^\s]* is stable.*a href.*
