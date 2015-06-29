@@ -45,9 +45,11 @@
            MULTIPLE_NETWORKS=true
            FUEL_STATS_ENABLED=true
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'thread_non_func_1_usb'
+         testgroup: 'thread_usb'
          properties: |
            ADMIN_BOOT_DEVICE=usb
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_non_func_1'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'bonding_ha'
          properties: |
