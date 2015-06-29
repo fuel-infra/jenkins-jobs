@@ -5,13 +5,18 @@
         This job will fetch remote upstream repos for selected distributions to version<br>
         It and serve it using http and rsync protocols. Includes simple rsync and selective<br>
         fetch using releases and sections when using Debian mirror structure.<br><br>
-        Default variable (MIRRORS) set multiple additional external targets in different locations.<br><br>
+        Default variable (MIRRORS) set multiple additional external targets in different locations.<br>
+        To only update link/htm 'recent' files use 'FORCED_LINK' parameter.<br><br>
         Related bug: <a href=https://review.openstack.org/148279>#148279</a><br>
         Maintenance contacts: #fuel-devops
     builders:
       - shell:
           !include-raw-escape './builders/mirror_pkgs_sync.sh'
     parameters:
+        - string:
+            name: FORCED_LINK
+            default: ''
+            description: 'Forced link instead of the lastest one (example: 2015-06-28-170127)'
         - string:
             name: MAX_DAYS
             default: '30'

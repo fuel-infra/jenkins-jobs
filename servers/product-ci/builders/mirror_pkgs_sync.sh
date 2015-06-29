@@ -36,6 +36,14 @@ PREFIX_DIR=$(echo "${DST_DIR}" | cut -f 1 -d %)
 RSYNC_DEST="${DST_PREFIX}/${DST_DIR//%version%/-${DATE}}"
 LAST_DEST="${DST_PREFIX}/${DST_DIR//%version%/-latest}"
 
+# set latest link
+if [ -z "${FORCED_LINK}" ]
+then
+  LINK="${PREFIX_DIR}-${DATE}"
+else
+  LINK="${PREFIX_DIR}-${FORCED_LINK}"
+fi
+
 # if older version exists, use hardlink switch
 if [ -d "${LAST_DEST}" ]
 then
@@ -47,22 +55,29 @@ then
 fi
 
 STATUS=-1
-if [[ "${SRC_URL}" =~ mirror:// ]]
+
+# synchronize from upstream if not only setting the link
+if [ -z "${FORCED_LINK}" ]
 then
-  if [ -z "${DISTRIBUTIONS}" ] || [ -z "${INST_DISTRIBUTIONS}" ] || [ -z "${SECTIONS}" ]
+  if [[ "${SRC_URL}" =~ mirror:// ]]
   then
-    echo 'ERROR: Missing debmirror settings!'
-    exit 1
+    if [ -z "${DISTRIBUTIONS}" ] || [ -z "${INST_DISTRIBUTIONS}" ] || [ -z "${SECTIONS}" ]
+    then
+      echo 'ERROR: Missing debmirror settings!'
+      exit 1
+    fi
+    # run debmirror
+    HOST=$(echo "${SRC_URL}" | cut -f 3 -d '/')
+    URL=$(echo "${SRC_URL}" | cut -f 4- -d '/')
+    ${DEBMIRROR} "${DEBMIRROR_OPTS[@]}" -s "${SECTIONS}" -h "${HOST}" -r /"${URL}" -d "${DISTRIBUTIONS}" --di-dist="${INST_DISTRIBUTIONS}" "${TMP_DIR}" || STATUS=${?}
+    # remove .temp directory
+    rm -rf "${TMP_DIR}"/.temp
+  else
+    # run rsync
+    ${RSYNC_PATH} "${RSYNC_OPTS[@]}" "${SRC_URL}" "${TMP_DIR}" || STATUS=${?}
   fi
-  # run debmirror
-  HOST=$(echo "${SRC_URL}" | cut -f 3 -d '/')
-  URL=$(echo "${SRC_URL}" | cut -f 4- -d '/')
-  ${DEBMIRROR} "${DEBMIRROR_OPTS[@]}" -s "${SECTIONS}" -h "${HOST}" -r /"${URL}" -d "${DISTRIBUTIONS}" --di-dist="${INST_DISTRIBUTIONS}" "${TMP_DIR}" || STATUS=${?}
-  # remove .temp directory
-  rm -rf "${TMP_DIR}"/.temp
 else
-  # run rsync
-  ${RSYNC_PATH} "${RSYNC_OPTS[@]}" "${SRC_URL}" "${TMP_DIR}" || STATUS=${?}
+  echo 'Upstream synchronization skipped - setting link/htm files only!'
 fi
 
 # if sync is completed, move to destination directory and create latest link
@@ -73,7 +88,7 @@ then
   mv -T "${TMP_DIR}" "${RSYNC_DEST}"
   # enforce creation date if mirror was not changed
   touch "${RSYNC_DEST}"
-  OUTPUT+="<a href=${DEFAULT_URL}/${PREFIX_DIR}-${DATE}>${DST_DIR//%version%/-latest}</a><br>"
+  OUTPUT+="<a href=${DEFAULT_URL}/${LINK}>${DST_DIR//%version%/-latest}</a><br>"
 else
   echo "ERROR: Mirroring of ${RSYNC_DEST} failed!"
   rm -rf "${TMP_DIR}"
@@ -119,12 +134,15 @@ do
   TMPSYNC_DIR=$(mktemp -d -p "${TMP_PREFIX}")
   HOST=$(echo "${MIRROR}" | cut -f 3 -d '/')
   URL=$(echo "${MIRROR}" | cut -f 5- -d '/')
-  ln -s "${PREFIX_DIR}-${DATE}" "${TMPSYNC_DIR}"/"${LATEST_NAME}"
-  echo "http://${HOST}/${URL}/${PREFIX_DIR}-${DATE}" > \
+  # prepare symbolic link and htm file in temporary directory
+  ln -s "${LINK}" "${TMPSYNC_DIR}"/"${LATEST_NAME}"
+  echo "http://${HOST}/${URL}/${LINK}" > \
     "${TMPSYNC_DIR}"/"${PREFIX_DIR}"-latest.htm
+  # synchronzie mirror without symlink and htm file
   ${RSYNC_PATH} -v "${RSYNC_REMOTE_OPTS[@]}" \
     --include "${PREFIX_DIR}-*/***" \
     --exclude "*" "${DST_PREFIX}"/ "${MIRROR}" && \
+    # add symbolic link and htm synchronization to queue
     echo "${RSYNC_PATH}" -av "${TMPSYNC_DIR}"/ "${MIRROR}" >> "${TMP_SYNC}" || STATUS=${?}
   echo rm -rf "${TMPSYNC_DIR}" >> "${TMP_SYNC}"
 done
@@ -134,9 +152,9 @@ if [ ${STATUS} -eq -1 ]
 then
   # update link on main mirror
   rm -f "${DST_PREFIX}"/"${LATEST_NAME}"
-  ln -s "${PREFIX_DIR}-${DATE}" "${DST_PREFIX}"/"${LATEST_NAME}"
+  ln -s "${LINK}" "${DST_PREFIX}"/"${LATEST_NAME}"
   # update index on main mirror
-  echo "${DEFAULT_URL}/${PREFIX_DIR}-${DATE}" > "${DST_PREFIX}"/"${LATEST_NAME}".htm
+  echo "${DEFAULT_URL}/${LINK}" > "${DST_PREFIX}"/"${LATEST_NAME}".htm
   # update indexes and symlinks on satallite mirrors
   source "${TMP_SYNC}"
 fi
