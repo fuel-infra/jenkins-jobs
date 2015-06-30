@@ -7,7 +7,7 @@
       - inject:
           properties-content: LOGS_BASEURL=http://ci-logs.fuel-infra.org/patching-ci/
 ########################################################################
-# Section: Wrappers
+# Section: Credentials
 ########################################################################
 - wrapper:
     name: ci-patching-deb
@@ -43,6 +43,13 @@
       - ssh-agent-credentials:
           users:
             - '5b900bb8-2b72-4023-ab4f-ddf20f5290c1'
+
+- wrapper:
+    name: obs-user-credentials
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '55e5d902-b1dc-4d09-a809-7b6c8413c853'
 
 ########################################################################
 # Section: SCM
