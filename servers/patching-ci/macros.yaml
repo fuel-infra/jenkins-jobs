@@ -56,6 +56,15 @@
           branches:
             - 'stable/6.1'
           wipe-workspace: false
+- scm:
+    name: trsync
+    scm:
+      - git:
+          basedir: trsync
+          url: https://review.fuel-infra.org/infra/trsync
+          branches:
+            - 'origin/{branch}'
+          wipe-workspace: false
 ########################################################################
 # Section: Publishers
 ########################################################################
