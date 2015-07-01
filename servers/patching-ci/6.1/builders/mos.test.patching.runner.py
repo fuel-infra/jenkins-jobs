@@ -108,7 +108,7 @@ for gerrit in GERRIT_HOSTS:
                                           branch=branch)
 
     for code_review in code_reviews:
-        if not re.search('(Closes|Partial)-bug:\s+#{0}'.format(BUG_ID),
+        if not re.search('(Closes|Partial)-bug:\s+#?{0}'.format(BUG_ID),
                          code_review['commitMessage'], re.IGNORECASE):
             raise PatchingError('Patch from CR {0} doesn\'t contain '
                                 '"Closes-bug: #{1}" or "Partial-bug: #{1}" '
