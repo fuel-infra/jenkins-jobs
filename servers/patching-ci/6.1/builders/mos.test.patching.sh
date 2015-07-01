@@ -43,7 +43,7 @@ function get_bug_from_commit_message {
     GERRIT_HOST="${1}"
     GERRIT_PORT="${2}"
     GERRIT_REVIEWER="${3}"
-    retry_ssh_command -p "${GERRIT_PORT}" "${GERRIT_REVIEWER}@${GERRIT_HOST}" gerrit query --commit-message "${4}" | sed -rn 's/.*(closes|partial)-bug:\s*#([0-9]+)\b.*/\2/pI'
+    retry_ssh_command -p "${GERRIT_PORT}" "${GERRIT_REVIEWER}@${GERRIT_HOST}" gerrit query --commit-message "${4}" | sed -rn 's/.*(closes|partial)-bug:\s*#?([0-9]+)\b.*/\2/pI'
     set -x
 }
 
@@ -181,7 +181,7 @@ else
 fi
 
 ISO_NAME="$(basename "$ISO_PATH")"
-ISO_VERSION="$(echo "${ISO_NAME}"| cut -d '-' -f 2-3)"
+ISO_VERSION="$(echo "${ISO_NAME}"| sed -rn 's/[^-]*\-([0-9,\.,-]+[0-9]).*/\1/p')"
 
 CHECK_REVIEWS_BUGS=true
 for GERRIT_HOST in "${GERRIT_HOSTS[@]}"; do
