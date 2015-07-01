@@ -9,7 +9,6 @@ elif [[ ${OPENSTACK_RELEASE} == 'ubuntu' ]]; then
 	export OPENSTACK_RELEASE=Ubuntu
 fi
 
-export VENV_PATH=/home/jenkins/venv-nailgun-tests
 export CONNECTION_STRING='qemu+tcp://127.0.0.1:16509/system'
 export ENV_NAME=${ENV_PREFIX}.${BUILD_NUMBER}
 export ENV_NAME=${ENV_NAME:0:68}

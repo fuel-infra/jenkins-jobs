@@ -33,6 +33,9 @@
     block-downstream: false
     block-upstream: false
     builders:
+    - inject:
+        properties-content:
+          VENV_PATH={base_venv_path}
     - inject: # overrides
         properties-content: '{properties}'
     - shell:
@@ -87,11 +90,11 @@
 
     scm:
     - main-git:
-        reponame: 'fuel-main'
+        reponame: '{base_reponame}'
         repobranch: '{base_repobranch}'
         basedir: 'BASE'
     - main-git:
-        reponame: 'fuel-qa'
+        reponame: '{upgrade_reponame}'
         repobranch: '{upgrade_repobranch}'
         basedir: 'UPGRADE'
 
