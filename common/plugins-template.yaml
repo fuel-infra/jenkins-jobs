@@ -1,5 +1,5 @@
 - job-template:
-    name: '6.1.system_test.{dist}.fuel_plugins'
+    name: '{version-id}.system_test.{dist}.fuel_plugins'
     builders:
       - inject:
           properties-content: |
@@ -19,7 +19,7 @@
       numToKeep: 50
     node: 'systest'
     concurrent: true
-    description: '6.1 swarm test group'
+    description: '{version-id} swarm test group'
     properties:
       - heavy-job:
           weight: 8
@@ -33,7 +33,7 @@
         description: "iso magnet link"
     - string:
         name: ENV_PREFIX
-        default: '6.1.system_test.{dist}.fuel_plugins'
+        default: '{version-id}.system_test.{dist}.fuel_plugins'
         description: 'Environment prefix'
     publishers:
     - archive:
