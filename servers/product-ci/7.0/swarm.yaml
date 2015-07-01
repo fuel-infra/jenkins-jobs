@@ -243,45 +243,38 @@
               current-parameters: true
               kill-phase-on: NEVER
             # Upgrades
-            - name: '7.0.system_test.centos.ceph_ha_one_controller_compact.upgrade'
+            - name: '7.0.system_test.centos.ceph_ha_one_controller_compact.upgrade_ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.ceph_ha_one_controller_compact_neutron.upgrade'
+            - name: '7.0.system_test.centos.ceph_ha_one_controller_compact_neutron.upgrade_ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.deploy_neutron_gre_ha.rollback'
+            - name: '7.0.system_test.centos.ceph_ha_one_controller_compact_neutron.rollback_ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.deploy_neutron_gre_ha.upgrade'
+            - name: '7.0.system_test.centos.deploy_neutron_gre.rollback_neutron_gre'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.deploy_neutron_gre.rollback'
+            - name: '7.0.system_test.centos.deploy_neutron_gre_ha.upgrade_neutron_gre_ha'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.ceph_ha_one_controller_compact.upgrade'
+            - name: '7.0.system_test.centos.deploy_neutron_gre_ha.rollback_neutron_gre_ha'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.ceph_ha_one_controller_compact_neutron.upgrade'
+            - name: '7.0.system_test.ubuntu.ceph_ha_one_controller_compact.upgrade_ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.deploy_neutron_gre_ha.rollback'
+            - name: '7.0.system_test.ubuntu.ceph_ha_one_controller_compact_neutron.upgrade_ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.deploy_neutron_gre_ha.upgrade'
+            - name: '7.0.system_test.ubuntu.ceph_ha_one_controller_compact_neutron.rollback_ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.deploy_neutron_gre.rollback'
+            - name: '7.0.system_test.ubuntu.deploy_neutron_gre.rollback_neutron_gre'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.ceph_ha_one_controller_compact.rollback'
+            - name: '7.0.system_test.ubuntu.deploy_neutron_gre_ha.upgrade_neutron_gre_ha'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.ceph_ha_one_controller_compact.rollback'
+            - name: '7.0.system_test.ubuntu.deploy_neutron_gre_ha.rollback_neutron_gre_ha'
               current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.ceph_ha_one_controller_compact_neutron.rollback'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.ceph_ha_one_controller_compact_neutron.rollback'
-              current-parameters: true
-              kill-phase-on: NEVER

@@ -11,47 +11,30 @@
     base_venv_path: '/home/jenkins/venv-nailgun-tests-2.9'
     upgrade_reponame: 'fuel-qa'
     upgrade_repobranch: 'origin/master'
-    properties: ''
+    properties: |
+      KEYSTONE_PASSWORD=newpass
+    weight: '8'
     jobs:
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
-          testgroup: 'deploy_neutron_gre_ha'
-          upgrade_testgroup: 'upgrade'
-          properties: |
-            KEYSTONE_PASSWORD=newpass
-          weight: '8'
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
-          upgrade_testgroup: 'upgrade'
-          properties: |
-            KEYSTONE_PASSWORD=newpass
-          weight: '8'
+          upgrade_testgroup:
+            - 'upgrade_ceph_ha_one_controller'
+
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact_neutron'
-          upgrade_testgroup: 'upgrade'
+          upgrade_testgroup:
+            - 'upgrade_ceph_ha_one_controller'
+            - 'rollback_ceph_ha_one_controller'
           properties: |
             NEUTRON_ENABLE=true
-          weight: '8'
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
-          testgroup: 'deploy_neutron_gre_ha'
-          upgrade_testgroup: 'rollback'
-          properties: |
-            KEYSTONE_PASSWORD=newpass
-          weight: '8'
+
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre'
-          upgrade_testgroup: 'rollback'
-          properties: |
-            KEYSTONE_PASSWORD=newpass
-          weight: '8'
+          upgrade_testgroup:
+            - 'rollback_neutron_gre'
+
       - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
-          testgroup: 'ceph_ha_one_controller_compact'
-          upgrade_testgroup: 'rollback'
-          properties: |
-            NEUTRON_ENABLE=true
-          weight: '8'
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
-          testgroup: 'ceph_ha_one_controller_compact_neutron'
-          upgrade_testgroup: 'rollback'
-          properties: |
-            NEUTRON_ENABLE=true
-          weight: '8'
+          testgroup: 'deploy_neutron_gre_ha'
+          upgrade_testgroup:
+            - 'upgrade_neutron_gre_ha'
+            - 'rollback_neutron_gre_ha'
