@@ -1,6 +1,6 @@
 - job-template:
     name: '{release}.{name}.test-runner'
-    project-type: freestyle
+    project-type: multijob
     disabled: '{is-disabled}'
     concurrent: true
     node: '{build-node}'
@@ -73,31 +73,45 @@
           !include-raw-escape builders/mos.test.patching.fetch_gerrit_commits.sh
       - shell:
           !include-raw-escape builders/mos.test.patching.runner.py
+      - multijob:
+          name: 'Build Late Artifacts'
+          projects:
+            - name: '6.1-build.late.artifacts'
+              property-file: 'parameters.txt'
+              enable-condition: '("${{REGENERATE_BOOTSTRAP}}" == "true").or("${{REGENERATE_IMAGE_CENTOS}}" == "true").or("${{REGENERATE_CONTAINERS}}" == "true")'
       - trigger-builds:
           - project: '{release}.{name}.test-deb'
             current-parameters: true
             property-file: 'parameters.txt'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
           - project: '{release}.{name}.test-rpm'
             current-parameters: true
             property-file: 'parameters.txt'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
           - project: '{release}.{name}.test-ubuntu-master'
             current-parameters: true
             property-file: 'parameters.txt'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
           - project: '{release}.{name}.test-centos-master'
             current-parameters: true
             property-file: 'parameters.txt'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
           - project: '{release}.{name}.ga.test-deb'
             current-parameters: true
             property-file: 'parameters.txt'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
           - project: '{release}.{name}.ga.test-rpm'
             current-parameters: true
             property-file: 'parameters.txt'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
           - project: '{release}.{name}.ga.test-ubuntu-master'
             current-parameters: true
             property-file: 'parameters.txt'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
           - project: '{release}.{name}.ga.test-centos-master'
             current-parameters: true
             property-file: 'parameters.txt'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
     publishers:
       - email:
           recipients: '{mailto}'
