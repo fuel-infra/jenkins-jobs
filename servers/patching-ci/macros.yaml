@@ -56,6 +56,17 @@
           branches:
             - 'stable/6.1'
           wipe-workspace: false
+
+- scm:
+    name: osci-mirrors
+    scm:
+      - git:
+          basedir: osci-mirrors
+          url: https://review.fuel-infra.org/infra/mirrors
+          branches:
+            - origin/master
+          wipe-workspace: false
+
 - scm:
     name: trsync
     scm:
