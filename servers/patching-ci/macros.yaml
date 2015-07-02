@@ -109,3 +109,18 @@
             REPORTED_JOB_URL=$BUILD_URL
             REPORTED_JOB_NAME=$JOB_NAME
             REPORTED_BUILD_ID=$BUILD_ID
+
+- publisher:
+    name: email-default
+    publishers:
+      - email-ext:
+          body: $DEFAULT_CONTENT
+          aborted: true
+          failure: true
+          still-failing: true
+          fixed: true
+          send-to:
+            - recipients
+            - requester
+          recipients: '{mail-to}'
+          subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
