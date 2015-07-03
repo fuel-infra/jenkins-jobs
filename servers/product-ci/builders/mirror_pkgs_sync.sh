@@ -98,7 +98,7 @@ fi
 echo "${OUTPUT}"
 
 # clean mirrors older then 30 days
-find "${DST_PREFIX}" -maxdepth 1 -mindepth 1 -type d | while read line
+find "${DST_PREFIX}" -maxdepth 1 -mindepth 1 -name "${PREFIX_DIR}-*" -type d | while read line
 do
   # parse date from directory name
   snapshot_date=$(echo "$line" | tail -c 18 | cut -d - -f -3)
