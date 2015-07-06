@@ -1,0 +1,109 @@
+- job-template:
+    name: '{release}.{name}.test-plan-generator'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: '{build-node}'
+    logrotate:
+      daysToKeep: 100
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 30
+          write-description: true
+      - test-patching-runner
+    parameters:
+      - string:
+          name: GERRIT_TOPIC
+          default: ''
+      - string:
+          name: OPENSTACK_PROJECTS
+          default: '^stackforge/fuel-.*'
+      - string:
+          name: OPENSTACK_BRANCH
+          default: 'stable/6.1'
+      - string:
+          name: FUELINFRA_PROJECTS
+          default: '^.*'
+      - string:
+          name: FUELINFRA_BRANCH
+          default: 'openstack-ci/fuel-6.1/2014.2'
+      - string:
+          name: FUEL_MILESTONE
+          default: '{release}'
+      - string:
+          name: GERRIT_HOSTS
+          description: "Available Gerrit instances (format: host:port:user)"
+          default: 'review.fuel-infra.org:29418:openstack-ci-jenkins,review.openstack.org:29418:fuel-osci-bot'
+      - string:
+          name: ENABLED_ENV_CUSTOM_TESTS
+          default: 'true'
+      - string:
+          name: ENABLED_MASTER_CUSTOM_TESTS
+          default: 'true'
+      - string:
+          name: ENABLED_TESTS_WITH_UPDATES
+          default: 'true'
+      - string:
+          name: ENABLED_TESTS_WITHOUT_UPDATES
+          default: 'true'
+      - string:
+          name: fuelqa_gerrit_commit
+          default: 'none'
+      - string:
+          name: patchingtests_gerrit_commit
+          default: 'none'
+      - string:
+          name: PYTHON_VENV
+          default: '/home/jenkins/venv-nailgun-tests-2.9/'
+      - string:
+          name: TESTPLAN_RAW_FILE
+          default: 'test_plan.txt'
+      - string:
+          name: TESTPLAN_HTML_FILE
+          default: 'test_plan.html'
+      - string:
+          name: OSCI_OBS_REPOS_CENTOS
+          default: 'http://osci-obs.vm.mirantis.net:82'
+      - string:
+          name: OSCI_OBS_REPOS_UBUNTU
+          default: 'http://obs-1.mirantis.com:82'
+      - string:
+          name: REPOS_SUFFIX
+          default: 'stable-updates'
+    scm:
+      - git:
+          url: 'https://review.fuel-infra.org/patching-tests.git'
+          branches:
+            - 'stable/6.1'
+          skip-tag: true
+          basedir: patching-tests
+      - git:
+          url: 'https://github.com/stackforge/fuel-qa.git'
+          branches:
+            - 'origin/stable/6.1'
+          skip-tag: true
+          basedir: fuel-qa
+    builders:
+      - shell:
+          !include-raw-escape builders/mos.test.patching.fetch_gerrit_commits.sh
+      - shell:
+          !include-raw-escape builders/mos.test.patching.runner.py
+      - shell:
+          !include-raw-escape builders/mos.test.plan.generator.sh
+      - shell:
+          !include-raw-escape builders/mos.test.plan.parser.py
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'test_plan.html'
+          latest-only: false
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: true
+      - description-setter:
+          regexp: (\[<a href=.*TestPlan.*</a>\])
+          set-for-matrix: false

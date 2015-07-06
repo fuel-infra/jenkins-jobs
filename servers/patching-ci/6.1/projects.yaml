@@ -12,6 +12,7 @@
       - '{release}.{name}.test-runner'
       - '{release}.{name}.rpm'
       - '{release}.{name}.deb'
+      - '{release}.{name}.test-plan-generator'
 - job-group:
     name: '{release}.{name}.rpm'
     jobs:
