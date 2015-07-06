@@ -15,6 +15,10 @@ OPENSTACK_BRANCH = os.environ.get("OPENSTACK_BRANCH", None)
 FUELINFRA_PROJECTS = os.environ.get("FUELINFRA_PROJECTS", None)
 FUELINFRA_BRANCH = os.environ.get("FUELINFRA_BRANCH", None)
 _GERRIT_HOSTS = os.environ.get("GERRIT_HOSTS", None)
+ENABLED_TESTS_WITH_UPDATES = os.environ.get("ENABLED_TESTS_WITH_UPDATES",
+                                            'false') == 'true'
+ENABLED_TESTS_WITHOUT_UPDATES = os.environ.get("ENABLED_TESTS_WITHOUT_UPDATES",
+                                               'false') == 'true'
 
 
 class PatchingError(Exception):
@@ -130,12 +134,20 @@ JENKINS_PARAMETERS.append('CUSTOM_TESTS={0}'.format(','.join(CUSTOM_TESTS)))
 
 env_patching = 'false'
 master_patching = 'false'
+env_ga_patching = 'false'
+master_ga_patching = 'false'
 
 for target in ERRATUM['targets']:
     if target['type'] == 'environment':
-        env_patching = 'true'
+        if ENABLED_TESTS_WITH_UPDATES:
+            env_patching = 'true'
+        if ENABLED_TESTS_WITHOUT_UPDATES:
+            env_ga_patching = 'true'
     elif target['type'] == 'master':
-        master_patching = 'true'
+        if ENABLED_TESTS_WITH_UPDATES:
+            master_patching = 'true'
+        if ENABLED_TESTS_WITHOUT_UPDATES:
+            master_ga_patching = 'true'
 
 JENKINS_PARAMETERS.append('ENABLED_RPM_PATCHING={0}'.format(env_patching))
 JENKINS_PARAMETERS.append('ENABLED_DEB_PATCHING={0}'.format(env_patching))
@@ -143,6 +155,12 @@ JENKINS_PARAMETERS.append('ENABLED_CENTOS_MASTER_PATCHING={0}'.format(
     master_patching))
 JENKINS_PARAMETERS.append('ENABLED_UBUNTU_MASTER_PATCHING={0}'.format(
     master_patching))
+JENKINS_PARAMETERS.append('ENABLED_RPM_GA_PATCHING={}'.format(env_ga_patching))
+JENKINS_PARAMETERS.append('ENABLED_DEB_GA_PATCHING={}'.format(env_ga_patching))
+JENKINS_PARAMETERS.append('ENABLED_CENTOS_MASTER_GA_PATCHING={0}'.format(
+    master_ga_patching))
+JENKINS_PARAMETERS.append('ENABLED_UBUNTU_MASTER_GA_PATCHING={0}'.format(
+    master_ga_patching))
 
 REGENERATE_PARAMETERS = [
     'regenerate_image_ubuntu',
