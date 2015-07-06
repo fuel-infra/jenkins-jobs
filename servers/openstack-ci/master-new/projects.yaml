@@ -10,8 +10,11 @@
     scm-user: 'openstack-ci-jenkins'
     scm-credentials-id: '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
     scm-repo: 'infra/obs'
+    scm-ci-status-client-repo: 'infra/ci-status-client'
     scm-branch: 'origin/feature/new-build-system'
+    scm-ci-status-client-branch: 'origin/master'
     scm-basedir: ''
+    scm-ci-status-client-basedir: 'ci-status-client'
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/feature/new-ci-flow'
     ops-code-prj: 'openstack/**'
@@ -48,26 +51,36 @@
     jobs:
       - 'master.mos-new.build-rpm':
           distro: centos7
+          last_stage: true
       - 'master.mos-new.build-rpm-request':
           distro: centos7
+          last_stage: false
       - 'master.mos-new.build-rpm-deps':
           distro: centos7
+          last_stage: true
       - 'master.mos-new.build-rpm-deps-request':
           distro: centos7
-      - 'master.mos-new.install-rpm'
+          last_stage: false
+      - 'master.mos-new.install-rpm':
+          last_stage: false
 
 - job-group:
     name: 'master.mos-new.deb'
     jobs:
       - 'master.mos-new.build-deb':
           distro: trusty
+          last_stage: true
       - 'master.mos-new.build-deb-request':
           distro: trusty
+          last_stage: false
       - 'master.mos-new.build-deb-deps':
           distro: trusty
+          last_stage: true
       - 'master.mos-new.build-deb-deps-request':
           distro: trusty
-      - 'master.mos-new.install-deb'
+          last_stage: false
+      - 'master.mos-new.install-deb':
+          last_stage: false
 
 - job-group:
     name: 'master.mos-new.autobuild'
