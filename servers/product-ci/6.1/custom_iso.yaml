@@ -62,11 +62,13 @@
       - choice:
           name: USE_MIRROR
           choices:
+            - auto
             - msk
             - srt
             - usa
             - hrk
             - none
+          description: 'take closest mirror'
       - string:
           name: fuelmain_gerrit_commit
           default: 'none'

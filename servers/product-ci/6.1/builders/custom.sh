@@ -37,6 +37,41 @@ export OSTF_GERRIT_COMMIT="${ostf_gerrit_commit}"
 export FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}"
 export PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}"
 
+######## Get node location to choose closer mirror ###############
+
+if [ "${USE_MIRROR}" == "auto" ]; then
+  LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+  LOCATION=${LOCATION_FACT:-msk}
+
+  case "${LOCATION}" in
+      srt)
+          USE_MIRROR=srt
+          ;;
+      msk)
+          USE_MIRROR=msk
+          ;;
+      kha)
+          USE_MIRROR=kha
+          ;;
+      poz)
+          USE_MIRROR=cz
+          ;;
+      bud)
+          USE_MIRROR=cz
+          ;;
+      bud-ext)
+          USE_MIRROR=cz
+          ;;
+      mnv)
+          USE_MIRROR=usa
+          ;;
+      *)
+          USE_MIRROR=msk
+  esac
+fi
+
+echo "Using mirror: ${USE_MIRROR}"
+
 #########################################
 
 echo "STEP 0. Clean before start"
