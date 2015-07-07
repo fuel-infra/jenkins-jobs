@@ -1,0 +1,69 @@
+########################################################################
+# Section: Wrappers
+########################################################################
+# example
+#
+#- wrapper:
+#    name: openstack-ci-jenkins
+#    wrappers:
+#      - ssh-agent-credentials:
+#          users:
+#            - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+########################################################################
+# Section: Triggers
+########################################################################
+# example
+#
+#- trigger:
+#    name: fuel-infra-deps-submit
+#    triggers:
+#      - gerrit:
+#          trigger-on:
+#            - change-merged-event
+#          projects:
+#            - project-compare-type: 'ANT'
+#              project-pattern: '{code-project}'
+#              branches:
+#                - branch-compare-type: 'PLAIN'
+#                  branch-pattern: '{branch}'
+#          server-name: fuel-infra
+#          silent: true
+#
+########################################################################
+# Section: SCM
+########################################################################
+# example
+#
+#- scm:
+#    name: fuel-infra
+#    scm:
+#      - git:
+#          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/{scm-repo}.git'
+#          basedir: '{scm-basedir}'
+#          credentials-id: '{scm-credentials-id}'
+#          skip-tag: true
+#          branches:
+#            - '{scm-branch}'
+#          wipe-workspace: false
+#
+########################################################################
+## Section: Parameters
+########################################################################
+# example
+#
+#- parameter:
+#    name: openstack-build-master
+#    parameters:
+#      - string:
+#          name: URL
+#          default: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/'
+#      - string:
+#          name: PRJPREFIX
+#          default: '{prjprefix}'
+#      - string:
+#          name: PROJECTNAME
+#          default: '{prjprefix}fuel-{version-id}'
+#      - bool:
+#          name: LAST_STAGE
+#          default: '{last_stage}'
+#

@@ -1,0 +1,4 @@
+- defaults:
+    name: global
+    description: 'Do not edit this job through the web!'
+    project-type: freestyle
