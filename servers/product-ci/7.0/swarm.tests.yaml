@@ -74,6 +74,12 @@
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'command_line'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'huge_ha_neutron'
          weight: '20'
          properties: |
