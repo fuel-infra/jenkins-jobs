@@ -120,12 +120,7 @@
             - 'origin/stable/6.1'
           skip-tag: true
           basedir: fuel-qa
-      - git:
-          url: 'https://review.fuel-infra.org/patching-tests.git'
-          branches:
-            - 'origin/stable/6.1'
-          skip-tag: true
-          basedir: patching-tests
+      - patching-tests
     builders:
       - logs-url
       - shell:

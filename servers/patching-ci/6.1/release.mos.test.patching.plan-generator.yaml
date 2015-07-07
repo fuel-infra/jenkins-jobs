@@ -74,12 +74,7 @@
           name: REPOS_SUFFIX
           default: 'stable-updates'
     scm:
-      - git:
-          url: 'https://review.fuel-infra.org/patching-tests.git'
-          branches:
-            - 'stable/6.1'
-          skip-tag: true
-          basedir: patching-tests
+      - patching-tests
       - git:
           url: 'https://github.com/stackforge/fuel-qa.git'
           branches:

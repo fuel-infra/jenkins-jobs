@@ -8,7 +8,7 @@ set -o pipefail
 if [[ "${patchingtests_gerrit_commit}" != "none" && -d "${WORKSPACE}/patching-tests/" ]]; then
    pushd "${WORKSPACE}/patching-tests/"
    for commit in ${patchingtests_gerrit_commit} ; do
-       git fetch "https://review.fuel-infra.org/patching-tests" "${commit}" && git cherry-pick FETCH_HEAD
+       git fetch "ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/patching-tests" "${commit}" && git cherry-pick FETCH_HEAD
    done
    popd
 fi
