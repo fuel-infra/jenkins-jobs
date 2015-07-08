@@ -34,7 +34,7 @@
     block-upstream: false
     builders:
     - inject:
-        properties-content:
+        properties-content: |
           VENV_PATH={base_venv_path}
           OLD_DEVOPS_DB={old_devops_db}
     - inject: # overrides
