@@ -1,0 +1,61 @@
+- job-template:
+    name: '{prefix}-fuel-library-bats-tests'
+    node: 'bats_tests'
+    description: |
+      <h2>Run unit tests against *.bats files in fuel-library repo</h2>
+      <h3>Job currently running in non-voting mode</h3>
+    builders:
+      - shell:
+          !include-raw-escape './builders/verify-fuel-library-bats-tests.sh'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          url: https://review.openstack.org/openstack/fuel-library.git
+          refspec: '{refspec}'
+          choosing-strategy: '{choosing-strategy}'
+    publishers:
+      - 'email-{email-type}'
+    triggers:
+      - timed: '{timed}'
+      - gerrit:
+          trigger-on: '{obj:trigger_on}'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'openstack/fuel-library'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+- project:
+    name: dualcheck-fuel-library-bats-tests
+    jobs:
+      - '{prefix}-fuel-library-bats-tests':
+          prefix: verify
+          trigger_on:
+            - patchset-created-event
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+          timed: '0 13 * * *'
+      - '{prefix}-fuel-library-bats-tests':
+          prefix: gate
+          trigger_on:
+            - change-merged-event
+          email-type: alert-on-merge
+          refspec: refs/heads/$GERRIT_BRANCH
+          choosing-strategy: default
+          timed: ''
