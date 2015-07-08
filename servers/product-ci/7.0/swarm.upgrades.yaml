@@ -9,6 +9,7 @@
     base_iso_magnet_link:
         !include-raw ../data/6.1-iso
     base_venv_path: '/home/jenkins/venv-nailgun-tests-2.9'
+    old_devops_db: 'false'
     upgrade_reponame: 'fuel-qa'
     upgrade_repobranch: 'origin/master'
     properties: |

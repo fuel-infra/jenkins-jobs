@@ -36,6 +36,7 @@
     - inject:
         properties-content:
           VENV_PATH={base_venv_path}
+          OLD_DEVOPS_DB={old_devops_db}
     - inject: # overrides
         properties-content: '{properties}'
     - shell:

@@ -34,9 +34,11 @@ echo "Description string: ${VERSION_STRING}"
 export UPGRADE_FUEL_FROM=$(basename ${ISO_PATH} | cut -d '-' -f 2 | sed s/.iso//g)
 export UPGRADE_FUEL_TO=$(basename ${TARBALL_PATH} | cut -d '-' -f 2)
 
-export DEVOPS_DB_NAME='devops'
-export DEVOPS_DB_USER='devops'
-export DEVOPS_DB_PASSWORD='devops'
+if [[ ${OLD_DEVOPS_DB} == 'true' ]]; then
+  export DEVOPS_DB_NAME='devops'
+  export DEVOPS_DB_USER='devops'
+  export DEVOPS_DB_PASSWORD='devops'
+fi
 
 export VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
 
