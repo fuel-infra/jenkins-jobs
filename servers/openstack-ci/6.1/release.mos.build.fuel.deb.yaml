@@ -41,7 +41,7 @@
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-main'
+              project-pattern: 'stackforge/fuel-library'
               branches:
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
