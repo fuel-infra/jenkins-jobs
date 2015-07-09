@@ -1,0 +1,61 @@
+- job:
+    name: '6.1.proposed-to-updates'
+    project-type: freestyle
+    #description:
+    #  !include-raw descriptions/create_snapshot.html
+    logrotate:
+      daysToKeep: 90
+      artifactDaysToKeep: 90
+      numToKeep: 100
+    node: mirror
+    concurrent: false
+    properties:
+      - heavy-job:
+          weight: 1
+
+    parameters:
+      - string:
+          name: DISTRO
+          default: 'centos-6'
+          description: 'Name of repo on obs-1 (currently ubuntu | centos-6)'
+      - string:
+          name: TIMESTAMP_SOURCE
+          default: ''
+          description: 'timestamp of snapshot to download.<br>Examples: latest, 2015-06-25-000000'
+      - string:
+          name: LOCATIONS
+          default: 'rsync://osci-mirror-msk.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-srt.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-kha.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync/mos rsync://mirror.seed-us1.fuel-infra.org/mirror-sync/mos rsync://mirror.seed-cz1.fuel-infra.org/mirror-sync/mos'
+          description: 'List of locations to sync to'
+      - string:
+          name: OBS_HOST
+          default: 'obs-1.mirantis.com'
+          description: 'Source host of build system to sync from'
+
+    builders:
+      - shell:
+          !include-raw builders/define_timestamp.sh
+      - shell:
+          !include-raw builders/merge-proposed-to-updates.sh
+      - shell:
+          !include-raw builders/push_updates_candidate_after_proposed.sh
+
+    scm:
+      - osci-mirrors
+      - trsync:
+          branch: 'mos_6.1'
+    #triggers:
+    #  - timed: ''
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - obs-user-credentials
+
+    publishers:
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci+alert@mirantis.com
+      - description-setter:
+          regexp: 'Description string: (.*)'
+      - archive:
+          artifacts: '*.txt'
+          allow-empty: true
+          latest-only: false
