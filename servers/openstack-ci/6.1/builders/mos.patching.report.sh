@@ -26,5 +26,5 @@ if [ "${UPDATES}" ] && [ -f "project.envfile" ] ; then
     elif echo "${JOB_NAME}" | fgrep rpm ; then
         DISTR="Centos"
     fi
-    retry 3 curl -X POST -d "launchpad=${LP_BUG}&release=${RELEASE}&distro=${DISTR}&package=${PACKAGENAME}&version=${PACKAGEVERSION}" "${HOST}/api/package/update.json?application=${APPNAME}&token=${ACCESSTOKEN}"
+    retry 3 curl -H "X-Auth-Application: ${APPNAME}" -H "X-Auth-Token: ${ACCESSTOKEN}" -X POST -d "launchpad=${LP_BUG}&release=${RELEASE}&distro=${DISTR}&package=${PACKAGENAME}&version=${PACKAGEVERSION}&git_commit=${GERRIT_PATCHSET_REVISION}&git _project=${GERRIT_PROJECT}" "${HOST}/api/package/update.json?"
 fi
