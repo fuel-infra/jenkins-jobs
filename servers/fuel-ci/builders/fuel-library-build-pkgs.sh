@@ -21,8 +21,8 @@ if [ "${GERRIT_REFSPEC}" !=  "refs/heads/master" ]; then
 fi
 
 ## Define packages related stuff
-BUILD_RPM_PACKAGES="fuel-library6.1"
-BUILD_DEB_PACKAGES="fuel-library6.1"
+BUILD_RPM_PACKAGES="fuel-library7.0"
+BUILD_DEB_PACKAGES="fuel-library7.0"
 
 SOURCE_PATH="${BUILD_DIR}/packages/sources"
 RPM_SPEC_PATH="${BUILD_DIR}/repos"
@@ -48,21 +48,21 @@ cp -rv "${BUILD_DIR}/repos/version.yaml" "${ARTS_DIR}/version.yaml.txt"
 
 # build rpm packages
 for pkg in ${BUILD_RPM_PACKAGES}; do
-  docker run --privileged --rm -v ${SOURCE_PATH}/${pkg}:/opt/sandbox/SOURCES \
-           -v ${RPM_SPEC_PATH}/${pkg}/specs/${pkg}.spec:/opt/sandbox/${pkg}.spec \
-           -v ${RPM_RESULT_DIR}:/opt/sandbox/RPMS \
+  docker run --privileged --rm -v "${SOURCE_PATH}/${pkg}:/opt/sandbox/SOURCES" \
+           -v "${RPM_SPEC_PATH}/${pkg}/specs/${pkg}.spec:/opt/sandbox/${pkg}.spec" \
+           -v "${RPM_RESULT_DIR}:/opt/sandbox/RPMS" \
            -u ${UID} \
-           fuel/rpmbuild_env /bin/bash /opt/sandbox/build_rpm_in_docker.sh
+           fuel-7.0/rpmbuild_env /bin/bash /opt/sandbox/build_rpm_in_docker.sh
 done
 
 # build deb packages
 for pkg in ${BUILD_DEB_PACKAGES}; do
   docker run --rm -u ${UID} \
-           -v ${SOURCE_PATH}/${pkg}:/opt/sandbox/SOURCES \
-           -v ${DEB_RESULT_DIR}:/opt/sandbox/DEB \
-           fuel/debbuild_env /bin/bash /opt/sandbox/build_deb_in_docker.sh
+           -v "${SOURCE_PATH}/${pkg}:/opt/sandbox/SOURCES" \
+           -v "${DEB_RESULT_DIR}:/opt/sandbox/DEB" \
+           fuel-7.0/debbuild_env /bin/bash /opt/sandbox/build_deb_in_docker.sh
 done
 
 # preparing artifacts
-find ${RPM_RESULT_DIR} -type f -name '*.rpm' -exec cp -v {} ${ARTS_DIR} \;
-find ${DEB_RESULT_DIR} -type f -name '*.deb' -exec cp -v {} ${ARTS_DIR} \;
+find "${RPM_RESULT_DIR}" -type f -name '*.rpm' -exec cp -v {} "${ARTS_DIR}" \;
+find "${DEB_RESULT_DIR}" -type f -name '*.deb' -exec cp -v {} "${ARTS_DIR}" \;
