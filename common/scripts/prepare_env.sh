@@ -10,10 +10,11 @@ function update_devops () {
   ACT=1
   VIRTUAL_ENV=/home/jenkins/venv-nailgun-tests${1}
   REPO_NAME=${2}
+  BRANCH=${3}
   if [ -f ${VIRTUAL_ENV}/bin/activate ]; then
     source ${VIRTUAL_ENV}/bin/activate
     echo "Python virtual env exist"
-    pip install -r https://raw.githubusercontent.com/stackforge/${REPO_NAME}/master/fuelweb_test/requirements.txt --upgrade
+    pip install -r https://raw.githubusercontent.com/stackforge/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt --upgrade
     django-admin.py syncdb --settings=devops.settings --noinput
     django-admin.py migrate devops --settings=devops.settings --noinput
     deactivate
@@ -21,7 +22,7 @@ function update_devops () {
     rm -rf ${VIRTUAL_ENV}
     virtualenv --system-site-packages  ${VIRTUAL_ENV}
     source ${VIRTUAL_ENV}/bin/activate
-    pip install -r https://raw.githubusercontent.com/stackforge/${REPO_NAME}/master/fuelweb_test/requirements.txt --upgrade
+    pip install -r https://raw.githubusercontent.com/stackforge/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt --upgrade
     django-admin.py syncdb --settings=devops.settings --noinput
     django-admin.py migrate devops --settings=devops.settings --noinput
     deactivate
@@ -45,12 +46,12 @@ function download_images () {
 
 # DevOps 2.5.x
 if [[ ${update_devops_2_5_x} == "true" ]]; then
-  update_devops "" "fuel-main"
+  update_devops "" "fuel-main" "stable/6.1"
 fi
 
 # DevOps 2.9.x
 if [[ ${update_devops_2_9_x} == "true" ]]; then
-  update_devops "-2.9" "fuel-qa"
+  update_devops "-2.9" "fuel-qa" "master"
 fi
 
 if [[ ${download_images} == "true" ]]; then
