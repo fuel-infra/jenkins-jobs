@@ -99,10 +99,6 @@
          node: 'huge-systest'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'repeatable_image_based'
-         properties: 'CLASSIC_PROVISIONING=false'
-     - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'classic_provisioning'
-         properties: 'CLASSIC_PROVISIONING=true'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'known_issues'
      - '{version-id}.{id}.{dist}.{testgroup}':

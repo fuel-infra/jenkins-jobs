@@ -49,12 +49,6 @@
           name: ENV_PREFIX
           default: 7.0.custom.ubuntu.bvt_2
           description: Define env prefix name. This parameter should not be changed
-      - choice:
-          name: CLASSIC_PROVISIONING
-          description: Export parameter which before was IMAGE_PROVISIONING.
-          choices:
-              - 'false'
-              - 'true'
     scm:
       - git:
           url: 'https://git.openstack.org/stackforge/fuel-qa.git'
