@@ -1,0 +1,110 @@
+- job-template:
+    name: '7.0.mos-new.fuel.build-deb'
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: '{build-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    properties:
+      - inject:
+          properties-content: |
+            GERRIT_USER=openstack-ci-jenkins
+            COMPONENT_PATH={component-path-cluster}
+            DISTRO_PATH={distro}/
+            DIST={distro}
+            REMOTE_REPO_HOST={repo-host}
+            REPO_PATH_PREFIX=osci/
+            REPO_REQUEST_PATH_PREFIX=osci/review/
+            BASE_PATH={base-path}
+            UPDATES_PATH={updates-path}
+            SECURITY_PATH={security-path}
+    wrappers:
+      - openstack-ci-jenkins
+    parameters:
+      - string:
+          name: PROJECT_NAME
+          default: '{project-name}'
+      - string:
+          name: PROJECT_VERSION
+          default: '{release}'
+      - string:
+          name: SOURCE_BRANCH
+          default: '{fuel-branch}'
+      - bool:
+          name: IS_UPDATES
+          default: '{is-updates}'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-branch}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/fuel-astute'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/fuel-main'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/fuel-web'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/fuel-library'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+          silent: true
+          server-name: review.openstack.org
+    builders:
+      - shell:
+          !include-raw-escape builders/mos.build.fuel.deb.sh
+      - inject:
+          properties-file: 'setenvfile'
+      - conditional-step:
+          condition-kind: shell
+          condition-command: |
+            #!/bin/bash -ex
+            [ "${{RESULT}}" == "0" ]
+          on-evaluation-failure: dont-run
+          steps:
+             - trigger-builds:
+                - project: '7.0.mos-new.publisher'
+                  current-parameters: true
+                  property-file: buildresult.params
+                  block: true
+             - copyartifact:
+                  project: '7.0.mos-new.publisher'
+                  filter: 'deb.publish.setenvfile'
+                  parameter-filters: 'GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}'
+                  optional: true
+                  which-build: 'last-successful'
+             - shell: |
+                  #!/bin/bash -ex
+                  # Fail stage if packages is not published
+                  [ -f "deb.publish.setenvfile" ] && source deb.publish.setenvfile
+                  [ "${{DEB_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
+      - shell: |
+          #!/bin/bash -ex
+          source setenvfile
+          exit "${{RESULT}}"
+    publishers:
+      - pkgname-as-desc
+      - archive:
+           artifacts: '**/buildlog.txt, **/buildresult.xml'
+           allow-empty: true
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: false

@@ -1,0 +1,77 @@
+- job-template:
+    name: '7.0.mos-new.install-deb'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: '{install-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    properties:
+      - inject:
+          properties-content: |
+            GERRIT_REVIEWER=vm-check-install-deb
+            GERRIT_INSTALL_VOTE=2
+    wrappers:
+      - vm-check-install-trusty
+      - pre-scm-buildstep:
+        - shell: 'rm -rf *'
+    parameters:
+      - string:
+          name: REQUEST
+          default: ''
+      - string:
+          name: DISPLAY_NAME
+          default: 'Check package for installation and simple testing'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{install-scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{install-scm-branch}'
+      #- fuel-infra:
+      #    scm-user: '{scm-user}'
+      #    scm-repo: '{scm-ci-status-repo}'
+      #    scm-basedir: '{scm-ci-status-basedir}'
+      #    scm-credentials-id: '{scm-credentials-id}'
+      #    scm-branch: '{scm-ci-status-branch}'
+    builders:
+      #- shell:
+      #    !include-raw-escape builders/ci.status.report.start.sh
+      - shell:
+          !include-raw-escape builders/mos.reset.vote.sh
+      - shell:
+          !include-raw-escape builders/mos.install.deb.sh
+      - shell:
+          !include-raw-escape builders/mos.vote.sh
+    publishers:
+      - post-tasks:
+        - matches:
+            - log-text: '/run/shm/'
+              operator: AND
+          script:
+            !include-raw-escape builders/mos.install.destroy.vm.sh
+        #- matches:
+        #    - log-text: 'Building'
+        #      operator: AND
+        #  script:
+        #    !include-raw-escape builders/ci.status.report.stop.sh
+      - archive:
+          artifacts: '**/*.xml'
+          allow-empty: true
+      - trigger-parameterized-builds:
+         - project: '7.0.mos-new.abort-package-testing'
+           condition: FAILED
+           current-parameters: true
+           predefined-parameters: |
+             ABORT_MODE=on-install-fail
+      - trigger-parameterized-builds:
+         - project: '7.0.mos-new.comment-abort'
+           predefined-parameters: |
+             UPSTREAM_JOB_NAME=$JOB_NAME
+             UPSTREAM_BUILD_URL=$BUILD_URL
+             GERRIT_USER=$GERRIT_REVIEWER
+             GERRIT_HOST=$GERRIT_HOST
+             GERRIT_PORT=$GERRIT_PORT
+             GERRIT_CHANGE_NUMBER=$GERRIT_CHANGE_NUMBER
+             GERRIT_PATCHSET_NUMBER=$GERRIT_PATCHSET_NUMBER
