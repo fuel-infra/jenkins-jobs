@@ -2,11 +2,6 @@
     name: '{prefix}-linkcheck'
     node: 'linkcheck'
     builders:
-      - copyartifact:
-          project: '{prefix}-linkcheck'
-          filter: 'make_output.txt'
-          which-build: last-successful
-          optional: true
       - inject:
           properties-content: |
             REQUIREMENTS={requirements}
@@ -20,21 +15,50 @@
     description: |
       Run 'make linkcheck' for documentation in {prefix} repository.
       Generates diff with previous run.
+
+      <p>
+      Owned by: Fuel DevOps Team<br/>
+      Job owner is not responsible for keeping builds green.<br/>
+      Maintenance contacts: #fuel-devops<br/>
+      </p>
     concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
     scm:
       - git:
           branches:
-            - 'master'
-          url: '{url}'
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: '{url}'
+          choosing-strategy: gerrit
     wrappers:
       - timeout:
           fail: true
           timeout: 30
     triggers:
-      - timed: '0 1 * * *'
+      - timed: 'H 1 * * *'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: '{project-pattern}'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
     publishers:
       - archive:
-          artifacts: 'make_output.txt, difference.txt, missing.txt'
+          artifacts: 'build_*.txt'
           allow-empty: 'true'
           fingerprint: true
       - email:
@@ -46,12 +70,14 @@
       - '{prefix}-linkcheck':
           prefix: 'fuel-web'
           url: 'https://review.openstack.org/stackforge/fuel-web'
+          project-pattern: 'stackforge/fuel-web'
           requirements: 'nailgun/test-requirements.txt'
-          exclude_regex: 'working'
+          exclude_regex: 'working|redirected'
           makedir: 'docs'
       - '{prefix}-linkcheck':
           prefix: 'fuel-docs'
           url: 'https://review.openstack.org/stackforge/fuel-docs'
+          project-pattern: 'stackforge/fuel-docs'
           requirements: 'requirements.txt'
           exclude_regex: 'ok|redirect'
           makedir: '.'
