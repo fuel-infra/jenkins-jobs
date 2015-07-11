@@ -96,7 +96,7 @@
                 PACKAGEVERSION=${{RPM_VERSION}}
                 PACKAGELIST=${{RPM_BINARIES}}
                 REPO_URL=${{RPM_REPO_URL}}
-          - project: '7.0.mos-new.deploy-deb'
+          - project: '7.0.mos-new.deploy-rpm'
             current-parameters: true
             property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
             property-file-fail-on-missing: false
