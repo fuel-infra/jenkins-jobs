@@ -89,79 +89,6 @@
           name: 'Run system tests'
           condition: COMPLETED
           projects:
-            # CentOS
-            - name: '7.0.system_test.centos.thread_1'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.ceph_ha_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.thread_2'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.thread_3'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.thread_4'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.thread_5'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.thread_7'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.bonding_ha'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.bonding_ha_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.cluster_actions'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.cic_maintenance_mode'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.ha_neutron'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.ha_neutron_destructive'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.command_line'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.huge_ha_neutron'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.huge_ha_nova'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.repeatable_image_based'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.known_issues'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.fuel_plugins'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.services_ha'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.services_ha.ceilometer'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.services_ha_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.thread_non_func_1'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.thread_usb'
-              current-parameters: true
-              kill-phase-on: NEVER
             # Ubuntu
             - name: '7.0.system_test.ubuntu.thread_1'
               current-parameters: true
@@ -236,24 +163,6 @@
               current-parameters: true
               kill-phase-on: NEVER
             # Upgrades
-            - name: '7.0.system_test.centos.ceph_ha_one_controller_compact.upgrade_ceph_ha_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.ceph_ha_one_controller_compact_neutron.upgrade_ceph_ha_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.ceph_ha_one_controller_compact_neutron.rollback_ceph_ha_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.deploy_neutron_gre.rollback_neutron_gre'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.deploy_neutron_gre_ha.upgrade_neutron_gre_ha'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '7.0.system_test.centos.deploy_neutron_gre_ha.rollback_neutron_gre_ha'
-              current-parameters: true
-              kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.ceph_ha_one_controller_compact.upgrade_ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
