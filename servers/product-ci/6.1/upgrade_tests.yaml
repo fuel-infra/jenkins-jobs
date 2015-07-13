@@ -29,14 +29,18 @@
     #     Branch of the fuel-main/ repo, used for running upgrade test.
     # weight
     #     Job weight
-    name: '{version-id}.{id}.{dist}.{upgrade_testgroup}'
+    name: '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}'
     block-downstream: false
     block-upstream: false
     builders:
+    - inject:
+        properties-content: |
+          VENV_PATH={base_venv_path}
+          OLD_DEVOPS_DB={old_devops_db}
     - inject: # overrides
         properties-content: '{properties}'
     - shell:
-        !include-raw-escape 'scripts/run_upgrade_system_test.sh'
+        !include-raw-escape 'builders/run_upgrade_system_test.sh'
     concurrent: true
     description: '{description}'
     disabled: false
@@ -67,7 +71,7 @@
         default: '{upgrade_testgroup}'
     - string:
         name: ENV_PREFIX
-        default: '{version-id}.{id}.{dist}.{upgrade_testgroup}'
+        default: '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}'
 
     properties:
     - heavy-job:

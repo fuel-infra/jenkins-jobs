@@ -8,33 +8,31 @@
     base_repobranch: 'origin/stable/6.1'
     base_iso_magnet_link:
         !include-raw ../data/6.1-iso
-    base_venv_path: '/home/jenkins/venv-nailgun-tests-2.9'
-    old_devops_db: 'false'
     upgrade_reponame: 'fuel-qa'
     upgrade_repobranch: 'origin/master'
     properties: |
       KEYSTONE_PASSWORD=newpass
     weight: '8'
     jobs:
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
-          testgroup: 'ceph_ha_one_controller_compact'
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+          testgroup: 'ceph_ha_one_controller'
           upgrade_testgroup:
-            - 'upgrade_ceph_ha_one_controller'
+            - 'upgrade_one_controller'
 
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
-          testgroup: 'ceph_ha_one_controller_compact_neutron'
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+          testgroup: 'ceph_ha_one_controller_neutron'
           upgrade_testgroup:
-            - 'upgrade_ceph_ha_one_controller'
-            - 'rollback_ceph_ha_one_controller'
+            - 'upgrade_one_controller_neutron'
+            - 'rollback_one_controller'
           properties: |
             NEUTRON_ENABLE=true
 
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre'
           upgrade_testgroup:
             - 'rollback_neutron_gre'
 
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre_ha'
           upgrade_testgroup:
             - 'upgrade_neutron_gre_ha'
