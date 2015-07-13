@@ -69,9 +69,8 @@
           branch: 'master'
           repo: fuel-main
       - osci-mirrors
-# FIXME - timer disabled
-#    triggers:
-#      - timed: 'H */6 * * *'
+    triggers:
+      - timed: 'H */6 * * *'
     wrappers:
       - timeout:
           fail: true
