@@ -4,7 +4,9 @@
       - inject:
            properties-content: |
              TESTS_RUNNER=7.0.swarm.runner
-
+             TESTRAIL_TEST_SUITE=Swarm 7.0
+             TESTRAIL_MILESTONE=7.0
+             LAUNCHPAD_MILESTONE=7.0
       - shell:
           !include-raw builders/test-reports-Testrail-upload_cases.sh
       - shell:
