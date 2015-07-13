@@ -54,11 +54,6 @@
           name: ISO Testing
           condition: SUCCESSFUL
           projects:
-            - name: '7.0.staging.centos.bvt_1'
-              kill-phase-on: NEVER
-              property-file: properties_file.txt
-              current-parameters: true
-              predefined-parameters: 'STAGING_ISO_BUILD_NUMBER=$7_0_STAGING_ISO_BUILD_NUMBER'
             - name: '7.0.staging.ubuntu.bvt_2'
               kill-phase-on: NEVER
               property-file: properties_file.txt
