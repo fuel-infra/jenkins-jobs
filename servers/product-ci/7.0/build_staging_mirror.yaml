@@ -13,10 +13,6 @@
     node: mirror
     parameters:
       - string:
-          name: REPOS
-          default: 'ubuntu-fuel-7.0-stable'
-          description: 'Space delimited list of ubuntu repos to create reprepro repo'
-      - string:
           name: extra_commits
           description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
       - string:
@@ -26,14 +22,11 @@
           name: mirror
           default: '7.0'
       - string:
-          name: purge_packages
-          default: 'yes'
-      - string:
           name: EXTRA_DEB_REPOS
-          default: 'http://mirrors-local-msk.msk.mirantis.net/ubuntu-security-7.0/ precise-security main universe multiverse restricted'
+          default: ''
       - bool:
           name: USE_STABLE_MOS_FOR_STAGING
-          default: true
+          default: false
           description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/7.0.all/lastSuccessfulBuild/artifact/version.yaml.txt">7.0.all</a>. Will used "master" otherwise.'
     properties:
       - heavy-job:
