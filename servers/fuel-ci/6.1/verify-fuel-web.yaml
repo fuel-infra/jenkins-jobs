@@ -1,5 +1,5 @@
 - job-template:
-    name: '{prefix}-fuel-web'
+    name: '6.1.{prefix}-fuel-web'
     builders:
       - shell:
           !include-raw-escape builders/verify-fuel-web.sh
@@ -15,7 +15,7 @@
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/stable/6.1'
       - string:
           name: PIP_OPTION
       - string:
@@ -54,11 +54,7 @@
               project-pattern: stackforge/fuel-web
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/6.0'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/5.1'
+                  branch-pattern: 'stable/6.1'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
@@ -70,16 +66,16 @@
           timeout: 45
 
 - project:
-    name: dualcheck-fuel-web
+    name: 6.1.dualcheck-fuel-web
     jobs:
-      - '{prefix}-fuel-web':
+      - '6.1.{prefix}-fuel-web':
           prefix: verify
           trigger-on: patchset-created-event
           email-type: default
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
-          timed: '0 11 * * *'
-      - '{prefix}-fuel-web':
+          timed: 'H 11 * * *'
+      - '6.1.{prefix}-fuel-web':
           prefix: gate
           trigger-on: change-merged-event
           email-type: alert-on-merge
