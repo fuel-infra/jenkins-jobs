@@ -1,6 +1,6 @@
 - job-template:
     name: '7.0.mos-new.build-rpm-request'
-    disabled: '{is-disabled}'
+    disabled: true
     concurrent: true
     node: '{build-node}'
     logrotate:
