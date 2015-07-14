@@ -9,9 +9,8 @@ if [ -z "${TESTRAIL_TEST_SUITE}" -o -z "${TESTRAIL_URL}" ]; then
   exit 1
 fi
 
-OPTIONS="--verbose"
 if [ -n "${MANUAL}" ]; then
-  OPTIONS+=" --manual"
+  OPTIONS=" --manual"
 fi
 
-python fuelweb_test/testrail/report.py "${OPTIONS}" --job-name "${TESTS_RUNNER}" --build-number "${BUILD_NUMBER}"
+python fuelweb_test/testrail/report.py --verbose "${OPTIONS}" --job-name "${TESTS_RUNNER}" --build-number "${BUILD_NUMBER}"

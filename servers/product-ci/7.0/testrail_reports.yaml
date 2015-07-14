@@ -6,7 +6,7 @@
 
     parameters:
       - string:
-          name: TEST_RUNNER
+          name: TESTS_RUNNER
           default: '7.0.test_all'
       - string:
           name: BUILD_NUMBER
