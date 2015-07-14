@@ -67,4 +67,4 @@
           repo: 'fuel-main'
     wrappers:
       - timeout:
-          timeout: 200
+          timeout: 320

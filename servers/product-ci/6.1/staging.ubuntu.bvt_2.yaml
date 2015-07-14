@@ -69,4 +69,4 @@
           repo: 'fuel-qa'
     wrappers:
       - timeout:
-          timeout: 200
+          timeout: 320
