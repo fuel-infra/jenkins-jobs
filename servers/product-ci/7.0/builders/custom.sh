@@ -70,7 +70,11 @@ if [ "${USE_MIRROR}" == "auto" ]; then
   esac
 fi
 
-echo "Using mirror: ${USE_MIRROR}"
+######## Get stable ubuntu mirror from snapshot ###############
+LATEST_MIRROR_ID=$(curl http://mirror.seed-cz1.fuel-infra.org/mos-repos/7.0.target.txt)
+MIRROR_UBUNTU_ROOT="/mos-repos/${LATEST_MIRROR_ID}/cluster/base/trusty"
+
+echo "Using mirror: ${USE_MIRROR} with ${MIRROR_UBUNTU_ROOT}"
 
 #########################################
 
