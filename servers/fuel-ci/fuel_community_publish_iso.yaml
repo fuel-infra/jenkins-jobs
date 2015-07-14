@@ -50,7 +50,7 @@
             STAGE=publish
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
-            DESCRIPTION=<a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.iso.torrent?from=status>ISO</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.img.torrent?from=status>IMG</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$UPGRADE_ID.tar.lrz.torrent?from=status>UPGD</a>
+            DESCRIPTION=$DESCRIPTION
         - project: fuel_community_build_reports
           condition: FAILED
           current-parameters: true
