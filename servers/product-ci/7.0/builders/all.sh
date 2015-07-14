@@ -19,6 +19,12 @@ export LOCAL_MIRROR=${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror
 export ARTS_DIR=${WORKSPACE}/artifacts
 rm -rf ${ARTS_DIR}
 
+######## Get stable ubuntu mirror from snapshot ###############
+LATEST_MIRROR_ID=$(curl -s http://osci-mirror-msk.msk.mirantis.net/mos-repos/7.0.target.txt | head -1)
+export MIRROR_UBUNTU_ROOT="/mos-repos/${LATEST_MIRROR_ID}/cluster/base/trusty"
+
+echo "Using mirror: ${USE_MIRROR} with ${MIRROR_UBUNTU_ROOT}"
+
 #########################################
 
 test "$deep_clean" = "true" && make deep_clean

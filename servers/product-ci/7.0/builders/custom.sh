@@ -71,8 +71,8 @@ if [ "${USE_MIRROR}" == "auto" ]; then
 fi
 
 ######## Get stable ubuntu mirror from snapshot ###############
-LATEST_MIRROR_ID=$(curl http://mirror.seed-cz1.fuel-infra.org/mos-repos/7.0.target.txt)
-MIRROR_UBUNTU_ROOT="/mos-repos/${LATEST_MIRROR_ID}/cluster/base/trusty"
+LATEST_MIRROR_ID=$(curl -s http://mirror.seed-cz1.fuel-infra.org/mos-repos/7.0.target.txt | head -1)
+export MIRROR_UBUNTU_ROOT="/mos-repos/${LATEST_MIRROR_ID}/cluster/base/trusty"
 
 echo "Using mirror: ${USE_MIRROR} with ${MIRROR_UBUNTU_ROOT}"
 
