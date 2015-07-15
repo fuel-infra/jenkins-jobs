@@ -4,8 +4,8 @@ set -ex
 
 WS=${WORKSPACE}
 
-virtualenv requirenv
-source requirenv/bin/activate
+virtualenv _requirenv
+source _requirenv/bin/activate
 pip install -r ${REQUIREMENTS}
 
 cd ${MAKEDIR}
