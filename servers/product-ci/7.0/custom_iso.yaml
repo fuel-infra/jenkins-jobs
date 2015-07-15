@@ -39,6 +39,9 @@
           name: PYTHON_FUELCLIENT_COMMIT
           default: 'master'
       - string:
+          name: FUEL_AGENT_COMMIT
+          default: 'master'
+      - string:
           name: FUELMAIN_COMMIT
           default: 'master'
       - string:
@@ -56,6 +59,9 @@
       - string:
           name: PYTHON_FUELCLIENT_REPO
           default: 'https://git.openstack.org/stackforge/python-fuelclient.git'
+      - string:
+          name: FUEL_AGENT_REPO
+          default: 'https://git.openstack.org/stackforge/fuel-agent.git'
       - string:
           name: FUELMAIN_REPO
           default: 'https://git.openstack.org/stackforge/fuel-main.git'
@@ -98,6 +104,11 @@
           name: python_fuelclient_gerrit_commit
           default: 'none'
           description: Refspecs for commits in python-fuelclient gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuel_agent_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-agent gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
       - string:
           name: EXTRA_RPM_REPOS
