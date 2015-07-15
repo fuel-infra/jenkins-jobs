@@ -13,4 +13,4 @@ if [ -n "${MANUAL}" ]; then
   OPTIONS=" --manual"
 fi
 
-python fuelweb_test/testrail/report.py --verbose "${OPTIONS}" --job-name "${TESTS_RUNNER}" --build-number "${BUILD_NUMBER}"
+python fuelweb_test/testrail/report.py --verbose ${OPTIONS} --job-name "${TESTS_RUNNER}" --build-number "${BUILD_NUMBER}"
