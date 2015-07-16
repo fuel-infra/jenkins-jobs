@@ -103,6 +103,7 @@
                 PACKAGEVERSION=${{RPM_VERSION}}
                 PACKAGELIST=${{RPM_BINARIES}}
                 REPO_URL=${{RPM_REPO_URL}}
+                DIST={distro}
             property-file-fail-on-missing: false
     publishers:
       - pkgname-as-desc
