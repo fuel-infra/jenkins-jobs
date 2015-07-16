@@ -110,16 +110,16 @@ echo FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}" >> "${ARTS_DIR}/gerrit_com
 echo PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 
-cp "${LOCAL_MIRROR}/*changelog" "${ARTS_DIR}/" || true
+cp "${LOCAL_MIRROR}"/*changelog "${ARTS_DIR}/" || true
 cp "${BUILD_DIR}/iso/isoroot/version.yaml" "${ARTS_DIR}/version.yaml.txt" || true
 (cd "${BUILD_DIR}/iso/isoroot" && find . | sed -s 's/\.\///') > "${ARTS_DIR}/listing.txt" || true
 
-grep MAGNET_LINK "${ARTS_DIR}/*iso.data.txt" > "${ARTS_DIR}/magnet_link.txt"
+grep MAGNET_LINK "${ARTS_DIR}"/*iso.data.txt > "${ARTS_DIR}/magnet_link.txt"
 
 # Generate build description
-ISO_MAGNET_LINK=$(grep MAGNET_LINK "${ARTS_DIR}/*iso.data.txt" | sed 's/MAGNET_LINK=//')
-ISO_HTTP_LINK=$(grep HTTP_LINK "${ARTS_DIR}/*iso.data.txt" | sed 's/HTTP_LINK=//')
-ISO_HTTP_TORRENT=$(grep HTTP_TORRENT "${ARTS_DIR}/*iso.data.txt" | sed 's/HTTP_TORRENT=//')
+ISO_MAGNET_LINK=$(grep MAGNET_LINK "${ARTS_DIR}"/*iso.data.txt | sed 's/MAGNET_LINK=//')
+ISO_HTTP_LINK=$(grep HTTP_LINK "${ARTS_DIR}"/*iso.data.txt | sed 's/HTTP_LINK=//')
+ISO_HTTP_TORRENT=$(grep HTTP_TORRENT "${ARTS_DIR}"/*iso.data.txt | sed 's/HTTP_TORRENT=//')
 
 echo "<a href=${ISO_HTTP_LINK}>ISO download link</a> <a href=${ISO_HTTP_TORRENT}>ISO torrent link</a><br>${ISO_MAGNET_LINK}<br>"
 
