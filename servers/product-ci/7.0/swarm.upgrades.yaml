@@ -20,6 +20,13 @@
             - 'upgrade_one_controller'
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+          testgroup: 'ceph_ha_one_controller'
+          upgrade_testgroup:
+            - 'upgrade_one_controller_classic'
+          properties: |
+            CLASSIC_PROVISIONING=true
+
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_neutron'
           upgrade_testgroup:
             - 'upgrade_one_controller_neutron'

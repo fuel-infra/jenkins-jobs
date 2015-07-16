@@ -166,6 +166,9 @@
             - name: '7.0.system_test.ubuntu.upgrade_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.upgrade_one_controller_classic'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.upgrade_one_controller_neutron'
               current-parameters: true
               kill-phase-on: NEVER
