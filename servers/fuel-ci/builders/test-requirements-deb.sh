@@ -39,9 +39,12 @@ else
         chdist --data-dir ${TEMPDIR} create ${REPO_NAME} http://obs-1.mirantis.com/mos/ubuntu/ mos${PRODUCT_VERSION} main
 
         cat > ${TEMPDIR}/${REPO_NAME}/etc/apt/sources.list <<EOT
-deb [arch=amd64] http://obs-1.mirantis.com/mos/ubuntu/ mos${PRODUCT_VERSION} main
-deb [arch=amd64] http://obs-1.mirantis.com/mos/ubuntu/ mos${PRODUCT_VERSION}-updates main
-deb [arch=amd64] http://obs-1.mirantis.com/mos/ubuntu/ mos${PRODUCT_VERSION}-security main
+# FIXME(vparakhin): fix Perestroika mirror as soon as repo format for 7.0+ is defined
+deb http://mirror.fuel-infra.org/mos-repos/7.0/cluster/base/trusty/ trusty main
+
+#deb [arch=amd64] http://obs-1.mirantis.com/mos/ubuntu/ mos${PRODUCT_VERSION} main
+#deb [arch=amd64] http://obs-1.mirantis.com/mos/ubuntu/ mos${PRODUCT_VERSION}-updates main
+#deb [arch=amd64] http://obs-1.mirantis.com/mos/ubuntu/ mos${PRODUCT_VERSION}-security main
 deb http://mirror.fuel-infra.org/pkgs/ubuntu/ ${DIST} main universe multiverse restricted
 deb http://mirror.fuel-infra.org/pkgs/ubuntu/ ${DIST}-security main universe multiverse restricted
 deb http://mirror.fuel-infra.org/pkgs/ubuntu/ ${DIST}-updates main universe multiverse restricted
