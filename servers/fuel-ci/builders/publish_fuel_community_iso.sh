@@ -16,9 +16,9 @@ seedclient.py -pvf "${ARTIFACTS_DIR}/${TARBALL_NAME}.tar.lrz" --tracker-url=http
 
 if [ -f "${ARTIFACTS_DIR}/${ISO_NAME}.img" ]; then
   echo "META: ${ISO_ID}: <a href=http://seed.fuel-infra.org/fuelweb-iso/${ISO_NAME}.iso.torrent?from=jenkins>ISO</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/${ISO_NAME}.img.torrent?from=jenkins>IMG</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/${TARBALL_NAME}.tar.lrz.torrent?from=jenkins>UPGD</a>"
-  DESCRIPTION="<a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.iso.torrent?from=status>ISO</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.img.torrent?from=status>IMG</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$UPGRADE_ID.tar.lrz.torrent?from=status>UPGD</a>"
+  echo "DESCRIPTION=<a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.iso.torrent?from=status>ISO</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.img.torrent?from=status>IMG</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$UPGRADE_ID.tar.lrz.torrent?from=status>UPGD</a>" > description.txt
 else
   # this is >=6.1 build
   echo "META: ${ISO_ID}: <a href=http://seed.fuel-infra.org/fuelweb-iso/${ISO_NAME}.iso.torrent?from=jenkins>ISO</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/${TARBALL_NAME}.tar.lrz.torrent?from=jenkins>UPGD</a>"
-  DESCRIPTION="<a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.iso.torrent?from=status>ISO</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$UPGRADE_ID.tar.lrz.torrent?from=status>UPGD</a>"
+  echo "DESCRIPTION=<a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.iso.torrent?from=status>ISO</a> <a href=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$UPGRADE_ID.tar.lrz.torrent?from=status>UPGD</a>" > description.txt
 fi
