@@ -46,11 +46,11 @@
         - project: fuel_community_build_reports
           condition: UNSTABLE_OR_BETTER
           current-parameters: true
+          property-file: description.txt
           predefined-parameters: |
             STAGE=publish
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
-            DESCRIPTION=$DESCRIPTION
         - project: fuel_community_build_reports
           condition: FAILED
           current-parameters: true
