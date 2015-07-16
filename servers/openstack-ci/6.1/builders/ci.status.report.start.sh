@@ -3,7 +3,9 @@ export GERRIT_USER="openstack-ci-jenkins"
 GERRIT_BRANCH=${GERRIT_BRANCH:-"$SOURCEBRANCH"}
 if echo "${GERRIT_BRANCH}" | fgrep fuel ; then
     RELEASE=$(echo "${GERRIT_BRANCH}" | egrep -o 'fuel-[0-9.]*' | egrep -o '[0-9.]*' | cat)
-else RELEASE=${GERRIT_BRANCH}
+elif echo "${GERRIT_BRANCH}" | fgrep security ; then
+    RELEASE=$(echo "${GERRIT_BRANCH}" | cut -d'-' -f1)
+else  RELEASE=${GERRIT_BRANCH}
 fi
 
 if echo "${JOB_NAME}" | fgrep deb ; then

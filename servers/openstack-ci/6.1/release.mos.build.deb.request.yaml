@@ -53,6 +53,7 @@
           spec-project: 'openstack-build/**'
           branch: 'openstack-ci/fuel-{version-id}/{openstack-id}'
           files: 'trusty/debian/**'
+          branch: 'openstack-ci/fuel-{version-id}/{openstack-id}-security-**'
     builders:
       - shell:
           !include-raw-escape builders/mos.remove.junk.files.sh

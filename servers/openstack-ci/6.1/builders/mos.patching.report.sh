@@ -16,6 +16,8 @@ APPNAME="${ERRATA_USER}"
 ACCESSTOKEN="${ERRATA_PASSWORD}"
 if echo "${GERRIT_BRANCH}" | fgrep fuel ; then
     RELEASE="$(echo "${GERRIT_BRANCH}" | egrep -o 'fuel-[0-9.]*' | egrep -o '[0-9.]*' | cat)"
+elif echo "${GERRIT_BRANCH}" | fgrep security ; then
+    RELEASE=$(echo "${GERRIT_BRANCH}" | cut -d'-' -f1)
 else RELEASE="${GERRIT_BRANCH}"
 fi
 
