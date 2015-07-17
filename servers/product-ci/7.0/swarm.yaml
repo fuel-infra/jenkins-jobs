@@ -120,6 +120,9 @@
             - name: '7.0.system_test.ubuntu.cluster_actions'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.controller_replacement'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.cic_maintenance_mode'
               current-parameters: true
               kill-phase-on: NEVER

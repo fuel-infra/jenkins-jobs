@@ -62,6 +62,8 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'cluster_actions'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'controller_replacement'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'cic_maintenance_mode'
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
