@@ -55,14 +55,18 @@ def geturl(url, suffix='api/json'):
 jenkins_stable_iso_job_url = os.environ.get('JENKINS_STABLE_ISO_JOB_URL')
 job_info = geturl(jenkins_stable_iso_job_url)
 
-iso_urls = list()
+last_success_id = 0
 for build in job_info.get('builds'):
     build_info = geturl(build['url'])
     if build_info.get('result') == 'SUCCESS':
         iso_build_url = geturl(build['url'], 'artifact/iso_build_url.txt')
-        iso_urls.append(iso_build_url.split('=')[-1].strip())
+        iso_build_url = iso_build_url.split('=')[-1].strip()
+        iso_build_info = geturl(iso_build_url)
+        if iso_build_info.get('number') > last_success_id:
+            last_success_id = iso_build_info['number']
+            last_success = iso_build_info['url']
 
-print(sorted(iso_urls)[-1])
+print(last_success)
 ")
 
     # geting of last stable iso commits

@@ -69,13 +69,16 @@ syslogger.info('Jenkins job that tests ISO is {}'
 job_info = geturl(iso_testing_job_url)
 syslogger.debug(job_info)
 
-iso_urls = list()
+last_success_id = 0
 for build in job_info.get('builds'):
     build_info = geturl(build['url'])
     if build_info.get('result') == 'SUCCESS':
         iso_build_url = geturl(build['url'], 'artifact/iso_build_url.txt')
-        iso_urls.append(iso_build_url.split('=')[-1].strip())
-last_success = sorted(iso_urls)[-1]
+        iso_build_url = iso_build_url.split('=')[-1].strip()
+        iso_build_info = geturl(iso_build_url)
+        if iso_build_info.get('number') > last_success_id:
+            last_success_id = iso_build_info['number']
+            last_success = iso_build_info['url']
 syslogger.info('Last successful build == {}'.format(last_success))
 with open(outf_name, 'w') as outf:
     print >>outf, last_success
