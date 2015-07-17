@@ -78,9 +78,13 @@ if [ "${USE_MIRROR}" == "auto" ]; then
   esac
 fi
 
-######## Get stable ubuntu mirror from snapshot ###############
-LATEST_MIRROR_ID=$(curl -s "${LATEST_MIRROR_ID_URL}/mos-repos/7.0.target.txt" | head -1)
-export MIRROR_UBUNTU_ROOT="/mos-repos/${LATEST_MIRROR_ID}/cluster/base/trusty"
+# if USE_MIRROR=none, let's get all values from make system
+# otherwise - choose closer mirror
+if [ "${USE_MIRROR}" != "none" ] ; then
+  ######## Get stable ubuntu mirror from snapshot ###############
+  LATEST_MIRROR_ID=$(curl -s "${LATEST_MIRROR_ID_URL}/mos-repos/7.0.target.txt" | head -1)
+  export MIRROR_UBUNTU_ROOT="/mos-repos/${LATEST_MIRROR_ID}/cluster/base/trusty"
+fi
 
 echo "Using mirror: ${USE_MIRROR} with ${MIRROR_UBUNTU_ROOT}"
 
