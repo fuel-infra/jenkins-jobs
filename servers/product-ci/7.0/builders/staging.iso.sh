@@ -4,11 +4,6 @@ set -ex
 
 echo STARTED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" > ci_status_params.txt
 
-# Checking gerrit commits for fuel-main
-if [ "${FUELMAIN_COMMIT}" != "master" ] ; then
-    git checkout "${FUELMAIN_COMMIT}"
-fi
-
 PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
 
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin:${PATH}
@@ -65,15 +60,17 @@ print(sorted(iso_urls)[-1])
 ")
 
     # geting of last stable iso commits
-    curl -fsS "${JENKINS_STABLE_ISO_BUILD_URL}artifact/version.yaml.txt" > "${WORKSPACE:-.}/version.yaml"
-    export VERSIONS=$(cat "${WORKSPACE:-.}/version.yaml")
-    export NAILGUN_COMMIT=$(echo -e "${VERSIONS}" | awk '/nailgun_sha:/ {print $NF}')
-    export PYTHON_FUELCLIENT_COMMIT=$(echo -e "${VERSIONS}" | awk '/python-fuelclient_sha:/ {print $NF}')
-    export ASTUTE_COMMIT=$(echo -e "${VERSIONS}" | awk '/astute_sha:/ {print $NF}')
-    export FUELLIB_COMMIT=$(echo -e "${VERSIONS}" | awk '/fuel-library_sha:/ {print $NF}')
-    export OSTF_COMMIT=$(echo -e "${VERSIONS}" | awk '/ostf_sha:/ {print $NF}')
-    export FUEL_AGENT_COMMIT=$(echo -e "${VERSIONS}" | awk '/fuel-agent_sha:/ {print $NF}')
-    export FUELMAIN_COMMIT=${FUELMAIN_COMMIT:-$(echo -e "${VERSIONS}" | awk '/fuelmain_sha:/ {print $NF}')}
+    curl -fsS "${JENKINS_STABLE_ISO_BUILD_URL}artifact/version.yaml.txt" > ${WORKSPACE:-.}/version.yaml
+    export NAILGUN_COMMIT=$(awk '/nailgun_sha:/ {print $NF}' ${WORKSPACE:-.}/version.yaml | tr -d \")
+    export PYTHON_FUELCLIENT_COMMIT=$(awk '/python-fuelclient_sha:/ {print $NF}' ${WORKSPACE:-.}/version.yaml | tr -d \")
+    export ASTUTE_COMMIT=$(awk '/astute_sha:/ {print $NF}' ${WORKSPACE:-.}/version.yaml | tr -d \")
+    export FUELLIB_COMMIT=$(awk '/fuel-library_sha:/ {print $NF}' ${WORKSPACE:-.}/version.yaml | tr -d \")
+    export OSTF_COMMIT=$(awk '/ostf_sha:/ {print $NF}' ${WORKSPACE:-.}/version.yaml | tr -d \")
+    export FUEL_AGENT_COMMIT=$(awk '/fuel-agent_sha:/ {print $NF}' ${WORKSPACE:-.}/version.yaml | tr -d \")
+    export FUELMAIN_COMMIT=$(awk '/fuelmain_sha:/ {print $NF}' ${WORKSPACE:-.}/version.yaml | tr -d \")
+
+    # checkout to FUELMAIN_COMMIT
+    git checkout ${FUELMAIN_COMMIT}
 fi
 
 # Checking gerrit commits for fuel-main
