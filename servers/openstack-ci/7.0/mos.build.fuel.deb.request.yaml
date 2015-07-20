@@ -47,6 +47,11 @@
                 exclude-drafts: true
           projects:
             - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/fuel-agent'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'PLAIN'
               project-pattern: 'stackforge/fuel-astute'
               branches:
                 - branch-compare-type: 'PLAIN'
