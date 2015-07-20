@@ -8,12 +8,17 @@
       - ssh-agent-credentials:
           users:
             - '98ec5f09-5ff1-476a-b1da-69e87186eaea'
+
 - wrapper:
     name: openstack-ci-jenkins
     wrappers:
       - ssh-agent-credentials:
           users:
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+      - timeout:
+          fail: 'true'
+          timeout: '120'
+          write-description: 'false'
 
 - wrapper:
     name: ci-build-deb
@@ -23,6 +28,10 @@
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '817edea8-b597-4a6e-9aeb-bad57b109e66'
             - '35fc8f47-a728-4d5a-bfeb-9338089f31fa'
+      - timeout:
+          fail: 'true'
+          timeout: '120'
+          write-description: 'false'
 
 - wrapper:
     name: ci-build-rpm
@@ -32,6 +41,10 @@
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '9654daf3-36d4-4998-909e-c4085330b8e7'
             - '35fc8f47-a728-4d5a-bfeb-9338089f31fa'
+      - timeout:
+          fail: 'true'
+          timeout: '120'
+          write-description: 'false'
 
 - wrapper:
     name: vm-check-install-rpm
@@ -41,6 +54,10 @@
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '06bc7ed4-3174-4c49-bb54-63a301874199'
             - 'e074d15f-e006-4435-8836-c792c431a270'
+      - timeout:
+          fail: 'true'
+          timeout: '180'
+          write-description: 'false'
 
 - wrapper:
     name: vm-check-install-deb
@@ -50,6 +67,10 @@
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '11acbe7e-c816-478d-b484-04adf29f4888'
             - 'e074d15f-e006-4435-8836-c792c431a270'
+      - timeout:
+          fail: 'true'
+          timeout: '180'
+          write-description: 'false'
 
 - wrapper:
     name: vm-check-install-trusty
@@ -59,6 +80,10 @@
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '11acbe7e-c816-478d-b484-04adf29f4888'
             - '9b8a6644-23be-4e82-9a2f-a26c62df8955'
+      - timeout:
+          fail: 'true'
+          timeout: '180'
+          write-description: 'false'
 
 - wrapper:
     name: openstack-ci-packtest-rpm
@@ -67,6 +92,10 @@
           users:
             - '1c17f649-550f-440e-a0ad-994de8417e67'
             - 'efa71805-f1ea-4ad4-9f26-32277f8bcc7a'
+      - timeout:
+          fail: 'true'
+          timeout: '300'
+          write-description: 'false'
 
 - wrapper:
     name: openstack-ci-packtest-deb
@@ -75,6 +104,10 @@
           users:
             - '1c17f649-550f-440e-a0ad-994de8417e67'
             - '4c78c2d6-a0d6-49b7-a398-d728a1b6a85c'
+      - timeout:
+          fail: 'true'
+          timeout: '300'
+          write-description: 'false'
 
 - wrapper:
     name: osci-jenkins-reporter
@@ -82,6 +115,10 @@
       - ssh-agent-credentials:
           users:
             - '35fc8f47-a728-4d5a-bfeb-9338089f31fa'
+      - timeout:
+          fail: 'true'
+          timeout: '120'
+          write-description: 'false'
 
 - wrapper:
     name: comment-abort-users
@@ -92,6 +129,10 @@
             - 'efa71805-f1ea-4ad4-9f26-32277f8bcc7a'
             - '11acbe7e-c816-478d-b484-04adf29f4888'
             - '06bc7ed4-3174-4c49-bb54-63a301874199'
+      - timeout:
+          fail: 'true'
+          timeout: '120'
+          write-description: 'false'
 
 ########################################################################
 # Section: Triggers
