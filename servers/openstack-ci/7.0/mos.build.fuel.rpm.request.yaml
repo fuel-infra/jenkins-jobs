@@ -80,6 +80,11 @@
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
             - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/fuel-nailgun-agent'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'PLAIN'
               project-pattern: 'stackforge/fuel-web'
               branches:
                 - branch-compare-type: 'PLAIN'
