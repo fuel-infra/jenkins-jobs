@@ -16,6 +16,12 @@
             ENV_PREFIX=centos
     parameters:
       - packtest:
+      - string:
+          name: DISPLAY_NAME
+          default: "Check rpm package for installation in environment"
+      - string:
+          name: REQUEST_TYPE
+          default: "Centos7"
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
@@ -24,15 +30,15 @@
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{install-scm-branch}'
       - fuel-qa-7.0:
-      # - fuel-infra:
-      #     scm-user: '{scm-user}'
-      #     scm-repo: '{scm-ci-status-client-repo}'
-      #     scm-basedir: '{scm-ci-status-client-basedir}'
-      #     scm-credentials-id: '{scm-credentials-id}'
-      #     scm-branch: '{scm-ci-status-client-branch}'
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-ci-status-client-repo}'
+          scm-basedir: '{scm-ci-status-client-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-ci-status-client-branch}'
     builders:
-      # - shell:
-      #     !include-raw-escape builders/ci.status.report.start.sh
+      - shell:
+          !include-raw-escape builders/ci.status.report.start.sh
       - shell:
           !include-raw-escape builders/mos.reset.vote.sh
       - shell:
@@ -44,8 +50,8 @@
         - matches:
             - log-text: Building
               operator: AND
-          # script:
-          #   !include-raw-escape builders/ci.status.report.stop.sh
+          script:
+            !include-raw-escape builders/ci.status.report.stop.sh
       - trigger-parameterized-builds:
           - project: '7.0.mos-new.comment-abort'
             predefined-parameters: |

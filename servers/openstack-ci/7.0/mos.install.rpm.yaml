@@ -21,7 +21,13 @@
           default: ''
       - string:
           name: DISPLAY_NAME
-          default: 'Check package for installation and simple testing'
+          default: "Check rpm package for installation and simple testing"
+      - string:
+          name: REQUEST_TYPE
+          default: "Centos7"
+      - bool:
+          name: LAST_STAGE
+          default: '{last_stage}'
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
@@ -29,15 +35,15 @@
           scm-basedir: '{scm-basedir}'
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{install-scm-branch}'
-      #- fuel-infra:
-      #    scm-user: '{scm-user}'
-      #    scm-repo: '{scm-ci-status-repo}'
-      #    scm-basedir: '{scm-ci-status-basedir}'
-      #    scm-credentials-id: '{scm-credentials-id}'
-      #    scm-branch: '{scm-ci-status-branch}'
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-ci-status-client-repo}'
+          scm-basedir: '{scm-ci-status-client-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-ci-status-client-branch}'
     builders:
-      #- shell:
-      #    !include-raw-escape builders/ci.status.report.start.sh
+      - shell:
+          !include-raw-escape builders/ci.status.report.start.sh
       - shell:
           !include-raw-escape builders/mos.reset.vote.sh
       - shell:
@@ -51,11 +57,11 @@
               operator: AND
           script:
             !include-raw-escape builders/mos.install.destroy.vm.sh
-        #- matches:
-        #    - log-text: 'Building'
-        #      operator: AND
-        #  script:
-        #    !include-raw-escape builders/ci.status.report.stop.sh
+        - matches:
+            - log-text: 'Building'
+              operator: AND
+          script:
+            !include-raw-escape builders/ci.status.report.stop.sh
       - archive:
           artifacts: '**/*.xml'
           allow-empty: true

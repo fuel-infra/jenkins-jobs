@@ -39,9 +39,18 @@
       - string:
           name: SPEC_BRANCH
           default: '{ops-branch}'
+      - string:
+          name: DISPLAY_NAME
+          default: "Build deb package on temporary repository"
+      - string:
+          name: REQUEST_TYPE
+          default: "Trusty"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
+      - bool:
+          name: LAST_STAGE
+          default: '{last_stage}'
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
@@ -49,6 +58,12 @@
           scm-basedir: '{scm-basedir}'
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{scm-branch}'
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-ci-status-client-repo}'
+          scm-basedir: '{scm-ci-status-client-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-ci-status-client-branch}'
     triggers:
       - fuel-infra-request:
           code-project: '{ops-code-prj}'
@@ -56,8 +71,8 @@
           branch: '{ops-branch}'
           files: '{distro}/debian/**'
     builders:
-     # - shell:
-     #      !include-raw-escape builders/ci.status.report.start.sh
+      - shell:
+          !include-raw-escape builders/ci.status.report.start.sh
       - shell: |
           #!/bin/bash -ex
           # Remove junk files
@@ -104,14 +119,22 @@
                 PACKAGEVERSION=${{DEB_VERSION}}
                 PACKAGELIST=${{DEB_BINARIES}}
                 REPO_URL=${{DEB_REPO_URL}}
+                DISPLAY_NAME=Check deb package for installation and simple testing
           - project: '7.0.mos-new.deploy-deb'
             current-parameters: true
             property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
             property-file-fail-on-missing: false
             predefined-parameters: |
                 REPO_URL=${{DEB_REPO_URL}}
+                DISPLAY_NAME=Check deb package for installation in environment
     publishers:
       - pkgname-as-desc
+      - post-tasks:
+            - matches:
+               - log-text: Building
+                 operator: AND
+              script:
+                 !include-raw-escape builders/ci.status.report.stop.sh
       - archive:
-           artifacts: '**/buildlog.txt, **/buildresult.xml'
-           allow-empty: true
+          artifacts: '**/buildlog.txt, **/buildresult.xml'
+          allow-empty: true
