@@ -60,6 +60,10 @@
           branches:
             - 'origin/$FUEL_MAIN_BRANCH'
     publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'logs/*'
+          latest-only: false
       - junit:
           keep-long-stdio: false
           results: '**/nosetests.xml'
