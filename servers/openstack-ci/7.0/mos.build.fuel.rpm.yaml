@@ -80,6 +80,11 @@
               branches:
                 - branch-compare-type: 'PLAIN'
                   branch-pattern: '{fuel-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/fuel-upgrade'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: '{fuel-branch}'
           silent: true
           server-name: review.openstack.org
     builders:
