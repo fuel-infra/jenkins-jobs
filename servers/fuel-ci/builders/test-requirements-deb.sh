@@ -7,7 +7,7 @@ OVERALL_STATUS=0
 
 PRODUCT_VERSION=`awk -F '[:=?]' '/^PRODUCT_VERSION\>/ {print $NF}' config.mk`
 REPO_NAME=ubuntu-fuel-$PRODUCT_VERSION-stable
-PACKAGES=`git diff --word-diff=plain HEAD~ requirements-deb.txt | egrep '^{+' | cut -d"+" -f2 | sed ':a;N;$!ba;s/\n/ /g'`
+PACKAGES=`git diff --word-diff=plain HEAD~ requirements-deb.txt | egrep '{+' | cut -d"+" -f2 | sed ':a;N;$!ba;s/\n/ /g'`
 
 if [ X"${PACKAGES}" = X"" ]; then
 	echo "MARK: no difference found, all requested packages exist in OBS and upstream repos."

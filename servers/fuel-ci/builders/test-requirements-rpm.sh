@@ -5,7 +5,7 @@ set -xe
 OVERALL_STATUS=0
 
 REPO_NAME=centos-fuel-$(awk -F '[:=?]' '/^PRODUCT_VERSION\>/ {print $NF}' config.mk)-stable
-PACKAGES=$(git diff --word-diff=plain HEAD~ requirements-rpm.txt | egrep '^{+' | egrep -v "@Base|@Core" | cut -d"+" -f2 | sed ':a;N;$!ba;s/\n/ /g')
+PACKAGES=$(git diff --word-diff=plain HEAD~ requirements-rpm.txt | egrep '{+' | egrep -v "@Base|@Core" | cut -d"+" -f2 | sed ':a;N;$!ba;s/\n/ /g')
 
 if [ X"${PACKAGES}" = X"" ]; then
 	echo "MARK: no difference found, all requested packages exist in OBS and upstream repos."
