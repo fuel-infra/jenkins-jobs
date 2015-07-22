@@ -2,3 +2,14 @@
     name: global
     description: 'Do not edit this job through the web!'
     project-type: freestyle
+
+    wrappers:
+      - build-timeout:
+          timeout: 30
+      - timestamps
+
+    logrotate:
+      daysToKeep: 1
+      numToKeep: -1
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1

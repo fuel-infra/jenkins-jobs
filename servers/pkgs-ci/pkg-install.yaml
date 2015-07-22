@@ -1,0 +1,64 @@
+- job-template:
+    name: 'pkg-install-{mos_version}-{pkg_type}'
+    project-type: freestyle
+    concurrent: true
+    node: 'install-node'
+    wrappers:
+      - install-vm-creds
+      - pre-scm-buildstep:
+        - shell: 'rm -rf *'
+      - timestamps
+      - ansicolor
+    parameters:
+      - string:
+          name: REQUEST
+          default: ''
+      - string:
+          name: DISPLAY_NAME
+          default: 'Check {pkg_type} package for installation and simple testing'
+      - string:
+          name: REQUEST_TYPE
+          default: "Centos7"
+    scm:
+      - git:
+          url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/ci-test-request.git'
+          credentials-id: 'e2e0bcb0-ea5d-4932-89ed-4d0e5bc67a4f'
+          branches:
+            - 'origin/master'
+    builders:
+      - shell:
+          !include-raw-escape builders/mos.install.cleanup.sh
+      - shell: |
+          #!/bin/bash -xe
+          export DIST={distro}
+          export PACKAGEVERSION=${{DEB_VERSION:-${{RPM_VERSION}}}}
+          export PACKAGELIST=${{DEB_BINARIES:-${{RPM_BINARIES}}}}
+          export REPO_URL=${{DEB_REPO_URL:-${{RPM_REPO_URL}}}}
+          export REPO_TYPE={pkg_type}
+          export GERRIT_PROJECT=${{ZUUL_PROJECT}}
+
+          START_TS=$(date +%s)
+          if bash -x vm-test {distro}; then
+              echo FAILED=false >> ci_status_params
+              RESULT=0
+          else
+              echo FAILED=true >> ci_status_params
+              RESULT=1
+          fi
+          TIME_ELAPSED=$(( $(date +%s) - ${{START_TS}} ))
+          echo "RESULT=${{RESULT}}" > setenvfile
+          echo "TIME_ELAPSED='$(date -u -d @${{TIME_ELAPSED}} +'%Hh %Mm %Ss' | sed 's|^00h ||; s|^00m ||')'" >> setenvfile
+          exit ${{RESULT}}
+
+    publishers:
+#      - junit:
+#          results: 'report.xml'
+      - post-tasks:
+        - matches:
+            - log-text: '/run/shm/'
+              operator: AND
+          script:
+            !include-raw-escape builders/mos.install.destroy.vm.sh
+      - archive:
+          artifacts: '**/*.xml, ci_status_params, setenvfile'
+          allow-empty: true
