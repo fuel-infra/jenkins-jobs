@@ -9,6 +9,7 @@
             CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
             CLASSIC_PROVISIONING=false
             EXAMPLE_PLUGIN_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example-1.0.0.fp
+            EXAMPLE_PLUGIN_V3_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example_v3-3.0-3.0.0-1.noarch.rpm
       - shell:
           !include-raw-escape 'scripts/run_plugins_system_test.sh'
     disabled: false
