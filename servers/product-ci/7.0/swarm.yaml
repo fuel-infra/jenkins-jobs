@@ -126,6 +126,9 @@
             - name: '7.0.system_test.ubuntu.cic_maintenance_mode'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.offloading'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.ha_neutron'
               current-parameters: true
               kill-phase-on: NEVER
