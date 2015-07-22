@@ -11,7 +11,7 @@ main () {
     docker ps -a | grep -F -e "Exited" | cut -d ' ' -f 1 | xargs -I% docker rm %
 
     # Unpublished packages cleanup
-    rm -rf "${WRKDIR}/built_packages/*"
+    rm -rf "${HOME}/built_packages/*"
 
     # Create images
     local _images="$(docker images | grep -F -e "build" | cut -d ' ' -f 1)"
