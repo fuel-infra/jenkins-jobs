@@ -47,6 +47,8 @@
       - shell:
           !include-raw-escape builders/mos.reset.vote.sh
       - shell:
+          !include-raw-escape builders/mos.install.cleanup.sh
+      - shell:
           !include-raw-escape builders/mos.install.rpm.sh
       - shell:
           !include-raw-escape builders/mos.vote.sh
