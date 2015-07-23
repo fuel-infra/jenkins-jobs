@@ -8,13 +8,13 @@ case "${REPO_TYPE}" in
       *) bash publisher/publish-deb-binaries.sh ;;
 esac
 
-export REPO_REQUEST_PATH_PREFIX=review/v4/
+export REPO_REQUEST_PATH_PREFIX=review/
 
-export RPM_OS_REPO_PATH="mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos6-fuel/os/x86_64"
-export RPM_PROPOSED_REPO_PATH="mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos6-fuel/proposed/x86_64"
-export RPM_UPDATES_REPO_PATH="mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos6-fuel/updates/x86_64"
-export RPM_SECURITY_REPO_PATH="mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos6-fuel/security/x86_64"
-export RPM_HOLDBACK_REPO_PATH="mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos6-fuel/holdback/x86_64"
+export RPM_OS_REPO_PATH="mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos6-fuel/os"
+export RPM_PROPOSED_REPO_PATH="mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos6-fuel/cr"
+export RPM_UPDATES_REPO_PATH="mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos6-fuel/updates"
+export RPM_SECURITY_REPO_PATH="mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos6-fuel/security"
+export RPM_HOLDBACK_REPO_PATH="mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos6-fuel/holdback"
 
 export DEB_REPO_PATH="mos-repos/ubuntu"
 export DEB_DIST_NAME="${PROJECT_NAME}${PROJECT_VERSION}"
