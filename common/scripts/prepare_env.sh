@@ -42,6 +42,7 @@ function download_images () {
 
   TMP_SAHARA_JUNO_HDP=$(seedclient-wrapper -d -m "${SAHARA_JUNO_HDP}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
   TMP_SAHARA_JUNO_VANILLA=$(seedclient-wrapper -d -m "${SAHARA_JUNO_VANILLA}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
+  TMP_SAHARA_KILO_VANILLA=$(seedclient-wrapper -d -m "${SAHARA_KILO_VANILLA}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
 }
 
 # DevOps 2.5.x

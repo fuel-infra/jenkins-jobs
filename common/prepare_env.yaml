@@ -47,6 +47,10 @@
           name: SAHARA_JUNO_VANILLA
           default: 'magnet:?xt=urn:btih:02b1c9666009c793d06655d61de3d8dd85ca7118&dn=sahara-juno-vanilla-2.4.1-ubuntu-14.04.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-mnv.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Ffuel-storage.srt.mirantis.net%2Fcloud-images%2Fsahara-juno-vanilla-2.4.1-ubuntu-14.04.qcow2'
           description: 'https://bugs.launchpad.net/fuel/+bug/1413183'
+      - string:
+          name: SAHARA_KILO_VANILLA
+          default: 'magnet:?xt=urn:btih:5aea5e797c507fea259a0d85f4523769c5b8fbb8&dn=sahara-kilo-vanilla-2.6-ubuntu-14.04.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-mnv.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Ffuel-storage.srt.mirantis.net%2Fcloud-images%2Fsahara-kilo-vanilla-2.6-ubuntu-14.04.qcow2'
+          description: 'https://bugs.launchpad.net/fuel/+bug/1477525'
     publishers:
       - email:
           notify-every-unstable-build: false
