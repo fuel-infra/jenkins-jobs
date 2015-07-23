@@ -8,8 +8,7 @@ set -o errexit
 ##
 
 vote() {
-  echo "WARNING: Voting stage is skipped"
-  #ssh -p "${GERRIT_PORT}" "${GERRIT_USER}@${GERRIT_HOST}" "${GERRIT_CMD}"
+  ssh -p "${GERRIT_PORT}" "${GERRIT_USER}@${GERRIT_HOST}" "${GERRIT_CMD}"
 }
 
 source setenvfile

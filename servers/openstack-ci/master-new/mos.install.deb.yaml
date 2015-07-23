@@ -10,7 +10,7 @@
       - inject:
           properties-content: |
             GERRIT_REVIEWER=vm-check-install-deb
-            GERRIT_INSTALL_VOTE=1
+            GERRIT_INSTALL_VOTE=2
     wrappers:
       - vm-check-install-trusty
       - pre-scm-buildstep:
