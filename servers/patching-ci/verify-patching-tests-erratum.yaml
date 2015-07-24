@@ -1,0 +1,52 @@
+- job:
+    name: 'verify-patching-tests-erratum'
+    node: patching-tests-erratum
+    concurrent: true
+    description: Run validation for erratum file
+    logrotate:
+      artifactDaysToKeep: 30
+    properties:
+      - heavy-job:
+          weight: '1'
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/stable/6.1'
+    builders:
+      - shell:
+          !include-raw builders/erratum_validation.sh
+    publishers:
+      - description-setter:
+          regexp: '^Description string: (.*)'
+    scm:
+      - git:
+          branches:
+            - '$GERRIT_BRANCH'
+          url: 'ssh+git://openstack-ci-jenkins@review.fuel-infra.org:29418/patching-tests.git'
+          refspec: '$GERRIT_REFSPEC'
+          credentials-id: '55e5d902-b1dc-4d09-a809-7b6c8413c853'
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'patching-tests'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/6.1'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+          readable-message: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 30
+          write-description: true
