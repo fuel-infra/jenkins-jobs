@@ -93,6 +93,9 @@
             - name: '7.0.system_test.ubuntu.thread_1'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.jumbo_frames'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER

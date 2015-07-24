@@ -16,6 +16,8 @@
          testgroup: 'setup' # test job, not included in runner
          weight: '4'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'jumbo_frames'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'thread_1'
          weight: '4'
          timeout: '600'
