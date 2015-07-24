@@ -153,4 +153,6 @@
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
          timeout: '1200'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'custom_hostname'
      - '{version-id}.system_test.{dist}.fuel_plugins'
