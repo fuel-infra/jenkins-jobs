@@ -10,17 +10,25 @@
           properties-content: |
             GERRIT_USER=ci-build-rpm
             GERRIT_VOTE=1
-            SRC_PROJECT_PATH=packages/{distro}
-            COMPONENT_PATH={component-path-fuel}
-            DISTRO_PATH={distro}/
-            DIST={distro}
+            SRC_PROJECT_PATH=packages/{rpm-dist-fuel}
+            DIST={rpm-dist-fuel}
             IS_OPENSTACK=false
             REMOTE_REPO_HOST={repo-host}
-            REPO_PATH_PREFIX=osci/
-            REPO_REQUEST_PATH_PREFIX=osci/review/
-            BASE_PATH={base-path}
-            UPDATES_PATH={updates-path}
-            SECURITY_PATH={security-path}
+            REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
+            # New scheme
+            RPM_OS_REPO_PATH={rpm-os-repo-path-fuel}
+            RPM_PROPOSED_REPO_PATH={rpm-proposed-repo-path-fuel}
+            RPM_UPDATES_REPO_PATH={rpm-updates-repo-path-fuel}
+            RPM_SECURITY_REPO_PATH={rpm-security-repo-path-fuel}
+            RPM_HOLDBACK_REPO_PATH={rpm-holdback-repo-path-fuel}
+            # Old scheme
+            #REPO_PATH_PREFIX=osci/
+            #REPO_REQUEST_PATH_PREFIX=osci/review/
+            COMPONENT_PATH={component-path-fuel}
+            DISTRO_PATH={rpm-dist-fuel}/
+            #BASE_PATH={base-path}
+            #UPDATES_PATH={updates-path}
+            #SECURITY_PATH={security-path}
     wrappers:
       - ci-build-rpm
     parameters:
@@ -81,6 +89,15 @@
                 - project: '7.0.mos-new.publisher'
                   current-parameters: true
                   property-file: buildresult.params
+                  predefined-parameters: |
+                      DIST=${{DIST}}
+                      REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
+                      REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
+                      RPM_OS_REPO_PATH=${{RPM_OS_REPO_PATH}}
+                      RPM_PROPOSED_REPO_PATH=${{RPM_PROPOSED_REPO_PATH}}
+                      RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
+                      RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
+                      RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
                   block: true
              - copyartifact:
                   project: '7.0.mos-new.publisher'
@@ -102,7 +119,7 @@
            - log-text: Building
              operator: AND
            script:
-               !include-raw-escape builders/ci.status.report.stop.sh
+              !include-raw-escape builders/ci.status.report.stop.sh
       - archive:
            artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
            allow-empty: true

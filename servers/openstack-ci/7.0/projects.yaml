@@ -22,8 +22,6 @@
     ops-spec-prj: 'openstack-build/**'
     ops-branch: 'openstack-ci/fuel-7.0/2015.1.0'
     ops-fuel-branch: 'openstack-ci/fuel/centos6/juno'
-    component-path-fuel: 'fuel/'
-    component-path-cluster: 'cluster/'
     # original scheme should be:
     #cluster-rpm-deps-code-project: '{project-name}/packages/{component-path-cluster}centos7/**'
     #cluster-deb-deps-code-project: '{project-name}/packages/{component-path-cluster}trusty/**'
@@ -34,13 +32,45 @@
     fuel-rpm-deps-code-project: 'packages/centos6/**'
     deps-branch: '7.0'
     fuel-branch: master
-    mailto: 'fuel-osci+ci-packaging@mirantis.com'
-    repo-host: '172.18.160.74'
-    repo-path-prefix: 'osci/'
-    repo-request-path-prefix: 'osci/review/'
+    mailto: 'fuel-build+ci-packaging@mirantis.com'
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    repo-request-path-prefix: 'review/'
+    ##################################
+    # old scheme
+    component-path-fuel: 'fuel/'
+    component-path-cluster: 'cluster/'
     base-path: 'base/'
     updates-path: 'updates/'
     security-path: 'security/'
+    ##################################
+    # new scheme
+    # master-node
+    rpm-dist-fuel: 'centos6'
+    rpm-os-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/os'
+    rpm-proposed-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/proposed'
+    rpm-updates-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/updates'
+    rpm-security-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/security'
+    rpm-holdback-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/holdback'
+    # rpm environment
+    rpm-dist-env: 'centos7'
+    rpm-os-repo-path-env: 'mos-repos/centos/mos7.0-centos7/os'
+    rpm-proposed-repo-path-env: 'mos-repos/centos/mos7.0-centos7/proposed'
+    rpm-updates-repo-path-env: 'mos-repos/centos/mos7.0-centos7/updates'
+    rpm-security-repo-path-env: 'mos-repos/centos/mos7.0-centos7/security'
+    rpm-holdback-repo-path-env: 'mos-repos/centos/mos7.0-centos7/holdback'
+    # deb environment
+    deb-dist-env: 'trusty'
+    deb-base-repo-path: 'mos-repos/ubuntu'
+    deb-base-dist-name: 'mos7.0'
+    deb-proposed-repo-path: ''
+    deb-proposed-dist-name: 'mos7.0-proposed'
+    deb-updates-repo-path: ''
+    deb-updates-dist-name: 'mos7.0-updates'
+    deb-security-repo-path: ''
+    deb-security-dist-name: 'mos7.0-security'
+    deb-holdback-repo-path: ''
+    deb-holdback-dist-name: 'mos7.0-holdback'
+    ##################################
     is-updates: ''
     is-disabled: ''
     jobs:
@@ -64,56 +94,44 @@
     name: '7.0.mos-new.rpm'
     jobs:
       - '7.0.mos-new.build-rpm':
-          distro: centos7
+          is-disabled: true
           last_stage: true
       - '7.0.mos-new.build-rpm-request':
-          distro: centos7
+          is-disabled: true
           last_stage: false
       - '7.0.mos-new.build-rpm-deps':
-          distro: centos7
+          is-disabled: true
           last_stage: true
       - '7.0.mos-new.build-rpm-deps-request':
-          distro: centos7
+          is-disabled: true
           last_stage: false
 
 - job-group:
     name: '7.0.mos-new.deb'
     jobs:
       - '7.0.mos-new.build-deb':
-          distro: trusty
           last_stage: true
       - '7.0.mos-new.build-deb-request':
-          distro: trusty
           last_stage: false
       - '7.0.mos-new.build-deb-deps':
-          distro: trusty
           last_stage: true
       - '7.0.mos-new.build-deb-deps-request':
-          distro: trusty
           last_stage: false
 
 - job-group:
     name: '7.0.mos-new.fuel'
     jobs:
       - '7.0.mos-new.fuel.build-rpm':
-          distro: centos6
       - '7.0.mos-new.fuel.build-rpm-request':
-          distro: centos6
       - '7.0.mos-new.fuel.build-deb':
-          distro: trusty
       - '7.0.mos-new.fuel.build-deb-request':
-          distro: trusty
       - '7.0.mos-new.fuel.build-rpm-deps':
-          distro: centos6
           last_stage: true
       - '7.0.mos-new.fuel.build-rpm-deps-request':
-          distro: centos6
           last_stage: false
       - '7.0.mos-new.fuel.build-ops':
-          distro: centos6
           last_stage: true
       - '7.0.mos-new.fuel.build-ops-request':
-          distro: centos6
           last_stage: false
 - job-group:
     name: '7.0.mos-new.maintain'

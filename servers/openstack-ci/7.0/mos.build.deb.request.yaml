@@ -13,17 +13,31 @@
             SRC_PROJECT_PATH=openstack
             SPEC_PROJECT_PATH=openstack-build
             SPEC_PROJECT_SUFFIX=-build
-            SPEC_PREFIX_PATH=/{distro}
-            COMPONENT_PATH={component-path-cluster}
-            DISTRO_PATH={distro}/
-            DIST={distro}
+            SPEC_PREFIX_PATH=/{deb-dist-env}
+            DIST={deb-dist-env}
             IS_OPENSTACK=true
             REMOTE_REPO_HOST={repo-host}
-            REPO_PATH_PREFIX=osci/
-            REPO_REQUEST_PATH_PREFIX=osci/review/
-            BASE_PATH={base-path}
-            UPDATES_PATH={updates-path}
-            SECURITY_PATH={security-path}
+            REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
+            # New scheme
+            DEB_REPO_PATH={deb-base-repo-path}
+            DEB_DIST_NAME={deb-base-dist-name}
+            DEB_PROPOSED_REPO_PATH={deb-proposed-repo-path}
+            DEB_PROPOSED_DIST_NAME={deb-proposed-dist-name}
+            DEB_UPDATES_REPO_PATH={deb-updates-repo-path}
+            DEB_UPDATES_DIST_NAME={deb-updates-dist-name}
+            DEB_SECURITY_REPO_PATH={deb-security-repo-path}
+            DEB_SECURITY_DIST_NAME={deb-security-dist-name}
+            DEB_HOLDBACK_REPO_PATH={deb-holdback-repo-path}
+            DEB_HOLDBACK_DIST_NAME={deb-holdback-dist-name}
+            # Old scheme
+            #REPO_REQUEST_PATH_PREFIX=osci/review/
+            #REPO_PATH_PREFIX=osci/
+            COMPONENT_PATH={component-path-cluster}
+            DISTRO_PATH={deb-dist-env}/
+            #REPO_PATH_PREFIX=osci/
+            #BASE_PATH={base-path}
+            #UPDATES_PATH={updates-path}
+            #SECURITY_PATH={security-path}
     wrappers:
       - ci-build-deb
     parameters:
@@ -69,7 +83,7 @@
           code-project: '{ops-code-prj}'
           spec-project: '{ops-spec-prj}'
           branch: '{ops-branch}'
-          files: '{distro}/debian/**'
+          files: '{deb-dist-env}/debian/**'
     builders:
       - shell:
           !include-raw-escape builders/ci.status.report.start.sh
@@ -94,6 +108,20 @@
                 - project: '7.0.mos-new.publisher'
                   current-parameters: true
                   property-file: buildresult.params
+                  predefined-parameters: |
+                      DIST=${{DIST}}
+                      REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
+                      REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
+                      DEB_REPO_PATH=${{DEB_REPO_PATH}}
+                      DEB_DIST_NAME=${{DEB_DIST_NAME}}
+                      DEB_PROPOSED_REPO_PATH=${{DEB_PROPOSED_REPO_PATH}}
+                      DEB_PROPOSED_DIST_NAME=${{DEB_PROPOSED_DIST_NAME}}
+                      DEB_UPDATES_REPO_PATH=${{DEB_UPDATES_REPO_PATH}}
+                      DEB_UPDATES_DIST_NAME=${{DEB_UPDATES_DIST_NAME}}
+                      DEB_SECURITY_REPO_PATH=${{DEB_SECURITY_REPO_PATH}}
+                      DEB_SECURITY_DIST_NAME=${{DEB_SECURITY_DIST_NAME}}
+                      DEB_HOLDBACK_REPO_PATH=${{DEB_HOLDBACK_REPO_PATH}}
+                      DEB_HOLDBACK_DIST_NAME=${{DEB_HOLDBACK_DIST_NAME}}
                   block: true
              - copyartifact:
                   project: '7.0.mos-new.publisher'
