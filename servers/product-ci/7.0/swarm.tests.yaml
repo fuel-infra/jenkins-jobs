@@ -70,8 +70,6 @@
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'offloading'
-         properties: |
-           CLASSIC_PROVISIONING=true
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron'
          timeout: '600'
