@@ -166,7 +166,8 @@
           regexp-for-failed: 'Description string: (.*)'
       - email-ext:
           default-subject: '$DEFAULT_SUBJECT'
-          always: true
+          failure: true
+          success: true
           send-to:
             - requester
     scm:

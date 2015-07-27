@@ -133,6 +133,7 @@
           set-for-matrix: false
       - email-ext:
           default-subject: '$DEFAULT_SUBJECT'
-          always: true
+          failure: true
+          success: true
           send-to:
             - requester

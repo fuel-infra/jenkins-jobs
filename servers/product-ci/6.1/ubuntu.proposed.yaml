@@ -91,6 +91,6 @@
           results: '**/nosetests.xml'
       - email-ext:
           default-subject: '$DEFAULT_SUBJECT'
-          always: true
+          failure: true
           send-to:
             - requester
