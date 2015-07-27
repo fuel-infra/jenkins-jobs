@@ -41,6 +41,12 @@
       - string:
           name: SOURCE_BRANCH
           default: '{deps-branch}'
+      - string:
+          name: DISPLAY_NAME
+          default: "Build rpm package on temporary repository"
+      - string:
+          name: REQUEST_TYPE
+          default: "Centos6"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
@@ -122,6 +128,8 @@
                 PACKAGELIST=${{RPM_BINARIES}}
                 REPO_URL=${{RPM_REPO_URL}}
                 DIST=${{DIST}}
+                DISPLAY_NAME=Build rpm package on temporary repository
+                REQUEST_TYPE=Centos6
             property-file-fail-on-missing: false
     publishers:
       - pkgname-as-desc

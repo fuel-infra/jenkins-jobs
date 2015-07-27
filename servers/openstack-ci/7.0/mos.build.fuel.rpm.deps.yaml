@@ -44,6 +44,12 @@
       - string:
           name: SOURCE_BRANCH
           default: '{deps-branch}'
+      - string:
+          name: DISPLAY_NAME
+          default: "Build rpm package on primary repository"
+      - string:
+          name: REQUEST_TYPE
+          default: "Centos6"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
