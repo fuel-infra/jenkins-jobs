@@ -1,0 +1,38 @@
+- job-template:
+    name: 'master.mos-new.comment'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: master
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    properties:
+      - inject:
+          properties-content: |
+            GERRIT_USER=openstack-ci-jenkins
+            GERRIT_MESSAGE=This branch is not used. Please abandon request.
+            GERRIT_VOTE=-1
+    wrappers:
+      - openstack-ci-jenkins
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: 'packages/centos6/*'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: 'master'
+          server-name: fuel-infra
+          silent: true
+    builders:
+      - shell: |
+          #!/bin/bash
+
+          set -o xtrace
+          set -o errexit
+
+          ssh -p "${{GERRIT_PORT}}" "${{GERRIT_USER}}@${{GERRIT_HOST}}" \
+              "gerrit review ${{GERRIT_CHANGE_NUMBER}},${{GERRIT_PATCHSET_NUMBER}} \
+               --message='${{GERRIT_MESSAGE}}' --code-review ${{GERRIT_VOTE}}"

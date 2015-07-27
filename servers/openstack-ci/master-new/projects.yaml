@@ -45,6 +45,7 @@
       - 'master.mos-new.deb'
       - 'master.mos-new.publisher'
       - 'master.mos-new.autobuild'
+      - 'master.mos-new.comment'
 
 - job-group:
     name: 'master.mos-new.rpm'
