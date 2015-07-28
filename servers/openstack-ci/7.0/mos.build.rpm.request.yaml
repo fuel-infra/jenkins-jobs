@@ -18,6 +18,8 @@
             IS_OPENSTACK=true
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
+            DISPLAY_NAME=Build rpm package on temporary repository
+            REQUEST_TYPE=Centos6
             # New scheme
             RPM_OS_REPO_PATH={rpm-os-repo-path-env}
             RPM_PROPOSED_REPO_PATH={rpm-proposed-repo-path-env}
@@ -50,12 +52,6 @@
       - string:
           name: SPEC_BRANCH
           default: '{ops-branch}'
-      - string:
-          name: DISPLAY_NAME
-          default: "Build rpm package on temporary repository"
-      - string:
-          name: REQUEST_TYPE
-          default: "Centos7"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
@@ -140,6 +136,7 @@
                 PACKAGELIST=${{RPM_BINARIES}}
                 REPO_URL=${{RPM_REPO_URL}}
                 DISPLAY_NAME=Check rpm package for installation and simple testing
+                REQUEST_TYPE=Centos6
           - project: '7.0.mos-new.deploy-rpm'
             current-parameters: true
             property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
@@ -147,6 +144,7 @@
             predefined-parameters: |
                 REPO_URL=${{DEB_REPO_URL}}
                 DISPLAY_NAME=Check rpm package for installation in environment
+                REQUEST_TYPE=Centos6
     publishers:
       - pkgname-as-desc
       - post-tasks:

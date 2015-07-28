@@ -11,6 +11,8 @@
           properties-content: |
             GERRIT_REVIEWER=vm-check-install-deb
             GERRIT_INSTALL_VOTE=2
+            DISPLAY_NAME=Check deb package for installation and simple testing
+            REQUEST_TYPE=Trusty
     wrappers:
       - vm-check-install-trusty
       - timeout:
@@ -22,12 +24,6 @@
       - string:
           name: REQUEST
           default: ''
-      - string:
-          name: DISPLAY_NAME
-          default: 'Check deb package for installation and simple testing'
-      - string:
-          name: REQUEST_TYPE
-          default: "Trusty"
       - bool:
           name: LAST_STAGE
           default: '{last_stage}'

@@ -18,6 +18,8 @@
             IS_OPENSTACK=true
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
+            DISPLAY_NAME=Build deb package on temporary repository
+            REQUEST_TYPE=Trusty
             # New scheme
             DEB_REPO_PATH={deb-base-repo-path}
             DEB_DIST_NAME={deb-base-dist-name}
@@ -56,12 +58,6 @@
       - string:
           name: SPEC_BRANCH
           default: '{ops-branch}'
-      - string:
-          name: DISPLAY_NAME
-          default: "Build deb package on temporary repository"
-      - string:
-          name: REQUEST_TYPE
-          default: "Trusty"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
@@ -151,6 +147,7 @@
                 PACKAGELIST=${{DEB_BINARIES}}
                 REPO_URL=${{DEB_REPO_URL}}
                 DISPLAY_NAME=Check deb package for installation and simple testing
+                REQUEST_TYPE=Trusty
           - project: '7.0.mos-new.deploy-deb'
             current-parameters: true
             property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
@@ -158,6 +155,7 @@
             predefined-parameters: |
                 REPO_URL=${{DEB_REPO_URL}}
                 DISPLAY_NAME=Check deb package for installation in environment
+                REQUEST_TYPE=Trusty
     publishers:
       - pkgname-as-desc
       - post-tasks:
