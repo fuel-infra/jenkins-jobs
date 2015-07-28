@@ -12,7 +12,7 @@
       VENV location, using dos.py command. Check if environment is not the last one<br>
       used for specific build and is old enought to be removed.<br><br>
       VENV parameter - environment where dos.py is executed<br>
-      Minimal times parameters (in days, for different job types): STAGING, SYSTEM_TEST, OTHER.
+      Minimal times parameters (in hours, for different job types): STAGING, SYSTEM_TEST, OTHER.
     concurrent: true
     parameters:
         - node:
@@ -26,13 +26,13 @@
             default: true
         - string:
             name: STAGING
-            default: '2'
+            default: '48'
         - string:
             name: SYSTEMTEST
-            default: '1'
+            default: '16'
         - string:
             name: OTHER
-            default: '2'
+            default: '48'
     wrappers:
       - timeout:
           fail: true

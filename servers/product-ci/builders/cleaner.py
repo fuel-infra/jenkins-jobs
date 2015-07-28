@@ -40,12 +40,16 @@ class Cleaner():
             # get list of local environments
             dos_path = "%s/bin/dos.py" % devops_path
             local_environments = subprocess.check_output([dos_path, 'list', '--timestamp']).split('\n')[:-1]
+            # workaround if header added
+            if local_environments and local_environments[0].startswith('NAME'):
+                local_environments=local_environments[2:]
+
             print 'Local environments found: %s' % local_environments
 
             for env in local_environments:
                 # try to get verified data first
                 try:
-                    env_name, local_timestamp_text = env.split(' ')
+                    env_name, local_timestamp_text = env.split()
                     local_timestamp = datetime.datetime.strptime(local_timestamp_text.split('.')[0], '%Y-%m-%d_%H:%M:%S')
                 except:
                     continue
@@ -53,13 +57,13 @@ class Cleaner():
                 if env_name.startswith('env_'):
                     print '- environment is env_* - skipping'
                     continue
-                env_lifetime_days = self.get_job_lifetime(env_name)
-                # if older then 10 days - just delete
-                if (datetime.datetime.now() - local_timestamp) > datetime.timedelta(days=10):
-                    print '- this build is safe to remove (%s - older then 10 days)' % local_timestamp
+                env_lifetime_hours = self.get_job_lifetime(env_name)
+                # if older then 5 days - just delete
+                if (datetime.datetime.now() - local_timestamp) > datetime.timedelta(days=5):
+                    print '- this build is safe to remove (%s - older then 5 days)' % local_timestamp
                     self.local_remove_env(dos_path, env_name)
                 # if lifetime expired - check if ready to erase
-                elif (datetime.datetime.now() - local_timestamp) > datetime.timedelta(days=env_lifetime_days):
+                elif (datetime.datetime.now() - local_timestamp) > datetime.timedelta(hours=env_lifetime_hours):
                     print '- old enough to be analysed (%s)' % local_timestamp
                     print '- looking for a prefix by name (%s)' % env_name
                     env_prefix = self.get_prefix_by_env_name(env_name)
