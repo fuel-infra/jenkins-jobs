@@ -7,9 +7,9 @@
       Build artifacts: iso and upgrade tarball
 
       <p>
-        Owned by: Fuel OSCI Team<br/>
+        Owned by: Fuel Build Team<br/>
         Job owner is responsible for keeping builds green.<br/>
-        Maintenance contacts: #fuel-osci, #fuel-devops<br/>
+        Maintenance contacts: #infra<br/>
       </p>
     node: iso
     disabled: true

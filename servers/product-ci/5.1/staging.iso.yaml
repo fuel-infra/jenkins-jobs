@@ -10,9 +10,9 @@
       For "official" 5.1.2 iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/5.1.2.all/">5.1.2.all</a>
 
       <p>
-        Owned by: Fuel OSCI Team<br/>
+        Owned by: Fuel Build team<br/>
         Job owner is responsible for keeping builds green.<br/>
-        Maintenance contacts: #fuel-osci, #fuel-devops<br/>
+        Maintenance contacts: #infra<br/>
       </p>
     logrotate:
       artifactDaysToKeep: 90

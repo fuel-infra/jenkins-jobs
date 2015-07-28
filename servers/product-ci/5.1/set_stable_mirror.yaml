@@ -12,9 +12,9 @@
       Update stable symlink target to specified mirror version.<br>
 
       <p>
-        Owned by: Fuel OSCI Team<br/>
+        Owned by: Fuel Build Team<br/>
         Job owner is responsible for keeping builds green.<br/>
-        Maintenance contacts: #fuel-osci<br/>
+        Maintenance contacts: #infra<br/>
       </p>
     logrotate:
       daysToKeep: 45
