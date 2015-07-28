@@ -36,6 +36,7 @@ export OSTF_GERRIT_COMMIT="${ostf_gerrit_commit}"
 export FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}"
 export PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}"
 export FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}"
+export FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}"
 
 ######## Get node location to choose closer mirror ###############
 
@@ -121,6 +122,7 @@ echo OSTF_GERRIT_COMMIT="${ostf_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.t
 echo FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
+echo FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 
 cp "${LOCAL_MIRROR}"/*changelog "${ARTS_DIR}/" || true
 cp "${BUILD_DIR}/iso/isoroot/version.yaml" "${ARTS_DIR}/version.yaml.txt" || true
