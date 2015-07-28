@@ -21,6 +21,7 @@
     install-build-node: 'install-tests'
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/stable/6.1'
+    fuel-scm-branch: 'origin/stable/6.1'
     packtest-build-node: 'package-testing'
     jobs:
       - '{release}.{name}.rpm':

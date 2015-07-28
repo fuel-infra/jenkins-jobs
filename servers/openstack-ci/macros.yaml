@@ -15,10 +15,6 @@
       - ssh-agent-credentials:
           users:
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
-      - timeout:
-          fail: 'true'
-          timeout: '120'
-          write-description: 'false'
 
 - wrapper:
     name: ci-build-deb
@@ -28,10 +24,6 @@
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '817edea8-b597-4a6e-9aeb-bad57b109e66'
             - '35fc8f47-a728-4d5a-bfeb-9338089f31fa'
-      - timeout:
-          fail: 'true'
-          timeout: '120'
-          write-description: 'false'
 
 - wrapper:
     name: ci-build-rpm
@@ -41,10 +33,6 @@
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '9654daf3-36d4-4998-909e-c4085330b8e7'
             - '35fc8f47-a728-4d5a-bfeb-9338089f31fa'
-      - timeout:
-          fail: 'true'
-          timeout: '120'
-          write-description: 'false'
 
 - wrapper:
     name: vm-check-install-rpm
@@ -54,10 +42,6 @@
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '06bc7ed4-3174-4c49-bb54-63a301874199'
             - 'e074d15f-e006-4435-8836-c792c431a270'
-      - timeout:
-          fail: 'true'
-          timeout: '180'
-          write-description: 'false'
 
 - wrapper:
     name: vm-check-install-deb
@@ -67,10 +51,6 @@
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '11acbe7e-c816-478d-b484-04adf29f4888'
             - 'e074d15f-e006-4435-8836-c792c431a270'
-      - timeout:
-          fail: 'true'
-          timeout: '180'
-          write-description: 'false'
 
 - wrapper:
     name: vm-check-install-trusty
@@ -80,10 +60,6 @@
             - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
             - '11acbe7e-c816-478d-b484-04adf29f4888'
             - '9b8a6644-23be-4e82-9a2f-a26c62df8955'
-      - timeout:
-          fail: 'true'
-          timeout: '180'
-          write-description: 'false'
 
 - wrapper:
     name: openstack-ci-packtest-rpm
@@ -92,10 +68,6 @@
           users:
             - '1c17f649-550f-440e-a0ad-994de8417e67'
             - 'efa71805-f1ea-4ad4-9f26-32277f8bcc7a'
-      - timeout:
-          fail: 'true'
-          timeout: '300'
-          write-description: 'false'
 
 - wrapper:
     name: openstack-ci-packtest-deb
@@ -104,10 +76,6 @@
           users:
             - '1c17f649-550f-440e-a0ad-994de8417e67'
             - '4c78c2d6-a0d6-49b7-a398-d728a1b6a85c'
-      - timeout:
-          fail: 'true'
-          timeout: '300'
-          write-description: 'false'
 
 - wrapper:
     name: osci-jenkins-reporter
@@ -115,10 +83,6 @@
       - ssh-agent-credentials:
           users:
             - '35fc8f47-a728-4d5a-bfeb-9338089f31fa'
-      - timeout:
-          fail: 'true'
-          timeout: '120'
-          write-description: 'false'
 
 - wrapper:
     name: comment-abort-users
@@ -129,14 +93,12 @@
             - 'efa71805-f1ea-4ad4-9f26-32277f8bcc7a'
             - '11acbe7e-c816-478d-b484-04adf29f4888'
             - '06bc7ed4-3174-4c49-bb54-63a301874199'
-      - timeout:
-          fail: 'true'
-          timeout: '120'
-          write-description: 'false'
+
 
 ########################################################################
 # Section: Triggers
 ########################################################################
+
 - trigger:
     name: fuel-infra-request
     triggers:
@@ -251,9 +213,11 @@
           silent: true
           server-name: review.openstack.org
 
+
 ########################################################################
 # Section: SCM
 ########################################################################
+
 - scm:
     name: fuel-infra
     scm:
@@ -273,12 +237,14 @@
           url: 'http://git.openstack.org/stackforge/fuel-qa.git'
           basedir: 'fuel-qa'
           branches:
-            - 'origin/stable/6.1'
+            - '{scm-branch}'
           wipe-workspace: false
+
 
 ########################################################################
 ## Section: Parameters
 ########################################################################
+
 - parameter:
     name: openstack-build
     parameters:
@@ -348,38 +314,6 @@
           default: '{last_stage}'
 
 - parameter:
-    name: openstack-build-master
-    parameters:
-      - string:
-          name: URL
-          default: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/'
-      - string:
-          name: PRJPREFIX
-          default: '{prjprefix}'
-      - string:
-          name: PROJECTNAME
-          default: '{prjprefix}fuel-{version-id}'
-      - bool:
-          name: LAST_STAGE
-          default: '{last_stage}'
-
-- parameter:
-    name: dependencies-build-master
-    parameters:
-      - string:
-          name: URL
-          default: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/'
-      - string:
-          name: PRJPREFIX
-          default: '{prjprefix}'
-      - string:
-          name: PROJECTNAME
-          default: '{prjprefix}fuel-{version-id}'
-      - bool:
-          name: LAST_STAGE
-          default: '{last_stage}'
-
-- parameter:
     name: packtest
     parameters:
       - string:
@@ -402,7 +336,25 @@
       - string:
           name: KEEP_BEFORE
           default: 'yes'
+
+- parameter:
+    name: iso-magnet-link-6.1
+    parameters:
       - string:
           name: ISO_MAGNET_LINK
           default: |
             magnet:?xt=urn:btih:9d59953417e0c2608f8fa0ffe43ceac00967708f&dn=MirantisOpenStack-6.1.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-mnv.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-6.1.iso
+
+
+########################################################################
+## Section: Publishers
+########################################################################
+
+- publisher:
+    name: pkgname-as-desc
+    publishers:
+      - description-setter:
+          regexp: '(PACKAGENAME=)(.+)'
+          regexp-for-failed: '(PACKAGENAME=)(.+)'
+          description: '\2'
+          description-for-failed: '\2'

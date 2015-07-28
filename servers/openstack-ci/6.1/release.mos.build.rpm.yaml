@@ -8,6 +8,9 @@
       daysToKeep: '{daysToKeep}'
     wrappers:
       - ci-build-rpm
+      - timeout:
+          fail: true
+          timeout: 120
       - inject-passwords:
           global: true
     parameters:

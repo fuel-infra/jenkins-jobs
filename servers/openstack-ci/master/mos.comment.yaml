@@ -14,6 +14,9 @@
             GERRIT_VOTE=-1
     wrappers:
       - openstack-ci-jenkins
+      - timeout:
+          fail: true
+          timeout: 120
     triggers:
       - gerrit:
           trigger-on:

@@ -23,6 +23,9 @@
             SECURITY_PATH={security-path}
     wrappers:
       - ci-build-rpm
+      - timeout:
+          fail: true
+          timeout: 120
     parameters:
       - string:
           name: PROJECT_NAME

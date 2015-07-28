@@ -14,6 +14,9 @@
           default: 'none'
     wrappers:
       - openstack-ci-jenkins
+      - timeout:
+          fail: true
+          timeout: 120
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'

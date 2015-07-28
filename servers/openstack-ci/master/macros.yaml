@@ -1,5 +1,5 @@
 - parameter:
-    name: autobuild-all
+    name: package-list-master
     parameters:
       - text:
           name: PACKAGE_LIST

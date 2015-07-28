@@ -8,6 +8,9 @@
       daysToKeep: '{daysToKeep}'
     wrappers:
       - vm-check-install-trusty
+      - timeout:
+          fail: true
+          timeout: 180
       - pre-scm-buildstep:
         - shell: 'rm -rf *'
     parameters:

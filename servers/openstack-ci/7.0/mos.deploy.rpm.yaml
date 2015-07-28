@@ -8,6 +8,9 @@
       daysToKeep: '{daysToKeep}'
     wrappers:
       - openstack-ci-packtest-rpm
+      - timeout:
+          fail: true
+          timeout: 300
     properties:
       - inject:
           properties-content: |
@@ -29,7 +32,8 @@
           scm-basedir: '{scm-basedir}'
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{install-scm-branch}'
-      - fuel-qa-7.0:
+      - fuel-qa:
+          scm-branch: '{fuel-scm-branch}'
       - fuel-infra:
           scm-user: '{scm-user}'
           scm-repo: '{scm-ci-status-client-repo}'

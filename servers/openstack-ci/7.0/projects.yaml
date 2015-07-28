@@ -18,6 +18,7 @@
     scm-ci-status-client-basedir: 'ci-status-client'
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/master'
+    fuel-scm-branch: 'origin/master'
     ops-code-prj: 'openstack/**'
     ops-spec-prj: 'openstack-build/**'
     ops-branch: 'openstack-ci/fuel-7.0/2015.1.0'

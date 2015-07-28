@@ -40,6 +40,9 @@
             #SECURITY_PATH={security-path}
     wrappers:
       - ci-build-deb
+      - timeout:
+          fail: true
+          timeout: 120
     parameters:
       - string:
           name: PROJECT_NAME
