@@ -39,10 +39,17 @@ export FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}"
 export FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}"
 
 ######## Get node location to choose closer mirror ###############
+# Do NOTHING if USE_MIRROR=none, else if user choose auto, we try to use
+# facter location to get closer mirror, if user provide the exact mirror we
+# use it
+if [ "${USE_MIRROR}" != "none" ]; then
 
-if [ "${USE_MIRROR}" == "auto" ]; then
-  LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
-  LOCATION=${LOCATION_FACT:-msk}
+  if [ "${USE_MIRROR}" == "auto" ]; then
+    LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+    LOCATION=${LOCATION_FACT:-msk}
+  else
+    LOCATION="${USE_MIRROR}"
+  fi
 
   case "${LOCATION}" in
       srt)
@@ -53,19 +60,11 @@ if [ "${USE_MIRROR}" == "auto" ]; then
           USE_MIRROR=msk
           LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
           ;;
-      kha)
-          USE_MIRROR=kha
+      hrk)
+          USE_MIRROR=hrk
           LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
           ;;
-      poz)
-          USE_MIRROR=cz
-          LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
-          ;;
-      bud)
-          USE_MIRROR=cz
-          LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
-          ;;
-      bud-ext)
+      poz|bud|bud-ext|cz)
           USE_MIRROR=cz
           LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
           ;;
@@ -77,12 +76,7 @@ if [ "${USE_MIRROR}" == "auto" ]; then
           USE_MIRROR=msk
           LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
   esac
-fi
 
-# if USE_MIRROR=none, let's get all values from make system
-# otherwise - choose closer mirror
-if [ "${USE_MIRROR}" != "none" ] ; then
-  ######## Get stable ubuntu mirror from snapshot ###############
   LATEST_MIRROR_ID=$(curl -s "${LATEST_MIRROR_ID_URL}/mos-repos/7.0.target.txt" | head -1)
   export MIRROR_UBUNTU_ROOT="/mos-repos/${LATEST_MIRROR_ID}/cluster/base/trusty"
 fi
