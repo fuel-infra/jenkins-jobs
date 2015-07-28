@@ -1,5 +1,5 @@
 - job-template:
-    name: 'master.mos-new.install-deb'
+    name: 'master.mos.install-deb'
     project-type: freestyle
     disabled: '{is-disabled}'
     concurrent: true

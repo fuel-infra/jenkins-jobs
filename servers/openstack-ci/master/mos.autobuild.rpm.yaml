@@ -1,5 +1,5 @@
 - job-template:
-    name: 'master.mos-new.autobuild-rpm'
+    name: 'master.mos.autobuild-rpm'
     disabled: '{is-disabled}'
     concurrent: false
     node: '{build-node}'
@@ -11,7 +11,7 @@
       - shell:
           !include-raw-escape builders/mos.autobuild.all.sh
       - trigger-builds:
-          - project: 'master.mos-new.build-rpm'
+          - project: 'master.mos.build-rpm'
             parameter-factories:
               - factory: filebuild
                 file-pattern: properties-*

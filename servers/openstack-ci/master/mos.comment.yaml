@@ -1,5 +1,5 @@
 - job-template:
-    name: 'master.mos-new.comment'
+    name: 'master.mos.comment'
     project-type: freestyle
     disabled: '{is-disabled}'
     concurrent: true

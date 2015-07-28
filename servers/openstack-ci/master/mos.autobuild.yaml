@@ -1,5 +1,5 @@
 - job-template:
-    name: 'master.mos-new.autobuild'
+    name: 'master.mos.autobuild'
     disabled: '{is-disabled}'
     project-type: multijob
     concurrent: false
@@ -12,9 +12,9 @@
       - multijob:
           name: Build
           projects:
-            - name: master.mos-new.autobuild-deb
+            - name: master.mos.autobuild-deb
               kill-phase-on: NEVER
-            - name: master.mos-new.autobuild-rpm
+            - name: master.mos.autobuild-rpm
               kill-phase-on: NEVER
     publishers:
       - email:

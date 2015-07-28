@@ -1,5 +1,5 @@
 - job-template:
-    name: 'master.mos-new.publisher'
+    name: 'master.mos.publisher'
     project-type: freestyle
     concurrent: false
     node: '{publish-node}'

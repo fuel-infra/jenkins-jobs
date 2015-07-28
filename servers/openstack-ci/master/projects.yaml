@@ -1,49 +1,91 @@
 - project:
     name: 'master.mos'
+    project-name: mos
     release: master
-    version-id: master
-    build-node: 'osci-fuel-meta-ubuntu'
-    install-build-node: 'install-tests'
+    ops-release: 2015.1.0
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+    install-node: 'install-tests'
     daysToKeep: 10
     scm-user: 'openstack-ci-jenkins'
     scm-credentials-id: '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
     scm-repo: 'infra/obs'
-    scm-branch: 'origin/master'
+    scm-ci-status-client-repo: 'infra/ci-status-client'
+    scm-branch: 'origin/feature/new-build-system'
+    scm-ci-status-client-branch: 'origin/master'
     scm-basedir: ''
-    scm-ci-status-repo: 'infra/ci_status'
-    scm-ci-status-branch: 'origin/master'
-    scm-ci-status-basedir: 'ci_status'
+    scm-ci-status-client-basedir: 'ci-status-client'
     install-scm-repo: 'infra/ci-test-request'
-    install-scm-branch: 'origin/master'
-    mailto: 'atsamutali@mirantis.com'
-    is-disabled: true
+    install-scm-branch: 'origin/feature/new-ci-flow'
+    ops-code-prj: 'openstack/**'
+    ops-spec-prj: 'openstack-build/**'
+    ops-branch: 'master'
+    component-path-fuel: 'fuel/'
+    component-path-cluster: 'cluster/'
+    # original scheme should be:
+    #cluster-rpm-deps-code-project: '{project-name}/packages/{component-path-cluster}centos7/**'
+    #cluster-deb-deps-code-project: '{project-name}/packages/{component-path-cluster}trusty/**'
+    #fuel-rpm-deps-code-project: '{project-name}/packages/{component-path-fuel}centos6/**'
+    # changed in order to backward compatibility with current 7.0 source scheme
+    cluster-rpm-deps-code-project: 'packages/centos7/**'
+    cluster-deb-deps-code-project: 'packages/trusty/**'
+    fuel-rpm-deps-code-project: 'packages/{component-path-fuel}centos6/**'
+    deps-branch: 'master'
+    mailto: 'dburmistrov@mirantis.com'
+    repo-host: '172.18.160.74'
+    repo-path-prefix: 'osci/'
+    repo-request-path-prefix: 'osci/review/'
+    base-path: 'base/'
+    updates-path: 'updates/'
+    security-path: 'security/'
+    is-updates: ''
+    is-disabled: ''
     jobs:
-      - 'master.mos.rpm':
-          prjprefix: 'centos-'
-          last_stage: true
-      - 'master.mos.deb':
-          prjprefix: 'trusty-'
-          last_stage: true
-      - 'master.mos.lint'
+      - 'master.mos.rpm'
+      - 'master.mos.deb'
+      - 'master.mos.publisher'
+      - 'master.mos.autobuild'
+      - 'master.mos.comment'
 
 - job-group:
     name: 'master.mos.rpm'
     jobs:
+      - 'master.mos.build-rpm':
+          distro: centos7
+          last_stage: true
       - 'master.mos.build-rpm-request':
+          distro: centos7
           last_stage: false
-      - 'master.mos.build-rpm'
+      - 'master.mos.build-rpm-deps':
+          distro: centos7
+          last_stage: true
       - 'master.mos.build-rpm-deps-request':
+          distro: centos7
           last_stage: false
-      - 'master.mos.build-rpm-deps'
-      - 'master.mos.install-rpm'
+      - 'master.mos.install-rpm':
+          last_stage: false
 
 - job-group:
     name: 'master.mos.deb'
     jobs:
+      - 'master.mos.build-deb':
+          distro: trusty
+          last_stage: true
       - 'master.mos.build-deb-request':
+          distro: trusty
           last_stage: false
-      - 'master.mos.build-deb'
+      - 'master.mos.build-deb-deps':
+          distro: trusty
+          last_stage: true
       - 'master.mos.build-deb-deps-request':
+          distro: trusty
           last_stage: false
-      - 'master.mos.build-deb-deps'
-      - 'master.mos.install-deb'
+      - 'master.mos.install-deb':
+          last_stage: false
+
+- job-group:
+    name: 'master.mos.autobuild'
+    jobs:
+      - 'master.mos.autobuild'
+      - 'master.mos.autobuild-deb'
+      - 'master.mos.autobuild-rpm'

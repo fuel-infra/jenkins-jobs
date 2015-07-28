@@ -1,5 +1,5 @@
 - job-template:
-    name: 'master.mos-new.build-deb'
+    name: 'master.mos.build-rpm'
     disabled: '{is-disabled}'
     concurrent: true
     node: '{build-node}'
@@ -8,7 +8,7 @@
     properties:
       - inject:
           properties-content: |
-            GERRIT_USER=ci-build-deb
+            GERRIT_USER=ci-build-rpm
             GERRIT_VOTE=1
             SRC_PROJECT_PATH=openstack
             SPEC_PROJECT_PATH=openstack-build
@@ -25,7 +25,7 @@
             UPDATES_PATH={updates-path}
             SECURITY_PATH={security-path}
     wrappers:
-      - ci-build-deb
+      - ci-build-rpm
     parameters:
       - string:
           name: PROJECT_NAME
@@ -44,10 +44,10 @@
           default: '{ops-branch}'
       - string:
           name: DISPLAY_NAME
-          default: "Build deb package on primary repository"
+          default: "Build rpm package on primary repository"
       - string:
           name: REQUEST_TYPE
-          default: "Trusty"
+          default: "Centos7"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
@@ -72,7 +72,7 @@
           code-project: '{ops-code-prj}'
           spec-project: '{ops-spec-prj}'
           branch: '{ops-branch}'
-          files: '{distro}/debian/**'
+          files: '{distro}/rpm/**'
     builders:
       - shell:
           !include-raw-escape builders/ci.status.report.start.sh
@@ -81,7 +81,7 @@
           # Remove junk files
           [ -f "corr.setenvfile" ] && rm -f corr.setenvfile || :
       - shell:
-          !include-raw-escape builders/mos.build.deb.sh
+          !include-raw-escape builders/mos.build.rpm.sh
       - inject:
           properties-file: 'setenvfile'
       - conditional-step:
@@ -92,21 +92,21 @@
           on-evaluation-failure: dont-run
           steps:
              - trigger-builds:
-                - project: 'master.mos-new.publisher'
+                - project: 'master.mos.publisher'
                   current-parameters: true
                   property-file: buildresult.params
                   block: true
              - copyartifact:
-                  project: 'master.mos-new.publisher'
-                  filter: 'deb.publish.setenvfile'
+                  project: 'master.mos.publisher'
+                  filter: 'rpm.publish.setenvfile'
                   parameter-filters: 'GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}'
                   optional: true
                   which-build: 'last-successful'
              - shell: |
                   #!/bin/bash -ex
                   # Fail stage if packages is not published
-                  [ -f "deb.publish.setenvfile" ] && source deb.publish.setenvfile
-                  [ "${{DEB_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
+                  [ -f "rpm.publish.setenvfile" ] && source rpm.publish.setenvfile
+                  [ "${{RPM_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
       - shell:
           !include-raw-escape builders/mos.vote.sh
     publishers:

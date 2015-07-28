@@ -1,5 +1,5 @@
 - job-template:
-    name: 'master.mos-new.build-deb-deps'
+    name: 'master.mos.build-deb-deps'
     disabled: '{is-disabled}'
     concurrent: true
     node: '{build-node}'
@@ -84,12 +84,12 @@
           on-evaluation-failure: dont-run
           steps:
              - trigger-builds:
-                - project: 'master.mos-new.publisher'
+                - project: 'master.mos.publisher'
                   current-parameters: true
                   property-file: buildresult.params
                   block: true
              - copyartifact:
-                  project: 'master.mos-new.publisher'
+                  project: 'master.mos.publisher'
                   filter: 'deb.publish.setenvfile'
                   parameter-filters: 'GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}'
                   optional: true

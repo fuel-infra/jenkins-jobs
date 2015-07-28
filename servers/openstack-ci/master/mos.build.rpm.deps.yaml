@@ -1,5 +1,5 @@
 - job-template:
-    name: 'master.mos-new.build-deb-request'
+    name: 'master.mos.build-rpm-deps'
     disabled: '{is-disabled}'
     concurrent: true
     node: '{build-node}'
@@ -8,16 +8,13 @@
     properties:
       - inject:
           properties-content: |
-            GERRIT_USER=ci-build-deb
+            GERRIT_USER=ci-build-rpm
             GERRIT_VOTE=1
-            SRC_PROJECT_PATH=openstack
-            SPEC_PROJECT_PATH=openstack-build
-            SPEC_PROJECT_SUFFIX=-build
-            SPEC_PREFIX_PATH=/{distro}
+            SRC_PROJECT_PATH=packages/{distro}
             COMPONENT_PATH={component-path-cluster}
             DISTRO_PATH={distro}/
             DIST={distro}
-            IS_OPENSTACK=true
+            IS_OPENSTACK=false
             REMOTE_REPO_HOST={repo-host}
             REPO_PATH_PREFIX=osci/
             REPO_REQUEST_PATH_PREFIX=osci/review/
@@ -25,7 +22,7 @@
             UPDATES_PATH={updates-path}
             SECURITY_PATH={security-path}
     wrappers:
-      - ci-build-deb
+      - ci-build-rpm
     parameters:
       - string:
           name: PROJECT_NAME
@@ -34,17 +31,17 @@
           name: PROJECT_VERSION
           default: '{release}'
       - string:
-          name: SOURCE_BRANCH
-          default: '{ops-branch}'
+          name: PACKAGENAME
+          default: ''
       - string:
-          name: SPEC_BRANCH
-          default: '{ops-branch}'
+          name: SOURCE_BRANCH
+          default: '{deps-branch}'
       - string:
           name: DISPLAY_NAME
-          default: "Build deb package on temporary repository"
+          default: "Build rpm package on primary repository"
       - string:
           name: REQUEST_TYPE
-          default: "Trusty"
+          default: "Centos7"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
@@ -65,11 +62,9 @@
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{scm-ci-status-client-branch}'
     triggers:
-      - fuel-infra-request:
-          code-project: '{ops-code-prj}'
-          spec-project: '{ops-spec-prj}'
-          branch: '{ops-branch}'
-          files: '{distro}/debian/**'
+      - fuel-infra-deps-submit:
+          code-project: '{cluster-rpm-deps-code-project}'
+          branch: '{deps-branch}'
     builders:
       - shell:
           !include-raw-escape builders/ci.status.report.start.sh
@@ -78,9 +73,7 @@
           # Remove junk files
           [ -f "corr.setenvfile" ] && rm -f corr.setenvfile || :
       - shell:
-          !include-raw-escape builders/mos.reset.vote.sh
-      - shell:
-          !include-raw-escape builders/mos.build.deb.sh
+          !include-raw-escape builders/mos.build.rpm.sh
       - inject:
           properties-file: 'setenvfile'
       - conditional-step:
@@ -91,42 +84,28 @@
           on-evaluation-failure: dont-run
           steps:
              - trigger-builds:
-                - project: 'master.mos-new.publisher'
+                - project: 'master.mos.publisher'
                   current-parameters: true
                   property-file: buildresult.params
                   block: true
              - copyartifact:
-                  project: 'master.mos-new.publisher'
-                  filter: 'deb.publish.setenvfile'
+                  project: 'master.mos.publisher'
+                  filter: 'rpm.publish.setenvfile'
                   parameter-filters: 'GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}'
                   optional: true
                   which-build: 'last-successful'
              - shell: |
                   #!/bin/bash -ex
                   # Fail stage if packages is not published
-                  [ -f "deb.publish.setenvfile" ] && source deb.publish.setenvfile
-                  [ "${{DEB_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
-             - inject:
-                  properties-file: 'deb.publish.setenvfile'
+                  [ -f "rpm.publish.setenvfile" ] && source rpm.publish.setenvfile
+                  [ "${{RPM_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
       - shell:
           !include-raw-escape builders/mos.vote.sh
-      - trigger-builds:
-          - project: 'master.mos-new.install-deb'
-            current-parameters: true
-            property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
-            predefined-parameters: |
-                PACKAGEVERSION=${{DEB_VERSION}}
-                PACKAGELIST=${{DEB_BINARIES}}
-                REPO_URL=${{DEB_REPO_URL}}
-                DISPLAY_NAME=Check deb package for installation and simple testing
-            property-file-fail-on-missing: false
     publishers:
-      - post-tasks:
-        - matches:
-           - log-text: Building
-             operator: AND
-          script:
-             !include-raw-escape builders/ci.status.report.stop.sh
       - archive:
            artifacts: '**/buildlog.txt, **/buildresult.xml'
            allow-empty: true
+      - email:
+          recipients: dburmistrov@mirantis.com atsamutali@mirantis.com
+          notify-every-unstable-build: true
+          send-to-individuals: false

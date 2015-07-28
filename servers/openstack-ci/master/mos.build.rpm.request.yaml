@@ -1,5 +1,5 @@
 - job-template:
-    name: 'master.mos-new.build-rpm-request'
+    name: 'master.mos.build-rpm-request'
     disabled: '{is-disabled}'
     concurrent: true
     node: '{build-node}'
@@ -91,12 +91,12 @@
           on-evaluation-failure: dont-run
           steps:
              - trigger-builds:
-                - project: 'master.mos-new.publisher'
+                - project: 'master.mos.publisher'
                   current-parameters: true
                   property-file: buildresult.params
                   block: true
              - copyartifact:
-                  project: 'master.mos-new.publisher'
+                  project: 'master.mos.publisher'
                   filter: 'rpm.publish.setenvfile'
                   parameter-filters: 'GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}'
                   optional: true
@@ -111,7 +111,7 @@
       - shell:
           !include-raw-escape builders/mos.vote.sh
       - trigger-builds:
-          - project: 'master.mos-new.install-rpm'
+          - project: 'master.mos.install-rpm'
             current-parameters: true
             property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
             predefined-parameters: |
