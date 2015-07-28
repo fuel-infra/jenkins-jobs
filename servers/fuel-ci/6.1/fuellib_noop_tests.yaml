@@ -1,5 +1,5 @@
 - job:
-    name: fuellib_noop_tests
+    name: '6.1.fuellib_noop_tests'
     builders:
       - shell:
           !include-raw builders/fuellib_noop_tests.sh
@@ -34,7 +34,12 @@
               project-pattern: stackforge/fuel-library
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
+                  branch-pattern: 'stable/6.1'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
           custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - ansicolor:
