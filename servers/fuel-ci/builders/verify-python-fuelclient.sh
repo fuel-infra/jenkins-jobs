@@ -18,12 +18,12 @@
 set -ex
 
 VENV=${WORKSPACE}_VENV
-virtualenv -p python2.6 ${VENV}
-source ${VENV}/bin/activate
+virtualenv -p python2.6 "${VENV}"
+source "${VENV}/bin/activate"
 
 export TEST_NAILGUN_DB=nailgun
-export FUEL_WEB_ROOT=${WORKSPACE}/fuel-web
+export FUEL_WEB_ROOT="${WORKSPACE}/fuel-web"
 
-./run_tests.sh -- --with-xunit
+./run_tests.sh
 
 deactivate
