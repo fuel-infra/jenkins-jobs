@@ -79,6 +79,8 @@ if [ "${USE_MIRROR}" != "none" ]; then
 
   LATEST_MIRROR_ID=$(curl -s "${LATEST_MIRROR_ID_URL}/mos-repos/7.0.target.txt" | head -1)
   export MIRROR_UBUNTU_ROOT="/mos-repos/${LATEST_MIRROR_ID}/cluster/base/trusty"
+  LATEST_SUITE=$(curl -s "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/dists/mos7.0.target.txt" | head -1)
+  export MIRROR_MOS_UBUNTU_SUITE="${LATEST_SUITE}"
 fi
 
 echo "Using mirror: ${USE_MIRROR} with ${MIRROR_UBUNTU_ROOT}"
