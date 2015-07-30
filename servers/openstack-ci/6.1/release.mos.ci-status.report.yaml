@@ -8,6 +8,9 @@
       daysToKeep: '{daysToKeep}'
     wrappers:
       - osci-jenkins-reporter
+      - timeout:
+          fail: true
+          timeout: 120
     parameters:
       - string:
           name: GERRIT_USER

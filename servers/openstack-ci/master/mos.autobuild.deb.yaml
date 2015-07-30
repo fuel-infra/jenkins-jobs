@@ -6,7 +6,7 @@
     logrotate:
       daysToKeep: '{daysToKeep}'
     parameters:
-      - autobuild-all
+      - package-list-master
     builders:
       - shell:
           !include-raw-escape builders/mos.autobuild.all.sh

@@ -8,6 +8,9 @@
       daysToKeep: '{daysToKeep}'
     wrappers:
       - openstack-ci-jenkins
+      - timeout:
+          fail: true
+          timeout: 120
     parameters:
       - string:
           name: GERRIT_USER

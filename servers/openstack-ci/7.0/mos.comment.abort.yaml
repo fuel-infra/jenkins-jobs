@@ -8,6 +8,9 @@
       daysToKeep: '{daysToKeep}'
     wrappers:
       - comment-abort-users
+      - timeout:
+          fail: true
+          timeout: 120
     builders:
       - shell:
           !include-raw-escape builders/mos.comment.abort.sh

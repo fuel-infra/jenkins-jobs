@@ -8,6 +8,9 @@
       daysToKeep: '{daysToKeep}'
     wrappers:
       - openstack-ci-packtest-deb
+      - timeout:
+          fail: true
+          timeout: 300
     parameters:
       - string:
           name: GERRIT_REVIEWER
@@ -31,7 +34,8 @@
       - string:
           name: UBUNTU_RELEASE
           default: 'trusty'
-      - packtest:
+      - packtest
+      - iso-magnet-link-6.1
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
@@ -40,6 +44,7 @@
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{install-scm-branch}'
       - fuel-qa:
+          scm-branch: '{fuel-scm-branch}'
       - fuel-infra:
           scm-user: '{scm-user}'
           scm-repo: '{scm-ci-status-client-repo}'
