@@ -16,9 +16,6 @@
           name: extra_commits
           description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
       - string:
-          name: YUM_DOWNLOAD_SRC
-          default: 'yes'
-      - string:
           name: mirror
           default: '7.0'
       - string:
