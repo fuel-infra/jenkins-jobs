@@ -15,6 +15,9 @@
     properties:
       - heavy-job:
           weight: 2
+      - throttle:
+          max-per-node: 1
+          option: project
     scm:
       - git:
           branches:
@@ -41,7 +44,7 @@
           colormap: xterm
       - timeout:
           fail: true
-          timeout: 30
+          timeout: 60
           write-description: true
     publishers:
       - email-default
