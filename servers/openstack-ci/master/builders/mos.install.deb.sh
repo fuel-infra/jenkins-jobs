@@ -4,8 +4,7 @@ set -o xtrace
 set -o errexit
 
 START_TS=$(date +%s)
-export DISABLE_VOTE=1
-if bash vm-test trusty; then
+if bash -x vm-test trusty; then
   echo FAILED=false >> ci_status_params
   RESULT=0
 else

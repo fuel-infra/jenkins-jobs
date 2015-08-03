@@ -4,6 +4,6 @@ set -o xtrace
 set -o errexit
 
 case "${REPO_TYPE}" in
-    rpm) bash publisher/publish-rpm-binaries.sh ;;
-      *) bash publisher/publish-deb-binaries.sh ;;
+    rpm) bash publisher.v4/publish-rpm-binaries.sh ;;
+    deb) bash publisher.v4/publish-deb-binaries.sh ;;
 esac
