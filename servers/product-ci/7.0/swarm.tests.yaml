@@ -39,9 +39,6 @@
            SLAVE_NODE_MEMORY=2560
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'thread_5'
-         properties: 'ADMIN_NODE_MEMORY=3072'
-     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'thread_7'
          properties: |
            MULTIPLE_NETWORKS=true
@@ -86,20 +83,9 @@
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'ha_destructive_ceph_nova'
-     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_destructive_ceph_neutron'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'huge_ha_neutron'
-         weight: '20'
-         properties: |
-           SLAVE_NODE_CPU=2
-           SLAVE_NODE_MEMORY=3072
-           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
-         timeout: '600'
-         node: 'huge-systest'
-     - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'huge_ha_nova'
          weight: '20'
          properties: |
            SLAVE_NODE_CPU=2
