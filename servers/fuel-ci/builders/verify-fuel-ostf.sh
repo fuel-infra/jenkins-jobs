@@ -21,6 +21,6 @@ virtualenv -p python2.6 ${VENV}
 source ${VENV}/bin/activate
 
 cd $WORKSPACE
-./run_tests.sh --with-xunit
+./run_tests.sh --with-xunit -c
 
 deactivate
