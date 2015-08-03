@@ -16,12 +16,10 @@
     scm-basedir: ''
     scm-ci-status-client-basedir: 'ci-status-client'
     install-scm-repo: 'infra/ci-test-request'
-    install-scm-branch: 'origin/feature/new-ci-flow'
+    install-scm-branch: 'origin/master'
     ops-code-prj: 'openstack/**'
     ops-spec-prj: 'openstack-build/**'
     ops-branch: 'master'
-    component-path-fuel: 'fuel/'
-    component-path-cluster: 'cluster/'
     # original scheme should be:
     #cluster-rpm-deps-code-project: '{project-name}/packages/{component-path-cluster}centos7/**'
     #cluster-deb-deps-code-project: '{project-name}/packages/{component-path-cluster}trusty/**'
@@ -29,15 +27,46 @@
     # changed in order to backward compatibility with current 7.0 source scheme
     cluster-rpm-deps-code-project: 'packages/centos7/**'
     cluster-deb-deps-code-project: 'packages/trusty/**'
-    fuel-rpm-deps-code-project: 'packages/{component-path-fuel}centos6/**'
     deps-branch: 'master'
-    mailto: 'dburmistrov@mirantis.com'
-    repo-host: '172.18.160.74'
-    repo-path-prefix: 'osci/'
-    repo-request-path-prefix: 'osci/review/'
+    mailto: 'fuel-build+ci-packaging@mirantis.com'
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    repo-request-path-prefix: 'review/'
+    ##################################
+    # old scheme
+    component-path-fuel: 'fuel/'
+    component-path-cluster: 'cluster/'
     base-path: 'base/'
     updates-path: 'updates/'
     security-path: 'security/'
+    ##################################
+    # new scheme
+    # master-node
+    rpm-dist-fuel: 'centos6'
+    rpm-os-repo-path-fuel: 'mos-repos/centos/mos-master-centos6-fuel/os'
+    rpm-proposed-repo-path-fuel: 'mos-repos/centos/mos-master-centos6-fuel/proposed'
+    rpm-updates-repo-path-fuel: 'mos-repos/centos/mos-master-centos6-fuel/updates'
+    rpm-security-repo-path-fuel: 'mos-repos/centos/mos-master-centos6-fuel/security'
+    rpm-holdback-repo-path-fuel: 'mos-repos/centos/mos-master-centos6-fuel/holdback'
+    # rpm environment
+    rpm-dist-env: 'centos7'
+    rpm-os-repo-path-env: 'mos-repos/centos/mos-master-centos7/os'
+    rpm-proposed-repo-path-env: 'mos-repos/centos/mos-master-centos7/proposed'
+    rpm-updates-repo-path-env: 'mos-repos/centos/mos-master-centos7/updates'
+    rpm-security-repo-path-env: 'mos-repos/centos/mos-master-centos7/security'
+    rpm-holdback-repo-path-env: 'mos-repos/centos/mos-master-centos7/holdback'
+    # deb environment
+    deb-dist-env: 'trusty'
+    deb-base-repo-path: 'mos-repos/ubuntu'
+    deb-base-dist-name: 'mos-master'
+    deb-proposed-repo-path: ''
+    deb-proposed-dist-name: 'mos-master-proposed'
+    deb-updates-repo-path: ''
+    deb-updates-dist-name: 'mos-master-updates'
+    deb-security-repo-path: ''
+    deb-security-dist-name: 'mos-master-security'
+    deb-holdback-repo-path: ''
+    deb-holdback-dist-name: 'mos-master-holdback'
+    ##################################
     is-updates: ''
     is-disabled: ''
     jobs:
