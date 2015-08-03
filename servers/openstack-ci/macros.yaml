@@ -321,18 +321,7 @@
           default: 'Check package for installation in environment'
       - string:
           name: TEST_GROUP
-          default: 'deploy_ha_one_controller_flat'
-      - string:
-          name: DEPLOYMENT_MODE
-          default: 'ha_compact'
-      - bool:
-          name: NEUTRON_ENABLE
-          default: false
-          description: 'If True: Neutron, If False: Nova network'
-      - string:
-          name: NEUTRON_SEGMENT_TYPE
-          default: 'vlan'
-          description: 'gre|vlan'
+          default: 'smoke_neutron'
       - string:
           name: KEEP_BEFORE
           default: 'yes'
