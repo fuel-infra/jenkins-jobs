@@ -136,10 +136,6 @@
           name: FEATURE_GROUPS
           default: 'mirantis'
           description: https://git.openstack.org/stackforge/fuel-specs/blob/master/specs/5.1/feature-groups.rst
-      - string:
-          name: MIRROR_BASE
-          default: ''
-          description: http://osci-mirror-srt.srt.mirantis.net/fwm/files/6.0-2014-10-08-123456
     scm:
       - git:
           url: '$FUELMAIN_REPO'
