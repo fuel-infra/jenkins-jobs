@@ -79,6 +79,10 @@
             UPSTREAM_BUILD_URL=$BUILD_URL
             UPSTREAM_BUILD_NUMBER=$BUILD_NUMBER
             BUILD_MIRROR_URL=$BUILD_MIRROR_URL
+
+        - project: '7.0.all-Testrail'
+          condition: UNSTABLE_OR_BETTER
+
     scm:
       - stackforge:
           branch: 'master'
@@ -173,3 +177,43 @@
             TESTRAIL_TEST_SUITE=Smoke/BVT
             TESTRAIL_URL=https://mirantis.testrail.com
             MANUAL=true
+
+
+
+- job:
+    name: '7.0.all-Testrail'
+    builders:
+      - inject:
+           properties-content: |
+            TESTRAIL_MILESTONE=7.0
+            LAUNCHPAD_MILESTONE=7.0
+            TESTS_RUNNER=$JOB_NAME
+            BUILD_NUMBER=$BUILD_NUMBER
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+            TESTRAIL_TEST_SUITE=Smoke/BVT
+            TESTRAIL_URL=https://mirantis.testrail.com
+      - shell:
+          !include-raw builders/all-Testrail.sh
+
+    node: testrail
+    publishers:
+      - email:
+          recipients: ishamrai@mirantis.com, devops+alert@mirantis.com
+
+    scm:
+     - main-git:
+          reponame: 'fuel-qa'
+          repobranch: 'origin/master'
+          basedir: ''
+
+
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
+
+    publishers:
+      - description-setter:
+          regexp: '^.*Report URL:\s*(.*)'
+          description: '<a href="\1">TestRail Report URL</a>'
+
