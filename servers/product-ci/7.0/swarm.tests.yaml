@@ -141,4 +141,6 @@
          timeout: '1200'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'custom_hostname'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'fuel_master_migrate'
      - '{version-id}.system_test.{dist}.fuel_plugins'
