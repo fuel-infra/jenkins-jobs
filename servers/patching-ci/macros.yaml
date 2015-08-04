@@ -69,7 +69,7 @@
     scm:
       - git:
           basedir: osci-mirrors
-          url: https://review.fuel-infra.org/infra/mirrors
+          url: ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/mirrors
           branches:
             - origin/master
           wipe-workspace: false
@@ -90,7 +90,7 @@
     scm:
       - git:
           basedir: trsync
-          url: https://review.fuel-infra.org/infra/trsync
+          url: ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/trsync
           branches:
             - 'origin/{branch}'
           wipe-workspace: false

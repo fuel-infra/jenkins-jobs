@@ -1,0 +1,64 @@
+- job:
+    name: '6.1.create_snapshot.ubuntu'
+    description:
+      !include-raw descriptions/create_snapshot.html
+    logrotate:
+      daysToKeep: 90
+      artifactDaysToKeep: 90
+      numToKeep: 100
+    node: mirror
+    concurrent: false
+    properties:
+      - heavy-job:
+          weight: 1
+
+    parameters:
+      - string:
+          name: DISTRO
+          default: 'ubuntu'
+          description: 'Name of repo on obs-1 (currently ubuntu | centos-6)'
+      - string:
+          name: TIMESTAMP
+          default: ''
+          description: 'timestamp of snapshot to download.<br>Examples: latest, 2015-06-25-000000'
+      - string:
+          name: LOCATIONS
+          default: 'rsync://osci-mirror-msk.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-srt.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-kha.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync/mos rsync://mirror.seed-us1.fuel-infra.org/mirror-sync/mos rsync://mirror.seed-cz1.fuel-infra.org/mirror-sync/mos'
+          description: 'List of locations to sync to'
+      - string:
+          name: OBS_HOST
+          default: 'obs-1.mirantis.com'
+          description: ''
+
+    builders:
+      - shell:
+          !include-raw builders/define_timestamp.sh
+      - shell:
+          !include-raw builders/prepare_repos_for_iso.sh
+      - shell:
+          !include-raw builders/push_updates_candidate.sh
+
+    scm:
+      - osci-mirrors
+      - trsync:
+          branch: 'mos_6.1'
+    triggers:
+      - timed: ''
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - obs-user-credentials
+
+    publishers:
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci+alert@mirantis.com
+      - description-setter:
+          regexp: 'Description string: (.*)'
+      - archive:
+          artifacts: '*.txt'
+          latest-only: false
+      - trigger-parameterized-builds:
+        - project: 'mos.test_updates_candidate'
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            MOS_PROPOSED_MIRROR_ID=$BUILD_ID
