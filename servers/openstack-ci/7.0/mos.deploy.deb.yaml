@@ -17,14 +17,10 @@
             GERRIT_REVIEWER=openstack-ci-packtest-deb
             GERRIT_DEPLOY_VOTE=2
             ENV_PREFIX=ubuntu
+            DISPLAY_NAME=Check deb package for installation and simple testing
+            REQUEST_TYPE=Trusty
     parameters:
       - packtest:
-      - string:
-          name: DISPLAY_NAME
-          default: "Check deb package for installation in environment"
-      - string:
-          name: REQUEST_TYPE
-          default: "Trusty"
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'

@@ -17,14 +17,10 @@
             GERRIT_REVIEWER=openstack-ci-packtest-rpm
             GERRIT_DEPLOY_VOTE=2
             ENV_PREFIX=centos
+            DISPLAY_NAME=Check rpm package for installation and simple testing
+            REQUEST_TYPE=Centos6
     parameters:
       - packtest:
-      - string:
-          name: DISPLAY_NAME
-          default: "Check rpm package for installation in environment"
-      - string:
-          name: REQUEST_TYPE
-          default: "Centos7"
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'

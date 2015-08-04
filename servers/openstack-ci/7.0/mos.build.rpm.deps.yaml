@@ -15,6 +15,8 @@
             IS_OPENSTACK=false
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
+            DISPLAY_NAME=Build rpm package on primary repository
+            REQUEST_TYPE=Centos6
             # New scheme
             RPM_OS_REPO_PATH={rpm-os-repo-path-env}
             RPM_PROPOSED_REPO_PATH={rpm-proposed-repo-path-env}
@@ -47,12 +49,6 @@
       - string:
           name: SOURCE_BRANCH
           default: '{deps-branch}'
-      - string:
-          name: DISPLAY_NAME
-          default: "Build rpm package on primary repository"
-      - string:
-          name: REQUEST_TYPE
-          default: "Centos7"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'

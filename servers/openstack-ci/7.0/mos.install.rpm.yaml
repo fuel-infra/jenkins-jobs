@@ -11,6 +11,8 @@
           properties-content: |
             GERRIT_REVIEWER=vm-check-install-rpm
             GERRIT_INSTALL_VOTE=2
+            DISPLAY_NAME=Check rpm package for installation and simple testing
+            REQUEST_TYPE=Centos6
     wrappers:
       - vm-check-install-rpm
       - timeout:
@@ -22,12 +24,6 @@
       - string:
           name: REQUEST
           default: ''
-      - string:
-          name: DISPLAY_NAME
-          default: "Check rpm package for installation and simple testing"
-      - string:
-          name: REQUEST_TYPE
-          default: "Centos7"
       - bool:
           name: LAST_STAGE
           default: '{last_stage}'
