@@ -1,0 +1,78 @@
+- job-template:
+    name: '{name}'
+    builders:
+      - shell:
+          !include-raw-escape builders/docker_run.sh
+    description: 'Test job to run custom Python scripts'
+    logrotate:
+      daysToKeep: '{days}'
+      numToKeep: '{num}'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+         name: CONFIG_DIR
+         default: '{config_dir}'
+         description: 'Path to directory with credentials'
+      - string:
+         name: CONFIG_NAME
+         default: '{config_name}'
+         description: 'Name of the file with credentials'
+      - string:
+         name: DOCKER_IMAGE
+         default: '{docker_image}'
+         description: 'Name of the docker image to run'
+      - label:
+         name: LABEL_SERVER
+         default: '{label_server}'
+         description: 'Label of the slave to run the script'
+      - string:
+         name: SCRIPT_PATH
+         default: '{script_path}'
+         description: 'Name of a script to execute'
+      - string:
+         name: REPOSITORY
+         default: '{repository}'
+         description: 'Link to a repository with scripts'
+    publishers:
+      - email:
+          recipients: 'anikitin@mirantis.com'
+    scm:
+      - git:
+         url: '{repository}'
+         credentials-id: 19476714-1555-42f7-b52f-79ec17070f9d
+         branches:
+            - origin/master
+    triggers:
+      - timed: '{trigger}'
+
+- project:
+    name: 'hello-world'
+    config_dir: '/etc/custom_scripts'
+    config_name: 'foo_bar.config'
+    days: 90
+    docker_image: 'python-jenkins-14-04'
+    label_server: 'custom-scripts'
+    num: 100
+    repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
+    script_path: 'hello-world/hello-world.py'
+    trigger: 'H */1 * * *'
+
+    jobs:
+      - '{name}'
+
+- project:
+    name: 'abandon-old-review'
+    config_dir: '/etc/custom_scripts'
+    config_name: 'id_rsa'
+    days: 90
+    docker_image: 'python-jenkins-14-04'
+    label_server: 'custom-scripts'
+    num: 100
+    repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
+    script_path: 'requests-abandon/abandon_old_reviews.sh'
+    trigger: 'H 1 * * *'
+
+    jobs:
+      - '{name}'
