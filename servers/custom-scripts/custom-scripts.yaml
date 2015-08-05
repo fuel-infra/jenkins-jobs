@@ -11,6 +11,10 @@
       - heavy-job:
           weight: 1
     parameters:
+      - label:
+         name: LABEL_SERVER
+         default: '{label_server}'
+         description: 'Label of the slave to run the script'
       - string:
          name: CONFIG_DIR
          default: '{config_dir}'
@@ -23,10 +27,10 @@
          name: DOCKER_IMAGE
          default: '{docker_image}'
          description: 'Name of the docker image to run'
-      - label:
-         name: LABEL_SERVER
-         default: '{label_server}'
-         description: 'Label of the slave to run the script'
+      - string:
+         name: MODE
+         default: '{mode}'
+         description: 'Mode to run script'
       - string:
          name: SCRIPT_PATH
          default: '{script_path}'
@@ -37,11 +41,11 @@
          description: 'Link to a repository with scripts'
     publishers:
       - email:
-          recipients: 'anikitin@mirantis.com'
+          recipients: '{recipients}'
     scm:
       - git:
          url: '{repository}'
-         credentials-id: 19476714-1555-42f7-b52f-79ec17070f9d
+         credentials-id: '{credentials}'
          branches:
             - origin/master
     triggers:
@@ -49,12 +53,15 @@
 
 - project:
     name: 'hello-world'
+    credentials: '19476714-1555-42f7-b52f-79ec17070f9d'
     config_dir: '/etc/custom_scripts'
     config_name: 'foo_bar.config'
     days: 90
     docker_image: 'python-jenkins-14-04'
     label_server: 'custom-scripts'
+    mode: ''
     num: 100
+    recipients: 'devops+alert@mirantis.com'
     repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
     script_path: 'hello-world/hello-world.py'
     trigger: 'H */1 * * *'
@@ -63,13 +70,16 @@
       - '{name}'
 
 - project:
-    name: 'abandon-old-review'
+    name: 'requests-abandon'
+    credentials: '19476714-1555-42f7-b52f-79ec17070f9d'
     config_dir: '/etc/custom_scripts'
     config_name: 'id_rsa'
     days: 90
     docker_image: 'python-jenkins-14-04'
     label_server: 'custom-scripts'
+    mode: 'dry-run'
     num: 100
+    recipients: 'devops+alert@mirantis.com'
     repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
     script_path: 'requests-abandon/abandon_old_reviews.sh'
     trigger: 'H 1 * * *'

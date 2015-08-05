@@ -13,4 +13,4 @@ fi
 
 docker run -v "${WORKSPACE}:/opt/${JOB_NAME}" \
            -v "${CONFIG_DIR}"/"${CONFIG_NAME}:${CONFIG_DIR}"/"${CONFIG_NAME}" \
-              "${DOCKER_IMAGE}" /bin/bash -xc "$COMMAND ; /opt/${JOB_NAME}/${SCRIPT_PATH}"
+              "${DOCKER_IMAGE}" /bin/bash -xc "$COMMAND ; /opt/${JOB_NAME}/${SCRIPT_PATH} ${MODE}"
