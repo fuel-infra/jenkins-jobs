@@ -1,0 +1,34 @@
+- project:
+    name: build
+    email_to: ''
+    tag: 'refs/tags/1.0.0'
+    plugin_name:
+      - calico:
+          plugin_repo: fuel-plugin-calico
+      - contrail:
+          plugin_repo: fuel-plugin-contrail
+      - vpnass:
+          plugin_repo: fuel-plugin-neutron-vpnaas
+      - fwaas:
+          plugin_repo: fuel-plugin-neutron-fwaas
+      - lma:
+          plugin_repo: fuel-plugin-lma-collector
+          tag: 'refs/tags/0.7.1'
+      - influxdb:
+          plugin_repo: fuel-plugin-influxdb-grafana
+          tag: 'refs/tags/0.7.1'
+      - eskibana:
+          plugin_repo: fuel-plugin-elasticsearch-kibana
+          tag: 'refs/tags/0.7.1'
+      - zabbix:
+          plugin_repo: fuel-plugin-external-zabbix
+          tag: 'refs/tags/1.0.0-0'
+      - emc:
+          plugin_repo: fuel-plugin-external-emc
+          tag: 'refs/tags/1.0.0'
+      - dvs:
+          plugin_repo: fuel-plugin-vmware-dvs
+          email_to: 'igajsin@mirantis.com'
+    jobs:
+      - 'fuel-plugin.{plugin_name}.build'
+      - 'fuel-plugin.{plugin_name}.tag'
