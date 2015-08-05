@@ -1,0 +1,59 @@
+- job:
+    name: build-fuel-specs
+    builders:
+      - shell:
+          !include-raw './builders/build-fuel-specs.sh'
+    description: |
+      Build fuel-specs for all branches and publish them to <a
+      href="http://specs.fuel-infra.org">specs.fuel-infra.org</a>
+      <p>Work In Progress
+      <p>Contacts: #fuel-devops
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 100
+    node: docs
+    concurrent: false
+    parameters:
+      - string:
+          name: GERRIT_BRANCH
+          default: 'master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          url: 'https://git.openstack.org/stackforge/fuel-specs.git'
+          branches:
+            - 'origin/$GERRIT_BRANCH'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'stackforge/fuel-specs'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          silent: true
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+    publishers:
+      - html-publisher:
+          name: 'Fuel specs build results'
+          dir: '_build/html'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+      - description-setter:
+          regexp: 'Description string: (.*)'
+          regexp-for-failed: 'Description string: (.*)'
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'devops+alert@mirantis.com'
+          send-to-individuals: false
