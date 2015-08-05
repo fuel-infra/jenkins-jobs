@@ -1,11 +1,11 @@
 - job:
-    name: 'master.fuel-library.pkgs.ubuntu.ha_neutron_vlan'
+    name: 'master.fuel-library.pkgs.ubuntu.neutron_vlan_ha'
     builders:
       - inject: # default env variables
           properties-content: |
             DISTRIBUTION=ubuntu
             OPENSTACK_RELEASE=ubuntu
-            TEST_GROUP=ha_neutron_vlan
+            TEST_GROUP=neutron_vlan_ha
             BRANCH=master
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
       - inject: # overrides
