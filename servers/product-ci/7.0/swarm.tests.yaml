@@ -34,11 +34,6 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'thread_3'
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'thread_4'
-         properties: |
-           SLAVE_NODE_MEMORY=2560
-         timeout: '600'
-     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'thread_7'
          properties: |
            MULTIPLE_NETWORKS=true
@@ -69,6 +64,12 @@
          testgroup: 'offloading'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_tun'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_public'
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive'
