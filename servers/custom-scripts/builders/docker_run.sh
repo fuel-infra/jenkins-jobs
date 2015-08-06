@@ -2,15 +2,17 @@
 
 set -ex
 
+JOB_HOST_PATH="${WORKSPACE}/${JOB_NAME}"
+JOB_DOCKER_PATH="/opt/${JOB_NAME}"
+
 COMMAND='true'
-if [[ -f "/opt/${JOB_NAME}/requirements-deb.txt" ]] ; then
-  COMMAND="$COMMAND ; apt-get install -y $(cat '/opt/${JOB_NAME}/requirements-deb.txt' | xargs)"
+if [[ -f "${JOB_HOST_PATH}/requirements-deb.txt" ]] ; then
+  COMMAND="${COMMAND} ; apt-get install -y $(xargs < "${JOB_HOST_PATH}/requirements-deb.txt")"
 fi
 
-if [[ -f "/opt/${JOB_NAME}/requirements-pip.txt" ]] ; then
-  COMMAND="$COMMAND ; pip install -r /opt/${JOB_NAME}/requirements-pip.txt"
+if [[ -f "${JOB_HOST_PATH}/requirements-pip.txt" ]] ; then
+  COMMAND="${COMMAND} ; pip install -r ${JOB_DOCKER_PATH}/requirements-pip.txt"
 fi
 
-docker run -v "${WORKSPACE}:/opt/${JOB_NAME}" \
-           -v "${CONFIG_DIR}"/"${CONFIG_NAME}:${CONFIG_DIR}"/"${CONFIG_NAME}" \
-              "${DOCKER_IMAGE}" /bin/bash -xc "$COMMAND ; /opt/${JOB_NAME}/${SCRIPT_PATH} ${MODE}"
+docker run -v "${JOB_HOST_PATH}:${JOB_DOCKER_PATH}" ${VOLUMES} \
+           -t "${DOCKER_IMAGE}" /bin/bash -exc "${COMMAND} ; /opt/${SCRIPT_PATH} ${MODE}"

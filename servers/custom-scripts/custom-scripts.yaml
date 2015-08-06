@@ -3,7 +3,7 @@
     builders:
       - shell:
           !include-raw-escape builders/docker_run.sh
-    description: 'Test job to run custom Python scripts'
+    description: '{description}'
     logrotate:
       daysToKeep: '{days}'
       numToKeep: '{num}'
@@ -15,14 +15,6 @@
          name: LABEL_SERVER
          default: '{label_server}'
          description: 'Label of the slave to run the script'
-      - string:
-         name: CONFIG_DIR
-         default: '{config_dir}'
-         description: 'Path to directory with credentials'
-      - string:
-         name: CONFIG_NAME
-         default: '{config_name}'
-         description: 'Name of the file with credentials'
       - string:
          name: DOCKER_IMAGE
          default: '{docker_image}'
@@ -39,6 +31,10 @@
          name: REPOSITORY
          default: '{repository}'
          description: 'Link to a repository with scripts'
+      - string:
+         name: VOLUMES
+         default: '{volumes}'
+         description: 'Volumes to mount into container'
     publishers:
       - email:
           recipients: '{recipients}'
@@ -54,9 +50,8 @@
 - project:
     name: 'hello-world'
     credentials: '19476714-1555-42f7-b52f-79ec17070f9d'
-    config_dir: '/etc/custom_scripts'
-    config_name: 'foo_bar.config'
     days: 90
+    description: 'The job to run hello-world.py script'
     docker_image: 'python-jenkins-14-04'
     label_server: 'custom-scripts'
     mode: ''
@@ -65,6 +60,7 @@
     repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
     script_path: 'hello-world/hello-world.py'
     trigger: 'H */1 * * *'
+    volumes: '-v /etc/custom_scripts/foo_bar.config:/etc/custom_scripts/foo_bar.config'
 
     jobs:
       - '{name}'
@@ -72,9 +68,8 @@
 - project:
     name: 'requests-abandon'
     credentials: '19476714-1555-42f7-b52f-79ec17070f9d'
-    config_dir: '/etc/custom_scripts'
-    config_name: 'id_rsa'
     days: 90
+    description: 'The job to run the script which abandon old request on review.openstack.org'
     docker_image: 'python-jenkins-14-04'
     label_server: 'custom-scripts'
     mode: 'dry-run'
@@ -82,7 +77,8 @@
     recipients: 'devops+alert@mirantis.com'
     repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
     script_path: 'requests-abandon/abandon_old_reviews.sh'
-    trigger: 'H 1 * * *'
+    trigger: 'H 1 * * 2'
+    volumes: '-v /etc/custom_scripts/id_rsa:/etc/custom_scripts/id_rsa -v /home/jenkins/.ssh/known_hosts:/root/.ssh/known_hosts'
 
     jobs:
       - '{name}'
