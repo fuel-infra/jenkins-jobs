@@ -1,0 +1,20 @@
+<p>Creates snapshot of repositories produced by build system<b>DISTRO</b></p>
+
+<ol>
+    <li>get specified snapshot (<b>SNAPSHOT_TIMESTAMP</b>) from nearest location (from <b>LOCATIONS</b>)</li>
+    <li>if <b>DISTRO</b>=="centos-6"
+        <ul>
+          <li>build second-level artifacts by triggering <a href="https://patching-ci.infra.mirantis.net/job/6.1-build.late.artifacts"/>
+            6.1-build.late.artifacts job
+          </a></li>
+            <li>push artifacts downloaded from artifacts.txt file into proposed repo on snapshot created on step 1</li>
+            <li>rebuild proposed repo (update repo metadata)</li>
+        </ul>
+    </li>
+    <li>sync updated local snapshot to all of the LOCATIONS as new one</li>
+  <b>Docs:</b> <a href="https://docs.google.com/document/d/1r8YqK4HJfVQULxgqGC7tjhAjEDiwznS2Cbsk1yLb9F4">MOS Patching in a Nutshell</a>.
+<p>
+  <b>Ownership:</b> Issues with this job are tracked by Infra team.
+<p>
+  <b>Contacts:</b> #infra, Vladimir Kuklin, Vitaly Sedelnik
+</ol>
