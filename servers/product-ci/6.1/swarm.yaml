@@ -52,7 +52,8 @@
 - job:
     name: '6.1.swarm.runner'
     project-type: multijob
-    description: 'Run all system tests'
+    description:
+      !include-raw descriptions/6.1_swarm_description.html
     concurrent: false
     node: 'runner'
     properties:
