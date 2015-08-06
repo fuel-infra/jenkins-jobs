@@ -60,16 +60,13 @@
     rpm-security-repo-path-env: 'mos-repos/centos/mos7.0-centos7/security'
     rpm-holdback-repo-path-env: 'mos-repos/centos/mos7.0-centos7/holdback'
     # deb environment
+    deb-origin: 'Mirantis'
     deb-dist-env: 'trusty'
-    deb-base-repo-path: 'mos-repos/ubuntu'
+    deb-base-repo-path: 'mos-repos/ubuntu/7.0'
     deb-base-dist-name: 'mos7.0'
-    deb-proposed-repo-path: ''
     deb-proposed-dist-name: 'mos7.0-proposed'
-    deb-updates-repo-path: ''
     deb-updates-dist-name: 'mos7.0-updates'
-    deb-security-repo-path: ''
     deb-security-dist-name: 'mos7.0-security'
-    deb-holdback-repo-path: ''
     deb-holdback-dist-name: 'mos7.0-holdback'
     ##################################
     is-updates: ''

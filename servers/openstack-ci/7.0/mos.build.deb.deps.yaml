@@ -18,15 +18,12 @@
             DISPLAY_NAME=Build deb package on primary repository
             REQUEST_TYPE=Trusty
             # New scheme
+            ORIGIN={deb-origin}
             DEB_REPO_PATH={deb-base-repo-path}
             DEB_DIST_NAME={deb-base-dist-name}
-            DEB_PROPOSED_REPO_PATH={deb-proposed-repo-path}
             DEB_PROPOSED_DIST_NAME={deb-proposed-dist-name}
-            DEB_UPDATES_REPO_PATH={deb-updates-repo-path}
             DEB_UPDATES_DIST_NAME={deb-updates-dist-name}
-            DEB_SECURITY_REPO_PATH={deb-security-repo-path}
             DEB_SECURITY_DIST_NAME={deb-security-dist-name}
-            DEB_HOLDBACK_REPO_PATH={deb-holdback-repo-path}
             DEB_HOLDBACK_DIST_NAME={deb-holdback-dist-name}
             # Old scheme
             #REPO_REQUEST_PATH_PREFIX=osci/review/
@@ -101,17 +98,14 @@
                   property-file: buildresult.params
                   predefined-parameters: |
                       DIST=${{DIST}}
+                      ORIGIN=${{ORIGIN}}
                       REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
                       REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
                       DEB_REPO_PATH=${{DEB_REPO_PATH}}
                       DEB_DIST_NAME=${{DEB_DIST_NAME}}
-                      DEB_PROPOSED_REPO_PATH=${{DEB_PROPOSED_REPO_PATH}}
                       DEB_PROPOSED_DIST_NAME=${{DEB_PROPOSED_DIST_NAME}}
-                      DEB_UPDATES_REPO_PATH=${{DEB_UPDATES_REPO_PATH}}
                       DEB_UPDATES_DIST_NAME=${{DEB_UPDATES_DIST_NAME}}
-                      DEB_SECURITY_REPO_PATH=${{DEB_SECURITY_REPO_PATH}}
                       DEB_SECURITY_DIST_NAME=${{DEB_SECURITY_DIST_NAME}}
-                      DEB_HOLDBACK_REPO_PATH=${{DEB_HOLDBACK_REPO_PATH}}
                       DEB_HOLDBACK_DIST_NAME=${{DEB_HOLDBACK_DIST_NAME}}
                   block: true
              - copyartifact:
@@ -130,14 +124,14 @@
     publishers:
       - pkgname-as-desc
       - post-tasks:
-          - matches:
-             - log-text: Building
-               operator: AND
-            script:
-               !include-raw-escape builders/ci.status.report.stop.sh
+         - matches:
+            - log-text: Building
+              operator: AND
+           script:
+              !include-raw-escape builders/ci.status.report.stop.sh
       - archive:
-           artifacts: '**/buildlog.txt, **/buildresult.xml'
-           allow-empty: true
+          artifacts: '**/buildlog.txt, **/buildresult.xml'
+          allow-empty: true
       - email:
           recipients: '{mailto}'
           notify-every-unstable-build: false
