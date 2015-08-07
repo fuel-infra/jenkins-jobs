@@ -22,7 +22,9 @@
             final buildNumber = currentBuild.getNumber()
             job.builds
                 .findAll { build -> build.number == buildNumber }
-                .each { build ->  build.setDescription("<iframe width="100%" height="600px" frameborder='0' src='http://jenkins-product.srt.mirantis.net:8080/view/7.0_swarm/job/7.0.swarm.statistic/lastSuccessfulBuild/artifact/logs/bugs_link_stat.html'</iframe>")  }
+                .each { build ->  build.setDescription("""
+                  <iframe width="100%" height="600px" frameborder='0' src='http://jenkins-product.srt.mirantis.net:8080/view/7.0_swarm/job/7.0.swarm.statistic/lastSuccessfulBuild/artifact/logs/bugs_link_stat.html'</iframe>
+                 """)  }
 
     node: testrail
     publishers:
