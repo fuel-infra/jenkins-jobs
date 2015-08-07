@@ -1,5 +1,6 @@
 - job:
     name: '7.0.swarm.statistic'
+    description: <iframe width="100%" height="600px" frameborder='0' src='http://jenkins-product.srt.mirantis.net:8080/view/7.0_swarm/job/7.0.swarm.statistic/lastSuccessfulBuild/artifact/logs/bugs_link_stat.html'</iframe>'
     builders:
       - inject:
            properties-content: |
@@ -10,34 +11,10 @@
              BUG_STATISTIC=true
       - shell:
           !include-raw builders/test-reports-Testrail.sh
-      - system-groovy:
-          command: |
-            import hudson.model.Cause
-            import hudson.model.Job
-            import jenkins.model.Jenkins
-            final JOB_NAME = '7.0.swarm.statistic'
-            final jenkins = Jenkins.instance
-            final job = jenkins.getItemByFullName(JOB_NAME, Job.class)
-            final currentBuild = Thread.currentThread().executable
-            final buildNumber = currentBuild.getNumber()
-            job.builds
-                .findAll { build -> build.number == buildNumber }
-                .each { build ->  build.setDescription("""
-                  <iframe width="100%" height="600px" frameborder='0' src='http://jenkins-product.srt.mirantis.net:8080/view/7.0_swarm/job/7.0.swarm.statistic/lastSuccessfulBuild/artifact/logs/bugs_link_stat.html'</iframe>
-                 """)  }
-
     node: testrail
-    publishers:
-      - archive:
-          allow-empty: false
-          artifacts: logs/bugs_link_stat.html
-          latest-only: false
-
-      - email:
-          recipients: ishamrai@mirantis.com, devops+alert@mirantis.com
 
     triggers:
-      - timed: '30 0 * * *'
+      - timed: '30 20 * * *'
 
     scm:
      - main-git:
@@ -45,14 +22,20 @@
           repobranch: 'origin/master'
           basedir: ''
 
-
     wrappers:
      - inject-passwords:
           global: true
           mask-password-params: true
 
     publishers:
+      - archive:
+          allow-empty: true
+          artifacts: bugs_link_stat.html
+          latest-only: false
+
+      - email:
+          recipients: ishamrai@mirantis.com, devops+alert@mirantis.com
+
       - description-setter:
           regexp: '^.*Report URL:\s*(.*)'
           description: '<a href="\1">TestRail Report URL</a>'
-
