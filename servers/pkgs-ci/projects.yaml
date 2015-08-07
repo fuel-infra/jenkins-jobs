@@ -23,6 +23,7 @@
       - 'pkg-build-{mos_version}-{pkg_type}'
       - 'pkg-install-{mos_version}-{pkg_type}'
       - 'systest-deb'
+      - 'pkg-gate-{mos_version}-{pkg_type}'
 
 - project:
     name: 'pkg-mos-deb'
