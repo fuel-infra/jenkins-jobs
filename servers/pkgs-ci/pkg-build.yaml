@@ -87,13 +87,13 @@
           IFS=${{OLDIFS}}
 
           # Set parameters to Zuul values
-          GERRIT_PROJECT=${{ZUUL_PROJECT}}
-          GERRIT_BRANCH=${{ZUUL_BRANCH}}
+          GERRIT_PROJECT=${{CHANGES[0]}}
+          GERRIT_BRANCH=${{CHANGES[1]}}
           GERRIT_REFSPEC=${{CHANGES[2]}}
-          GERRIT_CHANGE_NUMBER=${{ZUUL_CHANGE}}
+          GERRIT_CHANGE_NUMBER=${{ZUUL_CHANGE_IDS%,*}}
 
-          PROJECT_GROUP=${{ZUUL_PROJECT%%/*}}
-          SRC_PROJECT_PATH=${{ZUUL_PROJECT%/*}}
+          PROJECT_GROUP=${{GERRIT_PROJECT%%/*}}
+          SRC_PROJECT_PATH=${{GERRIT_PROJECT%/*}}
 
           IS_OPENSTACK=false
           COMPONENT_PATH=fuel/
@@ -111,7 +111,7 @@
           fi
 
           PROJECT_NAME=mos
-          PROJECT_VERSION=${{ZUUL_BRANCH#*/fuel-}}
+          PROJECT_VERSION=${{GERRIT_BRANCH#*/fuel-}}
           PROJECT_VERSION=${{PROJECT_VERSION%%/*}}
 
           # Set default version for master branch
@@ -143,7 +143,7 @@
       - copyartifact:
             project: '{mos_version}.mos-new.publisher'
             filter: '{pkg_type}.publish.setenvfile'
-            parameter-filters: 'ZUUL_CHANGES=${{ZUUL_CHANGES}}'
+            parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
             which-build: 'last-completed'
       - shell: |
             #!/bin/bash -ex
@@ -165,13 +165,13 @@
               - copyartifact:
                     project: 'pkg-install-{mos_version}-{pkg_type}'
                     filter: 'ci_status_params'
-                    parameter-filters: 'ZUUL_CHANGES=${{ZUUL_CHANGES}}'
+                    parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
                     which-build: 'last-completed'
               - shell: |
                     #!/bin/bash -ex
                     # Fail stage if packages are not installed
                     [ -f "ci_status_params" ] && source ci_status_params
-                    ${{FAILED}} && exit 1
+                    ${{FAILED}} && exit 1 || exit 0
               - trigger-builds:
                   - project: 'systest-{pkg_type}'
                     current-parameters: true
@@ -188,6 +188,67 @@
           artifacts: 'buildresult.params, setenvfile, {pkg_type}.publish.setenvfile'
           allow-empty: True
 
+    node: 'packtest'
+
+- job-template:
+    name: 'pkg-gate-{mos_version}-{pkg_type}'
+    wrappers:
+      - timestamps
+      - ansicolor
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+
+          ############################
+          # Prepare parameters for slave jobs
+          ############################
+
+          declare -a CHANGE_IDS
+          declare -a CHANGES
+
+          # Array of chande IDs
+          CHANGE_IDS=( ${{ZUUL_CHANGE_IDS}} )
+
+          # Array of changes (project:branch:refspec)
+          # Save input field separator
+          OLDIFS=${{IFS}}
+
+          # Split change info
+          IFS="^"
+          CHANGES=( ${{ZUUL_CHANGES}} )
+
+          # Restore input field separator
+          IFS=${{OLDIFS}}
+
+          # Create parameter files
+          for i in ${{!CHANGE_IDS[*]}}; do
+          cat > build-param-${{CHANGE_IDS[${{i}}]}}.setenvfile <<EOF
+          ZUUL_CHANGE_IDS=${{CHANGE_IDS[${{i}}]}}
+          ZUUL_CHANGES=${{CHANGES[${{i}}]}}
+          LAST_STAGE=false
+          TEST_INSTALL=false
+          EOF
+          done
+
+      - trigger-builds:
+          - project: 'pkg-build-{mos_version}-{pkg_type}'
+            current-parameters: true
+            block: true
+            same-node: true
+            parameter-factories:
+              - factory: filebuild
+                file-pattern: 'build-param-*.setenvfile'
+                no-files-found-action: FAIL
+      - copyartifact:
+            project: 'pkg-build-{mos_version}-{pkg_type}'
+            filter: '{pkg_type}.publish.setenvfile'
+            parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
+            which-build: 'last-completed'
+
+    publishers:
+      - archive:
+          artifacts: 'build-param-*.setenvfile'
+          allow-empty: True
     node: 'packtest'
 
 ################################################################################
