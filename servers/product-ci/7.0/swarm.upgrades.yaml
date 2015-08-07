@@ -15,7 +15,7 @@
     weight: '8'
     jobs:
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
-          testgroup: 'ceph_ha_one_controller'
+          testgroup: 'ceph_ha_one_controller_compact'
           upgrade_testgroup:
             - 'upgrade_one_controller'
 
