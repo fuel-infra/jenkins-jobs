@@ -1,0 +1,195 @@
+################################################################################
+# Job Templates
+################################################################################
+
+- job-template:
+    name: 'pkg-build-{mos_version}-{pkg_type}'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-branch}'
+    wrappers:
+      - ci-build-creds
+      - timeout:
+          timeout: 300
+      - timestamps
+      - ansicolor
+#    triggers:
+#      - zuul
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+
+          ############################
+          # Global parameters
+          ############################
+
+          export DIST="{distro}"
+          export DISTRO_PATH="{distro}/"
+          export SPEC_PREFIX_PATH="{spec_path_prefix}"
+
+          # Gerrit parameters
+          export GERRIT_HOST='{gerrit-host}'
+
+          # Parameters for package specs
+          export SPEC_PROJECT_SUFFIX='-build'
+
+          # Publishing repository parameters
+          export REMOTE_REPO_HOST='{repo-host}'
+          export REPO_REQUEST_PATH_PREFIX=review/
+
+          # New scheme
+          export ORIGIN=Mirantis
+          DEB_REPO_PATH=mos-repos/ubuntu
+          if ${{LAST_STAGE}}; then
+              DEB_REPO_PATH="${{DEB_REPO_PATH}}/{mos_version}"
+          fi
+          export DEB_REPO_PATH
+          export DEB_DIST_NAME=mos{mos_version}
+          export DEB_PROPOSED_REPO_PATH=
+          export DEB_PROPOSED_DIST_NAME=mos{mos_version}-proposed
+          export DEB_UPDATES_REPO_PATH=
+          export DEB_UPDATES_DIST_NAME=mos{mos_version}-updates
+          export DEB_SECURITY_REPO_PATH=
+          export DEB_SECURITY_DIST_NAME=mos{mos_version}-security
+          export DEB_HOLDBACK_REPO_PATH=
+          export DEB_HOLDBACK_DIST_NAME=mos{mos_version}-holdback
+
+          # New scheme for rpm
+          export RPM_OS_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/os
+          export RPM_PROPOSED_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/proposed
+          export RPM_UPDATES_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/updates
+          export RPM_SECURITY_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/security
+          export RPM_HOLDBACK_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/holdback
+
+          # Old scheme
+          #export REPO_REQUEST_PATH_PREFIX='osci/review/'
+          #export REPO_PATH_PREFIX='osci/'
+          #export BASE_PATH='{base-path}'
+          #export UPDATES_PATH='{updates-path}'
+          #export SECURITY_PATH='{security-path}'
+
+          ############################
+          # Zuul parameters
+          ############################
+
+          # Save input field separator
+          OLDIFS=${{IFS}}
+
+          # Split change info
+          IFS=":"
+          CHANGES=( ${{ZUUL_CHANGES}} )
+
+          # Restore input field separator
+          IFS=${{OLDIFS}}
+
+          # Set parameters to Zuul values
+          GERRIT_PROJECT=${{ZUUL_PROJECT}}
+          GERRIT_BRANCH=${{ZUUL_BRANCH}}
+          GERRIT_REFSPEC=${{CHANGES[2]}}
+          GERRIT_CHANGE_NUMBER=${{ZUUL_CHANGE}}
+
+          PROJECT_GROUP=${{ZUUL_PROJECT%%/*}}
+          SRC_PROJECT_PATH=${{ZUUL_PROJECT%/*}}
+
+          IS_OPENSTACK=false
+          COMPONENT_PATH=fuel/
+
+          if [ "${{PROJECT_GROUP}}" = "openstack" ]; then
+              IS_OPENSTACK=true
+              SPEC_PROJECT_PATH=${{PROJECT_GROUP}}${{SPEC_PROJECT_SUFFIX}}
+              COMPONENT_PATH=cluster/
+          fi
+          if [ "${{PROJECT_GROUP}}" = "openstack${{SPEC_PROJECT_SUFFIX}}" ]; then
+              IS_OPENSTACK=true
+              SRC_PROJECT_PATH=${{PROJECT_GROUP%-*}}
+              SPEC_PROJECT_PATH=${{PROJECT_GROUP}}
+              COMPONENT_PATH=cluster/
+          fi
+
+          PROJECT_NAME=mos
+          PROJECT_VERSION=${{ZUUL_BRANCH#*/fuel-}}
+          PROJECT_VERSION=${{PROJECT_VERSION%%/*}}
+
+          # Set default version for master branch
+          test "${{PROJECT_VERSION}}" = "master" && PROJECT_VERSION="7.0"
+
+          # Project info
+          export PROJECT_NAME PROJECT_VERSION
+
+          # Openstack project?
+          export IS_OPENSTACK COMPONENT_PATH
+
+          # Change info
+          export GERRIT_PROJECT GERRIT_BRANCH GERRIT_REFSPEC GERRIT_CHANGE_NUMBER
+
+          # Project groups/paths
+          export SRC_PROJECT_PATH SPEC_PROJECT_PATH
+
+          ############################
+          # Build package
+          ############################
+
+          bash build-{pkg_type}.sh
+
+      - trigger-builds:
+          - project: '{mos_version}.mos-new.publisher'
+            current-parameters: true
+            property-file: buildresult.params
+            block: true
+      - copyartifact:
+            project: '{mos_version}.mos-new.publisher'
+            filter: '{pkg_type}.publish.setenvfile'
+            parameter-filters: 'ZUUL_CHANGES=${{ZUUL_CHANGES}}'
+            which-build: 'last-completed'
+      - shell: |
+            #!/bin/bash -ex
+            # Fail stage if packages are not published
+            [ -f "{pkg_type}.publish.setenvfile" ] && source {pkg_type}.publish.setenvfile
+            VAR="$(echo {pkg_type} | tr [[:lower:]] [[:upper:]])_PUBLISH_SUCCEEDED"
+            eval \${{${{VAR}}:-false}} || exit 1
+      - conditional-step:
+            condition-kind: boolean-expression
+            condition-expression: ${{TEST_INSTALL}}
+            on-evaluation-failure: dont-run
+            steps:
+              - trigger-builds:
+                  - project: 'pkg-install-{mos_version}-{pkg_type}'
+                    current-parameters: true
+                    property-file: 'buildresult.params,tests.envfile,{pkg_type}.publish.setenvfile'
+                    property-file-fail-on-missing: false
+                    block: true
+              - copyartifact:
+                    project: 'pkg-install-{mos_version}-{pkg_type}'
+                    filter: 'ci_status_params'
+                    parameter-filters: 'ZUUL_CHANGES=${{ZUUL_CHANGES}}'
+                    which-build: 'last-completed'
+              - shell: |
+                    #!/bin/bash -ex
+                    # Fail stage if packages are not installed
+                    [ -f "ci_status_params" ] && source ci_status_params
+                    ${{FAILED}} && exit 1
+              - trigger-builds:
+                  - project: 'systest-{pkg_type}'
+                    current-parameters: true
+                    property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
+                    property-file-fail-on-missing: false
+                    predefined-parameters: |
+                        DEB_REPO_URL=${{DEB_REPO_URL}}
+                        RPM_REPO_URL=${{RPM_REPO_URL}}
+                        ISO_JOB_NAME={mos_version}.test_all
+    publishers:
+#      - junit:
+#          results: 'buildresult.xml'
+      - archive:
+          artifacts: 'buildresult.params, setenvfile, {pkg_type}.publish.setenvfile'
+          allow-empty: True
+
+    node: 'packtest'
+
+################################################################################
+# Job Groups
+################################################################################

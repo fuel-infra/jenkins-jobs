@@ -1,69 +1,59 @@
 ########################################################################
+# Section: Builders
+########################################################################
+
+########################################################################
 # Section: Wrappers
 ########################################################################
-# example
-#
-#- wrapper:
-#    name: openstack-ci-jenkins
-#    wrappers:
-#      - ssh-agent-credentials:
-#          users:
-#            - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+
+- wrapper:
+    name: build-timeout
+    wrappers:
+      - timeout:
+          timeout: '{timeout}'
+          timeout-var: 'BUILD_TIMEOUT'
+          fail: True
+
+- wrapper:
+    name: ci-build-creds
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - 'e2e0bcb0-ea5d-4932-89ed-4d0e5bc67a4f'
+
+- wrapper:
+    name: install-vm-creds
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '4cb87479-0917-4c76-8e73-0c20fee978b9'
+            - '2d1ef905-1a97-464b-918b-4025b7a535ea'
+
 ########################################################################
 # Section: Triggers
 ########################################################################
-# example
-#
-#- trigger:
-#    name: fuel-infra-deps-submit
-#    triggers:
-#      - gerrit:
-#          trigger-on:
-#            - change-merged-event
-#          projects:
-#            - project-compare-type: 'ANT'
-#              project-pattern: '{code-project}'
-#              branches:
-#                - branch-compare-type: 'PLAIN'
-#                  branch-pattern: '{branch}'
-#          server-name: fuel-infra
-#          silent: true
-#
+
 ########################################################################
 # Section: SCM
 ########################################################################
-# example
-#
-#- scm:
-#    name: fuel-infra
-#    scm:
-#      - git:
-#          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/{scm-repo}.git'
-#          basedir: '{scm-basedir}'
-#          credentials-id: '{scm-credentials-id}'
-#          skip-tag: true
-#          branches:
-#            - '{scm-branch}'
-#          wipe-workspace: false
-#
+
+- scm:
+    name: fuel-infra
+    scm:
+      - git:
+          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/{scm-repo}.git'
+          basedir: '{scm-basedir}'
+          credentials-id: '{scm-credentials-id}'
+          skip-tag: True
+          branches:
+            - '{scm-branch}'
+          browser: gitweb
+          browser-url: https://review.fuel-infra.org/gitweb?p={scm-repo}.git
+
 ########################################################################
-## Section: Parameters
+# Section: Parameters
 ########################################################################
-# example
-#
-#- parameter:
-#    name: openstack-build-master
-#    parameters:
-#      - string:
-#          name: URL
-#          default: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/'
-#      - string:
-#          name: PRJPREFIX
-#          default: '{prjprefix}'
-#      - string:
-#          name: PROJECTNAME
-#          default: '{prjprefix}fuel-{version-id}'
-#      - bool:
-#          name: LAST_STAGE
-#          default: '{last_stage}'
-#
+
+########################################################################
+# Section: Publushers
+########################################################################

@@ -1,0 +1,44 @@
+#
+# Project definitions
+#
+
+- common_template: &common_template
+    name: ''
+    gerrit-host: 'review.fuel-infra.org'
+
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    base-path: 'base/'
+    updates-path: 'updates/'
+    security-path: 'security/'
+
+    scm-user: 'openstack-ci-jenkins'
+    scm-credentials-id: 'e2e0bcb0-ea5d-4932-89ed-4d0e5bc67a4f'
+    scm-repo: 'infra/obs'
+    scm-branch: 'feature/new-build-system'
+    scm-basedir: ''
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'origin/master'
+
+    jobs:
+      - 'pkg-build-{mos_version}-{pkg_type}'
+      - 'pkg-install-{mos_version}-{pkg_type}'
+      - 'systest-deb'
+
+- project:
+    name: 'pkg-mos-deb'
+    pkg_type: 'deb'
+    mos_version:
+      - '7.0':
+          distro: 'trusty'
+          spec_path_prefix: '/trusty'
+    <<: *common_template
+
+- project:
+    name: 'pkg-mos-rpm'
+    pkg_type: 'rpm'
+    mos_version:
+      - '7.0':
+          distro: 'centos6'
+          spec_path_prefix: '/rpm'
+    <<: *common_template
+

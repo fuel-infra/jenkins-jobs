@@ -1,0 +1,54 @@
+- job:
+    name: 'systest-rpm'
+    disabled: true
+    builders:
+      - shell:
+          !include-raw builders/system_test_ubuntu.sh
+    concurrent: true
+    description:
+      !include-raw descriptions/systest-rpm
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    properties:
+      - heavy-job:
+          weight: 8
+    parameters:
+      - string:
+          name: MAGNET_LINK
+      - string:
+          name: TEST_GROUP
+          default: 'bvt_1'
+      - string:
+          name: OPENSTACK_RELEASE
+          default: 'CentOS'
+      - string:
+          name: ENV_PREFIX
+          default: 7.0.centos.bvt_1
+          description: Define env prefix name. This parameter should not be changed
+    scm:
+      - git:
+          url: 'https://git.openstack.org/stackforge/fuel-qa.git'
+          branches:
+            - 'origin/master'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 210
+      - timestamps
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml,logs/*'
+          latest-only: false
+      - logparser:
+          parse-rules: '/var/lib/jenkins/fuellib.parser'
+          unstable-on-warning: false
+          fail-on-error: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+
+    node: 'packtest'
