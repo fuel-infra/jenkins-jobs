@@ -20,12 +20,12 @@ export ARTS_DIR=${WORKSPACE}/artifacts
 rm -rf ${ARTS_DIR}
 
 ######## Get stable ubuntu mirror from snapshot ###############
-LATEST_MIRROR_ID=$(curl -s http://osci-mirror-msk.msk.mirantis.net/mos-repos/7.0.target.txt | head -1)
-export MIRROR_UBUNTU_ROOT="/mos-repos/${LATEST_MIRROR_ID}/cluster/base/trusty"
-LATEST_SUITE=$(curl -s http://osci-mirror-msk.msk.mirantis.net/mos-repos/ubuntu/dists/mos7.0.target.txt | head -1)
-export MIRROR_MOS_UBUNTU_SUITE="${LATEST_SUITE}"
+# Since we are building 7.All.iso in MSK let' hardcode this
+LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+LATEST_TARGET=$(curl -s "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | head -1)
+export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
 
-echo "Using mirror: ${USE_MIRROR} with ${MIRROR_UBUNTU_ROOT}"
+echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
 
 #########################################
 

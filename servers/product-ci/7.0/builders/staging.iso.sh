@@ -19,6 +19,13 @@ rm -rf "${ARTS_DIR}"
 
 rm -f "${WORKSPACE}/version.yaml"
 
+
+# (skulanov) FIXME: We DON'T have MIRROR_BASE in make 7.0
+# so this value must be replaced by MIRROR_CENTOS, which is
+# actually MIRROR_CENTOS=${MIRROR_BASE}/centos.
+# MIRROR_BASE comes from upstream job we don't need to unset it
+export MIRROR_CENTOS="${MIRROR_BASE}/centos"
+
 if [ "${USE_STABLE_MOS_FOR_STAGING}" = "true" ]; then
 
     export JENKINS_STABLE_ISO_JOB="${MIRROR}.test_all"
