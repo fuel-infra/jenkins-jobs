@@ -150,4 +150,6 @@
          testgroup: 'ready_node_reinstallation'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'error_node_reinstallation'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'bvt_ubuntu_bootstrap'
      - '{version-id}.system_test.{dist}.fuel_plugins'
