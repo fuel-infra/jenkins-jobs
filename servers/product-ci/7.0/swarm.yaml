@@ -141,6 +141,9 @@
             - name: '7.0.system_test.ubuntu.ha_neutron_destructive'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.ha_neutron_destructive_2'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.command_line'
               current-parameters: true
               kill-phase-on: NEVER
