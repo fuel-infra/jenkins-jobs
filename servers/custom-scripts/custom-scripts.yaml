@@ -49,7 +49,7 @@
 
 - project:
     name: 'hello-world'
-    credentials: '19476714-1555-42f7-b52f-79ec17070f9d'
+    credentials: '87e8f7c8-9d04-4ffa-bd9c-9ef88acffec0'
     days: 90
     description: 'The job to run hello-world.py script'
     docker_image: 'python-jenkins-14-04'
@@ -67,12 +67,12 @@
 
 - project:
     name: 'requests-abandon'
-    credentials: '19476714-1555-42f7-b52f-79ec17070f9d'
+    credentials: '87e8f7c8-9d04-4ffa-bd9c-9ef88acffec0'
     days: 90
     description: 'The job to run the script which abandon old request on review.openstack.org'
     docker_image: 'python-jenkins-14-04'
     label_server: 'custom-scripts'
-    mode: 'dry-run'
+    mode: ''
     num: 100
     recipients: 'devops+alert@mirantis.com'
     repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
