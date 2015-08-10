@@ -1,6 +1,6 @@
 - job:
     name: '7.0.swarm.statistic'
-    description: <iframe width="100%" height="600px" frameborder='0' src='http://jenkins-product.srt.mirantis.net:8080/view/7.0_swarm/job/7.0.swarm.statistic/lastSuccessfulBuild/artifact/logs/bugs_link_stat.html'</iframe>'
+    description: <iframe width="100%" height="600px" frameborder='0' src='http://jenkins-product.srt.mirantis.net:8080/view/7.0_swarm/job/7.0.swarm.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'</iframe>'
     builders:
       - inject:
            properties-content: |
