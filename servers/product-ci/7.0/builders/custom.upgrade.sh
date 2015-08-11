@@ -77,7 +77,7 @@ if [ "${USE_MIRROR}" != "none" ]; then
           LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
   esac
 
-  LATEST_TARGET=$(curl -s "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | head -1)
+  LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | head -1)
   export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
 fi
 
