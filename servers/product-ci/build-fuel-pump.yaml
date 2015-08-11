@@ -1,0 +1,30 @@
+- job:
+    name: 'build-fuel-pump'
+    builders:
+      - shell:
+          !include-raw './builders/build-fuel-pump.sh'
+    description: |
+      Build fuel pump image.
+      <p>Maintenance contacts: #converged-appliance
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: crla
+    concurrent: true
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - 'origin/master'
+          url: ssh://gerrit.mirantis.com:29418/redapt-certified-appliance/redapt-certified-appliance
+    triggers:
+      - timed: 'H 4 * * *'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
