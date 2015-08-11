@@ -101,8 +101,8 @@
       - choice:
           name: NETWORK_MODE
           choices:
-            - Nova
             - Neutron/VLAN
+            - Neutron/VXLAN
             - Neutron/GRE
           description: |
             Network mode selection will be applied only if net mode is not hard codded in the test.
