@@ -28,11 +28,11 @@ git checkout HEAD~1
 # Invoke build function
 build
 
-# Count only Warnings for later usage
-PREV_ERRORS=$(grep -c Error ${LOG_FILE} || true)
-PREV_WARNS=$(grep -ic WARNING ${LOG_FILE} || true)
+# Count Warnings and Errors for later usage
+PREV_ERRORS=$(grep -c ERROR ${LOG_FILE} || true)
+PREV_WARNS=$(grep -c WARNING ${LOG_FILE} || true)
 
-echo Number of Errors in previous commit: ${PREV_WARNS}
+echo Number of Errors in previous commit: ${PREV_ERRORS}
 echo Number of Warnings in previous commit: ${PREV_WARNS}
 
 # Now build with the latest commit
@@ -46,11 +46,11 @@ if [[ ! -d doc/_build/html ]]; then
     exit 1
 fi
 
-ERRORS=$(grep -ic ERROR ${LOG_FILE} || true)
-WARNS=$(grep -ic WARNING ${LOG_FILE} || true)
+ERRORS=$(grep -c ERROR ${LOG_FILE} || true)
+WARNS=$(grep -c WARNING ${LOG_FILE} || true)
 
-echo Number of build Warnings: ${WARNS}
-echo Number of build Errors: ${ERRORS}
+echo Number of current commit Errors: ${ERRORS}
+echo Number of current commit Warnings: ${WARNS}
 
 # If number of Warnings or Errors has increased compared to previous commit: fail the job's build
 if [[ ${ERRORS} -gt ${PREV_ERRORS} || ${WARNS} -gt ${PREV_WARNS} ]]; then
