@@ -13,7 +13,6 @@
             DIST={deb-dist-env}
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
-            # New scheme
             ORIGIN={deb-origin}
             DEB_REPO_PATH={deb-base-repo-path}
             DEB_DIST_NAME={deb-base-dist-name}
@@ -21,14 +20,6 @@
             DEB_UPDATES_DIST_NAME={deb-updates-dist-name}
             DEB_SECURITY_DIST_NAME={deb-security-dist-name}
             DEB_HOLDBACK_DIST_NAME={deb-holdback-dist-name}
-            # Old scheme
-            #REPO_PATH_PREFIX=osci/
-            #REPO_REQUEST_PATH_PREFIX=osci/review/
-            COMPONENT_PATH={component-path-cluster}
-            DISTRO_PATH={deb-dist-env}/
-            #BASE_PATH={base-path}
-            #UPDATES_PATH={updates-path}
-            #SECURITY_PATH={security-path}
     wrappers:
       - openstack-ci-jenkins
       - timeout:

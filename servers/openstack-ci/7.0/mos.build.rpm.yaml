@@ -20,20 +20,11 @@
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
             DISPLAY_NAME=Build rpm package on primary repository
             REQUEST_TYPE=Centos6
-            # New scheme
             RPM_OS_REPO_PATH={rpm-os-repo-path-env}
             RPM_PROPOSED_REPO_PATH={rpm-proposed-repo-path-env}
             RPM_UPDATES_REPO_PATH={rpm-updates-repo-path-env}
             RPM_SECURITY_REPO_PATH={rpm-security-repo-path-env}
             RPM_HOLDBACK_REPO_PATH={rpm-holdback-repo-path-env}
-            # Old scheme
-            #REPO_PATH_PREFIX=osci/
-            #REPO_REQUEST_PATH_PREFIX=osci/review/
-            COMPONENT_PATH={component-path-cluster}
-            DISTRO_PATH={rpm-dist-env}/
-            #BASE_PATH={base-path}
-            #UPDATES_PATH={updates-path}
-            #SECURITY_PATH={security-path}
     wrappers:
       - ci-build-rpm
       - timeout:
@@ -134,8 +125,8 @@
            script:
               !include-raw-escape builders/ci.status.report.stop.sh
       - archive:
-           artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
-           allow-empty: true
+          artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
+          allow-empty: true
       - email:
           recipients: '{mailto}'
           notify-every-unstable-build: false

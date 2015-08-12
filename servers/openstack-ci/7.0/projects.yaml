@@ -37,14 +37,6 @@
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
     repo-request-path-prefix: 'review/'
     ##################################
-    # old scheme
-    component-path-fuel: 'fuel/'
-    component-path-cluster: 'cluster/'
-    base-path: 'base/'
-    updates-path: 'updates/'
-    security-path: 'security/'
-    ##################################
-    # new scheme
     # master-node
     rpm-dist-fuel: 'centos6'
     rpm-os-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/os'
