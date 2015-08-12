@@ -159,7 +159,13 @@
             - name: '7.0.system_test.ubuntu.known_issues'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.fuel_plugins'
+            - name: '7.0.system_test.ubuntu.fuel_plugin_example'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.fuel_plugin_reboot'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.fuel_plugin_vip_reservation'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.services_ha'
