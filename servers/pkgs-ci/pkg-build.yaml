@@ -162,7 +162,7 @@
                     [ -f "ci_status_params" ] && source ci_status_params
                     ${{FAILED}} && exit 1 || exit 0
               - trigger-builds:
-                  - project: 'systest-{pkg_type}'
+                  - project: 'pkg-systest-{mos_version}-{pkg_type}'
                     current-parameters: true
                     property-file: 'buildresult.params,tests.envfile,{pkg_type}.publish.setenvfile'
                     property-file-fail-on-missing: false

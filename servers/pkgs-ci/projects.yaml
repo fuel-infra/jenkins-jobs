@@ -23,7 +23,7 @@
       - 'pkg-build-{mos_version}-{pkg_type}'
       - 'pkg-install-{mos_version}-{pkg_type}'
       - 'pkg-gate-{mos_version}-{pkg_type}'
-      - 'systest-deb'
+      - 'pkg-systest-{mos_version}-{pkg_type}'
       - 'pkg-publish-{mos_version}-{pkg_type}'
 
 - project:
@@ -34,6 +34,8 @@
           os: 'ubuntu'
           distro: 'trusty'
           spec_path_prefix: '/trusty'
+          test_group: 'bvt_2'
+    openstack_release: 'Ubuntu'
     <<: *common_template
 
 - project:
@@ -44,5 +46,7 @@
           os: 'centos'
           distro: 'centos6'
           spec_path_prefix: '/rpm'
+          test_group: 'prepare_slaves_3'
+    openstack_release: 'CentOS'
     <<: *common_template
 

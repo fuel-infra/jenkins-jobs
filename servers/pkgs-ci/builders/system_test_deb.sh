@@ -25,10 +25,7 @@ case "${LOCATION}" in
     poz)
         MIRROR_HOST="http://osci-mirror-poz.poz.mirantis.net/pkgs/"
         ;;
-    bud)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
-        ;;
-    bud-ext)
+    bud|bud-ext|undef)
         MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
         ;;
     mnv)
@@ -75,4 +72,6 @@ ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER.$BUILD_ID
 ENV_NAME=${ENV_NAME:0:68}
 ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
-sh -x "utils/jenkins/system_tests.sh" -t test -w "$WORKSPACE" -e "$ENV_NAME" -o --group="$TEST_GROUP" -i "$ISO_PATH"
+pushd fuel-qa
+sh -x "utils/jenkins/system_tests.sh" -t test -w "$WORKSPACE/fuel-qa" -e "$ENV_NAME" -o --group="$TEST_GROUP" -i "$ISO_PATH"
+popd
