@@ -26,31 +26,21 @@ echo "MARK: checking Perestroika and upstream repos..."
 TEMPDIR=$(/bin/mktemp -d /tmp/test-requirements-deb-XXXXXXXX)
 echo "MARK: workspace directory is ${TEMPDIR}"
 
-if [ "${DIST}" = "precise" ]; then
-    chdist --data-dir ${TEMPDIR} create ${REPO_NAME} http://mirror.fuel-infra.org/osci/${REPO_NAME}/ubuntu/ /
+chdist --data-dir ${TEMPDIR} create ubuntu http://mirror.fuel-infra.org/mos-repos/ubuntu/${PRODUCT_VERSION}/ mos${PRODUCT_VERSION} main restricted
 
-    cat >> ${TEMPDIR}/${REPO_NAME}/etc/apt/sources.list <<EOT
-deb http://mirror.yandex.ru/ubuntu ${DIST} main universe multiverse restricted
-deb http://mirror.yandex.ru/ubuntu ${DIST}-updates main universe multiverse restricted
-deb http://mirror.yandex.ru/ubuntu ${DIST}-security main universe multiverse restricted
-EOT
-else
-        chdist --data-dir ${TEMPDIR} create ${REPO_NAME} http://mirror.fuel-infra.org/mos-repos/ubuntu/ mos${PRODUCT_VERSION} main restricted
-
-        cat > ${TEMPDIR}/${REPO_NAME}/etc/apt/sources.list <<EOT
-deb http://mirror.fuel-infra.org/mos-repos/ubuntu/ mos${PRODUCT_VERSION} main restricted
-deb http://mirror.fuel-infra.org/mos-repos/ubuntu/ mos${PRODUCT_VERSION}-updates main restricted
-deb http://mirror.fuel-infra.org/mos-repos/ubuntu/ mos${PRODUCT_VERSION}-security main restricted
+cat > ${TEMPDIR}/ubuntu/etc/apt/sources.list <<EOT
+deb http://mirror.fuel-infra.org/mos-repos/ubuntu/${PRODUCT_VERSION}/ mos${PRODUCT_VERSION} main restricted
+deb http://mirror.fuel-infra.org/mos-repos/ubuntu/${PRODUCT_VERSION}/ mos${PRODUCT_VERSION}-updates main restricted
+deb http://mirror.fuel-infra.org/mos-repos/ubuntu/${PRODUCT_VERSION}/ mos${PRODUCT_VERSION}-security main restricted
 deb http://mirror.fuel-infra.org/pkgs/ubuntu/ ${DIST} main universe multiverse restricted
 deb http://mirror.fuel-infra.org/pkgs/ubuntu/ ${DIST}-security main universe multiverse restricted
 deb http://mirror.fuel-infra.org/pkgs/ubuntu/ ${DIST}-updates main universe multiverse restricted
 EOT
-fi
 
-echo 'APT::Get::AllowUnauthenticated 1;' > ${TEMPDIR}/${REPO_NAME}/etc/apt/apt.conf.d/02unauthenticated
+echo 'APT::Get::AllowUnauthenticated 1;' > ${TEMPDIR}/ubuntu/etc/apt/apt.conf.d/02unauthenticated
 
-chdist --data-dir ${TEMPDIR} apt-get ${REPO_NAME} update
-chdist --data-dir ${TEMPDIR} apt-get ${REPO_NAME} install --dry-run ${PACKAGES}
+chdist --data-dir ${TEMPDIR} apt-get ubuntu update
+chdist --data-dir ${TEMPDIR} apt-get ubuntu install --dry-run ${PACKAGES}
 RES=${?}
 if [ ${RES} -eq 0 ]; then
 	echo "MARK: SUCCESS. The following packages are available in Perestroika or upstream repos: ${PACKAGES}"
