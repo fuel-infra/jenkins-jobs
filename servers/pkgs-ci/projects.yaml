@@ -22,14 +22,16 @@
     jobs:
       - 'pkg-build-{mos_version}-{pkg_type}'
       - 'pkg-install-{mos_version}-{pkg_type}'
-      - 'systest-deb'
       - 'pkg-gate-{mos_version}-{pkg_type}'
+      - 'systest-deb'
+      - 'pkg-publish-{mos_version}-{pkg_type}'
 
 - project:
     name: 'pkg-mos-deb'
     pkg_type: 'deb'
     mos_version:
       - '7.0':
+          os: 'ubuntu'
           distro: 'trusty'
           spec_path_prefix: '/trusty'
     <<: *common_template
@@ -39,6 +41,7 @@
     pkg_type: 'rpm'
     mos_version:
       - '7.0':
+          os: 'centos'
           distro: 'centos6'
           spec_path_prefix: '/rpm'
     <<: *common_template

@@ -1,0 +1,127 @@
+################################################################################
+# Job Templates
+################################################################################
+
+- job-template:
+    name: 'pkg-gate-{mos_version}-{pkg_type}'
+    concurrent: True
+    description: |
+        This job parses set of Zuul parameters (ZUUL_CHANGE_IDS and ZUUL_CHANGES) and runs build job
+        for each pair.
+    wrappers:
+      - timestamps
+      - ansicolor
+      - timeout:
+          timeout: 3600
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+
+          ############################
+          # Prepare parameters for slave jobs
+          ############################
+
+          declare -a CHANGE_IDS
+          declare -a CHANGES
+
+          # Array of chande IDs
+          CHANGE_IDS=( ${{ZUUL_CHANGE_IDS}} )
+
+          # Array of changes (project:branch:refspec)
+          # Save input field separator
+          OLDIFS=${{IFS}}
+
+          # Split change info
+          IFS="^"
+          CHANGES=( ${{ZUUL_CHANGES}} )
+
+          # Restore input field separator
+          IFS=${{OLDIFS}}
+
+          # Create parameter files
+          for i in ${{!CHANGE_IDS[*]}}; do
+
+          OLDIFS=${{IFS}}
+          IFS=":"
+          CH=( ${{CHANGES[${{i}}]}} )
+          IFS=${{OLDIFS}}
+
+          rm -vf build-param-*.setenvfile
+
+          echo "Preparing parameters for patchset #${{CHANGE_IDS[${{i}}]#*,}} of change ${{CHANGE_IDS[${{i}}]%,*}} in project ${{CH[0]}} (branch ${{CH[1]}})"
+          cat > build-param-${{CHANGE_IDS[${{i}}]}}.setenvfile <<EOF
+          # Gerrit parameters
+          GERRIT_PROJECT=${{CH[0]}}
+          GERRIT_BRANCH=${{CH[1]}}
+          GERRIT_CHANGE_NUMBER=${{CHANGE_IDS[${{i}}]%,*}}
+          GERRIT_PATCHSET_NUMBER=${{CHANGE_IDS[${{i}}]#*,}}
+          GERRIT_REFSPEC=${{CH[2]}}
+
+          # Zuul parameters
+          ZUUL_PROJECT=${{CH[0]}}
+          ZUUL_BRANCH=${{CH[1]}}
+          ZUUL_CHANGE=${{CHANGE_IDS[${{i}}]%,*}}
+          ZUUL_PATCHSET=${{CHANGE_IDS[${{i}}]#*,}}
+          ZUUL_CHANGE_IDS=${{CHANGE_IDS[${{i}}]}}
+          ZUUL_CHANGES=${{CHANGES[${{i}}]}}
+
+          # Other job-specific parameters
+          LAST_STAGE=false
+          TEST_INSTALL=false
+          EOF
+
+          done
+
+      - trigger-builds:
+          - project: 'pkg-build-{mos_version}-{pkg_type}'
+            current-parameters: true
+            block: true
+            parameter-factories:
+              - factory: filebuild
+                file-pattern: 'build-param-*.setenvfile'
+                no-files-found-action: FAIL
+      - shell: |
+            #!/bin/bash -ex
+
+            PUBLISH_HOST=perestroika-repo-tst.infra.mirantis.net
+
+            PROJECT_NAME=mos
+            PROJECT_VERSION=${{ZUUL_BRANCH#*/fuel-}}
+            PROJECT_VERSION=${{PROJECT_VERSION%%/*}}
+
+            # Set default version for master branch
+            test "${{PROJECT_VERSION}}" = "master" && PROJECT_VERSION="7.0"
+
+            ############################
+            # Create list of built DEB repositories
+            ############################
+
+            for CR in `sed -r 's/,[0-9]+//g' <<< ${{ZUUL_CHANGE_IDS}}`; do
+                DEB_REPOS="${{DEB_REPOS:+${{DEB_REPOS}}|}}deb http://${{PUBLISH_HOST}}/review/CR-${{CR}}/mos-repos/{os} ${{PROJECT_NAME}}${{PROJECT_VERSION}} main"
+                RPM_REPOS="${{RPM_REPOS:+${{RPM_REPOS}}|}}http://${{PUBLISH_HOST}}/review/CR-${{CR}}/mos-repos/{os}/${{PROJECT_NAME}}${{PROJECT_VERSION}}-{distro}-fuel/os/x86_64"
+            done
+            echo "EXTRA_DEB_REPOS=${{DEB_REPOS}}" > deb_repos.setenvfile
+            echo "RPM_REPO_URL=${{RPM_REPOS}}"    > rpm_repos.setenvfile
+
+            ############################
+            # Create list of built DEB repositories
+            ############################
+
+      - trigger-builds:
+          - project: 'systest-{pkg_type}'
+            current-parameters: true
+            property-file: '{pkg_type}_repos.setenvfile'
+            property-file-fail-on-missing: true
+            block: true
+            predefined-parameters: |
+                ISO_JOB_NAME={mos_version}.test_all
+
+    publishers:
+      - archive:
+          artifacts: 'build-param-*.setenvfile,deb_repos.setenvfile'
+          allow-empty: True
+    node: 'packtest'
+
+################################################################################
+# Job Groups
+################################################################################

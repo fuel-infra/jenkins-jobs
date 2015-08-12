@@ -4,6 +4,14 @@
 
 - job-template:
     name: 'pkg-build-{mos_version}-{pkg_type}'
+    concurrent: True
+    description: |
+        This job builds a package and then publishes it by triggerring publisher job.<br>
+        After publishing are triggered test jobs:
+        <ul>
+          <li> install test for just built packages
+          <li> system test using just built packages
+        </ul>
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
@@ -76,24 +84,8 @@
           # Zuul parameters
           ############################
 
-          # Save input field separator
-          OLDIFS=${{IFS}}
-
-          # Split change info
-          IFS=":"
-          CHANGES=( ${{ZUUL_CHANGES}} )
-
-          # Restore input field separator
-          IFS=${{OLDIFS}}
-
-          # Set parameters to Zuul values
-          GERRIT_PROJECT=${{CHANGES[0]}}
-          GERRIT_BRANCH=${{CHANGES[1]}}
-          GERRIT_REFSPEC=${{CHANGES[2]}}
-          GERRIT_CHANGE_NUMBER=${{ZUUL_CHANGE_IDS%,*}}
-
-          PROJECT_GROUP=${{GERRIT_PROJECT%%/*}}
-          SRC_PROJECT_PATH=${{GERRIT_PROJECT%/*}}
+          PROJECT_GROUP=${{ZUUL_PROJECT%%/*}}
+          SRC_PROJECT_PATH=${{ZUUL_PROJECT%/*}}
 
           IS_OPENSTACK=false
           COMPONENT_PATH=fuel/
@@ -111,7 +103,7 @@
           fi
 
           PROJECT_NAME=mos
-          PROJECT_VERSION=${{GERRIT_BRANCH#*/fuel-}}
+          PROJECT_VERSION=${{ZUUL_BRANCH#*/fuel-}}
           PROJECT_VERSION=${{PROJECT_VERSION%%/*}}
 
           # Set default version for master branch
@@ -122,9 +114,6 @@
 
           # Openstack project?
           export IS_OPENSTACK COMPONENT_PATH
-
-          # Change info
-          export GERRIT_PROJECT GERRIT_BRANCH GERRIT_REFSPEC GERRIT_CHANGE_NUMBER
 
           # Project groups/paths
           export SRC_PROJECT_PATH SPEC_PROJECT_PATH
@@ -175,11 +164,10 @@
               - trigger-builds:
                   - project: 'systest-{pkg_type}'
                     current-parameters: true
-                    property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
+                    property-file: 'buildresult.params,tests.envfile,{pkg_type}.publish.setenvfile'
                     property-file-fail-on-missing: false
+                    block: true
                     predefined-parameters: |
-                        DEB_REPO_URL=${{DEB_REPO_URL}}
-                        RPM_REPO_URL=${{RPM_REPO_URL}}
                         ISO_JOB_NAME={mos_version}.test_all
     publishers:
 #      - junit:
@@ -188,67 +176,6 @@
           artifacts: 'buildresult.params, setenvfile, {pkg_type}.publish.setenvfile'
           allow-empty: True
 
-    node: 'packtest'
-
-- job-template:
-    name: 'pkg-gate-{mos_version}-{pkg_type}'
-    wrappers:
-      - timestamps
-      - ansicolor
-    builders:
-      - shell: |
-          #!/bin/bash -xe
-
-          ############################
-          # Prepare parameters for slave jobs
-          ############################
-
-          declare -a CHANGE_IDS
-          declare -a CHANGES
-
-          # Array of chande IDs
-          CHANGE_IDS=( ${{ZUUL_CHANGE_IDS}} )
-
-          # Array of changes (project:branch:refspec)
-          # Save input field separator
-          OLDIFS=${{IFS}}
-
-          # Split change info
-          IFS="^"
-          CHANGES=( ${{ZUUL_CHANGES}} )
-
-          # Restore input field separator
-          IFS=${{OLDIFS}}
-
-          # Create parameter files
-          for i in ${{!CHANGE_IDS[*]}}; do
-          cat > build-param-${{CHANGE_IDS[${{i}}]}}.setenvfile <<EOF
-          ZUUL_CHANGE_IDS=${{CHANGE_IDS[${{i}}]}}
-          ZUUL_CHANGES=${{CHANGES[${{i}}]}}
-          LAST_STAGE=false
-          TEST_INSTALL=false
-          EOF
-          done
-
-      - trigger-builds:
-          - project: 'pkg-build-{mos_version}-{pkg_type}'
-            current-parameters: true
-            block: true
-            same-node: true
-            parameter-factories:
-              - factory: filebuild
-                file-pattern: 'build-param-*.setenvfile'
-                no-files-found-action: FAIL
-      - copyartifact:
-            project: 'pkg-build-{mos_version}-{pkg_type}'
-            filter: '{pkg_type}.publish.setenvfile'
-            parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
-            which-build: 'last-completed'
-
-    publishers:
-      - archive:
-          artifacts: 'build-param-*.setenvfile'
-          allow-empty: True
     node: 'packtest'
 
 ################################################################################

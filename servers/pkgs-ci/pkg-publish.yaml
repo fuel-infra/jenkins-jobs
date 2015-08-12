@@ -1,0 +1,32 @@
+################################################################################
+# Job Templates
+################################################################################
+
+- job-template:
+    name: 'pkg-publish-{mos_version}-{pkg_type}'
+    concurrent: True
+    description: |
+        This job triggers build job to build released package and publish
+        it in released repository.
+
+        All work is done by slave job which determines change's status and
+        if it merged, publishes package in released repository.
+    wrappers:
+      - timestamps
+      - ansicolor
+      - timeout:
+          timeout: 3600
+    builders:
+      - trigger-builds:
+          - project: 'pkg-build-{mos_version}-{pkg_type}'
+            current-parameters: true
+            block: true
+            predefined-parameters: |
+                LAST_STAGE=true
+                TEST_INSTALL=false
+
+    node: 'packtest'
+
+################################################################################
+# Job Groups
+################################################################################
