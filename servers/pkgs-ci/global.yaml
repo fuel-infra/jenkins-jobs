@@ -9,7 +9,7 @@
       - timestamps
 
     logrotate:
-      daysToKeep: 1
+      daysToKeep: 30
       numToKeep: -1
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
