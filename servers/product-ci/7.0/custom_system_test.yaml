@@ -28,7 +28,6 @@
           choices:
             - backup_restore_master_base
             - bonding_neutron
-            - bvt_1
             - bvt_2
             - ceph_ha
             - ceph_ha_one_controller_compact
