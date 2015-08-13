@@ -108,7 +108,7 @@
             ############################
 
       - trigger-builds:
-          - project: 'systest-{pkg_type}'
+          - project: 'pkg-systest-{mos_version}-{pkg_type}'
             current-parameters: true
             property-file: '{pkg_type}_repos.setenvfile'
             property-file-fail-on-missing: true

@@ -2,6 +2,18 @@
 # Section: Builders
 ########################################################################
 
+- builder:
+    name: systest-rpm
+    builders:
+      - shell:
+          !include-raw builders/system_test_rpm.sh
+
+- builder:
+    name: systest-deb
+    builders:
+      - shell:
+          !include-raw builders/system_test_deb.sh
+
 ########################################################################
 # Section: Wrappers
 ########################################################################
@@ -49,6 +61,16 @@
             - '{scm-branch}'
           browser: gitweb
           browser-url: https://review.fuel-infra.org/gitweb?p={scm-repo}.git
+
+- scm:
+    name: stackforge
+    scm:
+      - git:
+          url: 'https://git.openstack.org/stackforge/{repo}.git'
+          branches:
+            - 'origin/{branch}'
+          basedir: '{repo}'
+          wipe-workspace: false
 
 ########################################################################
 # Section: Parameters

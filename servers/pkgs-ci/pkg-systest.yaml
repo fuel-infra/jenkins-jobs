@@ -1,11 +1,8 @@
-- job:
-    name: 'systest-deb'
+- job-template:
+    name: 'pkg-systest-{mos_version}-{pkg_type}'
     builders:
-      - shell:
-          !include-raw builders/system_test_ubuntu.sh
+       - systest-{pkg_type}
     concurrent: true
-    description:
-      !include-raw descriptions/systest-deb
     logrotate:
       artifactDaysToKeep: 90
       daysToKeep: 90
@@ -17,10 +14,14 @@
           name: MAGNET_LINK
       - string:
           name: TEST_GROUP
-          default: 'bvt_2'
+          default: '{test_group}'
       - string:
           name: OPENSTACK_RELEASE
-          default: 'Ubuntu'
+          default: '{openstack_release}'
+      - string:
+          name: ENV_PREFIX
+          default: 'pkg-systest-{mos_version}-{pkg_type}'
+          description: Define env prefix name. This parameter should not be changed
       - string:
           name: NEUTRON_ENABLE
           default: 'true'
@@ -43,16 +44,13 @@
       - string:
           name: EXTRA_DEB_REPOS_PRIORITY
           default: '1052'
-
-      - string:
-          name: ENV_PREFIX
-          default: 7.0.ubuntu.bvt_2
-          description: Define env prefix name. This parameter should not be changed
     scm:
-      - git:
-          url: 'https://git.openstack.org/stackforge/fuel-qa.git'
-          branches:
-            - 'origin/master'
+      - stackforge:
+          branch: 'master'
+          repo: fuel-main
+      - stackforge:
+          branch: 'master'
+          repo: fuel-qa
     wrappers:
       - ansicolor:
           colormap: xterm
