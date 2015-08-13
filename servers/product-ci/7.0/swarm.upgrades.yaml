@@ -20,6 +20,12 @@
             - 'upgrade_one_controller'
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+          testgroup: 'ceph_ha_one_controller'
+          upgrade_testgroup:
+            - 'upgrade_ha_one_controller'
+            - 'upgrade_ha_one_controller_delete_node'
+
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
           upgrade_testgroup:
             - 'upgrade_one_controller_classic'

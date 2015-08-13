@@ -205,6 +205,12 @@
             - name: '7.0.system_test.ubuntu.upgrade_one_controller_neutron'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.upgrade_ha_one_controller'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.upgrade_ha_one_controller_delete_node'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.rollback_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
@@ -215,4 +221,12 @@
               current-parameters: true
               kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.rollback_neutron_gre_ha'
+              current-parameters: true
+            - name: '7.0.system_test.centos.rollback_one_controller'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.rollback_neutron_gre'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.rollback_neutron_gre_ha'
               current-parameters: true
