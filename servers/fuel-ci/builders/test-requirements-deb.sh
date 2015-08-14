@@ -2,11 +2,11 @@
 
 set -x
 
-DIST=`awk -F '[:=?]' '/^UBUNTU_RELEASE\>/ {print $NF}' config.mk`
+DIST=`awk -F '[:=?]' '/^UBUNTU_RELEASE\>/ {print $NF}' config/config.mk`
 OVERALL_STATUS=0
 
-PRODUCT_VERSION=`awk -F '[:=?]' '/^PRODUCT_VERSION\>/ {print $NF}' config.mk`
-PACKAGES=`git diff --word-diff=plain HEAD~ requirements-deb.txt | egrep '{+' | cut -d"+" -f2 | sed ':a;N;$!ba;s/\n/ /g'`
+PRODUCT_VERSION=`awk -F '[:=?]' '/^PRODUCT_VERSION\>/ {print $NF}' config/config.mk`
+PACKAGES=`git diff --word-diff=plain HEAD~ config/requirements-deb.txt | egrep '{+' | cut -d"+" -f2 | sed ':a;N;$!ba;s/\n/ /g'`
 
 if [ X"${PACKAGES}" = X"" ]; then
 	echo "MARK: no difference found, all requested packages exist in Perestroika and upstream repos."
@@ -14,10 +14,10 @@ if [ X"${PACKAGES}" = X"" ]; then
 fi
 
 #check if requirements-deb.txt is sorted alphabetically
-if git diff --name-only HEAD~ requirements-deb.txt >/dev/null; then
-        sort -u requirements-deb.txt| diff requirements-deb.txt -;
+if git diff --name-only HEAD~ config/requirements-deb.txt >/dev/null; then
+        sort -u config/requirements-deb.txt| diff config/requirements-deb.txt -;
         if [ $? -ne 0 ]; then
-                echo "MARK: FAILURE. requirements-deb.txt is not sorted. Please sort it with sort -u";
+                echo "MARK: FAILURE. /config/requirements-deb.txt is not sorted. Please sort it with sort -u";
                 exit 1;
         fi
 fi
