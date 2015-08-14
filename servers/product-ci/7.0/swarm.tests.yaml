@@ -152,6 +152,10 @@
          testgroup: 'custom_hostname'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'fuel_master_migrate'
+         properties: |
+           SLAVE_NODE_MEMORY=6144
+           SLAVE_NODE_CPU=4
+         weight: 11
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ready_node_reinstallation'
      - '{version-id}.{id}.{dist}.{testgroup}':
