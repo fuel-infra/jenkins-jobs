@@ -8,13 +8,6 @@
           properties-content: |
             REPO_BASE_PATH=/home/jenkins/pubrepos
             SIGKEYID=3E301371
-            # Old scheme
-            #REMOTE_REPO_HOST={repo-host}
-            #REPO_PATH_PREFIX=osci/
-            #REPO_REQUEST_PATH_PREFIX=osci/review/
-            #BASE_PATH={base-path}
-            #UPDATES_PATH={updates-path}
-            #SECURITY_PATH={security-path}
     parameters:
       - string:
           name: PROJECT_NAME
