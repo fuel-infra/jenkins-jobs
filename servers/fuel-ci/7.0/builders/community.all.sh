@@ -34,6 +34,14 @@ if [ -n "${FUEL_COMMITS}" ] && [ -f "/home/jenkins/workspace/fuel_commits/${FUEL
   export PYTHON_FUELCLIENT_COMMIT=$(fgrep python-fuelclient_sha "${FUEL_COMMITS}"|cut -d\" -f2)
 fi
 
+######## Get stable ubuntu mirror from snapshot ###############
+# Since we are building community.iso in EU dc let' hardcode this
+LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
+LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | head -1)
+export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
+
+echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
+
 echo "Checkout fuel-main"
 
 if [ -n "${FUELMAIN_COMMIT}" ] ; then
