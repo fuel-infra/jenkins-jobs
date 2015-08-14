@@ -5,7 +5,7 @@
           properties-content: |
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
             OPENSTACK_RELEASE={dist}
-            TEST_GROUP=fuel_plugins
+            TEST_GROUP=fuel_plugin_example
             CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
             CLASSIC_PROVISIONING=false
             EXAMPLE_PLUGIN_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example-1.0.0.fp
@@ -34,7 +34,7 @@
         description: "iso magnet link"
     - string:
         name: ENV_PREFIX
-        default: '{version-id}.system_test.{dist}.fuel_plugins'
+        default: '{version-id}.system_test.{dist}.fuel_plugin_example'
         description: 'Environment prefix'
     publishers:
     - archive:
