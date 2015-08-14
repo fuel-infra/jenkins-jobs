@@ -36,24 +36,8 @@ cat <<EOF
 EOF
 done >> ${TMP_LAYOUT}
 
-# Fuel projects
-PROJECTS=""
-PROJECT_PREFIXES="packages/centos6 packages/centos7"
-for project_prefix in ${PROJECT_PREFIXES}; do
-    PROJECTS="${PROJECTS} $(ssh -p ${GERRIT_PORT} -i ${GERRIT_KEY} ${GERRIT_USER}@${GERRIT_HOST} gerrit ls-projects --prefix ${project_prefix})"
-done
-
-for project in $(echo "${PROJECTS}" | sort); do
-cat <<EOF
-
-  - name: ${project}
-    template:
-      - name: fuel
-EOF
-done >> ${TMP_LAYOUT}
-
 # Dependencies for OpenStack
-PROJECTS="$(ssh -p ${GERRIT_PORT} -i ${GERRIT_KEY} ${GERRIT_USER}@${GERRIT_HOST} gerrit ls-projects --prefix packages/trusty)"
+PROJECTS="$(ssh -p ${GERRIT_PORT} -i ${GERRIT_KEY} ${GERRIT_USER}@${GERRIT_HOST} gerrit ls-projects --prefix packages/)"
 
 for project in $(echo "${PROJECTS}" | sort); do
 cat <<EOF

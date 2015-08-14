@@ -13,10 +13,11 @@ pipelines:
 
   - name: pkg-build-mos
     description: |
-      Newly uploaded patchsets enter this pipeline to get an initial +/-1 Verified vote from Jenkins.
+      Newly uploaded patchsets enter this pipeline to get an initial
+      +/-1 Verified vote from Jenkins.
 
-      This pipeline is triggered when openstack/* projects gets +1 from Infra CI (mos-infra-ci), or
-      when any other project gets new patchset or comment "recheck".
+      This pipeline is triggered when openstack/* projects gets +1 from
+      Infra CI (mos-infra-ci), or comment "recheck".
     source: gerrit
     success-message: |
       Build succeeded (pkg-build pipeline).
@@ -30,17 +31,15 @@ pipelines:
           approval:
             - verified: 1
           branch:
-            - '^openstack-ci/fuel-7\.0[-/]'
-            - '^master$'
-        - event: patchset-created
-          branch:
-            - '^7\.0$'
-            - '^master$'
+            - ^master$
+            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+            - ^openstack-ci/fuel/centos\d/
         - event: comment-added
           comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck|reverify)
           branch:
-            - '^7\.0$'
-            - '^master$'
+            - ^master$
+            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+            - ^openstack-ci/fuel/centos\d/
     require:
       current-patchset: True
       open: True
@@ -49,20 +48,22 @@ pipelines:
         verified: 0
     success:
       gerrit:
-        verified: 0
+        verified: 1
     failure:
       gerrit:
-        verified: 0
+        verified: -1
 
   - name: pkg-build-spec
     description: |
-      Newly uploaded patchsets enter this pipeline to get an initial +/-1 Verified vote from Jenkins.
+      Newly uploaded patchsets enter this pipeline to get an initial
+      +/-1 Verified vote from Jenkins.
 
-      This pipeline created specially for openstack-build/* projects, because they use same branches
-      as openstack/* projects, but never will get approvement from Infra CI (mos-infra-ci).
+      This pipeline created specially for openstack-build/* projects, because
+      it use same branches as openstack/* projects, but never will get
+      approvement from Infra CI (mos-infra-ci).
 
-      So this job is triggerred by any new patchset to branch same as MOS projects, but attached only
-      to openstack-build/* projects.
+      So this job is triggerred by any new patchset to branch same as
+      MOS projects, but attached only to openstack-build/* projects.
     source: gerrit
     success-message: |
       Build succeeded (pkg-build pipeline).
@@ -73,13 +74,15 @@ pipelines:
       gerrit:
         - event: patchset-created
           branch:
-            - '^openstack-ci/fuel-7\.0[-/]'
-            - '^master$'
+            - ^master$
+            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+            - ^openstack-ci/fuel/centos\d/
         - event: comment-added
           comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck|reverify)
           branch:
-            - '^openstack-ci/fuel-7\.0[-/]'
-            - '^master$'
+            - ^master$
+            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+            - ^openstack-ci/fuel/centos\d/
     require:
       current-patchset: True
       open: True
@@ -88,10 +91,47 @@ pipelines:
         verified: 0
     success:
       gerrit:
-        verified: 0
+        verified: 1
     failure:
       gerrit:
+        verified: -1
+
+  - name: pkg-build-deps
+    description: |
+      Newly uploaded patchsets enter this pipeline to get an initial
+      +/-1 Verified vote from Jenkins.
+
+      This pipeline is triggered when project, that are required by openstack/*
+      projects, gets new patchset or comment "recheck".
+    source: gerrit
+    success-message: |
+      Build succeeded (pkg-build pipeline).
+    failure-message: |
+      Build failed (pkg-build pipeline).
+    manager: IndependentPipelineManager
+    trigger:
+      gerrit:
+        - event: patchset-created
+          branch:
+            - ^master$
+            - ^[7-9]\.\d$
+        - event: comment-added
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck|reverify)
+          branch:
+            - ^master$
+            - ^[7-9]\.\d$
+    require:
+      current-patchset: True
+      open: True
+    start:
+      gerrit:
         verified: 0
+    success:
+      gerrit:
+        verified: 1
+    failure:
+      gerrit:
+        verified: -1
 
   - name: pkg-gate-release
     description: |
@@ -111,8 +151,9 @@ pipelines:
           approval:
             - workflow: 1
           branch:
-            - '^7\.0$'
-            - '^openstack-ci/fuel-7\.0[-/]'
+            - ^[7-9]\.\d$
+            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+            - ^openstack-ci/fuel/centos\d/
     require:
       current-patchset: True
       open: True
@@ -121,11 +162,11 @@ pipelines:
         verified: 0
     success:
       gerrit:
-        verified: 0
+        verified: 2
         submit: False
     failure:
       gerrit:
-        verified: 0
+        verified: -2
     precedence: high
     window-floor: 20
     window-increase-factor: 2
@@ -148,7 +189,7 @@ pipelines:
           approval:
             - workflow: 1
           branch:
-            - '^master$'
+            - ^master$
     require:
       current-patchset: True
       open: True
@@ -157,11 +198,11 @@ pipelines:
         verified: 0
     success:
       gerrit:
-        verified: 0
+        verified: 2
         submit: False
     failure:
       gerrit:
-        verified: 0
+        verified: -2
     precedence: high
     window-floor: 20
     window-increase-factor: 2
@@ -181,9 +222,10 @@ pipelines:
       gerrit:
         - event: change-merged
           branch:
-            - '^7\.0$'
-            - '^master$'
-            - '^openstack-ci/fuel-7\.0[-/]'
+            - ^master$
+            - ^[7-9]\.\d$
+            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+            - ^openstack-ci/fuel/centos\d/
     require:
       status: MERGED
     start:
@@ -215,9 +257,22 @@ pipelines:
 
 jobs:
 
-  - name: ^pkg-(build|gate|publish)-.+$
+  - name: ^pkg-(build|gate|publish)-.+-deb$
     parameter-function: pkg_build
     voting: False
+    skip-if:
+      - project: ^packages/centos\d/
+      - branch: ^openstack-ci/fuel/centos\d/
+
+  - name: ^pkg-(build|gate|publish)-.+-rpm$
+    parameter-function: pkg_build
+    voting: False
+    skip-if:
+      - project: ^packages/trusty/
+      - project: ^openstack(-build)?/
+        branch: ^master$
+      - project: ^openstack(-build)?/
+        branch: ^openstack-ci/fuel-[7-9]\.\d[-/]
 
 #
 # Project templates
@@ -229,52 +284,67 @@ project-templates:
     merge-check:
       - noop
     pkg-build-mos:
-      - 'pkg-build-7.0-deb'
+      - pkg-build-7.0-deb
+      - pkg-build-7.0-rpm
     pkg-gate-release:
-      - 'pkg-gate-7.0-deb'
+      - pkg-gate-7.0-deb
+      - pkg-gate-7.0-rpm
     pkg-gate-master:
-      - 'pkg-gate-7.0-deb'
+      - pkg-gate-7.0-deb
+      - pkg-gate-7.0-rpm
     pkg-publish:
-      - 'pkg-publish-7.0-deb'
+      - pkg-publish-7.0-deb
+      - pkg-publish-7.0-rpm
 
   - name: spec
     merge-check:
       - noop
     pkg-build-spec:
-      - 'pkg-build-7.0-deb'
+      - pkg-build-7.0-deb
+      - pkg-build-7.0-rpm
     pkg-gate-release:
-      - 'pkg-gate-7.0-deb'
+      - pkg-gate-7.0-deb
+      - pkg-gate-7.0-rpm
     pkg-gate-master:
-      - 'pkg-gate-7.0-deb'
+      - pkg-gate-7.0-deb
+      - pkg-gate-7.0-rpm
     pkg-publish:
-      - 'pkg-publish-7.0-deb'
+      - pkg-publish-7.0-deb
+      - pkg-publish-7.0-rpm
 
   - name: deps
     merge-check:
       - noop
-    pkg-build-mos:
-      - 'pkg-build-7.0-deb'
+    pkg-build-deps:
+      - pkg-build-7.0-deb
+      - pkg-build-7.0-rpm
     pkg-gate-release:
-      - 'pkg-gate-7.0-deb'
+      - pkg-gate-7.0-deb
+      - pkg-gate-7.0-rpm
     pkg-gate-master:
-      - 'pkg-gate-7.0-deb'
+      - pkg-gate-7.0-deb
+      - pkg-gate-7.0-rpm
     pkg-publish:
-      - 'pkg-publish-7.0-deb'
-
-  - name: fuel
-    merge-check:
-      - noop
-    pkg-build-mos:
-      - 'pkg-build-7.0-rpm'
-    pkg-gate-release:
-      - 'pkg-gate-7.0-rpm'
-    pkg-gate-master:
-      - 'pkg-gate-7.0-rpm'
-    pkg-publish:
-      - 'pkg-publish-7.0-rpm'
+      - pkg-publish-7.0-deb
+      - pkg-publish-7.0-rpm
 
 #
 # Projects
 #
 
 projects:
+  - name: fuel-infra/ci-sandbox
+    merge-check:
+      - noop
+    pkg-build-deps: 
+      - pkg-build-7.0-deb
+      - pkg-build-7.0-rpm
+    pkg-gate-release:
+      - pkg-gate-7.0-deb
+      - pkg-gate-7.0-rpm
+    pkg-gate-master:
+      - pkg-gate-7.0-deb
+      - pkg-gate-7.0-rpm
+    pkg-publish:
+      - pkg-publish-7.0-deb
+      - pkg-publish-7.0-rpm
