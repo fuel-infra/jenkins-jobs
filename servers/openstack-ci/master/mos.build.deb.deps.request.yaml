@@ -15,16 +15,14 @@
             IS_OPENSTACK=false
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
-            # New scheme
+            DISPLAY_NAME=Build deb package on temporary repository
+            REQUEST_TYPE=Trusty
+            ORIGIN={deb-origin}
             DEB_REPO_PATH={deb-base-repo-path}
             DEB_DIST_NAME={deb-base-dist-name}
-            DEB_PROPOSED_REPO_PATH={deb-proposed-repo-path}
             DEB_PROPOSED_DIST_NAME={deb-proposed-dist-name}
-            DEB_UPDATES_REPO_PATH={deb-updates-repo-path}
             DEB_UPDATES_DIST_NAME={deb-updates-dist-name}
-            DEB_SECURITY_REPO_PATH={deb-security-repo-path}
             DEB_SECURITY_DIST_NAME={deb-security-dist-name}
-            DEB_HOLDBACK_REPO_PATH={deb-holdback-repo-path}
             DEB_HOLDBACK_DIST_NAME={deb-holdback-dist-name}
     wrappers:
       - ci-build-deb
@@ -44,12 +42,6 @@
       - string:
           name: SOURCE_BRANCH
           default: '{deps-branch}'
-      - string:
-          name: DISPLAY_NAME
-          default: "Build deb package on temporary repository"
-      - string:
-          name: REQUEST_TYPE
-          default: "Trusty"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
@@ -75,7 +67,7 @@
           branch: '{deps-branch}'
     builders:
       - shell:
-         !include-raw-escape builders/ci.status.report.start.sh
+          !include-raw-escape builders/ci.status.report.start.sh
       - shell: |
           #!/bin/bash -ex
           # Remove junk files
@@ -99,17 +91,14 @@
                   property-file: buildresult.params
                   predefined-parameters: |
                       DIST=${{DIST}}
+                      ORIGIN=${{ORIGIN}}
                       REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
                       REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
                       DEB_REPO_PATH=${{DEB_REPO_PATH}}
                       DEB_DIST_NAME=${{DEB_DIST_NAME}}
-                      DEB_PROPOSED_REPO_PATH=${{DEB_PROPOSED_REPO_PATH}}
                       DEB_PROPOSED_DIST_NAME=${{DEB_PROPOSED_DIST_NAME}}
-                      DEB_UPDATES_REPO_PATH=${{DEB_UPDATES_REPO_PATH}}
                       DEB_UPDATES_DIST_NAME=${{DEB_UPDATES_DIST_NAME}}
-                      DEB_SECURITY_REPO_PATH=${{DEB_SECURITY_REPO_PATH}}
                       DEB_SECURITY_DIST_NAME=${{DEB_SECURITY_DIST_NAME}}
-                      DEB_HOLDBACK_REPO_PATH=${{DEB_HOLDBACK_REPO_PATH}}
                       DEB_HOLDBACK_DIST_NAME=${{DEB_HOLDBACK_DIST_NAME}}
                   block: true
              - copyartifact:
@@ -131,19 +120,21 @@
           - project: 'master.mos.install-deb'
             current-parameters: true
             property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
+            property-file-fail-on-missing: false
             predefined-parameters: |
                 PACKAGEVERSION=${{DEB_VERSION}}
                 PACKAGELIST=${{DEB_BINARIES}}
                 REPO_URL=${{DEB_REPO_URL}}
                 DISPLAY_NAME=Check deb package for installation and simple testing
-            property-file-fail-on-missing: false
+                REQUEST_TYPE=Trusty
     publishers:
+      - pkgname-as-desc
       - post-tasks:
-        - matches:
-           - log-text: Building
-             operator: AND
-          script:
-             !include-raw-escape builders/ci.status.report.stop.sh
+         - matches:
+            - log-text: Building
+              operator: AND
+           script:
+              !include-raw-escape builders/ci.status.report.stop.sh
       - archive:
-           artifacts: '**/buildlog.txt, **/buildresult.xml'
-           allow-empty: true
+          artifacts: '**/buildlog.txt, **/buildresult.xml'
+          allow-empty: true

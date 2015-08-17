@@ -18,7 +18,8 @@
             IS_OPENSTACK=true
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
-            # New scheme
+            DISPLAY_NAME=Build rpm package on primary repository
+            REQUEST_TYPE=Centos6
             RPM_OS_REPO_PATH={rpm-os-repo-path-env}
             RPM_PROPOSED_REPO_PATH={rpm-proposed-repo-path-env}
             RPM_UPDATES_REPO_PATH={rpm-updates-repo-path-env}
@@ -45,12 +46,6 @@
       - string:
           name: SPEC_BRANCH
           default: '{ops-branch}'
-      - string:
-          name: DISPLAY_NAME
-          default: "Build rpm package on primary repository"
-      - string:
-          name: REQUEST_TYPE
-          default: "Centos7"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
@@ -122,16 +117,17 @@
       - shell:
           !include-raw-escape builders/mos.vote.sh
     publishers:
+      - pkgname-as-desc
       - post-tasks:
-        - matches:
-           - log-text: Building
-             operator: AND
-          script:
-             !include-raw-escape builders/ci.status.report.stop.sh
+         - matches:
+            - log-text: Building
+              operator: AND
+           script:
+              !include-raw-escape builders/ci.status.report.stop.sh
       - archive:
-           artifacts: '**/buildlog.txt, **/buildresult.xml'
-           allow-empty: true
+          artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
+          allow-empty: true
       - email:
-          recipients: dburmistrov@mirantis.com atsamutali@mirantis.com
-          notify-every-unstable-build: true
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
           send-to-individuals: false

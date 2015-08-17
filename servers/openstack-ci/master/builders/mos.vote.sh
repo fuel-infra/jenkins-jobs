@@ -17,30 +17,33 @@ source setenvfile
 [ -n "${GERRIT_DEPLOY_VOTE}" ] && GERRIT_VOTE=${GERRIT_DEPLOY_VOTE}
 rm -f setenvfile
 
-if [ "${RESULT}" -eq 0 ]; then
+# Do not perform voting if gerrit request is not defined
+[ -z "${GERRIT_CHANGE_NUMBER}" ] && exit "${RESULT}"
+
+if [ "${RESULT}" == 0 ]; then
     VOTE=${GERRIT_VOTE}
     GERRIT_RESULT="SUCCESS"
 else
-    VOTE="-${GERRIT_VOTE}"
+    VOTE="-"${GERRIT_VOTE}
     GERRIT_RESULT="FAILURE"
 fi
-[ "${SKIPPED}" == 1 ] && GERRIT_RESULT="${GERRIT_RESULT} (skipped)" && VOTE=0
+[ "${SKIPPED}" == 1 ] && GERRIT_RESULT=${GERRIT_RESULT}" (skipped)" && VOTE=0
 GERRIT_MESSAGE="* ${JOB_NAME} ${BUILD_URL} : ${GERRIT_RESULT}"
 [ -n "${TIME_ELAPSED}" ] && GERRIT_MESSAGE="${GERRIT_MESSAGE} in ${TIME_ELAPSED}"
 # Add repository link to gerrit comment"
 [ -f "buildresult.params" ] && source buildresult.params
 case "${REPO_TYPE}" in
     deb)
-        [ -f deb.publish.setenvfile ] && source deb.publish.setenvfile
+        [ -f "deb.publish.setenvfile" ] && source deb.publish.setenvfile
         REPOURL=${DEB_REPO_URL%% *}
         ;;
     rpm)
-        [ -f rpm.publish.setenvfile ] && source rpm.publish.setenvfile
+        [ -f "rpm.publish.setenvfile" ] && source rpm.publish.setenvfile
         REPOURL=${RPM_REPO_URL}
         ;;
 esac
 
-[ "${RESULT}" -eq 0 ] && [ -n "${REPOURL}" ] \
+[ "${RESULT}" == 0 ] && [ -n "${REPOURL}" ] \
     && GERRIT_MESSAGE="${GERRIT_MESSAGE}
 * package.repository ${REPOURL} : LINK"
 

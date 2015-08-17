@@ -1,12 +1,17 @@
-#!/bin/bash -ex
+#!/bin/bash
+
+set -o xtrace
+set -o errexit
 
 ##
 ## Reset previous vote
 ##
 vote() {
-  echo "WARNING: Voting stage is skipped"
-  #ssh -p "${GERRIT_PORT}" "${GERRIT_USER}@${GERRIT_HOST}" "${GERRIT_CMD}"
+  ssh -p "${GERRIT_PORT}" "${GERRIT_USER}@${GERRIT_HOST}" "${GERRIT_CMD}"
 }
+
+# Do not perform voting if gerrit request is not defined
+[ -z "${GERRIT_CHANGE_NUMBER}" ] && exit 0
 
 [ -n "${GERRIT_REVIEWER}" ] && GERRIT_USER=${GERRIT_REVIEWER}
 GERRIT_MESSAGE="* ${JOB_NAME} ${BUILD_URL} : STARTED"
