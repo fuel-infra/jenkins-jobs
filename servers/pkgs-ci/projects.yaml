@@ -22,7 +22,7 @@
 
     repo-base-path: '/home/jenkins/pubrepos'
 
-    spec-project-suffix: '-spec'
+    spec-project-suffix: '-build'
 
     scm-user: 'openstack-ci-jenkins'
     scm-credentials-id: 'e2e0bcb0-ea5d-4932-89ed-4d0e5bc67a4f'

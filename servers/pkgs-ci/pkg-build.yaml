@@ -43,10 +43,10 @@
 
           if [ "${{PROJECT_GROUP}}" = "openstack" ]; then
               IS_OPENSTACK=true
-              SPEC_PROJECT_PATH=${{PROJECT_GROUP}}${{SPEC_PROJECT_SUFFIX}}
+              SPEC_PROJECT_PATH=${{PROJECT_GROUP}}{spec-project-suffix}
               COMPONENT_PATH=cluster/
           fi
-          if [ "${{PROJECT_GROUP}}" = "openstack${{SPEC_PROJECT_SUFFIX}}" ]; then
+          if [ "${{PROJECT_GROUP}}" = "openstack{spec-project-suffix}" ]; then
               IS_OPENSTACK=true
               SRC_PROJECT_PATH=${{PROJECT_GROUP%-*}}
               SPEC_PROJECT_PATH=${{PROJECT_GROUP}}
@@ -85,7 +85,7 @@
           export REMOTE_REPO_HOST=perestroika-repo-tst.infra.mirantis.net
 
           # Parameters for package specs
-          export SPEC_PROJECT_SUFFIX='{spec-project-suffix}'
+          export SPEC_PROJECT_SUFFIX={spec-project-suffix}
 
           # New scheme
           DEB_DIST_NAME={project-name}{mos_version}
