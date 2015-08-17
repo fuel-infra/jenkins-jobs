@@ -18,7 +18,8 @@
             IS_OPENSTACK=true
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
-            # New scheme
+            DISPLAY_NAME=Build rpm package on temporary repository
+            REQUEST_TYPE=Centos6
             RPM_OS_REPO_PATH={rpm-os-repo-path-env}
             RPM_PROPOSED_REPO_PATH={rpm-proposed-repo-path-env}
             RPM_UPDATES_REPO_PATH={rpm-updates-repo-path-env}
@@ -42,12 +43,6 @@
       - string:
           name: SPEC_BRANCH
           default: '{ops-branch}'
-      - string:
-          name: DISPLAY_NAME
-          default: "Build rpm package on tempoary repository"
-      - string:
-          name: REQUEST_TYPE
-          default: "Centos7"
       - bool:
           name: IS_UPDATES
           default: '{is-updates}'
@@ -126,19 +121,21 @@
           - project: 'master.mos.install-rpm'
             current-parameters: true
             property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
+            property-file-fail-on-missing: false
             predefined-parameters: |
                 PACKAGEVERSION=${{RPM_VERSION}}
                 PACKAGELIST=${{RPM_BINARIES}}
                 REPO_URL=${{RPM_REPO_URL}}
                 DISPLAY_NAME=Check rpm package for installation and simple testing
-            property-file-fail-on-missing: false
+                REQUEST_TYPE=Centos7
     publishers:
+      - pkgname-as-desc
       - post-tasks:
-        - matches:
-           - log-text: Building
-             operator: AND
-          script:
-             !include-raw-escape builders/ci.status.report.stop.sh
+         - matches:
+            - log-text: Building
+              operator: AND
+           script:
+              !include-raw-escape builders/ci.status.report.stop.sh
       - archive:
-           artifacts: '**/buildlog.txt, **/buildresult.xml'
-           allow-empty: true
+          artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
+          allow-empty: true
