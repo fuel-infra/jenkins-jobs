@@ -118,7 +118,7 @@
 
     publishers:
       - archive:
-          artifacts: 'build-param-*.setenvfile,deb_repos.setenvfile'
+          artifacts: 'build-param-*.setenvfile,*_repos.setenvfile'
           allow-empty: True
     node: 'packtest'
 

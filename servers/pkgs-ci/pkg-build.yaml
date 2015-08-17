@@ -50,11 +50,12 @@
           export REPO_REQUEST_PATH_PREFIX=review/
 
           # New scheme
+          DEB_REPO_PATH=mos-repos/{os}/{mos_version}
+          RPM_REPO_PATH=mos-repos/{os}/mos{mos_version}-{distro}-fuel/os/x86_64/
+          export DEB_REPO_PATH RPM_REPO_PATH
+
+          # DEB-specific parameters
           export ORIGIN=Mirantis
-          DEB_REPO_PATH=mos-repos/ubuntu
-          if ${{LAST_STAGE}}; then
-              DEB_REPO_PATH="${{DEB_REPO_PATH}}/{mos_version}"
-          fi
           export DEB_REPO_PATH
           export DEB_DIST_NAME=mos{mos_version}
           export DEB_PROPOSED_REPO_PATH=
@@ -66,19 +67,12 @@
           export DEB_HOLDBACK_REPO_PATH=
           export DEB_HOLDBACK_DIST_NAME=mos{mos_version}-holdback
 
-          # New scheme for rpm
+          # RPM-specific parameters
           export RPM_OS_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/os
           export RPM_PROPOSED_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/proposed
           export RPM_UPDATES_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/updates
           export RPM_SECURITY_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/security
           export RPM_HOLDBACK_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/holdback
-
-          # Old scheme
-          #export REPO_REQUEST_PATH_PREFIX='osci/review/'
-          #export REPO_PATH_PREFIX='osci/'
-          #export BASE_PATH='{base-path}'
-          #export UPDATES_PATH='{updates-path}'
-          #export SECURITY_PATH='{security-path}'
 
           ############################
           # Zuul parameters
@@ -123,6 +117,15 @@
           ############################
 
           bash build-{pkg_type}.sh
+
+          rm -rf /home/jenkins/pubrepos/CR-${{ZUUL_CHANGE}}
+
+          # Extra parameters for publisher
+          echo REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}} >> buildresult.params
+          echo DEB_DIST_NAME=mos{mos_version}   >> buildresult.params
+          echo DEB_REPO_PATH=${{DEB_REPO_PATH}} >> buildresult.params
+          echo RPM_REPO_PATH=${{RPM_REPO_PATH}} >> buildresult.params
+          echo REMOTE_REPO_HOST=172.18.186.167  >> buildresult.params
 
       - trigger-builds:
           - project: '{mos_version}.mos-new.publisher'
