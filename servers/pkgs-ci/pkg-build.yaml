@@ -32,49 +32,6 @@
           #!/bin/bash -xe
 
           ############################
-          # Global parameters
-          ############################
-
-          export DIST="{distro}"
-          export DISTRO_PATH="{distro}/"
-          export SPEC_PREFIX_PATH="{spec_path_prefix}"
-
-          # Gerrit parameters
-          export GERRIT_HOST='{gerrit-host}'
-
-          # Parameters for package specs
-          export SPEC_PROJECT_SUFFIX='-build'
-
-          # Publishing repository parameters
-          export REMOTE_REPO_HOST='{repo-host}'
-          export REPO_REQUEST_PATH_PREFIX=review/
-
-          # New scheme
-          DEB_REPO_PATH=mos-repos/{os}/{mos_version}
-          RPM_REPO_PATH=mos-repos/{os}/mos{mos_version}-{distro}-fuel/os/x86_64/
-          export DEB_REPO_PATH RPM_REPO_PATH
-
-          # DEB-specific parameters
-          export ORIGIN=Mirantis
-          export DEB_REPO_PATH
-          export DEB_DIST_NAME=mos{mos_version}
-          export DEB_PROPOSED_REPO_PATH=
-          export DEB_PROPOSED_DIST_NAME=mos{mos_version}-proposed
-          export DEB_UPDATES_REPO_PATH=
-          export DEB_UPDATES_DIST_NAME=mos{mos_version}-updates
-          export DEB_SECURITY_REPO_PATH=
-          export DEB_SECURITY_DIST_NAME=mos{mos_version}-security
-          export DEB_HOLDBACK_REPO_PATH=
-          export DEB_HOLDBACK_DIST_NAME=mos{mos_version}-holdback
-
-          # RPM-specific parameters
-          export RPM_OS_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/os
-          export RPM_PROPOSED_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/proposed
-          export RPM_UPDATES_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/updates
-          export RPM_SECURITY_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/security
-          export RPM_HOLDBACK_REPO_PATH=mos-repos/centos/mos{mos_version}-{distro}-fuel/holdback
-
-          ############################
           # Zuul parameters
           ############################
 
@@ -96,12 +53,12 @@
               COMPONENT_PATH=cluster/
           fi
 
-          PROJECT_NAME=mos
+          PROJECT_NAME={project-name}
           PROJECT_VERSION=${{ZUUL_BRANCH#*/fuel-}}
           PROJECT_VERSION=${{PROJECT_VERSION%%/*}}
 
           # Set default version for master branch
-          test "${{PROJECT_VERSION}}" = "master" && PROJECT_VERSION="7.0"
+          test "${{PROJECT_VERSION}}" = "master" && PROJECT_VERSION="{master-mos-version}"
 
           # Project info
           export PROJECT_NAME PROJECT_VERSION
@@ -113,19 +70,71 @@
           export SRC_PROJECT_PATH SPEC_PROJECT_PATH
 
           ############################
+          # Global parameters
+          ############################
+
+          export DIST="{distro}"
+          export DISTRO_PATH="{distro}/"
+          export SPEC_PREFIX_PATH="{spec_path_prefix}"
+
+          # Gerrit parameters
+          export GERRIT_HOST='{gerrit-host}'
+
+          # Publish host parameters
+          # !!! Should be changed to {repo-host} !!!
+          export REMOTE_REPO_HOST=perestroika-repo-tst.infra.mirantis.net
+
+          # Parameters for package specs
+          export SPEC_PROJECT_SUFFIX='{spec-project-suffix}'
+
+          # New scheme
+          DEB_DIST_NAME={project-name}{mos_version}
+          DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
+          RPM_REPO_PATH={rel-path-prefix}/{os}/{project-name}{mos_version}-{distro}-fuel/os/x86_64/
+          export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
+
+          # DEB-specific parameters
+          export ORIGIN=Mirantis
+          export DEB_PROPOSED_REPO_PATH=
+          export DEB_PROPOSED_DIST_NAME={project-name}{mos_version}-proposed
+          export DEB_UPDATES_REPO_PATH=
+          export DEB_UPDATES_DIST_NAME={project-name}{mos_version}-updates
+          export DEB_SECURITY_REPO_PATH=
+          export DEB_SECURITY_DIST_NAME={project-name}{mos_version}-security
+          export DEB_HOLDBACK_REPO_PATH=
+          export DEB_HOLDBACK_DIST_NAME={project-name}{mos_version}-holdback
+
+          # RPM-specific parameters
+          export RPM_OS_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{distro}-fuel/os
+          export RPM_PROPOSED_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{distro}-fuel/proposed
+          export RPM_UPDATES_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{distro}-fuel/updates
+          export RPM_SECURITY_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{distro}-fuel/security
+          export RPM_HOLDBACK_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{distro}-fuel/holdback
+
+          ############################
           # Build package
           ############################
 
           bash build-{pkg_type}.sh
 
-          rm -rf /home/jenkins/pubrepos/CR-${{ZUUL_CHANGE}}
+          rm -rf {repo-base-path}/CR-${{ZUUL_CHANGE}}
 
           # Extra parameters for publisher
-          echo REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}} >> buildresult.params
-          echo DEB_DIST_NAME=mos{mos_version}   >> buildresult.params
-          echo DEB_REPO_PATH=${{DEB_REPO_PATH}} >> buildresult.params
-          echo RPM_REPO_PATH=${{RPM_REPO_PATH}} >> buildresult.params
-          echo REMOTE_REPO_HOST=172.18.186.167  >> buildresult.params
+          cat >> buildresult.params <<EOF
+
+          # Added for publisher
+          REPO_REQUEST_PATH_PREFIX={cr-path-prefix}
+          REPO_BASE_PATH={repo-base-path}
+          DEB_DIST_NAME=${{DEB_DIST_NAME}}
+          DEB_REPO_PATH=${{DEB_REPO_PATH}}
+          RPM_REPO_PATH=${{RPM_REPO_PATH}}
+          RPM_OS_REPO_PATH=${{RPM_OS_REPO_PATH}}
+          RPM_PROPOSED_REPO_PATH=${{RPM_PROPOSED_REPO_PATH}}
+          RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
+          RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
+          RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
+          REMOTE_REPO_HOST={repo-host}
+          EOF
 
       - trigger-builds:
           - project: '{mos_version}.mos-new.publisher'

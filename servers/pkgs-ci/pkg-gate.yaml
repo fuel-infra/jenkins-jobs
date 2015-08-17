@@ -83,22 +83,20 @@
       - shell: |
             #!/bin/bash -ex
 
-            PUBLISH_HOST=perestroika-repo-tst.infra.mirantis.net
+            PUBLISH_HOST={repo-host}
 
-            PROJECT_NAME=mos
-            PROJECT_VERSION=${{ZUUL_BRANCH#*/fuel-}}
-            PROJECT_VERSION=${{PROJECT_VERSION%%/*}}
-
-            # Set default version for master branch
-            test "${{PROJECT_VERSION}}" = "master" && PROJECT_VERSION="7.0"
+            # New scheme
+            DEB_DIST_NAME={project-name}{mos_version}
+            DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
+            RPM_REPO_PATH={rel-path-prefix}/{os}/{project-name}{mos_version}-{distro}-fuel/os/x86_64/
 
             ############################
             # Create list of built DEB repositories
             ############################
 
             for CR in `sed -r 's/,[0-9]+//g' <<< ${{ZUUL_CHANGE_IDS}}`; do
-                DEB_REPOS="${{DEB_REPOS:+${{DEB_REPOS}}|}}deb http://${{PUBLISH_HOST}}/review/CR-${{CR}}/mos-repos/{os} ${{PROJECT_NAME}}${{PROJECT_VERSION}} main"
-                RPM_REPOS="${{RPM_REPOS:+${{RPM_REPOS}}|}}http://${{PUBLISH_HOST}}/review/CR-${{CR}}/mos-repos/{os}/${{PROJECT_NAME}}${{PROJECT_VERSION}}-{distro}-fuel/os/x86_64"
+                DEB_REPOS="${{DEB_REPOS:+${{DEB_REPOS}}|}}deb http://${{PUBLISH_HOST}}/{cr-path-prefix}/CR-${{CR}}/${{DEB_REPO_PATH}} ${{DEB_DIST_NAME}} main"
+                RPM_REPOS="${{RPM_REPOS:+${{RPM_REPOS}}|}}http://${{PUBLISH_HOST}}/{cr-path-prefix}/CR-${{CR}}/${{RPM_REPO_PATH}}"
             done
             echo "EXTRA_DEB_REPOS=${{DEB_REPOS}}" > deb_repos.setenvfile
             echo "RPM_REPO_URL=${{RPM_REPOS}}"    > rpm_repos.setenvfile
