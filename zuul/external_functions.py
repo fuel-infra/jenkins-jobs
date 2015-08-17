@@ -28,7 +28,12 @@ def pkg_build(item, job, params):
     params['GERRIT_PATCHSET_NUMBER'] = item.change.patchset
     params['GERRIT_REFSPEC'] = item.change.refspec
     if hasattr(item.change, 'owner'):
-        params['GERRIT_CHANGE_OWNER'] = item.change.owner
+        params['GERRIT_CHANGE_OWNER'] = '"{name}" <{email}>'.format(
+            name=item.change.owner['name'],
+            email=item.change.owner['email']
+        )
+        params['GERRIT_CHANGE_OWNER_NAME'] = item.change.owner['name']
+        params['GERRIT_CHANGE_OWNER_EMAIL'] = item.change.owner['email']
 
     # Set specific parameters
     if re.match(re_openstack, params['ZUUL_PROJECT']):
