@@ -20,9 +20,9 @@
       - eskibana:
           plugin_repo: fuel-plugin-elasticsearch-kibana
           tag: 'refs/tags/0.7.1'
-      - zabbix:
-          plugin_repo: fuel-plugin-external-zabbix
-          tag: 'refs/tags/1.0.0-0'
+#      - zabbix:
+#          plugin_repo: fuel-plugin-external-zabbix
+#          tag: 'refs/tags/1.0.0-0'
       - emc:
           plugin_repo: fuel-plugin-external-emc
           tag: 'refs/tags/1.0.0'
