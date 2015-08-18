@@ -41,7 +41,7 @@
             NEUTRON_ENABLE=true
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
-          testgroup: 'deploy_neutron_gre'
+          testgroup: 'rollback_automatically_delete_node'
           upgrade_testgroup:
             - 'rollback_neutron_gre'
 
