@@ -34,8 +34,8 @@
           description: 'Save docker image as artifact. yes - will store image, need for further deployment on slaves'
       - string:
           name: fuelmain_gerrit_commit
-          default: refs/changes/85/167985/26
-          description: 'Temporary parameter while code is not merged to fuel-main'
+          default: refs/changes/32/212732/1
+          description: 'Temporary parameter while code is not implemented on perestroika side'
       - string:
           name: JENKINS_UID
           default: '1000'
@@ -46,7 +46,7 @@
           description: 'Define Jenkins GID, who is going to build packages. Need for setting proper file permissions'
       - string:
           name: UBUNTU_MIRROR_SUFFIX
-          default: /pkgs/ubuntu-2015-07-01-081710
+          default: /pkgs/ubuntu-latest/
           description: 'Define ubuntu stable upstream mirror'
 
     scm:
