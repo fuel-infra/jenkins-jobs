@@ -165,6 +165,8 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'os_upgrade'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'full_cluster_reinstallation'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'partition_preservation'
      - '{version-id}.system_test.{dist}.fuel_plugin_example'
      - '{version-id}.{id}.{dist}.{testgroup}':

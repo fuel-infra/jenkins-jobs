@@ -201,6 +201,9 @@
             - name: '7.0.system_test.ubuntu.os_upgrade'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.full_cluster_reinstallation'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.partition_preservation'
               current-parameters: true
               kill-phase-on: NEVER
