@@ -10,7 +10,7 @@
     logrotate:
       artifactDaysToKeep: 30
       daysToKeep: 30
-    node: fuel-web-master
+    node: python-fuelclient
     concurrent: true
     parameters:
       - string:
