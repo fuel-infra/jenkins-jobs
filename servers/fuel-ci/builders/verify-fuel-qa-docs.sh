@@ -57,4 +57,14 @@ if [[ ${ERRORS} -gt ${PREV_ERRORS} || ${WARNS} -gt ${PREV_WARNS} ]]; then
     exit 1
 fi
 
+# Check if all python modules from ./fuelweb_test are described in ./doc/*.rst files
+cd ${WORKSPACE}
+MODULES=$(find fuelweb_test -name *.py -not -name __init__.py | sed -e 's|/|.|g' | sed -e 's/.py$//g')
+MISSING_MODULES=$(for module in $MODULES; do if ! egrep -q -r "$module$" ./doc ; then echo $module; fi; done)
+if [ -n "$MISSING_MODULES" ]; then
+    echo The following modules are not described in documentation files ./doc/:
+    echo $MISSING_MODULES
+    exit 1
+fi
+
 exit 0
