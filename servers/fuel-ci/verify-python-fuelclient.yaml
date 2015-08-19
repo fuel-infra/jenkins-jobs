@@ -30,7 +30,7 @@
       - 'email-{email-type}'
       - junit:
           keep-long-stdio: false
-          results: '**/fuelclient.xml'
+          results: '**/fuelclient*.xml'
     scm:
       - git:
           branches:
