@@ -19,7 +19,6 @@ set -ex
 
 VENV=${WORKSPACE}_VENV
 virtualenv -p python2.6 "${VENV}"
-${VENV}/bin/pip install tox\>=2.1.0
 source "${VENV}/bin/activate"
 
 export TEST_NAILGUN_DB=nailgun
