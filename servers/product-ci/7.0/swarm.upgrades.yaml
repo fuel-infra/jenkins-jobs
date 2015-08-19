@@ -20,6 +20,11 @@
             - 'upgrade_one_controller'
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+          testgroup: 'os_upgrade'
+          upgrade_testgroup:
+            - 'os_upgrade'
+
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
           upgrade_testgroup:
             - 'upgrade_ha_one_controller'
