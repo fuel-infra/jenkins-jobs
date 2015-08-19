@@ -324,7 +324,7 @@
           default: 'smoke_neutron'
       - string:
           name: KEEP_BEFORE
-          default: 'no'
+          default: 'yes'
 
 - parameter:
     name: iso-magnet-link-6.1
