@@ -1,3 +1,51 @@
+- job:
+    name: 'fuel-plugin.zabbix.tag'
+    builders:
+      - shell:
+          !include-raw-escape './builders/zabbix-prepare-env.sh'
+    description: '<a href=https://github.com/stackforge/fuel-plugin-external-zabbix>Build {plugin_name} plugin when a new tag is created and start system tests.</a>'
+    logrotate:
+      numToKeep: 10
+    node: plugins-ci
+    parameters:
+      - string:
+          name: 'GERRIT_REFNAME'
+          default: 'refs/tags/1.0.0-0'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_REFNAME
+          name: ''
+          refspec: $GERRIT_REFNAME
+          url: 'https://review.openstack.org/stackforge/fuel-plugin-external-zabbix'
+          choosing-strategy: gerrit
+          clean:
+            before: true
+          skip-tag: true
+          wipe-workspace: false
+    triggers:
+      - gerrit:
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'stackforge/fuel-plugin-external-zabbix'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '**'
+          trigger-on:
+            - ref-updated-event
+          readable-message: true
+          silent: true
+          server-name: 'review.openstack.org'
+    publishers:
+      - archive:
+          artifacts: '*.rpm,*.txt'
+      - description-setter:
+          regexp: '^Description string: (.*)'
+          regexp-for-failed: '^Description string: (.*)'
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'ibelikov@mirantis.com, {email_to}'
+
 - job-template:
     name: 'fuel-plugin.{plugin_name}.tag'
     builders:
