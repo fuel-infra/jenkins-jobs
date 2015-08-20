@@ -1,0 +1,47 @@
+This job runs set of swarm tests against 6.1 repositories. 
+As 6.1 GA was released it is being used for acceptance and
+regression testing of code merged into stable branches
+which gets built into updates/proposed/security package
+repositories.
+
+It has following parameters:
+<ul>
+<li>
+MAGNET_LINK - Magnet Link to the ISO
+</li>
+<li>
+UPGRADE_TARBALL_MAGNET_LINK - Upgrade tarball magnet Link
+</li>
+<li>
+UBUNTU_LATEST - snapshots/ubuntu-2015-07-10-124412 relative path to <mirror>/mos/.. containing mirror with packages
+<br>
+of ubuntu to test against
+</li>
+<li>
+RPM_LATEST - snapshots/centos-6-2015-07-10-123110 relative path to <mirror>/mos/.. containing mirror with packages
+<br>
+of RPM to test against
+</li>
+<li>
+ENABLE_PROPOSED|SECURITY|UPDATES - whether to enable particular suites of packages - mirror of proposed/updates/security <br>
+packages. This assumes enabling mos6.1-\<suitename\> dists for ubuntu and "/\<suitename\>" subdirectory with packages for CentOS
+<br>
+of RPM to test against
+</li>
+<li>
+UBUNTU_MIRROR_ID - ID of ubuntu repository to test against. should be ubuntu-\<timestamp\>
+</li>
+</ul>
+  <b>Docs:</b> <a href="https://github.com/stackforge/fuel-qa/tree/stable/6.1/doc"> FUEL QA Docs </a>,
+  <a href="https://docs.google.com/document/d/1r8YqK4HJfVQULxgqGC7tjhAjEDiwznS2Cbsk1yLb9F4/edit#heading=h.v6n7sm36hfs6">Mirantis OpenStack Patching in a Nutshell</a>.
+<p>
+  <b>Ownership:</b> Issues with this job are tracked by MOS-Sustaining and Build Teams
+<p>
+  <b>Contacts:</b>
+  <ul>
+  <li>Infra (mirrors, generic issues): Slack@#infra</li>
+  <li>Test Code SMEs: Slack@#fuel-qa, Nastya Urlapova</li>
+  <li>Job owner: MOS-Sustaning team, Slack@#mos-sustaining-ru, Vitaly Sedelnik</li>
+  <li>Generic Contact: Vladimir Kuklin, Alexey Shtokolov </li>
+  </ul>
+
