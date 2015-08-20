@@ -3,6 +3,7 @@
     builders:
       - inject:
           properties-content: |
+            SLAVE_NODE_CPU=2
             NEUTRON_ENABLE=true
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
       - systest
