@@ -6,6 +6,8 @@ OVERALL_STATUS=0
 
 PRODUCT_VERSION=`awk -F '[:=?]' '/^PRODUCT_VERSION\>/ {print $NF}' config.mk`
 CENTOS_MAJOR=`awk -F '[:=?]' '/^CENTOS_MAJOR\>/ {print $NF}' config.mk`
+CENTOS_MINOR=`awk -F '[:=?]' '/^CENTOS_MINOR\>/ {print $NF}' config.mk`
+CENTOS_RELEASE=${CENTOS_MAJOR}.${CENTOS_MINOR}
 CENTOS_ARCH=`awk -F '[:=?]' '/^CENTOS_ARCH\>/ {print $NF}' config.mk`
 PACKAGES=$(git diff --word-diff=plain HEAD~ requirements-rpm.txt | egrep '{+' | egrep -v "@Base|@Core" | cut -d"+" -f2 | sed ':a;N;$!ba;s/\n/ /g')
 
@@ -22,8 +24,8 @@ fi
 echo "MARK: checking Perestroika and upstream repos..."
 rm -rf /var/tmp/yum-"${USER}"*/*
 
-RES=$(repoquery --repofrompath=upstream-base,http://mirror.centos.org/centos/${CENTOS_MAJOR}/os/${CENTOS_ARCH}/ \
---repofrompath=upstream-updates,http://mirror.centos.org/centos/${CENTOS_MAJOR}/updates/${CENTOS_ARCH}/ \
+RES=$(repoquery --repofrompath=upstream-base,http://vault.centos.org/${CENTOS_RELEASE}/os/${CENTOS_ARCH}/ \
+--repofrompath=upstream-updates,http://vault.centos.org/${CENTOS_RELEASE}/updates/${CENTOS_ARCH}/ \
 --repofrompath==perestroika,http://mirror.fuel-infra.org/mos-repos/centos/mos${PRODUCT_VERSION}-centos${CENTOS_MAJOR}-fuel/os/${CENTOS_ARCH}/ \
 --repofrompath==perestroika-security,http://mirror.fuel-infra.org/mos-repos/centos/mos${PRODUCT_VERSION}-centos${CENTOS_MAJOR}-fuel/security/${CENTOS_ARCH}/ \
 --repofrompath==perestroika-updates,http://mirror.fuel-infra.org/mos-repos/centos/mos${PRODUCT_VERSION}-centos${CENTOS_MAJOR}-fuel/updates/${CENTOS_ARCH}/ \
