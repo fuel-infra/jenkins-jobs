@@ -32,6 +32,21 @@
           branches:
             - 'origin/master'
           url: https://review.openstack.org/stackforge/fuel-plugins.git
+      - git:
+          branches:
+            - 'origin/master'
+          url: https://git.openstack.org/stackforge/fuel-plugin-detach-database.git
+          basedir: fuel-plugin-detach-database
+      - git:
+          branches:
+            - 'origin/master'
+          url: https://git.openstack.org/stackforge/fuel-plugin-detach-rabbitmq.git
+          basedir: fuel-plugin-detach-rabbitmq
+      - git:
+          branches:
+            - 'origin/master'
+          url: https://git.openstack.org/stackforge/fuel-plugin-detach-keystone.git
+          basedir: fuel-plugin-detach-keystone
     triggers:
       - timed: '0 22 * * *'
     wrappers:
