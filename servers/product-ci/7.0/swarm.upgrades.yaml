@@ -12,6 +12,7 @@
     upgrade_repobranch: 'origin/master'
     properties: |
       KEYSTONE_PASSWORD=newpass
+      SLAVE_NODE_MEMORY=3072
     weight: '8'
     jobs:
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
