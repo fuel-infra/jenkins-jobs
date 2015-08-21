@@ -20,7 +20,7 @@ re_branch_mos_version = r'^openstack-ci/fuel-(?P<version>[0-9.]+)(?P<update>-upd
 
 
 def params_gerrit(item, job, params):
-    # Gerrit parameters
+    # Set Gerrit parameters
     params['GERRIT_PROJECT'] = params['ZUUL_PROJECT']
     params['GERRIT_BRANCH'] = params['ZUUL_BRANCH']
     params['GERRIT_CHANGE_NUMBER'] = params['ZUUL_CHANGE']
@@ -56,28 +56,49 @@ def params_mos(item, job, params):
 
 
 def pkg_build(item, job, params):
-    # Common params
     params_gerrit(item, job, params)
     params_mos(item, job, params)
 
     # Package jobs specific parameters
+
+    # Branch for sources is always known
+    params['SOURCE_BRANCH'] = params['ZUUL_BRANCH']
+
     if params['IS_OPENSTACK'] == 'true':
-        params['SRC_PROJECT'] = re.sub(r'-build(/|$)', r'\1', params['ZUUL_PROJECT'])
-        params['SPEC_PROJECT'] = re.sub(r'(/|$)', r'-build\1', params['ZUUL_PROJECT'])
-        params['SPEC_BRANCH'] = params['ZUUL_BRANCH']
-        if params['SRC_PROJECT'] == params['ZUUL_PROJECT']:
-            params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
-        if params['SPEC_PROJECT'] == params['ZUUL_PROJECT']:
-            params['SPEC_REFSPEC'] = params['GERRIT_REFSPEC']
+        # Openstack projects are used for cluster nodes
         params['COMPONENT_PATH'] = 'cluster/'
+        # Check for dependent pair of openstack and openstack-build projects
+        changes = params['ZUUL_CHANGES'].split('^')
+        if len(changes) == 2:
+            for change_info in changes:
+                change = change_info.split(':')
+                if re.match(r'^openstack/', change[0]):
+                    params['SRC_PROJECT'] = change[0]
+                    params['SOURCE_BRANCH'] = change[1]
+                    params['SOURCE_REFSPEC'] = change[2]
+                if re.match(r'^openstack-build/', change[0]):
+                    params['SPEC_PROJECT'] = change[0]
+                    params['SPEC_BRANCH'] = change[1]
+                    params['SPEC_REFSPEC'] = change[2]
+        else:
+            # Guess source and build spec project names
+            params['SRC_PROJECT'] = re.sub(r'-build(/|$)', r'\1',
+                                           params['ZUUL_PROJECT'])
+            params['SPEC_PROJECT'] = re.sub(r'(/|$)', r'-build\1',
+                                            params['SRC_PROJECT'])
+            # Branch for build specs matches branch of sources
+            params['SPEC_BRANCH'] = params['ZUUL_BRANCH']
+            # Guess for which project use given refspec
+            if params['SRC_PROJECT'] == params['ZUUL_PROJECT']:
+                params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
+            if params['SPEC_PROJECT'] == params['ZUUL_PROJECT']:
+                params['SPEC_REFSPEC'] = params['GERRIT_REFSPEC']
     else:
         params['SRC_PROJECT'] = params['ZUUL_PROJECT']
+        params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
         params['COMPONENT_PATH'] = 'fuel/'
 
-    if params['SRC_PROJECT'] == params['ZUUL_PROJECT']:
-        params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
-
-    params['SOURCE_BRANCH'] = params['ZUUL_BRANCH']
+    params['REQUEST_NUM'] = 'CR-' + str(params['ZUUL_CHANGE'])
 
     params['LAST_STAGE'] = str(item.change.is_merged).lower()
 
