@@ -31,4 +31,6 @@ Examples
 
     fab fuel_ci:master_centos dos_py_29:version publish:csv
 
-- run arbitrary command
+Use `--user` option to connect as root::
+
+    fab --user=root fuel_ci:names=ci-slave -- whoami
