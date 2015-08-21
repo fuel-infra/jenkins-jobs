@@ -17,6 +17,7 @@ import re
 
 re_proj_openstack = r'^openstack(?P<build>-build)?/(?P<name>.+)'
 re_branch_mos_version = r'^openstack-ci/fuel-(?P<version>[0-9.]+)(?P<update>-updates)?/'
+re_pkg_name = r'^.+/(.+)$'
 
 
 def params_gerrit(item, job, params):
@@ -60,6 +61,8 @@ def pkg_build(item, job, params):
     params_mos(item, job, params)
 
     # Package jobs specific parameters
+
+    params['PACKAGENAME'] = re.match(re_pkg_name, params['ZUUL_PROJECT']).group(1)
 
     # Branch for sources is always known
     params['SOURCE_BRANCH'] = params['ZUUL_BRANCH']
