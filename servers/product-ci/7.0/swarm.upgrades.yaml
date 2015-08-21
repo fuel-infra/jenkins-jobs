@@ -21,6 +21,8 @@
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'os_upgrade'
+          weight: '20'
+          node: 'huge-systest'
           upgrade_testgroup:
             - 'os_upgrade'
 
