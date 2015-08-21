@@ -58,3 +58,31 @@
           upgrade_testgroup:
             - 'upgrade_neutron_gre_ha'
             - 'rollback_neutron_gre_ha'
+
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+          testgroup: 'ceph_rados_gw'
+          upgrade_testgroup:
+            - 'upgrade_neutron_ceph'
+          properties: |
+            NEUTRON_ENABLE=true
+
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+          testgroup: 'ceph_rados_gw'
+          upgrade_testgroup:
+            - 'upgrade_neutron_ceph_classic'
+          properties: |
+            NEUTRON_ENABLE=true
+            CLASSIC_PROVISIONING=true
+
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+          testgroup: 'deploy_multirole_compute_cinder'
+          upgrade_testgroup:
+            - 'upgrade_nova_cinder'
+
+      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+          testgroup: 'deploy_multirole_compute_cinder'
+          upgrade_testgroup:
+            - 'upgrade_nova_cinder_classic'
+          properties: |
+            CLASSIC_PROVISIONING=true
+

@@ -242,3 +242,29 @@
               kill-phase-on: NEVER
             - name: '7.0.system_test.centos.rollback_neutron_gre_ha'
               current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.upgrade_neutron_ceph'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.upgrade_neutron_ceph'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.upgrade_neutron_ceph_classic'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.upgrade_neutron_ceph_classic'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.upgrade_nova_cinder'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.upgrade_nova_cinder'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.upgrade_nova_cinder_classic'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.upgrade_nova_cinder_classic'
+              current-parameters: true
+              kill-phase-on: NEVER
+
