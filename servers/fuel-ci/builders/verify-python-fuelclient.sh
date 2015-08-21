@@ -20,11 +20,14 @@ set -ex
 VENV=${WORKSPACE}_VENV
 virtualenv -p python2.6 "${VENV}"
 ${VENV}/bin/pip install tox\>=2.1.0
+
 source "${VENV}/bin/activate"
 
 export TEST_NAILGUN_DB=nailgun
 export FUEL_WEB_ROOT="${WORKSPACE}/fuel-web"
 
-./run_tests.sh
+trap "tox -e cleanup" SIGINT SIGTERM
+tox
+trap - SIGINT SIGTERM
 
 deactivate
