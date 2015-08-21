@@ -115,6 +115,10 @@
           # Build package
           ############################
 
+          # Use parameters set by Zuul instead of guessing ones
+          sed -ri '/set_default_params/ d' build-{pkg_type}.sh
+
+          # ... and build a package
           bash build-{pkg_type}.sh
 
           rm -rf {repo-base-path}/CR-${{ZUUL_CHANGE}}
