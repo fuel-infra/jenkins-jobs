@@ -2,7 +2,7 @@
     name: '6.0.1.set_stable_mirror'
     builders:
       - copyartifact:
-          project: '6.1.set_stable_mirror'
+          project: '6.0.1.set_stable_mirror'
           filter: 'build_files.txt'
           which-build: last-successful
           optional: true
