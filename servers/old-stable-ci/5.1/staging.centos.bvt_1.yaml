@@ -25,7 +25,7 @@
     publishers:
       - nosetests
       - email-default:
-          mail-to: devops+alert@mirantis.com,fuel-osci@mirantis.com,mos-qa@mirantis.com
+          mail-to: ci+alert@mirantis.com,fuel-build@mirantis.com,mos-qa@mirantis.com
       - trigger-parameterized-builds:
         - project: fuel_build_reports
           condition: UNSTABLE_OR_BETTER
