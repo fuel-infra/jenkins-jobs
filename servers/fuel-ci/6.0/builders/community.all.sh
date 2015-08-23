@@ -3,10 +3,10 @@ export PATH=/bin:/usr/bin:/sbin:/usr/sbin:$PATH
 export FEATURE_GROUPS=experimental
 
 PROD_VER=`grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2`
-export ISO_NAME=fuel-community-$PROD_VER-$BUILD_NUMBER-$BUILD_ID
-export UPGRADE_TARBALL_NAME=fuel-community-$PROD_VER-upgrade-$BUILD_NUMBER-$BUILD_ID
-export ARTIFACT_NAME=fuel-community-$PROD_VER-artifacts-$BUILD_NUMBER-$BUILD_ID
-export ARTIFACT_DIFF_NAME=fuel-community-$PROD_VER-diff-$BUILD_NUMBER-$BUILD_ID
+export ISO_NAME=fuel-community-$PROD_VER-$BUILD_NUMBER-${BUILD_TIMESTAMP}
+export UPGRADE_TARBALL_NAME=fuel-community-$PROD_VER-upgrade-$BUILD_NUMBER-${BUILD_TIMESTAMP}
+export ARTIFACT_NAME=fuel-community-$PROD_VER-artifacts-$BUILD_NUMBER-${BUILD_TIMESTAMP}
+export ARTIFACT_DIFF_NAME=fuel-community-$PROD_VER-diff-$BUILD_NUMBER-${BUILD_TIMESTAMP}
 
 export USE_MIRROR=ext
 

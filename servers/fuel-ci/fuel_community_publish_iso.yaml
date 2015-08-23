@@ -11,10 +11,10 @@
     parameters:
       - string:
           name: ISO_ID
-          description: $release-$BUILD_NUMBER-$BUILD_ID from upstream iso build
+          description: $release-$BUILD_NUMBER-$BUILD_TIMESTAMP from upstream iso build
       - string:
           name: UPGRADE_ID
-          description: $release-upgrade-$BUILD_NUMBER-$BUILD_ID from upstream job
+          description: $release-upgrade-$BUILD_NUMBER-$BUILD_TIMESTAMP from upstream job
       - string:
           name: ARTIFACTS_DIR
           description: "Path to artifacts, that should be published, for example: /home/jenkins/workspace/6.0-community.all/artifacts"

@@ -13,6 +13,7 @@
       </p>
     node: iso
     properties:
+      - build-timestamp
       - heavy-job:
           weight: 1
       - throttle:

@@ -5,8 +5,8 @@ set -ex
 export FEATURE_GROUPS="experimental"
 
 PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
-export ISO_NAME="fuel-community-${PROD_VER}-${BUILD_NUMBER}-${BUILD_ID}"
-export UPGRADE_TARBALL_NAME="fuel-community-${PROD_VER}-upgrade-${BUILD_NUMBER}-${BUILD_ID}"
+export ISO_NAME="fuel-community-${PROD_VER}-${BUILD_NUMBER}-${BUILD_TIMESTAMP}"
+export UPGRADE_TARBALL_NAME="fuel-community-${PROD_VER}-upgrade-${BUILD_NUMBER}-${BUILD_TIMESTAMP}"
 
 export USE_MIRROR=ext
 

@@ -13,6 +13,7 @@
       numToKeep: 10
     node: build
     properties:
+      - build-timestamp
       - heavy-job:
           weight: 2
     parameters:
@@ -43,19 +44,19 @@
         - project: publish_fuel_community_iso
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
-            ISO_ID=6.1-$BUILD_NUMBER-$BUILD_ID
-            UPGRADE_ID=6.1-upgrade-$BUILD_NUMBER-$BUILD_ID
+            ISO_ID=6.1-$BUILD_NUMBER-$BUILD_TIMESTAMP
+            UPGRADE_ID=6.1-upgrade-$BUILD_NUMBER-$BUILD_TIMESTAMP
             ARTIFACTS_DIR=$WORKSPACE/artifacts
             RELEASE=6.1
             FUEL_MAIN_BRANCH=master
-            BUILD=fuel-community-6.1-$BUILD_NUMBER-$BUILD_ID
+            BUILD=fuel-community-6.1-$BUILD_NUMBER-$BUILD_TIMESTAMP
             TESTS_REPO=fuel-qa
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
         - project: fuel_community_build_reports
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
             RELEASE=6.1
-            BUILD=fuel-community-6.1-$BUILD_NUMBER-$BUILD_ID
+            BUILD=fuel-community-6.1-$BUILD_NUMBER-$BUILD_TIMESTAMP
             STAGE=build
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
@@ -63,7 +64,7 @@
           condition: FAILED
           predefined-parameters: |
             RELEASE=6.1
-            BUILD=fuel-community-6.1-$BUILD_NUMBER-$BUILD_ID
+            BUILD=fuel-community-6.1-$BUILD_NUMBER-$BUILD_TIMESTAMP
             STAGE=build
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL

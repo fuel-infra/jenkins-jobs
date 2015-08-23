@@ -1,0 +1,12 @@
+#
+# In newer versions of Jenkins BUILD_ID is equal to BUILD_NUMBER
+# See https://issues.jenkins-ci.org/browse/JENKINS-26520
+# Thus we should inject BUILD_TIMESTAMP variable via property
+#
+
+- property:
+    name: build-timestamp
+    properties:
+      - inject:
+          groovy-content: |
+            return [BUILD_TIMESTAMP:currentBuild.getTime().format("yyyy-MM-dd_HH-mm-ss")]

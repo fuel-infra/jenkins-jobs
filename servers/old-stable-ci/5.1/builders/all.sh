@@ -5,10 +5,10 @@ echo STARTED_TIME="`date -u +'%Y-%m-%dT%H:%M:%S'`" > ci_status_params.txt
 export FEATURE_GROUPS=mirantis
 
 PROD_VER=`grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2`
-export ISO_NAME=fuel-$PROD_VER-$BUILD_NUMBER-$BUILD_ID
-export UPGRADE_TARBALL_NAME=fuel-$PROD_VER-upgrade-$BUILD_NUMBER-$BUILD_ID
-export ARTIFACT_NAME=fuel-$PROD_VER-artifacts-$BUILD_NUMBER-$BUILD_ID
-export ARTIFACT_DIFF_NAME=fuel-$PROD_VER-diff-$BUILD_NUMBER-$BUILD_ID
+export ISO_NAME=fuel-$PROD_VER-$BUILD_NUMBER-${BUILD_TIMESTAMP}
+export UPGRADE_TARBALL_NAME=fuel-$PROD_VER-upgrade-$BUILD_NUMBER-${BUILD_TIMESTAMP}
+export ARTIFACT_NAME=fuel-$PROD_VER-artifacts-$BUILD_NUMBER-${BUILD_TIMESTAMP}
+export ARTIFACT_DIFF_NAME=fuel-$PROD_VER-diff-$BUILD_NUMBER-${BUILD_TIMESTAMP}
 
 
 # Available choices: msk srt usa hrk none

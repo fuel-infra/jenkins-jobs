@@ -19,6 +19,7 @@
       daysToKeep: 90
     node: iso
     properties:
+      - build-timestamp
       - heavy-job:
           weight: 1
       - throttle:
