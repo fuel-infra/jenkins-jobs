@@ -1,0 +1,53 @@
+- job:
+    name: '5.0.3.set_stable_mirror'
+    builders:
+      - copyartifact:
+          project: '5.0.3.set_stable_mirror'
+          filter: 'build_files.txt'
+          which-build: last-successful
+          optional: true
+      - shell:
+          !include-raw builders/set_stable_mirror.sh
+    description: |
+      Update stable symlink target to specified mirror version.<br>
+
+      <p>
+        Owned by: Fuel Build Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #infra<br/>
+      </p>
+    logrotate:
+      daysToKeep: 45
+      numToKeep: 100
+    node: mirror
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          default: '5.0.3'
+          name: MIRROR
+      - string:
+          default: 'osci-mirror-kha.kha.mirantis.net osci-mirror-msk.msk.mirantis.net osci-mirror-srt.srt.mirantis.net seed-us1.fuel-infra.org seed-cz1.fuel-infra.org'
+          name: RSYNCHOSTS
+      - string:
+          name: STABLE_VERSION
+    publishers:
+      - archive:
+          allow-empty: false
+          artifacts: build_*.txt
+          latest-only: false
+      - description-setter:
+          regexp: ^[^\s]* is stable.*a href.*
+      - trigger:
+          project: '5.0.3.iso'
+          threshold: SUCCESS
+      - email-default:
+          mail-to: ci+alert@mirantis.com, fuel-build@mirantis.com
+    scm:
+      - osci-mirrors:
+          branch: stable/5.0
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 320

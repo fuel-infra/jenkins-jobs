@@ -70,7 +70,8 @@
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
     scm:
-      - osci-mirrors
+      - osci-mirrors:
+          branch: master
     wrappers:
       - timeout:
           fail: true

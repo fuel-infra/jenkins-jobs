@@ -1,0 +1,35 @@
+- job:
+    name: '5.0.3.staging.ubuntu.bvt_2'
+    builders:
+      - inject:
+          properties-content: ''
+      - systest
+    concurrent: true
+    description:
+      !include-raw descriptions/staging.ubuntu.bvt_2
+    logrotate:
+      daysToKeep: 30
+    node: custom_bvt
+    properties:
+      - heavy-job:
+          weight: 8
+      - throttle:
+          max-per-node: 1
+          option: project
+    parameters:
+      - systest:
+          dist: Ubuntu
+          testgroup: bvt_2
+          version-id: '5.0.3'
+          id: 'staging'
+    publishers:
+      - nosetests
+      - email-default:
+          mail-to: ci+alert@mirantis.com,fuel-build@mirantis.com,mos-qa@mirantis.com
+    scm:
+      - stackforge:
+          branch: 'stable/5.0'
+          repo: 'fuel-main'
+    wrappers:
+      - timeout:
+          timeout: 320

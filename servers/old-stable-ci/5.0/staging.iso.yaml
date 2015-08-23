@@ -1,0 +1,65 @@
+- job:
+    name: '5.0.3.staging.iso'
+    builders:
+      - shell:
+          !include-raw builders/staging.iso.sh
+    concurrent: true
+    description: |
+      Build fuel master code on top of staging files/5.0.3-timestamp Fuel mirror.
+      <p>This ISO is used only to test staging mirror.<p>
+      For "official" 5.0.3 iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/5.0.3.iso/">5.0.3.iso</a>
+
+      <p>
+        Owned by: Fuel Build team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #infra<br/>
+      </p>
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    node: iso
+    properties:
+      - build-timestamp
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    parameters:
+
+      - string:
+          name: MIRROR_BASE
+          description: For example, http://osci-mirror-msk.msk.mirantis.net/fwm/files/$MIRROR_VERSION
+      - string:
+          name: make_args
+          description: Additional make arguments
+      - string:
+          name: FUELMAIN_COMMIT
+          default: stable/5.0
+      - string:
+          name: fuelmain_gerrit_commit
+          default: 'none'
+          description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
+      - string:
+          name: USE_MIRROR
+          default: msk
+    publishers:
+      - archive:
+          allow-empty: false
+          artifacts: artifacts/*txt, artifacts/*changelog
+          latest-only: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+      - email-default:
+          mail-to: ci+alert@mirantis.com, fuel-build@mirantis.com
+    scm:
+      - stackforge:
+          branch: 'stable/5.0'
+          repo: fuel-main
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 60

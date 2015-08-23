@@ -1,0 +1,66 @@
+- job:
+    name: '5.0.3.iso'
+    builders:
+      - shell:
+          !include-raw builders/iso.sh
+    description: |
+      Build artifacts: iso and img
+
+      <p>
+        Owned by: Fuel Build Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #infra<br/>
+      </p>
+    node: iso
+    properties:
+      - build-timestamp
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    parameters:
+      - string:
+          name: deep_clean
+          default: 'true'
+          description: Perform deep_clean or not. Default is "true". Set any other value
+            to disable it.
+      - string:
+          name: make_args
+          description: Additional make arguments
+      - string:
+          name: BUILD_MIRROR_URL
+          description: 'http://jenkins-product.srt.mirantis.net:8080/job/5.0.3.build_staging_mirror/100/'
+    publishers:
+      - archive:
+          allow-empty: false
+          artifacts: artifacts/*.data.txt, artifacts/*.data.html, version.yaml.txt,
+            *magnet_link.txt, listing.txt, artifacts/*changelog, data_build_url.txt
+          latest-only: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+      - email-default:
+          mail-to: 'ci+alert@mirantis.com, fuel-build@mirantis.com'
+      - trigger-parameterized-builds:
+        - project: '5.0.3.smoke,5.0.3.centos.bvt_1,5.0.3.ubuntu.bvt_2'
+          condition: UNSTABLE_OR_BETTER
+          property-file: magnet_link.txt
+
+    scm:
+      - stackforge:
+          branch: 'stable/5.0'
+          repo: fuel-main
+    triggers:
+      - timed: 'H 21 * * *'
+    wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
+      - inject-passwords:
+          global: true
+      - ssh-agent-credentials:
+          users:
+            - '39bdabdc-58f7-415b-a27b-7dd0d351e015'

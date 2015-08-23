@@ -1,0 +1,56 @@
+- job:
+    name: '5.0.3.build_staging_mirror'
+    builders:
+      - shell:
+          !include-raw builders/build_staging_mirror.sh
+    description:
+      !include-raw descriptions/build_staging_mirror
+    logrotate:
+      daysToKeep: 45
+      numToKeep: 100
+    node: mirror
+    parameters:
+      - bool:
+          name: only_resync
+          default: 'false'
+      - string:
+          name: extra_commits
+          description: 'Refspecs for commits in fuel-main gerrit. For example: refs/changes/10/55310/1'
+      - string:
+          name: YUM_DOWNLOAD_SRC
+          default: 'yes'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    publishers:
+      - email-default:
+          mail-to: ci+alert@mirantis.com, fuel-build@mirantis.com
+      - description-setter:
+          regexp: ^Updated:.*a href.*
+      - archive:
+          artifacts: mirror_staging.txt
+          latest-only: false
+      - trigger-parameterized-builds:
+        - project: '5.0.3.test_staging_mirror'
+          condition: UNSTABLE_OR_BETTER
+          property-file: mirror_staging.txt
+    scm:
+      - stackforge:
+          branch: 'stable/5.0'
+          repo: fuel-main
+      - osci-mirrors:
+          branch: 'stable/5.0'
+    triggers:
+      - timed: 'H 10 * * *'
+    wrappers:
+      - timeout:
+          timeout: 240
+          fail: true
+      - ssh-agent-credentials:
+          users:
+            - '39bdabdc-58f7-415b-a27b-7dd0d351e015'

@@ -111,5 +111,5 @@
           basedir: osci-mirrors
           url: https://review.fuel-infra.org/infra/mirrors
           branches:
-            - origin/master
+            - origin/{branch}
           wipe-workspace: false
