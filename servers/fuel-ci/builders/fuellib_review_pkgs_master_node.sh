@@ -4,6 +4,8 @@ set -ex
 
 export MIRROR_UBUNTU="$(curl -sSf "${JENKINS_URL}job/devops.master.env/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt")"
 
+export OPENSTACK_RELEASE=Ubuntu
+
 export FUEL_MAIN_PATH="/home/jenkins/workspace/fuel-main/env_masternode-master"
 export SYSTEM_TESTS="${FUEL_MAIN_PATH}/utils/jenkins/system_tests.sh"
 export ENV_NAME="env_masternode-master"
