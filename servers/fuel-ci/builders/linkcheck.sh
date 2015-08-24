@@ -6,24 +6,27 @@ WS=${WORKSPACE}
 
 virtualenv _requirenv
 source _requirenv/bin/activate
-pip install -r ${REQUIREMENTS}
+pip install -r "${REQUIREMENTS}"
 
-cd ${MAKEDIR}
+cd "${MAKEDIR}"
 
-(make linkcheck || true) | tee ${WS}/make_output_current.txt
+(make linkcheck || true) | tee "${WS}/make_output_current.txt"
 
-if [ -f ${WS}/make_output.txt ]
+egrep 'http.*:' "${WS}/make_output_current.txt" |\
+  sed 's/\s\s*/ /g' | egrep -w -v "${REGEX}" | sort > "${WS}/build_current.txt"
+
+git checkout HEAD~1
+
+(make linkcheck || true) | tee "${WS}/make_output_previous.txt"
+
+egrep 'http.*:' "${WS}/make_output_previous.txt" |\
+  sed 's/\s\s*/ /g' | egrep -w -v "${REGEX}" | sort > "${WS}/build_previous.txt"
+
+(diff --unchanged-line-format= --old-line-format= --new-line-format='%L' \
+  "${WS}/build_previous.txt" "${WS}/build_current.txt" || true) \
+  > "${WS}/build_new.txt"
+
+if [ -s "${WS}/build_new.txt" ]
 then
-  sort ${WS}/make_output.txt | sed 's/\s\s*/ /g' | \
-    cut -d ' ' -f 3- > ${WS}/make_output_sorted.txt
-  sort ${WS}/make_output_current.txt | sed 's/\s\s*/ /g' | \
-    cut -d ' ' -f 3- > ${WS}/make_output_current_sorted.txt
-  (diff ${WS}/make_output_sorted.txt ${WS}/make_output_current_sorted.txt || true) | \
-    egrep 'http*.:' | tee ${WS}/difference.txt
-  rm ${WS}/make_output_sorted.txt ${WS}/make_output_current_sorted.txt
+  exit 1
 fi
-
-mv ${WS}/make_output_current.txt ${WS}/make_output.txt
-
-egrep 'http.*:' ${WS}/make_output.txt |\
-  sed 's/\s\s*/ /g' | egrep -w -v "${REGEX}" > ${WS}/missing.txt
