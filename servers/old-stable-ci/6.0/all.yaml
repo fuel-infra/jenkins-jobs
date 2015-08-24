@@ -80,7 +80,7 @@
           branch: 'stable/6.0'
           repo: fuel-main
     triggers:
-      - timed: 'H 20 * * *'
+      - timed: 'H 7 * * *'
     wrappers:
       - timeout:
           timeout: 120

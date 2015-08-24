@@ -69,7 +69,7 @@
       - osci-mirrors:
           branch: master
     triggers:
-      - timed: 'H 5 * * *'
+      - timed: 'H 18 * * *'
     wrappers:
       - ssh-agent-credentials:
           users:
