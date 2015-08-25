@@ -172,3 +172,5 @@
          testgroup: 'fuel_plugin_reboot'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'fuel_plugin_vip_reservation'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'network_templates'
