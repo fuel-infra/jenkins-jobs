@@ -37,14 +37,27 @@
           export REPO_TYPE={pkg_type}
           export GERRIT_PROJECT=${{ZUUL_PROJECT}}
 
+          # Remove quotes, double and trailing slashes
+          REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+          EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+          PACKAGELIST=$(echo "${{PACKAGELIST}}" | sed 's|,| |g')
+
           START_TS=$(date +%s)
-          if bash -x vm-test {distro}; then
-              echo FAILED=false >> ci_status_params
-              RESULT=0
-          else
-              echo FAILED=true >> ci_status_params
-              RESULT=1
-          fi
+
+          echo FAILED=false >> ci_status_params
+          RESULT=0
+          for script in version-test-{pkg_type} vm-test repo-test-{pkg_type}
+          do
+              if [ -x "${{WORKSPACE}}/${{script}}" ]
+              then
+                  if ! bash -x "${{WORKSPACE}}/${{script}}"
+                  then
+                      sed -i 's/FAILED=false/FAILED=true/' ci_status_params
+                      RESULT=1
+                  fi
+              fi
+          done
+
           TIME_ELAPSED=$(( $(date +%s) - ${{START_TS}} ))
           echo "RESULT=${{RESULT}}" > setenvfile
           echo "TIME_ELAPSED='$(date -u -d @${{TIME_ELAPSED}} +'%Hh %Mm %Ss' | sed 's|^00h ||; s|^00m ||')'" >> setenvfile
