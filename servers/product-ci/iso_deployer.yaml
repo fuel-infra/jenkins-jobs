@@ -1,0 +1,15 @@
+- job:
+    builders:
+      - shell:
+          !include-raw './builders/iso_deployer.sh'
+    concurrent: true
+    logrotate:
+      num-to-keep: 400
+    name: iso_deployer
+    node: iso_cacher
+    parameters:
+      - string:
+          name: MAGNET_LINK
+    publishers:
+      - email:
+          recipients: devops+alert@mirantis.com
