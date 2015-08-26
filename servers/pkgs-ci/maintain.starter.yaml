@@ -1,0 +1,21 @@
+- job-template:
+    name: 'maintain.starter'
+    disabled: '{is-disabled}'
+    concurrent: false
+    node: '{maintain-node}'
+    triggers:
+      - timed: '@midnight'
+    builders:
+      - trigger-builds:
+          - project: 'maintain.worker'
+            parameter-factories:
+              - factory: allnodesforlabel
+                name: 'reBuilder-build-hosts'
+                node-label: '{maintain-node}'
+                ignore-offline-nodes: true
+            block: false
+    publishers:
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: false

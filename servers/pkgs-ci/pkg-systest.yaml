@@ -1,7 +1,7 @@
 - job-template:
-    name: 'pkg-systest-{mos_version}-{pkg_type}'
+    name: '{mos_version}-pkg-systest-{os}'
     builders:
-       - systest-{pkg_type}
+       - systest-{os}
     concurrent: true
     logrotate:
       artifactDaysToKeep: 90
@@ -20,7 +20,7 @@
           default: '{openstack_release}'
       - string:
           name: ENV_PREFIX
-          default: 'pkg-systest-{mos_version}-{pkg_type}'
+          default: '{mos_version}-pkg-systest-{os}'
           description: Define env prefix name. This parameter should not be changed
       - string:
           name: NEUTRON_ENABLE
@@ -44,6 +44,12 @@
       - string:
           name: EXTRA_DEB_REPOS_PRIORITY
           default: '1052'
+      - string:
+          name: PRODUCT_JENKINS_URL
+          default: '{product_jenkins_url}'
+      - string:
+          name: ISO_JOB_NAME
+          default: '{mos_version}.test_all'
     scm:
       - stackforge:
           branch: 'master'
@@ -52,12 +58,11 @@
           branch: 'master'
           repo: fuel-qa
     wrappers:
-      - ansicolor:
-          colormap: xterm
       - timeout:
           fail: true
           timeout: 210
       - timestamps
+      - ansicolor
     publishers:
       - archive:
           allow-empty: true
@@ -71,4 +76,4 @@
           keep-long-stdio: false
           results: '**/nosetests.xml'
 
-    node: 'packtest'
+    node: '{systest-node}'

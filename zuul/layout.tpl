@@ -17,7 +17,7 @@ pipelines:
       +/-1 Verified vote from Jenkins.
 
       This pipeline is triggered when openstack/* projects gets +1 from
-      Infra CI (mos-infra-ci), or comment "recheck".
+      Infra CI (mos-infra-ci), or comment "rebuild".
     source: gerrit
     success-message: |
       Build succeeded (pkg-build pipeline).
@@ -31,14 +31,24 @@ pipelines:
           approval:
             - verified: 1
           branch:
-            - ^master$
-            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+#            - ^master$
+            - ^openstack-ci/fuel-8\.\d[-/]
             - ^openstack-ci/fuel/centos\d/
         - event: comment-added
-          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck|reverify)
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*rebuild
           branch:
-            - ^master$
-            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+#            - ^master$
+            - ^openstack-ci/fuel-8\.\d[-/]
+            - ^openstack-ci/fuel/centos\d/
+        - event: comment-added
+          approval:
+            - workflow: 1
+          require-approval:
+            - verified: [-1, -2]
+              username: pkgs-ci
+          branch:
+#            - ^master$
+            - ^openstack-ci/fuel-8\.\d[-/]
             - ^openstack-ci/fuel/centos\d/
     require:
       current-patchset: True
@@ -74,14 +84,24 @@ pipelines:
       gerrit:
         - event: patchset-created
           branch:
-            - ^master$
-            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+#            - ^master$
+            - ^openstack-ci/fuel-8\.\d[-/]
             - ^openstack-ci/fuel/centos\d/
         - event: comment-added
-          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck|reverify)
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*rebuild
           branch:
-            - ^master$
-            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+#            - ^master$
+            - ^openstack-ci/fuel-8\.\d[-/]
+            - ^openstack-ci/fuel/centos\d/
+        - event: comment-added
+          approval:
+            - workflow: 1
+          require-approval:
+            - verified: [-1, -2]
+              username: pkgs-ci
+          branch:
+#            - ^master$
+            - ^openstack-ci/fuel-8\.\d[-/]
             - ^openstack-ci/fuel/centos\d/
     require:
       current-patchset: True
@@ -102,7 +122,7 @@ pipelines:
       +/-1 Verified vote from Jenkins.
 
       This pipeline is triggered when project, that are required by openstack/*
-      projects, gets new patchset or comment "recheck".
+      projects, gets new patchset or comment "rebuild".
     source: gerrit
     success-message: |
       Build succeeded (pkg-build pipeline).
@@ -113,13 +133,22 @@ pipelines:
       gerrit:
         - event: patchset-created
           branch:
-            - ^master$
-            - ^[7-9]\.\d$
+#            - ^master$
+            - ^8\.\d$
         - event: comment-added
-          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck|reverify)
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*rebuild
           branch:
-            - ^master$
-            - ^[7-9]\.\d$
+#            - ^master$
+            - ^8\.\d$
+        - event: comment-added
+          approval:
+            - workflow: 1
+          require-approval:
+            - verified: [-1, -2]
+              username: pkgs-ci
+          branch:
+#            - ^master$
+            - ^8\.\d$
     require:
       current-patchset: True
       open: True
@@ -133,26 +162,30 @@ pipelines:
       gerrit:
         verified: -1
 
-  - name: pkg-gate-release
+  - name: pkg-test
     description: |
-      Recheck approved changes and merge on success.
+      Run package tests and set Verified +/- 2 vote
 
-      This pipeline is triggerred only by changes to versioned branches to not mess changes from stable
-      brances and master.
+      This pipeline is triggered when project, gets Verified +1 from user pkgs-ci
+      or by comment "retest".
     source: gerrit
     success-message: |
-      Build succeeded (pkg-gate pipeline).
+      Build succeeded (pkg-build pipeline).
     failure-message: |
-      Build failed (pkg-gate pipeline).
-    manager: DependentPipelineManager
+      Build failed (pkg-build pipeline).
+    manager: IndependentPipelineManager
     trigger:
       gerrit:
         - event: comment-added
+          username: pkgs-ci
           approval:
-            - workflow: 1
+            - verified: 1
+        - event: comment-added
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*retest
           branch:
-            - ^[7-9]\.\d$
-            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+            - ^master$
+            - ^8\.\d$
+            - ^openstack-ci/fuel-8\.\d[-/]
             - ^openstack-ci/fuel/centos\d/
     require:
       current-patchset: True
@@ -163,20 +196,13 @@ pipelines:
     success:
       gerrit:
         verified: 2
-        submit: False
     failure:
       gerrit:
         verified: -2
-    precedence: high
-    window-floor: 20
-    window-increase-factor: 2
 
-  - name: pkg-gate-master
+  - name: pkg-gate
     description: |
       Recheck approved changes and merge on success.
-
-      This pipeline is triggerred only by changes to master branch to not mess changes from master branch
-      and stable brances.
     source: gerrit
     success-message: |
       Build succeeded (pkg-gate pipeline).
@@ -189,17 +215,27 @@ pipelines:
           approval:
             - workflow: 1
           branch:
-            - ^master$
+#            - ^master$
+            - ^8\.\d$
+            - ^openstack-ci/fuel-8\.\d[-/]
+            - ^openstack-ci/fuel/centos\d/
+        - event: comment-added
+          approval:
+            - verified: 1
+          username: pkgs-ci
     require:
       current-patchset: True
       open: True
+      approval:
+        - verified: [1, 2]
+          username: pkgs-ci
+        - workflow: 1
     start:
       gerrit:
         verified: 0
     success:
       gerrit:
         verified: 2
-        submit: False
     failure:
       gerrit:
         verified: -2
@@ -222,9 +258,16 @@ pipelines:
       gerrit:
         - event: change-merged
           branch:
-            - ^master$
-            - ^[7-9]\.\d$
-            - ^openstack-ci/fuel-[7-9]\.\d[-/]
+#            - ^master$
+            - ^8\.\d$
+            - ^openstack-ci/fuel-8\.\d[-/]
+            - ^openstack-ci/fuel/centos\d/
+        - event: comment-added
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(re)?publish
+          branch:
+#            - ^master$
+            - ^8\.\d$
+            - ^openstack-ci/fuel-8\.\d[-/]
             - ^openstack-ci/fuel/centos\d/
     require:
       status: MERGED
@@ -257,22 +300,86 @@ pipelines:
 
 jobs:
 
-  - name: ^pkg-(build|gate|publish)-.+-deb$
+  - name: ^8.0-pkg-(pipeline|gate|publish)-centos$
+    queue-name: mos-8.0-centos
+    branch:
+      - ^8\.\d$
+      - ^openstack-ci/fuel-8\.\d[-/]
+      - ^openstack-ci/fuel/centos\d/
     parameter-function: pkg_build
     voting: False
+    skip-if:
+      - project: ^packages/debian/
+      - project: ^packages/trusty/
+      - project: ^openstack/deb-
+      - project: ^openstack-build/
+        all-files-match-any:
+          - ^debian/
+          - ^trusty/debian/
+
+  - name: ^8.0-pkg-(pipeline|gate|publish)-debian$
+    queue-name: mos-8.0-debian
+    branch: non-existent
+    # Upstream have another naming for source and spec projects for Debian packages
+    parameter-function: pkg_build_debian
+    voting: True
     skip-if:
       - project: ^packages/centos\d/
-      - branch: ^openstack-ci/fuel/centos\d/
+      - project: ^packages/trusty/
+      - project: ^openstack-build/
 
-  - name: ^pkg-(build|gate|publish)-.+-rpm$
+  - name: ^8.0-pkg-(pipeline|gate|publish)-ubuntu$
+    queue-name: mos-8.0-ubuntu
+    branch:
+      - ^8\.\d$
+      - ^openstack-ci/fuel-8\.\d[-/]
+    parameter-function: pkg_build
+    voting: True
+    skip-if:
+      - project: ^packages/centos\d/
+      - project: ^packages/debian/
+      - project: ^openstack/deb-
+      - project: ^openstack-build/
+        all-files-match-any:
+          - ^rpm/
+
+  - name: ^master-pkg-(pipeline|gate|publish)-centos$
+    queue-name: mos-master-centos
+    branch: ^master$
     parameter-function: pkg_build
     voting: False
     skip-if:
+      - project: ^packages/debian/
       - project: ^packages/trusty/
-      - project: ^openstack(-build)?/
-        branch: ^master$
-      - project: ^openstack(-build)?/
-        branch: ^openstack-ci/fuel-[7-9]\.\d[-/]
+      - project: ^openstack/deb-
+      - project: ^openstack-build/
+        all-files-match-any:
+          - ^debian/
+          - ^trusty/debian/
+
+  - name: ^master-pkg-(pipeline|gate|publish)-debian$
+    queue-name: mos-master-debian
+    branch: non-existent
+    # Upstream have another naming for source and spec projects for Debian packages
+    parameter-function: pkg_build_debian
+    voting: True
+    skip-if:
+      - project: ^packages/centos\d/
+      - project: ^packages/trusty/
+      - project: ^openstack-build/
+
+  - name: ^master-pkg-(pipeline|gate|publish)-ubuntu$
+    queue-name: mos-master-ubuntu
+    branch: ^master$
+    parameter-function: pkg_build
+    voting: True
+    skip-if:
+      - project: ^packages/centos\d/
+      - project: ^packages/debian/
+      - project: ^openstack/deb-
+      - project: ^openstack-build/
+        all-files-match-any:
+          - ^rpm/
 
 #
 # Project templates
@@ -284,67 +391,83 @@ project-templates:
     merge-check:
       - noop
     pkg-build-mos:
-      - pkg-build-7.0-deb
-      - pkg-build-7.0-rpm
-    pkg-gate-release:
-      - pkg-gate-7.0-deb
-      - pkg-gate-7.0-rpm
-    pkg-gate-master:
-      - pkg-gate-7.0-deb
-      - pkg-gate-7.0-rpm
+      - 8.0-pkg-pipeline-centos
+      - 8.0-pkg-pipeline-debian
+      - 8.0-pkg-pipeline-ubuntu
+      - master-pkg-pipeline-centos
+      - master-pkg-pipeline-debian
+      - master-pkg-pipeline-ubuntu
+    pkg-gate:
+      - 8.0-pkg-gate-centos
+      - 8.0-pkg-gate-debian
+      - 8.0-pkg-gate-ubuntu
+      - master-pkg-gate-centos
+      - master-pkg-gate-debian
+      - master-pkg-gate-ubuntu
     pkg-publish:
-      - pkg-publish-7.0-deb
-      - pkg-publish-7.0-rpm
+      - 8.0-pkg-pipeline-centos
+      - 8.0-pkg-pipeline-debian
+      - 8.0-pkg-pipeline-ubuntu
+      - master-pkg-pipeline-centos
+      - master-pkg-pipeline-debian
+      - master-pkg-pipeline-ubuntu
 
   - name: spec
     merge-check:
       - noop
     pkg-build-spec:
-      - pkg-build-7.0-deb
-      - pkg-build-7.0-rpm
-    pkg-gate-release:
-      - pkg-gate-7.0-deb
-      - pkg-gate-7.0-rpm
-    pkg-gate-master:
-      - pkg-gate-7.0-deb
-      - pkg-gate-7.0-rpm
+      - 8.0-pkg-pipeline-centos
+      - 8.0-pkg-pipeline-debian
+      - 8.0-pkg-pipeline-ubuntu
+      - master-pkg-pipeline-centos
+      - master-pkg-pipeline-debian
+      - master-pkg-pipeline-ubuntu
+    pkg-gate:
+      - 8.0-pkg-gate-centos
+      - 8.0-pkg-gate-debian
+      - 8.0-pkg-gate-ubuntu
+      - master-pkg-gate-centos
+      - master-pkg-gate-debian
+      - master-pkg-gate-ubuntu
     pkg-publish:
-      - pkg-publish-7.0-deb
-      - pkg-publish-7.0-rpm
+      - 8.0-pkg-pipeline-centos
+      - 8.0-pkg-pipeline-debian
+      - 8.0-pkg-pipeline-ubuntu
+      - master-pkg-pipeline-centos
+      - master-pkg-pipeline-debian
+      - master-pkg-pipeline-ubuntu
 
   - name: deps
     merge-check:
       - noop
     pkg-build-deps:
-      - pkg-build-7.0-deb
-      - pkg-build-7.0-rpm
-    pkg-gate-release:
-      - pkg-gate-7.0-deb
-      - pkg-gate-7.0-rpm
-    pkg-gate-master:
-      - pkg-gate-7.0-deb
-      - pkg-gate-7.0-rpm
+      - 8.0-pkg-pipeline-centos
+      - 8.0-pkg-pipeline-debian
+      - 8.0-pkg-pipeline-ubuntu
+      - master-pkg-pipeline-centos
+      - master-pkg-pipeline-debian
+      - master-pkg-pipeline-ubuntu
+    pkg-gate:
+      - 8.0-pkg-gate-centos
+      - 8.0-pkg-gate-debian
+      - 8.0-pkg-gate-ubuntu
+      - master-pkg-gate-centos
+      - master-pkg-gate-debian
+      - master-pkg-gate-ubuntu
     pkg-publish:
-      - pkg-publish-7.0-deb
-      - pkg-publish-7.0-rpm
+      - 8.0-pkg-pipeline-centos
+      - 8.0-pkg-pipeline-debian
+      - 8.0-pkg-pipeline-ubuntu
+      - master-pkg-pipeline-centos
+      - master-pkg-pipeline-debian
+      - master-pkg-pipeline-ubuntu
 
 #
 # Projects
 #
 
 projects:
+
   - name: fuel-infra/ci-sandbox
-    merge-check:
-      - noop
-    pkg-build-deps: 
-      - pkg-build-7.0-deb
-      - pkg-build-7.0-rpm
-    pkg-gate-release:
-      - pkg-gate-7.0-deb
-      - pkg-gate-7.0-rpm
-    pkg-gate-master:
-      - pkg-gate-7.0-deb
-      - pkg-gate-7.0-rpm
-    pkg-publish:
-      - pkg-publish-7.0-deb
-      - pkg-publish-7.0-rpm
+    template:
+      - name: deps

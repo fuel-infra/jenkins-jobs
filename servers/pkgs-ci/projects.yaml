@@ -7,11 +7,14 @@
 
     project-name: 'mos'
 
-    master-mos-version: '7.0'
+    master-mos-version: '8.0'
 
     gerrit-host: 'review.fuel-infra.org'
 
-    repo-host: '172.18.186.167'
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+#    repo-host: '172.18.186.167'
+
+    product_jenkins_url: 'https://product-ci.infra.mirantis.net/'
 
     base-path: 'base/'
     updates-path: 'updates/'
@@ -22,10 +25,10 @@
 
     repo-base-path: '/home/jenkins/pubrepos'
 
-    spec-project-suffix: '-build'
+    pkg-sign-key: '1FA22B08'
 
     scm-user: 'openstack-ci-jenkins'
-    scm-credentials-id: 'e2e0bcb0-ea5d-4932-89ed-4d0e5bc67a4f'
+    scm-credentials-id: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
     scm-repo: 'infra/obs'
     scm-branch: 'feature/new-build-system'
     scm-basedir: ''
@@ -33,34 +36,92 @@
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/master'
 
+    # Job slave nodes
+    build-node: 'packtest'
+    publish-node: 'new-publisher'
+    install-node: 'install-node'
+    systest-node: 'packtest'
+
     jobs:
-      - 'pkg-build-{mos_version}-{pkg_type}'
-      - 'pkg-install-{mos_version}-{pkg_type}'
-      - 'pkg-gate-{mos_version}-{pkg_type}'
-      - 'pkg-systest-{mos_version}-{pkg_type}'
-      - 'pkg-publish-{mos_version}-{pkg_type}'
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-gate-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-systest-{os}'
 
 - project:
-    name: 'pkg-mos-deb'
-    pkg_type: 'deb'
+    name: 'pkg-mos-centos'
+    os: 'centos'
+    spec-path-prefix: ''
+    spec-path-suffix: '-build'
+    spec-project-prefix: ''
+    spec-project-suffix: '-build'
     mos_version:
-      - '7.0':
-          os: 'ubuntu'
+      - 'master':
+          distro: 'centos7'
+          pkg_type: 'rpm'
+          spec_path_prefix: '/rpm'
+          test_group: 'prepare_slaves_3'
+      - '8.0':
+          distro: 'centos6'
+          pkg_type: 'rpm'
+          spec_path_prefix: '/rpm'
+          test_group: 'prepare_slaves_3'
+    openstack_release: 'CentOS'
+    <<: *common_template
+
+- project:
+    name: 'pkg-mos-debian'
+    os: 'debian'
+    spec-path-prefix: ''
+    spec-path-suffix: ''
+    spec-project-prefix: 'deb-'
+    spec-project-suffix: ''
+    mos_version:
+      - 'master':
+          distro: 'jessie'
+          pkg_type: 'deb'
+          spec_path_prefix: '/jessie'
+          test_group: 'bvt_2'
+      - '8.0':
+          distro: 'jessie'
+          pkg_type: 'deb'
+          spec_path_prefix: '/jessie'
+          test_group: 'bvt_2'
+    openstack_release: 'Debian'
+    <<: *common_template
+
+- project:
+    name: 'pkg-mos-ubuntu'
+    os: 'ubuntu'
+    spec-path-prefix: ''
+    spec-path-suffix: '-build'
+    spec-project-prefix: ''
+    spec-project-suffix: '-build'
+    mos_version:
+      - 'master':
           distro: 'trusty'
+          pkg_type: 'deb'
+          spec_path_prefix: '/trusty'
+          test_group: 'bvt_2'
+      - '8.0':
+          distro: 'trusty'
+          pkg_type: 'deb'
           spec_path_prefix: '/trusty'
           test_group: 'bvt_2'
     openstack_release: 'Ubuntu'
     <<: *common_template
 
 - project:
-    name: 'pkg-mos-rpm'
-    pkg_type: 'rpm'
-    mos_version:
-      - '7.0':
-          os: 'centos'
-          distro: 'centos6'
-          spec_path_prefix: '/rpm'
-          test_group: 'prepare_slaves_3'
-    openstack_release: 'CentOS'
-    <<: *common_template
-
+    name: 'maintenace'
+    jobs:
+      - 'maintain.starter'
+      - 'maintain.worker'
+    maintain-node: 'packtest'
+    is-disabled: ''
+    mailto: 'fuel-build+ci-packaging@mirantis.com'
+    scm-user: 'openstack-ci-jenkins'
+    scm-credentials-id: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
+    scm-repo: 'infra/obs'
+    scm-branch: 'feature/new-build-system'
+    scm-basedir: ''

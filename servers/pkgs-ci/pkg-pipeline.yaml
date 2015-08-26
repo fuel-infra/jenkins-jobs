@@ -3,7 +3,7 @@
 ################################################################################
 
 - job-template:
-    name: 'pkg-build-{mos_version}-{pkg_type}'
+    name: '{mos_version}-pkg-pipeline-{os}'
     concurrent: True
     description: |
         This job builds a package and then publishes it by triggerring publisher job.<br>
@@ -25,33 +25,15 @@
           timeout: 300
       - timestamps
       - ansicolor
-#    triggers:
-#      - zuul
+    triggers:
+      - zuul
     builders:
       - shell: |
           #!/bin/bash -xe
 
           ############################
-          # Zuul parameters
+          # Project parameters
           ############################
-
-          PROJECT_GROUP=${{ZUUL_PROJECT%%/*}}
-          SRC_PROJECT_PATH=${{ZUUL_PROJECT%/*}}
-
-          IS_OPENSTACK=false
-          COMPONENT_PATH=fuel/
-
-          if [ "${{PROJECT_GROUP}}" = "openstack" ]; then
-              IS_OPENSTACK=true
-              SPEC_PROJECT_PATH=${{PROJECT_GROUP}}{spec-project-suffix}
-              COMPONENT_PATH=cluster/
-          fi
-          if [ "${{PROJECT_GROUP}}" = "openstack{spec-project-suffix}" ]; then
-              IS_OPENSTACK=true
-              SRC_PROJECT_PATH=${{PROJECT_GROUP%-*}}
-              SPEC_PROJECT_PATH=${{PROJECT_GROUP}}
-              COMPONENT_PATH=cluster/
-          fi
 
           PROJECT_NAME={project-name}
           PROJECT_VERSION=${{ZUUL_BRANCH#*/fuel-}}
@@ -62,12 +44,6 @@
 
           # Project info
           export PROJECT_NAME PROJECT_VERSION
-
-          # Openstack project?
-          export IS_OPENSTACK COMPONENT_PATH
-
-          # Project groups/paths
-          export SRC_PROJECT_PATH SPEC_PROJECT_PATH
 
           ############################
           # Global parameters
@@ -82,16 +58,21 @@
           export GERRIT_HOST='{gerrit-host}'
 
           # Publish host parameters
-          # !!! Should be changed to {repo-host} !!!
-          export REMOTE_REPO_HOST=perestroika-repo-tst.infra.mirantis.net
+          export REMOTE_REPO_HOST={repo-host}
 
           # Parameters for package specs
           export SPEC_PROJECT_SUFFIX={spec-project-suffix}
 
           # New scheme
-          DEB_DIST_NAME={project-name}{mos_version}
+          if [ "{mos_version}" = "master" ]; then
+              DEB_DIST_NAME={project-name}-{mos_version}
+              RPM_DIST_NAME={project-name}-{mos_version}-{distro}
+          else
+              DEB_DIST_NAME={project-name}{mos_version}
+              RPM_DIST_NAME={project-name}{mos_version}-{distro}-fuel
+          fi
           DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
-          RPM_REPO_PATH={rel-path-prefix}/{os}/{project-name}{mos_version}-{distro}-fuel/os/x86_64/
+          RPM_REPO_PATH={rel-path-prefix}/{os}/${{RPM_DIST_NAME}}/os/x86_64/
           export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
 
           # DEB-specific parameters
@@ -106,11 +87,11 @@
           export DEB_HOLDBACK_DIST_NAME={project-name}{mos_version}-holdback
 
           # RPM-specific parameters
-          export RPM_OS_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{distro}-fuel/os
-          export RPM_PROPOSED_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{distro}-fuel/proposed
-          export RPM_UPDATES_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{distro}-fuel/updates
-          export RPM_SECURITY_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{distro}-fuel/security
-          export RPM_HOLDBACK_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{distro}-fuel/holdback
+          export RPM_OS_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/os
+          export RPM_PROPOSED_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/proposed
+          export RPM_UPDATES_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/updates
+          export RPM_SECURITY_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/security
+          export RPM_HOLDBACK_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/holdback
 
           ############################
           # Build package
@@ -138,16 +119,16 @@
           RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
           RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
           RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
-          REMOTE_REPO_HOST={repo-host}
+          REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
           EOF
 
       - trigger-builds:
-          - project: '{mos_version}.mos-new.publisher'
+          - project: '{mos_version}-pkg-publish-{os}'
             current-parameters: true
             property-file: buildresult.params
             block: true
       - copyartifact:
-            project: '{mos_version}.mos-new.publisher'
+            project: '{mos_version}-pkg-publish-{os}'
             filter: '{pkg_type}.publish.setenvfile'
             parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
             which-build: 'last-completed'
@@ -163,13 +144,13 @@
             on-evaluation-failure: dont-run
             steps:
               - trigger-builds:
-                  - project: 'pkg-install-{mos_version}-{pkg_type}'
+                  - project: '{mos_version}-pkg-install-{os}'
                     current-parameters: true
                     property-file: 'buildresult.params,tests.envfile,{pkg_type}.publish.setenvfile'
                     property-file-fail-on-missing: false
                     block: true
               - copyartifact:
-                    project: 'pkg-install-{mos_version}-{pkg_type}'
+                    project: '{mos_version}-pkg-install-{os}'
                     filter: 'ci_status_params'
                     parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
                     which-build: 'last-completed'
@@ -178,8 +159,13 @@
                     # Fail stage if packages are not installed
                     [ -f "ci_status_params" ] && source ci_status_params
                     ${{FAILED}} && exit 1 || exit 0
+      - conditional-step:
+            condition-kind: boolean-expression
+            condition-expression: ${{TEST_SYSTEST}}
+            on-evaluation-failure: dont-run
+            steps:
               - trigger-builds:
-                  - project: 'pkg-systest-{mos_version}-{pkg_type}'
+                  - project: '{mos_version}-pkg-systest-{os}'
                     current-parameters: true
                     property-file: 'buildresult.params,tests.envfile,{pkg_type}.publish.setenvfile'
                     property-file-fail-on-missing: false
@@ -193,7 +179,7 @@
           artifacts: 'buildresult.params, setenvfile, {pkg_type}.publish.setenvfile'
           allow-empty: True
 
-    node: 'packtest'
+    node: '{build-node}'
 
 ################################################################################
 # Job Groups
