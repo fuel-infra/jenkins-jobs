@@ -76,6 +76,7 @@
           export DIST="{distro}"
           export DISTRO_PATH="{distro}/"
           export SPEC_PREFIX_PATH="{spec_path_prefix}"
+          export REPO_REQUEST_PATH_PREFIX="{cr-path-prefix}"
 
           # Gerrit parameters
           export GERRIT_HOST='{gerrit-host}'
@@ -127,7 +128,7 @@
           cat >> buildresult.params <<EOF
 
           # Added for publisher
-          REPO_REQUEST_PATH_PREFIX={cr-path-prefix}
+          REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
           REPO_BASE_PATH={repo-base-path}
           DEB_DIST_NAME=${{DEB_DIST_NAME}}
           DEB_REPO_PATH=${{DEB_REPO_PATH}}
