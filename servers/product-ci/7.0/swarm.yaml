@@ -7,6 +7,14 @@
           dist: 'centos'
 
 - project:
+     name: 7.0.upgradechain
+     jobs:
+       - '7.0-system_tests-upgradechain':
+           dist: 'ubuntu'
+       - '7.0-system_tests-upgradechain':
+           dist: 'centos'
+
+- project:
     name: 7.0.systests
     jobs:
       - '7.0-system_tests':
@@ -274,5 +282,42 @@
               current-parameters: true
               kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.network_templates'
+              current-parameters: true
+              kill-phase-on: NEVER
+            # Upgrade chain
+            - name: '7.0.system_test.centos.ceph_multinode_compact_neutron.rollback.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.ceph_multinode_compact_neutron.rollback.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.ceph_multinode_compact_neutron.upgrade.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.ceph_multinode_compact_neutron.upgrade.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.ceph_multinode_compact.upgrade.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.ceph_multinode_compact.upgrade.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.deploy_neutron_gre_ha.rollback.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.deploy_neutron_gre_ha.rollback.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.deploy_neutron_gre_ha.upgrade.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.deploy_neutron_gre_ha.upgrade.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.centos.deploy_neutron_gre.rollback.uc'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.deploy_neutron_gre.rollback.uc'
               current-parameters: true
               kill-phase-on: NEVER

@@ -94,3 +94,57 @@
           properties: |
             CLASSIC_PROVISIONING=true
 
+- job-group:
+    name: '7.0-system_tests-upgradechain'
+    version-id: '7.0'
+    id: 'system_test'
+    node: 'systest'
+    timeout: '480'
+    base_reponame: 'fuel-main'
+    base_repobranch: 'origin/stable/6.0'
+    base_iso_magnet_link:
+        !include-raw ../data/6.0-iso
+    base_venv_path: '/home/jenkins/venv-nailgun-tests'
+    old_devops_db: 'true'
+    base_upgraded_reponame: 'fuel-qa'
+    base_upgraded_repobranch: 'origin/stable/6.1'
+    upgrade_reponame: 'fuel-qa'
+    upgrade_repobranch: 'origin/master'
+    properties: ''
+    jobs:
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
+          testgroup: 'deploy_neutron_gre_ha'
+          upgrade_testgroup: 'upgrade'
+          properties: |
+            KEYSTONE_PASSWORD=newpass
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
+          testgroup: 'ceph_multinode_compact'
+          upgrade_testgroup: 'upgrade'
+          weight: '8'
+          properties: |
+            KEYSTONE_PASSWORD=newpass
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
+          testgroup: 'ceph_multinode_compact_neutron'
+          upgrade_testgroup: 'upgrade'
+          properties: |
+            NEUTRON_ENABLE=true
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
+          testgroup: 'deploy_neutron_gre_ha'
+          upgrade_testgroup: 'rollback'
+          properties: |
+            KEYSTONE_PASSWORD=newpass
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
+          testgroup: 'deploy_neutron_gre'
+          upgrade_testgroup: 'rollback'
+          properties: |
+            KEYSTONE_PASSWORD=newpass
+          weight: '8'
+      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
+          testgroup: 'ceph_multinode_compact_neutron'
+          upgrade_testgroup: 'rollback'
+          properties: |
+            NEUTRON_ENABLE=true
+          weight: '8'
