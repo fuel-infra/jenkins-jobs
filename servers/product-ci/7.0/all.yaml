@@ -82,6 +82,7 @@
 
         - project: '7.0.all-Testrail'
           condition: UNSTABLE_OR_BETTER
+          trigger-with-no-params: true
 
     scm:
       - stackforge:

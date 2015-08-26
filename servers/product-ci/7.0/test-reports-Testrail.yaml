@@ -17,9 +17,8 @@
       - email:
           recipients: ishamrai@mirantis.com, devops+alert@mirantis.com
 
-# FIXME - timer disabled
-#    triggers:
-#      - timed: 'H */2 * * *'
+    triggers:
+      - timed: 'H */2 * * *'
 
     scm:
      - main-git:
