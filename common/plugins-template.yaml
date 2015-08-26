@@ -1,15 +1,19 @@
 - job-template:
-    name: '{version-id}.system_test.{dist}.fuel_plugin_example'
+    name: '{version-id}.system_test.{dist}.plugins.{testgroup}'
     builders:
       - inject:
           properties-content: |
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
             OPENSTACK_RELEASE={dist}
-            TEST_GROUP=fuel_plugin_example
+            TEST_GROUP={testgroup}
             CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
             CLASSIC_PROVISIONING=false
             EXAMPLE_PLUGIN_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example-1.0.0.fp
             EXAMPLE_PLUGIN_V3_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example_v3-3.0-3.0.0-1.noarch.rpm
+            SEPARATE_SERVICE_DB_PLUGIN_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/detach-database-1.1-1.1.0-1.noarch.rpm
+            SEPARATE_SERVICE_RABBIT_PLUGIN_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/detach-rabbitmq-1.0-1.0.0-1.noarch.rpm
+            SEPARATE_SERVICE_KEYSTONE_PLUGIN_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/detach-keystone-1.0-1.0.2-1.noarch.rpm
+            SLAVE_NODE_MEMORY=3072
       - shell:
           !include-raw-escape 'scripts/run_plugin_example_system_test.sh'
     disabled: false
@@ -47,6 +51,12 @@
     - description-setter:
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
+    - trigger-parameterized-builds:
+      - project: '{version-id}-test-reports-Testrail'
+        condition: UNSTABLE_OR_BETTER
+        property-file: links.txt
+        predefined-parameters: TEST_JOB_NAME_ENABLE=true
+        triggerWithNoParameters: false
     wrappers:
     - timeout:
         fail: false
