@@ -84,6 +84,12 @@
     - description-setter:
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
+    - trigger-parameterized-builds:
+      - project: '{version-id}-test-reports-Testrail'
+        condition: UNSTABLE_OR_BETTER
+        property-file: links.txt
+        predefined-parameters: TEST_JOB_NAME_ENABLE=true
+        triggerWithNoParameters: false
 
     scm:
     - main-git:
