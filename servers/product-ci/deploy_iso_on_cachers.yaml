@@ -1,11 +1,12 @@
 - job:
     builders:
-      - multijob:
-          name: 'iso_deployer'
-          projects:
-            - name: 'iso_deployer'
-              current-parameters: true
-              node-label: 'iso_cacher'
+      - trigger-builds:
+          - project: 'iso_deployer'
+            current-parameters: true
+            parameter-factories:
+              - factory: allnodesforlabel
+                node-label: 'iso_cacher'
+                ignore-offline-nodes: true
     concurrent: true
     description: |
       Deploy ISO on cachers in remote locations.
