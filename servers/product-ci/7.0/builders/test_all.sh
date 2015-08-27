@@ -32,4 +32,4 @@ curl "${UPSTREAM_BUILD_URL}artifact/magnet_link.txt" -o magnet_link.txt
 
 # Create properties file for downstream jobs
 
-cat ubuntu_mirror_id.txt mirror_ubuntu.txt magnet_link.txt > properties_file.txt
+cat ubuntu_mirror_id.txt magnet_link.txt > properties_file.txt
