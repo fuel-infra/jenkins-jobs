@@ -1,0 +1,48 @@
+- job:
+    name: 'fuel_ci-status_reports'
+    builders:
+      - shell:
+          !include-raw builders/fuel_ci-status_reports.sh
+    description:
+          !include-raw descriptions/fuel_ci-status_reports
+    node: reports
+    parameters:
+      - string:
+          name: RELEASE
+      - string:
+          name: BUILD
+      - string:
+          name: STAGE
+      - string:
+          name: VALUE
+      - text:
+          name: DESCRIPTION
+      - string:
+          name: REPORTED_JOB_URL
+      - string:
+          name: DELTA
+          default: '1'
+      - string:
+          name: STARTED_TIME
+      - string:
+          name: FINISHED_TIME
+      - bool:
+          name: LAST_STAGE
+          default: false
+    scm:
+      - git:
+          url: https://$CIREPORT_USER:$CIREPORT_PASSWORD@review.fuel-infra.org/infra/ci_status
+          branches:
+            - origin/master
+          wipe-workspace: false
+    publishers:
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
+          send-to-individuals: false
+    wrappers:
+      - inject-passwords:
+          global: true
+      - ssh-agent-credentials:
+          users:
+            - '60262544-8924-4718-aa4e-7e629cc2f5d3'

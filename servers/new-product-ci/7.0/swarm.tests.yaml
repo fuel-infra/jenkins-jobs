@@ -1,0 +1,180 @@
+- job-group:
+   name: '7.0-system_tests'
+   version-id: '7.0'
+   id: 'system_test'
+   repobranch: 'origin/master'
+   reponame: 'fuel-qa'
+   venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+   default_pool: '10.109.0.0/16:24'
+   description: '7.0 swarm test group'
+   node: 'systest'
+   timeout: '480'
+   properties: |
+     SLAVE_NODE_MEMORY=3072
+   weight: '7'
+   jobs:
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'setup' # test job, not included in runner
+         weight: '4'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'jumbo_frames'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_1'
+         weight: '4'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ceph_ha_one_controller'
+         weight: '4'
+         properties: |
+           KVM_USE=true
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_2'
+         weight: '4'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_3'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_7'
+         properties: |
+           MULTIPLE_NETWORKS=true
+           FUEL_STATS_ENABLED=true
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_usb'
+         properties: |
+           ADMIN_BOOT_DEVICE=usb
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_non_func_1'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'bonding_ha'
+         properties: |
+           BONDING=true
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'bonding_ha_one_controller'
+         weight: '4'
+         properties: |
+           BONDING=true
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'cluster_actions'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'cluster_actions_ha'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'controller_replacement'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'cic_maintenance_mode'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'offloading'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_tun'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_public'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_destructive'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_destructive_2'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'command_line'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_destructive_ceph_neutron'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'huge_ha_neutron'
+         weight: '20'
+         properties: |
+           SLAVE_NODE_CPU=2
+           SLAVE_NODE_MEMORY=3072
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+         timeout: '600'
+         node: 'huge-systest'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'repeatable_image_based'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'known_issues'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'services_ha'
+         weight: '11'
+         node: 'services-systest'
+         properties: |
+           SLAVE_NODE_MEMORY=6144
+           SLAVE_NODE_CPU=2
+           KVM_USE=true
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+           EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
+           EXTERNAL_MONGO_USER=ceilometer
+           EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+           EXTERNAL_MONGO_REPL_SET=ceilometer
+         timeout: '1200'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'services_ha.ceilometer'
+         weight: '11'
+         node: 'services-systest'
+         properties: |
+           SLAVE_NODE_MEMORY=6144
+           SLAVE_NODE_CPU=2
+           KVM_USE=true
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+           EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
+           EXTERNAL_MONGO_USER=ceilometer
+           EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+           EXTERNAL_MONGO_REPL_SET=ceilometer
+         timeout: '1200'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'services_ha_one_controller'
+         weight: '11'
+         node: 'services-systest'
+         properties: |
+           SLAVE_NODE_MEMORY=6144
+           SLAVE_NODE_CPU=2
+           KVM_USE=true
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+           EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
+           EXTERNAL_MONGO_USER=ceilometer
+           EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+           EXTERNAL_MONGO_REPL_SET=ceilometer
+         timeout: '1200'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'custom_hostname'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'fuel_master_migrate'
+         properties: |
+           SLAVE_NODE_MEMORY=6144
+           SLAVE_NODE_CPU=4
+         weight: 11
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ready_node_reinstallation'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'error_node_reinstallation'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'bvt_ubuntu_bootstrap'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'full_cluster_reinstallation'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'partition_preservation'
+     - '{version-id}.system_test.{dist}.plugins.{testgroup}':
+         testgroup:
+           - 'thread_1_separate_services'
+           - 'thread_2_separate_services'
+           - 'fuel_plugin_example'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'fuel_plugin_reboot'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'fuel_plugin_vip_reservation'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'network_templates'
