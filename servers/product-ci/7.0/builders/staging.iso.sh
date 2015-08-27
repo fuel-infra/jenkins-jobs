@@ -26,13 +26,42 @@ rm -f "${WORKSPACE}/version.yaml"
 # MIRROR_BASE comes from upstream job we don't need to unset it
 export MIRROR_CENTOS="${MIRROR_BASE}/centos"
 
-######## Get stable ubuntu mirror from snapshot ###############
-# Since we are building staging.iso in MSK let's hardcode this
-LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+######## Get node location to choose closer mirror ###############
+# try to use facter and fall-back to bud location
+
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION=${LOCATION_FACT:-bud}
+
+case "${LOCATION}" in
+    srt)
+        USE_MIRROR=srt
+        LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
+        ;;
+    msk)
+        USE_MIRROR=msk
+        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+        ;;
+    hrk)
+        USE_MIRROR=hrk
+        LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
+        ;;
+    poz|bud|bud-ext|cz)
+        USE_MIRROR=cz
+        LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
+        ;;
+    mnv)
+        USE_MIRROR=usa
+        LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
+        ;;
+    *)
+        USE_MIRROR=msk
+        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+esac
+
 LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | head -1)
 export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
 
-echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
+echo "Using mirror: ${USE_MIRROR} with Ubuntu: ${MIRROR_MOS_UBUNTU_ROOT} and CentOS: ${MIRROR_CENTOS}"
 
 if [ "${USE_STABLE_MOS_FOR_STAGING}" = "true" ]; then
 
@@ -117,7 +146,6 @@ make deep_clean
 
 echo "STEP 1. Make everything"
 
-export USE_MIRROR=msk
 make ${make_args} iso version-yaml ${add_make_target}
 
 #########################################
