@@ -32,6 +32,8 @@
           upgrade_testgroup:
             - 'upgrade_ha_one_controller'
             - 'upgrade_ha_one_controller_delete_node'
+          properties: |
+            UPDATE_MASTER=true
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
@@ -39,6 +41,7 @@
             - 'upgrade_one_controller_classic'
           properties: |
             CLASSIC_PROVISIONING=true
+            UPDATE_MASTER=true
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact_neutron'
@@ -47,17 +50,22 @@
             - 'rollback_one_controller'
           properties: |
             NEUTRON_ENABLE=true
+            UPDATE_MASTER=true
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'rollback_automatically_delete_node'
           upgrade_testgroup:
             - 'rollback_neutron_gre'
+          properties: |
+            UPDATE_MASTER=true
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre_ha'
           upgrade_testgroup:
             - 'upgrade_neutron_gre_ha'
             - 'rollback_neutron_gre_ha'
+          properties: |
+            UPDATE_MASTER=true
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_rados_gw'
