@@ -31,7 +31,7 @@
           default: false
     scm:
       - git:
-          url: https://$CIREPORT_USER:$CIREPORT_PASSWORD@review.fuel-infra.org/infra/ci_status
+          url: ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/ci_status
           branches:
             - origin/master
           wipe-workspace: false
@@ -43,6 +43,4 @@
     wrappers:
       - inject-passwords:
           global: true
-      - ssh-agent-credentials:
-          users:
-            - '60262544-8924-4718-aa4e-7e629cc2f5d3'
+      - openstack-ci-jenkins-credentials

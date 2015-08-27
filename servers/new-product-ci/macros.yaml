@@ -113,3 +113,21 @@
           branches:
             - origin/master
           wipe-workspace: false
+
+########################################################################
+# Section: Wrappers
+########################################################################
+
+- wrapper:
+    name: mirrors-sync-credentials
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '6df792dd-c694-41cc-b2ee-71471e7324c3'
+
+- wrapper:
+    name: openstack-ci-jenkins-credentials
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'

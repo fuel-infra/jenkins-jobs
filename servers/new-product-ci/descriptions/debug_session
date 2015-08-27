@@ -2,10 +2,10 @@ Debug session with {weight} executors. Sends e-mail to Requester on start and on
 <p>
 Please choose the job with right amount of executors:
 <ul>
-<li><a href="http://jenkins-product.srt.mirantis.net:8080/job/debug_session_4/">debug_session_4</a></li>
-<li><a href="http://jenkins-product.srt.mirantis.net:8080/job/debug_session_8/">debug_session_8</a></li>
-<li><a href="http://jenkins-product.srt.mirantis.net:8080/job/debug_session_12/">debug_session_12</a></li>
-<li><a href="http://jenkins-product.srt.mirantis.net:8080/job/debug_session_24/">debug_session_24</a></li>
+<li><a href="https://product-ci.infra.mirantis.net/job/debug_session_4/">debug_session_4</a></li>
+<li><a href="https://product-ci.infra.mirantis.net/job/debug_session_8/">debug_session_8</a></li>
+<li><a href="https://product-ci.infra.mirantis.net/job/debug_session_12/">debug_session_12</a></li>
+<li><a href="https://product-ci.infra.mirantis.net/job/debug_session_24/">debug_session_24</a></li>
 </ul>
 </p>
 You need the same number of executors as used by the test you are debugging. Choose 8 by default.

@@ -7,7 +7,7 @@
     description: |
       Build fuel master code on top of staging files/7.0-timestamp Fuel mirror.
       <p>This ISO is used only to test staging mirror.<p>
-      For "official" 7.0 iso builds see <a href="http://jenkins-product.srt.mirantis.net:8080/job/7.0.all/">7.0.all</a>
+      For "official" 7.0 iso builds see <a href="https://product-ci.infra/mirantis.net/job/7.0.all/">7.0.all</a>
 
       <p>
         Owned by: Fuel Build Team<br/>

@@ -2,7 +2,7 @@
     name: '7.0.set_stable_mirror'
     builders:
       - copyartifact:
-          project: '6.1.set_stable_mirror'
+          project: '7.0.set_stable_mirror'
           filter: 'build_files.txt'
           which-build: last-successful
           optional: true
@@ -75,3 +75,4 @@
       - timeout:
           fail: true
           timeout: 320
+      - mirrors-sync-credentials
