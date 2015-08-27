@@ -54,6 +54,7 @@
                   then
                       sed -i 's/FAILED=false/FAILED=true/' ci_status_params
                       RESULT=1
+                      break
                   fi
               fi
           done
