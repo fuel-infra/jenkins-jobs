@@ -2,7 +2,7 @@
 
 set -ex
 
-TEST_ISO_JOB_URL="${JENKINS_URL}job/6.1.test_all/"
+TEST_ISO_JOB_URL="${JENKINS_URL}job/${TEST_ISO_JOB}/"
 
 ###################### Get MIRROR HOST ###############
 
