@@ -19,6 +19,7 @@ rm -rf logs/*
 ISO_PATH=$(seedclient-wrapper -d -m "${BASE_ISO_MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
 export MAKE_SNAPSHOT=true
+export TEST_GROUP='prepare_upgrade_env'
 
 sh -x "BASE/utils/jenkins/system_tests.sh" -t test -w "${WORKSPACE}/BASE" -e "${ENV_NAME}" -o --group="${TEST_GROUP}" -i "${ISO_PATH}"
 
@@ -36,6 +37,7 @@ export DEVOPS_DB_NAME='devops'
 export DEVOPS_DB_USER='devops'
 export DEVOPS_DB_PASSWORD='devops'
 export VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+export UPGRADE_TEST_GROUP='upgrade_first_stage'
 
 # Use -k to reuse environment
 sh -x "BASE_UPGRADED/utils/jenkins/system_tests.sh" -k -t test -w "${WORKSPACE}/BASE_UPGRADED" -e "${ENV_NAME}" -o --group="${UPGRADE_TEST_GROUP}" -i "${ISO_PATH}"
@@ -54,6 +56,7 @@ export DEVOPS_DB_NAME='devops'
 export DEVOPS_DB_USER='devops'
 export DEVOPS_DB_PASSWORD='devops'
 export VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+export UPGRADE_TEST_GROUP='upgrade_second_stage'
 
 # Use -k to reuse environment
 sh -x "UPGRADE/utils/jenkins/system_tests.sh" -k -t test -w "${WORKSPACE}/UPGRADE" -e "${ENV_NAME}" -o --group="${UPGRADE_TEST_GROUP}" -i "${ISO_PATH}"
