@@ -29,7 +29,7 @@
     #     Branch of the fuel-main/ repo, used for running upgrade test.
     # weight
     #     Job weight
-    name: '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc'
+    name: '{version-id}.{id}.{dist}.test.upgrade.chain'
     block-downstream: false
     block-upstream: false
     builders:
@@ -43,7 +43,8 @@
         !include-raw-escape 'builders/run_upgradechain_system_test.sh'
 
     concurrent: true
-    description: '{description}'
+    description: 
+      !include-raw descriptions/upgradechain_tests
     disabled: false
     logrotate:
       artifactDaysToKeep: -1
@@ -68,14 +69,8 @@
         default: '{dist}'
         description: Base distribution
     - string:
-        name: TEST_GROUP
-        default: '{testgroup}'
-    - string:
-        name: UPGRADE_TEST_GROUP
-        default: '{upgrade_testgroup}'
-    - string:
         name: ENV_PREFIX
-        default: '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}'
+        default: '{version-id}.{id}.{dist}.test.upgrade.chain'
 
     properties:
     - heavy-job:

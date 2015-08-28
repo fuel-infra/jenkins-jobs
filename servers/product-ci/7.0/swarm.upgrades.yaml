@@ -95,7 +95,7 @@
             CLASSIC_PROVISIONING=true
 
 - job-group:
-    name: '7.0-system_tests-upgradechain'
+    name: '7.0-system_tests-test_upgrade_chain'
     version-id: '7.0'
     id: 'system_test'
     node: 'systest'
@@ -112,39 +112,5 @@
     upgrade_repobranch: 'origin/master'
     properties: ''
     jobs:
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
-          testgroup: 'deploy_neutron_gre_ha'
-          upgrade_testgroup: 'upgrade'
-          properties: |
-            KEYSTONE_PASSWORD=newpass
-          weight: '8'
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
-          testgroup: 'ceph_multinode_compact'
-          upgrade_testgroup: 'upgrade'
-          weight: '8'
-          properties: |
-            KEYSTONE_PASSWORD=newpass
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
-          testgroup: 'ceph_multinode_compact_neutron'
-          upgrade_testgroup: 'upgrade'
-          properties: |
-            NEUTRON_ENABLE=true
-          weight: '8'
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
-          testgroup: 'deploy_neutron_gre_ha'
-          upgrade_testgroup: 'rollback'
-          properties: |
-            KEYSTONE_PASSWORD=newpass
-          weight: '8'
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
-          testgroup: 'deploy_neutron_gre'
-          upgrade_testgroup: 'rollback'
-          properties: |
-            KEYSTONE_PASSWORD=newpass
-          weight: '8'
-      - '{version-id}.{id}.{dist}.{testgroup}.{upgrade_testgroup}.uc':
-          testgroup: 'ceph_multinode_compact_neutron'
-          upgrade_testgroup: 'rollback'
-          properties: |
-            NEUTRON_ENABLE=true
+      - '{version-id}.{id}.{dist}.test.upgrade.chain':
           weight: '8'
