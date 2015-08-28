@@ -4,6 +4,7 @@
     release: master
     ops-release: 2015.1.0
     build-node: 'new-builder'
+    build-node-rpm: 'build-node-master-rpm'
     publish-node: 'new-publisher'
     install-node: 'install-tests'
     daysToKeep: 10

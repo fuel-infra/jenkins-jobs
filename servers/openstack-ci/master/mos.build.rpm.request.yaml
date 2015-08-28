@@ -2,7 +2,7 @@
     name: 'master.mos.build-rpm-request'
     disabled: '{is-disabled}'
     concurrent: true
-    node: '{build-node}'
+    node: '{build-node-rpm}'
     logrotate:
       daysToKeep: '{daysToKeep}'
     properties:
