@@ -85,3 +85,6 @@
     wrappers:
       - ansicolor:
           colormap: xterm
+      - timeout:
+          timeout: 120
+          fail: true
