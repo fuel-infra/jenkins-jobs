@@ -108,6 +108,10 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'known_issues'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'zabbix'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'backup_restore_master'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha'
          weight: '11'
          node: 'services-systest'
