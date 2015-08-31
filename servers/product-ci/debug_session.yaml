@@ -17,7 +17,11 @@
             Duration in hours. Note that build will be aborted in 3.5 hours anyway.
     properties:
       - heavy-job:
-          weight: {weight}
+          weight: '{weight}'
+      - authorization:
+          authenticated:
+            - job-read
+            - job-build
     publishers:
       - description-setter:
           description: '$NODE - $DURATION h'
