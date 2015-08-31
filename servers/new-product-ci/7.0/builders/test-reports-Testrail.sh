@@ -6,27 +6,33 @@ set -ex
 
 export TESTRAIL_USER=${TESTRAIL_USER}
 export TESTRAIL_PASSWORD=${TESTRAIL_PASSWORD}
+export TESTRAIL_REPORTER_PATH="fuelweb_test/testrail/report.py"
+export SWARM_RUNNER_JOB_NAME='7.0.swarm.runner'
 
 # Prepare venv
 source /home/jenkins/venv-nailgun-tests-2.9/bin/activate
-export SwarmRunnerName='7.0.swarm.runner'
-export Smoke_BVT='7.0.all'
-export TestrailCMDPath="fuelweb_test/testrail/report.py"
-
-# Report tests results from swarm
-
-export TESTRAIL_TEST_SUITE='Swarm 7.0'
-export TESTRAIL_TEST_subSUITE='7.0.swarm.runner'
 
 if [ "${TEST_JOB_NAME_ENABLE}" == "true" ]; then
- TEST_JOB_NAME=$(curl "${JENKINS_URL}job/7.0.swarm.Testrail/lastBuild/api/json?tree=actions\[causes\[upstreamProject\]\]&pretty=true" |grep upstreamProject |cut -d'"' -f4)
+ TEST_JOB_NAME=$(curl "${JENKINS_URL}/job/${JOB_NAME}/${BUILD_NUMBER}/api/json?tree=actions\[causes\[upstreamProject\]\]&pretty=true" |grep upstreamProject |cut -d'"' -f4)
 fi
 
 if [ "${BUG_STATISTIC}" == "true" ]; then
- RUNNER_BUILD_NUMBER=$(curl ${JENKINS_URL}view/7.0_swarm/job/7.0.swarm.runner/lastBuild/buildNumber)
+ RUNNER_BUILD_NUMBER=$(curl "${JENKINS_URL}/job/${SWARM_RUNNER_JOB_NAME}/lastBuild/buildNumber")
  OPTIONS="-s -N ${RUNNER_BUILD_NUMBER}"
 elif [ "${TEST_JOB_NAME}" != "" ]; then
  OPTIONS="-o ${TEST_JOB_NAME}"
 fi
 
-python ${TestrailCMDPath} -v -l -j "${TESTRAIL_TEST_subSUITE}" ${OPTIONS}
+# Report tests results from swarm (Ubuntu)
+
+export TESTRAIL_TEST_SUITE='Swarm 7.0'
+export USE_UBUNTU=true
+export USE_CENTOS=false
+python ${TESTRAIL_REPORTER_PATH} -v -l -j "${SWARM_RUNNER_JOB_NAME}" ${OPTIONS}
+
+# Report tests results from swarm (CentOS)
+
+export TESTRAIL_TEST_SUITE="Upgrade Centos Cluster"
+export USE_UBUNTU=false
+export USE_CENTOS=true
+python ${TESTRAIL_REPORTER_PATH} -v -l -j "${SWARM_RUNNER_JOB_NAME}" ${OPTIONS}
