@@ -38,7 +38,7 @@
         description: "iso magnet link"
     - string:
         name: ENV_PREFIX
-        default: '{version-id}.system_test.{dist}.fuel_plugin_example'
+        default: '{version-id}.system_test.{dist}.{testgroup}'
         description: 'Environment prefix'
     publishers:
     - archive:
