@@ -11,9 +11,9 @@
           plugin_repo: fuel-plugin-neutron-vpnaas
       - fwaas:
           plugin_repo: fuel-plugin-neutron-fwaas
-      - lma:
-          plugin_repo: fuel-plugin-lma-collector
-          tag: 'refs/tags/0.7.1'
+#      - lma:
+#          plugin_repo: fuel-plugin-lma-collector
+#          tag: 'refs/tags/0.7.1'
       - influxdb:
           plugin_repo: fuel-plugin-influxdb-grafana
           tag: 'refs/tags/0.7.1'
