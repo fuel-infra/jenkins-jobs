@@ -161,7 +161,13 @@
             - name: '7.0.system_test.ubuntu.repeatable_image_based'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.known_issues'
+            #- name: '7.0.system_test.ubuntu.known_issues'
+            #  current-parameters: true
+            #  kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.zabbix'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.backup_restore_master'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.plugins.fuel_plugin_example'
