@@ -1,6 +1,10 @@
 - job:
     name: '7.0.custom.ubuntu.bvt_2'
     builders:
+      - inject:
+          properties-content: |
+            SLAVE_NODE_CPU=2
+            SLAVE_NODE_MEMORY=3072
       - shell:
           !include-raw builders/run_system_test.sh
     concurrent: true
