@@ -1,0 +1,155 @@
+- job-group:
+   name: '6.1-system_tests'
+   version-id: '6.1'
+   id: 'system_test'
+   repobranch: 'origin/stable/6.1'
+   reponame: 'fuel-qa'
+   venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+   default_pool: '10.109.0.0/16:24'
+   description: '6.1 swarm test group'
+   node: 'systest'
+   timeout: '480'
+   properties: ''
+   weight: '7'
+   jobs:
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'setup' # test job, not included in runner
+         weight: '4'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_1'
+         weight: '4'
+         timeout: '600'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'ceph_ha_one_controller'
+         weight: '4'
+         properties: |
+            KVM_USE=true
+         timeout: '600'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_2'
+         weight: '4'
+         timeout: '600'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_3'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_4'
+         properties: |
+           SLAVE_NODE_MEMORY=2560
+         timeout: '600'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_5'
+         properties: 'ADMIN_NODE_MEMORY=3072'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_7'
+         properties: |
+           MULTIPLE_NETWORKS=true
+           FUEL_STATS_ENABLED=true
+           FUEL_STATS_CHECK=true
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_usb'
+         properties: |
+           ADMIN_BOOT_DEVICE=usb
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'thread_non_func_1'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'bonding_ha'
+         properties: |
+           BONDING=true
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'bonding_ha_one_controller'
+         weight: '4'
+         properties: |
+           BONDING=true
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'cluster_actions'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'cic_maintenance_mode'
+         timeout: '600'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron'
+         timeout: '600'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_destructive'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'command_line'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_destructive_ceph_nova'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_destructive_ceph_neutron'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'huge_ha_neutron'
+         weight: '20'
+         properties: |
+           SLAVE_NODE_CPU=2
+           SLAVE_NODE_MEMORY=3072
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+         timeout: '600'
+         node: 'huge-systest'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'huge_ha_nova'
+         weight: '20'
+         properties: |
+           SLAVE_NODE_CPU=2
+           SLAVE_NODE_MEMORY=3072
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+         timeout: '600'
+         node: 'huge-systest'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'repeatable_image_based'
+         properties: 'CLASSIC_PROVISIONING=false'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'classic_provisioning'
+         properties: 'CLASSIC_PROVISIONING=true'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'known_issues'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'services_ha'
+         weight: '11'
+         node: 'services-systest'
+         properties: |
+           SLAVE_NODE_MEMORY=6144
+           SLAVE_NODE_CPU=2
+           KVM_USE=true
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+           EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
+           EXTERNAL_MONGO_USER=ceilometer
+           EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+           EXTERNAL_MONGO_REPL_SET=ceilometer
+         timeout: '1200'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'services_ha.ceilometer'
+         weight: '11'
+         node: 'services-systest'
+         properties: |
+           SLAVE_NODE_MEMORY=6144
+           SLAVE_NODE_CPU=2
+           KVM_USE=true
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+           EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
+           EXTERNAL_MONGO_USER=ceilometer
+           EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+           EXTERNAL_MONGO_REPL_SET=ceilometer
+         timeout: '1200'
+     - '6.1.{id}.{dist}.{testgroup}':
+         testgroup: 'services_ha_one_controller'
+         weight: '11'
+         node: 'services-systest'
+         properties: |
+           SLAVE_NODE_MEMORY=6144
+           SLAVE_NODE_CPU=2
+           KVM_USE=true
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+           EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
+           EXTERNAL_MONGO_USER=ceilometer
+           EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+           EXTERNAL_MONGO_REPL_SET=ceilometer
+         timeout: '1200'
+     - '6.1.system_test.{dist}.fuel_plugins'
