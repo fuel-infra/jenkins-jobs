@@ -44,7 +44,7 @@ sh -x "BASE_UPGRADED/utils/jenkins/system_tests.sh" -k -t test -w "${WORKSPACE}/
 
 # The next upgrade step
 
-export TARBALL2_PATH=$(seedclient-wrapper -d -m "${UPGRADE_TARBALL_MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
+export TARBALL_PATH=$(seedclient-wrapper -d -m "${UPGRADE_TARBALL_MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
 VERSION_STRING=$(basename ${TARBALL2_PATH} | cut -d '-' -f 2-4)
 echo "Description string: ${VERSION_STRING}"
