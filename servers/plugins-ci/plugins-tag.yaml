@@ -44,7 +44,7 @@
           regexp-for-failed: '^Description string: (.*)'
       - email:
           notify-every-unstable-build: true
-          recipients: 'ibelikov@mirantis.com, {email_to}'
+          recipients: '{email_to}'
 
 - job-template:
     name: 'fuel-plugin.{plugin_name}.tag'
@@ -92,4 +92,4 @@
           regexp-for-failed: '^Description string: (.*)'
       - email:
           notify-every-unstable-build: true
-          recipients: 'ibelikov@mirantis.com, {email_to}'
+          recipients: '{email_to}'

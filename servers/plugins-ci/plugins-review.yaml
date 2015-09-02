@@ -39,7 +39,7 @@
           artifacts: '*.rpm,*.txt'
       - email:
           notify-every-unstable-build: true
-          recipients: 'ibelikov@mirantis.com'
+          recipients: ''
       - trigger-parameterized-builds:
         - project: fuel-plugins.publish_logs
           current-parameters: true
@@ -89,7 +89,7 @@
           artifacts: '*.zip'
       - email:
           notify-every-unstable-build: true
-          recipients: 'ibelikov@mirantis.com'
+          recipients: ''
       - trigger-parameterized-builds:
         - project: fuel-plugins.publish_logs
           current-parameters: true
@@ -139,7 +139,7 @@
           artifacts: '*.rpm,*.txt'
       - email:
           notify-every-unstable-build: true
-          recipients: 'ibelikov@mirantis.com, {email_to}'
+          recipients: '{email_to}'
       - trigger-parameterized-builds:
         - project: fuel-plugins.publish_logs
           current-parameters: true
