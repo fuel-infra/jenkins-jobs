@@ -9,6 +9,8 @@ from fabric.api import run
 from fabric.api import runs_once
 from fabric.api import task
 
+from fabric.contrib.files import exists
+
 from utils import Jenkins, Result
 
 state.output['running'] = False
@@ -101,8 +103,22 @@ def patching_ci(label=None, names=None):
 
     print "\n".join(env.hosts)
 
+# Publish task
 
-# Tasks
+@task
+@runs_once
+def publish(fmt='txt', filename=None):
+    """Print env.result object in format specified by fmt parameter.
+
+    Possible formats are 'txt', 'rst' or 'csv'.
+    """
+    if filename:
+        with open(filename, 'w') as f:
+            f.write(env.result.formatted(fmt))
+    else:
+        print env.result.formatted(fmt)
+
+#  Publishing tasks (tasks which collect output which can be parsed by publish task)
 
 @task
 def dos_py(command="version"):
@@ -128,21 +144,6 @@ def dos_py_29(command="version"):
         map(str.strip, data.split("\n"))
     )
     env.result.add_entry(env.host, result_entry)
-
-
-@task
-def dos_clean(string):
-    with venv():
-        run('for env in `dos.py list | grep "%s"`;'
-            'do echo $env && dos.py erase $env; done' % string)
-
-
-@task
-def dos_clean_29(string):
-    with venv29():
-        run('for env in `dos.py list | grep "%s"`;'
-            'do echo $env && dos.py erase $env; done' % string)
-
 
 @task
 def virsh(command="list"):
@@ -184,12 +185,29 @@ def stats(venvs=True, envs=True):
     execute(virsh)
     execute(ml2_check)
 
-@task
-@runs_once
-def publish(fmt='txt', filename=None):
+# Non-publishing tasks
 
-    if filename:
-        with open(filename, 'w') as f:
-            f.write(env.result.formatted(fmt))
-    else:
-        print env.result.formatted(fmt)
+@task
+def dos_clean(string):
+    with venv():
+        run('for env in `dos.py list | grep "%s"`;'
+            'do echo $env && dos.py erase $env; done' % string)
+
+@task
+def dos_clean_29(string):
+    with venv29():
+        run('for env in `dos.py list | grep "%s"`;'
+            'do echo $env && dos.py erase $env; done' % string)
+
+@task
+def set_symlink_to_iso(iso_filename, symlink='fuel_master.iso'):
+    """Set ISO symlink
+
+    fab fuel_ci:iso-263-upload set_symlink_to_iso:fuel-7.0-263-2015-09-02_03-12-20.iso
+
+    """
+    with cd('/home/jenkins/workspace/iso'):
+        if exists(iso_filename):
+            run('ln -sf {0} {1}'.format(iso_filename, symlink))
+        else:
+            raise Exception('{0} not found'.format(iso_filename))
