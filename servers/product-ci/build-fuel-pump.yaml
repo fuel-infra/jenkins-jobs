@@ -27,4 +27,4 @@
       - timeout:
           fail: true
           write-description: true
-          timeout: 45
+          timeout: 90
