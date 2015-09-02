@@ -158,6 +158,9 @@
             - name: '7.0.system_test.ubuntu.huge_ha_neutron'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.reduced_footprint'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.repeatable_image_based'
               current-parameters: true
               kill-phase-on: NEVER

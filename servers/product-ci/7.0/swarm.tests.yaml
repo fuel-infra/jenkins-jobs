@@ -178,3 +178,5 @@
          testgroup: 'fuel_plugin_vip_reservation'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'network_templates'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'reduced_footprint'
