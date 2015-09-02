@@ -21,7 +21,7 @@
     node: smoke
     properties:
       - heavy-job:
-          weight: 4
+          weight: 6
       - throttle:
           max-per-node: 1
           option: project
