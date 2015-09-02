@@ -40,20 +40,63 @@ def venv29():
 # Define hosts
 
 @task
-def product_ci(label=None, names=None):
-
-    env.user = 'root'
+def jenkins_product_ci(label=None, names=None):
 
     J = Jenkins('http://jenkins-product.srt.mirantis.net')
     env.hosts = J.list_nodes(label, names)
+
     print "\n".join(env.hosts)
 
+@task
+def product_ci(label=None, names=None):
+
+    J = Jenkins('https://product-ci.infra.mirantis.net')
+    env.hosts = J.list_nodes(label, names)
+    print "\n".join(env.hosts)
+
+@task
+def old_stable_ci(label=None, names=None):
+
+    J = Jenkins('https://old-stable-ci.infra.mirantis.net')
+    env.hosts = J.list_nodes(label, names)
+    print "\n".join(env.hosts)
 
 @task
 def fuel_ci(label=None, names=None):
-    env.user = 'root'
 
     J = Jenkins('https://ci.fuel-infra.org')
+    env.hosts = J.list_nodes(label, names)
+
+    print "\n".join(env.hosts)
+
+@task
+def osci_ci(label=None, names=None):
+
+    J = Jenkins('http://osci-jenkins.srt.mirantis.net:8080')
+    env.hosts = J.list_nodes(label, names)
+
+    print "\n".join(env.hosts)
+
+@task
+def infra_ci(label=None, names=None):
+
+    J = Jenkins('https://infra-ci.fuel-infra.org')
+    env.hosts = J.list_nodes(label, names)
+
+    print "\n".join(env.hosts)
+
+@task
+def packaging_ci(label=None, names=None):
+
+    J = Jenkins('https://packaging-ci.infra.mirantis.net')
+    env.hosts = J.list_nodes(label, names)
+
+    print "\n".join(env.hosts)
+
+@task
+def patching_ci(label=None, names=None):
+
+    J = Jenkins('https://patching-ci.infra.mirantis.net')
     env.hosts = J.list_nodes(label, names)
 
     print "\n".join(env.hosts)
@@ -117,6 +160,16 @@ def ml2_check():
     result_entry = (
         "bridge-nf-call-iptables",
         map(str.strip, data.split("\n"))
+    )
+    env.result.add_entry(env.host, result_entry)
+
+@task
+def hw_check():
+    cpu = run("nproc").strip()
+    memory = run('grep "^MemTotal:" /proc/meminfo').split()[-2]
+    result_entry = (
+        "hw_check",
+        ("{0}:{1}".format(cpu, int(memory)/1024/1024+1),)
     )
     env.result.add_entry(env.host, result_entry)
 
