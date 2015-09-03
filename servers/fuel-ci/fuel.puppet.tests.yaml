@@ -1,0 +1,44 @@
+- job-template:
+    name: verify-puppet-modules.{job_type}
+    builders:
+      - shell:
+          !include-raw-escape builders/fuel_puppet_tests.sh
+    concurrent: true
+    logrotate:
+      artifactDaysToKeep: 30
+    node: verify-puppet-modules
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: GERRIT_PROJECT
+          default: 'puppet-modules'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 30
+    scm:
+      - fuel-infra
+      - fuel-infra-tools:
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-branch: '{scm-branch}'
+    triggers:
+      - fuel-infra-request:
+          code-project: '{test-project}'
+          branch: '{test-branch}'
+
+- project:
+    name: fuel-puppet-modules
+    job_type:
+      - lint
+      - unit
+      - syntax
+    scm-repo: 'tools/puppet-modules-tests'
+    scm-basedir: 'puppet-modules-tests'
+    scm-branch: 'master'
+    test-project: 'puppet-modules/**'
+    test-branch: '**'
+    jobs:
+      - 'verify-puppet-modules.{job_type}'

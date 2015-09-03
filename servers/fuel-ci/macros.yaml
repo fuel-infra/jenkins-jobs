@@ -29,3 +29,52 @@
           recipients: '$GERRIT_CHANGE_OWNER_EMAIL, devops+fuel-ci-gating@mirantis.com'
           subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
           failure: true
+
+
+########################################################################
+# Section: Triggers
+########################################################################
+
+- trigger:
+    name: fuel-infra-request
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: '{code-project}'
+              branches:
+                - branch-compare-type: 'REG_EXP'
+                  branch-pattern: '{branch}'
+          server-name: review.fuel-infra.org
+          silent: true
+
+########################################################################
+# Section: SCM
+########################################################################
+
+- scm:
+    name: fuel-infra-tools
+    scm:
+      - git:
+          url: 'https://review.fuel-infra.org/{scm-repo}'
+          basedir: '{scm-basedir}'
+          skip-tag: true
+          branches:
+            - '{scm-branch}'
+          wipe-workspace: false
+          clean: true
+
+- scm:
+    name: fuel-infra
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.fuel-infra.org/$GERRIT_PROJECT
+          choosing-strategy: gerrit
+          clean: true
