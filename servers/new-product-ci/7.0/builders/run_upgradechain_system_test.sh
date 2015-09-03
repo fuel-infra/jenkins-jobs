@@ -30,8 +30,8 @@ export TARBALL_PATH=$(seedclient-wrapper -d -m "${BASE_UPGRADE_TARBALL_MAGNET_LI
 VERSION_STRING=$(basename ${TARBALL_PATH} | cut -d '-' -f 2)
 echo "Description string: ${VERSION_STRING}"
 
-export UPGRADE_FUEL_FROM=$(basename ${ISO_PATH} | cut -d '-' -f 2 | sed s/.iso//g)
-export UPGRADE_FUEL_TO=$(basename ${TARBALL_PATH} | cut -d '-' -f 2)
+export UPGRADE_FUEL_FROM=6.0
+export UPGRADE_FUEL_TO=6.1
 
 export DEVOPS_DB_NAME='devops'
 export DEVOPS_DB_USER='devops'
@@ -46,11 +46,11 @@ sh -x "BASE_UPGRADED/utils/jenkins/system_tests.sh" -k -t test -w "${WORKSPACE}/
 
 export TARBALL_PATH=$(seedclient-wrapper -d -m "${UPGRADE_TARBALL_MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
-VERSION_STRING=$(basename ${TARBALL2_PATH} | cut -d '-' -f 2-4)
+VERSION_STRING=$(basename ${TARBALL_PATH} | cut -d '-' -f 2-4)
 echo "Description string: ${VERSION_STRING}"
 
-export UPGRADE_FUEL_FROM=$(basename ${TARBALL_PATH} | cut -d '-' -f 2)
-export UPGRADE_FUEL_TO=$(basename ${TARBALL2_PATH} | cut -d '-' -f 2)
+export UPGRADE_FUEL_FROM=6.1
+export UPGRADE_FUEL_TO=7.0
 
 export DEVOPS_DB_NAME='devops'
 export DEVOPS_DB_USER='devops'
