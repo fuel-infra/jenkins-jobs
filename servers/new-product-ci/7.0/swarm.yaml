@@ -104,7 +104,10 @@
             - name: '7.0.system_test.ubuntu.ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.thread_2'
+            - name: '7.0.system_test.ubuntu.one_controller_actions'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.multirole'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.thread_3'

@@ -29,7 +29,11 @@
            KVM_USE=true
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'thread_2'
+         testgroup: 'one_controller_actions'
+         weight: '4'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'multirole'
          weight: '4'
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
