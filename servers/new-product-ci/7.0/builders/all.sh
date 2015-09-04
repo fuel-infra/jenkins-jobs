@@ -19,9 +19,38 @@ export LOCAL_MIRROR=${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror
 export ARTS_DIR=${WORKSPACE}/artifacts
 rm -rf ${ARTS_DIR}
 
-######## Get stable ubuntu mirror from snapshot ###############
-# Since we are building 7.All.iso in MSK let' hardcode this
-LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+######## Get node location to choose closer mirror ###############
+# try to use facter and fall-back to bud location
+
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION=${LOCATION_FACT:-bud}
+
+case "${LOCATION}" in
+    srt)
+        USE_MIRROR=srt
+        LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
+        ;;
+    msk)
+        USE_MIRROR=msk
+        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+        ;;
+    hrk)
+        USE_MIRROR=hrk
+        LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
+        ;;
+    poz|bud|bud-ext|cz)
+        USE_MIRROR=cz
+        LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
+        ;;
+    mnv)
+        USE_MIRROR=usa
+        LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
+        ;;
+    *)
+        USE_MIRROR=msk
+        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+esac
+
 LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | head -1)
 export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
 
