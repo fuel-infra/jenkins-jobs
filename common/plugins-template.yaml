@@ -60,7 +60,7 @@
     wrappers:
     - timeout:
         fail: false
-        timeout: '480'
+        timeout: '{timeout}'
         write-description: false
     - inject-passwords:
         global: true
