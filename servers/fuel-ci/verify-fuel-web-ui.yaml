@@ -32,6 +32,10 @@
     publishers:
       - description-setter:
           regexp-for-failed: '(Failed tests: (.*))'
+      - archive:
+          allow-empty: true
+          artifacts: 'test_run/ui_func/*.png'
+          latest-only: false
     scm:
       - git:
           branches:
