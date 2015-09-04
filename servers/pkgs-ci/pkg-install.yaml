@@ -1,8 +1,7 @@
 - job-template:
-    name: 'pkg-install-{mos_version}-{pkg_type}'
+    name: '{mos_version}-pkg-install-{os}'
     project-type: freestyle
     concurrent: true
-    node: 'install-node'
     wrappers:
       - install-vm-creds
       - pre-scm-buildstep:
@@ -20,11 +19,12 @@
           name: REQUEST_TYPE
           default: "Centos7"
     scm:
-      - git:
-          url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/ci-test-request.git'
-          credentials-id: 'e2e0bcb0-ea5d-4932-89ed-4d0e5bc67a4f'
-          branches:
-            - 'origin/master'
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: 'infra/ci-test-request'
+          scm-basedir: ''
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: 'master'
     builders:
       - shell:
           !include-raw-escape builders/mos.install.cleanup.sh
@@ -76,3 +76,5 @@
       - archive:
           artifacts: '**/*.xml, ci_status_params, setenvfile'
           allow-empty: true
+
+    node: '{install-node}'

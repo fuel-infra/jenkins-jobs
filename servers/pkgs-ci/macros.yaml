@@ -3,13 +3,19 @@
 ########################################################################
 
 - builder:
-    name: systest-rpm
+    name: systest-centos
     builders:
       - shell:
           !include-raw builders/system_test_rpm.sh
 
 - builder:
-    name: systest-deb
+    name: systest-debian
+    builders:
+      - shell:
+          !include-raw builders/system_test_deb.sh
+
+- builder:
+    name: systest-ubuntu
     builders:
       - shell:
           !include-raw builders/system_test_deb.sh
@@ -27,19 +33,26 @@
           fail: True
 
 - wrapper:
+    name: jenkins
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '0772133d-e02e-4385-9304-e87e7f830b4e'
+
+- wrapper:
     name: ci-build-creds
     wrappers:
       - ssh-agent-credentials:
           users:
-            - 'e2e0bcb0-ea5d-4932-89ed-4d0e5bc67a4f'
+            - 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
 
 - wrapper:
     name: install-vm-creds
     wrappers:
       - ssh-agent-credentials:
           users:
-            - '4cb87479-0917-4c76-8e73-0c20fee978b9'
-            - '2d1ef905-1a97-464b-918b-4025b7a535ea'
+            - 'd2f87345-ff0f-4470-bb25-9c9d944f81d1'
+            - '7a9284db-cc0e-46e1-992d-7c5f163f0678'
 
 ########################################################################
 # Section: Triggers
@@ -63,6 +76,36 @@
           browser-url: https://review.fuel-infra.org/gitweb?p={scm-repo}.git
 
 - scm:
+    name: fuel-infra-src
+    scm:
+      - git:
+          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/${{SRC_PROJECT}}.git'
+          basedir: 'wrk-build/${{PACKAGENAME}}-src'
+          credentials-id: '{scm-credentials-id}'
+          skip-tag: True
+          branches:
+            - ${{SOURCE_BRANCH}}
+          refspec: ${{SOURCE_REFSPEC}}
+          browser: gitweb
+          browser-url: https://review.fuel-infra.org/gitweb?p=${{SRC_PROJECT}}.git
+          wipe-workspace: False
+
+- scm:
+    name: fuel-infra-spec
+    scm:
+      - git:
+          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/${{SPEC_PROJECT}}.git'
+          basedir: 'wrk-build/${{PACKAGENAME}}-spec'
+          credentials-id: '{scm-credentials-id}'
+          skip-tag: True
+          branches:
+            - ${{SPEC_BRANCH}}
+          refspec: ${{SPEC_REFSPEC}}
+          browser: gitweb
+          browser-url: https://review.fuel-infra.org/gitweb?p=${{SPEC_PROJECT}}.git
+          wipe-workspace: False
+
+- scm:
     name: stackforge
     scm:
       - git:
@@ -71,6 +114,16 @@
             - 'origin/{branch}'
           basedir: '{repo}'
           wipe-workspace: false
+
+- scm:
+    name: zuul
+    scm:
+      - git:
+          url: '${ZUUL_URL}/${ZUUL_PROJECT}'
+          branches:
+            - '${ZUUL_BRANCH}'
+          refspec: '${ZUUL_REF}'
+          wipe-workspace: False
 
 ########################################################################
 # Section: Parameters

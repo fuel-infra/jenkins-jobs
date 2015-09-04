@@ -1,32 +1,42 @@
-################################################################################
-# Job Templates
-################################################################################
-
 - job-template:
-    name: 'pkg-publish-{mos_version}-{pkg_type}'
-    concurrent: True
-    description: |
-        This job triggers build job to build released package and publish
-        it in released repository.
-
-        All work is done by slave job which determines change's status and
-        if it merged, publishes package in released repository.
+    name: '{mos_version}-pkg-publish-{os}'
+    project-type: freestyle
+    concurrent: false
+    properties:
+      - inject:
+          properties-content: |
+            REPO_BASE_PATH={repo-base-path}
+            SIGKEYID={pkg-sign-key}
+    parameters:
+      - string:
+          name: PROJECT_NAME
+          default: '{project-name}'
+      - string:
+          name: PROJECT_VERSION
+          default: '{mos_version}'
+      - bool:
+          name: IS_UPDATES
+      - bool:
+          name: RESYNC_ONLY
+          default: false
     wrappers:
+      - jenkins
       - timestamps
       - ansicolor
-      - timeout:
-          timeout: 3600
+    triggers:
+      - zuul
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-branch}'
     builders:
-      - trigger-builds:
-          - project: 'pkg-build-{mos_version}-{pkg_type}'
-            current-parameters: true
-            block: true
-            predefined-parameters: |
-                LAST_STAGE=true
-                TEST_INSTALL=false
+        - shell: /bin/bash -xe publisher.v5/publish-{pkg_type}-binaries.sh
+    publishers:
+      - archive:
+           artifacts: '*.publish.setenvfile'
+           allow-empty: true
 
-    node: 'packtest'
-
-################################################################################
-# Job Groups
-################################################################################
+    node: '{publish-node}'

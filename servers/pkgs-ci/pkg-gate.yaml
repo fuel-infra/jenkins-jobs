@@ -3,7 +3,7 @@
 ################################################################################
 
 - job-template:
-    name: 'pkg-gate-{mos_version}-{pkg_type}'
+    name: '{mos_version}-pkg-gate-{os}'
     concurrent: True
     description: |
         This job parses set of Zuul parameters (ZUUL_CHANGE_IDS and ZUUL_CHANGES) and runs build job
@@ -13,6 +13,8 @@
       - ansicolor
       - timeout:
           timeout: 3600
+    triggers:
+      - zuul
     builders:
       - shell: |
           #!/bin/bash -xe
@@ -73,7 +75,7 @@
           done
 
       - trigger-builds:
-          - project: 'pkg-build-{mos_version}-{pkg_type}'
+          - project: '{mos_version}-pkg-pipeline-{os}'
             current-parameters: true
             block: true
             parameter-factories:
@@ -105,20 +107,26 @@
             # Create list of built DEB repositories
             ############################
 
-      - trigger-builds:
-          - project: 'pkg-systest-{mos_version}-{pkg_type}'
-            current-parameters: true
-            property-file: '{pkg_type}_repos.setenvfile'
-            property-file-fail-on-missing: true
-            block: true
-            predefined-parameters: |
-                ISO_JOB_NAME={mos_version}.test_all
+      - conditional-step:
+            condition-kind: boolean-expression
+            condition-expression: ${{TEST_SYSTEST}}
+            on-evaluation-failure: dont-run
+            steps:
+              - trigger-builds:
+                  - project: '{mos_version}-pkg-systest-{os}'
+                    current-parameters: true
+                    property-file: '{pkg_type}_repos.setenvfile'
+                    property-file-fail-on-missing: true
+                    block: true
+                    predefined-parameters: |
+                        ISO_JOB_NAME={mos_version}.test_all
 
     publishers:
       - archive:
           artifacts: 'build-param-*.setenvfile,*_repos.setenvfile'
           allow-empty: True
-    node: 'packtest'
+
+    node: '{build-node}'
 
 ################################################################################
 # Job Groups

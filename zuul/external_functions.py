@@ -19,6 +19,8 @@ re_proj_openstack = r'^openstack(?P<build>-build)?/(?P<name>.+)'
 re_branch_mos_version = r'^openstack-ci/fuel-(?P<version>[0-9.]+)(?P<update>-updates)?/'
 re_pkg_name = r'^.+/(.+)$'
 
+GIT_DEFAULT_REFSPEC='+refs/heads/*:refs/remotes/origin/*'
+
 
 def params_gerrit(item, job, params):
     # Set Gerrit parameters
@@ -62,14 +64,10 @@ def pkg_build(item, job, params):
 
     # Package jobs specific parameters
 
-    params['PACKAGENAME'] = re.match(re_pkg_name, params['ZUUL_PROJECT']).group(1)
-
     # Branch for sources is always known
     params['SOURCE_BRANCH'] = params['ZUUL_BRANCH']
 
     if params['IS_OPENSTACK'] == 'true':
-        # Openstack projects are used for cluster nodes
-        params['COMPONENT_PATH'] = 'cluster/'
         # Check for dependent pair of openstack and openstack-build projects
         changes = params['ZUUL_CHANGES'].split('^')
         if len(changes) == 2:
@@ -91,21 +89,88 @@ def pkg_build(item, job, params):
                                             params['SRC_PROJECT'])
             # Branch for build specs matches branch of sources
             params['SPEC_BRANCH'] = params['ZUUL_BRANCH']
+
             # Guess for which project use given refspec
             if params['SRC_PROJECT'] == params['ZUUL_PROJECT']:
                 params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
+            else:
+                params['SOURCE_REFSPEC'] = GIT_DEFAULT_REFSPEC
+
             if params['SPEC_PROJECT'] == params['ZUUL_PROJECT']:
                 params['SPEC_REFSPEC'] = params['GERRIT_REFSPEC']
+            else:
+                params['SPEC_REFSPEC'] = GIT_DEFAULT_REFSPEC
     else:
         params['SRC_PROJECT'] = params['ZUUL_PROJECT']
         params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
-        params['COMPONENT_PATH'] = 'fuel/'
+
+    params['PACKAGENAME'] = re.match(re_pkg_name, params['SRC_PROJECT']).group(1)
 
     params['REQUEST_NUM'] = 'CR-' + str(params['ZUUL_CHANGE'])
 
     params['LAST_STAGE'] = str(item.change.is_merged).lower()
+    params['TEST_INSTALL'] = str(not item.change.is_merged).lower()
+    params['TEST_SYSTEST'] = ('false' if params['ZUUL_BRANCH'] == 'master' else
+                              str(not item.change.is_merged).lower())
 
-    if not item.change.is_merged:
-        params['TEST_INSTALL'] = 'true'
+    # Temporary disable systest
+    params['TEST_SYSTEST'] = 'false'
+
+
+def pkg_build_debian(item, job, params):
+    params_gerrit(item, job, params)
+    params_mos(item, job, params)
+
+    # Package jobs specific parameters
+
+    # Branch for sources is always known
+    params['SOURCE_BRANCH'] = params['ZUUL_BRANCH']
+
+    if params['IS_OPENSTACK'] == 'true':
+        # Check for dependent pair of openstack and openstack-build projects
+        changes = params['ZUUL_CHANGES'].split('^')
+        if len(changes) == 2:
+            for change_info in changes:
+                change = change_info.split(':')
+                if re.match(r'^openstack/(?!deb-)', change[0]):
+                    params['SRC_PROJECT'] = change[0]
+                    params['SOURCE_BRANCH'] = change[1]
+                    params['SOURCE_REFSPEC'] = change[2]
+                if re.match(r'^openstack/deb-', change[0]):
+                    params['SPEC_PROJECT'] = change[0]
+                    params['SPEC_BRANCH'] = change[1]
+                    params['SPEC_REFSPEC'] = change[2]
+        else:
+            # Guess source and build spec project names
+            params['SRC_PROJECT'] = re.sub(r'/deb-', '/',
+                                           params['ZUUL_PROJECT'])
+            params['SPEC_PROJECT'] = re.sub(r'/', '/deb-',
+                                            params['SRC_PROJECT'])
+            # Branch for build specs matches branch of sources
+            params['SPEC_BRANCH'] = params['ZUUL_BRANCH']
+
+            # Guess for which project use given refspec
+            if params['SRC_PROJECT'] == params['ZUUL_PROJECT']:
+                params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
+            else:
+                params['SOURCE_REFSPEC'] = GIT_DEFAULT_REFSPEC
+
+            if params['SPEC_PROJECT'] == params['ZUUL_PROJECT']:
+                params['SPEC_REFSPEC'] = params['GERRIT_REFSPEC']
+            else:
+                params['SPEC_REFSPEC'] = GIT_DEFAULT_REFSPEC
     else:
-        params['TEST_INSTALL'] = 'false'
+        params['SRC_PROJECT'] = params['ZUUL_PROJECT']
+        params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
+
+    params['PACKAGENAME'] = re.match(re_pkg_name, params['SRC_PROJECT']).group(1)
+
+    params['REQUEST_NUM'] = 'CR-' + str(params['ZUUL_CHANGE'])
+
+    params['LAST_STAGE'] = str(item.change.is_merged).lower()
+    params['TEST_INSTALL'] = str(not item.change.is_merged).lower()
+    params['TEST_SYSTEST'] = ('false' if params['ZUUL_BRANCH'] == 'master' else
+                              str(not item.change.is_merged).lower())
+
+    # Temporary disable systest
+    params['TEST_SYSTEST'] = 'false'
