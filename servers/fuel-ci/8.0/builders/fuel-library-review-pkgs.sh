@@ -4,7 +4,7 @@ set -ex
 
 #common params
 
-export MIRROR_UBUNTU="$(curl -sSf "${JENKINS_URL}job/devops.7.0.env/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt")"
+export MIRROR_UBUNTU="$(curl -sSf "${JENKINS_URL}job/devops.master.env/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt")"
 
 
 export LOGS_DIR="/home/jenkins/workspace/${JOB_NAME}/logs/${BUILD_NUMBER}"

@@ -1,12 +1,12 @@
 - job:
-    name: '7.0.fuel-library.pkgs.ubuntu.neutron_vlan_ha'
+    name: 'master.fuel-library.pkgs.ubuntu.neutron_vlan_ha'
     builders:
       - inject: # default env variables
           properties-content: |
             DISTRIBUTION=ubuntu
             OPENSTACK_RELEASE=ubuntu
             TEST_GROUP=neutron_vlan_ha
-            BRANCH=stable/7.0
+            BRANCH=master
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
       - inject: # overrides
           override-build-parameters: true
@@ -21,11 +21,11 @@
       !include-raw descriptions/fuellib-ubuntu-pkgs
     logrotate:
       artifactDaysToKeep: 30
-    node: '7.0_ubuntu'
+    node: 'master_ubuntu'
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/stable/7.0'
+          default: 'refs/heads/master'
     properties:
       - heavy-job:
           weight: '6'
@@ -54,7 +54,7 @@
       - git:
           url: 'https://git.openstack.org/stackforge/fuel-main.git'
           branches:
-            - 'origin/stable/7.0'
+            - 'origin/master'
           basedir: 'fuel-main'
     triggers:
       - timed: 'H 2 * * *'
@@ -66,7 +66,7 @@
               project-pattern: stackforge/fuel-library
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/7.0'
+                  branch-pattern: 'master'
           readable-message: true
           custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:

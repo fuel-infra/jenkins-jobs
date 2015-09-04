@@ -1,20 +1,23 @@
 - job:
-    name: fuellib_unit_tests
+    name: 7.0.fuellib_noop_tests
     builders:
       - shell:
-          !include-raw builders/fuellib_unit_tests.sh
+          !include-raw builders/fuellib_noop_tests.sh
     concurrent: true
-    description: Runs ./utils/jenkins/fuel_unit_tests.sh
+    description: Runs ./utils/jenkins/fuel_noop_tests.sh
     logrotate:
       artifactDaysToKeep: 30
     node: fuel-library-unit-tests
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/stable/7.0'
     properties:
       - heavy-job:
-          weight: 1
+          weight: 2
+      - throttle:
+          max-per-node: 1
+          option: project
     scm:
       - git:
           branches:
@@ -23,7 +26,6 @@
             - gerrit:
                 refspec: $GERRIT_REFSPEC
                 url: https://review.openstack.org/stackforge/fuel-library.git
-          timeout: 20
           choosing-strategy: gerrit
     triggers:
       - timed: 'H 2 * * *'
@@ -35,23 +37,14 @@
               project-pattern: stackforge/fuel-library
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/6.1'
-                - branch-compare-type: PLAIN
                   branch-pattern: 'stable/7.0'
           custom-url: '* $JOB_NAME $BUILD_URL'
-          skip-vote:
-            successful: true
-            failed: true
-            unstable: true
-            notbuilt: true
     wrappers:
       - ansicolor:
           colormap: xterm
       - timeout:
           fail: true
-          timeout: 20
+          timeout: 60
           write-description: true
     publishers:
       - email-default

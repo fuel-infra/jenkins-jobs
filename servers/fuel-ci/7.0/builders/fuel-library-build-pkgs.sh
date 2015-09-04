@@ -16,7 +16,7 @@ rm -rf "${ARTS_DIR}"
 cd fuel-main
 
 # use commit from fuel-library in order to build library package
-if [ "${GERRIT_REFSPEC}" !=  "refs/heads/master" ]; then
+if [ "${GERRIT_REFSPEC}" !=  "refs/heads/stable/7.0" ]; then
   export FUELLIB_GERRIT_COMMIT="${GERRIT_REFSPEC}"
 fi
 

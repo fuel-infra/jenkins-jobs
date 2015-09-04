@@ -1,5 +1,5 @@
 - job:
-    name: '7.0-community.all'
+    name: '8.0-community.all'
     builders:
       - shell:
           !include-raw builders/community.all.sh
@@ -44,27 +44,27 @@
         - project: publish_fuel_community_iso
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
-            ISO_ID=7.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
-            UPGRADE_ID=7.0-upgrade-$BUILD_NUMBER-$BUILD_TIMESTAMP
+            ISO_ID=8.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
+            UPGRADE_ID=8.0-upgrade-$BUILD_NUMBER-$BUILD_TIMESTAMP
             ARTIFACTS_DIR=$WORKSPACE/artifacts
-            RELEASE=7.0
-            FUEL_MAIN_BRANCH=stable/7.0
-            BUILD=fuel-community-7.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
+            RELEASE=8.0
+            FUEL_MAIN_BRANCH=master
+            BUILD=fuel-community-8.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
             TESTS_REPO=fuel-qa
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
         - project: fuel_community_build_reports
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
-            RELEASE=7.0
-            BUILD=fuel-community-7.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
+            RELEASE=8.0
+            BUILD=fuel-community-8.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
             STAGE=build
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
         - project: fuel_community_build_reports
           condition: FAILED
           predefined-parameters: |
-            RELEASE=7.0
-            BUILD=fuel-community-7.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
+            RELEASE=8.0
+            BUILD=fuel-community-8.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
             STAGE=build
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL
@@ -72,7 +72,7 @@
       - git:
           url: 'https://git.openstack.org/stackforge/fuel-main.git'
           branches:
-            - 'origin/stable/7.0'
+            - 'origin/master'
     triggers:
       - timed: 'H 4 * * *'
     wrappers:

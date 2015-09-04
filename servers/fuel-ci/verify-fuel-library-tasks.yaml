@@ -35,6 +35,8 @@
                   branch-pattern: 'master'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/6.1'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/7.0'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:

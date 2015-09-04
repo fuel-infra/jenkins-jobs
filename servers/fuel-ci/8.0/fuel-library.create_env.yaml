@@ -1,5 +1,5 @@
 - job:
-    name: 'devops.7.0.fuel-library.create_env'
+    name: 'devops.master.fuel-library.create_env'
     concurrent: true
     description:
       !include-raw descriptions/fuel-library.create_env
@@ -19,7 +19,7 @@
           description: 'List of env prefixes to create'
       - string:
           name: BRANCH
-          default: stable/7.0
+          default: master
       - string:
           name: ISO_ID
           default: default
