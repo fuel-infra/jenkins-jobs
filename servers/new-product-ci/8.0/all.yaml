@@ -1,0 +1,213 @@
+- job:
+    name: '8.0.all'
+    builders:
+      - shell:
+          !include-raw builders/all.sh
+    description: |
+      Build artifacts: iso and upgrade tarball
+
+      <p>
+        Owned by: Fuel Build Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #infra<br/>
+      </p>
+    node: iso
+    properties:
+      - build-timestamp
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    parameters:
+      - string:
+          name: deep_clean
+          default: 'true'
+          description: Perform deep_clean or not. Default is "true". Set any other value
+            to disable it.
+      - string:
+          name: make_args
+          description: Additional make arguments
+      - string:
+          name: trigger_community_build
+          description: If set to "true" will trigger community build with the same commits
+    publishers:
+      - archive:
+          allow-empty: false
+          artifacts: artifacts/*.data.txt, artifacts/*.data.html, version.yaml.txt,
+            *magnet_link.txt, listing.txt, artifacts/*changelog, data_build_url.txt
+          latest-only: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+      - email-default:
+          mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
+      - trigger-parameterized-builds:
+
+        - project: 'trigger-external-events'
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            ISO_VERSION=8.0
+            BUILD=fuel-8.0-$BUILD_NUMBER
+            REPORTED_JOB_URL=$BUILD_URL
+
+        - project: 'deploy_iso_on_cachers'
+          property-file: magnet_link.txt
+          condition: UNSTABLE_OR_BETTER
+
+        - project: deploy_iso_on_cachers
+          condition: UNSTABLE_OR_BETTER
+          property-file: upgrade_magnet_link.txt
+
+        - project: fuel_ci-status_reports
+          condition: UNSTABLE_OR_BETTER
+          property-file: ci_status_params.txt
+          predefined-parameters: |
+            RELEASE=8.0
+            BUILD=fuel-8.0-$BUILD_NUMBER
+            STAGE=build
+            VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
+
+        - project: '8.0.test_all'
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            UPSTREAM_BUILD_URL=$BUILD_URL
+            UPSTREAM_BUILD_NUMBER=$BUILD_NUMBER
+            BUILD_MIRROR_URL=$BUILD_MIRROR_URL
+
+        - project: '8.0.all-Testrail'
+          condition: UNSTABLE_OR_BETTER
+          trigger-with-no-params: true
+
+    scm:
+      - stackforge:
+          branch: 'master'
+          repo: fuel-main
+# FIXME: timer
+#    triggers:
+#      - timed: 'H */6 * * *'
+    wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
+      - inject-passwords:
+          global: true
+      - mirrors-sync-credentials
+
+- job:
+    name: '8.0.test_all'
+    project-type: multijob
+    description: |
+      Trigger tests for fresh ISO
+      <p>
+        Owned by: Fuel QA Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #fuel-qa, #fuel-devops<br/>
+      </p>
+
+    concurrent: true
+    node: runner
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - bool:
+          name: 'SKIP_UBUNTU.BVT_2'
+          default: false
+          description: |
+            Select to skip build of 8.0.ubuntu.bvt_2
+      - bool:
+          name: 'SKIP_UBUNTU.SMOKE_NEUTRON'
+          default: false
+          description: |
+            Select to skip build of 8.0.ubuntu.smoke_neutron
+      - string:
+          name: UPSTREAM_JOB_URL
+          default: '${JENKINS_URL}job/8.0.all/'
+          description: URL of ISO build
+      - string:
+          name: UPSTREAM_BUILD_NUMBER
+          default: 'lastSuccessfulBuild'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: 'latest'
+          description: Use ubuntu-<timestamp> or latest for latest mirror available.
+    builders:
+      - shell:
+          !include-raw builders/test_all.sh
+      - multijob:
+          name: Run_BVT_and_Smoke
+          condition: COMPLETED
+          projects:
+            - name: '8.0.ubuntu.bvt_2'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+              enable-condition: '"${SKIP_UBUNTU.BVT_2}" == "false"'
+            - name: '8.0.ubuntu.smoke_neutron'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+              enable-condition: '"${SKIP_UBUNTU.SMOKE_NEUTRON}" == "false"'
+    publishers:
+      - email-systest:
+          body-failed:
+            !include-raw notifications/test_all.failed
+          mail-to: 'devops+alert@mirantis.com, mos-qa@mirantis.com'
+      - description-setter:
+          regexp: |
+            'Description string: (.*)'
+          set-for-matrix: false
+      - archive:
+          allow-empty: false
+          artifacts: '*.txt'
+          latest-only: false
+      - trigger-parameterized-builds:
+        - project: 8.0.testrail_reports
+          predefined-parameters: |
+            TESTS_RUNNER=$JOB_NAME
+            BUILD_NUMBER=$BUILD_NUMBER
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+            TESTRAIL_TEST_SUITE=Smoke/BVT
+            TESTRAIL_URL=https://mirantis.testrail.com
+            MANUAL=true
+
+
+
+- job:
+    name: '8.0.all-Testrail'
+    builders:
+      - inject:
+           properties-content: |
+            TESTRAIL_MILESTONE=8.0
+            LAUNCHPAD_MILESTONE=8.0
+            TESTS_RUNNER=$JOB_NAME
+            BUILD_NUMBER=$BUILD_NUMBER
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+            TESTRAIL_TEST_SUITE=Smoke/BVT
+            TESTRAIL_URL=https://mirantis.testrail.com
+      - shell:
+          !include-raw builders/all-Testrail.sh
+
+    node: testrail
+    publishers:
+      - email:
+          recipients: ishamrai@mirantis.com, devops+alert@mirantis.com
+
+    scm:
+     - main-git:
+          reponame: 'fuel-qa'
+          repobranch: 'origin/master'
+          basedir: ''
+
+
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
+
+    publishers:
+      - description-setter:
+          regexp: '^.*Report URL:\s*(.*)'
+          description: '<a href="\1">TestRail Report URL</a>'

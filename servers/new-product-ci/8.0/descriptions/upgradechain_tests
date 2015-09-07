@@ -1,0 +1,13 @@
+<p>Test upgrade chain</p>
+<pre style="font-size: 10px">
+- checkout 6.0 branch of fuel-main - https://github.com/stackforge/fuel-main/tree/stable/6.0 and run test using group 'prepare_upgrade_env'
+- checkout stable/6.1 fuel-qa branch (in shell don't forget to make exports - export DEVOPS_DB_NAME='devops' , export DEVOPS_DB_USER='devops', export DEVOPS_DB_PASSWORD='devops') and use test group 'upgrade_first_stage'
+- checkout master fuel-qa branch and use test group 'upgrade_second_stage'
+</pre>
+
+<p>
+  <b>Ownership:</b> Issues with this job are tracked by QA team.
+<p>
+  <b>Contacts:</b> #fuel-qa
+
+

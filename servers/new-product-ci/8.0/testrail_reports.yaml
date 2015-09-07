@@ -1,0 +1,44 @@
+- job:
+    name: '8.0.testrail_reports'
+    description:
+      !include-raw descriptions/testrail_reports
+    node: testrail
+
+    parameters:
+      - string:
+          name: TESTS_RUNNER
+          default: '8.0.test_all'
+      - string:
+          name: BUILD_NUMBER
+      - string:
+          name: TESTRAIL_TEST_SUITE
+          default: "Smoke/BVT"
+      - string:
+          name: MANUAL
+          default: 'true'
+      - string:
+          name: TESTRAIL_URL
+          default: "https://mirantis.testrail.com"
+      - string:
+          name: VENV_PATH
+          default: "/home/jenkins/venv-nailgun-tests-2.9"
+
+    builders:
+      - shell:
+          !include-raw './builders/testrail_reports.sh'
+    publishers:
+      - email:
+          recipients: devops+alert@mirantis.com
+    scm:
+      - main-git:
+          reponame: 'fuel-qa'
+          repobranch: 'origin/master'
+          basedir: ''
+    wrappers:
+      - inject-passwords:
+          global: true
+          mask-password-params: true
+    publishers:
+      - description-setter:
+          regexp: '^.*Report URL:\s*(.*)'
+          description: '<a href="\1">TestRail Report URL</a>'
