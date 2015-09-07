@@ -5,7 +5,7 @@
           !include-raw builders/staging.iso.sh
     concurrent: true
     description: |
-      Build fuel master code on top of staging files/7.0-timestamp Fuel mirror.
+      Build fuel stable/7.0 code on top of staging files/7.0-timestamp Fuel mirror.
       <p>This ISO is used only to test staging mirror.<p>
       For "official" 7.0 iso builds see <a href="https://product-ci.infra/mirantis.net/job/7.0.all/">7.0.all</a>
 
@@ -41,7 +41,7 @@
       - bool:
           name: USE_STABLE_MOS_FOR_STAGING
           default: true
-          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/7.0.all/lastSuccessfulBuild/artifact/version.yaml.txt">7.0.all</a>. Will used "master" otherwise.'
+          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/7.0.all/lastSuccessfulBuild/artifact/version.yaml.txt">7.0.all</a>. Will used "stable/7.0" otherwise.'
     publishers:
       - archive:
           allow-empty: false
@@ -90,7 +90,7 @@
             REPORTED_JOB_URL=$BUILD_URL
     scm:
       - stackforge:
-          branch: 'master'
+          branch: 'stable/7.0'
           repo: fuel-main
     wrappers:
       - timeout:

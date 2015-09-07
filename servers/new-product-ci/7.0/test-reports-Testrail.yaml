@@ -23,7 +23,7 @@
     scm:
      - main-git:
           reponame: 'fuel-qa'
-          repobranch: 'origin/master'
+          repobranch: 'origin/stable/7.0'
           basedir: ''
 
 

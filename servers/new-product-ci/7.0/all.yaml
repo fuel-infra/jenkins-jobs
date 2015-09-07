@@ -87,10 +87,11 @@
 
     scm:
       - stackforge:
-          branch: 'master'
+          branch: 'stable/7.0'
           repo: fuel-main
-    triggers:
-      - timed: 'H 17 * * *'
+# FIXME: timer
+#    triggers:
+#      - timed: 'H 17 * * *'
     wrappers:
       - timeout:
           timeout: 120
@@ -203,7 +204,7 @@
     scm:
      - main-git:
           reponame: 'fuel-qa'
-          repobranch: 'origin/master'
+          repobranch: 'origin/stable/7.0'
           basedir: ''
 
 

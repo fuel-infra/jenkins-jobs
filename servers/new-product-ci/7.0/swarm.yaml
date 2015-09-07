@@ -40,8 +40,9 @@
     builders:
       - shell:
           !include-raw builders/swarm.timer.sh
-    triggers:
-      - timed: '0 21 * * *'
+# FIXME: timer
+#    triggers:
+#      - timed: '0 21 * * *'
     publishers:
       - archive:
           allow-empty: false

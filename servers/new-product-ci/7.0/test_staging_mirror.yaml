@@ -11,7 +11,7 @@
     parameters:
       - string:
           name: FUEL_MAIN_BRANCH
-          default: master
+          default: stable/7.0
       - string:
           name: MIRROR
           default: '7.0'
@@ -33,7 +33,7 @@
       - bool:
           name: USE_STABLE_MOS_FOR_STAGING
           default: true
-          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/7.0.all/lastSuccessfulBuild/artifact/version.yaml.txt">7.0.all</a>. Will used "master" otherwise.'
+          description: 'If "true", ISO will built with the commits from last successful build of <a href="/job/7.0.all/lastSuccessfulBuild/artifact/version.yaml.txt">7.0.all</a>. Will used "stable/7.0" otherwise.'
     builders:
       - shell:
           !include-raw builders/test_staging_mirror_1.sh

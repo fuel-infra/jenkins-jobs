@@ -65,7 +65,7 @@
             REPORTED_JOB_URL=$BUILD_URL
     scm:
       - stackforge:
-          branch: 'master'
+          branch: 'stable/7.0'
           repo: 'fuel-qa'
     wrappers:
       - timeout:
