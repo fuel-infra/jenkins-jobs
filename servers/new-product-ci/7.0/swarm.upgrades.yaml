@@ -53,7 +53,7 @@
             UPDATE_MASTER=true
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
-          testgroup: 'rollback_automatically_delete_node'
+          testgroup: 'deploy_neutron_gre'
           upgrade_testgroup:
             - 'rollback_neutron_gre'
           properties: |
