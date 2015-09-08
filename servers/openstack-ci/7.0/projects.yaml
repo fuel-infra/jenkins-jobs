@@ -32,7 +32,7 @@
     cluster-deb-deps-code-project: 'packages/trusty/**'
     fuel-rpm-deps-code-project: 'packages/centos6/**'
     deps-branch: '7.0'
-    fuel-branch: master
+    fuel-branch: origin/stable/7.0
     mailto: 'fuel-build+ci-packaging@mirantis.com'
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
     repo-request-path-prefix: 'review/'
