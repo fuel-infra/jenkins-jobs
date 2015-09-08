@@ -1,0 +1,158 @@
+- job:
+    name: 'custom_8.0_iso'
+    builders:
+      - shell:
+          !include-raw builders/custom.sh
+    concurrent: true
+    description:
+      !include-raw descriptions/custom.iso
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    node: custom_iso
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    parameters:
+      - string:
+          name: make_args
+          default: ''
+          description: Additional make arguments
+      - string:
+          name: FUELLIB_COMMIT
+          default: 'master'
+      - string:
+          name: NAILGUN_COMMIT
+          default: 'master'
+      - string:
+          name: ASTUTE_COMMIT
+          default: 'master'
+      - string:
+          name: OSTF_COMMIT
+          default: 'master'
+      - string:
+          name: PYTHON_FUELCLIENT_COMMIT
+          default: 'master'
+      - string:
+          name: FUEL_AGENT_COMMIT
+          default: 'master'
+      - string:
+          name: FUEL_NAILGUN_AGENT_COMMIT
+          default: 'master'
+      - string:
+          name: FUELMAIN_COMMIT
+          default: 'master'
+      - string:
+          name: FUELLIB_REPO
+          default: 'https://git.openstack.org/stackforge/fuel-library.git'
+      - string:
+          name: NAILGUN_REPO
+          default: 'https://git.openstack.org/stackforge/fuel-web.git'
+      - string:
+          name: ASTUTE_REPO
+          default: 'https://git.openstack.org/stackforge/fuel-astute.git'
+      - string:
+          name: OSTF_REPO
+          default: 'https://git.openstack.org/stackforge/fuel-ostf.git'
+      - string:
+          name: PYTHON_FUELCLIENT_REPO
+          default: 'https://git.openstack.org/stackforge/python-fuelclient.git'
+      - string:
+          name: FUEL_AGENT_REPO
+          default: 'https://git.openstack.org/stackforge/fuel-agent.git'
+      - string:
+          name: FUEL_NAILGUN_AGENT_REPO
+          default: 'https://git.openstack.org/stackforge/fuel-nailgun-agent.git'
+      - string:
+          name: FUELMAIN_REPO
+          default: 'https://git.openstack.org/stackforge/fuel-main.git'
+      - choice:
+          name: USE_MIRROR
+          choices:
+            - none
+          description: 'take closest mirror'
+      - string:
+          name: fuelmain_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-main gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: nailgun_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-web gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: astute_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-astute gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: ostf_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-ostf gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuellib_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-library gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: python_fuelclient_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in python-fuelclient gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuel_agent_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-agent gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuel_nailgun_agent_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-nailgun-agent gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: EXTRA_RPM_REPOS
+          default: ''
+          description: |
+            Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
+            Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
+            Example: <b> foo,http://my.cool.repo/rpm   bar,ftp://repo.foo </b>
+      - string:
+          name: MIRANTIS
+          default: 'yes'
+          description: yes or no. Deprecated.
+      - string:
+          name: FEATURE_GROUPS
+          default: 'mirantis'
+          description: https://git.openstack.org/stackforge/fuel-specs/blob/master/specs/5.1/feature-groups.rst
+    scm:
+      - git:
+          url: '$FUELMAIN_REPO'
+          branches:
+            - 'origin/master'
+    wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
+      - ansicolor:
+          colormap: xterm
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: artifacts/*txt, artifacts/*changelog
+          latest-only: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'
+          failure: true
+          success: true
+          send-to:
+            - requester
