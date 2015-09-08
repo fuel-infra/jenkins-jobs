@@ -98,7 +98,7 @@
             deb http://../ubuntu trusty main universe multiverse|deb http://../ubuntu trusty-updates main universe multiverse|deb http://../ubuntu trusty-security main universe multiverse|deb http://../ubuntu trusty-proposed main universe multiverse
       - string:
           name: FUEL_QA_COMMIT
-          default: 'master'
+          default: 'stable/7.0'
       - string:
           name: fuel_qa_gerrit_commit
           default: 'none'
