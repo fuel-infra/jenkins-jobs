@@ -8,8 +8,6 @@ PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
 export ISO_NAME="fuel-community-${PROD_VER}-${BUILD_NUMBER}-${BUILD_TIMESTAMP}"
 export UPGRADE_TARBALL_NAME="fuel-community-${PROD_VER}-upgrade-${BUILD_NUMBER}-${BUILD_TIMESTAMP}"
 
-export USE_MIRROR=ext
-
 export BUILD_DIR="${WORKSPACE}/../tmp/${JOB_NAME}/build"
 export LOCAL_MIRROR="${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror"
 
@@ -37,7 +35,7 @@ fi
 ######## Get stable ubuntu mirror from snapshot ###############
 # Since we are building community.iso in EU dc let' hardcode this
 LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
-LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | head -1)
+LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/8.0.target.txt" | head -1)
 export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
 
 echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
@@ -49,6 +47,13 @@ if [ -n "${FUELMAIN_COMMIT}" ] ; then
 fi
 
 #########################################
+echo "STEP 0. Export Workarounds"
+export MIRROR_FUEL=http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos8.0-centos6-fuel/os/x86_64/
+export SANDBOX_MIRROR_CENTOS_UPSTREAM=http://vault.centos.org/6.6/
+export MIRROR_CENTOS=http://vault.centos.org/6.6/
+export MIRROR_MOS_UBUNTU=mirror.seed-cz1.fuel-infra.org
+export MIRROR_UBUNTU=mirror.seed-cz1.fuel-infra.org
+export USE_MIRROR=none
 
 echo "STEP 1. Make everything"
 
