@@ -180,7 +180,10 @@
             - name: '7.0.system_test.ubuntu.plugins.fuel_plugin_example'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '7.0.system_test.ubuntu.plugins.thread_1_separate_services'
+            - name: '7.0.system_test.ubuntu.plugins.thread_db_separate_services'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.plugins.thread_keystone_separate_services'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.plugins.thread_2_separate_services'

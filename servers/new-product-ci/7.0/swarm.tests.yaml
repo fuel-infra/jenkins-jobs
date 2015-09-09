@@ -177,7 +177,8 @@
          testgroup: 'partition_preservation'
      - '{version-id}.system_test.{dist}.plugins.{testgroup}':
          testgroup:
-           - 'thread_1_separate_services'
+           - 'thread_db_separate_services'
+           - 'thread_keystone_separate_services'
            - 'thread_2_separate_services'
            - 'fuel_plugin_example'
          timeout: '600'
