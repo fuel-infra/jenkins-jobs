@@ -27,7 +27,7 @@ export TEST_NAILGUN_DB=nailgun
 export FUEL_WEB_ROOT="${WORKSPACE}/fuel-web"
 
 trap "tox -e cleanup" SIGINT SIGTERM
-tox
+tox -e functional,cleanup
 trap - SIGINT SIGTERM
 
 deactivate
