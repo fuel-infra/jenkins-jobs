@@ -48,7 +48,7 @@
             UPGRADE_ID=6.1-upgrade-$BUILD_NUMBER-$BUILD_TIMESTAMP
             ARTIFACTS_DIR=$WORKSPACE/artifacts
             RELEASE=6.1
-            FUEL_MAIN_BRANCH=master
+            FUEL_MAIN_BRANCH=stable/6.1
             BUILD=fuel-community-6.1-$BUILD_NUMBER-$BUILD_TIMESTAMP
             TESTS_REPO=fuel-qa
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
