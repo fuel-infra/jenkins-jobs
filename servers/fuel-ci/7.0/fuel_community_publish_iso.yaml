@@ -1,0 +1,52 @@
+- job:
+    name: '7.0.publish_fuel_community_iso'
+    builders:
+      - shell:
+          !include-raw builders/publish_fuel_community_iso.sh
+    concurrent: true
+    logrotate:
+      daysToKeep: 20
+      numToKeep: 20
+    node: build
+    parameters:
+      - string:
+          name: ISO_ID
+          description: $release-$BUILD_NUMBER-$BUILD_TIMESTAMP from upstream iso build
+      - string:
+          name: UPGRADE_ID
+          description: $release-upgrade-$BUILD_NUMBER-$BUILD_TIMESTAMP from upstream job
+      - string:
+          name: ARTIFACTS_DIR
+          description: "Path to artifacts, that should be published, for example: /home/jenkins/workspace/6.0-community.all/artifacts"
+      - string:
+          name: BUILD
+    publishers:
+      - description-setter:
+          regexp: "^META: (.*)"
+      - email:
+          notify-every-unstable-build: false
+          recipients: devops+alert@mirantis.com
+          send-to-individuals: false
+      - trigger-parameterized-builds:
+        - project:  7.0.fuel_community.ubuntu.bvt_2
+          condition: UNSTABLE_OR_BETTER
+          current-parameters: true
+          predefined-parameters: |
+            ISO_TORRENT=http://seed.fuel-infra.org/fuelweb-iso/fuel-community-$ISO_ID.iso.torrent
+        - project: fuel_community_build_reports
+          condition: UNSTABLE_OR_BETTER
+          current-parameters: true
+          property-file: description.txt
+          predefined-parameters: |
+            RELEASE=7.0
+            STAGE=publish
+            VALUE=ok
+            REPORTED_JOB_URL=$BUILD_URL
+        - project: fuel_community_build_reports
+          condition: FAILED
+          current-parameters: true
+          predefined-parameters: |
+            RELEASE=7.0
+            STAGE=publish
+            VALUE=fail
+            REPORTED_JOB_URL=$BUILD_URL

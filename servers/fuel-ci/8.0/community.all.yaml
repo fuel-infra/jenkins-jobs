@@ -41,17 +41,13 @@
             fixed:
               delay: 60
       - trigger-parameterized-builds:
-        - project: publish_fuel_community_iso
+        - project: 8.0.publish_fuel_community_iso
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
             ISO_ID=8.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
             UPGRADE_ID=8.0-upgrade-$BUILD_NUMBER-$BUILD_TIMESTAMP
             ARTIFACTS_DIR=$WORKSPACE/artifacts
-            RELEASE=8.0
-            FUEL_MAIN_BRANCH=master
             BUILD=fuel-community-8.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
-            TESTS_REPO=fuel-qa
-            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
         - project: fuel_community_build_reports
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
