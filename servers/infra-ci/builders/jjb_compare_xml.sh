@@ -36,6 +36,9 @@ if [[ ${DIFF} -eq 1 ]]; then
     JOB_NAME=$(basename "${JOB}")
     # Extract job's ENV name (server/${ENV} to make sure, that we are comparing ENV/JOB_NAME with right ENV/BLOCKLIST.
     JOB_ENV=$(echo "${JOB}" | awk -F "/" '{print $(NF?NF-1:0)}')
+    # Make diff
+    mkdir -p "${OUT_DIR}/diff/${JOB_ENV}"
+    diff -U 50 "${OUT_DIR}/old/${JOB_ENV}/${JOB_NAME}" "${OUT_DIR}/new/${JOB_ENV}/${JOB_NAME}" >> "${OUT_DIR}/diff/${JOB_ENV}/${JOB_NAME}" || true
     for BL in ${WORKSPACE}/servers/${JOB_ENV}/${BLOCKLIST}; do
       # Do exact job name match when checking with blocklist.
       GREP=$(grep -Fxq "${JOB_NAME}" "${BL}"; echo "${?}")
@@ -48,7 +51,7 @@ if [[ ${DIFF} -eq 1 ]]; then
           exit 2
       else
         CHANGE=1
-        CHANGED+=${JOB_ENV}/${JOB_NAME}\<br\>
+        CHANGED+=\<a\ href\=${BUILD_URL}artifact/output/diff/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>
       fi
     done
   done
@@ -65,10 +68,10 @@ if [[ ${DIFF} -eq 1 ]]; then
     JOB_ENV=$(echo "${JOB}" | awk -F "/" '{print $(NF?NF-0:0)}' | cut -f1 -d ':')
     if [[ ${ON} = 'old' ]]; then
       REMOVE=1
-      REMOVED+=${JOB_ENV}/${JOB_NAME}\<br\>
+      REMOVED+=\<a\ href\=${BUILD_URL}artifact/output/old/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>
     elif [[ ${ON} = 'new' ]]; then
       ADD=1
-      ADDED+=${JOB_ENV}/${JOB_NAME}\<br\>
+      ADDED+=\<a\ href\=${BUILD_URL}artifact/output/new/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>
     fi
   done
   # And print added/removed if any.
