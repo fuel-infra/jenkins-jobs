@@ -76,6 +76,9 @@
          testgroup: 'ha_neutron_tun'
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_tun_scale'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_public'
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':

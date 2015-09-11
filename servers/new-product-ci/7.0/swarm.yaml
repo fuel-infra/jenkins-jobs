@@ -144,6 +144,9 @@
             - name: '7.0.system_test.ubuntu.ha_neutron_tun'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '7.0.system_test.ubuntu.ha_neutron_tun_scale'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '7.0.system_test.ubuntu.ha_neutron_public'
               current-parameters: true
               kill-phase-on: NEVER
