@@ -35,11 +35,9 @@
           recipients: devops+alert@mirantis.com
           send-to-individuals: false
       - naginator:
-          max-retries: 3
-          rerun-if-unstable: false
-          delay:
-            fixed:
-              delay: 60
+          max-failed-builds: 3
+          rerun-unstable-builds: false
+          fixed-delay: 60
       - trigger-parameterized-builds:
         - project: 8.0.publish_fuel_community_iso
           condition: UNSTABLE_OR_BETTER
