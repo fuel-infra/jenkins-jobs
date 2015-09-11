@@ -115,8 +115,6 @@
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'known_issues'
      - '7.0.{id}.{dist}.{testgroup}':
-         testgroup: 'zabbix'
-     - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'backup_restore_master'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha'

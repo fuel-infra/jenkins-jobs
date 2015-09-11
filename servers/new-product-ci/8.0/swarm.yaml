@@ -171,9 +171,6 @@
             #- name: '8.0.system_test.ubuntu.known_issues'
             #  current-parameters: true
             #  kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.zabbix'
-              current-parameters: true
-              kill-phase-on: NEVER
             - name: '8.0.system_test.ubuntu.backup_restore_master'
               current-parameters: true
               kill-phase-on: NEVER
