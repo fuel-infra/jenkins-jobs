@@ -82,3 +82,21 @@
 
     jobs:
       - '{name}'
+
+- project:
+    name: 'lp-assigner'
+    credentials: '87e8f7c8-9d04-4ffa-bd9c-9ef88acffec0'
+    days: 90
+    description: 'The job to run the script to assign bugs on Launchpad'
+    docker_image: 'python-jenkins-14-04'
+    label_server: 'custom-scripts'
+    mode: '--assign'
+    num: 100
+    recipients: 'devops+alert@mirantis.com'
+    repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
+    script_path: 'lp-assigner/lpassigner.py'
+    trigger: ''
+    volumes: '-v /etc/custom_scripts/lpassigner.conf:/etc/custom_scripts/lpassigner.conf -v /etc/custom_scripts/lpassigner_creds.conf:/etc/custom_scripts/lpassigner_creds.conf -v /home/jenkins/.ssh/known_hosts:/root/.ssh/known_hosts'
+
+    jobs:
+      - '{name}'
