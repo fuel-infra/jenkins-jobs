@@ -1,0 +1,41 @@
+- job-template:
+    name: 'zuul-maintainer'
+    project-type: freestyle
+    concurrent: false
+    description: |
+        This job works as 'all in one' tool for managing 'Zuul'.
+        Pick and run it with desired action as parameter.
+    node: ''
+
+    properties:
+      - heavy-job:
+          weight: 1
+
+    wrappers:
+      - ci-build-creds
+      - build-timeout:
+          timeout: 10
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-branch}'
+
+    triggers:
+     - timed: '@midnight'
+
+    builders:
+      - shell:
+          !include-raw-escape builders/zuul-maintainer.sh
+
+# uncomment when will be ready:
+    publishers:
+#      - email:
+#          recipients: '{mailto}'
+#          notify-every-unstable-build: false
+#          send-to-individuals: false
+        - archive:
+            artifacts: 'build/**/*'
+            allow-empty: true

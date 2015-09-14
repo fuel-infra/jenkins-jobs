@@ -132,3 +132,18 @@
     scm-repo: 'infra/obs'
     scm-branch: 'feature/new-build-system'
     scm-basedir: ''
+
+- project:
+    name: 'zuul'
+    jobs:
+      - 'zuul-maintainer'
+    is-disabled: ''
+    mailto: 'fuel-build+ci-packaging@mirantis.com'
+    scm-user: 'openstack-ci-jenkins'
+    scm-credentials-id: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
+    scm-repo: 'fuel-infra/zuul-layouts'
+    scm-branch: 'master'
+    scm-basedir: ''
+    ops-code-prj: 'fuel-infra/**'
+    ops-spec-prj: 'fuel-infra/**'
+    ops-branch: 'master'
