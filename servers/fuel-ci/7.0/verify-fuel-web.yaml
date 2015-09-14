@@ -4,7 +4,7 @@
       - shell:
           !include-raw-escape builders/verify-fuel-web.sh
     description: |
-      Test requests for fuel-web master branch
+      Test requests for fuel-web stable/7.0 branch
 
       Uses venv with python2.6
     logrotate:

@@ -19,6 +19,6 @@ npm install
 export TEST_NAILGUN_DB=nailgun
 
 cd $WORKSPACE
-./run_tests.sh --with-xunit --no-webui
+./run_tests.sh --with-xunit
 
 deactivate

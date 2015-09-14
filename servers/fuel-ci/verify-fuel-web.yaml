@@ -4,7 +4,7 @@
       - shell:
           !include-raw-escape builders/verify-fuel-web.sh
     description: |
-      Test requests for fuel-web master branch
+      Test requests for fuel-web master branch (without UI tests)
 
       Uses venv with python2.6
     logrotate:
@@ -55,10 +55,6 @@
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/6.0'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/5.1'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:

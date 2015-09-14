@@ -22,7 +22,7 @@ export TEST_NAILGUN_DB=nailgun
 
 cd "${WORKSPACE}"
 
-# Run UI functional tests"
-./run_tests.sh --ui-selenium
+# Run UI tests
+./run_tests.sh --webui
 
 deactivate
