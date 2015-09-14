@@ -1,0 +1,59 @@
+- job:
+    name: '8.0-centos7.iso'
+    builders:
+      - shell:
+          !include-raw builders/iso.sh
+    description: |
+      Build artifacts: iso
+
+      <p>
+        Owned by: Fuel Build Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #infra<br/>
+        Purpose: build L2 packages for Centos 7
+      </p>
+    node: iso
+    properties:
+      - build-timestamp
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    parameters:
+      - string:
+          name: deep_clean
+          default: 'true'
+          description: Perform deep_clean or not. Default is "true". Set any other value
+            to disable it.
+      - string:
+          name: make_args
+          description: Additional make arguments
+      - string:
+          name: fuelmain_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-main gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+    publishers:
+      - archive:
+          allow-empty: false
+          artifacts: artifacts/*.data.txt, artifacts/*.data.html, version.yaml.txt,
+            *magnet_link.txt, listing.txt, artifacts/*changelog, data_build_url.txt
+          latest-only: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+      - email-default:
+          mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
+    scm:
+      - stackforge:
+          branch: 'master'
+          repo: fuel-main
+    wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
+      - inject-passwords:
+          global: true

@@ -24,6 +24,46 @@ Repo Structure
   folder. For example, ``servers/pkgs-ci/`` folder corresponds to
   pkgs-ci.jenkins.org.
 
+``servers/fuel-ci/``
+
+https://ci.fuel-infra.org/
+
+``servers/infra-ci/``
+
+???
+
+``servers/jenkins-product-ci/``
+
+http://jenkins-product.srt.mirantis.net:8080/
+
+``servers/new-product-ci/``
+
+https://product-ci.infra.mirantis.net/
+
+``servers/old-stable-ci/``
+
+???
+
+``servers/openstack-ci/``
+
+http://osci-jenkins.srt.mirantis.net:8080/
+
+``servers/patching-ci/``
+
+???
+
+``servers/pkgs-ci/``
+
+https://packaging-ci.infra.mirantis.net/
+
+``servers/plugins-ci/``
+
+???
+
+``servers/scale-ci/``
+
+???
+
 ``common/``
 
   Common templates.
