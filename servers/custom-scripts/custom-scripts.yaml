@@ -3,6 +3,8 @@
     builders:
       - shell:
           !include-raw-escape builders/docker_run.sh
+      - inject:
+          properties-content: '{properties}'
     description: '{description}'
     logrotate:
       daysToKeep: '{days}'
@@ -56,6 +58,7 @@
     label_server: 'custom-scripts'
     mode: ''
     num: 100
+    properties: ''
     recipients: 'devops+alert@mirantis.com'
     repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
     script_path: 'hello-world/hello-world.py'
@@ -74,6 +77,7 @@
     label_server: 'custom-scripts'
     mode: ''
     num: 100
+    properties: ''
     recipients: 'devops+alert@mirantis.com'
     repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
     script_path: 'requests-abandon/abandon_old_reviews.sh'
@@ -92,6 +96,9 @@
     label_server: 'custom-scripts'
     mode: '--assign'
     num: 100
+    properties: |
+      BASE_URL = https://api.launchpad.net/devel/
+      DEBUG = 0
     recipients: 'devops+alert@mirantis.com'
     repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
     script_path: 'lp-assigner/lpassigner.py'
