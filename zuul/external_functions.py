@@ -16,7 +16,9 @@ import re
 
 
 re_proj_openstack = r'^openstack(?P<build>-build)?/(?P<name>.+)'
+re_proj_packages = r'^packages/(?P<dist>[^/]+)/(?P<package>[^/]+)'
 re_branch_mos_version = r'^openstack-ci/fuel-(?P<version>[0-9.]+)(?P<update>-updates)?/'
+re_branch_pkg_version = r'^(?P<version>[0-9.]+)$'
 re_pkg_name = r'^.+/(.+)$'
 
 GIT_DEFAULT_REFSPEC='+refs/heads/*:refs/remotes/origin/*'
@@ -104,7 +106,16 @@ def pkg_build(item, job, params):
         params['SRC_PROJECT'] = params['ZUUL_PROJECT']
         params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
 
-    params['PACKAGENAME'] = re.match(re_pkg_name, params['SRC_PROJECT']).group(1)
+    pkg_proj = re.match(re_proj_packages, params['ZUUL_PROJECT'])
+    if pkg_proj:
+        params['DIST'] = pkg_proj.group('dist')
+        params['PACKAGENAME'] = pkg_proj.group('package')
+        pkg_ver = re.match(re_branch_pkg_version, params['ZUUL_BRANCH'])
+        if pkg_ver:
+            params['MOS_VERSION'] = str(pkg_ver.group('version'))
+    else:
+        params['PACKAGENAME'] = re.match(re_pkg_name,
+                                         params['SRC_PROJECT']).group(1)
 
     params['REQUEST_NUM'] = 'CR-' + str(params['ZUUL_CHANGE'])
 

@@ -30,7 +30,7 @@
           !include-raw-escape builders/mos.install.cleanup.sh
       - shell: |
           #!/bin/bash -xe
-          export DIST={distro}
+          export DIST=${{DIST:-{distro}}}
           export PACKAGEVERSION=${{DEB_VERSION:-${{RPM_VERSION}}}}
           export PACKAGELIST=${{DEB_BINARIES:-${{RPM_BINARIES}}}}
           export REPO_URL=${{DEB_REPO_URL:-${{RPM_REPO_URL}}}}
