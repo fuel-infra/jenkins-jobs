@@ -7,9 +7,6 @@
       Tests and linters for Python code in fuel-library
 
       Uses fuel-library/utils/jenkins/python_run_tests.sh
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: verify-fuel-library-python
     concurrent: true
     parameters:

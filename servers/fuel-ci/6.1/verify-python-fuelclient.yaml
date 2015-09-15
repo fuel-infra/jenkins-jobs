@@ -7,9 +7,6 @@
       Test requests for python-fuelclient 6.1 branches
 
       Uses venv with python2.6
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: python-fuelclient
     concurrent: true
     parameters:

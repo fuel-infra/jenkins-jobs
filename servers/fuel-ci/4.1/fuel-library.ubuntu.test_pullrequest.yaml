@@ -17,8 +17,6 @@
     concurrent: true
     description:
       !include-raw descriptions/fuellib-ubuntu-legacy
-    logrotate:
-      artifactDaysToKeep: 30
     node: '4.1_ubuntu'
     parameters:
       - string:

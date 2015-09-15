@@ -5,9 +5,6 @@
           !include-raw-escape './builders/verify-fuel-stats.sh'
     concurrent: true
     description: "Runs tox -v"
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: verify-fuel-stats
     parameters:
       - string:

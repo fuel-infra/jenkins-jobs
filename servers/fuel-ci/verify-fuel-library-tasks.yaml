@@ -5,8 +5,6 @@
           !include-raw-escape builders/verify-fuel-library-tasks.sh
     concurrent: true
     description: Runs task check for granular deployment
-    logrotate:
-      artifactDaysToKeep: 30
     node: verify-fuel-library-tasks
     parameters:
       - string:

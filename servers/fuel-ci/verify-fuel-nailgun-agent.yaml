@@ -7,9 +7,6 @@
       Test requests for <a href=https://github.com/openstack/fuel-nailgun-agent>fuel-nailgun-agent</a>
 
       Uses rvm with ruby1.8 and ruby1.9
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: fuel-nailgun-agent
     concurrent: true
     parameters:

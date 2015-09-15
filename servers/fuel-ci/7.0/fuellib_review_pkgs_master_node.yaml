@@ -27,8 +27,6 @@
       EXTRA_RPM_REPOS_PRIORITY=15<br>
       EXTRA_DEB_REPOS_PRIORITY=1100<br>
       TEST_GROUP="smoke_neutron"
-    logrotate:
-      artifactDaysToKeep: 30
     node: 7.0_master_node_test
     parameters:
       - string:

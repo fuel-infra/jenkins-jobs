@@ -5,9 +5,6 @@
           !include-raw-escape './builders/verify-fuel-astute.sh'
     concurrent: true
     description: 'Test requests on gerrit'
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: verify-fuel-astute
     parameters:
       - string:

@@ -2,3 +2,8 @@
     name: global
     gerrit_trigger_on_recheck_regexp: '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck|reverify)'
 
+    logrotate:
+      daysToKeep: 90
+      numToKeep: -1
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1

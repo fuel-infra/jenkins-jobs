@@ -5,9 +5,6 @@
           !include-raw-escape builders/verify-fuel-plugins.sh
     description: |
       Build plugins for fuel-plugins project <a href=https://github.com/openstack/fuel-plugins>github.com/openstack/fuel-plugins</a>
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: verify-fuel-plugins
     concurrent: true
     parameters:

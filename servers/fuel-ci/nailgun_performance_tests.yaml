@@ -4,9 +4,6 @@
       - shell:
           !include-raw builders/nailgun_performance_tests.sh
     description: "Nailgun performance tests. Uses venv with python2.6"
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: fuel-web-master
     properties:
       - heavy-job:
@@ -43,9 +40,6 @@
       Verify nailgun performance tests for patches.
       Uses artifacts from "nailgun_performance_tests" and do not store it's own.
       Uses venv with python2.6"
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: fuel-web-master
     parameters:
       - string:

@@ -7,9 +7,6 @@
       Tests and linters for fuel-tasklib
 
       Uses ./run_tests.sh
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: verify-fuel-tasks-validator
     concurrent: true
     parameters:

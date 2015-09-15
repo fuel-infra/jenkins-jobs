@@ -5,9 +5,6 @@
           !include-raw-escape builders/verify-fuel-devops.sh
     description: |
       Runs 'tox -v' for openstack/fuel-devops repo
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: verify-fuel-devops
     parameters:
       - string:

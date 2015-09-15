@@ -5,8 +5,6 @@
           !include-raw builders/fuel.test_impact.sh
     concurrent: true
     description: 'Inform QA team if TestImpact is in commit message'
-    logrotate:
-      artifactDaysToKeep: 30
     properties:
       - heavy-job:
           weight: 1

@@ -7,9 +7,6 @@
       Test requests for fuel-web master branch (without UI tests)
 
       Uses venv with python2.6
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     node: verify-fuel-web
     concurrent: true
     parameters:

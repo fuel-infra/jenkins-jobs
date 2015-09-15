@@ -7,9 +7,6 @@
           ./run_tests.sh
     description: 'Runs ./run_tests.sh'
     node: flake8
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     parameters:
       - string:
           name: GERRIT_REFSPEC

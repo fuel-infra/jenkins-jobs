@@ -28,8 +28,6 @@
     concurrent: true
     description:
       !include-raw descriptions/fuellib-ubuntu-pkgs
-    logrotate:
-      artifactDaysToKeep: 30
     node: '7.0_ubuntu'
     parameters:
       - string:

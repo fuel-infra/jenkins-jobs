@@ -9,9 +9,6 @@
             REGEX={exclude_regex}
       - shell:
           !include-raw-escape './builders/linkcheck.sh'
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 30
     description: |
       Run 'make linkcheck' for documentation in {prefix} repository.
       Generates diff with previous run.

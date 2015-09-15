@@ -3,8 +3,6 @@
     concurrent: true
     description:
       !include-raw descriptions/fuel-library.create_env
-    logrotate:
-      artifactDaysToKeep: 30
     properties:
       - heavy-job:
           weight: '1'
