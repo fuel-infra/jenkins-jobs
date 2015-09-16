@@ -18,9 +18,6 @@
           default: 'refs/heads/master'
       - string:
           name: PIP_OPTION
-      - string:
-          name: NPM_CONFIG_PREFIX
-          default: '/home/jenkins/npm'
     properties:
       - heavy-job:
           weight: 1
