@@ -45,10 +45,10 @@
             - project-compare-type: 'ANT'
               project-pattern: '{code-project}'
               branches:
-                - branch-compare-type: 'REG_EXP'
+                - branch-compare-type: 'ANT'
                   branch-pattern: '{branch}'
           server-name: review.fuel-infra.org
-          silent: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
 
 ########################################################################
 # Section: SCM
