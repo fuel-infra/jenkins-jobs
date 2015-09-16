@@ -1,0 +1,28 @@
+- job:
+    name: docker-deploy
+    builders:
+      - shell:
+          !include-raw './scripts/docker-deploy.sh'
+    description: |
+      This job will deploy specific image from registry to selected node.
+    concurrent: true
+    parameters:
+        - string:
+            name: REGISTRY_URL
+            default: 'registry.fuel-infra.org'
+            description: 'source registry'
+        - dynamic-choice:
+            name: IMAGE
+            description: 'image from registry'
+            script: |
+              String output = 'http://registry.fuel-infra.org:5002/?name=internal-.*&tag=.*&format=select'.toURL().text
+              List images = output.split()
+              return images
+        - node:
+            description: 'destination node'
+            name: NODE
+            allowed-multiselect: true
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 5
