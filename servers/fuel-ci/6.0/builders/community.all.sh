@@ -98,6 +98,11 @@ echo "<a href=http://seed.fuel-infra.org/fuelweb-iso/${ARTIFACT_NAME}.tar.torren
 ##5.2) diff artifacts
 seedclient.py -pvf "${ARTS_DIR}/${ARTIFACT_DIFF_NAME}.tar" --tracker-url=http://retracker.local:80/announce,http://seed-us1.fuel-infra.org:8080/announce,http://seed-cz1.fuel-infra.org:8080/announce --http-root=http://seed-cz1.fuel-infra.org/fuelweb-iso,http://seed-us1.fuel-infra.org/fuelweb-iso --seed-host=seed-us1.fuel-infra.org:17333,seed-cz1.fuel-infra.org:17333
 
+# cleanup after the job
+# we can cleanup freely since make deep_clean doesn't wipe out ARTS_DIR
+cd "${WORKSPACE}"
+make deep_clean
+
 # Preparing description + torrent link for upstream jobs
 echo http://seed.fuel-infra.org/fuelweb-iso/${ARTIFACT_DIFF_NAME}.tar.torrent > ${WORKSPACE}/diff_torrent_link.txt
 echo "<a href=http://seed.fuel-infra.org/fuelweb-iso/${ARTIFACT_DIFF_NAME}.tar.torrent>${ARTIFACT_DIFF_NAME}</a>"

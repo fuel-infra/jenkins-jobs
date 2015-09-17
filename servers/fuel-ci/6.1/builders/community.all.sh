@@ -48,10 +48,15 @@ make ${make_args} iso upgrade-lrzip version-yaml openstack-yaml
 
 echo "STEP 2. Publish everything"
 
-cd ${WORKSPACE}
+cd "${WORKSPACE}"
 
 cp $LOCAL_MIRROR/*changelog ${ARTS_DIR}/ || true
 cp ${BUILD_DIR}/iso/isoroot/version.yaml ${WORKSPACE}/version.yaml.txt || true
 (cd ${BUILD_DIR}/iso/isoroot && find . | sed -s 's/\.\///') > ${WORKSPACE}/listing.txt || true
 
 echo "BUILD FINISHED."
+
+# cleanup after the job
+# we can cleanup freely since make deep_clean doesn't wipe out ARTS_DIR
+cd "${WORKSPACE}"
+make deep_clean
