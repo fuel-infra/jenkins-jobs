@@ -41,6 +41,8 @@
       - gerrit:
           trigger-on:
             - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: "^recheck$"
           projects:
             - project-compare-type: 'ANT'
               project-pattern: '{code-project}'
