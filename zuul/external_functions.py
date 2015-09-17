@@ -12,16 +12,20 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import base64
 import re
 
 
-re_proj_openstack = r'^openstack(?P<build>-build)?/(?P<name>.+)'
-re_proj_packages = r'^packages/(?P<dist>[^/]+)/(?P<package>[^/]+)'
-re_branch_mos_version = r'^openstack-ci/fuel-(?P<version>[0-9.]+)(?P<update>-updates)?/'
-re_branch_pkg_version = r'^(?P<version>[0-9.]+)$'
-re_pkg_name = r'^.+/(.+)$'
+re_prj_openstack = '^openstack(?P<build>-build)?/(?P<name>.+)'
+re_prj_packages = '^packages/(?P<dist>[^/]+)/(?P<package>[^/]+)'
+re_br_mos_ver = '^openstack-ci/fuel-(?P<version>[0-9.]+)(?P<update>-updates)?/'
+re_br_pkg_ver = '^(?P<version>[0-9.]+)$'
+re_pkg_name = '^.+/(.+)$'
 
-GIT_DEFAULT_REFSPEC='+refs/heads/*:refs/remotes/origin/*'
+re_bug_topic = '^bug/(?P<bug>\d+)$'
+re_bug_message = '(?i)^\w+-bug:\s*#?(?P<bug>\d+)\s*$'
+
+GIT_DEFAULT_REFSPEC = '+refs/heads/{branch}'
 
 
 def params_gerrit(item, job, params):
@@ -40,18 +44,40 @@ def params_gerrit(item, job, params):
         )
         params['GERRIT_CHANGE_OWNER_NAME'] = item.change.owner['name']
         params['GERRIT_CHANGE_OWNER_EMAIL'] = item.change.owner['email']
+    if item.change._data:
+        params['GERRIT_CHANGE_ID'] = item.change._data['id']
+        params['GERRIT_CHANGE_SUBJECT'] = item.change._data['subject']
+        params['GERRIT_CHANGE_COMMIT_MESSAGE'] = base64.b64encode(
+            item.change._data['commitMessage']
+        )
+        if 'type' in item.change._data:
+            params['GERRIT_EVENT_TYPE'] = item.change._data['type']
+        if 'topic' in item.change._data:
+            params['GERRIT_TOPIC'] = item.change._data['topic']
+            bug = re.match(re_bug_topic, item.change._data['topic'])
+            if bug:
+                params['LP_BUG'] = 'LP-' + str(bug.group('bug'))
+        if 'currentPatchSet' in item.change._data:
+            params['GERRIT_PATCHSET_REVISION'] = item.change._data[
+                        'currentPatchSet']['revision']
+        if 'LP_BUG' not in params:
+            for l in item.change._data['commitMessage'].splitlines():
+                bug = re.match(re_bug_message, l)
+                if bug:
+                    params['LP_BUG'] = 'LP-' + str(bug.group('bug'))
 
 
 def params_mos(item, job, params):
     # MOS-specific parameters
-    mos_proj = re.match(re_proj_openstack, params['ZUUL_PROJECT'])
+    mos_proj = re.match(re_prj_openstack, params['ZUUL_PROJECT'])
     if mos_proj:
         params['IS_OPENSTACK'] = 'true'
-        params['MOS_PROJECT'] = re.sub(r'-build(/|$)', r'\1', mos_proj.group('name'))
+        params['MOS_PROJECT'] = re.sub(r'-build(/|$)', r'\1',
+                                       mos_proj.group('name'))
     else:
         params['IS_OPENSTACK'] = 'false'
 
-    mos_ver = re.match(re_branch_mos_version, params['ZUUL_BRANCH'])
+    mos_ver = re.match(re_br_mos_ver, params['ZUUL_BRANCH'])
     if mos_ver:
         params['MOS_VERSION'] = str(mos_ver.group('version'))
         if mos_ver.group('update'):
@@ -96,21 +122,25 @@ def pkg_build(item, job, params):
             if params['SRC_PROJECT'] == params['ZUUL_PROJECT']:
                 params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
             else:
-                params['SOURCE_REFSPEC'] = GIT_DEFAULT_REFSPEC
+                params['SOURCE_REFSPEC'] = GIT_DEFAULT_REFSPEC.format(
+                    branch=params['ZUUL_BRANCH']
+                )
 
             if params['SPEC_PROJECT'] == params['ZUUL_PROJECT']:
                 params['SPEC_REFSPEC'] = params['GERRIT_REFSPEC']
             else:
-                params['SPEC_REFSPEC'] = GIT_DEFAULT_REFSPEC
+                params['SPEC_REFSPEC'] = GIT_DEFAULT_REFSPEC.format(
+                    branch=params['ZUUL_BRANCH']
+                )
     else:
         params['SRC_PROJECT'] = params['ZUUL_PROJECT']
         params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
 
-    pkg_proj = re.match(re_proj_packages, params['ZUUL_PROJECT'])
+    pkg_proj = re.match(re_prj_packages, params['ZUUL_PROJECT'])
     if pkg_proj:
         params['DIST'] = pkg_proj.group('dist')
         params['PACKAGENAME'] = pkg_proj.group('package')
-        pkg_ver = re.match(re_branch_pkg_version, params['ZUUL_BRANCH'])
+        pkg_ver = re.match(re_br_pkg_ver, params['ZUUL_BRANCH'])
         if pkg_ver:
             params['MOS_VERSION'] = str(pkg_ver.group('version'))
     else:
@@ -164,17 +194,22 @@ def pkg_build_debian(item, job, params):
             if params['SRC_PROJECT'] == params['ZUUL_PROJECT']:
                 params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
             else:
-                params['SOURCE_REFSPEC'] = GIT_DEFAULT_REFSPEC
+                params['SOURCE_REFSPEC'] = GIT_DEFAULT_REFSPEC.format(
+                    branch=params['ZUUL_BRANCH']
+                )
 
             if params['SPEC_PROJECT'] == params['ZUUL_PROJECT']:
                 params['SPEC_REFSPEC'] = params['GERRIT_REFSPEC']
             else:
-                params['SPEC_REFSPEC'] = GIT_DEFAULT_REFSPEC
+                params['SPEC_REFSPEC'] = GIT_DEFAULT_REFSPEC.format(
+                    branch=params['ZUUL_BRANCH']
+                )
     else:
         params['SRC_PROJECT'] = params['ZUUL_PROJECT']
         params['SOURCE_REFSPEC'] = params['GERRIT_REFSPEC']
 
-    params['PACKAGENAME'] = re.match(re_pkg_name, params['SRC_PROJECT']).group(1)
+    params['PACKAGENAME'] = re.match(re_pkg_name,
+                                     params['SRC_PROJECT']).group(1)
 
     params['REQUEST_NUM'] = 'CR-' + str(params['ZUUL_CHANGE'])
 
