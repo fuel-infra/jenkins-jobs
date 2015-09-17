@@ -83,7 +83,9 @@
 
         - project: '7.0.all-Testrail'
           condition: UNSTABLE_OR_BETTER
-          trigger-with-no-params: true
+          predefined-parameters: |
+            TESTRAIL_URL=https://mirantis.testrail.com
+
 
     scm:
       - stackforge:
