@@ -86,11 +86,12 @@
             #!/bin/bash -ex
 
             PUBLISH_HOST={repo-host}
+            DIST=${{DIST:-{distro}}}
 
             # New scheme
             DEB_DIST_NAME={project-name}{mos_version}
             DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
-            RPM_REPO_PATH={rel-path-prefix}/{os}/{project-name}{mos_version}-{distro}-fuel/os/x86_64/
+            RPM_REPO_PATH={rel-path-prefix}/{os}/{project-name}{mos_version}-${{DIST}}-fuel/os/x86_64/
 
             ############################
             # Create list of built DEB repositories

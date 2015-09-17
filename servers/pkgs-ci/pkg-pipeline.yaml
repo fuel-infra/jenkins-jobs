@@ -49,8 +49,8 @@
           # Global parameters
           ############################
 
-          export DIST="{distro}"
-          export DISTRO_PATH="{distro}/"
+          export DIST="${{DIST:-{distro}}}"
+          export DISTRO_PATH="${{DIST}}/"
           export SPEC_PREFIX_PATH="{spec_path_prefix}"
           export REPO_REQUEST_PATH_PREFIX="{cr-path-prefix}"
 
@@ -66,10 +66,10 @@
           # New scheme
           if [ "{mos_version}" = "master" ]; then
               DEB_DIST_NAME={project-name}-{mos_version}
-              RPM_DIST_NAME={project-name}-{mos_version}-{distro}
+              RPM_DIST_NAME={project-name}-{mos_version}-${{DIST}}
           else
               DEB_DIST_NAME={project-name}{mos_version}
-              RPM_DIST_NAME={project-name}{mos_version}-{distro}-fuel
+              RPM_DIST_NAME={project-name}{mos_version}-${{DIST}}-fuel
           fi
           DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
           RPM_REPO_PATH={rel-path-prefix}/{os}/${{RPM_DIST_NAME}}/os/x86_64/
