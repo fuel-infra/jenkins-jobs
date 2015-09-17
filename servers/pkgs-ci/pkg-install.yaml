@@ -3,7 +3,6 @@
     project-type: freestyle
     concurrent: true
     wrappers:
-      - ci-build-creds
       - install-vm-creds
       - pre-scm-buildstep:
         - shell: 'rm -rf *'
