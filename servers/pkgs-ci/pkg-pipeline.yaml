@@ -19,6 +19,12 @@
           scm-basedir: '{scm-basedir}'
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{scm-branch}'
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-ci-status-client-repo}'
+          scm-basedir: '{scm-ci-status-client-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{mos_version}'
     wrappers:
       - ci-build-creds
       - timeout:
@@ -27,7 +33,15 @@
       - ansicolor
     triggers:
       - zuul
+    properties:
+      - inject:
+          properties-content: |
+            PKG_TYPE={pkg_type}
     builders:
+      - shell: |
+          #!/bin/bash -xe
+          export DIST="${{DIST:-{distro}}}"
+          ci-status-client/ci-status-report.sh start
       - shell: |
           #!/bin/bash -xe
 
@@ -101,7 +115,8 @@
           sed -ri '/set_default_params/ d' build-{pkg_type}.sh
 
           # ... and build a package
-          bash build-{pkg_type}.sh
+          echo FAILED=true >> ci_status_params
+          bash build-{pkg_type}.sh && sed -ri 's/FAILED=true/FAILED=false/' ci_status_params
 
           rm -rf {repo-base-path}/CR-${{ZUUL_CHANGE}}
 
@@ -138,6 +153,12 @@
             [ -f "{pkg_type}.publish.setenvfile" ] && source {pkg_type}.publish.setenvfile
             VAR="$(echo {pkg_type} | tr [[:lower:]] [[:upper:]])_PUBLISH_SUCCEEDED"
             eval \${{${{VAR}}:-false}} || exit 1
+            REPOURL=( ${{DEB_REPO_URL:-${{RPM_REPO_URL}}}} )
+            GERRIT_MESSAGE="Package repository:
+
+            - package.repository ${{REPOURL[0]}} : LINK"
+            GERRIT_CMD="gerrit review ${{GERRIT_CHANGE_NUMBER}},${{GERRIT_PATCHSET_NUMBER}} '--message=${{GERRIT_MESSAGE}}'"
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '{gerrit-port}' '{scm-user}'@$'{gerrit-host}' "${{GERRIT_CMD}}" || :
       - conditional-step:
             condition-kind: boolean-expression
             condition-expression: ${{TEST_INSTALL}}
@@ -151,14 +172,14 @@
                     block: true
               - copyartifact:
                     project: '{mos_version}-pkg-install-{os}'
-                    filter: 'ci_status_params'
+                    filter: '{pkg_type}.install.setenvfile'
                     parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
                     which-build: 'last-completed'
               - shell: |
                     #!/bin/bash -ex
                     # Fail stage if packages are not installed
-                    [ -f "ci_status_params" ] && source ci_status_params
-                    ${{FAILED}} && exit 1 || exit 0
+                    [ -f "{pkg_type}.install.setenvfile" ] && source {pkg_type}.install.setenvfile
+                    exit ${{RESULT}}
       - conditional-step:
             condition-kind: boolean-expression
             condition-expression: ${{TEST_SYSTEST}}
@@ -173,10 +194,18 @@
                     predefined-parameters: |
                         ISO_JOB_NAME={mos_version}.test_all
     publishers:
+      - post-tasks:
+         - matches:
+            - log-text: Building
+              operator: AND
+           script: |
+             #!/bin/bash -xe
+             export DIST="${{DIST:-{distro}}}"
+             ci-status-client/ci-status-report.sh stop
 #      - junit:
 #          results: 'buildresult.xml'
       - archive:
-          artifacts: 'buildresult.params, setenvfile, {pkg_type}.publish.setenvfile'
+          artifacts: 'buildresult.params, ci_status_params, {pkg_type}.publish.setenvfile, {pkg_type}.install.setenvfile'
           allow-empty: True
 
     node: '{build-node}'
