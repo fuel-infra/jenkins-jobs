@@ -94,6 +94,12 @@
       - junit:
           keep-long-stdio: false
           results: '**/nosetests.xml'
+      - trigger-parameterized-builds:
+        - project: '7.0-test-reports-Testrail'
+          condition: COMPLETED
+          property-file: links.txt
+          predefined-parameters: TEST_JOB_NAME_ENABLE=true
+          triggerWithNoParameters: false
       - email-ext:
           default-subject: '$DEFAULT_SUBJECT'
           failure: true
