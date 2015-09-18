@@ -51,6 +51,7 @@
     wrappers:
       - ssh-agent-credentials:
           users:
+            - 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
             - 'd2f87345-ff0f-4470-bb25-9c9d944f81d1'
             - '7a9284db-cc0e-46e1-992d-7c5f163f0678'
 
