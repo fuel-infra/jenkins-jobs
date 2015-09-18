@@ -9,7 +9,7 @@ export FEATURE_GROUPS="mirantis"
 PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
 export CENTOS_MAJOR=7
 export CENTOS_MINOR=0
-export MIRROR_FUEL=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64
+export MIRROR_FUEL=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos8.0-centos7-fuel/os/x86_64
 
 export ISO_NAME=fuel-centos7-$PROD_VER-$BUILD_NUMBER-${BUILD_TIMESTAMP}
 
