@@ -1,0 +1,94 @@
+- job-template:
+    name: '{prefix}-fuel-web-py27'
+    builders:
+      - shell:
+          !include-raw-escape builders/verify-fuel-web.sh
+    description: |
+      Test requests for fuel-web master branch
+
+      Uses venv with python2.7
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: verify-fuel-web
+    concurrent: true
+    parameters:
+      - string:
+          name: PYTHON_EXEC
+          default: python2.7
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: PIP_OPTION
+      - string:
+          name: NPM_CONFIG_PREFIX
+          default: '/home/jenkins/npm'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - one-nailgun-db-per-node
+          max-per-node: 1
+          option: category
+    publishers:
+      - 'email-{email-type}'
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml,**/nailgun.xml,**/fuelclient.xml,**/shotgun.xml'
+      - description-setter:
+          regexp-for-failed: '(Failed tests: (.*))'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: '{refspec}'
+                url: https://review.openstack.org/stackforge/fuel-web.git
+          choosing-strategy: '{choosing-strategy}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - '{trigger-on}'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-web
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          #FIXME(rpodolyaka): make the job voting once the test pass
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+      - timed: '{timed}'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+
+- project:
+    name: dualcheck-fuel-web-py27
+    jobs:
+      - '{prefix}-fuel-web-py27':
+          prefix: verify
+          trigger-on: patchset-created-event
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+          timed: '0 11 * * *'
+      - '{prefix}-fuel-web-py27':
+          prefix: gate
+          trigger-on: change-merged-event
+          email-type: alert-on-merge
+          refspec: refs/heads/$GERRIT_BRANCH
+          choosing-strategy: default
+          timed: ''
+
