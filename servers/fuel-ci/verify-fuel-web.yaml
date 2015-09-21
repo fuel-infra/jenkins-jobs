@@ -18,6 +18,9 @@
           default: 'refs/heads/master'
       - string:
           name: PIP_OPTION
+      - string:
+          name: TOXENV
+          default: py26
     properties:
       - heavy-job:
           weight: 1

@@ -17,6 +17,9 @@
           name: PYTHON_EXEC
           default: python2.7
       - string:
+          name: TOXENV
+          default: py27
+      - string:
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
       - string:
