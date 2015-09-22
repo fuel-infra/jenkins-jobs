@@ -25,9 +25,6 @@ export USE_MIRROR=none
 TARGET="snapshots/8.0-2015-09-02-000000"
 export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${TARGET}"
 
-# Use stable centos mirror (kilo)
-export MIRROR_FUEL=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos8.0-centos6-fuel/snapshots/os-2015-09-21-125524/x86_64/
-
 echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
 
 #########################################
