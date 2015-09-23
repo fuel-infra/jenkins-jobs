@@ -1,0 +1,42 @@
+- job:
+    name: '8.0.swarm.statistic'
+    description: <iframe width="100%" height="600px" frameborder='0' src='https://product-ci.infra.mirantis.net/view/8.0_swarm/job/8.0.swarm.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'</iframe>
+    builders:
+      - inject:
+           properties-content: |
+             TESTS_RUNNER=8.0.swarm.runner
+             TESTRAIL_TEST_SUITE=Swarm 8.0
+             TESTRAIL_MILESTONE=8.0
+             LAUNCHPAD_MILESTONE=8.0
+             BUG_STATISTIC=true
+      - shell:
+          !include-raw builders/test-reports-Testrail.sh
+    node: testrail
+
+# FIXME: timers
+#    triggers:
+#      - timed: '30 20 * * *'
+
+    scm:
+     - main-git:
+          reponame: 'fuel-qa'
+          repobranch: 'origin/master'
+          basedir: ''
+
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: bugs_link_stat.html
+          latest-only: false
+
+      - email:
+          recipients: ishamrai@mirantis.com, devops+alert@mirantis.com
+
+      - description-setter:
+          regexp: '^.*Report URL:\s*(.*)'
+          description: '<a href="\1">TestRail Report URL</a>'

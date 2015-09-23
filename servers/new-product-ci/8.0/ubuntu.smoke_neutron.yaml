@@ -1,0 +1,47 @@
+- job:
+    name: '8.0.ubuntu.smoke_neutron'
+    builders:
+      - inject:
+          properties-content: |
+            SLAVE_NODE_CPU=2
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+      - systest
+    concurrent: true
+    description: |
+      Run tests with smoke_neutron test group.
+
+      <p>
+        Owned by: Fuel QA Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #fuel-qa<br/>
+      </p>
+    logrotate:
+      daysToKeep: 30
+      numToKeep: 50
+    node: smoke
+    properties:
+      - heavy-job:
+          weight: 6
+      - throttle:
+          max-per-node: 1
+          option: project
+    parameters:
+      - systest:
+          dist: 'ubuntu'
+          testgroup: 'smoke_neutron'
+          version-id: '8.0'
+          id: 'main'
+    publishers:
+      - nosetests
+      - email-systest:
+          body-failed:
+            !include-raw notifications/smoke.failed
+          mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
+    scm:
+      - stackforge:
+          branch: 'master'
+          repo: 'fuel-qa'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 135
