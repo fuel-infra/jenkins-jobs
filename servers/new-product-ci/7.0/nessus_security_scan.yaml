@@ -96,7 +96,7 @@
           results: '**/nosetests.xml'
       - trigger-parameterized-builds:
         - project: '7.0-test-reports-Testrail'
-          condition: COMPLETED
+          condition: ALWAYS
           property-file: links.txt
           predefined-parameters: TEST_JOB_NAME_ENABLE=true
           triggerWithNoParameters: false
