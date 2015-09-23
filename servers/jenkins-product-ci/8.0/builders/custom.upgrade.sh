@@ -39,49 +39,44 @@ export FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}"
 export FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}"
 
 ######## Get node location to choose closer mirror ###############
-# Do NOTHING if USE_MIRROR=none, else if user choose auto, we try to use
-# facter location to get closer mirror, if user provide the exact mirror we
-# use it
-if [ "${USE_MIRROR}" != "none" ]; then
+# We are building everything with USE_MIRROR=none
 
-  if [ "${USE_MIRROR}" == "auto" ]; then
-    LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
-    LOCATION=${LOCATION_FACT:-msk}
-  else
-    LOCATION="${USE_MIRROR}"
-  fi
+# Let's try use closest perestroika mirror location
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION=${LOCATION_FACT:-msk}
 
-  case "${LOCATION}" in
-      srt)
-          USE_MIRROR=srt
-          LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
-          ;;
-      msk)
-          USE_MIRROR=msk
-          LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
-          ;;
-      hrk)
-          USE_MIRROR=hrk
-          LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
-          ;;
-      poz|bud|bud-ext|cz)
-          USE_MIRROR=cz
-          LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
-          ;;
-      mnv)
-          USE_MIRROR=usa
-          LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
-          ;;
-      *)
-          USE_MIRROR=msk
-          LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
-  esac
+case "${LOCATION}" in
+    srt)
+        LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
+        ;;
+    msk)
+        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+        ;;
+    hrk)
+        LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
+        ;;
+    poz|bud|bud-ext|cz)
+        LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
+        ;;
+    mnv)
+        LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
+        ;;
+    *)
+        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+esac
 
-  LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/8.0.target.txt" | head -1)
-  export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
-fi
+# define closest stable ubuntu mirror snapshot
+LATEST_TARGET_UBUNTU=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/8.0.target.txt" | head -1)
+# since in fuel-main MIRROR_MOS_UBUNTU?=perestroika-repo-tst.infra.mirantis.net, we need to remove http://
+export MIRROR_MOS_UBUNTU="${LATEST_MIRROR_ID_URL#http://}"
+export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET_UBUNTU}"
 
-echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
+# define closest stable centos mirror snapshot
+# http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/$(PRODUCT_NAME)$(PRODUCT_VERSION)-centos6-fuel/os/x86_64
+LATEST_TARGET_CENTOS=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos8.0-centos6-fuel/os.target.txt" | head -1)
+export MIRROR_FUEL="${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos8.0-centos6-fuel/${LATEST_TARGET_CENTOS}/x86_64"
+
+echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU}${MIRROR_MOS_UBUNTU_ROOT} and ${MIRROR_FUEL}"
 
 #########################################
 
