@@ -1,0 +1,86 @@
+- job-template:
+    name: '{mos_version}.ubuntu-proposed.test'
+    project-type: multijob
+    description: |
+      Trigger tests for "proposed" Ubuntu channel
+      <p>
+        Owned by: MOS Sustaining Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contact: mos-sustaining-all@mirantis.com<br/>
+      </p>
+
+    concurrent: true
+    node: runner
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - bool:
+          name: 'SKIP_UBUNTU.BVT_2'
+          default: false
+          description: |
+            Select to skip build of {mos_version}.ubuntu.bvt_2
+      - bool:
+          name: 'SKIP_UBUNTU.SMOKE_NEUTRON'
+          default: false
+          description: |
+            Select to skip build of {mos_version}.ubuntu.smoke_neutron
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: 'latest'
+          description: Use ubuntu-<timestamp> or latest for latest mirror available.
+      - string:
+          name: MOS_VERSION
+          default: '{mos_version}'
+          description: Auto-added by Jenkins Job Builder, do not modify.
+    triggers:
+      - timed: 'H 20 * * *'
+    builders:
+      - shell:
+          !include-raw builders/get-magnet-link.sh
+      - shell:
+          !include-raw-escape builders/test-ubuntu-proposed.sh
+      - multijob:
+          name: Run_BVT_and_Smoke
+          condition: COMPLETED
+          projects:
+            - name: '{mos_version}.ubuntu-proposed.ubuntu.bvt_2'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+              enable-condition: '"${{SKIP_UBUNTU.BVT_2}}" == "false"'
+            - name: '{mos_version}.ubuntu-proposed.ubuntu.smoke_neutron'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+              enable-condition: '"${{SKIP_UBUNTU.SMOKE_NEUTRON}}" == "false"'
+    publishers:
+      - email-systest:
+          body-failed:
+            !include-raw notifications/test-ubuntu-proposed.failed
+          mail-to: 'mos-sustaining-all@mirantis.com'
+      - description-setter:
+          regexp: |
+            'Description string: (.*)'
+          set-for-matrix: false
+      - archive:
+          allow-empty: false
+          artifacts: '*.txt'
+          latest-only: false
+
+- project:
+    name: ubuntu-proposed.test
+    jobs:
+       - '{mos_version}.ubuntu-proposed.test'
+       - '{mos_version}.ubuntu-proposed.ubuntu.bvt_2'
+       - '{mos_version}.ubuntu-proposed.ubuntu.smoke_neutron'
+    mos_version:
+       - '6.1':
+            fuel-qa-branch: 'stable/6.1'
+            iso_magnet_link:
+               !include-raw ./data/6.1-iso
+       - '7.0':
+            fuel-qa-branch: 'stable/7.0'
+            iso_magnet_link:
+               !include-raw ./data/7.0-iso
+       - '8.0':
+            fuel-qa-branch: 'master'
+            iso_magnet_link: latest
