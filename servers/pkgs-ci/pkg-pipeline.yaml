@@ -41,6 +41,12 @@
       - shell: |
           #!/bin/bash -xe
           export DIST="${{DIST:-{distro}}}"
+
+          # Gerrit parameters
+          export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
+          export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
+          export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
+
           ci-status-client/ci-status-report.sh start
       - shell: |
           #!/bin/bash -xe
@@ -203,6 +209,12 @@
            script: |
              #!/bin/bash -xe
              export DIST="${{DIST:-{distro}}}"
+
+             # Gerrit parameters
+             export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
+             export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
+             export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
+
              ci-status-client/ci-status-report.sh stop
 #      - junit:
 #          results: 'buildresult.xml'
