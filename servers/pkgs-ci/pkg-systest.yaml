@@ -72,7 +72,7 @@
           export DIST="${{DIST:-{distro}}}"
           ci-status-client/ci-status-report.sh start
     wrappers:
-      - ci-build-creds
+      - gerrit-creds
       - timeout:
           fail: true
           timeout: 210

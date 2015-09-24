@@ -26,7 +26,7 @@
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{mos_version}'
     wrappers:
-      - ci-build-creds
+      - gerrit-creds
       - timeout:
           timeout: 300
       - timestamps
@@ -69,7 +69,9 @@
           export REPO_REQUEST_PATH_PREFIX="{cr-path-prefix}"
 
           # Gerrit parameters
-          export GERRIT_HOST='{gerrit-host}'
+          export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
+          export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
+          export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
 
           # Publish host parameters
           export REMOTE_REPO_HOST={repo-host}
@@ -116,7 +118,7 @@
 
           # ... and build a package
           echo FAILED=true >> ci_status_params
-          bash build-{pkg_type}.sh && sed -ri 's/FAILED=true/FAILED=false/' ci_status_params
+          bash build-${{IS_FUEL:+fuel-}}{pkg_type}.sh && sed -ri 's/FAILED=true/FAILED=false/' ci_status_params
 
           rm -rf {repo-base-path}/CR-${{ZUUL_CHANGE}}
 

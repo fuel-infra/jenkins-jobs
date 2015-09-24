@@ -12,7 +12,7 @@
           weight: 1
 
     wrappers:
-      - ci-build-creds
+      - gerrit-creds
       - build-timeout:
           timeout: 10
     scm:
