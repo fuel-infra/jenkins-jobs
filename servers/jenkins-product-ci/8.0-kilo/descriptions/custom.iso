@@ -1,0 +1,4 @@
+Build custom ISO image from commits or gerrit refspecs.
+<p>
+Based on OpenStack Kilo packages
+
