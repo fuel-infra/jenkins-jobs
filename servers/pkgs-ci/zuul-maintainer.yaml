@@ -24,7 +24,7 @@
           scm-branch: '{scm-branch}'
 
     triggers:
-     - timed: '@midnight'
+     - timed: '*/30 * * * *'
 
     builders:
       - shell:
