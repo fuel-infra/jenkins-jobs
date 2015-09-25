@@ -1,0 +1,41 @@
+- job:
+    name: '8.0.centos.bvt_2'
+    builders:
+      - inject:
+          properties-content: |
+            SLAVE_NODE_CPU=2
+            NEUTRON_ENABLE=true
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+      - systest
+    concurrent: true
+    description:
+      !include-raw descriptions/centos.bvt_2
+    logrotate:
+      daysToKeep: 30
+      numToKeep: 50
+    node: bvt
+    properties:
+      - heavy-job:
+          weight: 8
+      - throttle:
+          max-per-node: 1
+          option: project
+    parameters:
+      - systest:
+          dist: Centos
+          testgroup: bvt_2
+          version-id: '8.0'
+          id: 'main'
+    publishers:
+      - nosetests
+      - email-systest:
+          body-failed:
+            !include-raw notifications/bvt.failed
+          mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
+    scm:
+      - stackforge:
+          branch: 'master'
+          repo: 'fuel-qa'
+    wrappers:
+      - timeout:
+          timeout: 200
