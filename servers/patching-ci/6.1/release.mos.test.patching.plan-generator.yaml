@@ -1,5 +1,7 @@
 - job-template:
     name: '{release}.{name}.test-plan-generator'
+    description:
+      !include-raw descriptions/test_plan_generator.html
     project-type: freestyle
     disabled: '{is-disabled}'
     concurrent: true
