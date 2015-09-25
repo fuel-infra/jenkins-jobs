@@ -42,6 +42,7 @@
       - fuel-infra-deps-request:
           code-project: 'packages/centos6/**'
           branch: '{version-id}'
+          branch: '{version-id}-security-**'
     builders:
       - shell:
           !include-raw-escape builders/ci.status.report.start.sh
