@@ -20,12 +20,10 @@
           upgrade_testgroup:
             - 'upgrade_one_controller'
 
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '{version-id}.{id}.{dist}.os_upgrade':
           testgroup: 'os_upgrade'
           weight: '20'
           node: 'huge-systest'
-          upgrade_testgroup:
-            - 'os_upgrade'
 
       - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
