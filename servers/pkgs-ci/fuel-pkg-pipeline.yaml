@@ -1,0 +1,147 @@
+################################################################################
+# Job Templates
+################################################################################
+
+- job-template:
+    name: '{mos_version}-fuel-pkg-pipeline-{os}'
+    concurrent: True
+    description: |
+        This job builds a package and then publishes it by triggerring publisher job.<br>
+        After publishing are triggered test jobs:
+        <ul>
+          <li> install test for just built packages
+          <li> system test using just built packages
+        </ul>
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-branch}'
+    wrappers:
+      - ci-build-creds
+      - timeout:
+          timeout: 300
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+
+          ############################
+          # Project parameters
+          ############################
+
+          PROJECT_NAME={project-name}
+          PROJECT_VERSION=${{ZUUL_BRANCH#*/fuel-}}
+          PROJECT_VERSION=${{PROJECT_VERSION%%/*}}
+
+          # Set default version for master branch
+          test "${{PROJECT_VERSION}}" = "master" && PROJECT_VERSION="{master-mos-version}"
+
+          # Project info
+          export PROJECT_NAME PROJECT_VERSION
+
+          ############################
+          # Global parameters
+          ############################
+
+          export DIST="${{DIST:-{distro}}}"
+          export DISTRO_PATH="${{DIST}}/"
+          export SPEC_PREFIX_PATH="{spec_path_prefix}"
+          export REPO_REQUEST_PATH_PREFIX="{cr-path-prefix}"
+
+          # Gerrit parameters
+          export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
+          export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
+          export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
+
+          # Publish host parameters
+          export REMOTE_REPO_HOST={repo-host}
+
+          # Parameters for package specs
+          export SPEC_PROJECT_SUFFIX={spec-project-suffix}
+
+          # New scheme
+          if [ "{mos_version}" = "master" ]; then
+              DEB_DIST_NAME={project-name}-{mos_version}
+              RPM_DIST_NAME={project-name}-{mos_version}-${{DIST}}
+          else
+              DEB_DIST_NAME={project-name}{mos_version}
+              RPM_DIST_NAME={project-name}{mos_version}-${{DIST}}-fuel
+          fi
+          DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
+          RPM_REPO_PATH={rel-path-prefix}/{os}/${{RPM_DIST_NAME}}/os/x86_64/
+          export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
+
+          # DEB-specific parameters
+          export ORIGIN=Mirantis
+          export DEB_PROPOSED_REPO_PATH=
+          export DEB_PROPOSED_DIST_NAME={project-name}{mos_version}-proposed
+          export DEB_UPDATES_REPO_PATH=
+          export DEB_UPDATES_DIST_NAME={project-name}{mos_version}-updates
+          export DEB_SECURITY_REPO_PATH=
+          export DEB_SECURITY_DIST_NAME={project-name}{mos_version}-security
+          export DEB_HOLDBACK_REPO_PATH=
+          export DEB_HOLDBACK_DIST_NAME={project-name}{mos_version}-holdback
+
+          # RPM-specific parameters
+          export RPM_OS_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/os
+          export RPM_PROPOSED_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/proposed
+          export RPM_UPDATES_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/updates
+          export RPM_SECURITY_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/security
+          export RPM_HOLDBACK_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/holdback
+
+          ############################
+          # Build package
+          ############################
+
+          # Use parameters set by Zuul instead of guessing ones
+          sed -ri '/set_default_params/ d' build-{pkg_type}.sh
+
+          # ... and build a package
+          echo FAILED=true >> ci_status_params
+          bash build-fuel-{pkg_type}.sh && sed -ri 's/FAILED=true/FAILED=false/' ci_status_params
+
+          rm -rf {repo-base-path}/CR-${{ZUUL_CHANGE}}
+
+          # Extra parameters for publisher
+          cat >> buildresult.params <<EOF
+
+          # Added for publisher
+          REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
+          REPO_BASE_PATH={repo-base-path}
+          DEB_DIST_NAME=${{DEB_DIST_NAME}}
+          DEB_REPO_PATH=${{DEB_REPO_PATH}}
+          RPM_REPO_PATH=${{RPM_REPO_PATH}}
+          RPM_OS_REPO_PATH=${{RPM_OS_REPO_PATH}}
+          RPM_PROPOSED_REPO_PATH=${{RPM_PROPOSED_REPO_PATH}}
+          RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
+          RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
+          RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
+          REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
+          EOF
+
+      - trigger-builds:
+          - project: '{mos_version}-fuel-pkg-publish-{os}'
+            current-parameters: true
+            property-file: buildresult.params
+            block: true
+      - copyartifact:
+            project: '{mos_version}-fuel-pkg-publish-{os}'
+            filter: '{pkg_type}.publish.setenvfile'
+            parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
+            which-build: 'last-completed'
+    publishers:
+      - archive:
+          artifacts: 'buildresult.params, ci_status_params, {pkg_type}.publish.setenvfile, {pkg_type}.install.setenvfile'
+          allow-empty: True
+
+    node: '{build-node}'
+
+################################################################################
+# Job Groups
+################################################################################

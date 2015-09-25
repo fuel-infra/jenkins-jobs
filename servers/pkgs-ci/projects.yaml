@@ -9,12 +9,10 @@
 
     master-mos-version: '8.0'
 
-    gerrit-host: 'review.fuel-infra.org'
-
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
-#    repo-host: '172.18.186.167'
 
     gerrit-host: 'review.fuel-infra.org'
+    gerrit-user: 'openstack-ci-jenkins'
     gerrit-port: '29418'
 
     product_jenkins_url: 'https://product-ci.infra.mirantis.net/'
@@ -55,6 +53,8 @@
       - '{mos_version}-pkg-gate-{os}'
       - '{mos_version}-pkg-install-{os}'
       - '{mos_version}-pkg-systest-{os}'
+      - '{mos_version}-fuel-pkg-pipeline-{os}'
+      - '{mos_version}-fuel-pkg-publish-{os}'
 
 - project:
     name: 'pkg-mos-centos'
