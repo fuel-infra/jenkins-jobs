@@ -1,0 +1,88 @@
+- job:
+    name: '7.0-build.late.artifacts'
+    builders:
+      - shell:
+          !include-raw builders/build_late_artifacts.sh
+    concurrent: true
+    description: |
+      Build late artifacts:<br>
+      <ul>
+        <li>fuel-bootstrap-image</li>
+        <li>fuel-docker-images</li>
+        <li>fuel-target-centos-images</li>
+      </ul>
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    node: custom_iso
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    parameters:
+      - string:
+          name: make_args
+          default: '-j10'
+          description: 'Pass additional parameters to make command'
+      - string:
+          name: FUELMAIN_COMMIT
+          default: 'stable/7.0'
+      - string:
+          name: FUELMAIN_REPO
+          default: 'https://git.openstack.org/stackforge/fuel-main.git'
+      - choice:
+          name: USE_MIRROR
+          choices:
+            - cz
+            - us
+            - msk
+            - srt
+            - usa
+            - hrk
+            - none
+      - string:
+          name: fuelmain_gerrit_commit
+          default: 'refs/changes/19/227819/9'
+          description: Refspecs for commits in fuel-main gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: PATCHING_CI
+          default: '1'
+          description: Build fuel packages locally( 1 - yes; 0 - use from upstream )
+      - string:
+          name: EXTRA_RPM_REPOS
+          default: 'base,http://mirror.fuel-infra.org/fwm/7.0-release/centos/os/x86_64/ security,http://mirror.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel/security/x86_64/ updates,http://mirror.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel/updates/x86_64/'
+          description: |
+            Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
+            Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
+            Example: <b> foo,http://my.cool.repo/rpm   bar,ftp://repo.foo </b>
+      - string:
+          name: NOARTIFACT_MIRROR
+          default: ''
+          description: upstream mirror without late artifacts
+    scm:
+      - git:
+          url: '$FUELMAIN_REPO'
+          branches:
+            - 'origin/stable/7.0'
+    wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
+      - ansicolor:
+          colormap: xterm
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: artifacts/*txt
+          latest-only: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'
+          always: true

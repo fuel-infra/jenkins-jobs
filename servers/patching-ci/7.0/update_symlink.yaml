@@ -1,0 +1,56 @@
+- job:
+    name: '7.0.update_symlink'
+    description:
+      !include-raw descriptions/update_symlink.html
+    logrotate:
+      daysToKeep: 90
+      artifactDaysToKeep: 90
+      numToKeep: 100
+    node: mirror
+    concurrent: false
+    properties:
+      - heavy-job:
+          weight: 1
+
+    parameters:
+      - string:
+          name: SYMLINK
+          default: ''
+          description: 'Symlink location relative to http://mirror.fuel-infra.org/mos/ path. For example <b>snapshots/ubuntu-stable</b>'
+      - string:
+          name: TARGET
+          default: ''
+          description: |
+              Symlink target relative symlink file location.<br>
+              If other symlink specified as a target, it will be dereferenced recursively.<br>
+              For example <b>ubuntu-latest</b> target for <b>snapshots/ubuntu-stable</b> symlink <br>
+              mean that symlink <b>ubuntu-stable</b> will be created in <b>snapshots</b> <br>
+              directory and it will be targeted to <b>snapshots/ubuntu-latest target</b>
+      - string:
+          name: LOCATIONS
+          default: 'rsync://osci-mirror-msk.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-srt.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-kha.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync/mos rsync://mirror.seed-us1.fuel-infra.org/mirror-sync/mos rsync://mirror.seed-cz1.fuel-infra.org/mirror-sync/mos'
+          description: 'List of locations to sync to'
+
+    builders:
+      - shell:
+          !include-raw builders/update_symlink.sh
+
+    scm:
+      - trsync:
+          branch: 'mos_7.0'
+    triggers:
+      - timed: ''
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - obs-user-credentials
+
+    publishers:
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci+alert@mirantis.com
+      - description-setter:
+          description: "$SYMLINK -> $TARGET"
+          description-for-failed: ""
+      - archive:
+          artifacts: '*.txt'
+          latest-only: false

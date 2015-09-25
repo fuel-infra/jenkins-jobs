@@ -1,5 +1,5 @@
 - job-template:
-    name: '6.1.{name}.test-runner'
+    name: '{release}.{project}.test-runner'
     project-type: multijob
     disabled: '{is-disabled}'
     concurrent: true
@@ -23,13 +23,13 @@
           default: '^stackforge/fuel-.*'
       - string:
           name: OPENSTACK_BRANCH
-          default: 'stable/6.1'
+          default: 'stable/7.0'
       - string:
           name: FUELINFRA_PROJECTS
           default: '^.*'
       - string:
           name: FUELINFRA_BRANCH
-          default: 'openstack-ci/fuel-6.1/2014.2'
+          default: 'openstack-ci/fuel-7.0/2014.2'
       - string:
           name: GERRIT_HOSTS
           description: "Available Gerrit instances (format: host:port:user)"
@@ -54,7 +54,7 @@
           default: 'none'
       - string:
           name: MAGNET_LINK
-          default: 'magnet:?xt=urn:btih:9d59953417e0c2608f8fa0ffe43ceac00967708f&dn=MirantisOpenStack-6.1.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-mnv.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-6.1.iso'
+          default: 'magnet:?xt=urn:btih:9d59953417e0c2608f8fa0ffe43ceac00967708f&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-mnv.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
       - string:
           name: PYTHON_VENV
           default: '/home/jenkins/venv-nailgun-tests-2.9/'
@@ -71,42 +71,42 @@
       - multijob:
           name: 'Build Late Artifacts'
           projects:
-            - name: '6.1-build.late.artifacts'
+            - name: '7.0-build.late.artifacts'
               property-file: 'parameters.txt'
               enable-condition: '("${{REGENERATE_BOOTSTRAP}}" == "true").or("${{REGENERATE_IMAGE_CENTOS}}" == "true").or("${{REGENERATE_CONTAINERS}}" == "true")'
       - trigger-builds:
-          - project: '6.1.{name}.test-deb'
+          - project: '{release}.{name}.test-deb'
             current-parameters: true
             property-file: 'parameters.txt'
-            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
-          - project: '6.1.{name}.test-rpm'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/7.0-build.late.artifacts/${{7_0_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
+          - project: '{release}.{name}.test-rpm'
             current-parameters: true
             property-file: 'parameters.txt'
-            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
-          - project: '6.1.{name}.test-ubuntu-master'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/7.0-build.late.artifacts/${{7_0_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
+          - project: '{release}.{name}.test-ubuntu-master'
             current-parameters: true
             property-file: 'parameters.txt'
-            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
-          - project: '6.1.{name}.test-centos-master'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/7.0-build.late.artifacts/${{7_0_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
+          - project: '{release}.{name}.test-centos-master'
             current-parameters: true
             property-file: 'parameters.txt'
-            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
-          - project: '6.1.{name}.ga.test-deb'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/7.0-build.late.artifacts/${{7_0_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
+          - project: '{release}.{name}.ga.test-deb'
             current-parameters: true
             property-file: 'parameters.txt'
-            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
-          - project: '6.1.{name}.ga.test-rpm'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/7.0-build.late.artifacts/${{7_0_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
+          - project: '{release}.{name}.ga.test-rpm'
             current-parameters: true
             property-file: 'parameters.txt'
-            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
-          - project: '6.1.{name}.ga.test-ubuntu-master'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/7.0-build.late.artifacts/${{7_0_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
+          - project: '{release}.{name}.ga.test-ubuntu-master'
             current-parameters: true
             property-file: 'parameters.txt'
-            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
-          - project: '6.1.{name}.ga.test-centos-master'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/7.0-build.late.artifacts/${{7_0_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
+          - project: '{release}.{name}.ga.test-centos-master'
             current-parameters: true
             property-file: 'parameters.txt'
-            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/6.1-build.late.artifacts/${{6_1_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
+            predefined-parameters: 'LATE_ARTIFACTS_JOB_URL=${{JENKINS_URL}}job/7.0-build.late.artifacts/${{7_0_BUILD_LATE_ARTIFACTS_BUILD_NUMBER}}'
     publishers:
       - email:
           recipients: '{mailto}'

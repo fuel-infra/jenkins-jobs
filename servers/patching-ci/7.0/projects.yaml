@@ -1,21 +1,23 @@
 - project:
-    name: 'patching'
-    version-id: 6.1
-    openstack-id: 2014.2.2
-    fuel-branch: 'stable/6.1'
+    name: '7.0.patching'
+    project: 'patching'
+    release: 7.0
+    version-id: 7.0
+    openstack-id: 2015.1.0
+    fuel-branch: 'stable/7.0'
     prjsuffix: '-stable'
     build-node: ''
     mailto: 'devops+alert@mirantis.com'
     is-disabled: ''
     jobs:
-      - '6.1.{name}.test-runner'
-      - '6.1.{name}.rpm'
-      - '6.1.{name}.deb'
-      - '6.1.{name}.test-plan-generator'
+      - '{release}.{project}.test-runner'
+      - '{release}.{project}.rpm'
+      - '{release}.{project}.deb'
+      - '{release}.{project}.test-plan-generator'
 - job-group:
-    name: '6.1.{name}.rpm'
+    name: '{release}.{project}.rpm'
     jobs:
-      - '6.1.patching.{test_name}':
+      - '{release}.patching.{test_name}':
           test_name: 'test-rpm'
           testgroup: 'patching_environment'
           distname: 'centos'
@@ -23,7 +25,7 @@
           disable_updates: 'false'
           enablevar: 'ENABLED_RPM_PATCHING'
           enable_custom_var: 'ENABLED_ENV_CUSTOM_TESTS'
-      - '6.1.patching.{test_name}':
+      - '{release}.patching.{test_name}':
           test_name: 'test-centos-master'
           testgroup: 'patching_master_tests'
           distname: 'centos'
@@ -31,7 +33,7 @@
           disable_updates: 'false'
           enablevar: 'ENABLED_CENTOS_MASTER_PATCHING'
           enable_custom_var: 'ENABLED_MASTER_CUSTOM_TESTS'
-      - '6.1.patching.{test_name}':
+      - '{release}.patching.{test_name}':
           test_name: 'ga.test-rpm'
           testgroup: 'patching_environment'
           distname: 'centos'
@@ -39,7 +41,7 @@
           disable_updates: 'true'
           enablevar: 'ENABLED_RPM_GA_PATCHING'
           enable_custom_var: 'ENABLED_ENV_CUSTOM_TESTS'
-      - '6.1.patching.{test_name}':
+      - '{release}.patching.{test_name}':
           test_name: 'ga.test-centos-master'
           testgroup: 'patching_master_tests'
           distname: 'centos'
@@ -48,9 +50,9 @@
           enablevar: 'ENABLED_CENTOS_MASTER_GA_PATCHING'
           enable_custom_var: 'ENABLED_MASTER_CUSTOM_TESTS'
 - job-group:
-    name: '6.1.{name}.deb'
+    name: '{release}.{project}.deb'
     jobs:
-      - '6.1.patching.{test_name}':
+      - '{release}.patching.{test_name}':
           test_name: 'test-deb'
           testgroup: 'patching_environment'
           distname: 'ubuntu'
@@ -58,7 +60,7 @@
           disable_updates: 'false'
           enablevar: 'ENABLED_DEB_PATCHING'
           enable_custom_var: 'ENABLED_ENV_CUSTOM_TESTS'
-      - '6.1.patching.{test_name}':
+      - '{release}.patching.{test_name}':
           test_name: 'test-ubuntu-master'
           testgroup: 'patching_master_tests'
           distname: 'ubuntu'
@@ -66,7 +68,7 @@
           disable_updates: 'false'
           enablevar: 'ENABLED_UBUNTU_MASTER_PATCHING'
           enable_custom_var: 'ENABLED_MASTER_CUSTOM_TESTS'
-      - '6.1.patching.{test_name}':
+      - '{release}.patching.{test_name}':
           test_name: 'ga.test-deb'
           testgroup: 'patching_environment'
           distname: 'ubuntu'
@@ -74,7 +76,7 @@
           disable_updates: 'true'
           enablevar: 'ENABLED_DEB_GA_PATCHING'
           enable_custom_var: 'ENABLED_ENV_CUSTOM_TESTS'
-      - '6.1.patching.{test_name}':
+      - '{release}.patching.{test_name}':
           test_name: 'ga.test-ubuntu-master'
           testgroup: 'patching_master_tests'
           distname: 'ubuntu'

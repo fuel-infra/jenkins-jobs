@@ -1,5 +1,5 @@
 - job-template:
-    name: '6.1.patching.{test_name}'
+    name: '{release}.patching.{test_name}'
     project-type: freestyle
     disabled: '{is-disabled}'
     concurrent: false
@@ -31,7 +31,7 @@
           default: ''
       - string:
           name: FUEL_MILESTONE
-          default: '6.1'
+          default: '{release}'
       - string:
           name: TEST_GROUP
           default: '{testgroup}'
@@ -117,7 +117,7 @@
       - git:
           url: 'https://github.com/stackforge/fuel-qa.git'
           branches:
-            - 'origin/stable/6.1'
+            - 'origin/stable/7.0'
           skip-tag: true
           basedir: fuel-qa
       - patching-tests

@@ -1,5 +1,5 @@
 - job-template:
-    name: '6.1.{name}.test-plan-generator'
+    name: '{release}.{project}.test-plan-generator'
     description:
       !include-raw descriptions/test_plan_generator.html
     project-type: freestyle
@@ -25,16 +25,16 @@
           default: '^stackforge/fuel-.*'
       - string:
           name: OPENSTACK_BRANCH
-          default: 'stable/6.1'
+          default: 'stable/7.0'
       - string:
           name: FUELINFRA_PROJECTS
           default: '^.*'
       - string:
           name: FUELINFRA_BRANCH
-          default: 'openstack-ci/fuel-6.1/2014.2'
+          default: 'openstack-ci/fuel-7.0/2014.2'
       - string:
           name: FUEL_MILESTONE
-          default: '6.1'
+          default: '{release}'
       - string:
           name: GERRIT_HOSTS
           description: "Available Gerrit instances (format: host:port:user)"
@@ -80,7 +80,7 @@
       - git:
           url: 'https://github.com/stackforge/fuel-qa.git'
           branches:
-            - 'origin/stable/6.1'
+            - 'origin/stable/7.0'
           skip-tag: true
           basedir: fuel-qa
     builders:
