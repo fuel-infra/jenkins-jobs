@@ -1,0 +1,86 @@
+- job-template:
+    name: '{version-id}.{id}.{dist}.os_upgrade'
+    builders:
+      - inject: # default env variables
+          properties-content: |
+            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+            OPENSTACK_RELEASE={dist}
+            TEST_GROUP={testgroup}
+            CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+            CLASSIC_PROVISIONING=false
+            SLAVE_NODE_MEMORY=3072
+            OCTANE_PATH=fuel-octane
+      - shell:
+          !include-raw-escape 'scripts/run_upgrade_system_test.sh'
+    disabled: false
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+    node: '{node}'
+    concurrent: true
+    description: '{version-id} swarm test group'
+    properties:
+      - heavy-job:
+          weight: '{weight}'
+    scm:
+       - main-git:
+           reponame: '{base_reponame}'
+           repobranch: '{base_repobranch}'
+           basedir: 'BASE'
+       - main-git:
+           reponame: '{upgrade_reponame}'
+           repobranch: '{upgrade_repobranch}'
+           basedir: 'UPGRADE'
+       - main-git:
+           reponame: 'fuel-octane'
+           repobranch: 'master'
+           basedir: 'fuel-octane'
+
+    parameters:
+    - string:
+        name: ENV_PREFIX
+        default: '{version-id}.{id}.{dist}.os_upgrade'
+        description: 'Environment prefix'
+    - string:
+        name: BASE_ISO_MAGNET_LINK
+        default: '{base_iso_magnet_link}'
+        description: "Base iso magnet link"
+    - string:
+        name: UPGRADE_TARBALL_MAGNET_LINK
+        description: "Upgrade tarball magnet link"
+    - string:
+        name: OPENSTACK_RELEASE
+        default: '{dist}'
+        description: Base distribution
+    - string:
+        name: TEST_GROUP
+        default: '{testgroup}'
+
+    publishers:
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+    - trigger-parameterized-builds:
+      - project: '{version-id}-test-reports-Testrail'
+        condition: UNSTABLE_OR_BETTER
+        property-file: links.txt
+        predefined-parameters: TEST_JOB_NAME_ENABLE=true
+        triggerWithNoParameters: false
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - inject-passwords:
+        global: true
+    - ansicolor:
+        colormap: xterm
