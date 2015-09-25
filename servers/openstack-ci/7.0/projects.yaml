@@ -23,6 +23,8 @@
     ops-spec-prj: 'openstack-build/**'
     ops-branch: 'openstack-ci/fuel-7.0/2015.1.0'
     ops-fuel-branch: 'openstack-ci/fuel/centos6/juno'
+    ops-security-branch: 'openstack-ci/fuel-7.0/2015.1.0-security-**'
+    ops-fuel-security-branch: 'openstack-ci/fuel/centos6/juno-security-**'
     # original scheme should be:
     #cluster-rpm-deps-code-project: '{project-name}/packages/{component-path-cluster}centos7/**'
     #cluster-deb-deps-code-project: '{project-name}/packages/{component-path-cluster}trusty/**'
@@ -32,9 +34,11 @@
     cluster-deb-deps-code-project: 'packages/trusty/**'
     fuel-rpm-deps-code-project: 'packages/centos6/**'
     deps-branch: '7.0'
+    deps-security-branch: '7.0-security-**'
     # don't put "origin" in fuel-branch variable
     # fuel-branch MUST be in format: stable/version
-    fuel-branch: stable/7.0
+    fuel-branch: 'stable/7.0'
+    fuel-security-branch: 'stable/7.0-security-**'
     mailto: 'fuel-build+ci-packaging@mirantis.com'
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
     repo-request-path-prefix: 'review/'
@@ -97,6 +101,18 @@
       - '7.0.mos-new.build-rpm-deps-request':
           is-disabled: true
           last_stage: false
+      - '7.0.mos-new.build-rpm-security':
+          is-disabled: true
+          last_stage: true
+      - '7.0.mos-new.build-rpm-security-request':
+          is-disabled: true
+          last_stage: false
+      - '7.0.mos-new.build-rpm-deps-security':
+          is-disabled: true
+          last_stage: true
+      - '7.0.mos-new.build-rpm-deps-security-request':
+          is-disabled: true
+          last_stage: false
 
 - job-group:
     name: '7.0.mos-new.deb'
@@ -108,6 +124,14 @@
       - '7.0.mos-new.build-deb-deps':
           last_stage: true
       - '7.0.mos-new.build-deb-deps-request':
+          last_stage: false
+      - '7.0.mos-new.build-deb-security':
+          last_stage: true
+      - '7.0.mos-new.build-deb-security-request':
+          last_stage: false
+      - '7.0.mos-new.build-deb-deps-security':
+          last_stage: true
+      - '7.0.mos-new.build-deb-deps-security-request':
           last_stage: false
 
 - job-group:
@@ -125,6 +149,19 @@
           last_stage: true
       - '7.0.mos-new.fuel.build-ops-request':
           last_stage: false
+      - '7.0.mos-new.fuel.build-rpm-security':
+      - '7.0.mos-new.fuel.build-rpm-security-request':
+      - '7.0.mos-new.fuel.build-deb-security':
+      - '7.0.mos-new.fuel.build-deb-security-request':
+      - '7.0.mos-new.fuel.build-rpm-deps-security':
+          last_stage: true
+      - '7.0.mos-new.fuel.build-rpm-deps-security-request':
+          last_stage: false
+      - '7.0.mos-new.fuel.build-ops-security':
+          last_stage: true
+      - '7.0.mos-new.fuel.build-ops-security-request':
+          last_stage: false
+
 - job-group:
     name: '7.0.mos-new.maintain'
     jobs:

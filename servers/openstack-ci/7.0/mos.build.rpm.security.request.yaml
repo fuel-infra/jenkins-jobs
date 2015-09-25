@@ -1,0 +1,151 @@
+- job-template:
+    name: '7.0.mos-new.build-rpm-security-request'
+    disabled: true
+    concurrent: true
+    node: '{build-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    properties:
+      - inject:
+          properties-content: |
+            GERRIT_USER=ci-build-rpm
+            GERRIT_VOTE=1
+            SRC_PROJECT_PATH=openstack
+            SPEC_PROJECT_PATH=openstack-build
+            SPEC_PROJECT_SUFFIX=-build
+            SPEC_PREFIX_PATH=/{rpm-dist-env}
+            DIST={rpm-dist-env}
+            IS_OPENSTACK=true
+            IS_SECURITY=true
+            IS_UPDATES={is-updates}
+            REMOTE_REPO_HOST={repo-host}
+            REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
+            RPM_OS_REPO_PATH={rpm-os-repo-path-env}
+            RPM_PROPOSED_REPO_PATH={rpm-proposed-repo-path-env}
+            RPM_UPDATES_REPO_PATH={rpm-updates-repo-path-env}
+            RPM_SECURITY_REPO_PATH={rpm-security-repo-path-env}
+            RPM_HOLDBACK_REPO_PATH={rpm-holdback-repo-path-env}
+            DISPLAY_NAME=Build rpm package on temporary repository
+            REQUEST_TYPE=Centos6
+    wrappers:
+      - ci-build-rpm
+      - timeout:
+          fail: true
+          timeout: 120
+    parameters:
+      - string:
+          name: PROJECT_NAME
+          default: '{project-name}'
+      - string:
+          name: PROJECT_VERSION
+          default: '{release}'
+      - string:
+          name: SOURCE_BRANCH
+          default: '{ops-security-branch}'
+      - string:
+          name: SPEC_BRANCH
+          default: '{ops-security-branch}'
+      - bool:
+          name: LAST_STAGE
+          default: '{last_stage}'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-branch}'
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-ci-status-client-repo}'
+          scm-basedir: '{scm-ci-status-client-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-ci-status-client-branch}'
+    triggers:
+      - fuel-infra-request:
+          code-project: '{ops-code-prj}'
+          spec-project: '{ops-spec-prj}'
+          branch: '{ops-security-branch}'
+          files: '{rpm-dist-env}/rpm/**'
+    builders:
+      - shell:
+          !include-raw-escape builders/ci.status.report.start.sh
+      - shell: |
+          #!/bin/bash -ex
+          # Remove junk files
+          [ -f "corr.setenvfile" ] && rm -f corr.setenvfile || :
+      - shell:
+          !include-raw-escape builders/mos.reset.vote.sh
+      - shell:
+          !include-raw-escape builders/mos.build.rpm.sh
+      - inject:
+          properties-file: 'setenvfile'
+      - conditional-step:
+          condition-kind: shell
+          condition-command: |
+            #!/bin/bash -ex
+            [ "${{RESULT}}" == "0" ]
+          on-evaluation-failure: dont-run
+          steps:
+             - trigger-builds:
+                - project: '7.0.mos-new.publisher'
+                  current-parameters: true
+                  property-file: buildresult.params
+                  predefined-parameters: |
+                      IS_SECURITY=${{IS_SECURITY}}
+                      IS_UPDATES=${{IS_UPDATES}}
+                      DIST=${{DIST}}
+                      REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
+                      REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
+                      RPM_OS_REPO_PATH=${{RPM_OS_REPO_PATH}}
+                      RPM_PROPOSED_REPO_PATH=${{RPM_PROPOSED_REPO_PATH}}
+                      RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
+                      RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
+                      RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
+                  block: true
+             - copyartifact:
+                  project: '7.0.mos-new.publisher'
+                  filter: 'rpm.publish.setenvfile'
+                  parameter-filters: 'GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}'
+                  optional: true
+                  which-build: 'last-successful'
+             - shell: |
+                  #!/bin/bash -ex
+                  # Fail stage if packages is not published
+                  [ -f "rpm.publish.setenvfile" ] && source rpm.publish.setenvfile
+                  [ "${{RPM_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
+             - inject:
+                  properties-file: 'rpm.publish.setenvfile'
+      - shell:
+          !include-raw-escape builders/mos.vote.sh
+      - trigger-builds:
+          - project: '7.0.mos-new.install-rpm'
+            current-parameters: true
+            property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
+            property-file-fail-on-missing: false
+            predefined-parameters: |
+                PACKAGEVERSION=${{RPM_VERSION}}
+                PACKAGELIST=${{RPM_BINARIES}}
+                REPO_URL=${{RPM_REPO_URL}}
+                DIST=${{DIST}}
+                DISPLAY_NAME=Check rpm package for installation and simple testing
+                REQUEST_TYPE=${{REQUEST_TYPE}}
+          - project: '7.0.mos-new.deploy-rpm'
+            current-parameters: true
+            property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
+            property-file-fail-on-missing: false
+            predefined-parameters: |
+                REPO_URL=${{DEB_REPO_URL}}
+                DISPLAY_NAME=Check rpm package for installation in environment
+                REQUEST_TYPE=${{REQUEST_TYPE}}
+    publishers:
+      - pkgname-as-desc
+      - post-tasks:
+         - matches:
+            - log-text: Building
+              operator: AND
+           script:
+              !include-raw-escape builders/ci.status.report.stop.sh
+      - archive:
+           artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
+           allow-empty: true
