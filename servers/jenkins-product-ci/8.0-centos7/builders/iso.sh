@@ -43,7 +43,7 @@ test "$deep_clean" = "true" && make deep_clean
 
 #########################################
 echo "Using mirrors"
-make ${make_args} show-yum-repos-centos
+make ${make_args} show-yum-repos-centos show-centos-sandbox-repos
 
 make clean
 
