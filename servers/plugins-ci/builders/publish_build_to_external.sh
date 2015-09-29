@@ -8,4 +8,4 @@ rm -rf "${LOGS}"
 
 mkdir -p "${LOGS}"
 
-wget "${REPORTED_JOB_URL}/consoleText" -O "${LOGS}/consoleText.txt"
+wget --no-check-certificate "${REPORTED_JOB_URL}/consoleText" -O "${LOGS}/consoleText.txt"
