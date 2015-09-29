@@ -93,25 +93,3 @@
           properties: |
             CLASSIC_PROVISIONING=true
 
-- job-group:
-    name: '8.0-system_tests-test_upgrade_chain'
-    version-id: '8.0'
-    id: 'system_test'
-    node: 'systest'
-    timeout: '480'
-    base_reponame: 'fuel-main'
-    base_repobranch: 'origin/stable/6.0'
-    base_iso_magnet_link:
-        !include-raw ../data/6.0-iso
-    base_upgrade_tarball_magnet_link:
-        !include-raw ../data/6.1-upgrade
-    base_venv_path: '/home/jenkins/venv-nailgun-tests'
-    old_devops_db: 'true'
-    base_upgraded_reponame: 'fuel-qa'
-    base_upgraded_repobranch: 'origin/stable/6.1'
-    upgrade_reponame: 'fuel-qa'
-    upgrade_repobranch: 'origin/master'
-    properties: ''
-    jobs:
-      - '{version-id}.{id}.{dist}.test.upgrade.chain':
-          weight: '8'

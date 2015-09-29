@@ -7,14 +7,6 @@
           dist: 'centos'
 
 - project:
-     name: 8.0.test_upgrade_chain
-     jobs:
-       - '8.0-system_tests-test_upgrade_chain':
-           dist: 'ubuntu'
-       - '8.0-system_tests-test_upgrade_chain':
-           dist: 'centos'
-
-- project:
     name: 8.0.systests
     jobs:
       - '8.0-system_tests':
@@ -300,12 +292,5 @@
             #   current-parameters: true
             #   kill-phase-on: NEVER
             # - name: '8.0.system_test.ubuntu.upgrade_nova_cinder_classic'
-            #   current-parameters: true
-            #   kill-phase-on: NEVER
-            # # Upgrade chain
-            # - name: '8.0.system_test.centos.test.upgrade.chain'
-            #   current-parameters: true
-            #   kill-phase-on: NEVER
-            # - name: '8.0.system_test.ubuntu.test.upgrade.chain'
             #   current-parameters: true
             #   kill-phase-on: NEVER
