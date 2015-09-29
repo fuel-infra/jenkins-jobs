@@ -1,4 +1,11 @@
 - project:
+    name: 'zuul-layouts'
+    reponame: 'fuel-infra/zuul-layouts'
+    jobs:
+      - 'tox-verify-{name}':
+              node: 'tox'
+
+- project:
     name: 'jenkins-jobs'
     reponame: 'fuel-infra/jenkins-jobs'
     jobs:
