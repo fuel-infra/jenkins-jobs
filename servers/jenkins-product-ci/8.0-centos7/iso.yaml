@@ -30,7 +30,7 @@
             to disable it.
       - string:
           name: make_args
-          default: 'MIRROR_CENTOS=http://mirror.centos.org/centos-7/7/ SANDBOX_MIRROR_CENTOS_UPSTREAM=http://mirror.centos.org/centos-7/7/'
+          default: 'YUM_REPOS="official extras fuel" MIRROR_CENTOS=http://mirror.centos.org/centos-7/7/ SANDBOX_MIRROR_CENTOS_UPSTREAM=http://mirror.centos.org/centos-7/7/'
           description: Additional make arguments
       - string:
           name: fuelmain_gerrit_commit
