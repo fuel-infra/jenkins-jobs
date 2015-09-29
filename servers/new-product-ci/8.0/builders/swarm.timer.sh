@@ -2,7 +2,7 @@
 
 set -ex
 
-JENKINS_TEST_BUILD_URL="${JENKINS_URL}job/8.0.test_all/lastSuccessfulBuild/"
+JENKINS_TEST_BUILD_URL="${JENKINS_URL}job/8.0-kilo.test_all/lastSuccessfulBuild/"
 ISO_BUILD_URL="$(curl -fsS ${JENKINS_TEST_BUILD_URL}artifact/iso_build_url.txt \
         | awk -F '[ =]' '{print $NF}')"
 
