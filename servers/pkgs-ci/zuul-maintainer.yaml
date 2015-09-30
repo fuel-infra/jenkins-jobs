@@ -25,6 +25,7 @@
 
     triggers:
      - timed: '*/30 * * * *'
+     - zuul
 
     builders:
       - shell:
