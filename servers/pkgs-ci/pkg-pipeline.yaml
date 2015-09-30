@@ -162,11 +162,17 @@
             VAR="$(echo {pkg_type} | tr [[:lower:]] [[:upper:]])_PUBLISH_SUCCEEDED"
             eval \${{${{VAR}}:-false}} || exit 1
             REPOURL=( ${{DEB_REPO_URL:-${{RPM_REPO_URL}}}} )
+
+            # Gerrit parameters
+            export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
+            export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
+            export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
+
             GERRIT_MESSAGE="Package repository:
 
             - package.repository ${{REPOURL[0]}} : LINK"
             GERRIT_CMD="gerrit review ${{GERRIT_CHANGE_NUMBER}},${{GERRIT_PATCHSET_NUMBER}} '--message=${{GERRIT_MESSAGE}}'"
-            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '{gerrit-port}' '{scm-user}'@$'{gerrit-host}' "${{GERRIT_CMD}}" || :
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}" || :
       - conditional-step:
             condition-kind: boolean-expression
             condition-expression: ${{TEST_INSTALL}}
