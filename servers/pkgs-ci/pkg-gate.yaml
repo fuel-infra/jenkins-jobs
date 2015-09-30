@@ -40,6 +40,9 @@
           # Restore input field separator
           IFS=${{OLDIFS}}
 
+          # Remove parameter files from previous jobs
+          rm -vf build-param-*.setenvfile
+
           # Create parameter files
           for i in ${{!CHANGE_IDS[*]}}; do
 
@@ -47,8 +50,6 @@
           IFS=":"
           CH=( ${{CHANGES[${{i}}]}} )
           IFS=${{OLDIFS}}
-
-          rm -vf build-param-*.setenvfile
 
           echo "Preparing parameters for patchset #${{CHANGE_IDS[${{i}}]#*,}} of change ${{CHANGE_IDS[${{i}}]%,*}} in project ${{CH[0]}} (branch ${{CH[1]}})"
           cat > build-param-${{CHANGE_IDS[${{i}}]}}.setenvfile <<EOF
