@@ -29,8 +29,12 @@
           description: Perform deep_clean or not. Default is "true". Set any other value
             to disable it.
       - string:
+          name: YUM_REPOS
+          default: 'official extras fuel'
+          description: Define the list of repos, used for building ISO
+      - string:
           name: make_args
-          default: 'YUM_REPOS="official extras fuel" MIRROR_CENTOS=http://mirror.centos.org/centos-7/7/ SANDBOX_MIRROR_CENTOS_UPSTREAM=http://mirror.centos.org/centos-7/7/'
+          default: 'MIRROR_CENTOS=http://mirror.centos.org/centos-7/7/ SANDBOX_MIRROR_CENTOS_UPSTREAM=http://mirror.centos.org/centos-7/7/'
           description: Additional make arguments
       - string:
           name: fuelmain_gerrit_commit
