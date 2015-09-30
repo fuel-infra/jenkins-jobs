@@ -1,0 +1,53 @@
+- job:
+    name: verify-fuel-library-puppetfile
+    builders:
+      - shell:
+          !include-raw builders/verify-fuel-library-puppetfile.sh
+    concurrent: true
+    description: Runs ./utils/jenkins/fuel_validate_puppetfile.sh
+    logrotate:
+      artifactDaysToKeep: 30
+    node: fuel-library-validate-puppetfile
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/stackforge/fuel-library.git
+          timeout: 20
+          choosing-strategy: gerrit
+    triggers:
+      - timed: 'H 2 * * *'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: stackforge/fuel-library
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 20
+          write-description: true
+    publishers:
+      - email-default
