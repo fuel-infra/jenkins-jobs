@@ -1,5 +1,5 @@
 - job-template:
-    name: '{mos_version}-fuel-pkg-publish-{os}'
+    name: '{mos_version}-fuel-pkg-publish-{distro}'
     project-type: freestyle
     concurrent: false
     properties:

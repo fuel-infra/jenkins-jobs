@@ -11,10 +11,6 @@
 
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
 
-    gerrit-host: 'review.fuel-infra.org'
-    gerrit-user: 'openstack-ci-jenkins'
-    gerrit-port: '29418'
-
     product_jenkins_url: 'https://product-ci.infra.mirantis.net/'
 
     base-path: 'base/'
@@ -47,14 +43,30 @@
     install-node: 'install-node'
     systest-node: 'systest'
 
+- mos_gerrit_template: &mos_template
+    name: ''
+
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-user: 'openstack-ci-jenkins'
+    gerrit-port: '29418'
+
     jobs:
       - '{mos_version}-pkg-pipeline-{os}'
       - '{mos_version}-pkg-publish-{os}'
       - '{mos_version}-pkg-gate-{os}'
       - '{mos_version}-pkg-install-{os}'
       - '{mos_version}-pkg-systest-{os}'
-      - '{mos_version}-fuel-pkg-pipeline-{os}'
-      - '{mos_version}-fuel-pkg-publish-{os}'
+
+- fuel_gerrit_template: &fuel_template
+    name: ''
+
+    gerrit-host: 'review.openstack.org'
+    gerrit-user: 'openstack-ci-jenkins'
+    gerrit-port: '29418'
+
+    jobs:
+      - '{mos_version}-fuel-pkg-pipeline-{distro}'
+      - '{mos_version}-fuel-pkg-publish-{distro}'
 
 - project:
     name: 'pkg-mos-centos'
@@ -76,6 +88,7 @@
           test_group: 'prepare_slaves_3'
     openstack_release: 'CentOS'
     <<: *common_template
+    <<: *mos_template
 
 - project:
     name: 'pkg-mos-debian'
@@ -97,6 +110,7 @@
           test_group: 'bvt_2'
     openstack_release: 'Debian'
     <<: *common_template
+    <<: *mos_template
 
 - project:
     name: 'pkg-mos-ubuntu'
@@ -118,6 +132,34 @@
           test_group: 'bvt_2'
     openstack_release: 'Ubuntu'
     <<: *common_template
+    <<: *mos_template
+
+- project:
+    name: 'pkg-fuel'
+    mos_version:
+      - 'master'
+      - '8.0'
+    distro:
+      - centos6:
+          os: centos
+          openstack_release: 'CentOS'
+          pkg_type: 'rpm'
+          spec_path_prefix: '/rpm'
+          test_group: 'prepare_slaves_3'
+      - centos7:
+          os: centos
+          openstack_release: 'CentOS'
+          pkg_type: 'rpm'
+          spec_path_prefix: '/rpm'
+          test_group: 'prepare_slaves_3'
+      - trusty:
+          os: ubuntu
+          openstack_release: 'Ubuntu'
+          pkg_type: 'deb'
+          spec_path_prefix: '/trusty'
+          test_group: 'bvt_2'
+    <<: *common_template
+    <<: *fuel_template
 
 - project:
     name: 'maintenace'
