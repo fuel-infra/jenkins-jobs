@@ -63,7 +63,7 @@
     deb-security-dist-name: 'mos7.0-security'
     deb-holdback-dist-name: 'mos7.0-holdback'
     ##################################
-    is-updates: ''
+    is-updates: true
     is-disabled: ''
     jobs:
       - '7.0.mos-new.rpm'
