@@ -78,6 +78,47 @@ export MIRROR_FUEL="${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos8.0-centos6-fuel
 
 echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU}${MIRROR_MOS_UBUNTU_ROOT} and ${MIRROR_FUEL}"
 
+
+process_artifacts() {
+    local ARTIFACT="$1"
+    test -f "$ARTIFACT" || return 1
+
+    local HOSTNAME=`hostname -f`
+    local LOCAL_STORAGE="$2"
+    local TRACKER_URL="$3"
+    local HTTP_ROOT="$4"
+
+    echo "MD5SUM is:"
+    md5sum $ARTIFACT
+
+    echo "SHA1SUM is:"
+    sha1sum $ARTIFACT
+
+    mkdir -p $LOCAL_STORAGE
+    mv $ARTIFACT $LOCAL_STORAGE
+
+    # seedclient.py comes from python-seed devops package
+    local MAGNET_LINK=`seedclient.py -v -u -f "$LOCAL_STORAGE"/"$ARTIFACT" --tracker-url="${TRACKER_URL}" --http-root="${HTTP_ROOT}" || true`
+    local STORAGES=($(echo "${HTTP_ROOT}" | tr ',' '\n'))
+    local HTTP_LINK="${STORAGES}/${ARTIFACT}"
+    local HTTP_TORRENT="${HTTP_LINK}.torrent"
+
+    cat > $ARTIFACT.data.txt <<EOF
+ARTIFACT=$ARTIFACT
+HTTP_LINK=$HTTP_LINK
+HTTP_TORRENT=$HTTP_TORRENT
+MAGNET_LINK=$MAGNET_LINK
+EOF
+
+    cat >$ARTIFACT.data.html <<EOF
+<h1>$ARTIFACT</h1>
+<a href=\"$HTTP_LINK\">HTTP link</a><br>
+<a href=\"$HTTP_TORRENT\">Torrent file</a><br>
+<a href=\"$MAGNET_LINK\">Magnet link</a><br>
+EOF
+
+}
+
 #########################################
 
 echo "STEP 0. Clean before start"
@@ -92,10 +133,16 @@ make ${make_args} iso upgrade-lrzip version-yaml openstack-yaml
 
 echo "STEP 2. Publish everything"
 
+export LOCAL_STORAGE='/var/www/fuelweb-iso'
+export HTTP_ROOT="http://`hostname -f`/fuelweb-iso"
+export TRACKER_URL='http://tracker01-bud.infra.mirantis.net:8080/announce,http://tracker01-mnv.infra.mirantis.net:8080/announce,http://tracker01-msk.infra.mirantis.net:8080/announce'
+
 cd "${ARTS_DIR}"
 for artifact in $(ls fuel-*)
 do
-  "${WORKSPACE}/utils/jenkins/process_artifacts.sh" "${artifact}"
+  begin=`date +%s`
+  process_artifacts $artifact $LOCAL_STORAGE $TRACKER_URL $HTTP_ROOT
+  echo "Time taken: $((`date +%s` - $begin))"
 done
 
 cd "${WORKSPACE}"
