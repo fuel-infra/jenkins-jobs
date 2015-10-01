@@ -147,3 +147,4 @@
     ops-code-prj: 'fuel-infra/**'
     ops-spec-prj: 'fuel-infra/**'
     ops-branch: 'master'
+    build-node: 'new-builder'
