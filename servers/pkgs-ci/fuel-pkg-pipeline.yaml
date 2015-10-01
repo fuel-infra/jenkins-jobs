@@ -3,7 +3,7 @@
 ################################################################################
 
 - job-template:
-    name: '{mos_version}-fuel-pkg-pipeline-{os}'
+    name: '{mos_version}-fuel-pkg-pipeline-{distro}'
     concurrent: True
     description: |
         This job builds a package and then publishes it by triggerring publisher job.<br>
@@ -61,9 +61,6 @@
 
           # Publish host parameters
           export REMOTE_REPO_HOST={repo-host}
-
-          # Parameters for package specs
-          export SPEC_PROJECT_SUFFIX={spec-project-suffix}
 
           # New scheme
           if [ "{mos_version}" = "master" ]; then
@@ -126,12 +123,12 @@
           EOF
 
       - trigger-builds:
-          - project: '{mos_version}-fuel-pkg-publish-{os}'
+          - project: '{mos_version}-fuel-pkg-publish-{distro}'
             current-parameters: true
             property-file: buildresult.params
             block: true
       - copyartifact:
-            project: '{mos_version}-fuel-pkg-publish-{os}'
+            project: '{mos_version}-fuel-pkg-publish-{distro}'
             filter: '{pkg_type}.publish.setenvfile'
             parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
             which-build: 'last-completed'
