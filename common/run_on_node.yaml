@@ -1,0 +1,29 @@
+- job:
+    name: 'run_on_node'
+    concurrent: true
+    description: |
+      This is a helper job to execute selected job on specified node
+    parameters:
+      - node:
+          name: NODE_NAME
+          description: |
+            Specify where this job and tested job should be ran on.
+          allowed-multiselect: true
+      - string:
+          name: JOB_NAME
+          description: |
+            Jobs name which should be tested on a slave.
+      - text:
+          name: JOB_PARAMETERS
+          description: |
+            Parameters passed to the job in form key=value.
+    builders:
+      - trigger-builds:
+        - project: $JOB_NAME
+          same-node: true
+          block: true
+          predefined-parameters: |
+            $JOB_PARAMETERS
+    publishers:
+      - description-setter:
+          description: '$NODE_NAME: $JOB_NAME'
