@@ -123,7 +123,7 @@ if ! eval \$${ENABLE_VAR}; then
     exit 0
 fi
 
-case "${ENV_PREFIX}" in
+case "${DIST_NAME}" in
     "ubuntu")
         export OPENSTACK_RELEASE="Ubuntu"
         REPO_TYPE=${REPO_TYPE:-"trusty"}
@@ -177,7 +177,8 @@ else
     ENV_SUFFIX="updates"
 fi
 
-ENV_NAME="${TEST_GROUP}-${ENV_PREFIX}-${FUEL_MILESTONE}-${ENV_SUFFIX}"
+ENV_PREFIX="${TEST_GROUP}-${DIST_NAME}-${FUEL_MILESTONE}"
+ENV_NAME="${ENV_PREFIX}-${ENV_SUFFIX}"
 
 if [ -n "${MAGNET_LINK}" ]; then
     ISO_PATH="$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")"

@@ -36,8 +36,8 @@
           name: TEST_GROUP
           default: '{testgroup}'
       - string:
-          name: ENV_PREFIX
-          default: '{envprefix}'
+          name: DIST_NAME
+          default: '{distname}'
       - string:
           name: OSCI_OBS_REPOS_CENTOS
           default: 'http://osci-obs.vm.mirantis.net:82'

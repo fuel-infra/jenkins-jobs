@@ -49,7 +49,7 @@ function trap_err {
 }
 
 function generate_testplan {
-    case "${ENV_PREFIX}" in
+    case "${DIST_NAME}" in
         "ubuntu")
             export OPENSTACK_RELEASE="Ubuntu"
             REPO_TYPE="trusty"
@@ -96,7 +96,8 @@ function generate_testplan {
 
     ENV_SUFFIX="testplan_generation"
 
-    ENV_NAME="${TEST_GROUP}-${ENV_PREFIX}-${FUEL_MILESTONE}-${ENV_SUFFIX}"
+    ENV_PREFIX="${TEST_GROUP}-${DIST_NAME}-${FUEL_MILESTONE}"
+    ENV_NAME="${ENV_PREFIX}-${ENV_SUFFIX}"
 
     export PATCHING_MIRRORS="${PATCHING_MIRRORS_ARRAY[*]}"
     export PATCHING_MASTER_MIRRORS="${PATCHING_MASTER_MIRRORS_ARRAY[*]}"
@@ -148,25 +149,25 @@ for GERRIT_ID in $(seq 1 "${GERRIT_HOSTS_COUNT}"); do
 done
 
 if ${ENABLED_DEB_PATCHING} || ${ENABLED_DEB_GA_PATCHING}; then
-    export ENV_PREFIX="ubuntu"
+    export DIST_NAME="ubuntu"
     export TEST_GROUP="patching_environment"
     generate_testplan >> ${TESTPLAN_RAW_FILE}
 fi
 
 if ${ENABLED_UBUNTU_MASTER_PATCHING} || ${ENABLED_UBUNTU_MASTER_GA_PATCHING}; then
-    export ENV_PREFIX="ubuntu"
+    export DIST_NAME="ubuntu"
     export TEST_GROUP="patching_master"
     generate_testplan >> ${TESTPLAN_RAW_FILE}
 fi
 
 if ${ENABLED_RPM_PATCHING} || ${ENABLED_RPM_GA_PATCHING}; then
-    export ENV_PREFIX="centos"
+    export DIST_NAME="centos"
     export TEST_GROUP="patching_environment"
     generate_testplan >> ${TESTPLAN_RAW_FILE}
 fi
 
 if ${ENABLED_CENTOS_MASTER_PATCHING} || ${ENABLED_CENTOS_MASTER_GA_PATCHING}; then
-    export ENV_PREFIX="centos"
+    export DIST_NAME="centos"
     export TEST_GROUP="patching_master"
     generate_testplan >> ${TESTPLAN_RAW_FILE}
 fi
