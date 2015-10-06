@@ -1,9 +1,10 @@
-
 - job-template:
     name: 'fuel-plugin.{plugin_name_tox}.build'
     builders:
       - shell:
           tox
+      - shell:
+          !include-raw-escape './builders/rpm_check.sh'
     description: '<a href=https://github.com/stackforge/{plugin_repo}>Build {plugin_name} plugin from fuel-plugins project</a>'
     logrotate:
       numToKeep: 10
@@ -53,7 +54,9 @@
     name: 'fuel-plugin.{plugin_name}.build'
     builders:
       - shell:
-          !include-raw-escape './builders/build-zabbix-plugin.sh'
+          !include-raw-escape './builders/build-plugin.sh'
+      - shell:
+          !include-raw-escape './builders/rpm_check.sh'
     description: '<a href=https://github.com/stackforge/{plugin_repo}>Build {plugin_name} plugin from fuel-plugins project</a>'
     logrotate:
       numToKeep: 10
