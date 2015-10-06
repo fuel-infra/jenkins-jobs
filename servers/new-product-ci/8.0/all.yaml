@@ -86,9 +86,8 @@
       - stackforge:
           branch: 'master'
           repo: fuel-main
-# FIXME: timer
-#    triggers:
-#      - timed: 'H */6 * * *'
+    triggers:
+      - timed: 'H 1,7,13,19 * * *'
     wrappers:
       - timeout:
           timeout: 120
