@@ -1,6 +1,28 @@
 #!/bin/bash
 set -ex
 
+VIRTUAL_ENV="/home/jenkins/venv-nailgun-tests-fpb3"
+if [ -f "${VIRTUAL_ENV}/bin/activate" ]; then
+  source "${VIRTUAL_ENV}/bin/activate"
+  echo "Python virtual env exist"
+  git clone git://github.com/stackforge/fuel-plugins.git
+  pushd .
+  cd fuel-plugins
+  cd fuel_plugin_builder
+  pip install .
+  popd
+else
+  rm -rf "${VIRTUAL_ENV}"
+  virtualenv --system-site-packages  "${VIRTUAL_ENV}"
+  source "${VIRTUAL_ENV}/bin/activate"
+  git clone git://github.com/stackforge/fuel-plugins.git
+  pushd .
+  cd fuel-plugins
+  cd fuel_plugin_builder
+  pip install .
+  popd
+fi
+
 if [[ $GERRIT_REFNAME == *"refs/tags/"* ]]
 then
     find . -name '*.erb' -print0 | xargs -0 -P1 -L1 -I '%' erb -P -x -T '-' % | ruby -c
@@ -23,3 +45,6 @@ else
     echo "Description string: Not a tag creation event"
     exit 1
 fi
+
+deactivate
+
