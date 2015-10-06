@@ -41,6 +41,41 @@
           default: 'none'
           description: Refspecs for commits in fuel-main gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: nailgun_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-web gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: astute_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-astute gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: ostf_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-ostf gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuellib_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-library gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: python_fuelclient_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in python-fuelclient gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuel_agent_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-agent gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuel_nailgun_agent_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-nailgun-agent gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
     publishers:
       - archive:
           allow-empty: false
