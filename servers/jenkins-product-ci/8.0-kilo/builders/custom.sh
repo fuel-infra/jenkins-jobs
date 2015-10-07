@@ -43,12 +43,7 @@ export FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}"
 TARGET="snapshots/8.0-2015-09-02-000000"
 export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${TARGET}"
 
-# define closest stable centos mirror snapshot
-# http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/$(PRODUCT_NAME)$(PRODUCT_VERSION)-centos6-fuel/os/x86_64
-LATEST_TARGET_CENTOS=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos8.0-centos6-fuel/os.target.txt" | head -1)
-export MIRROR_FUEL="${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos8.0-centos6-fuel/${LATEST_TARGET_CENTOS}/x86_64"
-
-echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT} and ${MIRROR_FUEL}"
+echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
 
 #########################################
 
