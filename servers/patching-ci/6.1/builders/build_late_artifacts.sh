@@ -32,7 +32,7 @@ echo "${NOARTIFACT_MIRROR}"
 if [ -z "${NOARTIFACT_MIRROR}" ]; then
   echo "EXTRA_RPM_REPOS=${EXTRA_RPM_REPOS}"
 else
-  EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS} noartifacts-base,${NOARTIFACT_MIRROR}/mos6.1/base/ noartifacts-proposed,${NOARTIFACT_MIRROR}/mos6.1/proposed/ noartifacts-security,${NOARTIFACT_MIRROR}/mos6.1/security/"
+  EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS} noartifacts-proposed,${NOARTIFACT_MIRROR}/mos6.1/proposed/ noartifacts-security,${NOARTIFACT_MIRROR}/mos6.1/security/"
   echo "EXTRA_RPM_REPOS=${EXTRA_RPM_REPOS}"
 fi
 
