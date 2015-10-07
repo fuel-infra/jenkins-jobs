@@ -1,0 +1,67 @@
+- job:
+    name: cleaner
+    builders:
+      - copyartifact:
+          project: 'cleaner-on-labels'
+          filter: jobs.txt
+          which-build: workspace-latest
+      - shell:
+          !include-raw './builders/cleaner.py'
+    description: |
+      This job will iterate through a list of available environments for a specified<br>
+      VENV location, using dos.py command. Check if environment is not the last one<br>
+      used for specific build and is old enought to be removed.<br><br>
+      VENV parameter - environment where dos.py is executed<br>
+      Minimal times parameters (in hours, for different job types): STAGING, SYSTEM_TEST, OTHER.
+    concurrent: true
+    parameters:
+        - node:
+            name: NODE
+            allowed-multiselect: true
+        - bool:
+            name: 'DEVOPS_2_9'
+            default: true
+        - bool:
+            name: 'DEVOPS_2_5'
+            default: false
+        - string:
+            name: STAGING
+            default: '168'
+        - string:
+            name: SYSTEMTEST
+            default: '168'
+        - string:
+            name: OTHER
+            default: '168'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 5
+
+- job:
+    name: 'cleaner-on-labels'
+    node: 'runner'
+    parameters:
+      - string:
+          name: 'LABEL'
+          default: 'cleanable'
+    triggers:
+      - timed: '0 */5 * * *'
+    builders:
+      - shell:
+          !include-raw './builders/cleaner_jobs.py'
+      - trigger-builds:
+        - project: 'cleaner'
+          parameter-factories:
+            - factory: allnodesforlabel
+              node-label: $LABEL
+              name: 'NODE'
+      - shell:
+          !include-raw './builders/cleaner_dups.py'
+    publishers:
+      - archive:
+          artifacts: '*.txt'
+          allow-empty: 'true'
+          fingerprint: true
+      - email:
+          recipients: devops+alert@mirantis.com
