@@ -4,7 +4,7 @@ set -ex
 
 echo STARTED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" > ci_status_params.txt
 
-TEST_ISO_JOB_URL="${JENKINS_URL}job/7.0.test_all/"
+TEST_ISO_JOB_URL="https://product-ci.infra.mirantis.net/job/7.0.test_all/"
 MIRROR_HOST="http://mirror-pkgs.vm.mirantis.net/pkgs/"
 
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
