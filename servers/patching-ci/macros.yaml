@@ -71,7 +71,7 @@
           basedir: osci-mirrors
           url: ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/mirrors
           branches:
-            - origin/master
+            - 'origin/{branch}'
           wipe-workspace: false
 
 - scm:

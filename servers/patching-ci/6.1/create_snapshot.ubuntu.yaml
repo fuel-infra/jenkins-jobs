@@ -39,7 +39,8 @@
           !include-raw builders/push_updates_candidate.sh
 
     scm:
-      - osci-mirrors
+      - osci-mirrors:
+          branch: 'stable/6.1'
       - trsync:
           branch: 'mos_6.1'
     triggers:
