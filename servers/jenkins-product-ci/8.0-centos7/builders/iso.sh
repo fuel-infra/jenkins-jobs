@@ -38,12 +38,40 @@ export FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}"
 # No staging in 8.0
 export USE_MIRROR=none
 
-# Fix snapshot of a mirror which has been copied from 7.0 repositories
+######## Get node location to choose closer mirror ###############
+# We are building everything with USE_MIRROR=none
 
-TARGET="snapshots/8.0-2015-09-02-000000"
-export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${TARGET}"
+# Let's try use closest perestroika mirror location
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION=${LOCATION_FACT:-msk}
 
-echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
+case "${LOCATION}" in
+    srt)
+        LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
+        ;;
+    msk)
+        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+        ;;
+    hrk)
+        LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
+        ;;
+    poz|bud|bud-ext|cz)
+        LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
+        ;;
+    mnv)
+        LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
+        ;;
+    *)
+        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+esac
+
+# define closest stable ubuntu mirror snapshot
+LATEST_TARGET_UBUNTU=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/8.0.target.txt" | head -1)
+# since in fuel-main MIRROR_MOS_UBUNTU?=perestroika-repo-tst.infra.mirantis.net, we need to remove http://
+export MIRROR_MOS_UBUNTU="${LATEST_MIRROR_ID_URL#http://}"
+export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET_UBUNTU}"
+
+echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU}${MIRROR_MOS_UBUNTU_ROOT} and ${MIRROR_FUEL}"
 
 process_artifacts() {
     local ARTIFACT="$1"
