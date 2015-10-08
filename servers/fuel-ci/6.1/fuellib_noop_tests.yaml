@@ -11,7 +11,7 @@
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/stable/6.1'
     properties:
       - heavy-job:
           weight: 1
