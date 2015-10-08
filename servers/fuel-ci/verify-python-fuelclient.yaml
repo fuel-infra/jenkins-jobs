@@ -28,9 +28,6 @@
           option: category
     publishers:
       - 'email-{email-type}'
-      - junit:
-          keep-long-stdio: false
-          results: '**/fuelclient*.xml'
     scm:
       - git:
           branches:
