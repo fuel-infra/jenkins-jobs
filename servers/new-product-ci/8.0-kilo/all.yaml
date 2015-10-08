@@ -49,6 +49,13 @@
           mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
       - trigger-parameterized-builds:
 
+        - project: 'trigger-external-events'
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            ISO_VERSION=8.0-kilo
+            BUILD=fuel-kilo-8.0-$BUILD_NUMBER
+            REPORTED_JOB_URL=$BUILD_URL
+
         - project: 'fuel_ci-status_reports'
           condition: UNSTABLE_OR_BETTER
           property-file: ci_status_params.txt
@@ -158,10 +165,3 @@
           allow-empty: false
           artifacts: '*.txt'
           latest-only: false
-      - trigger-parameterized-builds:
-        - project: 'trigger-external-events'
-          condition: UNSTABLE_OR_BETTER
-          predefined-parameters: |
-            ISO_VERSION=8.0-kilo
-            BUILD=fuel-kilo-8.0-$BUILD_NUMBER
-            REPORTED_JOB_URL=$BUILD_URL
