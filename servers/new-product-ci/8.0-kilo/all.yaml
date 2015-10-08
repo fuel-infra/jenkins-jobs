@@ -158,3 +158,10 @@
           allow-empty: false
           artifacts: '*.txt'
           latest-only: false
+      - trigger-parameterized-builds:
+        - project: 'trigger-external-events'
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            ISO_VERSION=8.0-kilo
+            BUILD=fuel-kilo-8.0-$BUILD_NUMBER
+            REPORTED_JOB_URL=$BUILD_URL
