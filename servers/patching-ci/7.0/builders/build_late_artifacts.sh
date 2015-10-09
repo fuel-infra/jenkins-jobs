@@ -32,7 +32,7 @@ echo "${NOARTIFACT_MIRROR}"
 if [ -z "${NOARTIFACT_MIRROR}" ]; then
   echo "EXTRA_RPM_REPOS=${EXTRA_RPM_REPOS}"
 else
-  EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS} noartifacts-proposed,${NOARTIFACT_MIRROR}"
+  EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS} noartifacts-proposed,${NOARTIFACT_MIRROR}/x86_64"
   echo "EXTRA_RPM_REPOS=${EXTRA_RPM_REPOS}"
 fi
 
