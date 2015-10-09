@@ -13,6 +13,7 @@ ARTIFACT_LIST_URL="$(cat ${ARTIFACT_LIST_URL_ARTIFACT})"
 
 SSH_OPTS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 ssh ${SSH_OPTS} ${USER}@${PUBLISHER_HOST} << EOF
+set -ex
 ARTIFACT_LIST="\${HOME}/late_artifacts_list.txt"
 wget -nv -O "\${ARTIFACT_LIST}" "${ARTIFACT_LIST_URL}"
 ARTIFACTS_DIR="late_artifacts_${TIMESTAMP}"
