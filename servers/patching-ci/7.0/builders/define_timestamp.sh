@@ -23,7 +23,7 @@ case $DISTRO in
     "centos-6" )
         NOARTIFACT_MIRROR_ARTIFACT="${WORKSPACE}/noartifact_mirror.txt"
         rm -f "${NOARTIFACT_MIRROR_ARTIFACT}"
-        CURRENT_PROPOSED_SNAPSHOT=$(rsync -l rsync://${REPO_HOST%% *}/mirror/mos-repos/centos/mos7.0-centos6-fuel/snapshots/proposed-latest | awk '{print $NF}')
-        echo "NOARTIFACT_MIRROR = http://${REPO_HOST%% *}/mos-repos/centos/mos7.0-centos6-fuel/snapshots/${CURRENT_PROPOSED_SNAPSHOT}" > "${NOARTIFACT_MIRROR_ARTIFACT}"
+        CURRENT_PROPOSED_SNAPSHOT=$(rsync -l rsync://${REMOTE_HOST%% *}/mirror/mos-repos/centos/mos7.0-centos6-fuel/snapshots/proposed-latest | awk '{print $NF}')
+        echo "NOARTIFACT_MIRROR = http://${REMOTE_HOST%% *}/mos-repos/centos/mos7.0-centos6-fuel/snapshots/${CURRENT_PROPOSED_SNAPSHOT}" > "${NOARTIFACT_MIRROR_ARTIFACT}"
         ;;
 esac
