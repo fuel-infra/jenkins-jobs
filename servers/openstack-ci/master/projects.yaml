@@ -58,7 +58,7 @@
     deb-holdback-dist-name: 'mos-master-holdback'
     ##################################
     is-updates: ''
-    is-disabled: ''
+    is-disabled: 'true'
     jobs:
       - 'master.mos.rpm'
       - 'master.mos.deb'
