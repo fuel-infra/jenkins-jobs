@@ -20,7 +20,8 @@
             DISPLAY_NAME=Check deb package for installation and simple testing
             REQUEST_TYPE=Trusty
     parameters:
-      - packtest:
+      - packtest
+      - iso-magnet-link-7.0
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
