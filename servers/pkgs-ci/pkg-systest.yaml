@@ -49,12 +49,14 @@
           name: ISO_JOB_NAME
           default: '{mos_version}.test_all'
     scm:
-      - stackforge:
+      - upstream:
           branch: 'master'
           repo: fuel-main
-      - stackforge:
+          fuel-namespace: '{fuel-namespace}'
+      - upstream:
           branch: 'master'
           repo: fuel-qa
+          fuel-namespace: '{fuel-namespace}'
       - fuel-infra:
           scm-user: '{scm-user}'
           scm-repo: '{scm-ci-status-client-repo}'

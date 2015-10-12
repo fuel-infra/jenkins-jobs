@@ -108,10 +108,10 @@
           wipe-workspace: False
 
 - scm:
-    name: stackforge
+    name: upstream
     scm:
       - git:
-          url: 'https://git.openstack.org/stackforge/{repo}.git'
+          url: 'https://git.openstack.org/{fuel-namespace}/{repo}.git'
           branches:
             - 'origin/{branch}'
           basedir: '{repo}'

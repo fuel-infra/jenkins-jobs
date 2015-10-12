@@ -30,6 +30,8 @@
     scm-branch: 'feature/new-build-system'
     scm-basedir: ''
 
+    fuel-namespace: 'stackforge'
+
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/master'
 
