@@ -46,13 +46,13 @@
             - none
       - string:
           name: fuelmain_gerrit_commit
-          default: 'refs/changes/19/227819/9'
+          default: 'none'
           description: Refspecs for commits in fuel-main gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
       - string:
           name: PATCHING_CI
           default: '1'
-          description: Build fuel packages locally( 1 - yes; 0 - use from upstream )
+          description: Build fuel packages locally( 0 - yes; 1 - use fuel packages from upstream )
       - string:
           name: EXTRA_RPM_REPOS
           default: 'security,http://mirror.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel/security/x86_64/ updates,http://mirror.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel/updates/x86_64/'
