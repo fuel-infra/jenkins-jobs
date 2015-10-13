@@ -81,12 +81,12 @@
       - 'master':
           distro: 'centos7'
           pkg_type: 'rpm'
-          spec_path_prefix: '/rpm'
+          spec_path_prefix: '/centos7'
           test_group: 'prepare_slaves_3'
       - '8.0':
-          distro: 'centos6'
+          distro: 'centos7'
           pkg_type: 'rpm'
-          spec_path_prefix: '/rpm'
+          spec_path_prefix: '/centos7'
           test_group: 'prepare_slaves_3'
     openstack_release: 'CentOS'
     <<: *common_template
