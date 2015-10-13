@@ -126,6 +126,10 @@
           echo FAILED=true >> ci_status_params
           bash build-${{IS_FUEL:+fuel-}}{pkg_type}.sh && sed -ri 's/FAILED=true/FAILED=false/' ci_status_params
 
+          # Fail job in case of package building error
+          source ci_status_params
+          ${{FAILED}} && exit 1 || exit 0
+
           rm -rf {repo-base-path}/CR-${{ZUUL_CHANGE}}
 
           # Extra parameters for publisher
