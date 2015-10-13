@@ -62,8 +62,6 @@
           !include-raw-escape builders/mos.deb.reprepro.sh
       - shell:
           !include-raw-escape builders/mos.vote.sh
-      - shell:
-          !include-raw-escape builders/mos.patching.remote.create.snapshot.deb.sh
     publishers:
       - post-tasks:
         - matches:
