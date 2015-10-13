@@ -146,8 +146,8 @@
           EOF
 
           # Fail job in case of package building error
-          source ci_status_params
-          ${{FAILED}} && exit 1 || exit 0
+          FAILED=$(awk -F= '/^FAILED=/ {{gsub(/"/,""); print $2}}' ci_status_params)
+          test "${{FAILED}}" = "true" && exit 1 || exit 0
       - trigger-builds:
           - project: '{mos_version}-pkg-publish-{os}'
             current-parameters: true
