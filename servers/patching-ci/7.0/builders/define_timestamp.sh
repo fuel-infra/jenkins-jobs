@@ -11,7 +11,8 @@ export SAVE_LATEST_DAYS=${SAVE_LATEST_DAYS:-61}
 export WARN_DATE=$(date --utc "+%Y%m%d" -d "$SAVE_LATEST_DAYS days ago")
 
 if [ -z "${TIMESTAMP}" ]; then
-    export TIMESTAMP=$(date --utc "+%Y-%m-%d-%H%M%S")
+    echo "ERROR: TIMESTAMP is empty!"
+    exit 1
 else
     # check that TIMESTAMP variable matches regexp
     echo "${TIMESTAMP}" | grep -E "^${TIMESTAMP_REGEXP}$"
