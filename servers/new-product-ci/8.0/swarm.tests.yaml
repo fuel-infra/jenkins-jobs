@@ -88,7 +88,19 @@
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'ha_neutron_destructive_2'
+         testgroup: 'ha_neutron_destructive_gre'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_destructive_vlan'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_destructive_vxlan'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
