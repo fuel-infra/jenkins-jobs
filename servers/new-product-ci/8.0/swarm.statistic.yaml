@@ -13,9 +13,8 @@
           !include-raw builders/test-reports-Testrail.sh
     node: testrail
 
-# FIXME: timers
-#    triggers:
-#      - timed: '30 20 * * *'
+    triggers:
+      - timed: '30 20 * * *'
 
     scm:
      - main-git:
