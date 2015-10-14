@@ -16,19 +16,19 @@
       - string:
           name: SYMLINK
           default: ''
-          description: 'Symlink location relative to http://mirror.fuel-infra.org/mos/ path. For example <b>snapshots/ubuntu-stable</b>'
+          description: 'Symlink location relative to every rsync root path specified on $LOCATIONS. For example <b>ubuntu/snapshots/7.0-stable</b> relative to rsync://mirror.fuel-infra.org/mos-repos/ means full symlink url <b>rsync://mirror.fuel-infra.org/mirror-sync/mos-repos/ubuntu/snapshots/7.0-stable</b>'
       - string:
           name: TARGET
           default: ''
           description: |
               Symlink target relative symlink file location.<br>
               If other symlink specified as a target, it will be dereferenced recursively.<br>
-              For example <b>ubuntu-latest</b> target for <b>snapshots/ubuntu-stable</b> symlink <br>
-              mean that symlink <b>ubuntu-stable</b> will be created in <b>snapshots</b> <br>
-              directory and it will be targeted to <b>snapshots/ubuntu-latest target</b>
+              For example <b>7.0-latest</b> target for <b>ubuntu/snapshots/7.0-stable</b> symlink <br>
+              mean that symlink <b>7.0-stable</b> will be created in <b>ubuntu/snapshots</b> <br>
+              directory and it will be targeted to <b>ubuntu/snapshots/7.0-latest target</b>
       - string:
           name: LOCATIONS
-          default: 'rsync://osci-mirror-msk.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-srt.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-kha.infra.mirantis.net/mirror-sync/mos rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync/mos rsync://mirror.seed-us1.fuel-infra.org/mirror-sync/mos rsync://mirror.seed-cz1.fuel-infra.org/mirror-sync/mos'
+          default: 'rsync://osci-mirror-msk.infra.mirantis.net/mirror-sync/mos-repos rsync://osci-mirror-srt.infra.mirantis.net/mirror-sync/mos-repos rsync://osci-mirror-kha.infra.mirantis.net/mirror-sync/mos-repos rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync/mos-repos rsync://mirror.seed-us1.fuel-infra.org/mirror-sync/mos-repos rsync://mirror.seed-cz1.fuel-infra.org/mirror-sync/mos-repos'
           description: 'List of locations to sync to'
 
     builders:
@@ -53,4 +53,5 @@
           description-for-failed: ""
       - archive:
           artifacts: '*.txt'
+          allow-empty: true
           latest-only: false
