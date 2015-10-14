@@ -1,0 +1,81 @@
+- job:
+    name: 'create-mos-compliance-reports'
+    properties:
+      - inject:
+          properties-content: |
+            GERRIT_USER=openstack-ci-jenkins
+            GERRIT_HOST=https://review.fuel-infra.org
+            SRT_MIRROR_HOST=osci-mirror-srt.infra.mirantis.net
+            MIRROR_HOST=perestroika-repo-tst.infra.mirantis.net
+            JENKINS_PRODUCT=https://product-ci.infra.mirantis.net
+            BLACKDUCK_USER=testuser@mirantis.com
+            RPM_DIST_NAME=centos6
+            SDKPATH=/home/jenkins/Export-6.1.1-SDK-V6.1/
+    builders:
+      - copyartifact:
+          project: create-mos-compliance-reports
+          filter: "projects.tar.gz"
+          target:
+          which-build: last-successful
+          build-number:
+          optional: true
+          flatten:
+          parameter-filters:
+      - shell:
+          !include-raw builders/licens_report.sh
+      - shell:
+          !include-raw builders/encryption_report.sh
+      - shell:
+          !include-raw builders/create_reports.sh
+    node: blackduck
+    description:
+      !include-raw descriptions/compliance_report.html
+    parameters:
+      - string:
+          name: RELEASE
+      - string:
+          name: BLACKDUCK_HOST
+      - choice:
+          name: UPDATES_REPO_NAME
+          choices:
+             - updates
+             - proposed
+             - security
+          description: "Which component is scan?"
+      - bool:
+          name: UPDATES
+          default:
+      - bool:
+          name: FORCE_ANALYSIS
+          default:
+      - bool:
+          name: REMOVE_PROJECTS
+          default:
+          description: ATTENTION! Run with this flag remove projects in BlackDuck and clear local storage if exist.
+                        If you want simple rescan exist projects please use FORCE_ANALYSIS parameter.
+    scm:
+      - fuel-infra:
+          scm-user: 'openstack-ci-jenkins'
+          scm-repo: 'infra/license-compliance'
+          scm-basedir: 'license-compliance'
+          scm-credentials-id: '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'
+          scm-branch: 'origin/master'
+      - fuel-infra:
+          scm-user: 'openstack-ci-jenkins'
+          scm-repo: 'infra/encryption-compliance'
+          scm-basedir: ''
+          scm-credentials-id: '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'
+          scm-branch: 'origin/master'
+    publishers:
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'fuel-build@mirantis.com'
+          send-to-individuals: false
+      - archive:
+          allow-empty: false
+          artifacts: '*.csv, projects.tar.gz'
+          latest-only: false
+    wrappers:
+       - openstack-ci-jenkins
+       - inject-passwords:
+           global: true

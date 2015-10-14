@@ -1,0 +1,16 @@
+<!-- Managed by Jenkins Job Builder -->
+<p>Automate License and Export Compliance Reporting.</p>
+
+<p>
+Workflow:
+<ol>
+  <li>Clone scripts
+      <p><a href="https://review.fuel-infra.org/#/admin/projects/infra/license-compliance">infra/license-compliance</a> and
+      <a href="https://review.fuel-infra.org/#/admin/projects/infra/encryption-compliance">infra/encryption-compliance</a></p>
+  </li>
+  <li>Create local repositories with binary and source packages;</li>
+  <li>Create License Compliance report with rpm and dpkg-deb utils;</li>
+  <li>Create Export Compliance report via Black Duck Export. For rescan exist projects use FORCE_ANALYSIS;</li>
+  <li>Merge License and Export reports;</li>
+  <li>For remove exist project in Black Duck use REMOVE_PROJECTS;</li>
+</ol>

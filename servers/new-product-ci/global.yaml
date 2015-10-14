@@ -12,3 +12,22 @@
          branches:
           - '{repobranch}'
          basedir: '{basedir}'
+
+- scm:
+    name: fuel-infra
+    scm:
+      - git:
+          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/{scm-repo}.git'
+          basedir: '{scm-basedir}'
+          credentials-id: '{scm-credentials-id}'
+          skip-tag: true
+          branches:
+            - '{scm-branch}'
+          wipe-workspace: false
+
+- wrapper:
+    name: openstack-ci-jenkins
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'
