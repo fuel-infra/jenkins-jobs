@@ -7,17 +7,6 @@ WORKSPACE="${WORKSPACE:-.}"
 TIMESTAMP_ARTIFACT="${WORKSPACE}/timestamp.txt"
 TIMESTAMP="$(cat ${TIMESTAMP_ARTIFACT})"
 
-CHANGE_REQUESTS="12211 12217"
-for CHANGE_REQUEST in $CHANGE_REQUESTS; do
-    pushd osci-mirrors
-        REMOTE="origin"
-        ORIGIN_HOST="$(git remote -v | awk -F '[:/]' '/^'${REMOTE}'.*fetch/ {print $4}')"
-        ORIGIN_PORT="$(git remote -v | awk -F '[:/]' '/^'${REMOTE}'.*fetch/ {print $5}')"
-        REF="$(ssh -p ${ORIGIN_PORT} ${ORIGIN_HOST} gerrit query --format TEXT --current-patch-set ${CHANGE_REQUEST} | awk '/ref:/ {print $NF}')"
-        git fetch ${REMOTE} ${REF} && git cherry-pick FETCH_HEAD
-    popd
-done
-
 SCRIPT_PATH="/home/jenkins"
 SSH_OPTS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 # copy scripts to publisher host
@@ -36,5 +25,5 @@ case $DISTRO in
 esac
 
 # and run script
-CMD="export TIMESTAMP=${TIMESTAMP} REMOTE_HOST="${REMOTE_HOST}"; ${SCRIPT_PATH}/prepare-repos-for-iso/${SCRIPT_NAME} ${TIMESTAMP}"
+CMD="export TIMESTAMP=${TIMESTAMP} SIGKEYID=${SIGKEYID} REMOTE_HOST=\"${REMOTE_HOST}\"; ${SCRIPT_PATH}/prepare-repos-for-iso/${SCRIPT_NAME} ${TIMESTAMP}"
 ssh ${SSH_OPTS} ${USER}@${PUBLISHER_HOST} ${CMD}

@@ -2,15 +2,6 @@
 
 set -xe
 
-pushd osci-mirrors
-    CHANGE_REQUEST=12217
-    REMOTE="origin"
-    ORIGIN_HOST="$(git remote -v | awk -F '[:/]' '/^'${REMOTE}'.*fetch/ {print $4}')"
-    ORIGIN_PORT="$(git remote -v | awk -F '[:/]' '/^'${REMOTE}'.*fetch/ {print $5}')"
-    REF="$(ssh -p ${ORIGIN_PORT} ${ORIGIN_HOST} gerrit query --format TEXT --current-patch-set ${CHANGE_REQUEST} | awk '/ref:/ {print $NF}')"
-    git fetch ${REMOTE} ${REF} && git cherry-pick FETCH_HEAD
-popd
-
 # detect timestamp
 WORKSPACE="${WORKSPACE:-.}"
 TIMESTAMP_TARGET_ARTIFACT="${WORKSPACE}/timestamp.txt"

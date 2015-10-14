@@ -15,8 +15,8 @@
       - inject:
           properties-content: |
             REPO_BASE_PATH=/home/jenkins/pubrepos
-            SIGKEYID=1FA22B08
-            PUBLISHER_HOST=publisher01-tst.infra.mirantis.net
+            SIGKEYID=3E301371
+            PUBLISHER_HOST=perestroika-repo-tst.infra.mirantis.net
 
     parameters:
       - string:
@@ -29,8 +29,7 @@
           description: 'timestamp of snapshot to download.<br>Examples: latest, 2015-06-25-000000'
       - string:
           name: REMOTE_HOST
-          default: '172.18.186.167'
-          #default: '172.18.186.167 osci-mirror-msk.infra.mirantis.net osci-mirror-srt.infra.mirantis.net osci-mirror-kha.infra.mirantis.net osci-mirror-poz.infra.mirantis.net mirror.seed-us1.fuel-infra.org mirror.seed-cz1.fuel-infra.org'
+          default: 'perestroika-repo-tst.infra.mirantis.net osci-mirror-msk.infra.mirantis.net osci-mirror-srt.infra.mirantis.net osci-mirror-kha.infra.mirantis.net osci-mirror-poz.infra.mirantis.net mirror.seed-us1.fuel-infra.org mirror.seed-cz1.fuel-infra.org'
           description: 'List of locations to sync to'
 
     builders:
@@ -68,8 +67,8 @@
       - obs-user-credentials
 
     publishers:
-      #- email-default:
-      #    mail-to: devops+alert@mirantis.com, fuel-osci+alert@mirantis.com
+      - email-default:
+          mail-to: devops+alert@mirantis.com, fuel-osci+alert@mirantis.com
       - description-setter:
           regexp: 'Description string: (.*)'
       - archive:
