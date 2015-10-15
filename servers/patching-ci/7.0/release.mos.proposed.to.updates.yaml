@@ -31,6 +31,10 @@
           name: REMOTE_HOST
           default: 'perestroika-repo-tst.infra.mirantis.net osci-mirror-msk.infra.mirantis.net osci-mirror-srt.infra.mirantis.net osci-mirror-kha.infra.mirantis.net osci-mirror-poz.infra.mirantis.net mirror.seed-us1.fuel-infra.org mirror.seed-cz1.fuel-infra.org'
           description: 'List of locations to sync to'
+      - bool:
+          name: UPDATE_HEAD
+          default: true
+          description: 'Update head repository symlink'
 
     builders:
       - shell:
