@@ -56,7 +56,7 @@
       - email-default:
           mail-to: ci+alert@mirantis.com, fuel-build@mirantis.com
     scm:
-      - stackforge:
+      - openstack:
           branch: 'stable/5.0'
           repo: fuel-main
     wrappers:

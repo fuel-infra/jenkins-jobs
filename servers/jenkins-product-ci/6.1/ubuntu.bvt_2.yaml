@@ -32,7 +32,7 @@
             !include-raw notifications/bvt.failed
           mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
     scm:
-      - stackforge:
+      - openstack:
           branch: 'stable/6.1'
           repo: 'fuel-qa'
     wrappers:

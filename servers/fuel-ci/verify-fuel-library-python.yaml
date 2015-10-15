@@ -31,7 +31,7 @@
           remotes:
             - gerrit:
                 refspec: '{refspec}'
-                url: https://review.openstack.org/stackforge/fuel-library.git
+                url: https://review.openstack.org/openstack/fuel-library.git
           timeout: 20
           choosing-strategy: '{choosing-strategy}'
     triggers:
@@ -40,7 +40,7 @@
             - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: stackforge/fuel-library
+              project-pattern: openstack/fuel-library
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'

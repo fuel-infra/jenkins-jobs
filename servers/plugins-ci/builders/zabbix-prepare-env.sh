@@ -8,14 +8,14 @@ VIRTUAL_ENV=/home/jenkins/venv-nailgun-tests-fpb3
 if [ -f ${VIRTUAL_ENV}/bin/activate ]; then
   source ${VIRTUAL_ENV}/bin/activate
   echo "Python virtual env exist"
-  git clone git://github.com/stackforge/fuel-plugins.git
+  git clone git://github.com/openstack/fuel-plugins.git
   cd fuel-plugins
   pip install fuel-plugin-builder
 else
   rm -rf ${VIRTUAL_ENV}
   virtualenv --system-site-packages  ${VIRTUAL_ENV}
   source ${VIRTUAL_ENV}/bin/activate
-  git clone git://github.com/stackforge/fuel-plugins.git
+  git clone git://github.com/openstack/fuel-plugins.git
   cd fuel-plugins
   pip install fuel-plugin-builder
 fi

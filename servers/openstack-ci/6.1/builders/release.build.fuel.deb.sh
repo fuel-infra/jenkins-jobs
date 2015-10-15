@@ -556,14 +556,14 @@ main () {
   rm -f *.xml
 
   case $GERRIT_PROJECT in
-      "stackforge/fuel-astute" )
-          build_deb_fuel fuel-astute stackforge/fuel-astute
+      "openstack/fuel-astute" )
+          build_deb_fuel fuel-astute openstack/fuel-astute
           ;;
-      "stackforge/fuel-web" )
-          build_deb_fuel nailgun stackforge/fuel-web
+      "openstack/fuel-web" )
+          build_deb_fuel nailgun openstack/fuel-web
           ;;
-      "stackforge/fuel-library" )
-          build_deb_fuel fuel-library stackforge/fuel-library
+      "openstack/fuel-library" )
+          build_deb_fuel fuel-library openstack/fuel-library
           ;;
   esac
 

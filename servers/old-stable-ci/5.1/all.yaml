@@ -80,7 +80,7 @@
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
     scm:
-      - stackforge:
+      - openstack:
           branch: 'stable/5.1'
           repo: fuel-main
     triggers:

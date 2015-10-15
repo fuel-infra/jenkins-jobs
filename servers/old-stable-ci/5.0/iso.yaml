@@ -50,7 +50,7 @@
           property-file: magnet_link.txt
 
     scm:
-      - stackforge:
+      - openstack:
           branch: 'stable/5.0'
           repo: fuel-main
     triggers:

@@ -40,7 +40,7 @@
           condition: UNSTABLE_OR_BETTER
           property-file: mirror_staging.txt
     scm:
-      - stackforge:
+      - openstack:
           branch: 'stable/5.0'
           repo: fuel-main
       - osci-mirrors:

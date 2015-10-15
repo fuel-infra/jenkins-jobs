@@ -46,7 +46,7 @@
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL
     scm:
-      - stackforge:
+      - openstack:
           branch: 'master'
           repo: 'fuel-qa'
     wrappers:

@@ -4,7 +4,7 @@
       - shell:
           !include-raw-escape builders/verify-fuel-plugins.sh
     description: |
-      Build plugins for fuel-plugins project <a href=https://github.com/stackforge/fuel-plugins>github.com/stackforge/fuel-plugins</a>
+      Build plugins for fuel-plugins project <a href=https://github.com/openstack/fuel-plugins>github.com/openstack/fuel-plugins</a>
     logrotate:
       artifactDaysToKeep: 30
       daysToKeep: 30
@@ -35,7 +35,7 @@
           remotes:
             - gerrit:
                 refspec: '{refspec}'
-                url: https://review.openstack.org/stackforge/fuel-plugins.git
+                url: https://review.openstack.org/openstack/fuel-plugins.git
           choosing-strategy: '{choosing-strategy}'
     triggers:
       - gerrit:
@@ -43,7 +43,7 @@
             - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: stackforge/fuel-plugins
+              project-pattern: openstack/fuel-plugins
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

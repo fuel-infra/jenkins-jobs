@@ -88,7 +88,7 @@
       - email-default:
           mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
     scm:
-      - stackforge:
+      - openstack:
           branch: 'master'
           repo: fuel-main
     wrappers:

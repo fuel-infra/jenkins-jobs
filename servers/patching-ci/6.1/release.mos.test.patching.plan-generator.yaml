@@ -22,7 +22,7 @@
           default: ''
       - string:
           name: OPENSTACK_PROJECTS
-          default: '^stackforge/fuel-.*'
+          default: '^openstack/fuel-.*'
       - string:
           name: OPENSTACK_BRANCH
           default: 'stable/6.1'
@@ -78,7 +78,7 @@
     scm:
       - patching-tests
       - git:
-          url: 'https://github.com/stackforge/fuel-qa.git'
+          url: 'https://github.com/openstack/fuel-qa.git'
           branches:
             - 'origin/stable/6.1'
           skip-tag: true

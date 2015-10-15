@@ -71,7 +71,7 @@ fi
 # Checking gerrit commits for fuel-qa
 if [[ "${fuel_qa_gerrit_commit}" != "none" ]] ; then
   for commit in ${fuel_qa_gerrit_commit} ; do
-    git fetch https://review.openstack.org/stackforge/fuel-qa "${commit}" && git cherry-pick FETCH_HEAD
+    git fetch https://review.openstack.org/openstack/fuel-qa "${commit}" && git cherry-pick FETCH_HEAD
   done
 fi
 

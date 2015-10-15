@@ -4,7 +4,7 @@
     - shell:
         !include-raw './builders/merged-fuel-specs.sh'
     description: |
-      Build stackforge/fuel-specs repo on merge.
+      Build openstack/fuel-specs repo on merge.
       <p>Built specs are available under <a href="https://ci.fuel-infra.org/job/merged-fuel-specs/Fuel_Development_Specs_build_results">Fuel_Development_Specs_build_results</a> link.
     logrotate:
       artifactDaysToKeep: 30
@@ -30,7 +30,7 @@
       - git:
           branches:
             - $GERRIT_BRANCH
-          url: 'https://review.openstack.org/stackforge/fuel-specs'
+          url: 'https://review.openstack.org/openstack/fuel-specs'
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
     triggers:
@@ -39,7 +39,7 @@
             - change-merged-event
           projects:
             - project-compare-type: PLAIN
-              project-pattern: 'stackforge/fuel-specs'
+              project-pattern: 'openstack/fuel-specs'
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

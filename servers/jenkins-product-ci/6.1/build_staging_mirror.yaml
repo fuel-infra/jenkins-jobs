@@ -68,7 +68,7 @@
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
     scm:
-      - stackforge:
+      - openstack:
           branch: 'stable/6.1'
           repo: fuel-main
       - osci-mirrors

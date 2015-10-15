@@ -19,7 +19,7 @@
           allowed-multiselect: true
       - string:
           name: REQS_PATH
-          default: 'https://raw.githubusercontent.com/stackforge/fuel-qa/master/fuelweb_test/requirements.txt'
+          default: 'https://raw.githubusercontent.com/openstack/fuel-qa/master/fuelweb_test/requirements.txt'
       - string:
           name: VENV_PATH
           default: '/home/jenkins/venv-nailgun-tests-2.9'

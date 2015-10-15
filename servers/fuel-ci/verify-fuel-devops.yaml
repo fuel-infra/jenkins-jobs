@@ -4,7 +4,7 @@
       - shell:
           !include-raw-escape builders/verify-fuel-devops.sh
     description: |
-      Runs 'tox -v' for stackforge/fuel-devops repo
+      Runs 'tox -v' for openstack/fuel-devops repo
     logrotate:
       artifactDaysToKeep: 30
       daysToKeep: 30
@@ -21,7 +21,7 @@
           branches:
             - $GERRIT_BRANCH
           refspec: '{refspec}'
-          url: 'https://review.openstack.org/stackforge/fuel-devops'
+          url: 'https://review.openstack.org/openstack/fuel-devops'
           choosing-strategy: '{choosing-strategy}'
 
     triggers:
@@ -31,7 +31,7 @@
             - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: 'stackforge/fuel-devops'
+              project-pattern: 'openstack/fuel-devops'
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

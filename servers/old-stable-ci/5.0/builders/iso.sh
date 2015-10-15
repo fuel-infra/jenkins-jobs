@@ -2,11 +2,11 @@ export PATH=/bin:/usr/bin:/sbin:/usr/sbin:$PATH
 
 release=5.0.3
 
-export FUELLIB_REPO=https://github.com/stackforge/fuel-library.git
-export NAILGUN_REPO=https://github.com/stackforge/fuel-web.git
-export ASTUTE_REPO=https://github.com/stackforge/fuel-astute.git
-export OSTF_REPO=https://github.com/stackforge/fuel-ostf.git
-export FUELMAIN_REPO=https://github.com/stackforge/fuel-main.git
+export FUELLIB_REPO=https://github.com/openstack/fuel-library.git
+export NAILGUN_REPO=https://github.com/openstack/fuel-web.git
+export ASTUTE_REPO=https://github.com/openstack/fuel-astute.git
+export OSTF_REPO=https://github.com/openstack/fuel-ostf.git
+export FUELMAIN_REPO=https://github.com/openstack/fuel-main.git
 
 # Available choises: msk srt usa hrk none
 export USE_MIRROR=msk

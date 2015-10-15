@@ -5,7 +5,7 @@
           tox
       - shell:
           !include-raw-escape './builders/rpm_check.sh'
-    description: '<a href=https://github.com/stackforge/{plugin_repo}>Build {plugin_name} plugin from fuel-plugins project</a>'
+    description: '<a href=https://github.com/openstack/{plugin_repo}>Build {plugin_name} plugin from fuel-plugins project</a>'
     logrotate:
       numToKeep: 10
     node: plugins-ci
@@ -19,13 +19,13 @@
             - $GERRIT_BRANCH
           name: ''
           refspec: $GERRIT_REFSPEC
-          url: 'https://review.openstack.org/stackforge/{plugin_repo}'
+          url: 'https://review.openstack.org/openstack/{plugin_repo}'
           choosing-strategy: gerrit
     triggers:
       - gerrit:
           projects:
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/{plugin_repo}'
+              project-pattern: 'openstack/{plugin_repo}'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '**'
@@ -57,7 +57,7 @@
           !include-raw-escape './builders/build-plugin.sh'
       - shell:
           !include-raw-escape './builders/rpm_check.sh'
-    description: '<a href=https://github.com/stackforge/{plugin_repo}>Build {plugin_name} plugin from fuel-plugins project</a>'
+    description: '<a href=https://github.com/openstack/{plugin_repo}>Build {plugin_name} plugin from fuel-plugins project</a>'
     logrotate:
       numToKeep: 10
     node: plugins-ci
@@ -71,13 +71,13 @@
             - $GERRIT_BRANCH
           name: ''
           refspec: $GERRIT_REFSPEC
-          url: 'https://review.openstack.org/stackforge/{plugin_repo}'
+          url: 'https://review.openstack.org/openstack/{plugin_repo}'
           choosing-strategy: gerrit
     triggers:
       - gerrit:
           projects:
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/{plugin_repo}'
+              project-pattern: 'openstack/{plugin_repo}'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '**'

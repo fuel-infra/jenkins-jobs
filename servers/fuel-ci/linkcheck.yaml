@@ -69,15 +69,15 @@
     jobs:
       - '{prefix}-linkcheck':
           prefix: 'fuel-web'
-          url: 'https://review.openstack.org/stackforge/fuel-web'
-          project-pattern: 'stackforge/fuel-web'
+          url: 'https://review.openstack.org/openstack/fuel-web'
+          project-pattern: 'openstack/fuel-web'
           requirements: 'nailgun/test-requirements.txt'
           exclude_regex: 'working|redirected'
           makedir: 'docs'
       - '{prefix}-linkcheck':
           prefix: 'fuel-docs'
-          url: 'https://review.openstack.org/stackforge/fuel-docs'
-          project-pattern: 'stackforge/fuel-docs'
+          url: 'https://review.openstack.org/openstack/fuel-docs'
+          project-pattern: 'openstack/fuel-docs'
           requirements: 'requirements.txt'
           exclude_regex: 'ok|redirect'
           makedir: '.'

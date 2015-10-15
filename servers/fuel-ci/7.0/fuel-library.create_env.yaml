@@ -42,7 +42,7 @@
 
     scm:
       - git:
-          url: 'https://git.openstack.org/stackforge/fuel-qa.git'
+          url: 'https://git.openstack.org/openstack/fuel-qa.git'
           branches:
             - $SHA
           basedir: fuel-qa

@@ -49,7 +49,7 @@
           remotes:
             - gerrit:
                 refspec: '{refspec}'
-                url: https://review.openstack.org/stackforge/fuel-web.git
+                url: https://review.openstack.org/openstack/fuel-web.git
           choosing-strategy: '{choosing-strategy}'
     triggers:
       - gerrit:
@@ -57,7 +57,7 @@
             - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: stackforge/fuel-web
+              project-pattern: openstack/fuel-web
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'

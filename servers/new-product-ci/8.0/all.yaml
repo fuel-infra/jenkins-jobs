@@ -83,7 +83,7 @@
           trigger-with-no-params: true
 
     scm:
-      - stackforge:
+      - openstack:
           branch: 'master'
           repo: fuel-main
     triggers:

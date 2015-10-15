@@ -21,7 +21,7 @@ export ARTS_DIR=${WORKSPACE}/artifacts
 # Checking gerrit commits for fuel-main
 if [ "$fuelmain_gerrit_commit" != "none" ] ; then
   for commit in $fuelmain_gerrit_commit ; do
-    git fetch https://review.openstack.org/stackforge/fuel-main $commit && git cherry-pick FETCH_HEAD || false
+    git fetch https://review.openstack.org/openstack/fuel-main $commit && git cherry-pick FETCH_HEAD || false
   done
 fi
 

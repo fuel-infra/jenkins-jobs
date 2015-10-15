@@ -1,8 +1,8 @@
 - job:
-    name: stackforge-verify-fuel-web
+    name: openstack-verify-fuel-web
     builders:
         - shell:
-            !include-raw './builders/stackforge-verify-fuel-web.sh'
+            !include-raw './builders/openstack-verify-fuel-web.sh'
     concurrent: true
     description: |
         Test requests for fuel-web repository <p>Uses venv with python2.6
@@ -39,7 +39,7 @@
             branches:
                 - $GERRIT_BRANCH
             refspec: $GERRIT_REFSPEC
-            url: 'https://review.openstack.org/stackforge/fuel-web'
+            url: 'https://review.openstack.org/openstack/fuel-web'
             choosing-strategy: gerrit
     wrappers:
         - timeout:
@@ -55,7 +55,7 @@
                 - patchset-created-event
             projects:
                 - project-compare-type: PLAIN
-                  project-pattern: 'stackforge/fuel-web'
+                  project-pattern: 'openstack/fuel-web'
                   branches:
                     - branch-compare-type: PLAIN
                       branch-pattern: 'stable/4.1'

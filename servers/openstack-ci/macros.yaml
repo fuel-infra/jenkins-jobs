@@ -234,7 +234,7 @@
     name: fuel-qa
     scm:
       - git:
-          url: 'http://git.openstack.org/stackforge/fuel-qa.git'
+          url: 'http://git.openstack.org/openstack/fuel-qa.git'
           basedir: 'fuel-qa'
           branches:
             - '{scm-branch}'

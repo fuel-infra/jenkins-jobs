@@ -26,7 +26,7 @@
             - change-merged-event
           projects:
             - project-compare-type: ANT
-              project-pattern: 'stackforge/fuel**'
+              project-pattern: 'openstack/fuel**'
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

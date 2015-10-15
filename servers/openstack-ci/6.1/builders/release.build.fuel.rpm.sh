@@ -494,23 +494,23 @@ main () {
   rm -f *.xml
 
   case $GERRIT_PROJECT in
-      "stackforge/fuel-ostf" )
-          build_rpm_fuel fuel-ostf stackforge/fuel-ostf specs/fuel-ostf.spec
+      "openstack/fuel-ostf" )
+          build_rpm_fuel fuel-ostf openstack/fuel-ostf specs/fuel-ostf.spec
           ;;
-      "stackforge/python-fuelclient" )
-          build_rpm_fuel python-fuelclient stackforge/python-fuelclient specs/python-fuelclient.spec
+      "openstack/python-fuelclient" )
+          build_rpm_fuel python-fuelclient openstack/python-fuelclient specs/python-fuelclient.spec
           ;;
-      "stackforge/fuel-astute" )
-          build_rpm_fuel astute stackforge/fuel-astute specs/astute.spec
+      "openstack/fuel-astute" )
+          build_rpm_fuel astute openstack/fuel-astute specs/astute.spec
           ;;
-      "stackforge/fuel-web" )
-          build_rpm_fuel nailgun stackforge/fuel-web specs/nailgun.spec
+      "openstack/fuel-web" )
+          build_rpm_fuel nailgun openstack/fuel-web specs/nailgun.spec
           ;;
-      "stackforge/fuel-library" )
-          build_rpm_fuel fuel-library6.1 stackforge/fuel-library specs/fuel-library6.1.spec
+      "openstack/fuel-library" )
+          build_rpm_fuel fuel-library6.1 openstack/fuel-library specs/fuel-library6.1.spec
           ;;
-      "stackforge/fuel-main" )
-          build_rpm_fuel fuel-main stackforge/fuel-main specs/fuel-main.spec
+      "openstack/fuel-main" )
+          build_rpm_fuel fuel-main openstack/fuel-main specs/fuel-main.spec
           ;;
   esac
 

@@ -35,7 +35,7 @@
       - git:
           branches:
             - $GERRIT_BRANCH
-          url: 'https://review.openstack.org/stackforge/fuel-web'
+          url: 'https://review.openstack.org/openstack/fuel-web'
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
     triggers:
@@ -45,7 +45,7 @@
               - patchset-created-event
             projects:
               - project-compare-type: PLAIN
-                project-pattern: 'stackforge/fuel-web'
+                project-pattern: 'openstack/fuel-web'
                 branches:
                   - branch-compare-type: ANT
                     branch-pattern: '**'

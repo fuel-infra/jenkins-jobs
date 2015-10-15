@@ -24,7 +24,7 @@
           remotes:
             - gerrit:
                 refspec: $GERRIT_REFSPEC
-                url: https://review.openstack.org/stackforge/fuel-qa.git
+                url: https://review.openstack.org/openstack/fuel-qa.git
           choosing-strategy: gerrit
     triggers:
       - timed: 'H 2 * * *'
@@ -33,7 +33,7 @@
             - patchset-created-event
           projects:
             - project-compare-type: PLAIN
-              project-pattern: stackforge/fuel-qa
+              project-pattern: openstack/fuel-qa
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

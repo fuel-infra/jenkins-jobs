@@ -42,7 +42,7 @@
             example: fuel-community-8.0-13-2015-09-10_05-25-45
     scm:
       - git:
-          url: 'https://git.openstack.org/stackforge/fuel-qa.git'
+          url: 'https://git.openstack.org/openstack/fuel-qa.git'
           branches:
             - 'origin/stable/7.0'
     publishers:

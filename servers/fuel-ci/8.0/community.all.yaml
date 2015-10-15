@@ -66,7 +66,7 @@
             REPORTED_JOB_URL=$BUILD_URL
     scm:
       - git:
-          url: 'https://git.openstack.org/stackforge/fuel-main.git'
+          url: 'https://git.openstack.org/openstack/fuel-main.git'
           branches:
             - 'origin/master'
     triggers:

@@ -20,7 +20,7 @@
           default: ''
       - string:
           name: OPENSTACK_PROJECTS
-          default: '^stackforge/fuel-.*'
+          default: '^openstack/fuel-.*'
       - string:
           name: OPENSTACK_BRANCH
           default: 'stable/6.1'

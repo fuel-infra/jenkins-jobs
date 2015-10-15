@@ -4,7 +4,7 @@
       - shell:
           !include-raw-escape builders/verify-fuel-nailgun-agent.sh
     description: |
-      Test requests for <a href=https://github.com/stackforge/fuel-nailgun-agent>fuel-nailgun-agent</a>
+      Test requests for <a href=https://github.com/openstack/fuel-nailgun-agent>fuel-nailgun-agent</a>
 
       Uses rvm with ruby1.8 and ruby1.9
     logrotate:
@@ -33,7 +33,7 @@
           remotes:
             - gerrit:
                 refspec: '{refspec}'
-                url: https://review.openstack.org/stackforge/fuel-nailgun-agent.git
+                url: https://review.openstack.org/openstack/fuel-nailgun-agent.git
           choosing-strategy: '{choosing-strategy}'
     triggers:
       - gerrit:
@@ -41,7 +41,7 @@
             - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: stackforge/fuel-nailgun-agent
+              project-pattern: openstack/fuel-nailgun-agent
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

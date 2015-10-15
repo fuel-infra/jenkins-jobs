@@ -21,7 +21,7 @@
           branches:
             - $GERRIT_BRANCH
           refspec: $GERRIT_REFSPEC
-          url: 'https://review.openstack.org/stackforge/fuel-stats'
+          url: 'https://review.openstack.org/openstack/fuel-stats'
           choosing-strategy: gerrit
     triggers:
       - timed: 'H 2 * * *'
@@ -30,7 +30,7 @@
             - patchset-created-event
           projects:
             - project-compare-type: PLAIN
-              project-pattern: 'stackforge/fuel-stats'
+              project-pattern: 'openstack/fuel-stats'
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

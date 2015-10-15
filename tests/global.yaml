@@ -7,7 +7,7 @@
     name: main-git
     scm:
       - git:
-         url: 'https://git.openstack.org/stackforge/{reponame}.git'
+         url: 'https://git.openstack.org/openstack/{reponame}.git'
          branches:
           - '{repobranch}'
 

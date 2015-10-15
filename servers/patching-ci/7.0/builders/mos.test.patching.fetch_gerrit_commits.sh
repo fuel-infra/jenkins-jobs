@@ -17,7 +17,7 @@ fi
 if [[ "${fuelqa_gerrit_commit}" != "none" && -d "${WORKSPACE}/fuel-qa/" ]]; then
    pushd "${WORKSPACE}/fuel-qa/"
    for commit in ${fuelqa_gerrit_commit} ; do
-       git fetch "https://review.openstack.org/stackforge/fuel-qa" "${commit}" && git cherry-pick FETCH_HEAD
+       git fetch "https://review.openstack.org/openstack/fuel-qa" "${commit}" && git cherry-pick FETCH_HEAD
    done
    popd
 fi

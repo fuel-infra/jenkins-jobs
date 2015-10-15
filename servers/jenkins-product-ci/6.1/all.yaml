@@ -81,7 +81,7 @@
             UPSTREAM_BUILD_NUMBER=$BUILD_NUMBER
             BUILD_MIRROR_URL=$BUILD_MIRROR_URL
     scm:
-      - stackforge:
+      - openstack:
           branch: 'stable/6.1'
           repo: fuel-main
     wrappers:

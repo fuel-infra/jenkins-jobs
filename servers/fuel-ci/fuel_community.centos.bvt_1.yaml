@@ -53,7 +53,7 @@
               - fuel-main
     scm:
       - git:
-          url: 'https://git.openstack.org/stackforge/$TESTS_REPO.git'
+          url: 'https://git.openstack.org/openstack/$TESTS_REPO.git'
           branches:
             - 'origin/$FUEL_MAIN_BRANCH'
     publishers:

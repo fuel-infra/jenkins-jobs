@@ -6,7 +6,7 @@
           tox
       - shell:
           !include-raw-escape './builders/rpm_check.sh'
-    description: '<a href=https://github.com/stackforge/{plugin_repo}>Build {plugin_name} plugin when a new tag is created and start system tests.</a>'
+    description: '<a href=https://github.com/openstack/{plugin_repo}>Build {plugin_name} plugin when a new tag is created and start system tests.</a>'
     logrotate:
       numToKeep: 10
     node: plugins-ci
@@ -20,7 +20,7 @@
             - $GERRIT_REFNAME
           name: ''
           refspec: $GERRIT_REFNAME
-          url: 'https://review.openstack.org/stackforge/{plugin_repo}'
+          url: 'https://review.openstack.org/openstack/{plugin_repo}'
           choosing-strategy: gerrit
           clean:
             before: true
@@ -30,7 +30,7 @@
       - gerrit:
           projects:
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/{plugin_repo}'
+              project-pattern: 'openstack/{plugin_repo}'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '**'
@@ -56,7 +56,7 @@
           !include-raw-escape './builders/build-plugin-from-tag.sh'
       - shell:
           !include-raw-escape './builders/rpm_check.sh'
-    description: '<a href=https://github.com/stackforge/{plugin_repo}>Build {plugin_name} plugin when a new tag is created and start system tests.</a>'
+    description: '<a href=https://github.com/openstack/{plugin_repo}>Build {plugin_name} plugin when a new tag is created and start system tests.</a>'
     logrotate:
       numToKeep: 10
     node: plugins-ci
@@ -70,7 +70,7 @@
             - $GERRIT_REFNAME
           name: ''
           refspec: $GERRIT_REFNAME
-          url: 'https://review.openstack.org/stackforge/{plugin_repo}'
+          url: 'https://review.openstack.org/openstack/{plugin_repo}'
           choosing-strategy: gerrit
           clean:
             before: true
@@ -80,7 +80,7 @@
       - gerrit:
           projects:
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/{plugin_repo}'
+              project-pattern: 'openstack/{plugin_repo}'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '**'

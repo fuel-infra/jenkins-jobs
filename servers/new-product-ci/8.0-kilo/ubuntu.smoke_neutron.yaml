@@ -38,7 +38,7 @@
             !include-raw notifications/smoke.failed
           mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
     scm:
-      - stackforge:
+      - openstack:
           branch: 'master'
           repo: 'fuel-qa'
     wrappers:

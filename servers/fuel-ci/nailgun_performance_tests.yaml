@@ -24,7 +24,7 @@
           artifacts: results/tests/*, results/last/*, results/results/*, nailgun/nailgun_perf_test_report.csv, nailgun/failed_tests.txt
     scm:
       - git:
-          url: https://review.openstack.org/stackforge/fuel-web.git
+          url: https://review.openstack.org/openstack/fuel-web.git
           branches:
             - '*/master'
     triggers:
@@ -70,7 +70,7 @@
           remotes:
             - gerrit:
                 refspec: $GERRIT_REFSPEC
-                url: https://review.openstack.org/stackforge/fuel-web.git
+                url: https://review.openstack.org/openstack/fuel-web.git
           choosing-strategy: gerrit
     triggers:
       - gerrit:
@@ -78,7 +78,7 @@
             - patchset-created-event
           projects:
             - project-compare-type: PLAIN
-              project-pattern: stackforge/fuel-web
+              project-pattern: openstack/fuel-web
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

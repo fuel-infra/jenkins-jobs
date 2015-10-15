@@ -89,7 +89,7 @@
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL
     scm:
-      - stackforge:
+      - openstack:
           branch: 'stable/7.0'
           repo: fuel-main
     wrappers:

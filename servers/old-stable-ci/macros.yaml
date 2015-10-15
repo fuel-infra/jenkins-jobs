@@ -95,10 +95,10 @@
 # Section: SCM
 ########################################################################
 - scm:
-    name: stackforge
+    name: openstack
     scm:
       - git:
-          url: 'https://git.openstack.org/stackforge/{repo}.git'
+          url: 'https://git.openstack.org/openstack/{repo}.git'
           branches:
             - 'origin/{branch}'
           wipe-workspace: false

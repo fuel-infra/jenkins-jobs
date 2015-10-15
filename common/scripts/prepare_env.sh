@@ -14,7 +14,7 @@ function update_devops () {
   if [ -f ${VIRTUAL_ENV}/bin/activate ]; then
     source ${VIRTUAL_ENV}/bin/activate
     echo "Python virtual env exist"
-    pip install -r https://raw.githubusercontent.com/stackforge/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt --upgrade
+    pip install -r https://raw.githubusercontent.com/openstack/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt --upgrade
     django-admin.py syncdb --settings=devops.settings --noinput
     django-admin.py migrate devops --settings=devops.settings --noinput
     deactivate
@@ -22,7 +22,7 @@ function update_devops () {
     rm -rf ${VIRTUAL_ENV}
     virtualenv --system-site-packages  ${VIRTUAL_ENV}
     source ${VIRTUAL_ENV}/bin/activate
-    pip install -r https://raw.githubusercontent.com/stackforge/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt --upgrade
+    pip install -r https://raw.githubusercontent.com/openstack/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt --upgrade
     django-admin.py syncdb --settings=devops.settings --noinput
     django-admin.py migrate devops --settings=devops.settings --noinput
     deactivate

@@ -174,7 +174,7 @@
       - git:
           branches:
             - 'origin/$FUEL_QA_COMMIT'
-          url: 'https://github.com/stackforge/fuel-qa.git'
+          url: 'https://github.com/openstack/fuel-qa.git'
     wrappers:
       - ansicolor:
           colormap: xterm

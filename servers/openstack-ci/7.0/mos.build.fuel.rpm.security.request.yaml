@@ -50,57 +50,57 @@
                 exclude-drafts: true
           projects:
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/python-fuelclient'
+              project-pattern: 'openstack/python-fuelclient'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-ostf'
+              project-pattern: 'openstack/fuel-ostf'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-agent'
+              project-pattern: 'openstack/fuel-agent'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-astute'
+              project-pattern: 'openstack/fuel-astute'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-main'
+              project-pattern: 'openstack/fuel-main'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-mirror'
+              project-pattern: 'openstack/fuel-mirror'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-nailgun-agent'
+              project-pattern: 'openstack/fuel-nailgun-agent'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-octane'
+              project-pattern: 'openstack/fuel-octane'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-web'
+              project-pattern: 'openstack/fuel-web'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-library'
+              project-pattern: 'openstack/fuel-library'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'
             - project-compare-type: 'PLAIN'
-              project-pattern: 'stackforge/fuel-upgrade'
+              project-pattern: 'openstack/fuel-upgrade'
               branches:
                 - branch-compare-type: 'ANT'
                   branch-pattern: '{fuel-security-branch}'

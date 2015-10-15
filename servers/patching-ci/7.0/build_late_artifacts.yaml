@@ -33,7 +33,7 @@
           default: 'stable/7.0'
       - string:
           name: FUELMAIN_REPO
-          default: 'https://git.openstack.org/stackforge/fuel-main.git'
+          default: 'https://git.openstack.org/openstack/fuel-main.git'
       - choice:
           name: USE_MIRROR
           choices:

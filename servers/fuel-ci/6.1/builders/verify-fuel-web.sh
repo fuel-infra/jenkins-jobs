@@ -5,7 +5,7 @@ set -ex
 # Cherry-pick upper bounds for test requirements
 # https://bugs.launchpad.net/fuel/+bug/1473926
 
-git fetch https://review.openstack.org/stackforge/fuel-web refs/changes/30/201030/2 && git cherry-pick FETCH_HEAD
+git fetch https://review.openstack.org/openstack/fuel-web refs/changes/30/201030/2 && git cherry-pick FETCH_HEAD
 
 export TEST_WORKERS=4
 export PATH=$PATH:$NPM_CONFIG_PREFIX/bin

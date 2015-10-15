@@ -29,7 +29,7 @@
       - heavy-job:
           weight: 8
     scm:
-      - stackforge:
+      - openstack:
           branch: 'master'
           repo: 'fuel-qa'
     parameters:

@@ -51,7 +51,7 @@
 
     scm:
       - git:
-          url: 'https://git.openstack.org/stackforge/fuel-main.git'
+          url: 'https://git.openstack.org/openstack/fuel-main.git'
           branches:
             - refs/remotes/origin/master
 

@@ -82,7 +82,7 @@
             BUILD_MIRROR_URL=$BUILD_MIRROR_URL
 
     scm:
-      - stackforge:
+      - openstack:
           branch: 'master'
           repo: fuel-main
     triggers:

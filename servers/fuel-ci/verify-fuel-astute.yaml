@@ -34,7 +34,7 @@
       - git:
           branches:
             - $GERRIT_BRANCH
-          url: 'https://review.openstack.org/stackforge/fuel-astute'
+          url: 'https://review.openstack.org/openstack/fuel-astute'
           refspec: '{refspec}'
           choosing-strategy: '{choosing-strategy}'
     triggers:
@@ -44,7 +44,7 @@
             - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: 'stackforge/fuel-astute'
+              project-pattern: 'openstack/fuel-astute'
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

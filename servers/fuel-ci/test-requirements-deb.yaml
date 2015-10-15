@@ -21,7 +21,7 @@
           remotes:
             - gerrit:
                 refspec: $GERRIT_REFSPEC
-                url: https://review.openstack.org/stackforge/fuel-mirror.git
+                url: https://review.openstack.org/openstack/fuel-mirror.git
           choosing-strategy: gerrit
     triggers:
       - timed: 'H 2 * * *'
@@ -30,7 +30,7 @@
             - patchset-created-event
           projects:
             - project-compare-type: PLAIN
-              project-pattern: 'stackforge/fuel-mirror'
+              project-pattern: 'openstack/fuel-mirror'
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

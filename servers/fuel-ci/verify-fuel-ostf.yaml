@@ -30,7 +30,7 @@
           remotes:
             - gerrit:
                 refspec: '{refspec}'
-                url: https://review.openstack.org/stackforge/fuel-ostf.git
+                url: https://review.openstack.org/openstack/fuel-ostf.git
           choosing-strategy: '{choosing-strategy}'
     triggers:
       - gerrit:
@@ -38,7 +38,7 @@
             - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: stackforge/fuel-ostf
+              project-pattern: openstack/fuel-ostf
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

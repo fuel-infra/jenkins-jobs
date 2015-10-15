@@ -4,7 +4,7 @@
       - shell:
           !include-raw-escape builders/verify-fuel-upgrade.sh
     description: |
-      Test requests for <a href=https://github.com/stackforge/fuel-upgrade>fuel-upgrade</a>
+      Test requests for <a href=https://github.com/openstack/fuel-upgrade>fuel-upgrade</a>
 
       Uses venv with python2.6
     logrotate:
@@ -35,7 +35,7 @@
           remotes:
             - gerrit:
                 refspec: '{refspec}'
-                url: https://review.openstack.org/stackforge/fuel-upgrade.git
+                url: https://review.openstack.org/openstack/fuel-upgrade.git
           choosing-strategy: '{choosing-strategy}'
     triggers:
       - gerrit:
@@ -43,7 +43,7 @@
             - '{trigger-on}'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: stackforge/fuel-upgrade
+              project-pattern: openstack/fuel-upgrade
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'

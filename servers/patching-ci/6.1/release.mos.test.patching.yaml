@@ -115,7 +115,7 @@
           default: 'true'
     scm:
       - git:
-          url: 'https://github.com/stackforge/fuel-qa.git'
+          url: 'https://github.com/openstack/fuel-qa.git'
           branches:
             - 'origin/stable/6.1'
           skip-tag: true
