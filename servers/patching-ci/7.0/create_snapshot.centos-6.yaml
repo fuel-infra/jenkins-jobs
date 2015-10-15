@@ -35,22 +35,30 @@
           name: UPDATE_HEAD
           default: true
           description: 'Update head repository symlink'
+      - bool:
+          name: BUILD_LATE_ARTIFACTS
+          default: true
+          description: ''
 
     builders:
       - shell:
           !include-raw builders/define_timestamp.sh
-      - multijob:
-          name: Build late artifacts
-          condition: SUCCESSFUL
-          projects:
-            - name: '7.0-build.late.artifacts'
-              kill-phase-on: FAILURE
-              property-file: noartifact_mirror.txt
+      - conditional-step:
+          condition-kind: shell
+          condition-command: '[ "$BUILD_LATE_ARTIFACTS" == "true" ]'
+          steps:
+            - multijob:
+                name: Build late artifacts
+                condition: SUCCESSFUL
+                projects:
+                  - name: '7.0-build.late.artifacts'
+                    kill-phase-on: FAILURE
+                    property-file: noartifact_mirror.txt
 
-      - shell:
-          !include-raw builders/get_late_artifact_url.py
-      - shell:
-          !include-raw builders/push_late_artifacts.sh
+            - shell:
+                !include-raw builders/get_late_artifact_url.py
+            - shell:
+                !include-raw builders/push_late_artifacts.sh
       - shell:
           !include-raw builders/prepare_repos_for_iso.sh
 
