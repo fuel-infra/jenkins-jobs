@@ -24,7 +24,7 @@
           scm-branch: '{scm-branch}'
 
     triggers:
-     - timed: '*/30 * * * *'
+     - timed: '*/15 * * * *'
      - zuul
 
     builders:
