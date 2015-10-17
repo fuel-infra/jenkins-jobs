@@ -11,11 +11,11 @@
           #!/bin/bash
           set -ex
           source /home/jenkins/venv-nailgun-tests/bin/activate
-          dos.py erase ${ENV_NAME}_system_test || echo "Nothing to erase"
+          dos.py erase ${ENV_NAME} || echo "Nothing to erase"
           deactivate
 
           source /home/jenkins/venv-nailgun-tests-2.9/bin/activate
-          dos.py erase ${ENV_NAME}_system_test || echo "Nothing to erase"
+          dos.py erase ${ENV_NAME} || echo "Nothing to erase"
           deactivate
       - shell:
           !include-raw builders/run_system_test.sh
@@ -23,7 +23,7 @@
           #!/bin/bash
           set -ex
           source ${VENV_PATH}/bin/activate
-          dos.py erase ${ENV_NAME}_system_test
+          dos.py erase ${ENV_NAME}
     concurrent: true
     description:
       !include-raw descriptions/community.ubuntu.bvt_2
