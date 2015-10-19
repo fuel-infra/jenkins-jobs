@@ -45,7 +45,9 @@
           !include-raw builders/define_timestamp.sh
       - conditional-step:
           condition-kind: shell
-          condition-command: '[ "$BUILD_LATE_ARTIFACTS" == "true" ]'
+          condition-command: |
+              #!/bin/bash -e
+              [ "$BUILD_LATE_ARTIFACTS" == "true" ]
           steps:
             - multijob:
                 name: Build late artifacts
