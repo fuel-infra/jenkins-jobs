@@ -72,13 +72,13 @@ if [[ -n "${RPM_LATEST}" ]]; then
         UPDATE_FUEL_MIRROR+="${MIRROR_HOST}mos/${RPM_LATEST}/mos6.1/updates"
     fi
     if [[ "${ENABLE_SECURITY}" == "true" ]]; then
-        RPM_SECURITY="mos-security,${MIRROR_HOST}mos/${RPM_LATEST}/security"
+        RPM_SECURITY="mos-security,${MIRROR_HOST}mos/${RPM_LATEST}/mos6.1/security"
         if [[ -n "${EXTRA_RPM_REPOS}" ]]; then
             EXTRA_RPM_REPOS+="|"
             UPDATE_FUEL_MIRROR+=" "
         fi
         EXTRA_RPM_REPOS+="${RPM_SECURITY}"
-        UPDATE_FUEL_MIRROR+="${MIRROR_HOST}mos/${RPM_LATEST}/security"
+        UPDATE_FUEL_MIRROR+="${MIRROR_HOST}mos/${RPM_LATEST}/mos6.1/security"
     fi
     export EXTRA_RPM_REPOS
     export UPDATE_FUEL_MIRROR
