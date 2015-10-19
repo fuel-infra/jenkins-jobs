@@ -57,7 +57,7 @@ export VENV_PATH=${VENV_PATH:-/home/jenkins/venv-nailgun-tests-2.9}
 ISO_MAGNET_FILE=lastSuccessfulBuild/artifact/magnet_link.txt
 
 # Getting MAGNET_LINK from last built ISO and force rebuild the environment if it has successfully passed smoke test.
-ISO_MAGNET_ART=http://jenkins-product.srt.mirantis.net:8080/job/${ISO_JOB_NAME}/${ISO_MAGNET_FILE}
+ISO_MAGNET_ART=https://product-ci.infra.mirantis.net/job/${ISO_JOB_NAME}/${ISO_MAGNET_FILE}
 
 # Check if the artifact with the magnet link exists.
 if curl -sl ${ISO_MAGNET_ART} | fgrep "Error 404"; then
