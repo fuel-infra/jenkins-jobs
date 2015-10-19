@@ -34,8 +34,10 @@
             - project-compare-type: PLAIN
               project-pattern: openstack/fuel-library
               branches:
-                - branch-compare-type: ANT
-                  branch-pattern: '**'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/7.0'
           custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - ansicolor:
