@@ -1,6 +1,13 @@
 - job:
     name: '6.1.fuel-library.pkgs.master_node'
     builders:
+      - inject: # Gerrit url fix
+          properties-content: |
+            FUELLIB_GERRIT_URL=https://review.openstack.org/openstack/fuel-library
+            NAILGUN_GERRIT_URL=https://review.openstack.org/openstack/fuel-web
+            PYTHON_FUELCLIENT_GERRIT_URL=https://review.openstack.org/openstack/python-fuelclient
+            ASTUTE_GERRIT_URL=https://review.openstack.org/openstack/fuel-astute
+            OSTF_GERRIT_URL=https://review.openstack.org/openstack/fuel-ostf
       - shell:
           !include-raw builders/fuel-library-build-pkgs.sh
       - shell:
