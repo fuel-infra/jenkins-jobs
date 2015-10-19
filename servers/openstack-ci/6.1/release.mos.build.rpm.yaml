@@ -41,12 +41,31 @@
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{scm-ci-status-client-branch}'
     triggers:
-      - fuel-infra-submit:
-          code-project: 'openstack/**'
-          spec-project: 'openstack-build/**'
-          branch: 'openstack-ci/fuel-{version-id}/{openstack-id}'
-          branch: 'openstack-ci/fuel-{version-id}/{openstack-id}-security-**'
-          files: 'rpm/**'
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: 'openstack-build/**'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: 'openstack-ci/fuel-{version-id}/{openstack-id}'
+                - branch-compare-type: 'ANT'
+                  branch-pattern: 'openstack-ci/fuel-{version-id}/{openstack-id}-security-**'
+              file-paths:
+                - compare-type: 'ANT'
+                  pattern: 'tests/**'
+                - compare-type: 'ANT'
+                  pattern: 'rpm/**'
+            - project-compare-type: 'ANT'
+              project-pattern: 'openstack/**'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: 'openstack-ci/fuel-{version-id}/{openstack-id}'
+                - branch-compare-type: 'ANT'
+                  branch-pattern: 'openstack-ci/fuel-{version-id}/{openstack-id}-security-**'
+          server-name: fuel-infra
+          silent: true
     builders:
       - shell:
           !include-raw-escape builders/mos.remove.junk.files.sh

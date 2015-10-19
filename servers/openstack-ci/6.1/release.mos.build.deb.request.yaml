@@ -48,12 +48,31 @@
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{scm-ci-status-client-branch}'
     triggers:
-      - fuel-infra-request:
-          code-project: 'openstack/**'
-          spec-project: 'openstack-build/**'
-          branch: 'openstack-ci/fuel-{version-id}/{openstack-id}'
-          files: 'trusty/debian/**'
-          branch: 'openstack-ci/fuel-{version-id}/{openstack-id}-security-**'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: 'openstack-build/**'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: 'openstack-ci/fuel-{version-id}/{openstack-id}'
+                - branch-compare-type: 'ANT'
+                  branch-pattern: 'openstack-ci/fuel-{version-id}/{openstack-id}-security-**'
+              file-paths:
+                - compare-type: 'ANT'
+                  pattern: 'tests/**'
+                - compare-type: 'ANT'
+                  pattern: 'trusty/debian/**'
+            - project-compare-type: 'ANT'
+              project-pattern: 'openstack/**'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: 'openstack-ci/fuel-{version-id}/{openstack-id}'
+                - branch-compare-type: 'ANT'
+                  branch-pattern: 'openstack-ci/fuel-{version-id}/{openstack-id}-security-**'
+          server-name: fuel-infra
+          silent: true
     builders:
       - shell:
           !include-raw-escape builders/mos.remove.junk.files.sh

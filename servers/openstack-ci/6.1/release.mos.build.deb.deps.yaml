@@ -47,10 +47,19 @@
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{scm-ci-status-client-branch}'
     triggers:
-      - fuel-infra-deps-submit:
-          code-project: 'packages/trusty/**'
-          branch: '{version-id}'
-          branch: '{version-id}-security-**'
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: 'packages/trusty/**'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{version-id}'
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{version-id}-security-**'
+          server-name: fuel-infra
+          silent: true
     builders:
       - shell:
           !include-raw-escape builders/ci.status.report.start.sh
