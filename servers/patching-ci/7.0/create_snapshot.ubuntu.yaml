@@ -22,10 +22,14 @@
           name: DISTRO
           default: 'ubuntu'
           description: 'Name of repo on obs-1 (currently ubuntu | centos-6)'
-      - string:
-          name: TIMESTAMP
-          default: ''
-          description: 'timestamp of snapshot to download.<br>Examples: latest, 2015-06-25-000000'
+      - dynamic-string:
+          name: TIMESTAMP 
+          script: |
+              TimeZone.setDefault(TimeZone.getTimeZone('UTC'))
+              def now = new Date()
+              return now.format("yyyy-MM-dd-HHmmss")
+          remote: false
+          description: 'New timestamp for snapshot to upload.<br>Examples: 2015-06-25-000000'
       - string:
           name: REMOTE_HOST
           default: 'perestroika-repo-tst.infra.mirantis.net osci-mirror-msk.infra.mirantis.net osci-mirror-srt.infra.mirantis.net osci-mirror-kha.infra.mirantis.net osci-mirror-poz.infra.mirantis.net mirror.seed-us1.fuel-infra.org mirror.seed-cz1.fuel-infra.org'
