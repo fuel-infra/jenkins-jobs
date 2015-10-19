@@ -76,6 +76,13 @@
           default: 'none'
           description: Refspecs for commits in fuel-nailgun-agent gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: EXTRA_RPM_REPOS
+          default: ''
+          description: |
+            Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
+            Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
+            Example: <b> foo,http://my.cool.repo/rpm   bar,ftp://repo.foo </b>
     publishers:
       - archive:
           allow-empty: false
