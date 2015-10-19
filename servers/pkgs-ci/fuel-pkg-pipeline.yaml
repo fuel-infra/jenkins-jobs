@@ -122,6 +122,9 @@
           REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
           EOF
 
+          # Fail job in case of package building error
+          FAILED=$(awk -F= '/^FAILED=/ {{gsub(/"/,""); print $2}}' ci_status_params)
+          test "${{FAILED}}" = "true" && exit 1 || exit 0
       - trigger-builds:
           - project: '{mos_version}-fuel-pkg-publish-{distro}'
             current-parameters: true
