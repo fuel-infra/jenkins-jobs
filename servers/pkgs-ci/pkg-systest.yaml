@@ -103,7 +103,7 @@
              ci-status-client/ci-status-report.sh stop
       - archive:
           allow-empty: true
-          artifacts: '**/nosetests.xml,logs/*, ci_status_params'
+          artifacts: '**/nosetests.xml, logs/*, ci_status_params, fuel-qa/logs/*'
           latest-only: false
       - logparser:
           parse-rules: '/var/lib/jenkins/fuellib.parser'
