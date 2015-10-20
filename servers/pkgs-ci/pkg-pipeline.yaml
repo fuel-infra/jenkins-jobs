@@ -24,7 +24,7 @@
           scm-repo: '{scm-ci-status-client-repo}'
           scm-basedir: '{scm-ci-status-client-basedir}'
           scm-credentials-id: '{scm-credentials-id}'
-          scm-branch: '{mos_version}'
+          scm-branch: '{scm-ci-status-client-branch}'
     wrappers:
       - gerrit-creds
       - timeout:
