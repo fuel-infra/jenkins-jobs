@@ -15,7 +15,12 @@ rsync -avPzt -e "ssh ${SSH_OPTS}" osci-mirrors/mos-proposed-to-updates/lock-func
 rsync -avPzt -e "ssh ${SSH_OPTS}" trsync ${USER}@${PUBLISHER_HOST}:${SCRIPT_PATH}
 
 case $DISTRO in
-    "centos-6" ) SCRIPT_NAME="update-centos-repo.sh"
+    "centos-6" ) # Add dowloaded artifacts to proposed repository
+                 if [ "$BUILD_LATE_ARTIFACTS" == "true" ] ; then
+                     CMD="export SIGKEYID=${SIGKEYID} ; ${SCRIPT_PATH}/prepare-repos-for-iso/add-artifacts-to-proposed-centos-6.sh ${TIMESTAMP}"
+                     ssh ${SSH_OPTS} ${USER}@${PUBLISHER_HOST} ${CMD}
+                 fi
+                 SCRIPT_NAME="update-centos-repo.sh"
                  ;;
       "ubuntu" ) SCRIPT_NAME="update-ubuntu-repo.sh"
                  ;;
