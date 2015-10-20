@@ -3,7 +3,7 @@
 set -ex
 
 WEB_SHARE_ROOT=/var/www/fwm/
-WEB_SHARE_JOB="${WEB_SHARE_ROOT}/${BUILD_ID}"
+WEB_SHARE_JOB="${WEB_SHARE_ROOT}/${JOB_NAME}/${BUILD_ID}"
 
 export BUILD_DIR=${WORKSPACE}/../tmp/${JOB_NAME}/build
 export LOCAL_MIRROR=${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror
@@ -59,7 +59,7 @@ find "${BUILD_DIR}/packages/rpm/RPMS/" -type f -name '*.rpm' -exec cp -v {} "${W
 
 # create artifact with links
 rm -rf "${ARTS_DIR}/artifacts.txt"
-find "${WEB_SHARE_JOB}" -name "*.rpm" -type f -printf "http://$(hostname)/fwm/${BUILD_ID}/%f\n" > "${ARTS_DIR}/artifacts.txt"
+find "${WEB_SHARE_JOB}" -name "*.rpm" -type f -printf "http://$(hostname)/fwm/${JOB_NAME}/${BUILD_ID}/%f\n" > "${ARTS_DIR}/artifacts.txt"
 
 # copy urls to packages that were downloaded
 cp -rv "${BUILD_DIR}/mirror/centos/urls.list" "${ARTS_DIR}/pkgs.list.txt"
