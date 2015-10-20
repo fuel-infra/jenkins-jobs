@@ -1,0 +1,24 @@
+- job:
+    name: docker-publish
+    node: docker-builder
+    builders:
+      - shell:
+          !include-raw './scripts/docker-publish.sh'
+    description: |
+      This job will use docker builder host and build an image from the given url.
+    concurrent: true
+    parameters:
+      - string:
+          name: NAME
+          description: 'name of image to publish (without "internal-" prefix)'
+      - string:
+          name: TAG
+          description: 'image tag to publish'
+      - string:
+          name: REGISTRY_URLS
+          default: 'registry.fuel-infra.org'
+          description: 'space separated list of <hostname>:<port> pairs'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 20
