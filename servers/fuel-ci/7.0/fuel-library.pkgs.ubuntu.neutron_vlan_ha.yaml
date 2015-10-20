@@ -1,6 +1,15 @@
 - job:
     name: '7.0.fuel-library.pkgs.ubuntu.neutron_vlan_ha'
     builders:
+      - inject: # Gerrit fixes
+          properties-content: |
+            FUELLIB_GERRIT_URL=https://review.openstack.org/openstack/fuel-library
+            NAILGUN_GERRIT_URL=https://review.openstack.org/openstack/fuel-web
+            PYTHON_FUELCLIENT_GERRIT_URL=https://review.openstack.org/openstack/python-fuelclient
+            FUEL_AGENT_GERRIT_URL=https://review.openstack.org/openstack/fuel-agent
+            FUEL_NAILGUN_AGENT_GERRIT_URL=https://review.openstack.org/openstack/fuel-nailgun-agent
+            ASTUTE_GERRIT_URL=https://review.openstack.org/openstack/fuel-astute
+            OSTF_GERRIT_URL=https://review.openstack.org/openstack/fuel-ostf
       - inject: # default env variables
           properties-content: |
             DISTRIBUTION=ubuntu
