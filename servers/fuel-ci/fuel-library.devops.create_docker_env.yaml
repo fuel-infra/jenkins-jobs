@@ -34,7 +34,7 @@
           description: 'Save docker image as artifact. yes - will store image, need for further deployment on slaves'
       - string:
           name: fuelmain_gerrit_commit
-          default: refs/changes/32/212732/1
+          default: refs/changes/32/212732/4
           description: 'Temporary parameter while code is not implemented on perestroika side'
       - string:
           name: JENKINS_UID

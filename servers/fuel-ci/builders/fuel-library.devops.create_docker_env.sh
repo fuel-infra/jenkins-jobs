@@ -9,6 +9,11 @@ if [ "${fuelmain_gerrit_commit}" != "none" ] ; then
   done
 fi
 
+MIRROR=http://mirror.fuel-infra.org
+LATEST_TARGET=$(curl -sSf "${MIRROR}/mos-repos/centos/mos8.0-centos6-fuel/os.target.txt" | head -1)
+# use mirror from snapshot
+export CENTOS_MIRROR="${MIRROR}/mos-repos/centos/mos8.0-centos6-fuel/${LATEST_TARGET}/x86_64/"
+
 # must be defined directly, otherwise script will save to /var/tmp
 export ARTS_DIR="${WORKSPACE}/artifacts"
 
