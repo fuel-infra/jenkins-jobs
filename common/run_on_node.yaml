@@ -9,21 +9,26 @@
           description: |
             Specify where this job and tested job should be ran on.
           allowed-multiselect: true
-      - string:
+      - dynamic-choice:
           name: JOB_NAME
           description: |
             Jobs name which should be tested on a slave.
+          script: |
+            def jobs = jenkins.model.Jenkins.instance.items.displayName
       - text:
           name: JOB_PARAMETERS
           description: |
             Parameters passed to the job in form key=value.
     builders:
+      - shell: |
+          #!/bin/bash
+          set -ex
+          echo "${JOB_PARAMETERS}" > params.prop
       - trigger-builds:
         - project: $JOB_NAME
           same-node: true
           block: true
-          predefined-parameters: |
-            $JOB_PARAMETERS
+          property-file: params.prop
     publishers:
       - description-setter:
           description: '$NODE_NAME: $JOB_NAME'
