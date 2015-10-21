@@ -78,6 +78,9 @@
           export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
 
           ci-status-client/ci-status-report.sh start
+
+          # Clean logs from previous runs
+          rm -f fuel-qa/logs/*
       - systest-{os}
     wrappers:
       - gerrit-creds
