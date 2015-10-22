@@ -164,6 +164,10 @@
             [ -f "{pkg_type}.publish.setenvfile" ] && source {pkg_type}.publish.setenvfile
             VAR="$(echo {pkg_type} | tr [[:lower:]] [[:upper:]])_PUBLISH_SUCCEEDED"
             eval \${{${{VAR}}:-false}} || exit 1
+
+            # Don't post repository link
+            test "${{POST_REPO_LINK:-true}}" = "false" && exit || :
+
             REPOURL=( ${{DEB_REPO_URL:-${{RPM_REPO_URL}}}} )
 
             # Gerrit parameters

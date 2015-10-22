@@ -72,6 +72,7 @@
           LAST_STAGE=false
           TEST_INSTALL=false
           TEST_SYSTEST=false
+          POST_REPO_LINK=false
           EOF
 
           done
