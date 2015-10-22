@@ -48,6 +48,9 @@
           name: CREATEMIRROR_COMMIT
           default: 'master'
       - string:
+          name: FUELMENU_COMMIT
+          default: 'master'
+      - string:
           name: FUELMAIN_COMMIT
           default: 'master'
       - string:
@@ -74,6 +77,9 @@
       - string:
           name: CREATEMIRROR_REPO
           default: 'https://git.openstack.org/openstack/fuel-mirror.git'
+      - string:
+          name: FUELMENU_REPO
+          default: 'https://git.openstack.org/openstack/fuel-menu.git'
       - string:
           name: FUELMAIN_REPO
           default: 'https://git.openstack.org/openstack/fuel-main.git'
@@ -125,6 +131,11 @@
           name: createmirror_gerrit_commit
           default: 'none'
           description: Refspecs for commits in fuel-mirror gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuelmenu_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-menu gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
       - string:
           name: EXTRA_RPM_REPOS
