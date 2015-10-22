@@ -71,6 +71,7 @@
           # Other job-specific parameters
           LAST_STAGE=false
           TEST_INSTALL=false
+          TEST_SYSTEST=false
           EOF
 
           done
