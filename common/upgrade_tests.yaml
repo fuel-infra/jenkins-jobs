@@ -85,7 +85,7 @@
       - project: '{version-id}-test-reports-Testrail'
         condition: ALWAYS
         property-file: links.txt
-        predefined-parameters: TEST_JOB_NAME_ENABLE=true
+        predefined-parameters: TEST_JOB_NAME=$JOB_NAME
         triggerWithNoParameters: false
     - description-setter:
         regexp: "'Description string: (.*)'"

@@ -11,7 +11,11 @@
           !include-raw builders/test-reports-Testrail-upload_cases.sh
       - shell:
           !include-raw builders/test-reports-Testrail.sh
-
+    parameters:
+      - string:
+          name: TEST_JOB_NAME
+          description: 'Name of Jenkins job with tests results'
+          default: 'none'
     node: testrail
     publishers:
       - email:
