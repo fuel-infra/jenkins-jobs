@@ -2,10 +2,17 @@
 
 set -x
 
-DIST=`awk -F '[:=?]' '/^UBUNTU_RELEASE\>/ {print $NF}' config/config.mk`
+# get values:
+#   - MIRROR_MOS_UBUNTU_HOST=mirror.fuel-infra.org
+#   - MIRROR_MOS_UBUNTU_HTTPDIR="mos-repos/ubuntu/8.0"
+source "${WORKSPACE}/config/common.cfg"
+
+# extract version from MIRROR_MOS_UBUNTU_HTTPDIR
+PRODUCT_VERSION=${MIRROR_MOS_UBUNTU_HTTPDIR##*/}
+DIST=trusty
+
 OVERALL_STATUS=0
 
-PRODUCT_VERSION=`awk -F '[:=?]' '/^PRODUCT_VERSION\>/ {print $NF}' config/config.mk`
 PACKAGES=`git diff --word-diff=plain HEAD~ config/requirements-deb.txt | egrep '{+' | cut -d"+" -f2 | sed ':a;N;$!ba;s/\n/ /g'`
 
 if [ X"${PACKAGES}" = X"" ]; then
@@ -26,15 +33,15 @@ echo "MARK: checking Perestroika and upstream repos..."
 TEMPDIR=$(/bin/mktemp -d /tmp/test-requirements-deb-XXXXXXXX)
 echo "MARK: workspace directory is ${TEMPDIR}"
 
-chdist --data-dir ${TEMPDIR} create ubuntu http://mirror.fuel-infra.org/mos-repos/ubuntu/${PRODUCT_VERSION}/ mos${PRODUCT_VERSION} main restricted
+chdist --data-dir ${TEMPDIR} create ubuntu http://${MIRROR_MOS_UBUNTU_HOST}/${MIRROR_MOS_UBUNTU_HTTPDIR}/ mos${PRODUCT_VERSION} main restricted
 
 cat > ${TEMPDIR}/ubuntu/etc/apt/sources.list <<EOT
-deb http://mirror.fuel-infra.org/mos-repos/ubuntu/${PRODUCT_VERSION}/ mos${PRODUCT_VERSION} main restricted
-deb http://mirror.fuel-infra.org/mos-repos/ubuntu/${PRODUCT_VERSION}/ mos${PRODUCT_VERSION}-updates main restricted
-deb http://mirror.fuel-infra.org/mos-repos/ubuntu/${PRODUCT_VERSION}/ mos${PRODUCT_VERSION}-security main restricted
-deb http://mirror.fuel-infra.org/pkgs/ubuntu/ ${DIST} main universe multiverse restricted
-deb http://mirror.fuel-infra.org/pkgs/ubuntu/ ${DIST}-security main universe multiverse restricted
-deb http://mirror.fuel-infra.org/pkgs/ubuntu/ ${DIST}-updates main universe multiverse restricted
+deb http://${MIRROR_MOS_UBUNTU_HOST}/${MIRROR_MOS_UBUNTU_HTTPDIR}/ mos${PRODUCT_VERSION} main restricted
+deb http://${MIRROR_MOS_UBUNTU_HOST}/${MIRROR_MOS_UBUNTU_HTTPDIR}/ mos${PRODUCT_VERSION}-updates main restricted
+deb http://${MIRROR_MOS_UBUNTU_HOST}/${MIRROR_MOS_UBUNTU_HTTPDIR}/ mos${PRODUCT_VERSION}-security main restricted
+deb http://${MIRROR_MOS_UBUNTU_HOST}/pkgs/ubuntu/ ${DIST} main universe multiverse restricted
+deb http://${MIRROR_MOS_UBUNTU_HOST}/pkgs/ubuntu/ ${DIST}-security main universe multiverse restricted
+deb http://${MIRROR_MOS_UBUNTU_HOST}/pkgs/ubuntu/ ${DIST}-updates main universe multiverse restricted
 EOT
 
 echo 'APT::Get::AllowUnauthenticated 1;' > ${TEMPDIR}/ubuntu/etc/apt/apt.conf.d/02unauthenticated
