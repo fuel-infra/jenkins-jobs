@@ -26,7 +26,7 @@
     parameters:
       - string:
           name: make_args
-          default: '-j10'
+          default: ''
           description: 'Pass additional parameters to make command'
       - string:
           name: FUELMAIN_COMMIT

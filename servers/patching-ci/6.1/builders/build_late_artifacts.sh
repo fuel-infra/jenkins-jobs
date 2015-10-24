@@ -63,3 +63,6 @@ find "${WEB_SHARE_JOB}" -name "*.rpm" -type f -printf "http://$(hostname)/fwm/${
 
 # copy urls to packages that were downloaded
 cp -rv "${BUILD_DIR}/mirror/centos/urls.list" "${ARTS_DIR}/pkgs.list.txt"
+
+# copy /home/jenkins/workspace/tmp/7.0-build.late.artifacts/build/docker/fuel-centos-build.log
+cp -rv "${BUILD_DIR}/docker/fuel-centos-build.log" "${ARTS_DIR}/fuel-centos-build.log.txt"
