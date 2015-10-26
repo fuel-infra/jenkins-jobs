@@ -15,7 +15,7 @@
             name: IMAGE
             description: 'image from registry'
             script: |
-              String output = 'http://registry.fuel-infra.org:5002/?name=internal-.*&tag=.*&format=select'.toURL().text
+              String output = 'http://registry.fuel-infra.org:5002/?name=infra-.*&tag=.*&format=select'.toURL().text
               List images = output.split()
               return images
         - node:

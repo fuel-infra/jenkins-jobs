@@ -10,7 +10,7 @@
     parameters:
       - string:
           name: NAME
-          description: 'name of image to publish (without "internal-" prefix)'
+          description: 'name of image to publish (without "infra-" prefix)'
       - string:
           name: TAG
           description: 'image tag to publish'

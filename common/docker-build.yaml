@@ -17,7 +17,7 @@
             description: 'GIT repository with image'
         - string:
             name: NAME
-            description: 'destination repository name (without "internal-" prefix)'
+            description: 'destination repository name (without "infra-" prefix)'
         - string:
             name: TAG
             description: 'destination repository tag'
