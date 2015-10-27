@@ -13,6 +13,7 @@ C=0; for repo in ${RPM_REPO_URL//|/ }; do
 EXTRA_RPM_REPOS=${EXTRA_RPM_REPOS}repo-$C",$repo,1 "; (( ++C ))
 done
 fi
+export EXTRA_RPM_REPOS
 
 EXTRA_RPM_REPOS_PRIORITY=1
 
