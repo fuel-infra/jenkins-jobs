@@ -8,6 +8,8 @@
         - shell: 'rm -rf *'
       - timestamps
       - ansicolor
+    triggers:
+      - zuul
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
@@ -38,6 +40,15 @@
           ci-status-client/ci-status-report.sh start
       - shell:
           !include-raw-escape builders/mos.install.cleanup.sh
+      - copyartifact:
+          project: '{mos_version}-pkg-pipeline-{os}'
+          filter: 'buildresult.params, {pkg_type}.publish.setenvfile'
+          which-build: last-successful
+          parameter-filters: ZUUL_COMMIT=${{ZUUL_COMMIT}}
+      - inject:
+          properties-file: 'buildresult.params'
+      - inject:
+          properties-file: '{pkg_type}.publish.setenvfile'
       - shell: |
           #!/bin/bash -xe
           export DIST=${{DIST:-{distro}}}

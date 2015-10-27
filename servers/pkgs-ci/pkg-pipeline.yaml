@@ -188,8 +188,6 @@
               - trigger-builds:
                   - project: '{mos_version}-pkg-install-{os}'
                     current-parameters: true
-                    property-file: 'buildresult.params,tests.envfile,{pkg_type}.publish.setenvfile'
-                    property-file-fail-on-missing: false
                     block: true
               - copyartifact:
                     project: '{mos_version}-pkg-install-{os}'
@@ -209,11 +207,7 @@
               - trigger-builds:
                   - project: '{mos_version}-pkg-systest-{os}'
                     current-parameters: true
-                    property-file: 'buildresult.params,tests.envfile,{pkg_type}.publish.setenvfile'
-                    property-file-fail-on-missing: false
                     block: true
-                    predefined-parameters: |
-                        ISO_JOB_NAME={mos_version}.test_all
     publishers:
       - post-tasks:
          - matches:
