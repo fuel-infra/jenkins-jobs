@@ -9,9 +9,6 @@ VENV=${WORKSPACE}_VENV
 virtualenv ${VENV}
 source ${VENV}/bin/activate
 
-cd ${WORKSPACE}
-pip install shotgun/
-
 cd ${WORKSPACE}/nailgun
 pip install -r test-requirements.txt
 
