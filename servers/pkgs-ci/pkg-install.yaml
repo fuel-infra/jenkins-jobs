@@ -69,7 +69,7 @@
 
           echo FAILED=false >> ci_status_params
           RESULT=0
-          for script in version-test-{pkg_type} vm-test
+          for script in version-test-{pkg_type} vm-test repo-test-{pkg_type}-docker
           do
               if ! bash -x "${{WORKSPACE}}/${{script}}"
               then
@@ -78,8 +78,6 @@
                   break
               fi
           done
-
-          bash -x repo-test-{pkg_type}-docker ||:
 
           TIME_ELAPSED=$(( $(date +%s) - ${{START_TS}} ))
           echo "RESULT=${{RESULT}}" > {pkg_type}.install.setenvfile
