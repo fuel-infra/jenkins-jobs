@@ -5,6 +5,7 @@ set -ex
 echo STARTED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" > ci_status_params.txt
 
 test -z "${EXTRA_DEB_REPOS}" && EXTRA_DEB_REPOS="deb $(echo "$DEB_REPO_URL" | tr -d \")"
+export EXTRA_DEB_REPOS
 
 ###################### Get MIRROR HOST ###############
 
