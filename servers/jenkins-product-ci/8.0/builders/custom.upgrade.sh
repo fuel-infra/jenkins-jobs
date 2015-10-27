@@ -39,6 +39,7 @@ export FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}"
 export FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}"
 export CREATEMIRROR_GERRIT_COMMIT="${createmirror_gerrit_commit}"
 export FUELMENU_GERRIT_COMMIT="${fuelmenu_gerrit_commit}"
+export SHOTGUN_GERRIT_COMMIT="${shotgun_gerrit_commit}"
 
 ######## Get node location to choose closer mirror ###############
 # We are building everything with USE_MIRROR=none
@@ -159,6 +160,7 @@ echo FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}" >> "${ARTS_DIR}/gerr
 echo FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo CREATEMIRROR_GERRIT_COMMIT="${createmirror_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo FUELMENU_GERRIT_COMMIT="${fuelmenu_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
+echo SHOTGUN_GERRIT_COMMIT="${shotgun_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 
 cp "${LOCAL_MIRROR}"/*changelog "${ARTS_DIR}/" || true
 cp "${BUILD_DIR}/iso/isoroot/version.yaml" "${WORKSPACE}/version.yaml.txt" || true

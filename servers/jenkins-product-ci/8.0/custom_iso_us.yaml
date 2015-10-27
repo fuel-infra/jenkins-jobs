@@ -51,6 +51,9 @@
           name: FUELMENU_COMMIT
           default: 'master'
       - string:
+          name: SHOTGUN_COMMIT
+          default: 'master'
+      - string:
           name: FUELMAIN_COMMIT
           default: 'master'
       - string:
@@ -80,6 +83,9 @@
       - string:
           name: FUELMENU_REPO
           default: 'https://git.openstack.org/openstack/fuel-menu.git'
+      - string:
+          name: SHOTGUN_REPO
+          default: 'https://git.openstack.org/openstack/shotgun.git'
       - string:
           name: FUELMAIN_REPO
           default: 'https://git.openstack.org/openstack/fuel-main.git'
@@ -136,6 +142,11 @@
           name: fuelmenu_gerrit_commit
           default: 'none'
           description: Refspecs for commits in fuel-menu gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: shotgun_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in shotgun gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
       - string:
           name: EXTRA_RPM_REPOS
