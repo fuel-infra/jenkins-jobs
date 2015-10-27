@@ -1,0 +1,67 @@
+- job-template:
+    name: cleaner
+    builders:
+      - copyartifact:
+          project: 'cleaner-on-labels'
+          filter: jobs.txt
+          which-build: workspace-latest
+      - shell:
+          !include-raw-escape './scripts/cleaner.py'
+    description: |
+      This job will iterate through a list of available environments for a specified<br>
+      VENV location, using dos.py command. Check if environment is not the last one<br>
+      used for specific build and is old enought to be removed.<br><br>
+      VENV parameter - environment where dos.py is executed<br>
+      Minimal times parameters (in hours, for different job types): STAGING, SYSTEM_TEST, OTHER.
+    concurrent: true
+    parameters:
+        - node:
+            name: NODE
+            allowed-multiselect: true
+        - bool:
+            name: 'DEVOPS_2_9'
+            default: '{devops_29}'
+        - bool:
+            name: 'DEVOPS_2_5'
+            default: '{devops_25}'
+        - string:
+            name: STAGING
+            default: '{time_staging}'
+        - string:
+            name: SYSTEMTEST
+            default: '{time_systemtest}'
+        - string:
+            name: OTHER
+            default: '{time_other}'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 5
+
+- job-template:
+    name: 'cleaner-on-labels'
+    node: 'runner'
+    parameters:
+      - string:
+          name: 'LABEL'
+          default: 'cleanable'
+    triggers:
+      - timed: '0 */5 * * *'
+    builders:
+      - shell:
+          !include-raw-escape './scripts/cleaner_jobs.py'
+      - trigger-builds:
+        - project: 'cleaner'
+          parameter-factories:
+            - factory: allnodesforlabel
+              node-label: $LABEL
+              name: 'NODE'
+      - shell:
+          !include-raw-escape './scripts/cleaner_dups.py'
+    publishers:
+      - archive:
+          artifacts: '*.txt'
+          allow-empty: 'true'
+          fingerprint: true
+      - email:
+          recipients: devops+alert@mirantis.com
