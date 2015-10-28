@@ -32,8 +32,8 @@
             - project-compare-type: PLAIN
               project-pattern: openstack/fuel-library
               branches:
-                - branch-compare-type: ANT
-                  branch-pattern: '**'
+                - branch-compare-type: REG_EXP
+                  branch-pattern: '^(?!stable/(?:5\.0|5\.1|6\.0|6\.1|7\.0)).*$'
           skip-vote:
             successful: true
             failed: true
