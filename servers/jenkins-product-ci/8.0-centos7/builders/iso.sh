@@ -34,6 +34,11 @@ export FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}"
 export PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}"
 export FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}"
 export FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}"
+export CREATEMIRROR_GERRIT_COMMIT="${createmirror_gerrit_commit}"
+export FUELMENU_GERRIT_COMMIT="${fuelmenu_gerrit_commit}"
+export SHOTGUN_GERRIT_COMMIT="${shotgun_gerrit_commit}"
+export NETWORKCHECKER_GERRIT_COMMIT="${networkchecker_gerrit_commit}"
+export FUELUPGRADE_GERRIT_COMMIT="${fuelupgrade_gerrit_commit}"
 
 # No staging in 8.0
 export USE_MIRROR=none
