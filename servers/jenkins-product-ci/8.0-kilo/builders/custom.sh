@@ -35,6 +35,7 @@ export ASTUTE_GERRIT_COMMIT="${astute_gerrit_commit}"
 export FUELMENU_GERRIT_COMMIT="${fuelmenu_gerrit_commit}"
 export SHOTGUN_GERRIT_COMMIT="${shotgun_gerrit_commit}"
 export NETWORKCHECKER_GERRIT_COMMIT="${networkchecker_gerrit_commit}"
+export FUELUPGRADE_GERRIT_COMMIT="${fuelupgrade_gerrit_commit}"
 export OSTF_GERRIT_COMMIT="${ostf_gerrit_commit}"
 export FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}"
 export PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}"
@@ -85,6 +86,7 @@ echo FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}" >> "
 echo FUELMENU_GERRIT_COMMIT="${fuelmenu_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo SHOTGUN_GERRIT_COMMIT="${shotgun_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo NETWORKCHECKER_GERRIT_COMMIT="${networkchecker_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
+echo FUELUPGRADE_GERRIT_COMMIT="${fuelupgrade_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 
 cp "${LOCAL_MIRROR}"/*changelog "${ARTS_DIR}/" || true
 cp "${BUILD_DIR}/iso/isoroot/version.yaml" "${ARTS_DIR}/version.yaml.txt" || true

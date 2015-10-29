@@ -57,6 +57,9 @@
           name: NETWORKCHECKER_COMMIT
           default: 'master'
       - string:
+          name: FUELUPGRADE_COMMIT
+          default: 'master'
+      - string:
           name: FUELMAIN_COMMIT
           default: 'master'
       - string:
@@ -92,6 +95,9 @@
       - string:
           name: NETWORKCHECKER_REPO
           default: 'https://git.openstack.org/openstack/network-checker.git'
+      - string:
+          name: FUELUPGRADE_REPO
+          default: 'https://git.openstack.org/openstack/fuel-upgrade.git'
       - string:
           name: FUELMAIN_REPO
           default: 'https://git.openstack.org/openstack/fuel-main.git'
@@ -158,6 +164,11 @@
           name: networkchecker_gerrit_commit
           default: 'none'
           description: Refspecs for commits in network-checker gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuelupgrade_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-upgrade gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
       - string:
           name: EXTRA_RPM_REPOS
