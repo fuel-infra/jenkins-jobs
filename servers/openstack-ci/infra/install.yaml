@@ -1,0 +1,45 @@
+- job-template:
+    name: 'infra-install'
+    project-type: freestyle
+    concurrent: true
+    node: '{infra-install-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    properties:
+      - inject:
+          properties-content: |
+            GERRIT_USER=${{TEST_VOTE_USER}}
+            GERRIT_VOTE=2
+            SKIP_VOTE=0
+    wrappers:
+      - vote-users
+      - timeout:
+          fail: true
+          timeout: 180
+      - pre-scm-buildstep:
+          - shell: 'rm -rf *'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{install-scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{install-scm-branch}'
+    builders:
+      - shell:
+          !include-raw-escape: builders/install.sh
+      - shell:
+          !include-raw-escape: builders/vote.sh
+      - shell:
+          !include-raw-escape: builders/exit.sh
+    publishers:
+      - pkgname-as-desc
+      - post-tasks:
+        - matches:
+            - log-text: '/run/shm/'
+              operator: AND
+          script:
+            !include-raw-escape: builders/install.destroy.vm.sh
+      - archive:
+          artifacts: '**/*.xml'
+          allow-empty: true

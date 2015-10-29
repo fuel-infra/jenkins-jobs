@@ -1,0 +1,90 @@
+- job-template:
+    name: 'infra-build'
+    concurrent: true
+    node: '{infra-build-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    properties:
+      - inject:
+          properties-content: |
+              REMOTE_REPO_HOST={repo-host}
+              REPO_REQUEST_PATH_PREFIX={cr-path-prefix}
+              ORIGIN={deb-origin}
+              GERRIT_USER=${{BUILD_VOTE_USER}}
+              GERRIT_VOTE=1
+              SKIP_VOTE=0
+    wrappers:
+      - vote-users
+      - timeout:
+          fail: true
+          timeout: 120
+    parameters:
+      - string:
+          name: PROJECT_NAME
+          default: 'infra'
+      - string:
+          name: PROJECT_VERSION
+          default: '1.0'
+      - bool:
+          name: IS_UPDATES
+          default: '{is-updates}'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-branch}'
+    builders:
+      - shell:
+          !include-raw-escape: builders/build.sh
+      - inject:
+          properties-file: 'setenvfile'
+      - conditional-step:
+          condition-kind: shell
+          condition-command: |
+            #!/bin/bash -ex
+            [ "${{RESULT}}" == "0" ]
+          on-evaluation-failure: dont-run
+          steps:
+             - trigger-builds:
+                - project: 'infra-publish'
+                  current-parameters: true
+                  property-file: buildresult.params
+                  block: true
+             - copyartifact:
+                  project: 'infra-publish'
+                  filter: '${{DIST}}.publish.setenvfile'
+                  parameter-filters: 'GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}'
+                  optional: true
+                  which-build: 'last-successful'
+             - shell: |
+                  #!/bin/bash -ex
+                  # Fail stage if packages is not published
+                  [ -f "${{DIST}}.publish.setenvfile" ] && source ${{DIST}}.publish.setenvfile
+                  [ "${{PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
+             - inject:
+                  properties-file: '${{DIST}}.publish.setenvfile'
+      - shell:
+          !include-raw-escape: builders/vote.sh
+      - shell:
+          !include-raw-escape: builders/exit.sh
+      - trigger-builds:
+          - project: 'infra-install'
+            current-parameters: true
+            property-file: 'buildresult.params,tests.envfile'
+            property-file-fail-on-missing: false
+            predefined-parameters: |
+                PACKAGEVERSION=${{VERSION}}
+                PACKAGELIST=${{BINARIES}}
+                REPO_URL=${{REPO_URL}}
+    publishers:
+      - pkgname-as-desc
+    #  - archive-trace-files
+    #  - archive:
+    #      artifacts: '**/buildlog.txt, **/buildresult.xml'
+    #      allow-empty: true
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: false

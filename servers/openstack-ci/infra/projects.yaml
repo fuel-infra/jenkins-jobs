@@ -1,0 +1,40 @@
+- common_template: &common_template
+    name: ''
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    cr-path-prefix: 'review/'
+    repo-base-path: '/home/jenkins/pubrepos'
+    #pkg-sign-key: '1FA22B08'
+    pkg-sign-key: '3E301371'
+    scm-user: 'openstack-ci-jenkins'
+    scm-credentials-id: '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+    infra-build-node: 'devops-builder'
+    infra-publish-node: 'new-publisher'
+    infra-install-node: 'install-tests'
+
+- project:
+    <<: *common_template
+    name: 'infra'
+    release: 1.0
+    daysToKeep: 10
+    scm-repo: 'infra/obs'
+    scm-branch: 'origin/feature/infra-packages'
+    scm-basedir: ''
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'origin/master'
+    backports-code-project: 'fuel-infra/backports/**'
+    backports-code-project-prefix: 'fuel-infra/backports'
+    backports-code-branch: 'master'
+    packages-code-project: 'fuel-infra/packages/**'
+    packages-code-project-prefix: 'fuel-infra/packages'
+    packages-code-branch: 'master'
+    is-updates: false
+    deb-origin: 'Mirantis'
+    mailto: 'fuel-build+ci-packaging@mirantis.com'
+#    mailto: 'dburmistrov@mirantis.com'
+    jobs:
+        - 'infra-pipeline-starter'
+        - 'infra-build'
+        - 'infra-publish'
+        - 'infra-install'
+        - 'infra-maintain-starter'
+        - 'infra-maintain-worker'
