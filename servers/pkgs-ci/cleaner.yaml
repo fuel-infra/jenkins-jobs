@@ -1,10 +1,10 @@
 - project:
-    name: old-stable-ci-cleaner
-    devops_25: true
+    name: pkgs-ci-cleaner
+    devops_25: false
     devops_29: true
-    time_staging: '48'
+    time_staging: '16'
     time_systemtest: '16'
-    time_other: '48'
+    time_other: '16'
     jobs:
       - cleaner
       - cleaner-on-labels
