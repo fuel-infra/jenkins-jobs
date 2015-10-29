@@ -1,0 +1,46 @@
+- job-template:
+    name: 'devops.install-deb'
+    project-type: freestyle
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: '{install-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    properties:
+      - inject:
+          properties-content: |
+            GERRIT_REVIEWER=vm-check-install-deb
+            GERRIT_INSTALL_VOTE=2
+    wrappers:
+      - vm-check-install-trusty
+      - timeout:
+          fail: true
+          timeout: 180
+      - pre-scm-buildstep:
+        - shell: 'rm -rf *'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{install-scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{install-scm-branch}'
+    builders:
+      - shell:
+          !include-raw-escape builders/reset.vote.sh
+      - shell:
+          !include-raw-escape builders/install.cleanup.sh
+      - shell:
+          !include-raw-escape builders/install.deb.sh
+      - shell:
+          !include-raw-escape builders/vote.sh
+    publishers:
+      - post-tasks:
+        - matches:
+            - log-text: '/run/shm/'
+              operator: AND
+          script:
+            !include-raw-escape builders/install.destroy.vm.sh
+      - archive:
+          artifacts: '**/*.xml'
+          allow-empty: true

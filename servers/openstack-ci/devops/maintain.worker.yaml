@@ -1,0 +1,34 @@
+- job-template:
+    name: 'devops.maintain.worker'
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: ''
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    properties:
+      - heavy-job:
+          weight: 4
+    parameters:
+      - label:
+          name: 'reBuilder-build-hosts'
+          default: 'none'
+    wrappers:
+      - openstack-ci-jenkins
+      - timeout:
+          fail: true
+          timeout: 120
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: '{scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{scm-branch}'
+    builders:
+      - shell:
+          !include-raw-escape builders/maintain.sh
+    publishers:
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: false
