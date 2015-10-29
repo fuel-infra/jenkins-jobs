@@ -115,6 +115,15 @@
           refspec: '${ZUUL_REF}'
           wipe-workspace: False
 
+- scm:
+    name: perestroika
+    scm:
+      - git:
+          url: 'https://git.openstack.org/openstack/fuel-mirror.git'
+          branches:
+            - master
+          basedir: 'fuel-mirror'
+
 ########################################################################
 # Section: Parameters
 ########################################################################

@@ -15,12 +15,7 @@
       - build-timeout:
           timeout: 120
     scm:
-      - fuel-infra:
-          scm-user: '{scm-user}'
-          scm-repo: '{scm-repo}'
-          scm-basedir: '{scm-basedir}'
-          scm-credentials-id: '{scm-credentials-id}'
-          scm-branch: '{scm-branch}'
+      - perestroika
     builders:
       - shell:
           !include-raw-escape builders/mos.maintain.sh

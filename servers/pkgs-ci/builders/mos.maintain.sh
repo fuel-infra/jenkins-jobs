@@ -4,7 +4,11 @@ set -o xtrace
 set -o errexit
 
 main () {
-    local WRKDIR=$(pwd)
+
+    # FIXME: use perestroika from openstack/fuel-mirror
+    # checkout fuel-mirror to ${WORKSPACE}/fuel-mirror
+    # so docker builder is in ${WORKSPACE}/fuel-mirror/perestroika
+    local WRKDIR=${WORKSPACE}/fuel-mirror/perestroika
     [ -d "${WRKDIR}/docker-builder" ] && local _dpath="${WRKDIR}/docker-builder" || exit 1
 
     # Aborted containers cleanup
