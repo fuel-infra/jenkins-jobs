@@ -57,6 +57,9 @@
           name: NETWORKCHECKER_COMMIT
           default: 'master'
       - string:
+          name: FUELUPGRADE_COMMIT
+          default: 'master'
+      - string:
           name: FUELMAIN_COMMIT
           default: 'master'
       - string:
