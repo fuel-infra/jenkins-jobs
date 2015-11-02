@@ -68,7 +68,7 @@ if [ "${USE_MIRROR}" != "none" ]; then
           USE_MIRROR=cz
           LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
           ;;
-      mnv)
+      mnv|scc)
           USE_MIRROR=usa
           LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
           ;;

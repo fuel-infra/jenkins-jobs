@@ -63,7 +63,7 @@ case "${LOCATION}" in
     poz|bud|bud-ext|cz)
         LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
         ;;
-    mnv)
+    mnv|scc)
         LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
         ;;
     *)
