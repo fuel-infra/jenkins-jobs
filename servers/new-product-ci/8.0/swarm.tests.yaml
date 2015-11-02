@@ -112,6 +112,12 @@
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'logrotate'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_destructive_ceph_neutron'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'huge_ha_neutron'
