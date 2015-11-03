@@ -2,6 +2,7 @@
     name: global
     description: 'Do not edit this job through the web!'
     project-type: freestyle
+    send_reports_disabled: false
 
 - scm:
     name: main-git
