@@ -176,7 +176,7 @@
          testgroup: 'full_cluster_reinstallation'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'partition_preservation'
-     - '{version-id}.system_test.{dist}.plugins.{testgroup}':
+     - '7.0.system_test.{dist}.plugins.{testgroup}':
          testgroup:
            - 'thread_db_separate_services'
            - 'thread_keystone_separate_services'
