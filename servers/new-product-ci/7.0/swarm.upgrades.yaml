@@ -15,17 +15,17 @@
       SLAVE_NODE_MEMORY=3072
     weight: '8'
     jobs:
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
           upgrade_testgroup:
             - 'upgrade_one_controller'
 
-      - '{version-id}.{id}.{dist}.os_upgrade':
+      - '7.0.{id}.{dist}.os_upgrade':
           testgroup: 'os_upgrade'
           weight: '20'
           node: 'huge-systest'
 
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
           upgrade_testgroup:
             - 'upgrade_ha_one_controller'
@@ -33,7 +33,7 @@
           properties: |
             UPDATE_MASTER=true
 
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
           upgrade_testgroup:
             - 'upgrade_one_controller_classic'
@@ -41,7 +41,7 @@
             CLASSIC_PROVISIONING=true
             UPDATE_MASTER=true
 
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact_neutron'
           upgrade_testgroup:
             - 'upgrade_one_controller_neutron'
@@ -50,14 +50,14 @@
             NEUTRON_ENABLE=true
             UPDATE_MASTER=true
 
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre'
           upgrade_testgroup:
             - 'rollback_neutron_gre'
           properties: |
             UPDATE_MASTER=true
 
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre_ha'
           upgrade_testgroup:
             - 'upgrade_neutron_gre_ha'
@@ -65,14 +65,14 @@
           properties: |
             UPDATE_MASTER=true
 
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_rados_gw'
           upgrade_testgroup:
             - 'upgrade_neutron_ceph'
           properties: |
             NEUTRON_ENABLE=true
 
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_rados_gw'
           upgrade_testgroup:
             - 'upgrade_neutron_ceph_classic'
@@ -80,12 +80,12 @@
             NEUTRON_ENABLE=true
             CLASSIC_PROVISIONING=true
 
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_multirole_compute_cinder'
           upgrade_testgroup:
             - 'upgrade_nova_cinder'
 
-      - '{version-id}.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{id}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_multirole_compute_cinder'
           upgrade_testgroup:
             - 'upgrade_nova_cinder_classic'

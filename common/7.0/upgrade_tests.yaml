@@ -6,7 +6,7 @@
     #
     # version-id
     #     Versioned identificator of the Fuel ISO or tarball used in this job.
-    #     For example: ``7.0``, ``7.0-community``, ``6.0-icehouse``.
+    #     For example: ``6.1``, ``6.1-community``, ``6.0-icehouse``.
     # id
     #     Any string, name of the job. Use only [a-z_-] symbols.
     # dist
@@ -29,13 +29,10 @@
     #     Branch of the fuel-main/ repo, used for running upgrade test.
     # weight
     #     Job weight
-    name: '7.0.{id}.{dist}.{testgroup}.{upgrade_testgroup}'
+    name: '7.0.{id}.{dist}.{upgrade_testgroup}'
     block-downstream: false
     block-upstream: false
     builders:
-    - inject:
-        properties-content:
-          VENV_PATH={base_venv_path}
     - inject: # overrides
         properties-content: '{properties}'
     - shell:
@@ -70,7 +67,7 @@
         default: '{upgrade_testgroup}'
     - string:
         name: ENV_PREFIX
-        default: '7.0.{id}.{dist}.{testgroup}.{upgrade_testgroup}'
+        default: '7.0.{id}.{dist}.{upgrade_testgroup}'
 
     properties:
     - heavy-job:
@@ -84,6 +81,12 @@
     - junit:
         keep-long-stdio: false
         results: '**/nosetests.xml'
+    - trigger-parameterized-builds:
+      - project: '7.0-test-reports-Testrail'
+        condition: ALWAYS
+        property-file: links.txt
+        predefined-parameters: TEST_JOB_NAME_ENABLE=true
+        triggerWithNoParameters: false
     - description-setter:
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
