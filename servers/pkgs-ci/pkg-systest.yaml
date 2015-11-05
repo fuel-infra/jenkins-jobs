@@ -7,6 +7,10 @@
     properties:
       - heavy-job:
           weight: 8
+      - inject:
+          properties-content: |
+            PKG_TYPE={pkg_type}
+            ISO_JOB_NAME={mos_version}.test_all
     parameters:
       - string:
           name: MAGNET_LINK
@@ -63,10 +67,8 @@
           scm-basedir: '{scm-ci-status-client-basedir}'
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{scm-ci-status-client-branch}'
-    properties:
-      - inject:
-          properties-content: |
-            PKG_TYPE={pkg_type}
+    triggers:
+      - zuul
     builders:
       - shell: |
           #!/bin/bash -xe
@@ -81,6 +83,13 @@
 
           # Clean logs from previous runs
           rm -f fuel-qa/logs/*
+      - copyartifact:
+          project: '{mos_version}-pkg-pipeline-{os}'
+          filter: '{pkg_type}.publish.setenvfile'
+          which-build: last-successful
+          parameter-filters: ZUUL_COMMIT=${{ZUUL_COMMIT}}
+      - inject:
+          properties-file: '{pkg_type}.publish.setenvfile'
       - systest-{os}
     wrappers:
       - gerrit-creds
