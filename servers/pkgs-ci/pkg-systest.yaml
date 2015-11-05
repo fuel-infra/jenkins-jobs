@@ -10,6 +10,10 @@
       - inject:
           properties-content: |
             PKG_TYPE={pkg_type}
+            TEST_GROUP={test_group}
+            ENV_PREFIX={mos_version}-pkg-systest-{os}
+            EXTRA_DEB_REPOS_PRIORITY=1052
+            PRODUCT_JENKINS_URL={product_jenkins_url}
             ISO_JOB_NAME={mos_version}.test_all
     parameters:
       - string:
