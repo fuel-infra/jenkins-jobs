@@ -62,7 +62,7 @@ if [ "${USE_MIRROR}" == "auto" ]; then
       bud-ext)
           USE_MIRROR=cz
           ;;
-      mnv)
+      mnv|scc)
           USE_MIRROR=usa
           ;;
       *)
