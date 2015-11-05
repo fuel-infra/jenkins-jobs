@@ -185,34 +185,6 @@
             - package.repository ${{REPOURL[0]}} : LINK"
             GERRIT_CMD="gerrit review ${{GERRIT_CHANGE_NUMBER}},${{GERRIT_PATCHSET_NUMBER}} '--message=${{GERRIT_MESSAGE}}'"
             ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}" || :
-      - conditional-step:
-            condition-kind: boolean-expression
-            condition-expression: ${{TEST_INSTALL}}
-            on-evaluation-failure: dont-run
-            steps:
-              - trigger-builds:
-                  - project: '{mos_version}-pkg-install-{os}'
-                    current-parameters: true
-                    block: true
-              - copyartifact:
-                    project: '{mos_version}-pkg-install-{os}'
-                    filter: '{pkg_type}.install.setenvfile'
-                    parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
-                    which-build: 'last-completed'
-              - shell: |
-                    #!/bin/bash -ex
-                    # Fail stage if packages are not installed
-                    [ -f "{pkg_type}.install.setenvfile" ] && source {pkg_type}.install.setenvfile
-                    exit ${{RESULT}}
-      - conditional-step:
-            condition-kind: boolean-expression
-            condition-expression: ${{TEST_SYSTEST}}
-            on-evaluation-failure: dont-run
-            steps:
-              - trigger-builds:
-                  - project: '{mos_version}-pkg-systest-{os}'
-                    current-parameters: true
-                    block: true
     publishers:
       - post-tasks:
          - matches:
