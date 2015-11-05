@@ -124,13 +124,13 @@
           ############################
 
           # Use parameters set by Zuul instead of guessing ones
-          sed -ri '/set_default_params/ d' build-{pkg_type}.sh
+          test "${{SKIP_DEF_PARAMS:-true}}" = true && sed -ri '/set_default_params/ d' build-{pkg_type}.sh
 
           # ... and build a package
-          echo FAILED=true >> ci_status_params
+          echo FAILED=true > ci_status_params
           bash build-${{IS_FUEL:+fuel-}}{pkg_type}.sh && sed -ri 's/FAILED=true/FAILED=false/' ci_status_params
 
-          rm -rf {repo-base-path}/CR-${{ZUUL_CHANGE}}
+          rm -rf {repo-base-path}/${{REQUEST_NUM:-CR-${{ZUUL_CHANGE}}}}
 
           # Extra parameters for publisher
           cat >> buildresult.params <<EOF
@@ -149,6 +149,8 @@
           RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
           REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
           EOF
+
+          test "${{UNSET_LP_BUG:-false}}" == "true" && sed -ri '/^LP_BUG=/ d' buildresult.params
 
           # Fail job in case of package building error
           FAILED=$(awk -F= '/^FAILED=/ {{gsub(/"/,""); print $2}}' ci_status_params)

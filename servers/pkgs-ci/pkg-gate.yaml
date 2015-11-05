@@ -9,6 +9,7 @@
         This job parses set of Zuul parameters (ZUUL_CHANGE_IDS and ZUUL_CHANGES) and runs build job
         for each pair.
     wrappers:
+      - gerrit-creds
       - timestamps
       - ansicolor
       - timeout:
@@ -22,6 +23,11 @@
           ############################
           # Prepare parameters for slave jobs
           ############################
+
+          # Gerrit parameters
+          export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
+          export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
+          export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
 
           declare -a CHANGE_IDS
           declare -a CHANGES
@@ -52,13 +58,56 @@
           IFS=${{OLDIFS}}
 
           echo "Preparing parameters for patchset #${{CHANGE_IDS[${{i}}]#*,}} of change ${{CHANGE_IDS[${{i}}]%,*}} in project ${{CH[0]}} (branch ${{CH[1]}})"
+
+          # Define projects paths
+          # This paths are required by perestorika for checkouting projects from git
+
+          # Strip project name to get path only
+          SRC_PROJECT_PATH=${{CH[0]%/*}}
+          # Strip spec path prefix if any
+          SRC_PROJECT_PATH=${{SRC_PROJECT_PATH#{spec-path-prefix}}}
+          # Strip spec path suffix if any
+          SRC_PROJECT_PATH=${{SRC_PROJECT_PATH%{spec-path-suffix}}}
+          # Define spec project path using prefix and suffix
+          SPEC_PROJECT_PATH={spec-path-prefix}${{SRC_PROJECT_PATH}}{spec-path-suffix}
+
+          PACKAGENAME=${{CH[0]##*/}}
+          PACKAGENAME=${{PACKAGENAME%{spec-project-suffix}}}
+          SRC_PROJECT=${{SRC_PROJECT_PATH}}/${{PACKAGENAME}}
+
+          SOURCE_REFSPEC=${{CH[2]}}
+
+          # Set flag for openstack projects
+          # Required to use paired projects src+spec
+          if [ "${{SRC_PROJECT_PATH}}" = "openstack" ]; then
+              IS_OPENSTACK=true
+              SPEC_PROJECT=${{SPEC_PROJECT_PATH}}/{spec-project-prefix}${{PACKAGENAME}}{spec-project-suffix}
+              if [ "${{CH[0]}}" = "${{SRC_PROJECT}}" ]; then
+                  unset SPEC_REFSPEC
+              else
+                  SPEC_REFSPEC=${{CH[2]}}
+                  unset SOURCE_REFSPEC
+              fi
+          else
+              IS_OPENSTACK=false
+              unset SPEC_PROJECT
+              unset SPEC_REFSPEC
+          fi
+
+          GERRIT_CMD="gerrit query --current-patch-set ${{CHANGE_IDS[${{i}}]%,*}}"
+          CHANGE_INFO=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}")
+          TOPIC=$(sed -r 's/^.+\stopic:\s+(\S+)\s*.*$/\1/' <<< ${{CHANGE_INFO}})
+          REVISION=$(sed -r 's/^.+\srevision:\s+(\S+)\s*.*$/\1/' <<< ${{CHANGE_INFO}})
+
           cat > build-param-${{CHANGE_IDS[${{i}}]}}.setenvfile <<EOF
-          # Gerrit parameters
-          GERRIT_PROJECT=${{CH[0]}}
+          # Basic required Gerrit parameters
           GERRIT_BRANCH=${{CH[1]}}
-          GERRIT_CHANGE_NUMBER=${{CHANGE_IDS[${{i}}]%,*}}
-          GERRIT_PATCHSET_NUMBER=${{CHANGE_IDS[${{i}}]#*,}}
-          GERRIT_REFSPEC=${{CH[2]}}
+
+          # Required by publisher to decide where to publish package, test or release repo
+          GERRIT_CHANGE_STATUS=NEW
+
+          # Gerrit topic is required for linked changes to openstack projects (src+spec)
+          GERRIT_TOPIC=${{TOPIC}}
 
           # Zuul parameters
           ZUUL_PROJECT=${{CH[0]}}
@@ -67,67 +116,51 @@
           ZUUL_PATCHSET=${{CHANGE_IDS[${{i}}]#*,}}
           ZUUL_CHANGE_IDS=${{CHANGE_IDS[${{i}}]}}
           ZUUL_CHANGES=${{CHANGES[${{i}}]}}
+          ZUUL_COMMIT=${{REVISION}}
 
-          # Other job-specific parameters
-          LAST_STAGE=false
-          TEST_INSTALL=false
-          TEST_SYSTEST=false
+          # Will be used for repository naming
+          REQUEST_NUM=GATE-${{ZUUL_CHANGE}}-${{ZUUL_UUID}}
+
+          # Basic project parameters
+          PACKAGENAME=${{PACKAGENAME}}
+          SRC_PROJECT=${{SRC_PROJECT}}
+          SRC_PROJECT_PATH=${{SRC_PROJECT_PATH}}
+          SOURCE_BRANCH=${{CH[1]}}
+          SOURCE_REFSPEC=${{SOURCE_REFSPEC}}
+
+          # Openstack project parameters
+          IS_OPENSTACK=${{IS_OPENSTACK}}
+          SPEC_PROJECT_PATH=${{SPEC_PROJECT_PATH}}
+          SPEC_PROJECT=${{SPEC_PROJECT}}
+          SPEC_BRANCH=${{CH[1]}}
+          SPEC_REFSPEC=${{SPEC_REFSPEC}}
+
+          # Don't post links to repositories because gating builds several projects/packages
           POST_REPO_LINK=false
+
+          # Used for linking builds
+          TRIGGERED_BY=${{BUILD_TAG}}
+
+          # Because job is not triggerred by zuul with parameters, perestroika must set parameters by itself
+          SKIP_DEF_PARAMS=false
+
+          # Don't use for gating shared repositories based on LP bug
+          UNSET_LP_BUG=true
           EOF
 
           done
 
       - trigger-builds:
           - project: '{mos_version}-pkg-pipeline-{os}'
-            current-parameters: true
+            current-parameters: false
             block: true
             parameter-factories:
               - factory: filebuild
                 file-pattern: 'build-param-*.setenvfile'
                 no-files-found-action: FAIL
-      - shell: |
-            #!/bin/bash -ex
-
-            PUBLISH_HOST={repo-host}
-            DIST=${{DIST:-{distro}}}
-
-            # New scheme
-            DEB_DIST_NAME={project-name}{mos_version}
-            DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
-            RPM_REPO_PATH={rel-path-prefix}/{os}/{project-name}{mos_version}-${{DIST}}-fuel/os/x86_64/
-
-            ############################
-            # Create list of built DEB repositories
-            ############################
-
-            for CR in `sed -r 's/,[0-9]+//g' <<< ${{ZUUL_CHANGE_IDS}}`; do
-                DEB_REPOS="${{DEB_REPOS:+${{DEB_REPOS}}|}}deb http://${{PUBLISH_HOST}}/{cr-path-prefix}/CR-${{CR}}/${{DEB_REPO_PATH}} ${{DEB_DIST_NAME}} main"
-                RPM_REPOS="${{RPM_REPOS:+${{RPM_REPOS}}|}}http://${{PUBLISH_HOST}}/{cr-path-prefix}/CR-${{CR}}/${{RPM_REPO_PATH}}"
-            done
-            echo "EXTRA_DEB_REPOS=${{DEB_REPOS}}" > deb_repos.setenvfile
-            echo "RPM_REPO_URL=${{RPM_REPOS}}"    > rpm_repos.setenvfile
-
-            ############################
-            # Create list of built DEB repositories
-            ############################
-
-      - conditional-step:
-            condition-kind: boolean-expression
-            condition-expression: ${{TEST_SYSTEST}}
-            on-evaluation-failure: dont-run
-            steps:
-              - trigger-builds:
-                  - project: '{mos_version}-pkg-systest-{os}'
-                    current-parameters: true
-                    property-file: '{pkg_type}_repos.setenvfile'
-                    property-file-fail-on-missing: true
-                    block: true
-                    predefined-parameters: |
-                        ISO_JOB_NAME={mos_version}.test_all
-
     publishers:
       - archive:
-          artifacts: 'build-param-*.setenvfile,*_repos.setenvfile'
+          artifacts: 'build-param-*.setenvfile'
           allow-empty: True
 
     node: '{build-node}'
