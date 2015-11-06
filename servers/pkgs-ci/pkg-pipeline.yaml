@@ -127,7 +127,9 @@
           test "${{SKIP_DEF_PARAMS:-true}}" = true && sed -ri '/set_default_params/ d' build-{pkg_type}.sh
 
           # ... and build a package
-          echo FAILED=true > ci_status_params
+          # File ci_status_params is created by status reporting (ci-status-client/ci-status-report.sh)
+          # Append parameters (>>) to it instead of (re)creating (>) new file
+          echo FAILED=true >> ci_status_params
           bash build-${{IS_FUEL:+fuel-}}{pkg_type}.sh && sed -ri 's/FAILED=true/FAILED=false/' ci_status_params
 
           rm -rf {repo-base-path}/${{REQUEST_NUM:-CR-${{ZUUL_CHANGE}}}}
