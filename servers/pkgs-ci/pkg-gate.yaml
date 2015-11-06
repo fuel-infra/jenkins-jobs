@@ -8,6 +8,10 @@
     description: |
         This job parses set of Zuul parameters (ZUUL_CHANGE_IDS and ZUUL_CHANGES) and runs build job
         for each pair.
+    properties:
+      - throttle:
+          option: project
+          max-per-node: 7
     wrappers:
       - gerrit-creds
       - timestamps
