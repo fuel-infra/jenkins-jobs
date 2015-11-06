@@ -1,8 +1,8 @@
-- job:
-    name: verify-fuel-web-docs
+- job-template:
+    name: '{prefix}-fuel-web-docs'
     builders:
       - shell:
-          !include-raw './builders/verify-fuel-web-docs.sh'
+          !include-raw-escape './builders/verify-fuel-web-docs.sh'
     concurrent: true
     description: 'Test requests on gerrit'
     logrotate:
@@ -43,6 +43,8 @@
         - gerrit:
             trigger-on:
               - patchset-created-event
+              - comment-added-contains-event:
+                  comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
             projects:
               - project-compare-type: PLAIN
                 project-pattern: 'openstack/fuel-web'
@@ -57,3 +59,10 @@
           write-description: true
       - ansicolor:
           colormap: xterm
+
+- project:
+    name: dualcheck-fuel-web-docs
+    jobs:
+      - '{prefix}-fuel-web-docs':
+          prefix: verify
+

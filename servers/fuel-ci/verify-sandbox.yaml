@@ -1,5 +1,5 @@
-- job:
-    name: verify-sandbox
+- job-template:
+    name: '{prefix}-sandbox'
     disabled: true
     description: |
       Purpose of this job is to test current Jenkins Gerrits configuration,
@@ -9,7 +9,7 @@
           weight: 1
     builders:
       - shell:
-          !include-raw './builders/verify-sandbox.sh'
+          !include-raw-escape './builders/verify-sandbox.sh'
     triggers:
       - gerrit:
           trigger-on:
@@ -17,6 +17,8 @@
             - change-abandoned-event
             - change-merged-event
             - change-restored-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: 'openstack-dev/ci-sandbox'
@@ -24,3 +26,10 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
+
+- project:
+    name: dualcheck-sandbox
+    jobs:
+      - '{prefix}-sandbox':
+          prefix: verify
+

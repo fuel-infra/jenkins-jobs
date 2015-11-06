@@ -28,6 +28,7 @@
       - fuel-infra-request:
           code-project: '{test-project}'
           branch: '{test-branch}'
+          fuel-infra-request-recheck_regexp: '{gerrit_trigger_on_recheck_regexp}'
 
 - project:
     name: fuel-puppet-modules
