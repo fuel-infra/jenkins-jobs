@@ -117,6 +117,7 @@
           ZUUL_CHANGE_IDS=${{CHANGE_IDS[${{i}}]}}
           ZUUL_CHANGES=${{CHANGES[${{i}}]}}
           ZUUL_COMMIT=${{REVISION}}
+          ZUUL_UUID=${{ZUUL_UUID}}
 
           # Will be used for repository naming
           REQUEST_NUM=GATE-${{ZUUL_CHANGE}}-${{ZUUL_UUID}}
