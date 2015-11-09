@@ -44,7 +44,7 @@
           project: '{mos_version}-pkg-pipeline-{os}'
           filter: 'buildresult.params, {pkg_type}.publish.setenvfile'
           which-build: last-successful
-          parameter-filters: ZUUL_COMMIT=${{ZUUL_COMMIT}}
+          parameter-filters: GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}
       - inject:
           properties-file: 'buildresult.params'
       - inject:
