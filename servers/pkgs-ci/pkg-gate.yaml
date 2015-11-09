@@ -106,6 +106,7 @@
           cat > build-param-${{CHANGE_IDS[${{i}}]}}.setenvfile <<EOF
           # Basic required Gerrit parameters
           GERRIT_BRANCH=${{CH[1]}}
+          GERRIT_PATCHSET_REVISION=${{REVISION}}
 
           # Required by publisher to decide where to publish package, test or release repo
           GERRIT_CHANGE_STATUS=NEW
