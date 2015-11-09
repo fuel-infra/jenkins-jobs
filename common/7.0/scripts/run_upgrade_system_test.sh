@@ -142,6 +142,7 @@ if [[ -n "${DEB_LATEST}" ]]; then
         fi
         EXTRA_DEB_REPOS+="${DEB_SECURITY}"
     fi
+    export EXTRA_DEB_REPOS
 fi
 
 
