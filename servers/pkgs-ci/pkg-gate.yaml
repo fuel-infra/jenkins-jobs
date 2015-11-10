@@ -105,6 +105,7 @@
 
           cat > build-param-${{CHANGE_IDS[${{i}}]}}.setenvfile <<EOF
           # Basic required Gerrit parameters
+          GERRIT_PROJECT=${{CH[0]}}
           GERRIT_BRANCH=${{CH[1]}}
           GERRIT_PATCHSET_REVISION=${{REVISION}}
 
