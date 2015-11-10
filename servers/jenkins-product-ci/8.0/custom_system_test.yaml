@@ -23,8 +23,8 @@
       - choice:
           name: OPENSTACK_RELEASE
           choices:
-            - CentOS
             - Ubuntu
+            - CentOS
       - choice:
           name: TEST_GROUP
           description: |
