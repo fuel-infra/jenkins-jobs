@@ -79,6 +79,7 @@
           default: 'latest'
       - string:
           name: RPM_LATEST
+          default: 'latest'
       - string:
           name: UBUNTU_MIRROR_ID
           default: 'ubuntu-latest'
