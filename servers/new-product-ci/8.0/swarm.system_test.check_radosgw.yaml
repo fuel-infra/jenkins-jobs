@@ -1,0 +1,74 @@
+
+- job-template:
+    name: '8.0.system_test.{dist}.check_radosgw'
+    block-downstream: false
+    block-upstream: false
+    builders:
+    - inject: # default env variables
+        properties-content: |
+          VENV_PATH={venvpath}
+          POOL_DEFAULT={default_pool}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          TEST_ISO_JOB={version-id}.test_all
+    - inject: # overrides
+        properties-content: '{properties}'
+    - shell:
+        !include-raw-escape '../../../common/scripts/run_system_test.sh'
+    concurrent: true
+    description: '{description}'
+    disabled: false
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+    node: '{node}'
+
+    parameters:
+    - string:
+        name: MAGNET_LINK
+        description: "iso magnet link"
+    - string:
+        name: ENV_PREFIX
+        default: '8.0.system_test.ubuntu.check_radosgw'
+        description: 'Environment prefix'
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
+
+    publishers:
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+    - trigger-parameterized-builds:
+      - project: '{version-id}-test-reports-Testrail'
+        condition: ALWAYS
+        property-file: links.txt
+        predefined-parameters: TEST_JOB_NAME_ENABLE=true
+        triggerWithNoParameters: false
+
+    scm:
+    - main-git:
+        reponame: '{reponame}'
+        repobranch: '{repobranch}'
+        basedir: ''
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - inject-passwords:
+        global: true
+    - ansicolor:
+        colormap: xterm

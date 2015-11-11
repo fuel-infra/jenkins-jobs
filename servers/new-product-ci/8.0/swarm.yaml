@@ -238,6 +238,9 @@
             - name: '8.0.system_test.ubuntu.network_templates'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '8.0.system_test.ubuntu.check_radosgw'
+              current-parameters: true
+              kill-phase-on: NEVER
             # FIXME: upgrades
             #   # Upgrades
             - name: '8.0.system_test.ubuntu.os_upgrade'
