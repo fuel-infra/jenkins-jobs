@@ -40,7 +40,7 @@ PREV_WARNS=$(grep -c WARNING ${LOG_FILE} || true)
 
 # Check if all python modules from ./fuelweb_test are currently described in ./doc/*.rst files
 cd ${WORKSPACE}
-PREV_MODULES=$(find fuelweb_test -name *.py -not -name __init__.py | sed -e 's|/|.|g' | sed -e 's/.py$//g')
+PREV_MODULES=$(find fuelweb_test system_test -name *.py -not -name __init__.py | sed -e 's|/|.|g' | sed -e 's/.py$//g')
 PREV_MISSING_MODULES=$(for module in $PREV_MODULES; do if ! egrep -q -r "$module$" ./doc ; then echo $module; fi; done)
 if [ -n "$PREV_MISSING_MODULES" ]; then
     PREV_MISSING_MODULES_COUNT=$(echo "$PREV_MISSING_MODULES"|wc -l)
