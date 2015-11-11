@@ -1,0 +1,125 @@
+--- # manually created template
+docker-builder:
+  job_name: docker-publish
+  verify_tests:
+    name: docker-build
+    params:
+      URL: github.com/jbfink/docker-lampstack.git
+      NAME: lampstack
+      TAG: git
+      REGISTRY_URLS: registry.fuel-infra.org
+
+7.0_ubuntu:
+  job_name: devops.7.0.fuel-library.create_env
+  verify_tests:
+    name: devops.7.0.fuel-library.create_env
+    params:
+      ENV_PREFIXES: env_ubuntu env_centos env_masternode env_granular_ubuntu env_granular_centos
+      BRANCH: stable/7.0
+      ISO_ID: default
+      NODE: srv47.devops.mirantis.net
+      SHA: c7c91b07aa3c0a30b1e4a18b3dc577ed4e706135
+      VENV_PATH: /home/jenkins/venv-nailgun-tests-2.9
+      UPDATE_VENV: true
+
+systest:
+  job_name:
+  verify_tests:
+    name: 8.0.system_test.ubuntu.setup
+    params:
+      ENV_PREFIX: 8.0.system_test.ubuntu.setup
+
+custom_iso:
+  job_name:
+  verify_tests:
+
+mirror_pkgs_sync:
+  job_name:
+  verify_tests:
+
+runner:
+  job_name:
+  verify_tests:
+
+mirror:
+  job_name:
+  verify_tests:
+
+services-systest:
+  job_name:
+  verify_tests:
+
+NO_LABEL:
+  job_name:
+  verify_tests:
+
+custom_bvt:
+  job_name:
+  verify_tests:
+
+bvt:
+  job_name:
+  verify_tests:
+
+huge-systest:
+  job_name:
+  verify_tests:
+
+docs:
+  job_name:
+  verify_tests:
+
+custom_test:
+  job_name:
+  verify_tests:
+
+iso_cacher:
+  job_name:
+  verify_tests:
+
+testrail:
+  job_name:
+  verify_tests:
+
+smoke:
+  job_name:
+  verify_tests:
+
+iso:
+  job_name:
+  verify_tests:
+
+custom_iso_us:
+  job_name:
+  verify_tests:
+
+crla:
+  job_name:
+  verify_tests:
+
+staging_bvt:
+  job_name:
+  verify_tests:
+
+proposed_bvt:
+  job_name:
+  verify_tests:
+
+build-fuel-plugins:
+  job_name:
+  verify_tests:
+
+reports:
+  job_name:
+  verify_tests:
+
+publish_for_partners:
+  job_name:
+  verify_tests:
+
+compare_repos:
+  job_name:
+  verify_tests:
+
+
+
