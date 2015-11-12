@@ -57,6 +57,10 @@
     - string:
         name: TEST_GROUP
         default: '{testgroup}'
+    - string:
+        name: UPGRADE_TEST_GROUP
+        default: '{upgrade_testgroup}'
+
 
     publishers:
     - archive:

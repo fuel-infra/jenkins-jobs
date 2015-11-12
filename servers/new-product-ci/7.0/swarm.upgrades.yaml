@@ -21,7 +21,8 @@
             - 'upgrade_one_controller'
 
       - '7.0.{id}.{dist}.os_upgrade':
-          testgroup: 'os_upgrade'
+          testgroup: 'prepare_os_upgrade'
+          upgrade_testgroup: 'os_upgrade'
           weight: '20'
           node: 'huge-systest'
 

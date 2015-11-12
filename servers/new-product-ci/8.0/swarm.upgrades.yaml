@@ -21,7 +21,7 @@
             - 'upgrade_one_controller'
 
       - '{version-id}.{id}.{dist}.os_upgrade':
-          testgroup: 'ha_ceph_for_all_ubuntu_neutron_vlan'
+          testgroup: 'prepare_os_upgrade'
           upgrade_testgroup: 'os_upgrade'
           weight: '20'
           node: 'huge-systest'
