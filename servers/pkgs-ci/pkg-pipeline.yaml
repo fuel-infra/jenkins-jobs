@@ -154,7 +154,7 @@
 
           # Extra script(s) for testing
           if [ -d ${{WORKSPACE}}/wrk-build/${{PACKAGENAME}}-spec/tests ]; then
-              TESTS_CONTENT=$(tar -C ${{WORKSPACE}}/wrk-build/${{PACKAGENAME}}-spec -cz tests | base64)
+              TESTS_CONTENT=$(tar -C ${{WORKSPACE}}/wrk-build/${{PACKAGENAME}}-spec -cz tests | base64 -w0)
               echo "TESTS_CONTENT=${{TESTS_CONTENT}}" >> buildresult.params
           fi
 
