@@ -152,6 +152,12 @@
           REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
           EOF
 
+          # Extra script(s) for testing
+          if [ -d ${{WORKSPACE}}/wrk-build/${{PACKAGENAME}}-spec/tests ]; then
+              TESTS_CONTENT=$(tar -C ${{WORKSPACE}}/wrk-build/${{PACKAGENAME}}-spec -cz tests | base64)
+              echo "TESTS_CONTENT=${{TESTS_CONTENT}}" >> buildresult.params
+          fi
+
           test "${{UNSET_LP_BUG:-false}}" == "true" && sed -ri '/^LP_BUG=/ d' buildresult.params
 
           # Fail job in case of package building error
