@@ -29,12 +29,12 @@
           ./parse_yaml.py ${LABEL_NAME} > test.param
           curl https://product-ci.infra.mirantis.net/job/8.0.test_all/lastSuccessfulBuild/artifact/magnet_link.txt >> test.param
       - inject:
-          properties-file: ./test.param
+          properties-file: utils/label_compliance/test.param
       - trigger-builds:
         - project: $TRIGGERED_JOB_NAMES
           same-node: true
           block: true
-          property-file: ./test.param
+          property-file: utils/label_compliance/test.param
       - trigger-builds:
         - project: 'label_job_manager'
           predefined-parameters: |
