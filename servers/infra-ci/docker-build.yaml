@@ -3,7 +3,7 @@
     node: docker-builder
     builders:
       - shell:
-          !include-raw './scripts/docker-build.sh'
+          !include-raw './builders/docker-build.sh'
       - trigger-builds:
         - project: 'docker-publish'
           current-parameters: true
@@ -13,13 +13,14 @@
     concurrent: true
     parameters:
         - string:
-            name: URL
-            description: 'GIT repository with image'
+            name: REPOSITORY
+            default: 'https://review.fuel-infra.org/fuel-infra/dockerfiles'
+            description: 'repository with dockerfiles'
         - string:
-            name: NAME
-            description: 'destination repository name (without "infra-" prefix)'
+            name: IMAGE_NAME
+            description: 'destination repository name'
         - string:
-            name: TAG
+            name: IMAGE_TAG
             description: 'destination repository tag'
         - string:
             name: REGISTRY_URLS

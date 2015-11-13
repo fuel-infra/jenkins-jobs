@@ -3,16 +3,16 @@
     node: docker-builder
     builders:
       - shell:
-          !include-raw './scripts/docker-publish.sh'
+          !include-raw './builders/docker-publish.sh'
     description: |
       This job will use docker builder host and build an image from the given url.
     concurrent: true
     parameters:
       - string:
-          name: NAME
-          description: 'name of image to publish (without "infra-" prefix)'
+          name: IMAGE_NAME
+          description: 'name of image to publish'
       - string:
-          name: TAG
+          name: IMAGE_TAG
           description: 'image tag to publish'
       - string:
           name: REGISTRY_URLS
