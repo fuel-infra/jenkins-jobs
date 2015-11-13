@@ -243,36 +243,36 @@
               kill-phase-on: NEVER
             # FIXME: upgrades
             #   # Upgrades
-            - name: '8.0.system_test.ubuntu.os_upgrade'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.upgrade_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.upgrade_one_controller_classic'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.upgrade_one_controller_neutron'
-              current-parameters: true
-              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.os_upgrade'
+#              current-parameters: true
+#              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.upgrade_one_controller'
+#              current-parameters: true
+#              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.upgrade_one_controller_classic'
+#              current-parameters: true
+#              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.upgrade_one_controller_neutron'
+#              current-parameters: true
+#              kill-phase-on: NEVER
 #            - name: '8.0.system_test.centos.upgrade_ha_one_controller'
 #              current-parameters: true
 #              kill-phase-on: NEVER
 #            - name: '8.0.system_test.centos.upgrade_ha_one_controller_delete_node'
 #              current-parameters: true
 #              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.rollback_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.rollback_neutron_gre'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.upgrade_neutron_gre_ha'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.rollback_neutron_gre_ha'
-              current-parameters: true
-              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.rollback_one_controller'
+#              current-parameters: true
+#              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.rollback_neutron_gre'
+#              current-parameters: true
+#              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.upgrade_neutron_gre_ha'
+#              current-parameters: true
+#              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.rollback_neutron_gre_ha'
+#              current-parameters: true
+#              kill-phase-on: NEVER
 #            - name: '8.0.system_test.centos.rollback_one_controller'
 #              current-parameters: true
 #              kill-phase-on: NEVER
@@ -285,24 +285,24 @@
 #            - name: '8.0.system_test.centos.upgrade_neutron_ceph'
 #              current-parameters: true
 #              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.upgrade_neutron_ceph'
-              current-parameters: true
-              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.upgrade_neutron_ceph'
+#              current-parameters: true
+#              kill-phase-on: NEVER
 #            - name: '8.0.system_test.centos.upgrade_neutron_ceph_classic'
 #              current-parameters: true
 #              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.upgrade_neutron_ceph_classic'
-              current-parameters: true
-              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.upgrade_neutron_ceph_classic'
+#              current-parameters: true
+#              kill-phase-on: NEVER
 #            - name: '8.0.system_test.centos.upgrade_nova_cinder'
 #              current-parameters: true
 #              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.upgrade_nova_cinder'
-              current-parameters: true
-              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.upgrade_nova_cinder'
+#              current-parameters: true
+#              kill-phase-on: NEVER
 #            - name: '8.0.system_test.centos.upgrade_nova_cinder_classic'
 #              current-parameters: true
 #              kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.upgrade_nova_cinder_classic'
-              current-parameters: true
-              kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.upgrade_nova_cinder_classic'
+#              current-parameters: true
+#              kill-phase-on: NEVER
