@@ -68,7 +68,7 @@ WARNS=$(grep -c WARNING ${LOG_FILE} || true)
 
 # Check if all python modules from ./fuelweb_test are described in ./doc/*.rst files
 cd ${WORKSPACE}
-MODULES=$(find fuelweb_test -name *.py -not -name __init__.py | sed -e 's|/|.|g' | sed -e 's/.py$//g')
+MODULES=$(find fuelweb_test system_test -name *.py -not -name __init__.py | sed -e 's|/|.|g' | sed -e 's/.py$//g')
 MISSING_MODULES=$(for module in $MODULES; do if ! egrep -q -r "$module$" ./doc ; then echo $module; fi; done)
 if [ -n "$MISSING_MODULES" ]; then
     MISSING_MODULES_COUNT=$(echo "$MISSING_MODULES"|wc -l)
