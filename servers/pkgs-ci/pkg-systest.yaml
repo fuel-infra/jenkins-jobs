@@ -89,9 +89,11 @@
           rm -f fuel-qa/logs/*
       - copyartifact:
           project: '{mos_version}-pkg-pipeline-{os}'
-          filter: '{pkg_type}.publish.setenvfile'
+          filter: 'ci_status_params, {pkg_type}.publish.setenvfile'
           which-build: last-successful
           parameter-filters: GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}
+      - inject:
+          properties-file: 'ci_status_params'
       - inject:
           properties-file: '{pkg_type}.publish.setenvfile'
       - systest-{os}
