@@ -64,6 +64,6 @@ ISO_PATH=`seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "$
 VERSION_STRING=`basename $ISO_PATH | cut -d '-' -f 2-3`
 echo "Description string: $TEST_GROUP on $VERSION_STRING"
 
-export MAKE_SNAPSHOT=true
+export MAKE_SNAPSHOT=false
 
 sh -x "utils/jenkins/system_tests.sh" -t test -w "$WORKSPACE" -e "$ENV_NAME" -o --group="$TEST_GROUP" -i "$ISO_PATH"
