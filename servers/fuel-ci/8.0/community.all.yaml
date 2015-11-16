@@ -45,7 +45,6 @@
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
             ISO_ID=8.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
-            UPGRADE_ID=8.0-upgrade-$BUILD_NUMBER-$BUILD_TIMESTAMP
             ARTIFACTS_DIR=$WORKSPACE/artifacts
             BUILD=fuel-community-8.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
         - project: fuel_community_build_reports

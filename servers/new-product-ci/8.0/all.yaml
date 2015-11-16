@@ -4,7 +4,7 @@
       - shell:
           !include-raw builders/all.sh
     description: |
-      Build artifacts: iso and upgrade tarball
+      Build artifacts: iso
 
       <p>
         Owned by: Fuel Build Team<br/>
@@ -59,10 +59,6 @@
         - project: 'deploy_iso_on_cachers'
           property-file: magnet_link.txt
           condition: UNSTABLE_OR_BETTER
-
-        - project: deploy_iso_on_cachers
-          condition: UNSTABLE_OR_BETTER
-          property-file: upgrade_magnet_link.txt
 
         - project: '8.0.test_all'
           condition: UNSTABLE_OR_BETTER

@@ -10,7 +10,6 @@ export FEATURE_GROUPS="mirantis"
 
 PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
 export ISO_NAME=fuel-$PROD_VER-$BUILD_NUMBER-${BUILD_TIMESTAMP}
-export UPGRADE_TARBALL_NAME=fuel-$PROD_VER-upgrade-$BUILD_NUMBER-${BUILD_TIMESTAMP}
 
 export BUILD_DIR=${WORKSPACE}/../tmp/${JOB_NAME}/build
 export LOCAL_MIRROR=${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror
@@ -79,7 +78,7 @@ EOF
 #########################################
 
 echo "STEP 1. Make everything"
-make ${make_args} iso upgrade-lrzip version-yaml openstack-yaml
+make ${make_args} iso version-yaml openstack-yaml
 
 #########################################
 
@@ -104,7 +103,6 @@ cp ${BUILD_DIR}/iso/isoroot/version.yaml ${WORKSPACE}/version.yaml.txt || true
 (cd ${BUILD_DIR}/iso/isoroot && find . | sed -s 's/\.\///') > ${WORKSPACE}/listing.txt || true
 
 grep MAGNET_LINK ${ARTS_DIR}/fuel-*.iso.data.txt > ${WORKSPACE}/magnet_link.txt
-grep MAGNET_LINK ${ARTS_DIR}/fuel-*upgrade-*.data.txt > ${WORKSPACE}/upgrade_magnet_link.txt
 
 #########################################
 

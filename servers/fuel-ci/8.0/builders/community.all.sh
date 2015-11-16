@@ -6,7 +6,6 @@ export FEATURE_GROUPS="experimental"
 
 PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
 export ISO_NAME="fuel-community-${PROD_VER}-${BUILD_NUMBER}-${BUILD_TIMESTAMP}"
-export UPGRADE_TARBALL_NAME="fuel-community-${PROD_VER}-upgrade-${BUILD_NUMBER}-${BUILD_TIMESTAMP}"
 
 export BUILD_DIR="${WORKSPACE}/../tmp/${JOB_NAME}/build"
 export LOCAL_MIRROR="${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror"
@@ -57,7 +56,7 @@ export USE_MIRROR=none
 
 echo "STEP 1. Make everything"
 
-make iso upgrade-lrzip version-yaml openstack-yaml
+make iso version-yaml openstack-yaml
 
 echo "STEP 2. Publish everything"
 
