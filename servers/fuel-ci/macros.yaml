@@ -42,7 +42,7 @@
           trigger-on:
             - patchset-created-event
             - comment-added-contains-event:
-                comment-contains-value: "^recheck$"
+                comment-contains-value: '{fuel-infra-request-recheck_regexp}'
           projects:
             - project-compare-type: 'ANT'
               project-pattern: '{code-project}'

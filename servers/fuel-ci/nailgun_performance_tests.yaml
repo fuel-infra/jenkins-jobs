@@ -34,11 +34,11 @@
           fail: true
           timeout: 45
 
-- job:
-    name: verify-nailgun_performance_tests
+- job-template:
+    name: '{prefix}-nailgun_performance_tests'
     builders:
       - shell:
-          !include-raw builders/nailgun_performance_tests.sh
+          !include-raw-escape builders/nailgun_performance_tests.sh
     description: |
       Verify nailgun performance tests for patches.
       Uses artifacts from "nailgun_performance_tests" and do not store it's own.
@@ -76,6 +76,8 @@
       - gerrit:
           trigger-on:
             - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: openstack/fuel-web
@@ -91,3 +93,10 @@
       - timeout:
           fail: true
           timeout: 45
+
+- project:
+    name: dualcheck-nailgun_performance_tests
+    jobs:
+      - '{prefix}-nailgun_performance_tests':
+          prefix: verify
+

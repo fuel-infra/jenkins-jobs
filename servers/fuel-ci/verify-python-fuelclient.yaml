@@ -39,8 +39,7 @@
           choosing-strategy: '{choosing-strategy}'
     triggers:
       - gerrit:
-          trigger-on:
-            - '{trigger-on}'
+          trigger-on: '{obj:trigger_on}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: openstack/python-fuelclient
@@ -62,14 +61,18 @@
     jobs:
       - '{prefix}-python-fuelclient':
           prefix: verify
-          trigger-on: patchset-created-event
+          trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           email-type: default
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
           timed: '0 13 * * *'
       - '{prefix}-python-fuelclient':
           prefix: gate
-          trigger-on: change-merged-event
+          trigger_on:
+            - change-merged-event
           email-type: alert-on-merge
           refspec: refs/heads/$GERRIT_BRANCH
           choosing-strategy: default

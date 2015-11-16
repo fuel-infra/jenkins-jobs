@@ -1,8 +1,8 @@
-- job:
-    name: verify-fuel-stats
+- job-template:
+    name: '{prefix}-fuel-stats'
     builders:
       - shell:
-          !include-raw './builders/verify-fuel-stats.sh'
+          !include-raw-escape './builders/verify-fuel-stats.sh'
     concurrent: true
     description: "Runs tox -v"
     logrotate:
@@ -28,6 +28,8 @@
       - gerrit:
           trigger-on:
             - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: 'openstack/fuel-stats'
@@ -45,3 +47,9 @@
           colormap: css
     publishers:
       - email-default
+
+- project:
+    name: dualcheck-fuel-stats
+    jobs:
+      - '{prefix}-fuel-stats':
+          prefix: verify

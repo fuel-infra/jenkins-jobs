@@ -1,8 +1,8 @@
-- job:
-    name: verify-fuel-qa-docs
+- job-template:
+    name: '{prefix}-fuel-qa-docs'
     builders:
       - shell:
-          !include-raw './builders/verify-fuel-qa-docs.sh'
+          !include-raw-escape './builders/verify-fuel-qa-docs.sh'
     description: 'Check that we dont add more warnings.'
     logrotate:
       numToKeep: 100
@@ -30,6 +30,8 @@
       - gerrit:
           trigger-on:
             - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: openstack/fuel-qa
@@ -56,3 +58,10 @@
           keep-all: true
           allow-missing: true
           wrapper-name: 'htmlpublisher-wrapper.html'
+
+- project:
+    name: dualcheck-fuel-qa-docs
+    jobs:
+      - '{prefix}-fuel-qa-docs':
+          prefix: verify
+
