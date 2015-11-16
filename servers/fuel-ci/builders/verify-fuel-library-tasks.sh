@@ -20,6 +20,6 @@ VENV=${WORKSPACE}_VENV
 virtualenv -p python2.6 --clear ${VENV}
 source ${VENV}/bin/activate || exit 1
 
-pip install -r "${WORKSPACE}/utils/jenkins/tasks-test-requirements.txt"
+pip install "tox>=1.8"
 
 /bin/bash ${WORKSPACE}/utils/jenkins/tasks_run_tests.sh
