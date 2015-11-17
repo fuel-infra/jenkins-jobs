@@ -52,7 +52,7 @@ case "${LOCATION}" in
     poz|bud|bud-ext|cz)
         LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
         ;;
-    mnv|scc)
+    scc)
         LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
         ;;
     *)
@@ -126,7 +126,7 @@ echo "STEP 2. Publish iso"
 
 export LOCAL_STORAGE='/var/www/fuelweb-iso'
 export HTTP_ROOT="http://$(hostname -f)/fuelweb-iso"
-export TRACKER_URL='http://tracker01-bud.infra.mirantis.net:8080/announce,http://tracker01-mnv.infra.mirantis.net:8080/announce,http://tracker01-msk.infra.mirantis.net:8080/announce'
+export TRACKER_URL='http://tracker01-bud.infra.mirantis.net:8080/announce,http://tracker01-scc.infra.mirantis.net:8080/announce,http://tracker01-msk.infra.mirantis.net:8080/announce'
 
 cd "${ARTS_DIR}"
 for artifact in fuel-*; do

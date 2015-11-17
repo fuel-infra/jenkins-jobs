@@ -86,7 +86,7 @@ echo "STEP 2. Publish everything"
 
 export LOCAL_STORAGE='/var/www/fuelweb-iso'
 export HTTP_ROOT="http://`hostname -f`/fuelweb-iso"
-export TRACKER_URL='http://tracker01-bud.infra.mirantis.net:8080/announce,http://tracker01-mnv.infra.mirantis.net:8080/announce,http://tracker01-msk.infra.mirantis.net:8080/announce'
+export TRACKER_URL='http://tracker01-bud.infra.mirantis.net:8080/announce,http://tracker01-scc.infra.mirantis.net:8080/announce,http://tracker01-msk.infra.mirantis.net:8080/announce'
 
 cd ${ARTS_DIR}
 for artifact in `ls fuel-*`
