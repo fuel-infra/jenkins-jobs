@@ -77,7 +77,7 @@
               fi
           done
 
-          bash -x repo-test-{pkg_type} ||:
+          bash -x repo-test-{pkg_type}-docker ||:
 
           TIME_ELAPSED=$(( $(date +%s) - ${{START_TS}} ))
           echo "RESULT=${{RESULT}}" > {pkg_type}.install.setenvfile
