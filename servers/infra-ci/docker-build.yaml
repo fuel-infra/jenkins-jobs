@@ -12,20 +12,20 @@
       Job 'docker-publish' is triggered after this one to publish image to registries.
     concurrent: true
     parameters:
-        - string:
-            name: REPOSITORY
-            default: 'https://review.fuel-infra.org/fuel-infra/dockerfiles'
-            description: 'repository with dockerfiles'
-        - string:
-            name: IMAGE_NAME
-            description: 'destination repository name'
-        - string:
-            name: IMAGE_TAG
-            description: 'destination repository tag'
-        - string:
-            name: REGISTRY_URLS
-            default: 'registry.fuel-infra.org'
-            description: 'space separated list of <hostname>:<port> pairs'
+      - string:
+          name: REPOSITORY
+          default: 'https://review.fuel-infra.org/fuel-infra/dockerfiles'
+          description: 'repository with dockerfiles'
+      - string:
+          name: IMAGE_NAME
+          description: 'destination repository name'
+      - string:
+          name: IMAGE_TAG
+          description: 'destination repository tag'
+      - string:
+          name: REGISTRY_URLS
+          default: 'registry01-bud.fuel-infra.org registry01-scc.fuel-infra.org'
+          description: 'space separated list of docker registry hosts'
     wrappers:
       - timeout:
           fail: true

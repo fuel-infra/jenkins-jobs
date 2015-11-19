@@ -16,8 +16,8 @@
           description: 'image tag to publish'
       - string:
           name: REGISTRY_URLS
-          default: 'registry.fuel-infra.org'
-          description: 'space separated list of <hostname>:<port> pairs'
+          default: 'registry01-bud.fuel-infra.org registry01-scc.fuel-infra.org'
+          description: 'space separated list of docker registry hosts'
     wrappers:
       - timeout:
           fail: true
