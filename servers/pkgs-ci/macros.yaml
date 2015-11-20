@@ -134,3 +134,15 @@
 ########################################################################
 # Section: Publushers
 ########################################################################
+- publisher:
+    name: email-alert-on-merge
+    publishers:
+      - email-ext:
+          body: $DEFAULT_CONTENT
+          send-to:
+            - recipients
+          recipients: 'skulanov@mirantis.net'
+          subject: '[Packaging-ci][$PROJECT_NAME] Fuel package build on merge failed - # $BUILD_NUMBER'
+          presend-script:
+            !include-raw 'email_ext_groovy.inc'
+          failure: true

@@ -136,6 +136,7 @@
             parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
             which-build: 'last-completed'
     publishers:
+      - 'email-alert-on-merge'
       - archive:
           artifacts: 'buildresult.params, ci_status_params, {pkg_type}.publish.setenvfile, {pkg_type}.install.setenvfile'
           allow-empty: True

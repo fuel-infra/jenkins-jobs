@@ -35,6 +35,7 @@
     builders:
         - shell: /bin/bash -xe publisher.v5/publish-{pkg_type}-binaries.sh
     publishers:
+      - 'email-alert-on-merge'
       - archive:
            artifacts: '*.publish.setenvfile'
            allow-empty: true
