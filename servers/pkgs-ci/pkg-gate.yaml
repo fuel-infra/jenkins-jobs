@@ -33,6 +33,28 @@
           export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
           export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
 
+          # Regexes for files to skip CentOS
+          FILES_SKIP_CENTOS=( "^\." "^debian/" "^trusty/debian/" )
+          RE_OPT_CENTOS=""
+
+          # Regexes for files to skip Ubuntu
+          FILES_SKIP_UBUNTU=( "^\." "^rpm/" "^centos\d/" )
+          RE_OPT_UBUNTU=""
+
+          # Generate command line options for grep to skip CentOS
+          for RE in ${{FILES_SKIP_CENTOS[*]}}; do
+            RE_OPT_CENTOS="${{RE_OPT_CENTOS}} -e ${{RE}}"
+          done
+
+          # Generate command line options for grep to skip Ubuntu
+          for RE in ${{FILES_SKIP_UBUNTU[*]}}; do
+            RE_OPT_UBUNTU="${{RE_OPT_UBUNTU}} -e ${{RE}}"
+          done
+
+          # Branch of currently testing patchset
+          TESTING_BRANCH=${{ZUUL_BRANCH#openstack-ci/fuel-}}
+          TESTING_BRANCH=${{TESTING_BRANCH%%/*}}
+
           declare -a CHANGE_IDS
           declare -a CHANGES
 
@@ -60,6 +82,16 @@
           IFS=":"
           CH=( ${{CHANGES[${{i}}]}} )
           IFS=${{OLDIFS}}
+
+          # Branch of other(s) patchset(s)
+          CHANGE_BRANCH=${{CH[1]#openstack-ci/fuel-}}
+          CHANGE_BRANCH=${{CHANGE_BRANCH%%/*}}
+
+          # Skip patchset if it's branch is not same as branch of currently testing patchset
+          if [ "${{CHANGE_BRANCH}}" != "${{TESTING_BRANCH}}" ]; then
+              echo "Skip patchset #${{CHANGE_IDS[${{i}}]#*,}} of change ${{CHANGE_IDS[${{i}}]%,*}} in project ${{CH[0]}} (branch ${{CH[1]}})"
+              continue
+          fi
 
           echo "Preparing parameters for patchset #${{CHANGE_IDS[${{i}}]#*,}} of change ${{CHANGE_IDS[${{i}}]%,*}} in project ${{CH[0]}} (branch ${{CH[1]}})"
 
@@ -98,12 +130,33 @@
               unset SPEC_REFSPEC
           fi
 
-          GERRIT_CMD="gerrit query --current-patch-set ${{CHANGE_IDS[${{i}}]%,*}}"
+          GERRIT_CMD="gerrit query --current-patch-set --files ${{CHANGE_IDS[${{i}}]%,*}}"
           CHANGE_INFO=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}")
-          TOPIC=$(sed -r 's/^.+\stopic:\s+(\S+)\s*.*$/\1/' <<< ${{CHANGE_INFO}})
-          REVISION=$(sed -r 's/^.+\srevision:\s+(\S+)\s*.*$/\1/' <<< ${{CHANGE_INFO}})
+          TOPIC=$(awk '$1 == "topic:" {{print $2}}' <<< "${{CHANGE_INFO}}")
+          REVISION=$(awk '$1 == "revision:" {{print $2}}' <<< "${{CHANGE_INFO}}")
 
-          cat > build-param-${{CHANGE_IDS[${{i}}]}}.setenvfile <<EOF
+          # Get list of changed files
+          FILE_LIST=$(awk '$1 == "file:" && $2 != "/COMMIT_MSG" {{print $2}}' <<< "${{CHANGE_INFO}}")
+
+          # Build RPM if not matches skip list for CentOS
+          echo "${{FILE_LIST}}" | grep -q -E ${{RE_OPT_CENTOS}} || PKG_CENTOS="centos"
+
+          # Build DEB if not matches skip list for CentOS
+          echo "${{FILE_LIST}}" | grep -q -E ${{RE_OPT_UBUNTU}} || PKG_UBUNTU="ubuntu"
+
+          # Skip builds basing on project name
+          case ${{ZUUL_PROJECT}} in
+            packages/centos*)
+              unset PKG_UBUNTU
+            ;;
+            packages/trusty*)
+              unset PKG_CENTOS
+            ;;
+          esac
+
+          for OS in ${{PKG_CENTOS}} ${{PKG_UBUNTU}}; do
+          echo "Will build package for ${{OS}}"
+          cat > build-param-${{CHANGE_IDS[${{i}}]}}-${{OS}}.setenvfile <<EOF
           # Basic required Gerrit parameters
           GERRIT_BRANCH=${{CH[1]}}
           GERRIT_PATCHSET_REVISION=${{REVISION}}
@@ -153,17 +206,23 @@
           # Don't use for gating shared repositories based on LP bug
           UNSET_LP_BUG=true
           EOF
+          done
 
           done
 
       - trigger-builds:
-          - project: '{mos_version}-pkg-pipeline-{os}'
+          - project: '{mos_version}-pkg-pipeline-centos'
             current-parameters: false
             block: true
             parameter-factories:
               - factory: filebuild
-                file-pattern: 'build-param-*.setenvfile'
-                no-files-found-action: FAIL
+                file-pattern: 'build-param-*-centos.setenvfile'
+          - project: '{mos_version}-pkg-pipeline-ubuntu'
+            current-parameters: false
+            block: true
+            parameter-factories:
+              - factory: filebuild
+                file-pattern: 'build-param-*-ubuntu.setenvfile'
     publishers:
       - archive:
           artifacts: 'build-param-*.setenvfile'

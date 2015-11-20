@@ -1,5 +1,5 @@
 - job-template:
-    name: '{mos_version}-pkg-systest-{os}'
+    name: '{mos_version}-pkg-systest'
     concurrent: true
     logrotate:
       artifactDaysToKeep: 90
@@ -9,24 +9,22 @@
           weight: 8
       - inject:
           properties-content: |
-            PKG_TYPE={pkg_type}
-            TEST_GROUP={test_group}
-            ENV_PREFIX={mos_version}-pkg-systest-{os}
-            EXTRA_DEB_REPOS_PRIORITY=1052
+            ENV_PREFIX={mos_version}-pkg-systest
             PRODUCT_JENKINS_URL={product_jenkins_url}
             ISO_JOB_NAME={mos_version}.test_all
+            REBUILD_ISO=false
     parameters:
       - string:
           name: MAGNET_LINK
       - string:
           name: TEST_GROUP
-          default: '{test_group}'
+          default: 'bvt_2'
       - string:
           name: OPENSTACK_RELEASE
-          default: '{openstack_release}'
+          default: 'Ubuntu'
       - string:
           name: ENV_PREFIX
-          default: '{mos_version}-pkg-systest-{os}'
+          default: '{mos_version}-pkg-systest'
           description: Define env prefix name. This parameter should not be changed
       - string:
           name: NEUTRON_ENABLE
@@ -76,7 +74,6 @@
     builders:
       - shell: |
           #!/bin/bash -xe
-          export DIST="${{DIST:-{distro}}}"
 
           # Gerrit parameters
           export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
@@ -88,15 +85,25 @@
           # Clean logs from previous runs
           rm -f fuel-qa/logs/*
       - copyartifact:
-          project: '{mos_version}-pkg-pipeline-{os}'
-          filter: 'ci_status_params, {pkg_type}.publish.setenvfile'
+          project: '{mos_version}-pkg-pipeline-centos'
+          filter: 'ci_status_params, rpm.publish.setenvfile'
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
+          optional: true
+      - copyartifact:
+          project: '{mos_version}-pkg-pipeline-ubuntu'
+          filter: 'deb.publish.setenvfile'
+          which-build: last-successful
+          parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
+          optional: true
+      - shell: /bin/bash -xec 'touch {{deb,rpm}}.publish.setenvfile'
       - inject:
           properties-file: 'ci_status_params'
       - inject:
-          properties-file: '{pkg_type}.publish.setenvfile'
-      - systest-{os}
+          properties-file: 'rpm.publish.setenvfile'
+      - inject:
+          properties-file: 'deb.publish.setenvfile'
+      - systest
     wrappers:
       - gerrit-creds
       - timeout:
@@ -111,7 +118,6 @@
               operator: AND
            script: |
              #!/bin/bash -xe
-             export DIST="${{DIST:-{distro}}}"
 
              # Gerrit parameters
              export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}

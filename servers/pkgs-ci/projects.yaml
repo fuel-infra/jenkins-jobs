@@ -45,6 +45,13 @@
     install-node: 'install-node'
     systest-node: 'systest'
 
+- gerrit_params: &gerrit_params
+    name: ''
+
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-user: 'openstack-ci-jenkins'
+    gerrit-port: '29418'
+
 - mos_gerrit_template: &mos_template
     name: ''
 
@@ -57,7 +64,6 @@
       - '{mos_version}-pkg-publish-{os}'
       - '{mos_version}-pkg-gate-{os}'
       - '{mos_version}-pkg-install-{os}'
-      - '{mos_version}-pkg-systest-{os}'
 
 - fuel_gerrit_template: &fuel_template
     name: ''
@@ -82,12 +88,10 @@
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
-          test_group: 'prepare_slaves_3'
       - '8.0':
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
-          test_group: 'prepare_slaves_3'
     openstack_release: 'CentOS'
     <<: *common_template
     <<: *mos_template
@@ -104,12 +108,10 @@
           distro: 'jessie'
           pkg_type: 'deb'
           spec_path_prefix: '/jessie'
-          test_group: 'bvt_2'
       - '8.0':
           distro: 'jessie'
           pkg_type: 'deb'
           spec_path_prefix: '/jessie'
-          test_group: 'bvt_2'
     openstack_release: 'Debian'
     <<: *common_template
     <<: *mos_template
@@ -126,15 +128,23 @@
           distro: 'trusty'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
-          test_group: 'bvt_2'
       - '8.0':
           distro: 'trusty'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
-          test_group: 'bvt_2'
     openstack_release: 'Ubuntu'
     <<: *common_template
     <<: *mos_template
+
+- project:
+    name: 'mos-systest'
+    mos_version:
+      - 'master'
+      - '8.0'
+    <<: *gerrit_params
+    <<: *common_template
+    jobs:
+      - '{mos_version}-pkg-systest'
 
 - project:
     name: 'pkg-fuel'
@@ -147,19 +157,16 @@
           openstack_release: 'CentOS'
           pkg_type: 'rpm'
           spec_path_prefix: '/rpm'
-          test_group: 'prepare_slaves_3'
       - centos7:
           os: centos
           openstack_release: 'CentOS'
           pkg_type: 'rpm'
           spec_path_prefix: '/rpm'
-          test_group: 'prepare_slaves_3'
       - trusty:
           os: ubuntu
           openstack_release: 'Ubuntu'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
-          test_group: 'bvt_2'
     <<: *common_template
     <<: *fuel_template
 
