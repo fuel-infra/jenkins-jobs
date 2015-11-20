@@ -24,6 +24,10 @@
       - string:
           name: NPM_CONFIG_PREFIX
           default: '/home/jenkins/npm'
+      - bool:
+          name: VENV_CLEANUP
+          default: true
+          description: 'Check this option to rebuild virtual environment'
     properties:
       - heavy-job:
           weight: 1

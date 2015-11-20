@@ -15,6 +15,10 @@
       - string:
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
+      - bool:
+          name: VENV_CLEANUP
+          default: true
+          description: 'Check this option to rebuild virtual environment'
     properties:
       - heavy-job:
           weight: 1
