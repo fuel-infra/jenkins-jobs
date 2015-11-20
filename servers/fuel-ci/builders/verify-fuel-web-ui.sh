@@ -8,7 +8,7 @@ export TEST_WORKERS=4
 export PATH=$PATH:${NPM_CONFIG_PREFIX}/bin
 
 VENV="${WORKSPACE}_VENV"
-[ "${VENV_CLEANUP}" == "true" ] && rm -rf ${VENV}
+[ "${VENV_CLEANUP}" == "true" ] && rm -rf "${VENV}"
 virtualenv -p python2.6 "${VENV}"
 source "${VENV}/bin/activate"
 
