@@ -6,7 +6,7 @@
       daysToKeep: 90
     properties:
       - heavy-job:
-          weight: 7
+          weight: 8
       - inject:
           properties-content: |
             PKG_TYPE={pkg_type}
