@@ -2,7 +2,7 @@
 
 set -ex
 
-echo STARTED_TIME="`date -u +'%Y-%m-%dT%H:%M:%S'`" > ci_status_params.txt
+echo STARTED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" > ci_status_params.txt
 
 export FEATURE_GROUPS="mirantis"
 
@@ -18,27 +18,16 @@ export BUILD_DIR=${WORKSPACE}/../tmp/${JOB_NAME}/build
 export LOCAL_MIRROR=${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror
 
 export ARTS_DIR=${WORKSPACE}/artifacts
-rm -rf ${ARTS_DIR}
+rm -rf "${ARTS_DIR}"
+
+source "${WORKSPACE}/environment"
 
 # Checking gerrit commits for fuel-main
-if [ "${fuelmain_gerrit_commit}" != "none" ] ; then
-  for commit in ${fuelmain_gerrit_commit} ; do
-    git fetch https://review.openstack.org/openstack/fuel-main "${commit}" && git cherry-pick FETCH_HEAD || false
+if [ "${FUELMAIN_GERRIT_COMMIT}" != "none" ] ; then
+  for commit in ${FUELMAIN_GERRIT_COMMIT} ; do
+    git fetch https://review.openstack.org/openstack/fuel-main "${commit}" && git cherry-pick FETCH_HEAD
   done
 fi
-
-export NAILGUN_GERRIT_COMMIT="${nailgun_gerrit_commit}"
-export ASTUTE_GERRIT_COMMIT="${astute_gerrit_commit}"
-export OSTF_GERRIT_COMMIT="${ostf_gerrit_commit}"
-export FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}"
-export PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}"
-export FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}"
-export FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}"
-export CREATEMIRROR_GERRIT_COMMIT="${createmirror_gerrit_commit}"
-export FUELMENU_GERRIT_COMMIT="${fuelmenu_gerrit_commit}"
-export SHOTGUN_GERRIT_COMMIT="${shotgun_gerrit_commit}"
-export NETWORKCHECKER_GERRIT_COMMIT="${networkchecker_gerrit_commit}"
-export FUELUPGRADE_GERRIT_COMMIT="${fuelupgrade_gerrit_commit}"
 
 # No staging in 8.0
 export USE_MIRROR=none
@@ -82,45 +71,45 @@ process_artifacts() {
     local ARTIFACT="$1"
     test -f "$ARTIFACT" || return 1
 
-    local HOSTNAME=`hostname -f`
+    local HOSTNAME=$(hostname -f)
     local LOCAL_STORAGE="$2"
     local TRACKER_URL="$3"
     local HTTP_ROOT="$4"
 
     echo "MD5SUM is:"
-    md5sum $ARTIFACT
+    md5sum "${ARTIFACT}"
 
     echo "SHA1SUM is:"
-    sha1sum $ARTIFACT
+    sha1sum "${ARTIFACT}"
 
-    mkdir -p $LOCAL_STORAGE
-    mv $ARTIFACT $LOCAL_STORAGE
+    mkdir -p "${LOCAL_STORAGE}"
+    mv "${ARTIFACT}" "${LOCAL_STORAGE}"
 
     # seedclient.py comes from python-seed devops package
-    local MAGNET_LINK=`seedclient.py -v -u -f "$LOCAL_STORAGE"/"$ARTIFACT" --tracker-url="${TRACKER_URL}" --http-root="${HTTP_ROOT}" || true`
+    local MAGNET_LINK=$(seedclient.py -v -u -f "${LOCAL_STORAGE}"/"${ARTIFACT}" --tracker-url="${TRACKER_URL}" --http-root="${HTTP_ROOT}" || true)
     local STORAGES=($(echo "${HTTP_ROOT}" | tr ',' '\n'))
-    local HTTP_LINK="${STORAGES}/${ARTIFACT}"
+    local HTTP_LINK="${STORAGES[0]}/${ARTIFACT}"
     local HTTP_TORRENT="${HTTP_LINK}.torrent"
 
-    cat > $ARTIFACT.data.txt <<EOF
-ARTIFACT=$ARTIFACT
-HTTP_LINK=$HTTP_LINK
-HTTP_TORRENT=$HTTP_TORRENT
-MAGNET_LINK=$MAGNET_LINK
+    cat > "${ARTIFACT}.data.txt" <<EOF
+ARTIFACT=${ARTIFACT}
+HTTP_LINK=${HTTP_LINK}
+HTTP_TORRENT=${HTTP_TORRENT}
+MAGNET_LINK=${MAGNET_LINK}
 EOF
 
-    cat >$ARTIFACT.data.html <<EOF
-<h1>$ARTIFACT</h1>
-<a href=\"$HTTP_LINK\">HTTP link</a><br>
-<a href=\"$HTTP_TORRENT\">Torrent file</a><br>
-<a href=\"$MAGNET_LINK\">Magnet link</a><br>
+    cat > "${ARTIFACT}.data.html" <<EOF
+<h1>${ARTIFACT}</h1>
+<a href=\"${HTTP_LINK}\">HTTP link</a><br>
+<a href=\"${HTTP_TORRENT}\">Torrent file</a><br>
+<a href=\"${MAGNET_LINK}\">Magnet link</a><br>
 EOF
 
 }
 
 #########################################
 
-test "$deep_clean" = "true" && make deep_clean
+test "${deep_clean}" = "true" && make deep_clean
 
 #########################################
 echo "Using mirrors"
@@ -136,33 +125,32 @@ make ${make_args} iso
 echo "STEP 2. Publish iso"
 
 export LOCAL_STORAGE='/var/www/fuelweb-iso'
-export HTTP_ROOT="http://`hostname -f`/fuelweb-iso"
+export HTTP_ROOT="http://$(hostname -f)/fuelweb-iso"
 export TRACKER_URL='http://tracker01-bud.infra.mirantis.net:8080/announce,http://tracker01-mnv.infra.mirantis.net:8080/announce,http://tracker01-msk.infra.mirantis.net:8080/announce'
 
-cd ${ARTS_DIR}
-for artifact in `ls fuel-*`
-do
-  begin=`date +%s`
-  process_artifacts $artifact $LOCAL_STORAGE $TRACKER_URL $HTTP_ROOT
-  echo "Time taken: $((`date +%s` - $begin))"
+cd "${ARTS_DIR}"
+for artifact in fuel-*; do
+  begin=$(date +%s)
+  process_artifacts "${artifact}" "${LOCAL_STORAGE}" "${TRACKER_URL}" "${HTTP_ROOT}"
+  echo "Time taken: $(($(date +%s) - begin))"
 done
 
-cd ${WORKSPACE}
+cd "${WORKSPACE}"
 
-(cd ${BUILD_DIR}/iso/isoroot && find . | sed -s 's/\.\///') > ${WORKSPACE}/listing.txt || true
+(cd "${BUILD_DIR}/iso/isoroot" && find . | sed -s 's/\.\///') > "${WORKSPACE}/listing.txt" || true
 
-grep MAGNET_LINK ${ARTS_DIR}/fuel-*.iso.data.txt > ${WORKSPACE}/magnet_link.txt
+grep MAGNET_LINK "${ARTS_DIR}"/fuel-*.iso.data.txt > "${WORKSPACE}/magnet_link.txt"
 
 #########################################
 
 echo "STEP 3. Generate build description"
 
-ISO_MAGNET_LINK=`grep MAGNET_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/MAGNET_LINK=//'`
-ISO_HTTP_LINK=`grep HTTP_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_LINK=//'`
-ISO_HTTP_TORRENT=`grep HTTP_TORRENT ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_TORRENT=//'`
+ISO_MAGNET_LINK=$(grep MAGNET_LINK "${ARTS_DIR}"/*iso.data.txt | sed 's/MAGNET_LINK=//')
+ISO_HTTP_LINK=$(grep HTTP_LINK "${ARTS_DIR}"/*iso.data.txt | sed 's/HTTP_LINK=//')
+ISO_HTTP_TORRENT=$(grep HTTP_TORRENT "${ARTS_DIR}"/*iso.data.txt | sed 's/HTTP_TORRENT=//')
 
-echo "<a href="$ISO_HTTP_LINK">ISO download link</a> <a href="$ISO_HTTP_TORRENT">ISO torrent link</a><br>${ISO_MAGNET_LINK}<br>"
+echo "<a href=\"${ISO_HTTP_LINK}\">ISO download link</a> <a href=\"${ISO_HTTP_TORRENT}\">ISO torrent link</a><br>${ISO_MAGNET_LINK}<br>"
 
 echo "BUILD FINISHED."
 
-echo FINISHED_TIME="`date -u +'%Y-%m-%dT%H:%M:%S'`" >> ci_status_params.txt
+echo FINISHED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" >> ci_status_params.txt

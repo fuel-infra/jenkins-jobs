@@ -2,6 +2,8 @@
     name: '8.0-centos7.iso'
     builders:
       - shell:
+          !include-raw builders/get-refs.py
+      - shell:
           !include-raw builders/iso.sh
     description: |
       Build artifacts: iso
