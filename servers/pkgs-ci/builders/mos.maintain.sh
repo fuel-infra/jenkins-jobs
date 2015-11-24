@@ -8,7 +8,7 @@ main () {
     [ -d "${WRKDIR}/docker-builder" ] && local _dpath="${WRKDIR}/docker-builder" || exit 1
 
     # Aborted containers cleanup
-    docker ps -a | grep -F -e "Exited" | cut -d ' ' -f 1 | xargs -I% docker rm %
+    docker ps -a | grep -F -e "Exited" -e "Dead" | cut -d ' ' -f 1 | xargs -I% docker rm %
 
     # Unpublished packages cleanup
     rm -rf "${HOME}/built_packages/*"
