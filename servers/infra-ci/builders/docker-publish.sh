@@ -2,8 +2,16 @@
 
 set -ex
 
-for URL in ${REGISTRY_URLS}
+source to_publish.txt
+
+for IMAGE in ${IMAGES}
 do
-  docker tag -f "infra/${IMAGE_NAME}:${IMAGE_TAG}" "${URL}/infra/${IMAGE_NAME}:${IMAGE_TAG}"
-  docker push "${URL}/infra/${IMAGE_NAME}:${IMAGE_TAG}"
+  IMAGE_NAME=$(echo "$IMAGE" | cut -f 1 -d :)
+  IMAGE_TAG=$(echo "$IMAGE" | cut -f 2 -d :)
+
+  for URL in ${REGISTRY_URLS}
+  do
+    docker tag -f "${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}" "${URL}/${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}"
+    docker push "${URL}/${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}"
+  done
 done

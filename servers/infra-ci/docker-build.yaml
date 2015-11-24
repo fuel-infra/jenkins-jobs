@@ -6,27 +6,42 @@
           !include-raw './builders/docker-build.sh'
       - trigger-builds:
         - project: 'docker-publish'
-          current-parameters: true
     description: |
-      This job will use docker builder host and build an image from the given git url.
+     This job will use docker builder host and build image from the given git url.
       Job 'docker-publish' is triggered after this one to publish image to registries.
-    concurrent: true
+    concurrent: false
     parameters:
       - string:
-          name: REPOSITORY
-          default: 'https://review.fuel-infra.org/fuel-infra/dockerfiles'
-          description: 'repository with dockerfiles'
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
       - string:
-          name: IMAGE_NAME
-          description: 'destination repository name'
-      - string:
-          name: IMAGE_TAG
-          description: 'destination repository tag'
-      - string:
-          name: REGISTRY_URLS
-          default: 'registry01-bud.fuel-infra.org registry01-scc.fuel-infra.org'
-          description: 'space separated list of docker registry hosts'
+          name: GERRIT_EVENT_TYPE
+          default: 'manual-start'
+    scm:
+      - main:
+          reponame: 'fuel-infra/dockerfiles'
+          repobranch: '$GERRIT_BRANCH'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: fuel-infra/dockerfiles
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - timeout:
           fail: true
           timeout: 5
+    publishers:
+      - archive:
+          allow-empty: false
+          artifacts: 'to_publish.txt'
+          latest-only: false
+      - description-setter:
+          regexp: ^\[urls\](.*)
+          set-for-matrix: true
