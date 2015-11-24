@@ -92,7 +92,7 @@
           optional: true
       - copyartifact:
           project: '{mos_version}-pkg-pipeline-ubuntu'
-          filter: 'deb.publish.setenvfile'
+          filter: 'ci_status_params, deb.publish.setenvfile'
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
           optional: true
