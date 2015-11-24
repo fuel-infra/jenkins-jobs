@@ -30,8 +30,6 @@
       - gerrit:
           trigger-on:
             - patchset-created-event
-            - comment-added-contains-event:
-                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: openstack/fuel-library

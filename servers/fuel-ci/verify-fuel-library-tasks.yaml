@@ -55,8 +55,6 @@
           prefix: verify
           trigger_on:
             - patchset-created-event
-            - comment-added-contains-event:
-                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           email-type: default
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
