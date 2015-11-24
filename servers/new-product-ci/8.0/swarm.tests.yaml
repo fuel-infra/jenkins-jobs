@@ -64,6 +64,7 @@
          testgroup: 'cluster_actions_ha'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'controller_replacement'
+         timeout: '540'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'cic_maintenance_mode'
          timeout: '600'
