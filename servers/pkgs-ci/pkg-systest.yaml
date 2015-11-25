@@ -1,5 +1,5 @@
 - job-template:
-    name: '{mos_version}-pkg-systest'
+    name: '{mos_version}-pkg-systest-{os}'
     concurrent: true
     logrotate:
       artifactDaysToKeep: 90
@@ -13,6 +13,7 @@
             PRODUCT_JENKINS_URL={product_jenkins_url}
             ISO_JOB_NAME={mos_version}.test_all
             REBUILD_ISO=false
+            OPENSTACK_RELEASE={os}
     parameters:
       - string:
           name: MAGNET_LINK

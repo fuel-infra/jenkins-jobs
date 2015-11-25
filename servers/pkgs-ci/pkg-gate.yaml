@@ -3,7 +3,7 @@
 ################################################################################
 
 - job-template:
-    name: '{mos_version}-pkg-gate-{os}'
+    name: '{mos_version}-pkg-gate'
     concurrent: True
     description: |
         This job parses set of Zuul parameters (ZUUL_CHANGE_IDS and ZUUL_CHANGES) and runs build job

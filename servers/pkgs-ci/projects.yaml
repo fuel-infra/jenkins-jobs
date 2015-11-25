@@ -39,6 +39,11 @@
     scm-ci-status-client-branch: '8.0'
     scm-ci-status-client-basedir: 'ci-status-client'
 
+    spec-path-prefix: ''
+    spec-path-suffix: '-build'
+    spec-project-prefix: ''
+    spec-project-suffix: '-build'
+
     # Job slave nodes
     build-node: 'new-builder'
     publish-node: 'new-publisher'
@@ -62,8 +67,8 @@
     jobs:
       - '{mos_version}-pkg-pipeline-{os}'
       - '{mos_version}-pkg-publish-{os}'
-      - '{mos_version}-pkg-gate-{os}'
       - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-systest-{os}'
 
 - fuel_gerrit_template: &fuel_template
     name: ''
@@ -79,10 +84,6 @@
 - project:
     name: 'pkg-mos-centos'
     os: 'centos'
-    spec-path-prefix: ''
-    spec-path-suffix: '-build'
-    spec-project-prefix: ''
-    spec-project-suffix: '-build'
     mos_version:
       - 'master':
           distro: 'centos7'
@@ -99,10 +100,6 @@
 - project:
     name: 'pkg-mos-debian'
     os: 'debian'
-    spec-path-prefix: ''
-    spec-path-suffix: ''
-    spec-project-prefix: 'deb-'
-    spec-project-suffix: ''
     mos_version:
       - 'master':
           distro: 'jessie'
@@ -119,10 +116,6 @@
 - project:
     name: 'pkg-mos-ubuntu'
     os: 'ubuntu'
-    spec-path-prefix: ''
-    spec-path-suffix: '-build'
-    spec-project-prefix: ''
-    spec-project-suffix: '-build'
     mos_version:
       - 'master':
           distro: 'trusty'
@@ -137,14 +130,14 @@
     <<: *mos_template
 
 - project:
-    name: 'mos-systest'
+    name: 'gate'
     mos_version:
       - 'master'
       - '8.0'
     <<: *gerrit_params
     <<: *common_template
     jobs:
-      - '{mos_version}-pkg-systest'
+      - '{mos_version}-pkg-gate'
 
 - project:
     name: 'pkg-fuel'
