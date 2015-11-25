@@ -14,7 +14,7 @@ export Smoke_BVT='8.0.all'
 export TestrailCMDPath="fuelweb_test/testrail/report.py"
 
 # Report tests results from swarm
-#export TESTRAIL_TEST_SUITE='Swarm 8.0'
+#export TESTRAIL_TEST_SUITE='[8.0] Swarm'
 #export TESTRAIL_TEST_subSUITE='8.0.swarm.runner'
 
 python ${TestrailCMDPath} -v -l -j "${Smoke_BVT}" -c

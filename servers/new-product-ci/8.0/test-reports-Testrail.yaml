@@ -4,7 +4,7 @@
       - inject:
            properties-content: |
              TESTS_RUNNER=8.0.swarm.runner
-             TESTRAIL_TEST_SUITE=Swarm 8.0
+             TESTRAIL_TEST_SUITE=[8.0] Swarm
              TESTRAIL_MILESTONE=8.0
              LAUNCHPAD_MILESTONE=8.0
       - shell:

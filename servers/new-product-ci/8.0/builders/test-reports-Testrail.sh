@@ -25,7 +25,7 @@ fi
 
 # Report tests results from swarm (Ubuntu)
 
-export TESTRAIL_TEST_SUITE='Swarm 8.0'
+export TESTRAIL_TEST_SUITE='[8.0] Swarm'
 export USE_UBUNTU=true
 export USE_CENTOS=false
 python ${TESTRAIL_REPORTER_PATH} -v -l -j "${SWARM_RUNNER_JOB_NAME}" ${OPTIONS}
