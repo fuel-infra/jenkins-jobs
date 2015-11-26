@@ -70,6 +70,7 @@
           testgroup: 'ceph_rados_gw'
           upgrade_testgroup:
             - 'upgrade_neutron_ceph'
+          timeout: '700'
           properties: |
             NEUTRON_ENABLE=true
 
