@@ -145,7 +145,7 @@
           echo "${{FILE_LIST}}" | grep -q -E ${{RE_OPT_UBUNTU}} || PKG_UBUNTU="ubuntu"
 
           # Skip builds basing on project name
-          case ${{ZUUL_PROJECT}} in
+          case ${{CH[0]}} in
             packages/centos*)
               unset PKG_UBUNTU
             ;;
