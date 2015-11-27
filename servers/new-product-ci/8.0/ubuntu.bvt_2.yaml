@@ -29,6 +29,7 @@
           id: 'main'
     publishers:
       - nosetests
+      - post-destroy-vms
       - email-systest:
           body-failed:
             !include-raw notifications/bvt.failed

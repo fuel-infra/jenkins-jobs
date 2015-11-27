@@ -33,6 +33,10 @@
     block-downstream: false
     block-upstream: false
     builders:
+    - inject: # default env variables
+        properties-content: |
+          VENV_PATH={venvpath}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
     - inject: # overrides
         properties-content: '{properties}'
     - shell:
@@ -81,6 +85,7 @@
     - junit:
         keep-long-stdio: false
         results: '**/nosetests.xml'
+    - post-destroy-vms
     - trigger-parameterized-builds:
       - project: '{version-id}-test-reports-Testrail'
         condition: ALWAYS

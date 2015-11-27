@@ -59,12 +59,12 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
     export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-proposed main universe multiverse"
 fi
 
-export VENV_PATH="/home/jenkins/venv-nailgun-tests-2.9"
-export CONNECTION_STRING="qemu+tcp://127.0.0.1:16509/system"
 export TIMESTAMP=$(date +%y%m%d%H%M)
 export ENV_NAME="${ENV_PREFIX}.${BUILD_NUMBER}.${TIMESTAMP}"
 export ENV_NAME="${ENV_NAME:0:68}"
 export FUEL_STATS_ENABLED="false"
+
+echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
 rm -rf logs/*
 

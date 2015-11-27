@@ -10,3 +10,19 @@
       - inject:
           groovy-content: |
             return [BUILD_TIMESTAMP:currentBuild.getTime().format("yyyy-MM-dd_HH-mm-ss")]
+
+- publisher:
+    name: post-destroy-vms
+    publishers:
+    - post-tasks:
+      - matches:
+        - log-text: 'Build timed out'
+          operator: AND
+        script: |
+          #!/bin/bash
+
+          set -ex
+
+          source "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
+          source "${VENV_PATH}/bin/activate"
+          dos.py destroy "${ENV_NAME}"

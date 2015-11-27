@@ -11,6 +11,7 @@
         !include-raw ../data/8.0-iso
     upgrade_reponame: 'fuel-qa'
     upgrade_repobranch: 'origin/master'
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     properties: |
       KEYSTONE_PASSWORD=newpass
       SLAVE_NODE_MEMORY=3072

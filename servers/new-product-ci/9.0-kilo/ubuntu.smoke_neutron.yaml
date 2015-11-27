@@ -33,6 +33,7 @@
           id: 'kilo'
     publishers:
       - nosetests
+      - post-destroy-vms
       - email-systest:
           body-failed:
             !include-raw notifications/smoke.failed

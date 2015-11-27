@@ -3,9 +3,7 @@
     builders:
       - inject: # default env variables
           properties-content: |
-            VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
-            OPENSTACK_RELEASE={dist}
-            TEST_GROUP={testgroup}
+            VENV_PATH={venvpath}
             CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
             CLASSIC_PROVISIONING=false
             SLAVE_NODE_MEMORY=3072
@@ -67,6 +65,7 @@
         allow-empty: true
         artifacts: '**/nosetests.xml,logs/*'
         latest-only: false
+    - post-destroy-vms
     - junit:
         keep-long-stdio: false
         results: '**/nosetests.xml'
