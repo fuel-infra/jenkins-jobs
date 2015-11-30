@@ -1,0 +1,183 @@
+- job-template:
+    # Variables required:
+    #
+    # version-id
+    #     Versioned identificator of the job.
+    #     For example: ``8.0``, ``8.0-kilo``, ``master``.
+    # dist
+    #     OPENSTACK_RELEASE variable (ex, 'Ubuntu').
+    # mos
+    #     MOS version
+    # project
+    #     Name of the repository with code to test (ex, fuel-library)
+    # projectbranch
+    #     Branch of the repository above.
+    #     Used for Gerrit Trigger configuration.
+    # projectpackage
+    #     Name of the package to build from project repository
+    # venvpath
+    #     Path to virtual env with fuel-devops installed (VENV_PATH)
+    # properties
+    #     List of strings "VAR=value".
+    #     Additional variables injected in job environment.
+
+    name: '{version-id}.custom.pkgs.{dist}'
+    properties: ''
+    concurrent: true
+
+    description: |
+      Prepares package and runs deployment test with custom params
+      and custom testgroup
+
+    node: '{version-id}-custom-pkgs'
+
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          default: 'latest'
+          description: 'Magnet link of ISO. If "latest" then the latest ISO from {version-id} will be downloaded'
+      - choice:
+          name: PROJECT
+          description: Fuel project name on https://review.openstack.org/
+          choices:
+            - fuel-library
+            - fuel-ostf
+            - fuel-web
+            - fuel-agent
+            - python-fuelclient
+      - string:
+          name: CUSTOM_PROJECT
+          description: |
+            Specify the name of a project on https://review.openstack.org/
+            if it's not present in the PROJECT list.
+            This will override the PROJECT variable value.
+      - choice:
+          name: PROJECT_PACKAGE
+          description: Fuel package name which will be builded
+          choices:
+            - fuel-library{mos}
+            - fuel-ostf
+            - fuel-nailgun
+            - fuel-agent
+            - python-fuelclient
+      - string:
+          name: CUSTOM_PROJECT_PACKAGE
+          description: |
+            Specify the name of a package
+            if it's not present in the PROJECT_PACKAGE list.
+            This will override the PROJECT_PACKAGE variable value.
+      - string:
+          name: GERRIT_BRANCH
+          default: '{projectbranch}'
+          description: 'Branch of the PROJECT package'
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/{projectbranch}'
+          description: 'Refspec of the PROJECT package'
+      - string:
+          name: FUEL_QA_COMMIT
+          default: '{version-id}'
+          description: 'Commit SHA of fuel-qa repository for system test'
+      - choice:
+          name: TEST_GROUP
+          description: Choose TEST_GROUP from the list or use CUSTOM_TEST_GROUP field below.
+          choices:
+            - neutron_vlan_ha
+            - smoke_neutron
+            - gate_ostf_update
+            - review_fuel_agent_one_node_provision
+            - review_fuel_client
+            - review_fuel_web_deploy
+      - string:
+          name: CUSTOM_TEST_GROUP
+          description: |
+            Specify the name of a custom test group which
+            is not present on the TEST_GROUP list. This will override
+            the TEST_GROUP variable value.
+      - text:
+          name: ADDITIONAL_PARAMETERS
+          description: |
+            NAME1=VALUE1</br>
+            NAME2=VALUE2</br>
+            Note: do not use quotes here!
+    properties:
+      - throttle:
+          max-per-node: 1
+          option: project
+      - heavy-job:
+          weight: 6
+
+    scm:
+      - git:
+          url: 'https://git.openstack.org/openstack/fuel-qa.git'
+          branches:
+            - $FUEL_QA_COMMIT
+          basedir: fuel-qa
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/openstack/$PROJECT.git
+          basedir: $PROJECT
+          timeout: 20
+          choosing-strategy: gerrit
+      - git:
+          url: 'https://git.openstack.org/openstack/fuel-mirror.git'
+          branches:
+            - 'origin/master'
+          basedir: 'fuel-mirror'
+
+    builders:
+      - inject:
+          # pkgs variables
+          properties-content: |
+            MOS={mos}
+            MIRROR_ARTIFACT={mirror_artifact}
+      - inject:
+          # env variables
+          properties-content: |
+            LATEST_MAGNET_LINK={latest_magnet_link}
+            VENV_PATH={venvpath}
+            SYSTEST_ROOT=$WORKSPACE/fuel-qa
+            ENV_NAME=env_{version-id}_$TEST_GROUP-$BUILD_NUMBER
+      - inject:
+          # deployment test variables
+          properties-content: |
+            OPENSTACK_RELEASE={dist}
+            UPDATE_FUEL=true
+            UPDATE_FUEL_PATH=$WORKSPACE/packages/
+            UBUNTU_RELEASE=auxiliary
+            LOCAL_MIRROR_UBUNTU=/var/www/nailgun/ubuntu/auxiliary/
+            LOCAL_MIRROR_CENTOS=/var/www/nailgun/centos/auxiliary/
+            EXTRA_RPM_REPOS_PRIORITY=15
+            EXTRA_DEB_REPOS_PRIORITY=1100
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+      - inject:
+          # custom parameters
+          properties-content: $ADDITIONAL_PARAMETERS
+      - shell:
+          !include-raw-escape builders/pull_iso.sh
+      - inject:
+          properties-file: 'iso_path.txt'
+      - shell:
+          !include-raw-escape builders/build-pkgs.sh
+      - shell:
+          !include-raw-escape builders/test-pkgs.sh
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'logs/$BUILD_NUMBER/*,packages/*'
+          latest-only: false
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+          regexp-for-failed: "'Description string: (.*)'"
+
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: '{timeout}'
+          write-description: true
