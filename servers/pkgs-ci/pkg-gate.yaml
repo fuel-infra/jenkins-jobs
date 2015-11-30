@@ -95,6 +95,12 @@
 
           echo "Preparing parameters for patchset #${{CHANGE_IDS[${{i}}]#*,}} of change ${{CHANGE_IDS[${{i}}]%,*}} in project ${{CH[0]}} (branch ${{CH[1]}})"
 
+          # Get CR info from Gerrit
+          GERRIT_CMD="gerrit query --current-patch-set --files ${{CHANGE_IDS[${{i}}]%,*}}"
+          CHANGE_INFO=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}")
+          TOPIC=$(awk '$1 == "topic:" {{print $2}}' <<< "${{CHANGE_INFO}}")
+          REVISION=$(awk '$1 == "revision:" {{print $2}}' <<< "${{CHANGE_INFO}}")
+
           # Define projects paths
           # This paths are required by perestorika for checkouting projects from git
 
@@ -119,21 +125,26 @@
               IS_OPENSTACK=true
               SPEC_PROJECT=${{SPEC_PROJECT_PATH}}/{spec-project-prefix}${{PACKAGENAME}}{spec-project-suffix}
               if [ "${{CH[0]}}" = "${{SRC_PROJECT}}" ]; then
-                  unset SPEC_REFSPEC
+                  GERRIT_CMD="gerrit query --current-patch-set topic:${{TOPIC}} branch:${{CH[1]}} project:${{SPEC_PROJECT}} NOT status:abandoned"
+                  BOUND_INFO=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}")
+                  BOUND_REFSPEC=$(awk '$1 == "ref:" {{print $2}}' <<< "${{BOUND_INFO}}")
+                  SPEC_REFSPEC=${{BOUND_REFSPEC}}
               else
                   SPEC_REFSPEC=${{CH[2]}}
-                  unset SOURCE_REFSPEC
+                  GERRIT_CMD="gerrit query --current-patch-set topic:${{TOPIC}} branch:${{CH[1]}} project:${{SRC_PROJECT}} NOT status:abandoned"
+                  BOUND_INFO=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}")
+                  BOUND_REFSPEC=$(awk '$1 == "ref:" {{print $2}}' <<< "${{BOUND_INFO}}")
+                  SOURCE_REFSPEC=${{BOUND_REFSPEC}}
+              fi
+              if [ $(echo "${{BOUND_REFSPEC}}" | wc -l) -gt 1 ]; then
+                  echo "ERROR: Multiple corresponding changes found!"
+                  exit 1
               fi
           else
               IS_OPENSTACK=false
               unset SPEC_PROJECT
               unset SPEC_REFSPEC
           fi
-
-          GERRIT_CMD="gerrit query --current-patch-set --files ${{CHANGE_IDS[${{i}}]%,*}}"
-          CHANGE_INFO=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}")
-          TOPIC=$(awk '$1 == "topic:" {{print $2}}' <<< "${{CHANGE_INFO}}")
-          REVISION=$(awk '$1 == "revision:" {{print $2}}' <<< "${{CHANGE_INFO}}")
 
           # Get list of changed files
           FILE_LIST=$(awk '$1 == "file:" && $2 != "/COMMIT_MSG" {{print $2}}' <<< "${{CHANGE_INFO}}")
