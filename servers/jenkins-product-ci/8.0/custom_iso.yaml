@@ -45,7 +45,7 @@
           name: FUEL_NAILGUN_AGENT_COMMIT
           default: 'master'
       - string:
-          name: CREATEMIRROR_COMMIT
+          name: FUEL_MIRROR_COMMIT
           default: 'master'
       - string:
           name: FUELMENU_COMMIT
@@ -84,7 +84,7 @@
           name: FUEL_NAILGUN_AGENT_REPO
           default: 'https://git.openstack.org/openstack/fuel-nailgun-agent.git'
       - string:
-          name: CREATEMIRROR_REPO
+          name: FUEL_MIRROR_REPO
           default: 'https://git.openstack.org/openstack/fuel-mirror.git'
       - string:
           name: FUELMENU_REPO
@@ -147,7 +147,7 @@
           description: Refspecs for commits in fuel-nailgun-agent gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
       - string:
-          name: createmirror_gerrit_commit
+          name: fuel_mirror_gerrit_commit
           default: 'none'
           description: Refspecs for commits in fuel-mirror gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2

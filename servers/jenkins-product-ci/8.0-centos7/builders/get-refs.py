@@ -18,7 +18,7 @@ GERRIT_COMMIT_VARS = {
     'python_fuelclient_gerrit_commit': 'PYTHON_FUELCLIENT_GERRIT_COMMIT',
     'fuel_agent_gerrit_commit': 'FUEL_AGENT_GERRIT_COMMIT',
     'fuel_nailgun_agent_gerrit_commit': 'FUEL_NAILGUN_AGENT_GERRIT_COMMIT',
-    'createmirror_gerrit_commit': 'CREATEMIRROR_GERRIT_COMMIT',
+    'fuel_mirror_gerrit_commit': 'FUEL_MIRROR_GERRIT_COMMIT',
     'fuelmenu_gerrit_commit': 'FUELMENU_GERRIT_COMMIT',
     'shotgun_gerrit_commit': 'SHOTGUN_GERRIT_COMMIT',
     'networkchecker_gerrit_commit': 'NETWORKCHECKER_GERRIT_COMMIT',
