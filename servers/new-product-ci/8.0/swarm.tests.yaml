@@ -71,6 +71,9 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'offloading'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'filling_root'
+         timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron'
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
