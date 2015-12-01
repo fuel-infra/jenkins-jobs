@@ -2,6 +2,11 @@
     name: global
     description: 'Do not edit this job through the web!'
     project-type: freestyle
+    logrotate:
+      daysToKeep: 30
+      numToKeep: -1
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
 
 - scm:
     name: main
