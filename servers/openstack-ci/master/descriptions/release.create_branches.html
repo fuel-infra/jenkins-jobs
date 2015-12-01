@@ -1,0 +1,28 @@
+<p>Creates branches according config.</p>
+
+<p>
+Based on project
+<a href="https://review.fuel-infra.org/#/admin/projects/infra/release_scripts">infra/release_scripts</a>.
+</p>
+
+<p>
+Workflow:
+<ol>
+  <li>Prepare create_branch.yaml on project
+      <a href="https://review.fuel-infra.org/#/admin/projects/infra/release_scripts">infra/release_scripts</a>.
+      (see
+      <a href="https://review.fuel-infra.org/gitweb?p=infra/release_scripts.git;a=tree;f=create_branch;">create_branch/</a>
+      directory)
+      and push it as change request to <b>master</b> branch;</li>
+  <li>Run the job with specified <b>CHANGE_BRANCH_CHANGEID</b> parameter
+      (Will be used latest patchset. <b>DRY_RUN</b> will be set as <b>true</b>
+      automatically);</li>
+  <li>Check results (see log and test results). Correct config if needed;</li>
+  <li>If results are correct, please merge the change request;</li>
+  <li>After merge you should run the job <b>with specified MARK_BUILD_BY_TAG and
+      DRY_RUN=false</b>. All the branches will be created and <b>git tag</b> specified on
+      <b>MARK_BUILD_BY_TAG</b> will be created on project
+      <a href="https://review.fuel-infra.org/#/admin/projects/infra/release_scripts">infra/release_scripts</a>.
+      </li>
+</ol>
+</p>

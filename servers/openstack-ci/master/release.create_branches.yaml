@@ -1,0 +1,70 @@
+- job:
+    name: 'release.create_branches'
+    description:
+      !include-raw descriptions/release.create_branches.html
+
+
+    node: osci-testing-twin0d
+    concurrent: false
+
+
+    parameters:
+      - bool:
+          name: DRY_RUN
+          default: true
+          description: |
+              All the changes will not be pushed but will be applied on the
+              WORKSPACE.  Will be performed all the related checks and the
+              results will be written to log.
+      - string:
+          name: MARK_BUILD_BY_TAG
+          description: |
+              Tag named by the specified value will be created on current HEAD
+              of <b>master</b> branch on
+              <a href="https://review.fuel-infra.org/#/admin/projects/infra/release_scripts">infra/release_scripts</a>
+              when you run the job with <b>DRY_RUN=false</b>.<br><br>
+              If tag with specified name already exists, the job will fail.
+              Please specify nonexistent tag name.<br><br>
+              For example you may specify <b>MOS8.0</b>, <b>MOS8.0-deps</b> etc.
+      - string:
+          name: CHANGE_BRANCH_CHANGEID
+          description: |
+              If specified, the job will checkout
+              <a href="https://review.fuel-infra.org/#/admin/projects/infra/release_scripts">infra/release_scripts</a>
+              to latest patchset of this change-request.
+              Also <b>DRY_RUN=true</b> will be set automatically.
+      - bool:
+          name: FORCE_RECREATE
+          default: false
+          description: |
+              Option 'if_branch_exists: recreate_new' in create_branch.yaml will
+              be set as 'if_branch_exists: use_existent' if FORCE_RECREATE==false
+
+
+    builders:
+      - shell:
+          !include-raw builders/release.create_branches.sh
+
+
+    scm:
+      - git:
+          basedir: release_scripts
+          url: ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/release_scripts
+          branches:
+            - origin/master
+          wipe-workspace: true
+
+
+    publishers:
+      - description-setter:
+          regexp: 'Description string: (.*)'
+      - archive:
+          artifacts: 'release_scripts/create_branch/create_branch.conf,release_scripts/create_branch/create_branch.yaml'
+          latest-only: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/create_branch.xml'
+
+
+    wrappers:
+      - openstack-ci-jenkins
