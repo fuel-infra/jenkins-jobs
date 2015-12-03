@@ -133,6 +133,15 @@
          timeout: '600'
          node: 'huge-systest'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'services_external.sahara'
+         weight: '20'
+         properties: |
+           SLAVE_NODE_CPU=2
+           SLAVE_NODE_MEMORY=32768
+           SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+         timeout: '600'
+         node: 'huge-systest'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'repeatable_image_based'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'known_issues'

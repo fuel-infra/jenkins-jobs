@@ -166,6 +166,9 @@
             - name: '8.0.system_test.ubuntu.logrotate'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '8.0.system_test.ubuntu.services_external.sahara'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '8.0.system_test.ubuntu.ha_destructive_ceph_neutron'
               current-parameters: true
               kill-phase-on: NEVER
