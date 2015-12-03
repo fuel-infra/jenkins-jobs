@@ -2,6 +2,7 @@
     name: '{mos_version}-pkg-publish-{os}'
     project-type: freestyle
     concurrent: false
+    quiet-period: 60
     properties:
       - inject:
           properties-content: |
