@@ -72,6 +72,7 @@
     jobs:
       - '{mos_version}-fuel-pkg-pipeline-{distro}'
       - '{mos_version}-fuel-pkg-publish-{distro}'
+      - '{mos_version}-fuel-pkg-install-{distro}'
 
 - project:
     name: 'pkg-mos-centos'
