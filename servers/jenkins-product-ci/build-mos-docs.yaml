@@ -1,13 +1,13 @@
 - job:
-    name: build-fuel-docs
+    name: build-mos-docs
     builders:
       - shell:
-          !include-raw './builders/build-fuel-docs.sh'
+          !include-raw './builders/build-mos-docs.sh'
     description: |
-      Build fuel-docs for all branches and publish them to <a
+      Build mos/mos-docs for all branches and publish them to <a
       href="http://docs.mirantis.com">docs.mirantis.com</a>
       <p>Work In Progress
-      <p>Contacts: #fuel-devops
+      <p>Contacts: ci-team at #infra
     logrotate:
       artifactDaysToKeep: 30
       daysToKeep: 100
@@ -17,14 +17,24 @@
       - string:
           name: GERRIT_BRANCH
           default: 'master'
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+
     properties:
       - heavy-job:
           weight: 1
+
     scm:
       - git:
-          url: 'https://git.openstack.org/openstack/fuel-docs.git'
           branches:
-            - 'origin/$GERRIT_BRANCH'
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/mos/mos-docs'
+          choosing-strategy: gerrit
+          clean: true
 
     triggers:
       - gerrit:
@@ -32,13 +42,16 @@
             - change-merged-event
           projects:
             - project-compare-type: PLAIN
-              project-pattern: 'openstack/fuel-docs'
+              project-pattern: 'mos/mos-docs'
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           silent: true
 
     wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '60262544-8924-4718-aa4e-7e629cc2f5d3'
       - ansicolor:
           colormap: xterm
       - timeout:
@@ -47,7 +60,7 @@
           timeout: 45
     publishers:
       - html-publisher:
-          name: 'Fuel Docs build results'
+          name: 'MOS Docs build results'
           dir: '_build/html'
           files: 'index.html'
           keep-all: true
@@ -57,5 +70,5 @@
           regexp-for-failed: 'Description string: (.*)'
       - email:
           notify-every-unstable-build: true
-          recipients: 'devops+alert@mirantis.com'
+          recipients: 'ci@mirantis.com'
           send-to-individuals: false
