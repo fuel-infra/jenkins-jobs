@@ -5,5 +5,5 @@
     logrotate:
       daysToKeep: 90
       numToKeep: -1
-      artifactDaysToKeep: -1
+      artifactDaysToKeep: 14
       artifactNumToKeep: -1
