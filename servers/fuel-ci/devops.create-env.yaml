@@ -1,5 +1,5 @@
-- job:
-    name: 'devops.master.fuel-library.create_env'
+- job-template:
+    name: 'devops.{version-id}.create-env'
     concurrent: true
     description:
       !include-raw descriptions/fuel-library.create_env
@@ -12,27 +12,27 @@
 
     parameters:
       - string:
-          name: ENV_PREFIXES
-          default: 'env_ubuntu env_centos env_masternode env_granular_ubuntu env_granular_centos'
-          description: 'List of env prefixes to create'
+          name: ENV_NAMES
+          default: 'env_{version-id}_smoke_neutron env_{version-id}_neutron_ha_vlan'
+          description: 'List of env prefixes to clean up'
       - string:
-          name: BRANCH
-          default: master
+          name: ISO_PATH
+          default: '/home/jenkins/workspace/iso/fuel_{version-id}.iso'
       - string:
-          name: ISO_ID
-          default: default
+          name: VENV_PATH
+          default: '{venvpath}'
+      - string:
+          name: SYSTEST_ROOT
+          default: '/home/jenkins/workspace/systest/{version-id}'
       - node:
           name: NODE
           description: "Select slave"
           ignore-offline-nodes: true
           allowed-multiselect: true
       - string:
-          name: SHA
-          default: master
+          name: FUEL_QA_COMMIT
+          default: '{version-id}'
           description: 'Commit SHA of fuel-qa repository'
-      - string:
-          name: VENV_PATH
-          default: /home/jenkins/venv-nailgun-tests-2.9
       - bool:
           name: UPDATE_VENV
           default: false
@@ -42,22 +42,20 @@
       - git:
           url: 'https://git.openstack.org/openstack/fuel-qa.git'
           branches:
-            - $SHA
+            - $FUEL_QA_COMMIT
           basedir: fuel-qa
 
     builders:
       - shell:
-          !include-raw builders/update_venv.sh
+          !include-raw-escape builders/update_venv.sh
       - shell:
-          !include-raw builders/fuel-library.create_env.sh
+          !include-raw-escape builders/update-env.sh
 
     publishers:
       - description-setter:
-          string: "'Description string: (.*)'"
+          string: "Description string: (.*)"
 
     wrappers:
-      - ansicolor:
-          colormap: xterm
       - timeout:
           fail: true
           timeout: 10

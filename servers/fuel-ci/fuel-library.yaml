@@ -1,0 +1,27 @@
+- project:
+    name: 'fuel-library master tests'
+    version-id: master
+    project: fuel-library
+    projectpackage: fuel-library8.0
+    projectbranch: master
+    mos: '8.0'
+    properties: ''
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    timeout: 200
+    jobs:
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+          dist: ubuntu
+          testgroup: smoke_neutron
+          properties: |
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+          dist: ubuntu
+          testgroup: neutron_vlan_ha
+          properties: |
+            SYNC_DEPL_TASKS=true
+            KEEP_BEFORE=yes
+
+      - 'devops.{version-id}.create-env'
+      - 'devops.{version-id}.env'
