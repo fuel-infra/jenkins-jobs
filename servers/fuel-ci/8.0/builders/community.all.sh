@@ -47,12 +47,10 @@ fi
 
 #########################################
 echo "STEP 0. Export Workarounds"
-export MIRROR_FUEL=http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos8.0-centos6-fuel/os/x86_64/
-export SANDBOX_MIRROR_CENTOS_UPSTREAM=http://vault.centos.org/6.6/
-export MIRROR_CENTOS=http://vault.centos.org/6.6/
+export MIRROR_FUEL=http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos8.0-centos7-fuel/os/x86_64/
 export MIRROR_MOS_UBUNTU=mirror.seed-cz1.fuel-infra.org
 export MIRROR_UBUNTU=mirror.seed-cz1.fuel-infra.org
-export USE_MIRROR=none
+export USE_MIRROR=ext
 
 echo "STEP 1. Make everything"
 
