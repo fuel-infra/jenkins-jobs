@@ -30,6 +30,9 @@
       - eskibana:
           plugin_repo: fuel-plugin-elasticsearch-kibana
           tag: 'refs/tags/0.7.1'
+      - lma_alerting:
+          plugin_repo: fuel-plugin-lma-infrastructure-alerting
+          tag: 'refs/tags/0.8.0'
     jobs:
       - 'fuel-plugin.{plugin_name}.build'
       - 'fuel-plugin.{plugin_name}.tag'
