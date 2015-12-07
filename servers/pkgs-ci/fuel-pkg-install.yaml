@@ -61,9 +61,6 @@
               operator: AND
           script:
             !include-raw-escape builders/mos.install.destroy.vm.sh
-        - matches:
-            - log-text: 'Building'
-              operator: AND
       - archive:
           artifacts: '**/*.xml, ci_status_params, {pkg_type}.install.setenvfile'
           allow-empty: true
