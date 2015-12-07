@@ -131,3 +131,28 @@
 
     jobs:
       - '{name}'
+
+- project:
+    name: 'lp_milestone_status_changer'
+    credentials: '87e8f7c8-9d04-4ffa-bd9c-9ef88acffec0'
+    days: 1
+    description: 'The job to run the script to differentiate fixed and none fixed bugs.'
+    docker_image: 'python-jenkins-14-04'
+    label_server: 'custom-scripts'
+    mode: '--execute'
+    num: 100
+    properties: |
+      LP_STATUS_CHANGER_PROJECTS = fuel, mos
+      LP_STATUS_CHANGER_MILESTONES = 7.0,
+      LP_STATUS_CHANGER_TRIGGER_STATUSES = Fix Committed, Fix Released
+      LP_STATUS_CHANGER_STATUS_FROM = Confirmed
+      LP_STATUS_CHANGER_STATUS_TO = Triaged
+      LP_STATUS_CHANGER_MAXIMUM = -1
+    recipients: 'devops+alert@mirantis.com'
+    repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
+    script_path: 'lp-milestone-status-changer/lp_milestone_status_changer.py'
+    trigger: ''
+    volumes: '-v /etc/custom_scripts/lp_milestone_status_changer.conf:/etc/custom_scripts/lp_milestone_status_changer.conf -v /etc/custom_scripts/lp_milestone_status_changer_credentials.conf:/etc/custom_scripts/lp_milestone_status_changer_credentials.conf -v /home/jenkins/.ssh/known_hosts:/root/.ssh/known_hosts'
+
+    jobs:
+      - '{name}'
