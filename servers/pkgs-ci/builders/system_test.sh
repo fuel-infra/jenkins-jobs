@@ -28,6 +28,15 @@ export OPENSTACK_RELEASE
 
 ###################### Get MIRROR HOST ###############
 
+UBUNTU_MIRROR_FILE="lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt"
+UBUNTU_MIRROR_ART="${PRODUCT_JENKINS_URL:-https://product-ci.infra.mirantis.net}/job/${ISO_JOB_NAME}/${UBUNTU_MIRROR_FILE}"
+
+if MIRROR_RES=$(curl -ksf "${UBUNTU_MIRROR_ART}"); then
+    if [ "${MIRROR_RES%=*}" = "UBUNTU_MIRROR_ID" ]; then
+        export UBUNTU_MIRROR_ID=${MIRROR_RES#*=}
+    fi
+fi
+
 LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
 LOCATION=${LOCATION_FACT:-bud}
 UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
