@@ -24,7 +24,7 @@ test "$deep_clean" = "true" && make deep_clean
 #########################################
 
 echo "STEP 0. Export workarounds"
-export MIRROR_FUEL=http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos8.0-centos6-fuel/os/x86_64/
+export MIRROR_FUEL=http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos8.0-centos7-fuel/os/x86_64/
 export MIRROR_MOS_UBUNTU=mirror.seed-cz1.fuel-infra.org
 export MIRROR_UBUNTU=mirror.seed-cz1.fuel-infra.org
 export USE_MIRROR=none
