@@ -24,6 +24,8 @@ export EXTRA_DEB_REPOS_PRIORITY=1052
 export EXTRA_RPM_REPOS
 export EXTRA_DEB_REPOS
 
+export OPENSTACK_RELEASE
+
 ###################### Get MIRROR HOST ###############
 
 LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
