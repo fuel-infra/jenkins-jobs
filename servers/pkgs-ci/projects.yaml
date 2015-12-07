@@ -74,6 +74,8 @@
     gerrit-user: 'openstack-ci-jenkins'
     gerrit-port: '29418'
 
+    install-node: 'fuel-install-node'
+
     jobs:
       - '{mos_version}-fuel-pkg-pipeline-{distro}'
       - '{mos_version}-fuel-pkg-publish-{distro}'
