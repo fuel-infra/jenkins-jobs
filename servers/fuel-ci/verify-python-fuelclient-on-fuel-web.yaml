@@ -1,0 +1,88 @@
+- scm:
+    name: gerrit-fuel-web
+    scm:
+      - git:
+         branches:
+          - $GERRIT_BRANCH
+         remotes:
+           - gerrit:
+               refspec: $GERRIT_REFSPEC
+               url: https://review.openstack.org/openstack/fuel-web.git
+         choosing-strategy: gerrit
+
+- scm:
+    name: git-python-fuelclient
+    scm:
+      - git:
+         basedir: python-fuelclient
+         url: https://git.openstack.org/openstack/python-fuelclient.git
+         branches:
+          - origin/master
+
+- scm:
+    name: both
+    scm:
+      - gerrit-fuel-web
+      - git-python-fuelclient
+
+- job-template:
+    name: '{prefix}-python-fuelclient-on-fuel-web'
+    builders:
+      - shell:
+          !include-raw-escape builders/verify-python-fuelclient-on-fuel-web.sh
+    description: |
+      Run tests for python-fuelclient on fuel-web change requests.
+
+    node: python-fuelclient
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: PIP_OPTION
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - one-nailgun-db-per-node
+          max-per-node: 1
+          option: category
+    publishers:
+      - 'email-{email-type}'
+    scm:
+      - both
+    triggers:
+      - gerrit:
+          trigger-on: '{obj:trigger_on}'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-web
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/8.0'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+      - timed: '{timed}'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+
+- project:
+    name: dualcheck-python-fuelclient-on-fuel-web
+    jobs:
+      - '{prefix}-python-fuelclient-on-fuel-web':
+          prefix: verify
+          trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          email-type: default
+          timed: '0 13 * * *'
+
