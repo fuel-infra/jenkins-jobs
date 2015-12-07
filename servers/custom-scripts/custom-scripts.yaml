@@ -107,3 +107,27 @@
 
     jobs:
       - '{name}'
+
+- project:
+    name: 'lp_release_migrator'
+    credentials: '87e8f7c8-9d04-4ffa-bd9c-9ef88acffec0'
+    days: 1
+    description: 'The job to migrate Launchpad bugs between milestones after releases.'
+    docker_image: 'python-jenkins-14-04'
+    label_server: 'custom-scripts'
+    mode: '--execute'
+    num: 100
+    properties: |
+      LP_RELEASE_PROJECTS = fuel, mos
+      LP_RELEASE_OLD_MILESTONE_NAMES = 7.0
+      LP_RELEASE_NEW_MILESTONE_NAME = 8.0
+      LP_RELEASE_MAXIMUM = -1
+      LP_RELEASE_STATUSES = New, Confirmed, Triaged, In Progress, Incomplete
+    recipients: 'devops+alert@mirantis.com'
+    repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
+    script_path: 'lp_release_migrator/lp_release_migrator.py'
+    trigger: ''
+    volumes: '-v /etc/custom_scripts/lp_release_migrator.conf:/etc/custom_scripts/lp_release_migrator.conf -v /etc/custom_scripts/lp_release_migrator_credentials.conf:/etc/custom_scripts/lp_release_migrator_credentials.conf -v /home/jenkins/.ssh/known_hosts:/root/.ssh/known_hosts'
+
+    jobs:
+      - '{name}'
