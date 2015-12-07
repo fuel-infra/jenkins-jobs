@@ -185,3 +185,14 @@
     ops-spec-prj: 'fuel-infra/**'
     ops-branch: 'master'
     build-node: 'new-builder'
+
+- project:
+    name: 'sync'
+    jobs:
+      - 'sync_debian_specs'
+    scm-user: 'openstack-ci-jenkins'
+    scm-credentials-id: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
+    scm-repo: 'infra/mirrors'
+    scm-branch: 'master'
+    scm-basedir: ''
+    sync-node: 'sync-deb-spec'
