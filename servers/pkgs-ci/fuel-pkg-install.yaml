@@ -47,12 +47,11 @@
 
           echo FAILED=false >> ci_status_params
           RESULT=0
-          for script in version-test-{pkg_type} vm-test
+          for script in version-test-{pkg_type} vm-test repo-test-{pkg_type}-docker
           do
             bash -x "${{WORKSPACE}}/${{script}}"
           done
 
-          bash -x repo-test-{pkg_type}-docker ||:
 
     publishers:
       - post-tasks:
