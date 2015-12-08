@@ -143,11 +143,6 @@
       - 'master'
       - '8.0'
     distro:
-      - centos6:
-          os: centos
-          openstack_release: 'CentOS'
-          pkg_type: 'rpm'
-          spec_path_prefix: '/rpm'
       - centos7:
           os: centos
           openstack_release: 'CentOS'
