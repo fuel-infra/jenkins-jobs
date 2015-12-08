@@ -30,9 +30,3 @@ export USE_UBUNTU=true
 export USE_CENTOS=false
 python ${TESTRAIL_REPORTER_PATH} -v -l -j "${SWARM_RUNNER_JOB_NAME}" ${OPTIONS}
 
-# Report tests results from swarm (CentOS)
-
-export TESTRAIL_TEST_SUITE="Upgrade Centos Cluster"
-export USE_UBUNTU=false
-export USE_CENTOS=true
-python ${TESTRAIL_REPORTER_PATH} -v -l -j "${SWARM_RUNNER_JOB_NAME}" ${OPTIONS}
