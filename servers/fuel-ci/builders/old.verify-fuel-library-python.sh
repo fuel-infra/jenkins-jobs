@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#
 #    Copyright 2015 Mirantis, Inc.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -14,20 +14,12 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-
 set -ex
 
 VENV=${WORKSPACE}_VENV
-virtualenv -p python2.7 "${VENV}"
-${VENV}/bin/pip install tox\>=2.1.0
+virtualenv -p python2.6 ${VENV}
+source ${VENV}/bin/activate || exit 1
 
-source "${VENV}/bin/activate"
+pip install "tox>=1.8"
 
-export TEST_NAILGUN_DB=nailgun
-export FUEL_WEB_ROOT="${WORKSPACE}/fuel-web"
-
-trap "tox -e cleanup" SIGINT SIGTERM
-tox -e functional,cleanup
-trap - SIGINT SIGTERM
-
-deactivate
+/bin/bash ${WORKSPACE}/utils/jenkins/python_run_tests.sh

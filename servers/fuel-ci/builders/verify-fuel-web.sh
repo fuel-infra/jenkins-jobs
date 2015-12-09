@@ -3,7 +3,7 @@
 set -ex
 
 export TEST_WORKERS=4
-export PYTHON_EXEC=${PYTHON_EXEC:-python2.6}
+export PYTHON_EXEC=${PYTHON_EXEC:-python2.7}
 
 VENV=${WORKSPACE}_VENV
 [ "${VENV_CLEANUP}" == "true" ] && rm -rf "${VENV}"
