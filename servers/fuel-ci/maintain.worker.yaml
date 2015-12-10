@@ -9,6 +9,10 @@
       artifactDaysToKeep: 90
       daysToKeep: 90
     node: pbuilder
+    parameters:
+      - string:
+          name: UPSTREAM_MIRROR
+          default: 'http://mirror.seed-cz1.fuel-infra.org/pkgs/ubuntu/'
     properties:
       - heavy-job:
           weight: 7
