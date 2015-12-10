@@ -78,7 +78,7 @@ EOF
 #########################################
 
 echo "STEP 1. Make everything"
-make ${make_args} iso version-yaml openstack-yaml
+make ${make_args} iso version-yaml
 
 #########################################
 

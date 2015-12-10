@@ -54,7 +54,7 @@ export USE_MIRROR=ext
 
 echo "STEP 1. Make everything"
 
-make iso version-yaml openstack-yaml
+make iso version-yaml
 
 echo "STEP 2. Publish everything"
 
