@@ -32,8 +32,8 @@
             - project-compare-type: PLAIN
               project-pattern: 'openstack/fuel-main'
               branches:
-                - branch-compare-type: ANT
-                  branch-pattern: '**'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
               file-paths:
                 - compare-type: ANT
                   pattern: '**/requirements-rpm.txt'

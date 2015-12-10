@@ -2,15 +2,7 @@
 
 set -xe
 
-PRODUCT_VERSION=`awk -F '[:=?]' '/^PRODUCT_VERSION\>/ {print $NF}' config.mk`
-CENTOS_MAJOR=`awk -F '[:=?]' '/^CENTOS_MAJOR\>/ {print $NF}' config.mk`
-CENTOS_MINOR=`awk -F '[:=?]' '/^CENTOS_MINOR\>/ {print $NF}' config.mk`
-CENTOS_RELEASE=${CENTOS_MAJOR}.${CENTOS_MINOR}
-CENTOS_ARCH=`awk -F '[:=?]' '/^CENTOS_ARCH\>/ {print $NF}' config.mk`
 PACKAGES=$(git diff --word-diff=plain HEAD~ requirements-rpm.txt | egrep '{+' | egrep -v "@Base|@Core" | cut -d"+" -f2 | sed ':a;N;$!ba;s/\n/ /g')
-
-export MIRROR_CENTOS=http://vault.centos.org/${CENTOS_RELEASE}/
-export MIRROR_FUEL=http://mirror.fuel-infra.org/mos-repos/centos/mos${PRODUCT_VERSION}-centos${CENTOS_MAJOR}-fuel/os/${CENTOS_ARCH}/
 
 if [ X"${PACKAGES}" = X"" ]; then
 	echo "MARK: no difference found, all requested packages exist in Perestroika and upstream repos."
@@ -24,4 +16,4 @@ fi
 
 echo "MARK: checking Perestroika and upstream repos..."
 
-make show-yum-urls-centos USE_MIRROR=none
+make show-yum-urls-centos-full USE_MIRROR=none
