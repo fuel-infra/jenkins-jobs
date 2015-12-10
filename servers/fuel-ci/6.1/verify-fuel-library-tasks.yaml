@@ -1,5 +1,5 @@
 - job-template:
-    name: '{prefix}-fuel-library-tasks'
+    name: '6.1.{prefix}-fuel-library-tasks'
     builders:
       - shell:
           !include-raw-escape builders/verify-fuel-library-tasks.sh
@@ -9,7 +9,7 @@
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/stable/6.1'
     properties:
       - heavy-job:
           weight: 1
@@ -29,7 +29,7 @@
               project-pattern: openstack/fuel-library
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
+                  branch-pattern: 'stable/6.1'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
@@ -43,9 +43,9 @@
       - 'email-{email-type}'
 
 - project:
-    name: dualcheck-fuel-library-tasks
+    name: 6.1.dualcheck-fuel-library-tasks
     jobs:
-      - '{prefix}-fuel-library-tasks':
+      - '6.1.{prefix}-fuel-library-tasks':
           prefix: verify
           trigger_on:
             - patchset-created-event
@@ -53,7 +53,7 @@
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
           timed: '0 9 * * *'
-      - '{prefix}-fuel-library-tasks':
+      - '6.1.{prefix}-fuel-library-tasks':
           prefix: gate
           trigger_on:
             - change-merged-event
