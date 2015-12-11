@@ -1,0 +1,133 @@
+- job-template:
+    name: '{mos_version}-pkg-massrebuild-{os}'
+    concurrent: true
+    description: |
+        This job is worker for mass-rebuild case.<br>
+        It builds a package and then publishes it by triggerring publisher job<br>
+        with enabled downgrade feature.<br>
+    node: '{build-node}'
+    wrappers:
+      - timeout:
+          timeout: 300
+      - timestamps
+      - ansicolor
+      - gerrit-creds
+    scm:
+      - perestroika
+    properties:
+      - inject:
+          properties-content: |
+            PKG_TYPE={pkg_type}
+    parameters:
+      - string:
+          name: PACKAGENAME
+          default: ''
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+
+          # FIXME: use perestroika from openstack/fuel-mirror
+          # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
+          # and then copy perestroika directory to root ${{WORKSPACE}}
+          cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
+
+          # Gerrit parameters
+          export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
+          export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
+          export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
+
+          ############################
+          # Project parameters
+          ############################
+
+          export PROJECT_NAME={project-name}
+          export PROJECT_VERSION={mos_version}
+
+          ############################
+          # Global parameters
+          ############################
+
+          export SOURCE_BRANCH=openstack-ci/fuel-8.0/liberty
+          export SPEC_BRANCH=openstack-ci/fuel-8.0/liberty
+          export SRC_PROJECT_PATH=openstack
+          export SPEC_PROJECT_PATH=openstack-build
+          export IS_UPDATES=false
+          export IS_OPENSTACK=true
+          export IS_DOWNGRADE=true
+          export DIST="${{DIST:-{distro}}}"
+          export SPEC_PREFIX_PATH="{spec_path_prefix}"
+          export REPO_REQUEST_PATH_PREFIX="{cr-path-prefix}"
+
+          # Publish host parameters
+          export REMOTE_REPO_HOST={repo-host}
+
+          # Parameters for package specs
+          export SPEC_PROJECT_SUFFIX={spec-project-suffix}
+
+          # New scheme
+          if [ "{mos_version}" = "master" ]; then
+              DEB_DIST_NAME={project-name}-{mos_version}
+              RPM_DIST_NAME={project-name}-{mos_version}-${{DIST}}
+          else
+              DEB_DIST_NAME={project-name}{mos_version}
+              RPM_DIST_NAME={project-name}{mos_version}-${{DIST}}-fuel
+          fi
+          DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
+          RPM_REPO_PATH={rel-path-prefix}/{os}/${{RPM_DIST_NAME}}/os/x86_64/
+          export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
+
+          # DEB-specific parameters
+          export ORIGIN=Mirantis
+          export DEB_PROPOSED_REPO_PATH=
+          export DEB_PROPOSED_DIST_NAME={project-name}{mos_version}-proposed
+          export DEB_UPDATES_REPO_PATH=
+          export DEB_UPDATES_DIST_NAME={project-name}{mos_version}-updates
+          export DEB_SECURITY_REPO_PATH=
+          export DEB_SECURITY_DIST_NAME={project-name}{mos_version}-security
+          export DEB_HOLDBACK_REPO_PATH=
+          export DEB_HOLDBACK_DIST_NAME={project-name}{mos_version}-holdback
+
+          # RPM-specific parameters
+          export RPM_OS_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/os
+          export RPM_PROPOSED_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/proposed
+          export RPM_UPDATES_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/updates
+          export RPM_SECURITY_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/security
+          export RPM_HOLDBACK_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/holdback
+
+          ############################
+          # Build package
+          ############################
+
+          bash build-${{IS_FUEL:+fuel-}}{pkg_type}.sh
+
+          # Extra parameters for publisher
+          cat >> buildresult.params <<EOF
+
+          # Added for publisher
+          ORIGIN=${{ORIGIN}}
+          REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
+          REPO_BASE_PATH={repo-base-path}
+          DEB_DIST_NAME=${{DEB_DIST_NAME}}
+          DEB_REPO_PATH=${{DEB_REPO_PATH}}
+          RPM_REPO_PATH=${{RPM_REPO_PATH}}
+          RPM_OS_REPO_PATH=${{RPM_OS_REPO_PATH}}
+          RPM_PROPOSED_REPO_PATH=${{RPM_PROPOSED_REPO_PATH}}
+          RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
+          RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
+          RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
+          REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
+          IS_DOWNGRADE=${{IS_DOWNGRADE}}
+          EOF
+
+          BUILD_SUCCEEDED=$(awk -F= '/^BUILD_SUCCEEDED=/ {{gsub(/"/,""); print $2}}' buildresult.params)
+          test "${{BUILD_SUCCEEDED}}" = "false" && exit 1
+          exit 0
+      - trigger-builds:
+          - project: '{mos_version}-pkg-publish-{os}'
+            current-parameters: true
+            property-file: buildresult.params
+            block: true
+    publishers:
+      - archive:
+          artifacts: buildresult.params
+          allow-empty: true
