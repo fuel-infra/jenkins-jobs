@@ -28,7 +28,7 @@
     publishers:
       - archive:
           allow-empty: true
-          artifacts: version.yaml.txt, listing.txt, *torrent_link.txt, artifacts/*changelog
+          artifacts: listing.txt, *torrent_link.txt, artifacts/*changelog
           latest-only: false
       - email:
           notify-every-unstable-build: false

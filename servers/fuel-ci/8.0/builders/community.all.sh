@@ -54,14 +54,13 @@ export USE_MIRROR=ext
 
 echo "STEP 1. Make everything"
 
-make iso version-yaml
+make iso
 
 echo "STEP 2. Publish everything"
 
 cd "${WORKSPACE}"
 
 cp "${LOCAL_MIRROR}/*changelog ${ARTS_DIR}/" || true
-cp "${BUILD_DIR}/iso/isoroot/version.yaml" "${WORKSPACE}/version.yaml.txt" || true
 (cd "${BUILD_DIR}/iso/isoroot" && find . | sed -s 's/\.\///') > "${WORKSPACE}/listing.txt" || true
 
 echo "BUILD FINISHED."
