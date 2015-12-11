@@ -11,7 +11,7 @@
           default: 'refs/heads/master'
       - string:
           name: GERRIT_PROJECT
-          default: 'puppet-modules'
+          default: 'puppet-modules/puppet-horizon'
     wrappers:
       - timeout:
           fail: true
