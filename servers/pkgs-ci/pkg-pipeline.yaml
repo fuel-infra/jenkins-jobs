@@ -14,12 +14,6 @@
         </ul>
     scm:
       - perestroika
-      - fuel-infra:
-          scm-user: '{scm-user}'
-          scm-repo: '{scm-ci-status-client-repo}'
-          scm-basedir: '{scm-ci-status-client-basedir}'
-          scm-credentials-id: '{scm-credentials-id}'
-          scm-branch: '{scm-ci-status-client-branch}'
     wrappers:
       - gerrit-creds
       - timeout:
@@ -28,21 +22,7 @@
       - ansicolor
     triggers:
       - zuul
-    properties:
-      - inject:
-          properties-content: |
-            PKG_TYPE={pkg_type}
     builders:
-      - shell: |
-          #!/bin/bash -xe
-          export DIST="${{DIST:-{distro}}}"
-
-          # Gerrit parameters
-          export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
-          export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
-          export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
-
-          ci-status-client/ci-status-report.sh start
       - shell: |
           #!/bin/bash -xe
 
@@ -60,7 +40,7 @@
           PROJECT_VERSION=${{PROJECT_VERSION%%/*}}
 
           # Set default version for master branch
-          test "${{PROJECT_VERSION}}" = "master" && PROJECT_VERSION="{master-mos-version}"
+          test "${{PROJECT_VERSION}}" = "master" && PROJECT_VERSION="{master-mos-version}" || :
 
           # Project info
           export PROJECT_NAME PROJECT_VERSION
@@ -124,13 +104,10 @@
           ############################
 
           # Use parameters set by Zuul instead of guessing ones
-          test "${{SKIP_DEF_PARAMS:-true}}" = true && sed -ri '/set_default_params/ d' build-{pkg_type}.sh
+          test "${{SKIP_DEF_PARAMS:-true}}" = true && sed -ri '/set_default_params/ d' build-{pkg_type}.sh || :
 
           # ... and build a package
-          # File ci_status_params is created by status reporting (ci-status-client/ci-status-report.sh)
-          # Append parameters (>>) to it instead of (re)creating (>) new file
-          echo FAILED=true >> ci_status_params
-          bash build-${{IS_FUEL:+fuel-}}{pkg_type}.sh && sed -ri 's/FAILED=true/FAILED=false/' ci_status_params
+          bash -x build-${{IS_FUEL:+fuel-}}{pkg_type}.sh
 
           rm -rf {repo-base-path}/${{REQUEST_NUM:-CR-${{ZUUL_CHANGE}}}}
 
@@ -156,11 +133,7 @@
           # affect test parameters if any
           touch tests.envfile
 
-          test "${{UNSET_LP_BUG:-false}}" == "true" && sed -ri '/^LP_BUG=/ d' buildresult.params
-
-          # Fail job in case of package building error
-          FAILED=$(awk -F= '/^FAILED=/ {{gsub(/"/,""); print $2}}' ci_status_params)
-          test "${{FAILED}}" = "true" && exit 1 || exit 0
+          test "${{UNSET_LP_BUG:-false}}" == "true" && sed -ri '/^LP_BUG=/ d' buildresult.params || :
       - trigger-builds:
           - project: '{mos_version}-pkg-publish-{os}'
             current-parameters: true
@@ -195,24 +168,10 @@
             ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}" || :
     publishers:
       - 'email-alert-on-merge'
-      - post-tasks:
-         - matches:
-            - log-text: Building
-              operator: AND
-           script: |
-             #!/bin/bash -xe
-             export DIST="${{DIST:-{distro}}}"
-
-             # Gerrit parameters
-             export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
-             export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
-             export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
-
-             ci-status-client/ci-status-report.sh stop
 #      - junit:
 #          results: 'buildresult.xml'
       - archive:
-          artifacts: 'buildresult.params, ci_status_params, {pkg_type}.publish.setenvfile, tests.envfile'
+          artifacts: 'buildresult.params, {pkg_type}.publish.setenvfile, tests.envfile'
           allow-empty: True
 
     node: '{build-node}'

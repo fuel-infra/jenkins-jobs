@@ -17,27 +17,7 @@
           scm-basedir: ''
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{install-scm-branch}'
-      - fuel-infra:
-          scm-user: '{scm-user}'
-          scm-repo: '{scm-ci-status-client-repo}'
-          scm-basedir: '{scm-ci-status-client-basedir}'
-          scm-credentials-id: '{scm-credentials-id}'
-          scm-branch: '{scm-ci-status-client-branch}'
-    properties:
-      - inject:
-          properties-content: |
-            PKG_TYPE={pkg_type}
     builders:
-      - shell: |
-          #!/bin/bash -xe
-          export DIST="${{DIST:-{distro}}}"
-
-          # Gerrit parameters
-          export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
-          export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
-          export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
-
-          ci-status-client/ci-status-report.sh start
       - shell:
           !include-raw-escape builders/mos.install.cleanup.sh
       - copyartifact:
@@ -61,7 +41,6 @@
           export PACKAGEVERSION=${{DEB_VERSION:-${{RPM_VERSION}}}}
           export PACKAGELIST=${{DEB_BINARIES:-${{RPM_BINARIES}}}}
           export REPO_URL=${{DEB_REPO_URL:-${{RPM_REPO_URL}}}}
-          export REPO_TYPE={pkg_type}
           export GERRIT_PROJECT=${{ZUUL_PROJECT}}
 
           # Remove quotes, double and trailing slashes
@@ -69,26 +48,12 @@
           EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
           PACKAGELIST=$(echo "${{PACKAGELIST}}" | sed 's|,| |g')
 
-          START_TS=$(date +%s)
-
-          echo FAILED=false >> ci_status_params
-          RESULT=0
           for script in version-test-{pkg_type} vm-test
           do
               script_log="${{script}}.log"
               rm -f "${{script_log}}"
-              if ! bash -x "${{WORKSPACE}}/${{script}}" 2>> "${{script_log}}" | tee -a "${{script_log}}"
-              then
-                  sed -i 's/FAILED=false/FAILED=true/' ci_status_params
-                  RESULT=1
-                  break
-              fi
+              bash -x "${{WORKSPACE}}/${{script}}" 2>> "${{script_log}}" | tee -a "${{script_log}}"
           done
-
-          TIME_ELAPSED=$(( $(date +%s) - ${{START_TS}} ))
-          echo "RESULT=${{RESULT}}" > {pkg_type}.install.setenvfile
-          echo "TIME_ELAPSED='$(date -u -d @${{TIME_ELAPSED}} +'%Hh %Mm %Ss' | sed 's|^00h ||; s|^00m ||')'" >> {pkg_type}.install.setenvfile
-          exit ${{RESULT}}
 
     publishers:
       - post-tasks:
@@ -97,23 +62,10 @@
               operator: AND
           script:
             !include-raw-escape builders/mos.install.destroy.vm.sh
-        - matches:
-            - log-text: 'Building'
-              operator: AND
-          script: |
-            #!/bin/bash -xe
-            export DIST="${{DIST:-{distro}}}"
-
-            # Gerrit parameters
-            export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
-            export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
-            export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
-
-            ci-status-client/ci-status-report.sh stop
 #      - junit:
 #          results: 'report.xml'
       - archive:
-          artifacts: '**/*.xml, ci_status_params, {pkg_type}.install.setenvfile,
+          artifacts: '**/*.xml, {pkg_type}.install.setenvfile,
                       version-test-{pkg_type}.log, vm-test.log, repo-test-{pkg_type}-docker.log'
           allow-empty: true
 

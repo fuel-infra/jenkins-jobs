@@ -2,8 +2,6 @@
 
 set -ex
 
-echo STARTED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" > ci_status_params.txt
-
 # receive input in the $RPM_REPO_URL var as "repourl1|repourl2|..."
 # and convert to the $EXTRA_RPM_REPOS var as
 # EXTRA_RPM_REPOS="repo1,repourl1,priority repo2,repourl2,priority"
@@ -92,12 +90,12 @@ if [ -n "${EXTRA_RPM_REPOS}" -a "${REBUILD_ISO}" = "true" ]; then
 
     # Build an ISO with custom repository
     pushd fuel-main
-    rm -rf /var/tmp/yum-${USER}-*
+    rm -rf "/var/tmp/yum-${USER}-*"
     make deep_clean
     make -j10 iso USE_MIRROR="${LOCATION}" EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}"
     popd
 
-    ISO_PATH=$(find ${WORKSPACE}/fuel-main/build/artifacts/ -name *.iso -print)
+    ISO_PATH=$(find "${WORKSPACE}/fuel-main/build/artifacts/" -name "*.iso" -print)
 else
     TEST_GROUP="bvt_2"
 
@@ -113,7 +111,7 @@ else
         exit 1
     fi
 
-    MAGNET_LINK=`curl -s "${ISO_MAGNET_ART}" | fgrep 'MAGNET_LINK=' | sed 's~.*MAGNET_LINK=~~'`
+    MAGNET_LINK=$(curl -s "${ISO_MAGNET_ART}" | fgrep 'MAGNET_LINK=' | sed 's~.*MAGNET_LINK=~~')
     echo "MAGNET_LINK=${MAGNET_LINK}"
 
     ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")

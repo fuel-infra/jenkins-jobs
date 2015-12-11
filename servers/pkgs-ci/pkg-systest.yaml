@@ -65,42 +65,26 @@
           branch: '{fuel-qa-branch}'
           repo: fuel-qa
           fuel-namespace: '{fuel-namespace}'
-      - fuel-infra:
-          scm-user: '{scm-user}'
-          scm-repo: '{scm-ci-status-client-repo}'
-          scm-basedir: '{scm-ci-status-client-basedir}'
-          scm-credentials-id: '{scm-credentials-id}'
-          scm-branch: '{scm-ci-status-client-branch}'
     triggers:
       - zuul
     builders:
       - shell: |
           #!/bin/bash -xe
-
-          # Gerrit parameters
-          export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
-          export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
-          export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
-
-          ci-status-client/ci-status-report.sh start
-
           # Clean logs from previous runs
           rm -f fuel-qa/logs/*
       - copyartifact:
           project: '{mos_version}-pkg-pipeline-centos'
-          filter: 'ci_status_params, rpm.publish.setenvfile'
+          filter: 'rpm.publish.setenvfile'
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
           optional: true
       - copyartifact:
           project: '{mos_version}-pkg-pipeline-ubuntu'
-          filter: 'ci_status_params, deb.publish.setenvfile'
+          filter: 'deb.publish.setenvfile'
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
           optional: true
       - shell: /bin/bash -xec 'touch {{deb,rpm}}.publish.setenvfile'
-      - inject:
-          properties-file: 'ci_status_params'
       - inject:
           properties-file: 'rpm.publish.setenvfile'
       - inject:
@@ -114,22 +98,9 @@
       - timestamps
       - ansicolor
     publishers:
-      - post-tasks:
-         - matches:
-            - log-text: Building
-              operator: AND
-           script: |
-             #!/bin/bash -xe
-
-             # Gerrit parameters
-             export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
-             export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
-             export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
-
-             ci-status-client/ci-status-report.sh stop
       - archive:
           allow-empty: true
-          artifacts: '**/nosetests.xml, logs/*, ci_status_params, fuel-qa/logs/*'
+          artifacts: '**/nosetests.xml, logs/*, fuel-qa/logs/*'
           latest-only: false
       - logparser:
           parse-rules: '/var/lib/jenkins/fuellib.parser'
