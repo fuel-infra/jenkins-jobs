@@ -194,6 +194,7 @@
             GERRIT_CMD="gerrit review ${{GERRIT_CHANGE_NUMBER}},${{GERRIT_PATCHSET_NUMBER}} '--message=${{GERRIT_MESSAGE}}'"
             ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}" || :
     publishers:
+      - 'email-alert-on-merge'
       - post-tasks:
          - matches:
             - log-text: Building
