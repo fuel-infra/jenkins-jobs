@@ -6,6 +6,7 @@ export TEST_WORKERS=4
 export PYTHON_EXEC=${PYTHON_EXEC:-python2.6}
 
 VENV=${WORKSPACE}_VENV
+[ "${VENV_CLEANUP}" == "true" ] && rm -rf ${VENV}
 virtualenv -p ${PYTHON_EXEC} ${VENV}
 source ${VENV}/bin/activate
 

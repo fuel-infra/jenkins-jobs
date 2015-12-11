@@ -18,6 +18,10 @@
       - string:
           name: TOXENV
           default: py26
+      - bool:
+          name: VENV_CLEANUP
+          default: true
+          description: 'Check this option to rebuild virtual environment'
     properties:
       - heavy-job:
           weight: 1
