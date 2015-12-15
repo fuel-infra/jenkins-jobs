@@ -61,7 +61,3 @@
       - description-setter:
           regexp: 'Description string: (.*)'
           regexp-for-failed: 'Description string: (.*)'
-      - email:
-          notify-every-unstable-build: true
-          recipients: 'ci@mirantis.com'
-          send-to-individuals: false
