@@ -23,11 +23,28 @@ upload_image() {
   rsync -v build/${IMAGE} "${RSYNC_URL}/images/${IMAGE}-$(date '+%Y%m%d-%s')"
 }
 
+delete_old_images() {
+  local include_files="$(mktemp)"
+
+  rsync --list-only "${RSYNC_URL}/images/" | \
+    grep -oP ".*\K${IMAGE}-\d{8}-\d+\$" | \
+    sort | \
+    head -n -31 > "${include_files}"
+
+  [[ ! -f "${include_files}" || ! -s "${include_files}" ]] && return 0
+
+  rsync -rv --delete --include-from="${include_files}" --exclude='*' . \
+    "${RSYNC_URL}/images/"
+
+  rm -f "${include_files}"
+}
+
 main() {
   pushd "${WORKSPACE}"
 
   build_image
   upload_image
+  delete_old_images
 
   popd
 }
