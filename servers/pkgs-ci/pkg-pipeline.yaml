@@ -188,9 +188,9 @@
             export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
             export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
 
-            GERRIT_MESSAGE="Package repository:
+            GERRIT_MESSAGE="Build succeeded (repository_{pkg_type} pipeline).
 
-            - package.repository ${{REPOURL[0]}} : LINK"
+            - package.repository.{pkg_type} ${{REPOURL[0]}} : LINK"
             GERRIT_CMD="gerrit review ${{GERRIT_CHANGE_NUMBER}},${{GERRIT_PATCHSET_NUMBER}} '--message=${{GERRIT_MESSAGE}}'"
             ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}" || :
     publishers:
