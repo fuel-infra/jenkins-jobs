@@ -1,0 +1,5 @@
+- project:
+    name: infra-ci.update-jenkins-jobs
+    ci-name: infra-ci
+    jobs:
+      - update-jenkins-jobs

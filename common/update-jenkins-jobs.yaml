@@ -1,0 +1,51 @@
+- job-template:
+    name: 'update-jenkins-jobs'
+    description: 'Update jenkins jobs configuration on fuel-infra/jenkins-jobs merge or manually'
+    concurrent: false
+    node: 'jjb_update'
+    builders:
+      - inject:
+          properties-content: 'CI_NAME={ci-name}'
+      - shell:
+          !include-raw-escape scripts/update-jenkins-jobs.sh
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: JOBS_LIST
+          description: 'Space separated list of jobs to update. Will update all jobs if empty'
+    publishers:
+      - post-tasks:
+        - matches:
+          - log-text: '.'
+          escalate-status: true
+          script: !include-raw-escape scripts/update-jenkins-jobs-cleanup.sh
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'https://review.fuel-infra.org/fuel-infra/jenkins-jobs.git'
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'fuel-infra/jenkins-jobs'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+              file-paths:
+                - compare-type: ANT
+                  pattern: 'common/**'
+                - compare-type: ANT
+                  pattern: 'servers/{ci-name}/**'
+    wrappers:
+      - timestamps
+      - inject-passwords:
+          global: true
