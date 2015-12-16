@@ -22,6 +22,10 @@
       - node:
           name: NODE
           allowed-multiselect: true
+      - text:
+          name: VENV_REQUIREMENTS
+          default: ''
+          description: 'Use custom requirements for venv'
       - string:
           name: CLOUD_FEDORA
           default: 'magnet:?xt=urn:btih:edf7287187fe35e94aaa6cf973c04fbc6700433f&dn=cloud-fedora.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fsrv07-srt.srt.mirantis.net%2Fcloud-images%2Fcloud-fedora.qcow2&ws=http%3A%2F%2Fsrv08-srt.srt.mirantis.net%2Fcloud-images%2Fcloud-fedora.qcow2&ws=http%3A%2F%2Fsrv11-msk.msk.mirantis.net%2Fcloud-images%2Fcloud-fedora.qcow2'

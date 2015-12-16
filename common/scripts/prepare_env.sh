@@ -11,22 +11,35 @@ function update_devops () {
   VIRTUAL_ENV=/home/jenkins/venv-nailgun-tests${1}
   REPO_NAME=${2}
   BRANCH=${3}
+
   if [ -f ${VIRTUAL_ENV}/bin/activate ]; then
     source ${VIRTUAL_ENV}/bin/activate
     echo "Python virtual env exist"
-    pip install -r https://raw.githubusercontent.com/openstack/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt --upgrade
-    django-admin.py syncdb --settings=devops.settings --noinput
-    django-admin.py migrate devops --settings=devops.settings --noinput
-    deactivate
-   else
+  else
     rm -rf ${VIRTUAL_ENV}
     virtualenv --system-site-packages  ${VIRTUAL_ENV}
     source ${VIRTUAL_ENV}/bin/activate
-    pip install -r https://raw.githubusercontent.com/openstack/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt --upgrade
-    django-admin.py syncdb --settings=devops.settings --noinput
-    django-admin.py migrate devops --settings=devops.settings --noinput
-    deactivate
   fi
+
+  # Prepare requirements file
+  if [[ -n "${VENV_REQUIREMENTS}" ]]; then
+    echo "Install with custom requirements"
+    echo "${VENV_REQUIREMENTS}" >"${WORKSPACE}/venv-requirements.txt"
+  else
+    if ! curl -fsS "https://raw.githubusercontent.com/openstack/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt" > "${WORKSPACE}/venv-requirements.txt"; then
+      echo "Problem with downloading requirements"
+      exit 1
+    fi
+  fi
+
+  pip install -r "${WORKSPACE}/venv-requirements.txt" --upgrade
+  echo "=============================="
+  pip freeze
+  echo "=============================="
+  django-admin.py syncdb --settings=devops.settings --noinput
+  django-admin.py migrate devops --settings=devops.settings --noinput
+  deactivate
+
 }
 
 function download_images () {
