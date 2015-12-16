@@ -40,6 +40,9 @@
     publishers:
       - email:
           recipients: '{recipients}'
+      - archive:
+          artifacts: 'artifacts/*'
+          allow-empty: 'true'
     scm:
       - git:
          url: '{repository}'
@@ -157,3 +160,23 @@
 
     jobs:
       - '{name}'
+
+- project:
+    name: 'reporting_tool'
+    credentials: '87e8f7c8-9d04-4ffa-bd9c-9ef88acffec0'
+    days: 365
+    description: 'This job runs script which generates weekly CI report.'
+    docker_image: 'python-jenkins-14-04'
+    label_server: 'custom-scripts'
+    mode: '--csv --formatted-text --age 7d --config /etc/custom_scripts/reporting_tool.conf --file-prefix /opt/reporting_tool/artifacts/weekly-report'
+    num: 100
+    properties: ''
+    recipients: 'devops+alert@mirantis.com'
+    repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
+    script_path: 'reporting_tool/report.py'
+    trigger: 'H 01 * * 2'
+    volumes: '-v /etc/custom_scripts/reporting_tool.conf:/etc/custom_scripts/reporting_tool.conf -v /etc/custom_scripts/review.openstack.org:/etc/custom_scripts/review.openstack.org -v /etc/custom_scripts/review.fuel-infra.org:/etc/custom_scripts/review.fuel-infra.org -v /home/jenkins/.ssh/known_hosts:/root/.ssh/known_hosts -v /home/jenkins/workspace/reporting_tool/reporting_tool/artifacts/:/opt/reporting_tool/artifacts/ -v /tmp/report-cache/:/tmp/'
+
+    jobs:
+      - '{name}'
+
