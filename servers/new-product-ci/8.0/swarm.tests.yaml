@@ -217,6 +217,11 @@
          testgroup: 'ironic_base'
          properties: |
            IRONIC_ENABLED=true
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'services_reconfiguration'
+         properties: |
+           DISABLE_SSL=true
+           SLAVE_NODE_CPU=2
      - '8.0.system_test.{dist}.check_radosgw':
          testgroup: 'system_test.deploy_and_check_radosgw.3ctrl_3comp_ceph_neutronVLAN'
 
