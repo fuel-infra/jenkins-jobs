@@ -13,7 +13,8 @@
             PRODUCT_JENKINS_URL={product_jenkins_url}
             ISO_JOB_NAME={mos_version}.test_all
             REBUILD_ISO=false
-            OPENSTACK_RELEASE={os}
+            OPENSTACK_RELEASE={openstack_release}
+            OS_TYPE={os}
     parameters:
       - string:
           name: MAGNET_LINK
@@ -22,7 +23,7 @@
           default: 'bvt_2'
       - string:
           name: OPENSTACK_RELEASE
-          default: 'Ubuntu'
+          default: 'ubuntu'
       - string:
           name: ENV_PREFIX
           default: '{mos_version}-pkg-systest'

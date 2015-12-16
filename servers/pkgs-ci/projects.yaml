@@ -84,6 +84,26 @@
       - '{mos_version}-fuel-pkg-install-{distro}'
 
 - project:
+    name: 'pkg-mos-rhel'
+    os: 'rhel'
+    openstack_release: 'ubuntu'
+    mos_version:
+      - '8.0':
+          fuel-main-branch: 'stable/8.0'
+          fuel-qa-branch: 'stable/8.0'
+          distro: 'centos7'
+          pkg_type: 'rpm'
+          spec_path_prefix: '/centos7'
+
+    jobs:
+      - '{mos_version}-pkg-systest-{os}'
+
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-user: 'openstack-ci-jenkins'
+    gerrit-port: '29418'
+    <<: *common_template
+
+- project:
     name: 'pkg-mos-centos'
     os: 'centos'
     mos_version:
@@ -124,7 +144,7 @@
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
-    openstack_release: 'CentOS'
+    openstack_release: 'centos'
     <<: *common_template
     <<: *mos_template
 
@@ -150,7 +170,7 @@
           distro: 'jessie'
           pkg_type: 'deb'
           spec_path_prefix: '/jessie'
-    openstack_release: 'Debian'
+    openstack_release: 'debian'
     <<: *common_template
     <<: *mos_template
 
@@ -176,7 +196,7 @@
           distro: 'trusty'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
-    openstack_release: 'Ubuntu'
+    openstack_release: 'ubuntu'
     <<: *common_template
     <<: *mos_template
 
@@ -206,12 +226,12 @@
     distro:
       - centos7:
           os: centos
-          openstack_release: 'CentOS'
+          openstack_release: 'centos'
           pkg_type: 'rpm'
           spec_path_prefix: '/rpm'
       - trusty:
           os: ubuntu
-          openstack_release: 'Ubuntu'
+          openstack_release: 'ubuntu'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
     <<: *common_template
