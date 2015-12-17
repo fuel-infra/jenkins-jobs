@@ -46,18 +46,3 @@
           write-description: true
     publishers:
       - email-default
-      - ruby-metrics:
-          report-dir: "tests/noop/coverage"
-          target:
-            - total-coverage:
-                healthy: 70
-                unhealthy: 0
-                unstable: 0
-            - code-coverage:
-                healthy: 70
-                unhealthy: 0
-                unstable: 0
-      - archive:
-          allow-empty: true
-          artifacts: '**/coverage_reports.tar.xz'
-          latest-only: false
