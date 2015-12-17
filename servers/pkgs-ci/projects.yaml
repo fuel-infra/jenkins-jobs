@@ -7,7 +7,7 @@
 
     project-name: 'mos'
 
-    master-mos-version: '8.0'
+    master-mos-version: '9.0'
 
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
 
@@ -95,6 +95,10 @@
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
+      - '9.0':
+          distro: 'centos7'
+          pkg_type: 'rpm'
+          spec_path_prefix: '/centos7'
     openstack_release: 'CentOS'
     <<: *common_template
     <<: *mos_template
@@ -108,6 +112,10 @@
           pkg_type: 'deb'
           spec_path_prefix: '/jessie'
       - '8.0':
+          distro: 'jessie'
+          pkg_type: 'deb'
+          spec_path_prefix: '/jessie'
+      - '9.0':
           distro: 'jessie'
           pkg_type: 'deb'
           spec_path_prefix: '/jessie'
@@ -127,6 +135,10 @@
           distro: 'trusty'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
+      - '9.0':
+          distro: 'trusty'
+          pkg_type: 'deb'
+          spec_path_prefix: '/trusty'
     openstack_release: 'Ubuntu'
     <<: *common_template
     <<: *mos_template
@@ -136,6 +148,7 @@
     mos_version:
       - 'master'
       - '8.0'
+      - '9.0'
     <<: *gerrit_params
     <<: *common_template
     jobs:
@@ -146,6 +159,7 @@
     mos_version:
       - 'master'
       - '8.0'
+      - '9.0'
     distro:
       - centos7:
           os: centos
