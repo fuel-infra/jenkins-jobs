@@ -1,33 +1,39 @@
-#!/bin/bash
+#!/bin/bash -xe
 
-set -ex
+###################### Set defaults ###############
+# When job is triggerred by Zuul, parameters for job are set by Zuul, and job
+# defaults are not applied.
 
-# receive input in the $RPM_REPO_URL var as "repourl1|repourl2|..."
-# and convert to the $EXTRA_RPM_REPOS var as
-# EXTRA_RPM_REPOS="repo1,repourl1,priority repo2,repourl2,priority"
+export EXTRA_RPM_REPOS_PRIORITY=${EXTRA_RPM_REPOS_PRIORITY:-1}
+export EXTRA_DEB_REPOS_PRIORITY=${EXTRA_DEB_REPOS_PRIORITY:-1052}
 
-if [ -n "${RPM_REPO_URL}" -a -z "${EXTRA_RPM_REPOS}" ]; then
-    C=0
-    for repo in ${RPM_REPO_URL//|/ }; do
-        EXTRA_RPM_REPOS=${EXTRA_RPM_REPOS}repo-$C",$repo,1 "; (( ++C ))
-    done
+if [ -z "${EXTRA_RPM_REPOS}" ]; then
+    EXTRA_RPM_REPOS="release-repo,http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH},98"
+    if [ -n "${RPM_REPO_URL}" ]; then
+        EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}|test-repo,${RPM_REPO_URL},${EXTRA_RPM_REPOS_PRIORITY}"
+    fi
 fi
 
-if [ -n "${DEB_REPO_URL}" -a -z "${EXTRA_DEB_REPOS}" ]; then
-    EXTRA_DEB_REPOS="deb $(echo "${DEB_REPO_URL}" | tr -d \")"
+if [ -z "${EXTRA_DEB_REPOS}" ]; then
+    EXTRA_DEB_REPOS="deb http://${REMOTE_REPO_HOST}/${DEB_REPO_PATH} ${DEB_DIST_NAME} ${DEB_COMPONENTS},1010"
+    if [ -n "${DEB_REPO_URL}" ]; then
+        EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}|deb ${DEB_REPO_URL},${EXTRA_DEB_REPOS_PRIORITY}"
+    fi
 fi
 
-export EXTRA_RPM_REPOS_PRIORITY=1
-export EXTRA_DEB_REPOS_PRIORITY=1052
-export EXTRA_RPM_REPOS
-export EXTRA_DEB_REPOS
+export EXTRA_RPM_REPOS EXTRA_DEB_REPOS
 
-export OPENSTACK_RELEASE
+###################### Set required parameters ###############
+
+export VENV_PATH=${VENV_PATH:-${HOME}/venv-nailgun-tests-2.9}
+
+ENV_NAME=${ENV_PREFIX}.${BUILD_NUMBER}.${BUILD_ID}
+ENV_NAME=${ENV_NAME:0:68}
 
 ###################### Get MIRROR HOST ###############
 
 UBUNTU_MIRROR_FILE="lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt"
-UBUNTU_MIRROR_ART="${PRODUCT_JENKINS_URL:-https://product-ci.infra.mirantis.net}/job/${ISO_JOB_NAME}/${UBUNTU_MIRROR_FILE}"
+UBUNTU_MIRROR_ART="${PRODUCT_JENKINS_URL}/job/${ISO_JOB_NAME}/${UBUNTU_MIRROR_FILE}"
 
 if MIRROR_RES=$(curl -ksf "${UBUNTU_MIRROR_ART}"); then
     if [ "${MIRROR_RES%=*}" = "UBUNTU_MIRROR_ID" ]; then
@@ -74,47 +80,65 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
             UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
     esac
 
-    export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-proposed main universe multiverse"
+    export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-proposed main universe multiverse"
 fi
 
-rm -rf logs/*
+###################### Get ISO image ###############
 
-export VENV_PATH=${VENV_PATH:-/home/jenkins/venv-nailgun-tests-2.9}
-
-ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER.$BUILD_ID
-ENV_NAME=${ENV_NAME:0:68}
-
-# Build ISO if there is any RPM repos
-if [ -n "${EXTRA_RPM_REPOS}" -a "${REBUILD_ISO}" = "true" ]; then
-    TEST_GROUP="prepare_slaves_3"
-
+if [ "${REBUILD_ISO}" = "true" ]; then
     # Build an ISO with custom repository
+
+    read MIRROR_UBUNTU_METHOD MIRROR_UBUNTU_HOST MIRROR_UBUNTU_ROOT <<< $(awk '{match($0, "^(.+)://([^/]+)(.*)$", a); print a[1], a[2], a[3]}' <<< "${UBUNTU_MIRROR_URL}")
+
+    # EXTRA_DEB_REPOS is used for tests but should not be used for ISO building
+    SAVE_EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}"
+    unset EXTRA_DEB_REPOS
+
     pushd fuel-main
     rm -rf "/var/tmp/yum-${USER}-*"
     make deep_clean
-    make -j10 iso USE_MIRROR="${LOCATION}" EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}"
+    make -j10 iso USE_MIRROR="${LOCATION}" EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}" \
+        MIRROR_MOS_UBUNTU_METHOD="${MIRROR_UBUNTU_METHOD}" \
+        MIRROR_MOS_UBUNTU="${MIRROR_UBUNTU_HOST}" \
+        MIRROR_UBUNTU_METHOD="${MIRROR_UBUNTU_METHOD}" \
+        MIRROR_UBUNTU="${MIRROR_UBUNTU_HOST}" \
+        MIRROR_UBUNTU_ROOT="${MIRROR_UBUNTU_ROOT}" \
+        MIRROR_UBUNTU_SUITE="${UBUNTU_DIST}"
     popd
 
     ISO_PATH=$(find "${WORKSPACE}/fuel-main/build/artifacts/" -name "*.iso" -print)
-else
-    TEST_GROUP="bvt_2"
 
+    # Restore EXTRA_DEB_REPOS
+    export EXTRA_DEB_REPOS="${SAVE_EXTRA_DEB_REPOS}"
+else
     # Use last BVT-tested ISO
     ISO_MAGNET_FILE="lastSuccessfulBuild/artifact/magnet_link.txt"
 
     # Getting MAGNET_LINK from last built ISO and force rebuild the environment if it has successfully passed smoke test.
-    ISO_MAGNET_ART="${PRODUCT_JENKINS_URL:-https://product-ci.infra.mirantis.net}/job/${ISO_JOB_NAME}/${ISO_MAGNET_FILE}"
+    ISO_MAGNET_ART="${PRODUCT_JENKINS_URL}/job/${ISO_JOB_NAME}/${ISO_MAGNET_FILE}"
 
-    # Check if the artifact with the magnet link exists.
-    if curl -sl "${ISO_MAGNET_ART}" | fgrep "Error 404"; then
-        echo "*** ERROR: URL ${ISO_MAGNET_ART} does not exist!"
+    if [ -z "${MAGNET_LINK}" ]; then
+        MAGNET_LINK=$(curl -kLs "${ISO_MAGNET_ART}" | awk '/^MAGNET_LINK=/ {print gensub(/^[^=]+=/,"",1)}')
+    fi
+    if [ -n "${MAGNET_LINK}" ]; then
+        echo "MAGNET_LINK=${MAGNET_LINK}"
+        ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
+    else
+        echo "*** ERROR: Can not get ISO image! ***"
         exit 1
     fi
+fi
 
-    MAGNET_LINK=$(curl -s "${ISO_MAGNET_ART}" | fgrep 'MAGNET_LINK=' | sed 's~.*MAGNET_LINK=~~')
-    echo "MAGNET_LINK=${MAGNET_LINK}"
+###################### Set test group ###############
 
-    ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
+# If job is triggerred by Zuul, job defaults are not applied and TEST_GROUP is empty
+# In this case run BVT if there is DEB_REPO_URL, or prepare_slaves_3 otherwise
+if [ -z "${TEST_GROUP}" ]; then
+    if [ -n "${DEB_REPO_URL}" ]; then
+        TEST_GROUP=bvt_2
+    else
+        TEST_GROUP=prepare_slaves_3
+    fi
 fi
 
 # In case of RHEL tests we override systest group and set additional parameters
@@ -130,6 +154,8 @@ if [[ ${OS_TYPE} == 'rhel' ]]; then
     export CENTOS_DUMMY_DEPLOY=True
 fi
 
+###################### Run test ###############
+
 pushd fuel-qa
-sh -x "utils/jenkins/system_tests.sh" -t test -w "$WORKSPACE/fuel-qa" -e "$ENV_NAME" -o --group="$TEST_GROUP" -i "$ISO_PATH"
+sh -x "utils/jenkins/system_tests.sh" -t test -w "${WORKSPACE}/fuel-qa" -e "${ENV_NAME}" -o --group="${TEST_GROUP}" -i "${ISO_PATH}"
 popd

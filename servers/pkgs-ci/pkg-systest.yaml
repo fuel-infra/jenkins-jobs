@@ -9,26 +9,27 @@
           weight: 8
       - inject:
           properties-content: |
-            ENV_PREFIX={mos_version}-pkg-systest
-            PRODUCT_JENKINS_URL={product_jenkins_url}
             ISO_JOB_NAME={mos_version}.test_all
-            REBUILD_ISO=false
-            OPENSTACK_RELEASE={openstack_release}
+            OPENSTACK_RELEASE={os}
             OS_TYPE={os}
+
+            ENV_PREFIX={mos_version}-pkg-systest-{os}-{distro}
+            UBUNTU_DIST={main_ubuntu_release}
+
+            REMOTE_REPO_HOST={repo-host}
+
+            DEB_DIST_NAME={project-name}{mos_version}
+            DEB_REPO_PATH={rel-path-prefix}/ubuntu/{mos_version}
+            DEB_COMPONENTS=main restricted
+
+            RPM_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{main_centos_release}-fuel/os/x86_64/
     parameters:
       - string:
           name: MAGNET_LINK
       - string:
           name: TEST_GROUP
           default: 'bvt_2'
-      - string:
-          name: OPENSTACK_RELEASE
-          default: 'ubuntu'
-      - string:
-          name: ENV_PREFIX
-          default: '{mos_version}-pkg-systest'
-          description: Define env prefix name. This parameter should not be changed
-      - string:
+      - bool:
           name: NEUTRON_ENABLE
           default: 'true'
       - string:
@@ -38,24 +39,30 @@
             'latest' - latest available; 'latest-stable' - mirror from successful run of 7.0.test_all job; 'ubuntu-2015-01-01-030500'
       - string:
           name: MIRROR_UBUNTU
-          default:
           description: |
             If empty, it will be set automatically based on UBUNTU_MIRROR_ID value.
             <p>
             deb http://../ubuntu trusty main universe multiverse|deb http://../ubuntu trusty-updates main universe multiverse|deb http://../ubuntu trusty-security main universe multiverse|deb http://../ubuntu trusty-proposed main universe multiverse
       - string:
           name: EXTRA_DEB_REPOS
-          default: ''
-          description: 'deb http://... trusty main'
+          default: 'deb http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{mos_version} main restricted,1010'
+          description: 'deb http://... trusty main(,prio1)|deb http://... trusty main(,prio2)'
       - string:
           name: EXTRA_DEB_REPOS_PRIORITY
           default: '1052'
       - string:
+          name: EXTRA_RPM_REPOS
+          default: 'release-repo,http://{repo-host}/{rel-path-prefix}/centos/{project-name}{mos_version}-{main_centos_release}-fuel/os/x86_64/,98'
+          description: 'reponame1,http://...(,prio1)|reponame2,http://...(,prio2)'
+      - string:
+          name: EXTRA_RPM_REPOS_PRIORITY
+          default: '1'
+      - string:
           name: PRODUCT_JENKINS_URL
           default: '{product_jenkins_url}'
-      - string:
-          name: ISO_JOB_NAME
-          default: '{mos_version}.test_all'
+      - bool:
+          name: REBUILD_ISO
+          default: false
     scm:
       - upstream:
           branch: '{fuel-main-branch}'
@@ -67,11 +74,12 @@
           fuel-namespace: '{fuel-namespace}'
     triggers:
       - zuul
+      - timed: "H */12 * * *"
     builders:
       - shell: |
           #!/bin/bash -xe
           # Clean logs from previous runs
-          rm -f fuel-qa/logs/*
+          rm -vf fuel-qa/logs/* {{deb,rpm}}.publish.setenvfile
       - copyartifact:
           project: '{mos_version}-pkg-pipeline-centos'
           filter: 'rpm.publish.setenvfile'
@@ -91,7 +99,6 @@
           properties-file: 'deb.publish.setenvfile'
       - systest
     wrappers:
-      - gerrit-creds
       - timeout:
           fail: true
           timeout: 210

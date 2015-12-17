@@ -9,6 +9,9 @@
 
     master-mos-version: '9.0'
 
+    main_centos_release: 'centos7'
+    main_ubuntu_release: 'trusty'
+
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
 
     product_jenkins_url: 'https://product-ci.infra.mirantis.net/'
