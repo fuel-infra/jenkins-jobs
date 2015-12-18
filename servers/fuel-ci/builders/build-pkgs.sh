@@ -66,7 +66,7 @@ if [ -d "${PROJECT_ROOT}/debian" ]; then
   ## build deb
   "${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
     --build-target trusty \
-    --ext-repos "mos,http://mirror.seed-cz1.fuel-infra.org/mos-repos/ubuntu/${MOS} mos${MOS} main restricted" \
+    --ext-repos "http://mirror.seed-cz1.fuel-infra.org/mos-repos/ubuntu/${MOS} mos${MOS} main restricted" \
     --source "${SOURCE_PATH}" \
     --output-dir "${DEB_RESULT_DIR}"
 fi
