@@ -25,7 +25,7 @@ main () {
 
     # Create or update chroots
     local _rpmchroots="$(ls -1 /var/cache/docker-builder/mock/cache/)"
-    for target in 6 7 ; do
+    for target in 7 ; do
         if [ $(echo "${_rpmchroots}" | grep -Fc -e "-${target}-") -eq 0 ] ; then
             env "DIST=${target}" bash "${_dpath}/create-rpm-chroot.sh"
         else
