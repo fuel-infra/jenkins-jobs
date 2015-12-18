@@ -77,17 +77,23 @@ fi
 
 # define closest stable ubuntu mirror snapshot
 LATEST_TARGET_UBUNTU=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/${PROD_VER}.target.txt" | head -1)
-# since in fuel-main MIRROR_MOS_UBUNTU?=perestroika-repo-tst.infra.mirantis.net, we need to remove http://
-export MIRROR_MOS_UBUNTU="${LATEST_MIRROR_ID_URL#http://}"
-export MIRROR_UBUNTU="${MIRROR_MOS_UBUNTU}"
-export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET_UBUNTU}"
+
+# we need to have ability to define UBUNTU MOS mirror by user
+if [[ "${make_args}" != *"MIRROR_MOS_UBUNTU="* ]]; then
+    # MIRROR_MOS_UBUNTU= is not defined in make_args, so let's use the default one
+    # since in fuel-main MIRROR_MOS_UBUNTU?=perestroika-repo-tst.infra.mirantis.net, we need to remove http://
+    export MIRROR_MOS_UBUNTU="${LATEST_MIRROR_ID_URL#http://}"
+    export MIRROR_UBUNTU="${MIRROR_MOS_UBUNTU}"
+    export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET_UBUNTU}"
+fi
 
 # define closest stable centos mirror snapshot
 # http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/$(PRODUCT_NAME)$(PRODUCT_VERSION)-centos7-fuel/os/x86_64
 LATEST_TARGET_CENTOS=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos${PROD_VER}-centos7-fuel/os.target.txt" | head -1)
 
 # we need to have ability to define MIRROR_FUEL by user
-if [ -z "${MIRROR_FUEL}" ]; then
+if [[ "${make_args}" != *"MIRROR_FUEL="* ]]; then
+    # MIRROR_FUEL= is not defined in make_args
     export MIRROR_FUEL="${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos${PROD_VER}-centos7-fuel/${LATEST_TARGET_CENTOS}/x86_64"
 fi
 
