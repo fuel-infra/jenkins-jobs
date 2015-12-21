@@ -41,6 +41,7 @@
       - trigger-parameterized-builds:
         - project: publish_fuel_community_iso
           condition: UNSTABLE_OR_BETTER
+          node-parameters: true
           predefined-parameters: |
             ISO_ID=6.1-$BUILD_NUMBER-$BUILD_TIMESTAMP
             UPGRADE_ID=6.1-upgrade-$BUILD_NUMBER-$BUILD_TIMESTAMP

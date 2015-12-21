@@ -41,6 +41,7 @@
       - trigger-parameterized-builds:
         - project: 8.0.publish_fuel_community_iso
           condition: UNSTABLE_OR_BETTER
+          node-parameters: true
           predefined-parameters: |
             ISO_ID=8.0-$BUILD_NUMBER-$BUILD_TIMESTAMP
             ARTIFACTS_DIR=$WORKSPACE/artifacts
