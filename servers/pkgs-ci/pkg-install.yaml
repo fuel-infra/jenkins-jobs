@@ -52,7 +52,11 @@
       - inject:
           properties-file: 'tests.envfile'
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash -x
+
+          set -o errexit
+          set -o pipefail
+
           export DIST=${{DIST:-{distro}}}
           export PACKAGEVERSION=${{DEB_VERSION:-${{RPM_VERSION}}}}
           export PACKAGELIST=${{DEB_BINARIES:-${{RPM_BINARIES}}}}
@@ -71,7 +75,9 @@
           RESULT=0
           for script in version-test-{pkg_type} vm-test repo-test-{pkg_type}-docker
           do
-              if ! bash -x "${{WORKSPACE}}/${{script}}"
+              script_log="${{script}}.log"
+              rm -f "${{script_log}}"
+              if ! bash -x "${{WORKSPACE}}/${{script}}" 2>> "${{script_log}}" | tee -a "${{script_log}}"
               then
                   sed -i 's/FAILED=false/FAILED=true/' ci_status_params
                   RESULT=1
@@ -107,7 +113,8 @@
 #      - junit:
 #          results: 'report.xml'
       - archive:
-          artifacts: '**/*.xml, ci_status_params, {pkg_type}.install.setenvfile'
+          artifacts: '**/*.xml, ci_status_params, {pkg_type}.install.setenvfile,
+                      version-test-{pkg_type}.log, vm-test.log, repo-test-{pkg_type}-docker.log'
           allow-empty: true
 
     node: '{install-node}'
