@@ -55,7 +55,9 @@
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'
-          custom-url: '* $JOB_NAME $BUILD_URL'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/8.0'
+              custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - ansicolor:
           colormap: css
