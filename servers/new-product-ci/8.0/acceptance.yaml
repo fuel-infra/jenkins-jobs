@@ -1,0 +1,53 @@
+- project:
+    name: 8.0.acceptance
+    jobs:
+      - '8.0-acceptance':
+          dist: 'ubuntu'
+
+- job:
+    name: '8.0.acceptance.runner'
+    project-type: multijob
+    description: 'Run all acceptance tests'
+    concurrent: false
+    node: 'runner'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          description: 'ISO magnet link'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: 'ubuntu-latest'
+          description: |
+            'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+      - string:
+          name: CUSTOM_VERSION
+          default: ''
+          description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+    publishers:
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+      - email-default:
+          mail-to: 'ci+acceptance@mirantis.com'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 1200
+    builders:
+      - shell: # Get description from MAGNET_LINK variable
+          !include-raw builders/get_version_from_magnet.sh
+      - multijob:
+          name: 'Run acceptance tests'
+          condition: COMPLETED
+          projects:
+            - name: '8.0.acceptance.ubuntu.ha_vlan_group_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_vlan_group_2'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_vlan_group_7'
+              current-parameters: true
+              kill-phase-on: NEVER

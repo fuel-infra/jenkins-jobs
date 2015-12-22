@@ -1,0 +1,21 @@
+- job-group:
+   name: '8.0-acceptance'
+   version-id: '8.0'
+   id: 'acceptance'
+   repobranch: 'origin/stable/8.0'
+   reponame: 'fuel-qa'
+   venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+   default_pool: '10.109.0.0/16:24'
+   description: '8.0 acceptance test group'
+   node: 'acceptance'
+   timeout: '480'
+   properties: ''
+   weight: '7'
+   jobs:
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_vlan_group_1'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_vlan_group_2'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_vlan_group_7'
+
