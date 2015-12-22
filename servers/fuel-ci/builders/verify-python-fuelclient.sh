@@ -19,7 +19,7 @@ set -ex
 
 VENV=${WORKSPACE}_VENV
 virtualenv -p python2.7 "${VENV}"
-${VENV}/bin/pip install tox\>=2.1.0
+${VENV}/bin/pip install --upgrade tox\>=2.3.1
 
 source "${VENV}/bin/activate"
 
