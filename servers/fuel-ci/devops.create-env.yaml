@@ -13,7 +13,7 @@
     parameters:
       - string:
           name: ENV_NAMES
-          default: 'env_{version-id}_smoke_neutron env_{version-id}_neutron_ha_vlan'
+          default: 'env_{version-id}_smoke_neutron env_{version-id}_neutron_vlan_ha'
           description: 'List of env prefixes to clean up'
       - string:
           name: ISO_PATH
