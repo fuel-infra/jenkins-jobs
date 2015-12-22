@@ -9,7 +9,7 @@ fi
 
 rm -rf "${VENV_PATH}"
 
-REQS_PATH="${WORKSPACE}/fuel-main/fuelweb_test/requirements.txt"
+REQS_PATH="${WORKSPACE}/fuel-qa/fuelweb_test/requirements.txt"
 
 virtualenv --system-site-packages "${VENV_PATH}"
 source "${VENV_PATH}/bin/activate"
