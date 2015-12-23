@@ -79,7 +79,7 @@
       - git:
           url: 'https://git.openstack.org/openstack/fuel-qa.git'
           branches:
-            - 'origin/master'
+            - 'origin/stable/8.0'
     wrappers:
       - ansicolor:
           colormap: xterm
