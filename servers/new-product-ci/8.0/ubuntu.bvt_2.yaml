@@ -34,7 +34,7 @@
           mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
     scm:
       - openstack:
-          branch: 'master'
+          branch: 'stable/8.0'
           repo: 'fuel-qa'
     wrappers:
       - timeout:

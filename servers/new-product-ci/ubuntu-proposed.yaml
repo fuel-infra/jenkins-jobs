@@ -82,5 +82,5 @@
             iso_magnet_link:
                !include-raw ./data/7.0-iso
        - '8.0':
-            fuel-qa-branch: 'master'
+            fuel-qa-branch: 'stable/8.0'
             iso_magnet_link: latest

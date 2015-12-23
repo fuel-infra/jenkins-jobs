@@ -19,7 +19,7 @@
     node: testrail
     publishers:
       - email:
-          recipients: ishamrai@mirantis.com, devops+alert@mirantis.com
+          recipients: devops+alert@mirantis.com
 
 # FIXME: timer
 #    triggers:
@@ -28,7 +28,7 @@
     scm:
      - main-git:
           reponame: 'fuel-qa'
-          repobranch: 'origin/master'
+          repobranch: 'origin/stable/8.0'
           basedir: ''
 
 
