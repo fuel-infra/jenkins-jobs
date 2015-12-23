@@ -27,7 +27,7 @@
       - trigger-builds:
         - project: $JOB_NAME
           same-node: true
-          block: true
+          block: false
           property-file: params.prop
     publishers:
       - description-setter:
