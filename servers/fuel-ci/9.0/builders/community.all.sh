@@ -34,7 +34,7 @@ fi
 ######## Get stable ubuntu mirror from snapshot ###############
 # Since we are building community.iso in EU dc let' hardcode this
 LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
-LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/8.0.target.txt" | head -1)
+LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/9.0.target.txt" | head -1)
 export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
 
 echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
@@ -47,7 +47,7 @@ fi
 
 #########################################
 echo "STEP 0. Export Workarounds"
-export MIRROR_FUEL=http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos8.0-centos7-fuel/os/x86_64/
+export MIRROR_FUEL=http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos9.0-centos7-fuel/os/x86_64/
 export MIRROR_MOS_UBUNTU=mirror.seed-cz1.fuel-infra.org
 export MIRROR_UBUNTU=mirror.seed-cz1.fuel-infra.org
 export USE_MIRROR=ext

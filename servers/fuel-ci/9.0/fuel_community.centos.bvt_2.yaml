@@ -1,5 +1,5 @@
 - job:
-    name: '8.0.fuel_community.centos.bvt_2'
+    name: '9.0.fuel_community.centos.bvt_2'
     builders:
       - inject:
           properties-content: |
@@ -39,12 +39,12 @@
           name: BUILD
           description: |
             Used for status reporting.
-            example: fuel-community-8.0-13-2015-09-10_05-25-45
+            example: fuel-community-9.0-13-2015-09-10_05-25-45
     scm:
       - git:
           url: 'https://git.openstack.org/openstack/fuel-qa.git'
           branches:
-            - 'origin/stable/8.0'
+            - 'origin/master'
     publishers:
       - archive:
           allow-empty: true
@@ -65,7 +65,7 @@
           condition: UNSTABLE_OR_BETTER
           current-parameters: true
           predefined-parameters: |
-            RELEASE=8.0
+            RELEASE=9.0
             STAGE=bvt_1
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
@@ -73,7 +73,7 @@
           condition: FAILED
           current-parameters: true
           predefined-parameters: |
-            RELEASE=8.0
+            RELEASE=9.0
             STAGE=bvt_1
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL

@@ -1,12 +1,12 @@
 - job:
-    name: '8.0.fuel_community.centos.bvt_2'
+    name: '9.0.fuel_community.ubuntu.bvt_2'
     builders:
       - inject:
           properties-content: |
             TEST_GROUP=bvt_2
-            OPENSTACK_RELEASE=CentOS
+            OPENSTACK_RELEASE=Ubuntu
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
-            ENV_NAME=fuel_community.centos.bvt_1_system_test
+            ENV_NAME=fuel_community.ubuntu.bvt_2_system_test
       - shell: |
           #!/bin/bash
           set -ex
@@ -26,7 +26,7 @@
           dos.py erase ${ENV_NAME}
     concurrent: true
     description:
-      !include-raw descriptions/community.centos.bvt_2
+      !include-raw descriptions/community.ubuntu.bvt_2
     node: bvt
     properties:
       - heavy-job:
@@ -39,12 +39,12 @@
           name: BUILD
           description: |
             Used for status reporting.
-            example: fuel-community-8.0-13-2015-09-10_05-25-45
+            example: fuel-community-9.0-13-2015-09-10_05-25-45
     scm:
       - git:
           url: 'https://git.openstack.org/openstack/fuel-qa.git'
           branches:
-            - 'origin/stable/8.0'
+            - 'origin/master'
     publishers:
       - archive:
           allow-empty: true
@@ -65,15 +65,15 @@
           condition: UNSTABLE_OR_BETTER
           current-parameters: true
           predefined-parameters: |
-            RELEASE=8.0
-            STAGE=bvt_1
+            RELEASE=9.0
+            STAGE=bvt_2
             VALUE=ok
             REPORTED_JOB_URL=$BUILD_URL
         - project: fuel_community_build_reports
           condition: FAILED
           current-parameters: true
           predefined-parameters: |
-            RELEASE=8.0
-            STAGE=bvt_1
+            RELEASE=9.0
+            STAGE=bvt_2
             VALUE=fail
             REPORTED_JOB_URL=$BUILD_URL
