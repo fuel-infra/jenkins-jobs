@@ -21,6 +21,8 @@ rm -rf ${ARTS_DIR}
 
 test "$deep_clean" = "true" && make deep_clean
 
+rm -rf /var/tmp/yum-${USER}-*
+
 #########################################
 
 echo "STEP 0. Export workarounds"

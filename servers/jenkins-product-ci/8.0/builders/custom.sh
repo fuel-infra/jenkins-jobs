@@ -132,6 +132,8 @@ EOF
 echo "STEP 0. Clean before start"
 make deep_clean
 
+rm -rf /var/tmp/yum-${USER}-*
+
 #########################################
 
 echo "STEP 1. Make everything"
