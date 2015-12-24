@@ -17,6 +17,8 @@ rm -rf "${ARTS_DIR}"
 
 test "$deep_clean" = "true" && make deep_clean
 
+rm -rf /var/tmp/yum-${USER}-*
+
 #########################################
 
 echo "Check version.yaml for Fuel commit ids (if present)"

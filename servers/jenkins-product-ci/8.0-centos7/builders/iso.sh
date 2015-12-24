@@ -111,6 +111,8 @@ EOF
 
 test "${deep_clean}" = "true" && make deep_clean
 
+rm -rf /var/tmp/yum-${USER}-*
+
 #########################################
 echo "Using mirrors"
 make ${make_args} show-yum-repos-centos show-centos-sandbox-repos

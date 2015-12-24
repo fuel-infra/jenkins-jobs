@@ -92,6 +92,7 @@ if [ -n "${EXTRA_RPM_REPOS}" -a "${REBUILD_ISO}" = "true" ]; then
 
     # Build an ISO with custom repository
     pushd fuel-main
+    rm -rf /var/tmp/yum-${USER}-*
     make deep_clean
     make -j10 iso USE_MIRROR="${LOCATION}" EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}"
     popd
