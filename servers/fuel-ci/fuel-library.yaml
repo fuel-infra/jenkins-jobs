@@ -2,9 +2,9 @@
     name: 'fuel-library master tests'
     version-id: master
     project: fuel-library
-    projectpackage: fuel-library8.0
+    projectpackage: fuel-library9.0
     projectbranch: master
-    mos: '8.0'
+    mos: '9.0'
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     timeout: 200

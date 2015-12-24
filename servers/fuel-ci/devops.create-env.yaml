@@ -31,7 +31,7 @@
           allowed-multiselect: true
       - string:
           name: FUEL_QA_COMMIT
-          default: '{version-id}'
+          default: '{projectbranch}'
           description: 'Commit SHA of fuel-qa repository'
       - bool:
           name: UPDATE_VENV
