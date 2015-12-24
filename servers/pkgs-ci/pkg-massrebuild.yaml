@@ -47,8 +47,8 @@
           # Global parameters
           ############################
 
-          export SOURCE_BRANCH=openstack-ci/fuel-8.0/liberty
-          export SPEC_BRANCH=openstack-ci/fuel-8.0/liberty
+          export SOURCE_BRANCH=openstack-ci/fuel-{mos_version}/liberty
+          export SPEC_BRANCH=openstack-ci/fuel-{mos_version}/liberty
           export SRC_PROJECT_PATH=openstack
           export SPEC_PROJECT_PATH=openstack-build
           export IS_UPDATES=false
