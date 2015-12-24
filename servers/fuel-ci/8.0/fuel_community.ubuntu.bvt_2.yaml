@@ -44,7 +44,7 @@
       - git:
           url: 'https://git.openstack.org/openstack/fuel-qa.git'
           branches:
-            - 'origin/master'
+            - 'origin/stable/8.0'
     publishers:
       - archive:
           allow-empty: true

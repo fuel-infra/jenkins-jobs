@@ -1,0 +1,14 @@
+<h3>Build verification test for Centos</h3>
+<pre style="font-size: 10px">
+Case: ceph_rados_gw
+Scenario:
+1. Create cluster with Neutron
+2. Add 3 nodes with controller role
+3. Add 3 nodes with compute and ceph-osd role
+4. Deploy the cluster
+5. Check ceph status
+6. Run OSTF tests
+7. Check the radosqw daemon is started
+
+Duration 90m
+</pre>
