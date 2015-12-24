@@ -19,7 +19,7 @@ export DEPS_DIR="${BUILD_DIR}/deps"
 rm -rf "${DEPS_DIR}"
 
 # Checking gerrit commits for fuel-main
-if [ "${FUELMAIN_COMMIT}" != "master" ] ; then
+if [ "${FUELMAIN_COMMIT}" != "stable/8.0" ] ; then
     git checkout "${FUELMAIN_COMMIT}"
 fi
 

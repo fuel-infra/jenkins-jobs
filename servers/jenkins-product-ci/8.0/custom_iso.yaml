@@ -25,43 +25,43 @@
           description: Additional make arguments
       - string:
           name: FUELLIB_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: NAILGUN_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: ASTUTE_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: OSTF_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: PYTHON_FUELCLIENT_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: FUEL_AGENT_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: FUEL_NAILGUN_AGENT_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: FUEL_MIRROR_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: FUELMENU_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: SHOTGUN_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: NETWORKCHECKER_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: FUELUPGRADE_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: FUELMAIN_COMMIT
-          default: 'master'
+          default: 'stable/8.0'
       - string:
           name: FUELLIB_REPO
           default: 'https://git.openstack.org/openstack/fuel-library.git'
@@ -190,7 +190,7 @@
       - git:
           url: '$FUELMAIN_REPO'
           branches:
-            - 'origin/master'
+            - 'origin/stable/8.0'
     wrappers:
       - timeout:
           timeout: 120

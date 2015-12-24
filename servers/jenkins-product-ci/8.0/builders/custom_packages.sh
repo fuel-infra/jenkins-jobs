@@ -9,7 +9,7 @@ export SIGKEYID=6DAFDD9D
 # project related vars
 export PROJECT_NAME=mos
 export PROJECT_VERSION=8.0
-export SOURCE_BRANCH=master
+export SOURCE_BRANCH='stable/8.0'
 # we need to set GERRIT_CHANGE_STATUS in order to increase package version:
 # [ "$GERRIT_CHANGE_STATUS" == "NEW" ] && _rev=$(( $_rev + 1 ))
 export GERRIT_CHANGE_STATUS=NEW
