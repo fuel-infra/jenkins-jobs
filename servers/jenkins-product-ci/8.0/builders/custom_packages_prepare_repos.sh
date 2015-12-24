@@ -8,9 +8,9 @@ mkdir -p "${REPOS_PATH}"
 
 build_repo() {
 
-  # we preparing repos for build in case we are not on master branch
+  # we preparing repos for build in case we are not on stable/8.0 branch
   # or have gerrit_patchsets defined
-  if [ "$3" != "master" ] || [ "$5" != "none" ] ; then
+  if [ "$3" != "stable/8.0" ] || [ "$5" != "none" ] ; then
     #Clone everything and checkout to branch (or hash)
     git clone "$2" "${REPOS_PATH}/$1" && (cd "${REPOS_PATH}/$1" && git checkout -q "$3")
 
