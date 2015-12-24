@@ -11,6 +11,8 @@
             BLACKDUCK_USER=testuser@mirantis.com
             RPM_DIST_NAME=centos6
             SDKPATH=/home/jenkins/Export-6.1.1-SDK-V6.1/
+            CUSTOMCLASS=/usr/local/bin
+            KEYPATH=/etc/blackduck/credentials.json
     builders:
       - copyartifact:
           project: create-mos-compliance-reports
@@ -53,6 +55,11 @@
           default:
           description: ATTENTION! Run with this flag remove projects in BlackDuck and clear local storage if exist.
                         If you want simple rescan exist projects please use FORCE_ANALYSIS parameter.
+    properties:
+      - authorization:
+          sotpuschennikov:
+            - job-read
+            - job-build
     scm:
       - fuel-infra:
           scm-user: 'openstack-ci-jenkins'

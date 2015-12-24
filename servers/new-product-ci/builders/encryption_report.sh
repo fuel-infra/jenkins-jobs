@@ -17,7 +17,7 @@ create_artifacts () {
 
 remove_projects () {
     for i in $(cat $@) ; do
-       project_id=$(echo "${i}" | -d':' cut -f2)
+       project_id=$(echo "${i}" | cut -d':' -f2)
        project=$(echo "${i}" | cut -d':' -f1)
        echo "Remove project ${project}"
        scripts/remove_project.sh "${project_id}"
