@@ -123,6 +123,7 @@
       LP_RELEASE_NEW_MILESTONE_NAME = 8.0
       LP_RELEASE_MAXIMUM = -1
       LP_RELEASE_STATUSES = New, Confirmed, Triaged, In Progress, Incomplete
+      LP_RELEASE_BUGS_IMPORTANCE = High,
     recipients: 'devops+alert@mirantis.com'
     repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
     script_path: 'lp_release_migrator/lp_release_migrator.py'
