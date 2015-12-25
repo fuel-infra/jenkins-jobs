@@ -1,0 +1,42 @@
+- job-template:
+    name: '{version-id}.send_reports'
+    disabled: '{obj:send_reports_disabled}'
+    description: |
+      Reporting job that does nothing except triggering reporting jobs specific for product infrastructure.
+      Its behaviour can be overridden or job can be completely disabled at all if necessary.
+      <p>
+        Owned by: Fuel CI Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #infra<br/>
+      </p>
+    node: reports
+    publishers:
+      - trigger-parameterized-builds:
+        - project: 'trigger-external-events'
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            ISO_VERSION=$ISO_VERSION
+            BUILD=$BUILD
+            REPORTED_JOB_URL=$REPORTED_JOB_URL
+
+        - project: fuel_ci-status_reports
+          condition: UNSTABLE_OR_BETTER
+          property-file: ci_status_params.txt
+          predefined-parameters: |
+            RELEASE=$RELEASE
+            BUILD=$BUILD
+            STAGE=$STAGE
+            VALUE=$VALUE
+            REPORTED_JOB_URL=$REPORTED_JOB_URL
+
+        - project: '{version-id}.all-Testrail'
+          condition: UNSTABLE_OR_BETTER
+          trigger-with-no-params: true
+
+- project:
+    name: '9.0-liberty-reporting'
+    jobs:
+      - '{version-id}.send_reports':
+          version-id: '9.0-liberty'
+        
+
