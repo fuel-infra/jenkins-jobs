@@ -1,0 +1,34 @@
+- job:
+    name: '9.0-maintain.worker'
+    builders:
+      - shell:
+          !include-raw builders/mos.maintain.sh
+    concurrent: true
+
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    node: pbuilder
+    properties:
+      - heavy-job:
+          weight: 2
+    scm:
+      - git:
+          url: 'https://github.com/openstack/fuel-mirror'
+          branches:
+            - 'origin/master'
+    triggers:
+      - timed: '@midnight'
+    wrappers:
+      - timeout:
+          timeout: 10
+          fail: true
+      - ansicolor:
+          colormap: xterm
+    publishers:
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'
+          failure: true
+          success: true
+          send-to:
+            - requester
