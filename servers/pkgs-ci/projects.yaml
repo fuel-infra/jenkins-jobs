@@ -88,14 +88,39 @@
     os: 'centos'
     mos_version:
       - 'master':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
       - '8.0':
+          fuel-main-branch: 'stable/8.0'
+          fuel-qa-branch: 'stable/8.0'
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
       - '9.0':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
+          distro: 'centos7'
+          pkg_type: 'rpm'
+          spec_path_prefix: '/centos7'
+    mos_version:
+      - 'master':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
+          distro: 'centos7'
+          pkg_type: 'rpm'
+          spec_path_prefix: '/centos7'
+      - '8.0':
+          fuel-main-branch: 'stable/8.0'
+          fuel-qa-branch: 'stable/8.0'
+          distro: 'centos7'
+          pkg_type: 'rpm'
+          spec_path_prefix: '/centos7'
+      - '9.0':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
@@ -108,14 +133,20 @@
     os: 'debian'
     mos_version:
       - 'master':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
           distro: 'jessie'
           pkg_type: 'deb'
           spec_path_prefix: '/jessie'
       - '8.0':
+          fuel-main-branch: 'stable/8.0'
+          fuel-qa-branch: 'stable/8.0'
           distro: 'jessie'
           pkg_type: 'deb'
           spec_path_prefix: '/jessie'
       - '9.0':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
           distro: 'jessie'
           pkg_type: 'deb'
           spec_path_prefix: '/jessie'
@@ -128,14 +159,20 @@
     os: 'ubuntu'
     mos_version:
       - 'master':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
           distro: 'trusty'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
       - '8.0':
+          fuel-main-branch: 'stable/8.0'
+          fuel-qa-branch: 'stable/8.0'
           distro: 'trusty'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
       - '9.0':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
           distro: 'trusty'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
@@ -157,9 +194,15 @@
 - project:
     name: 'pkg-fuel'
     mos_version:
-      - 'master'
-      - '8.0'
-      - '9.0'
+      - 'master':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
+      - '8.0':
+          fuel-main-branch: 'stable/8.0'
+          fuel-qa-branch: 'stable/8.0'
+      - '9.0':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
     distro:
       - centos7:
           os: centos
