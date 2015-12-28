@@ -57,11 +57,11 @@
           default: '{mos_version}.test_all'
     scm:
       - upstream:
-          branch: 'master'
+          branch: '{fuel-main-branch}'
           repo: fuel-main
           fuel-namespace: '{fuel-namespace}'
       - upstream:
-          branch: 'master'
+          branch: '{fuel-qa-branch}'
           repo: fuel-qa
           fuel-namespace: '{fuel-namespace}'
       - fuel-infra:
