@@ -31,7 +31,7 @@
     description: |
       Runs deployment test with TEST_GROUP={testgroup} for reviews in
       openstack/{project}
-    node: '{version-id}-pkgs'
+    node: '{version-id}-{project}-pkgs'
     parameters:
       - string:
           name: GERRIT_REFSPEC
