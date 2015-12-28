@@ -53,25 +53,27 @@ export FUELUPGRADE_GERRIT_COMMIT="${fuelupgrade_gerrit_commit}"
 LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
 LOCATION=${LOCATION_FACT:-msk}
 
-case "${LOCATION}" in
-    srt)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
-        ;;
-    msk)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
-        ;;
-    hrk)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
-        ;;
-    poz|bud|bud-ext|cz)
-        LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
-        ;;
-    scc)
-        LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
-        ;;
-    *)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
-esac
+if test -z $LATEST_MIRROR_ID_URL; then
+    case "${LOCATION}" in
+        srt)
+            LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
+            ;;
+        msk)
+            LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+            ;;
+        hrk)
+            LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
+            ;;
+        poz|bud|bud-ext|cz)
+            LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
+            ;;
+        scc)
+            LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
+            ;;
+        *)
+            LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+    esac
+fi
 
 # define closest stable ubuntu mirror snapshot
 LATEST_TARGET_UBUNTU=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/${PROD_VER}.target.txt" | head -1)

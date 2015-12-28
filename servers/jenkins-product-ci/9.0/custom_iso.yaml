@@ -24,6 +24,11 @@
           default: ''
           description: Version of production. If empty - it will be taken from 'config.mk'
       - string:
+          name: LATEST_MIRROR_ID_URL
+          default: ''
+          description: Mirror baseurl. For example http://perestroika-repo-tst.infra.mirantis.net
+            Otherwise it is calculated depending on the worker location.
+      - string:
           name: make_args
           default: ''
           description: Additional make arguments
