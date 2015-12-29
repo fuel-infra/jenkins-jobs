@@ -16,6 +16,11 @@
       - build-timestamp
       - heavy-job:
           weight: 2
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
     parameters:
       - string:
           name: deep_clean
