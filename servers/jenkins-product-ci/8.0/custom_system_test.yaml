@@ -94,6 +94,7 @@
           name: NETWORK_MODE
           choices:
             - Neutron/VLAN
+            - ''
             - Neutron/VXLAN
             - Neutron/GRE
           description: |
