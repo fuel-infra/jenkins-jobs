@@ -139,6 +139,15 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'backup_restore_master'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'rhel.basic'
+         properties: |
+            RHEL_IMAGE=qa-centos-compute-2015-12-03.qcow2
+            RHEL_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
+            RHEL_IMAGE_MD5=524136c435d3e17143029b3431e46ae1
+            RHEL_IMAGE_USER=root
+            RHEL_IMAGE_PASSWORD=r00tme
+            CENTOS_DUMMY_DEPLOY=True
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha'
          weight: '11'
          node: 'services-systest'
