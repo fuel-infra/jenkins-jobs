@@ -65,6 +65,7 @@
       - '{mos_version}-pkg-pipeline-{os}'
       - '{mos_version}-pkg-publish-{os}'
       - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
       - '{mos_version}-pkg-systest-{os}'
       - '{mos_version}-pkg-massrebuild-starter-{os}'
       - '{mos_version}-pkg-massrebuild-{os}'
