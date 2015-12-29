@@ -9,7 +9,7 @@ export PATH=$PATH:${NPM_CONFIG_PREFIX}/bin
 
 VENV="${WORKSPACE}_VENV"
 [ "${VENV_CLEANUP}" == "true" ] && rm -rf "${VENV}"
-virtualenv -p python2.6 "${VENV}"
+virtualenv -p python2.7 "${VENV}"
 source "${VENV}/bin/activate"
 
 NODE_MODULES="${VENV}/node_modules"

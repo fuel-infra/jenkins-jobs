@@ -1,30 +1,27 @@
 - job-template:
-    name: '{prefix}-python-fuelclient'
+    name: 'old.{prefix}-fuel-library-python'
     builders:
       - shell:
-          !include-raw-escape builders/verify-python-fuelclient.sh
+          !include-raw-escape builders/old.verify-fuel-library-python.sh
     description: |
-      Test requests for python-fuelclient master branch
+      Tests and linters for Python code in fuel-library
+      for stable/6.1 and stable/7.0 branches
 
-      Uses venv with python2.7
-    node: 'python-fuelclient-{branch-name}'
+      Uses fuel-library/utils/jenkins/python_run_tests.sh
+    node: verify-fuel-library-python
     concurrent: true
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/stable/6.1'
       - string:
           name: PIP_OPTION
     properties:
       - heavy-job:
           weight: 1
       - throttle:
-          categories:
-            - one-nailgun-db-per-node
           max-per-node: 1
-          option: category
-    publishers:
-      - 'email-{email-type}'
+          option: project
     scm:
       - git:
           branches:
@@ -32,17 +29,20 @@
           remotes:
             - gerrit:
                 refspec: '{refspec}'
-                url: https://review.openstack.org/openstack/python-fuelclient.git
+                url: https://review.openstack.org/openstack/fuel-library.git
+          timeout: 20
           choosing-strategy: '{choosing-strategy}'
     triggers:
       - gerrit:
           trigger-on: '{obj:trigger_on}'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: openstack/python-fuelclient
+              project-pattern: openstack/fuel-library
               branches:
-                - branch-compare-type: ANT
-                  branch-pattern: '{branch-name}'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/6.1'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/7.0'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
@@ -52,22 +52,23 @@
           fail: true
           write-description: true
           timeout: 45
+    publishers:
+      - description-setter:
+          regexp-for-failed: '(Failed tests: (.*))'
+      - 'email-{email-type}'
 
 - project:
-    name: dualcheck-python-fuelclient
-    branch-name: 'master'
+    name: old.dualcheck-fuel-library-python
     jobs:
-      - '{prefix}-python-fuelclient':
+      - 'old.{prefix}-fuel-library-python':
           prefix: verify
           trigger_on:
             - patchset-created-event
-            - comment-added-contains-event:
-                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           email-type: default
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
-          timed: '0 13 * * *'
-      - '{prefix}-python-fuelclient':
+          timed: '0 12 * * *'
+      - 'old.{prefix}-fuel-library-python':
           prefix: gate
           trigger_on:
             - change-merged-event

@@ -6,7 +6,7 @@
     description: |
       Test requests for fuel-web UI (./run_tests.sh --webui) master branch
 
-      Uses venv with python2.6
+      Uses venv with python2.7
     node: verify-fuel-web-ui
     concurrent: true
     parameters:

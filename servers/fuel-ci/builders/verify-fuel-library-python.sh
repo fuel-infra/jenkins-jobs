@@ -17,7 +17,7 @@
 set -ex
 
 VENV=${WORKSPACE}_VENV
-virtualenv -p python2.6 ${VENV}
+virtualenv -p python2.7 ${VENV}
 source ${VENV}/bin/activate || exit 1
 
 pip install "tox>=1.8"

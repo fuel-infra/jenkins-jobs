@@ -1,10 +1,10 @@
 - job:
-    name: nailgun_performance_tests
+    name: old.nailgun_performance_tests
     builders:
       - shell:
-          !include-raw builders/nailgun_performance_tests.sh
-    description: "Nailgun performance tests. Uses venv with python2.7"
-    node: fuel-web-master
+          !include-raw builders/old.nailgun_performance_tests.sh
+    description: "Nailgun performance tests. Uses venv with python2.6"
+    node: fuel-web
     properties:
       - heavy-job:
           weight: 1
@@ -23,7 +23,7 @@
       - git:
           url: https://review.openstack.org/openstack/fuel-web.git
           branches:
-            - '*/master'
+            - '*/stable/7.0'
     triggers:
       - timed: '0 8,20 * * *'
     wrappers:
@@ -32,19 +32,19 @@
           timeout: 45
 
 - job-template:
-    name: '{prefix}-nailgun_performance_tests'
+    name: 'old.{prefix}-nailgun_performance_tests'
     builders:
       - shell:
-          !include-raw-escape builders/nailgun_performance_tests.sh
+          !include-raw-escape builders/old.nailgun_performance_tests.sh
     description: |
       Verify nailgun performance tests for patches.
-      Uses artifacts from "nailgun_performance_tests" and do not store it's own.
-      Uses venv with python2.7"
+      Uses artifacts from "old.nailgun_performance_tests" and do not store it's own.
+      Uses venv with python2.6"
     node: fuel-web-master
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/stable/6.1'
     properties:
       - heavy-job:
           weight: 1
@@ -59,6 +59,7 @@
           send-to-individuals: false
     scm:
       - git:
+          url: https://review.openstack.org/openstack/fuel-web.git
           branches:
             - $GERRIT_BRANCH
           remotes:
@@ -77,7 +78,9 @@
               project-pattern: openstack/fuel-web
               branches:
                 - branch-compare-type: ANT
-                  branch-pattern: '**'
+                  branch-pattern: 'stable/7.0'
+                - branch-compare-type: ANT
+                  branch-pattern: 'stable/6.1'
               file-paths:
                 - compare-type: ANT
                   pattern: nailgun/nailgun/test/performance/**
@@ -89,8 +92,7 @@
           timeout: 45
 
 - project:
-    name: dualcheck-nailgun_performance_tests
+    name: dualcheck-old.nailgun_performance_tests
     jobs:
-      - '{prefix}-nailgun_performance_tests':
+      - 'old.{prefix}-nailgun_performance_tests':
           prefix: verify
-

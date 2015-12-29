@@ -5,6 +5,7 @@
           !include-raw-escape builders/verify-fuel-library-python.sh
     description: |
       Tests and linters for Python code in fuel-library
+      for master branch
 
       Uses fuel-library/utils/jenkins/python_run_tests.sh
     node: verify-fuel-library-python
@@ -40,10 +41,6 @@
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/6.1'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/7.0'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/8.0'
           custom-url: '* $JOB_NAME $BUILD_URL'

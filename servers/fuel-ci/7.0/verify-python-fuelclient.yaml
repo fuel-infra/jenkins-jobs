@@ -1,29 +1,23 @@
 - job-template:
-    name: '{prefix}-fuel-web-py27'
+    name: '{version-id}.{prefix}-python-fuelclient'
     builders:
+      - inject:
+          properties-content: |
+            BRANCH={branch}
       - shell:
-          !include-raw-escape builders/verify-fuel-web.sh
+          !include-raw-escape builders/verify-python-fuelclient.sh
     description: |
-      Test requests for fuel-web master branch
+      Test requests for python-fuelclient stable/{version-id} branch
 
-      Uses venv with python2.7
-    node: verify-fuel-web
+      Uses venv with python2.6
+    node: 'python-fuelclient-{version-id}'
     concurrent: true
     parameters:
       - string:
-          name: PYTHON_EXEC
-          default: python2.7
-      - string:
-          name: TOXENV
-          default: py27
-      - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/stable/{version-id}'
       - string:
           name: PIP_OPTION
-      - string:
-          name: NPM_CONFIG_PREFIX
-          default: '/home/jenkins/npm'
       - bool:
           name: VENV_CLEANUP
           default: true
@@ -38,11 +32,6 @@
           option: category
     publishers:
       - 'email-{email-type}'
-      - junit:
-          keep-long-stdio: false
-          results: '**/nosetests.xml,**/nailgun.xml,**/fuelclient.xml,**/shotgun.xml'
-      - description-setter:
-          regexp-for-failed: '(Failed tests: (.*))'
     scm:
       - git:
           branches:
@@ -50,19 +39,17 @@
           remotes:
             - gerrit:
                 refspec: '{refspec}'
-                url: https://review.openstack.org/openstack/fuel-web.git
+                url: https://review.openstack.org/openstack/python-fuelclient.git
           choosing-strategy: '{choosing-strategy}'
     triggers:
       - gerrit:
           trigger-on: '{obj:trigger_on}'
           projects:
             - project-compare-type: PLAIN
-              project-pattern: openstack/fuel-web
+              project-pattern: openstack/python-fuelclient
               branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/8.0'
+                - branch-compare-type: ANT
+                  branch-pattern: '{branch}'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
@@ -74,9 +61,10 @@
           timeout: 45
 
 - project:
-    name: dualcheck-fuel-web-py27
+    name: '{version-id}.dualcheck-python-fuelclient'
+    version-id: '7.0'
     jobs:
-      - '{prefix}-fuel-web-py27':
+      - '{version-id}.{prefix}-python-fuelclient':
           prefix: verify
           trigger_on:
             - patchset-created-event
@@ -85,8 +73,9 @@
           email-type: default
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
-          timed: '0 11 * * *'
-      - '{prefix}-fuel-web-py27':
+          timed: '0 13 * * *'
+          branch: 'stable/{version-id}'
+      - '{version-id}.{prefix}-python-fuelclient':
           prefix: gate
           trigger_on:
             - change-merged-event
@@ -94,4 +83,5 @@
           refspec: refs/heads/$GERRIT_BRANCH
           choosing-strategy: default
           timed: ''
+          branch: 'stable/{version-id}'
 

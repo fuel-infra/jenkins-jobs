@@ -3,7 +3,7 @@
 set -ex
 
 VENV="${WORKSPACE}_VENV"
-virtualenv -p python2.7 "${VENV}"
+virtualenv -p python2.6 "${VENV}"
 source ${VENV}/bin/activate
 
 export TEST_NAILGUN_DB="nailgun"
@@ -14,11 +14,11 @@ pushd nailgun > /dev/null
 
 download_artifacts() {
   echo "Looking for artifacts in ${1}"
-  wget -q "${JENKINS_URL}job/nailgun_performance_tests/${1}/artifact/nailgun/nailgun_perf_test_report.csv"
+  wget -q "${JENKINS_URL}job/old.nailgun_performance_tests/${1}/artifact/nailgun/nailgun_perf_test_report.csv"
   return $?
 }
 
-lastCompletedBuild=$(wget -q "${JENKINS_URL}job/nailgun_performance_tests/lastCompletedBuild/buildNumber" -O -)
+lastCompletedBuild=$(wget -q "${JENKINS_URL}job/old.nailgun_performance_tests/lastCompletedBuild/buildNumber" -O -)
 echo "Last completed build: ${lastCompletedBuild}"
 
 artifactsFound=0
