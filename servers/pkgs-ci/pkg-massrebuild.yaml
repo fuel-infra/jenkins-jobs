@@ -5,7 +5,7 @@
         This job is worker for mass-rebuild case.<br>
         It builds a package and then publishes it by triggerring publisher job<br>
         with enabled downgrade feature.<br>
-    node: '{build-node}'
+    node: '{build-node}-{mos_version}'
     wrappers:
       - timeout:
           timeout: 300
@@ -47,8 +47,8 @@
           # Global parameters
           ############################
 
-          export SOURCE_BRANCH=openstack-ci/fuel-{mos_version}/liberty
-          export SPEC_BRANCH=openstack-ci/fuel-{mos_version}/liberty
+          SOURCE_BRANCH=openstack-ci/fuel-{mos_version}/liberty
+          SPEC_BRANCH=openstack-ci/fuel-{mos_version}/liberty
           export SRC_PROJECT_PATH=openstack
           export SPEC_PROJECT_PATH=openstack-build
           export IS_UPDATES=false
@@ -64,17 +64,20 @@
           # Parameters for package specs
           export SPEC_PROJECT_SUFFIX={spec-project-suffix}
 
+          DEB_DIST_NAME={project-name}{mos_version}
+          RPM_DIST_NAME={project-name}{mos_version}-${{DIST}}-fuel
+
           # New scheme
           if [ "{mos_version}" = "master" ]; then
               DEB_DIST_NAME={project-name}-{mos_version}
               RPM_DIST_NAME={project-name}-{mos_version}-${{DIST}}
-          else
-              DEB_DIST_NAME={project-name}{mos_version}
-              RPM_DIST_NAME={project-name}{mos_version}-${{DIST}}-fuel
+              SOURCE_BRANCH={mos_version}
+              SPEC_BRANCH={mos_version}
           fi
           DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
           RPM_REPO_PATH={rel-path-prefix}/{os}/${{RPM_DIST_NAME}}/os/x86_64/
           export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
+          export SOURCE_BRANCH SPEC_BRANCH
 
           # DEB-specific parameters
           export ORIGIN=Mirantis

@@ -5,7 +5,7 @@
         This job is worker for mass-rebuild case.<br>
         It builds a package and then publishes it by triggerring publisher job<br>
         with enabled downgrade feature.<br>
-    node: '{build-node}'
+    node: '{build-node}-{mos_version}'
     wrappers:
       - timeout:
           timeout: 300
