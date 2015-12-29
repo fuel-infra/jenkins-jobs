@@ -4,7 +4,7 @@
       - shell:
           !include-raw-escape builders/verify-python-fuelclient.sh
     description: |
-      Test requests for python-fuelclient master branch
+      Test requests for python-fuelclient 'master' and 'stable/8.0' branch
 
       Uses venv with python2.7
     node: 'python-fuelclient-{branch-name}'
@@ -42,7 +42,9 @@
               project-pattern: openstack/python-fuelclient
               branches:
                 - branch-compare-type: ANT
-                  branch-pattern: '{branch-name}'
+                  branch-pattern: 'master'
+                - branch-compare-type: ANT
+                  branch-pattern: 'stable/8.0'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
@@ -75,4 +77,3 @@
           refspec: refs/heads/$GERRIT_BRANCH
           choosing-strategy: default
           timed: ''
-
