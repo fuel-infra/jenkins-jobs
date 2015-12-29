@@ -1,0 +1,19 @@
+- project:
+    name: 'python-fuelclient master tests'
+    version-id: master
+    project: python-fuelclient
+    projectpackage: python-fuelclient
+    projectbranch: master
+    mos: '9.0'
+    properties: ''
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    timeout: 200
+    jobs:
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+          dist: ubuntu
+          testgroup: review_fuel_client
+          properties: |
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+            KEEP_BEFORE=yes
+            UPLOAD_PATCHSET=true
