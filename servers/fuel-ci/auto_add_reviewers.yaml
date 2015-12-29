@@ -1,0 +1,42 @@
+- job:
+    name: 'auto-add-reviewers'
+    builders:
+      - shell:
+          !include-raw builders/auto_add_reviewers.py
+    concurrent: true
+    description: 'Add reviewers from MAINTAINERS file if it is present in repo'
+    properties:
+      - heavy-job:
+          weight: 1
+    node: reviewers
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          url: https://review.openstack.org/$GERRIT_PROJECT
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - comment-added-contains-event:
+                comment-contains-value: 'Verified\+1'
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'openstack/fuel**'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          silent: true
+          readable-message: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '7245518b-27f8-4e16-b50b-b271e4192037'
+      - timeout:
+          fail: true
+          timeout: 15
+          write-description: true
+      - ansicolor:
+          colormap: xterm
