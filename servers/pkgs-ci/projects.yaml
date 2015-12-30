@@ -82,6 +82,7 @@
       - '{mos_version}-fuel-pkg-pipeline-{distro}'
       - '{mos_version}-fuel-pkg-publish-{distro}'
       - '{mos_version}-fuel-pkg-install-{distro}'
+      - '{mos_version}-fuel-pkg-repotest-{distro}'
 
 - project:
     name: 'pkg-mos-centos'
