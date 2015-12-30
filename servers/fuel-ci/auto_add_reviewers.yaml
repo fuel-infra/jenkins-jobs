@@ -22,7 +22,7 @@
             - comment-added-contains-event:
                 comment-contains-value: 'Verified\+1'
           projects:
-            - project-compare-type: PLAIN
+            - project-compare-type: ANT
               project-pattern: 'openstack/fuel**'
               branches:
                 - branch-compare-type: PLAIN
