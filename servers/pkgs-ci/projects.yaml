@@ -106,25 +106,6 @@
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
-    mos_version:
-      - 'master':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-          distro: 'centos7'
-          pkg_type: 'rpm'
-          spec_path_prefix: '/centos7'
-      - '8.0':
-          fuel-main-branch: 'stable/8.0'
-          fuel-qa-branch: 'stable/8.0'
-          distro: 'centos7'
-          pkg_type: 'rpm'
-          spec_path_prefix: '/centos7'
-      - '9.0':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-          distro: 'centos7'
-          pkg_type: 'rpm'
-          spec_path_prefix: '/centos7'
     openstack_release: 'CentOS'
     <<: *common_template
     <<: *mos_template
