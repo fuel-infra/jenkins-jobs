@@ -117,7 +117,7 @@
           default: 'lastSuccessfulBuild'
       - string:
           name: UBUNTU_MIRROR_ID
-          default: 'ubuntu-2015-12-02-170158'
+          default: 'latest'
           description: Use ubuntu-<timestamp> or latest for latest mirror available.
     builders:
       - shell:
