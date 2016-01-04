@@ -119,6 +119,19 @@ else
     ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 fi
 
+# In case of RHEL tests we override systest group and set additional parameters
+# required for test execution
+if [[ ${OS_TYPE} == 'rhel' ]]; then
+    TEST_GROUP="rhel.basic"
+
+    export RHEL_IMAGE=qa-centos-compute-2015-12-03.qcow2
+    export RHEL_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
+    export RHEL_IMAGE_MD5=524136c435d3e17143029b3431e46ae1
+    export RHEL_IMAGE_USER=root
+    export RHEL_IMAGE_PASSWORD=r00tme
+    export CENTOS_DUMMY_DEPLOY=True
+fi
+
 pushd fuel-qa
 sh -x "utils/jenkins/system_tests.sh" -t test -w "$WORKSPACE/fuel-qa" -e "$ENV_NAME" -o --group="$TEST_GROUP" -i "$ISO_PATH"
 popd
