@@ -62,4 +62,4 @@
     wrappers:
       - timeout:
           fail: true
-          timeout: 60
+          timeout: 120
