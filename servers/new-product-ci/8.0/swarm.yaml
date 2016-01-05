@@ -90,10 +90,6 @@
           name: 'Run system tests'
           condition: COMPLETED
           projects:
-            # Centos
-            - name: '8.0.system_test.centos.rhel.basic'
-              current-parameters: true
-              kill-phase-on: NEVER
             # Ubuntu
             - name: '8.0.system_test.ubuntu.thread_1'
               current-parameters: true
@@ -204,6 +200,9 @@
               current-parameters: true
               kill-phase-on: NEVER
             - name: '8.0.system_test.ubuntu.fuel_plugin_vip_reservation'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.system_test.ubuntu.rhel.basic'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '8.0.system_test.ubuntu.services_ha'
