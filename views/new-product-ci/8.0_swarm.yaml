@@ -1,0 +1,17 @@
+- view:
+      type: list
+      name: '8.0_swarm'
+      regex: '.*(?!8.0.system_test.ubuntu.known_issues)(?!8.0.system_test.ubuntu.rhel.basic)(?!8.0.system_test.ubuntu.setup)(?!8.0.system_test.ubuntu.upgrade_ha_one_controller)(?!8.0.system_test.ubuntu.upgrade_ha_one_controller_delete_node)(?!8.0.system_test.ubuntu.upgrade_neutron_ceph_classic)(?!8.0.system_test.ubuntu.upgrade_nova_cinder_classic)(8.0.system_test.ubuntu|8.0.swarm).*'
+      jobs:
+        - 8.0-test-reports-Testrail
+        - 8.0.nessus_security_scan
+        - 8.0.system_test.centos.ironic_base
+      columns:
+        - status
+        - weather
+        - job
+        - last_success
+        - last_failure
+        - last_duration
+        - build_button
+      recurse: False
