@@ -28,7 +28,7 @@
           recipients: devops+alert@mirantis.com
           send-to-individuals: false
       - trigger-parameterized-builds:
-        - project:  8.0.fuel_community.centos.bvt_2, 8.0.fuel_community.ubuntu.bvt_2
+        - project:  8.0.fuel_community.ubuntu.bvt_2
           condition: UNSTABLE_OR_BETTER
           current-parameters: true
           predefined-parameters: |
