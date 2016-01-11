@@ -174,9 +174,8 @@
     recipients: 'devops+alert@mirantis.com'
     repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
     script_path: 'reporting_tool/report.py'
-    trigger: 'H 01 * * 2'
+    trigger: 'H 01,13 * * 3'
     volumes: '-v /etc/custom_scripts/reporting_tool.conf:/etc/custom_scripts/reporting_tool.conf -v /etc/custom_scripts/review.openstack.org:/etc/custom_scripts/review.openstack.org -v /etc/custom_scripts/review.fuel-infra.org:/etc/custom_scripts/review.fuel-infra.org -v /home/jenkins/.ssh/known_hosts:/root/.ssh/known_hosts -v /home/jenkins/workspace/reporting_tool/artifacts/:/opt/reporting_tool/artifacts/ -v /tmp/report-cache/:/tmp/'
 
     jobs:
       - '{name}'
-
