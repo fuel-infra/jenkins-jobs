@@ -24,7 +24,7 @@ test "$deep_clean" = "true" && make deep_clean
 echo "STEP 0. Export workarounds"
 export MIRROR_MOS_UBUNTU="perestroika-repo-tst.infra.mirantis.net"
 export MIRROR_FUEL="http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos9.0-centos7-fuel/os/x86_64"
-export MIRROR_DOCKER="http://mirror.fuel-infra.org/docker/8.0"
+export MIRROR_UBUNTU="mirror.seed-cz1.fuel-infra.org"
 export USE_MIRROR=none
 
 LATEST_TARGET=$(curl -sSf "${MIRROR_MOS_UBUNTU}/mos-repos/ubuntu/9.0.target.txt" | head -1)
