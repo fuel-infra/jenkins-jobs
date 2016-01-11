@@ -209,7 +209,7 @@
     publishers:
       - archive:
           allow-empty: true
-          artifacts: artifacts/*txt, artifacts/*changelog, artifacts/*.gz
+          artifacts: artifacts/*txt, artifacts/*changelog
           latest-only: false
       - description-setter:
           regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)

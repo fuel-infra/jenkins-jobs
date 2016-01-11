@@ -74,6 +74,7 @@ esac
 LATEST_TARGET_UBUNTU=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/8.0.target.txt" | head -1)
 # since in fuel-main MIRROR_MOS_UBUNTU?=perestroika-repo-tst.infra.mirantis.net, we need to remove http://
 export MIRROR_MOS_UBUNTU="${LATEST_MIRROR_ID_URL#http://}"
+export MIRROR_UBUNTU="${MIRROR_MOS_UBUNTU}"
 export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET_UBUNTU}"
 
 # define closest stable centos mirror snapshot
@@ -175,8 +176,6 @@ echo SHOTGUN_GERRIT_COMMIT="${shotgun_gerrit_commit}" >> "${ARTS_DIR}/gerrit_com
 echo NETWORKCHECKER_GERRIT_COMMIT="${networkchecker_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo FUELUPGRADE_GERRIT_COMMIT="${fuelupgrade_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 
-# let's save fuel-centos-build.log as artifact
-gzip -c "${BUILD_DIR}/docker/fuel-centos-build.log" > "${ARTS_DIR}/fuel-centos-build.log.gz" || true
 
 cp "${LOCAL_MIRROR}"/*changelog "${ARTS_DIR}/" || true
 cp "${BUILD_DIR}/iso/isoroot/version.yaml" "${ARTS_DIR}/version.yaml.txt" || true
