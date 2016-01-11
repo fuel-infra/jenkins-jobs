@@ -201,8 +201,8 @@
          testgroup: 'ready_node_reinstallation'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'error_node_reinstallation'
-#     - '{version-id}.{id}.{dist}.{testgroup}':
-#         testgroup: 'bvt_ubuntu_bootstrap'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'bvt_ubuntu_bootstrap'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'full_cluster_reinstallation'
      - '{version-id}.{id}.{dist}.{testgroup}':

@@ -232,9 +232,9 @@
             - name: '8.0.system_test.ubuntu.error_node_reinstallation'
               current-parameters: true
               kill-phase-on: NEVER
-#            - name: '8.0.system_test.ubuntu.bvt_ubuntu_bootstrap'
-#              current-parameters: true
-#              kill-phase-on: NEVER
+            - name: '8.0.system_test.ubuntu.bvt_ubuntu_bootstrap'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '8.0.system_test.ubuntu.full_cluster_reinstallation'
               current-parameters: true
               kill-phase-on: NEVER
