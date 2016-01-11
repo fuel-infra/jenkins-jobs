@@ -67,12 +67,12 @@ def main():
 
     command = (
         "ssh -p{GERRIT_PORT} {username}@{GERRIT_HOST} gerrit set-reviewers "
-        "{reviewers} {GERRIT_CHANGE_ID}".format(
+        "{reviewers} {GERRIT_CHANGE_NUMBER}".format(
             username='fuel-ci',
             reviewers=' '.join(maintainers_list),
             GERRIT_PORT=os.environ.get('GERRIT_PORT', '29418'),
             GERRIT_HOST=os.environ.get('GERRIT_HOST', ''),
-            GERRIT_CHANGE_ID=os.environ.get('GERRIT_CHANGE_ID', ''),
+            GERRIT_CHANGE_NUMBER=os.environ.get('GERRIT_CHANGE_NUMBER', ''),
 
         )
     )
