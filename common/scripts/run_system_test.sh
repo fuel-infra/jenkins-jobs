@@ -41,7 +41,7 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
 
     case "${UBUNTU_MIRROR_ID}" in
         latest-stable)
-            UBUNTU_MIRROR_ID="$(curl -fsS ${TEST_ISO_JOB_URL}lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt | awk -F '[ =]' '{print $NF}')"
+            UBUNTU_MIRROR_ID="$(curl -fsS "${TEST_ISO_JOB_URL}lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt" | awk -F '[ =]' '{print $NF}')"
             UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
             ;;
         latest)
@@ -51,7 +51,15 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
             UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
     esac
 
-    export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-proposed main universe multiverse"
+    UBUNTU_REPOS="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse"
+
+    if [ "$ENABLE_PROPOSED" = true ]; then
+        UBUNTU_PROPOSED="deb ${UBUNTU_MIRROR_URL} trusty-proposed main universe multiverse"
+        UBUNTU_REPOS="$UBUNTU_REPOS|$UBUNTU_PROPOSED"
+    fi
+
+    export MIRROR_UBUNTU="$UBUNTU_REPOS"
+
 fi
 
 rm -rf logs/*
@@ -59,9 +67,9 @@ rm -rf logs/*
 ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER.$BUILD_ID
 ENV_NAME=${ENV_NAME:0:68}
 
-ISO_PATH=`seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}"`
+ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
-VERSION_STRING=`basename $ISO_PATH | cut -d '-' -f 2-3`
+VERSION_STRING=$(basename "$ISO_PATH" | cut -d '-' -f 2-3)
 echo "Description string: $TEST_GROUP on $VERSION_STRING"
 
 export MAKE_SNAPSHOT=false

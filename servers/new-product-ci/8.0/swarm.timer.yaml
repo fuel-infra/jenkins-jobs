@@ -1,0 +1,43 @@
+- job-template:
+    name: '{version-id}.swarm.timer.{repo_type}'
+    description: |
+      Trigger 8.0.swarm.runner with latest stable iso build.
+    node: 'runner'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+    triggers:
+        - timed: '{trigger}'
+    builders:
+      - shell:
+          !include-raw-escape builders/swarm.timer.sh
+    publishers:
+      - archive:
+          allow-empty: false
+          artifacts: 'links.txt'
+          latest-only: false
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+      - email-default:
+          mail-to: 'devops+alert@mirantis.com'
+      - trigger-parameterized-builds:
+        - project: '8.0.swarm.runner'
+          condition: UNSTABLE_OR_BETTER
+          property-file: links.txt
+          boolean-parameters:
+            ENABLE_PROPOSED: {enable_proposed}
+          triggerWithNoParameters: false
+
+- job-group:
+    name: '8.0.swarm.timers'
+    version-id: 8.0
+    jobs:
+      - '{version-id}.swarm.timer.{repo_type}':
+         repo_type: stable
+         trigger: '0 21 * * 1-5'
+         enable_proposed: false
+      - '{version-id}.swarm.timer.{repo_type}':
+         repo_type: proposed
+         trigger: 'H 21 * * 6,7'
+         enable_proposed: true

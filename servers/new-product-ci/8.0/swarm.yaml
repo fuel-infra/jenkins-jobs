@@ -18,36 +18,7 @@
     name: 8.0.swarm-helpers
     jobs:
       - '8.0.swarm.runner'
-      - '8.0.swarm.timer'
-
-- job:
-    name: '8.0.swarm.timer'
-    description: |
-      Trigger 8.0.swarm.runner with latest stable iso build
-    node: 'runner'
-    properties:
-      - heavy-job:
-          weight: 1
-    parameters:
-    builders:
-      - shell:
-          !include-raw builders/swarm.timer.sh
-    triggers:
-      - timed: '0 21 * * *'
-    publishers:
-      - archive:
-          allow-empty: false
-          artifacts: 'links.txt'
-          latest-only: false
-      - description-setter:
-          regexp: "'Description string: (.*)'"
-      - email-default:
-          mail-to: 'devops+alert@mirantis.com'
-      - trigger-parameterized-builds:
-        - project: '8.0.swarm.runner'
-          condition: UNSTABLE_OR_BETTER
-          property-file: links.txt
-          triggerWithNoParameters: false
+      - '8.0.swarm.timers'
 
 - job:
     name: '8.0.swarm.runner'
@@ -74,6 +45,10 @@
           name: CUSTOM_VERSION
           default: ''
           description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+      - bool:
+          name: ENABLE_PROPOSED
+          default: false
+          description: 'If false only stable repositories are used'
     publishers:
       - description-setter:
           regexp: "'Description string: (.*)'"
