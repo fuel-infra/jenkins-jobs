@@ -1,0 +1,78 @@
+- job:
+    name: 'lp_release_migrator'
+    builders:
+      - inject:
+          properties-content: |
+            MODE=${RUN_MODE} --projects='${PROJECTS}' --old_milestone_names='${OLD_MILESTONE_NAMES}' --new_milestone_name='${NEW_MILESTONE_NAME}' --maximum=${MAXIMUM} --statuses='${STATUSES}' --bugs_importance='${BUGS_IMPORTANCE}'
+      - shell:
+          !include-raw builders/docker_run.sh
+    description: |
+      The job to migrate Launchpad bugs between milestones.
+      Related bug https://bugs.launchpad.net/fuel/+bug/1483968
+    logrotate:
+      daysToKeep: '1000'
+      numToKeep: '100'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - label:
+         name: LABEL_SERVER
+         default: 'custom-scripts'
+         description: 'Label of the slave to run the script'
+      - string:
+         name: DOCKER_IMAGE
+         default: 'python-jenkins-14-04'
+         description: 'Name of the docker image to run'
+      - string:
+         name: RUN_MODE
+         default: '--execute'
+         description: 'Mode to run script: `--execute` or `--dry_run`'
+      - string:
+         name: SCRIPT_PATH
+         default: 'lp_release_migrator/lp_release_migrator.py'
+         description: 'Name of a script to execute'
+      - string:
+         name: REPOSITORY
+         default: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
+         description: 'Link to a repository with scripts'
+      - string:
+         name: VOLUMES
+         default: '-v /etc/custom_scripts/lp_release_migrator/:/etc/custom_scripts/'
+         description: 'Volumes to mount into container'
+      - string:
+         name: PROJECTS
+         default: 'fuel, mos'
+         description: 'Project on lp to work on, separated by commas'
+      - string:
+         name: OLD_MILESTONE_NAMES
+         default: '7.0'
+         description: 'Milestone names from which bugs would be retarget, separated by commas'
+      - string:
+         name: NEW_MILESTONE_NAME
+         default: '8.0'
+         description: 'Milestone name to which bugs would be retarget'
+      - string:
+         name: MAXIMUM
+         default: '-1'
+         description: 'Total amount of issues to be processed, integer'
+      - string:
+         name: STATUSES
+         default: 'New, Confirmed, Triaged, In Progress, Incomplete'
+         description: 'Project statuses which script would be work on, separated by commas'
+      - string:
+         name: BUGS_IMPORTANCE
+         default: 'Critical, High, Medium, Low, Wishlist'
+         description: 'Bugs importance to be processed, separated by commas'
+    publishers:
+      - email:
+          recipients: 'devops+alert@mirantis.com'
+      - archive:
+          artifacts: 'artifacts/*'
+          allow-empty: 'true'
+    scm:
+      - git:
+         url: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
+         credentials-id: '87e8f7c8-9d04-4ffa-bd9c-9ef88acffec0'
+         branches:
+            - origin/master
