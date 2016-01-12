@@ -73,7 +73,7 @@
 
           echo FAILED=false >> ci_status_params
           RESULT=0
-          for script in version-test-{pkg_type} vm-test repo-test-{pkg_type}-docker
+          for script in version-test-{pkg_type} vm-test
           do
               script_log="${{script}}.log"
               rm -f "${{script_log}}"
