@@ -9,6 +9,7 @@
           weight: 8
       - inject:
           properties-content: |
+            PRODUCT_JENKINS_URL={product_jenkins_url}
             ISO_JOB_NAME={mos_version}.test_all
             OPENSTACK_RELEASE={os}
             OS_TYPE={os}
