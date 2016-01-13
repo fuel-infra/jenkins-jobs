@@ -3,8 +3,6 @@
     project-type: freestyle
     concurrent: true
     wrappers:
-      - pre-scm-buildstep:
-        - shell: 'rm -rf *'
       - timestamps
       - ansicolor
     triggers:
@@ -16,27 +14,7 @@
           scm-basedir: ''
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{install-scm-branch}'
-      - fuel-infra:
-          scm-user: '{scm-user}'
-          scm-repo: '{scm-ci-status-client-repo}'
-          scm-basedir: '{scm-ci-status-client-basedir}'
-          scm-credentials-id: '{scm-credentials-id}'
-          scm-branch: '{scm-ci-status-client-branch}'
-    properties:
-      - inject:
-          properties-content: |
-            PKG_TYPE={pkg_type}
     builders:
-      - shell: |
-          #!/bin/bash -xe
-          export DIST="${{DIST:-{distro}}}"
-
-          # Gerrit parameters
-          export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
-          export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
-          export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
-
-          ci-status-client/ci-status-report.sh start
       - copyartifact:
           project: '{mos_version}-pkg-pipeline-{os}'
           filter: 'buildresult.params, {pkg_type}.publish.setenvfile'
@@ -54,36 +32,6 @@
           REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
           EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
 
-          START_TS=$(date +%s)
-
-          echo FAILED=false >> ci_status_params
-          RESULT=0
-          if ! bash -x repo-test-{pkg_type}-docker
-          then
-              sed -i 's/FAILED=false/FAILED=true/' ci_status_params
-              RESULT=1
-              break
-          fi
-
-          TIME_ELAPSED=$(( $(date +%s) - ${{START_TS}} ))
-          echo "RESULT=${{RESULT}}" > {pkg_type}.install.setenvfile
-          echo "TIME_ELAPSED='$(date -u -d @${{TIME_ELAPSED}} +'%Hh %Mm %Ss' | sed 's|^00h ||; s|^00m ||')'" >> {pkg_type}.install.setenvfile
-          exit ${{RESULT}}
-
-    publishers:
-      - post-tasks:
-        - matches:
-            - log-text: 'Building'
-              operator: AND
-          script: |
-            #!/bin/bash -xe
-            export DIST="${{DIST:-{distro}}}"
-
-            # Gerrit parameters
-            export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
-            export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
-            export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
-
-            ci-status-client/ci-status-report.sh stop
+          bash -x repo-test-{pkg_type}-docker
 
     node: '{install-node}'

@@ -32,10 +32,6 @@
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/master'
 
-    scm-ci-status-client-repo: 'infra/ci-status-client'
-    scm-ci-status-client-branch: '8.0'
-    scm-ci-status-client-basedir: 'ci-status-client'
-
     spec-path-prefix: ''
     spec-path-suffix: '-build'
     spec-project-prefix: ''

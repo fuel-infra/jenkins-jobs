@@ -56,7 +56,7 @@
           script:
             !include-raw-escape builders/mos.install.destroy.vm.sh
       - archive:
-          artifacts: '**/*.xml, ci_status_params, {pkg_type}.install.setenvfile'
+          artifacts: '**/*.xml, {pkg_type}.install.setenvfile'
           allow-empty: true
 
     node: '{install-node}'

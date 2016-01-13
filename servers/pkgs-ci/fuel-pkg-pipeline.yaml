@@ -40,7 +40,7 @@
           PROJECT_VERSION=${{PROJECT_VERSION%%/*}}
 
           # Set default version for master branch
-          test "${{PROJECT_VERSION}}" = "master" && PROJECT_VERSION="{master-mos-version}"
+          test "${{PROJECT_VERSION}}" = "master" && PROJECT_VERSION="{master-mos-version}" || :
 
           # Project info
           export PROJECT_NAME PROJECT_VERSION
@@ -100,8 +100,7 @@
           sed -ri '/set_default_params/ d' build-fuel-{pkg_type}.sh
 
           # ... and build a package
-          echo FAILED=true > ci_status_params
-          bash build-fuel-{pkg_type}.sh && sed -ri 's/FAILED=true/FAILED=false/' ci_status_params
+          bash -x build-fuel-{pkg_type}.sh
 
           rm -rf {repo-base-path}/CR-${{ZUUL_CHANGE}}
 
@@ -122,9 +121,6 @@
           REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
           EOF
 
-          # Fail job in case of package building error
-          FAILED=$(awk -F= '/^FAILED=/ {{gsub(/"/,""); print $2}}' ci_status_params)
-          test "${{FAILED}}" = "true" && exit 1 || exit 0
       - trigger-builds:
           - project: '{mos_version}-fuel-pkg-publish-{distro}'
             current-parameters: true
@@ -138,7 +134,7 @@
     publishers:
       - 'email-alert-on-merge'
       - archive:
-          artifacts: 'buildresult.params, ci_status_params, {pkg_type}.publish.setenvfile, {pkg_type}.install.setenvfile'
+          artifacts: 'buildresult.params, {pkg_type}.publish.setenvfile'
           allow-empty: True
 
     node: '{build-node}'
