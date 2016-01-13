@@ -227,6 +227,7 @@
          testgroup: 'fuel_plugin_vip_reservation'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'network_templates'
+         timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'reduced_footprint'
      - '{version-id}.{id}.{dist}.{testgroup}':
