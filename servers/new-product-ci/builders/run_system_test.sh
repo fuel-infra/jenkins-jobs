@@ -48,7 +48,17 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
             UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
     esac
 
-    export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-proposed main universe multiverse"
+    UBUNTU_REPOS="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse"
+
+    ENABLE_PROPOSED="${ENABLE_PROPOSED:-true}"
+
+    if [ "$ENABLE_PROPOSED" = true ]; then
+        UBUNTU_PROPOSED="deb ${UBUNTU_MIRROR_URL} trusty-proposed main universe multiverse"
+        UBUNTU_REPOS="$UBUNTU_REPOS|$UBUNTU_PROPOSED"
+    fi
+
+    export MIRROR_UBUNTU="$UBUNTU_REPOS"
+
 fi
 
 rm -rf logs/*

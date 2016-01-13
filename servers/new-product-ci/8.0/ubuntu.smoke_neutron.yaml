@@ -5,6 +5,7 @@
           properties-content: |
             SLAVE_NODE_CPU=2
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
+            ENABLE_PROPOSED=false
       - systest
     concurrent: true
     description: |
