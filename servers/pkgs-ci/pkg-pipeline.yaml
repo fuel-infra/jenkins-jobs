@@ -65,6 +65,15 @@
           # Parameters for package specs
           export SPEC_PROJECT_SUFFIX={spec-project-suffix}
 
+          # Set parameters specific to project(s)
+          case ${{ZUUL_PROJECT}} in
+              openstack/fuel-*|openstack/network-checker|openstack/python-fuelclient|openstack/shotgun )
+                  IS_FUEL=true
+                  IS_OPENSTACK=false
+                  unset SPEC_PROJECT
+                  ;;
+          esac
+
           # New scheme
           if [ "{mos_version}" = "master" ]; then
               DEB_DIST_NAME={project-name}-{mos_version}
