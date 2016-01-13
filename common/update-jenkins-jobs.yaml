@@ -1,6 +1,8 @@
 - job-template:
     name: 'update-jenkins-jobs'
-    description: 'Update jenkins jobs configuration on fuel-infra/jenkins-jobs merge or manually'
+    description: |
+      <p>Update jenkins jobs configuration on fuel-infra/jenkins-jobs merge or manually</p>
+      <p>Requires python-tox package and user credentials stored as JJB_USER and JJB_PASS using Jenkins Global Passwords feature</p>
     concurrent: false
     node: 'jjb_update'
     builders:
