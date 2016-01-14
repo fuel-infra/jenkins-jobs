@@ -1,0 +1,18 @@
+- project:
+    name: 'fuel-web master tests'
+    version-id: master
+    project: fuel-web
+    projectpackage: fuel-nailgun
+    projectbranch: master
+    mos: '9.0'
+    properties: ''
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    timeout: 200
+    jobs:
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+          dist: ubuntu
+          testgroup: review_fuel_web_deploy
+          timed: '15 */12 * * *'
+          properties: |
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
