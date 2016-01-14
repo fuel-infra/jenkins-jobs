@@ -48,6 +48,78 @@
             - name: '8.0.acceptance.ubuntu.ha_vlan_group_2'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_vlan_group_3'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_vlan_group_4'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_vlan_group_5'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_vlan_group_6'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '8.0.acceptance.ubuntu.ha_vlan_group_7'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_tun_group_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_tun_group_2'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_tun_group_3'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_scale_group_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_scale_group_2'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_scale_group_3'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_scale_group_4'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_scale_group_5'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.ha_scale_group_6'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.mongo_multirole'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.multirole_group_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.mixed_os_components'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.murano_os_component'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.sahara_os_component'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.cli_acceptance_deployment_tests'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.cli_acceptance_ceph_deployment_tests'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.failover_group_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.failover_group_2'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.failover_group_mongo'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.thread_separate_services_ceph'
               current-parameters: true
               kill-phase-on: NEVER
