@@ -146,6 +146,7 @@ fi
 if [[ ${OS_TYPE} == 'rhel' ]]; then
     TEST_GROUP="rhel.basic"
 
+    export OPENSTACK_RELEASE=ubuntu
     export RHEL_IMAGE=qa-centos-compute-2015-12-03.qcow2
     export RHEL_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
     export RHEL_IMAGE_MD5=524136c435d3e17143029b3431e46ae1
