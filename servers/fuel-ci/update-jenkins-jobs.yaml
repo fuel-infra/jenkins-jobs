@@ -1,0 +1,5 @@
+- project:
+    name: fuel-ci.update-jenkins-jobs
+    ci-name: fuel-ci
+    jobs:
+      - update-jenkins-jobs
