@@ -7,7 +7,14 @@
 - job:
     name: '8.0.acceptance.runner'
     project-type: multijob
-    description: 'Run all acceptance tests'
+    description: |
+      Run system tests wich were automated according to acceptance test plan.
+
+      <p>
+        Owned by: Fuel QA Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #fuel-qa<br/>
+      </p>
     concurrent: false
     node: 'runner'
     properties:
