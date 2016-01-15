@@ -210,6 +210,9 @@
             - name: '9.0.system_test.ubuntu.bvt_ubuntu_bootstrap'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.system_test.ubuntu.bvt_centos_bootstrap'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '9.0.system_test.ubuntu.full_cluster_reinstallation'
               current-parameters: true
               kill-phase-on: NEVER
