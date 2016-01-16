@@ -168,7 +168,7 @@
     description: 'This job runs script which generates weekly CI report.'
     docker_image: 'python-jenkins-14-04'
     label_server: 'custom-scripts'
-    mode: '--csv --formatted-text --age 7d --config /etc/custom_scripts/reporting_tool.conf --file-prefix /opt/reporting_tool/artifacts/weekly-report'
+    mode: '--csv --formatted-text --skip-empty --age 7d --config /etc/custom_scripts/reporting_tool.conf --file-prefix /opt/reporting_tool/artifacts/weekly-report'
     num: 100
     properties: ''
     recipients: 'devops+alert@mirantis.com'
