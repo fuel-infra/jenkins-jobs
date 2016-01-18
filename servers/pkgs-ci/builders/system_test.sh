@@ -97,7 +97,7 @@ if [ "${REBUILD_ISO}" = "true" ]; then
     pushd fuel-main
     rm -rf "/var/tmp/yum-${USER}-*"
     make deep_clean
-    make -j10 iso USE_MIRROR="${LOCATION}" EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}" \
+    make iso USE_MIRROR="${LOCATION}" EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}" \
         MIRROR_MOS_UBUNTU_METHOD="${MIRROR_UBUNTU_METHOD}" \
         MIRROR_MOS_UBUNTU="${MIRROR_UBUNTU_HOST}" \
         MIRROR_UBUNTU_METHOD="${MIRROR_UBUNTU_METHOD}" \
