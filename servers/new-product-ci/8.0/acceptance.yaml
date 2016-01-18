@@ -3,6 +3,13 @@
     jobs:
       - '8.0-acceptance':
           dist: 'ubuntu'
+      - '8.0.{id}.test-reports':
+          id: 'acceptance'
+          properties: |
+            TESTS_RUNNER=8.0.acceptance.runner
+            TESTRAIL_TEST_SUITE=[8.0][Fuel] Release Acceptance
+            TESTRAIL_MILESTONE=8.0
+            LAUNCHPAD_MILESTONE=8.0
 
 - job:
     name: '8.0.acceptance.runner'
@@ -127,6 +134,6 @@
             - name: '8.0.acceptance.ubuntu.failover_group_mongo'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '8.0.acceptance.ubuntu.thread_separate_services_ceph'
+            - name: '8.0.acceptance.ubuntu.plugins.thread_separate_services_ceph'
               current-parameters: true
               kill-phase-on: NEVER

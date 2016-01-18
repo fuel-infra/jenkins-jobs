@@ -1,5 +1,5 @@
 - job-template:
-    name: '{version-id}.system_test.{dist}.plugins.{testgroup}'
+    name: '{version-id}.{id}.{dist}.plugins.{testgroup}'
     builders:
       - inject:
           properties-content: |
@@ -24,7 +24,7 @@
       numToKeep: 50
     node: 'systest'
     concurrent: true
-    description: '{version-id} swarm test group'
+    description: '{version-id} {id} test group'
     properties:
       - heavy-job:
           weight: 8
@@ -38,7 +38,7 @@
         description: "iso magnet link"
     - string:
         name: ENV_PREFIX
-        default: '{version-id}.system_test.{dist}.{testgroup}'
+        default: '{version-id}.{id}.{dist}.{testgroup}'
         description: 'Environment prefix'
     publishers:
     - archive:
@@ -52,7 +52,7 @@
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
     - trigger-parameterized-builds:
-      - project: '{version-id}-test-reports-Testrail'
+      - project: '{version-id}.{id}.test-reports'
         condition: ALWAYS
         property-file: links.txt
         predefined-parameters: TEST_JOB_NAME=$JOB_NAME

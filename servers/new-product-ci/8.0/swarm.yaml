@@ -19,6 +19,13 @@
     jobs:
       - '8.0.swarm.runner'
       - '8.0.swarm.timers'
+      - '8.0.{id}.test-reports':
+          id: 'system_test'
+          properties: |
+            TESTS_RUNNER=8.0.swarm.runner
+            TESTRAIL_TEST_SUITE=[8.0] Swarm
+            TESTRAIL_MILESTONE=8.0
+            LAUNCHPAD_MILESTONE=8.0
 
 - job:
     name: '8.0.swarm.runner'
