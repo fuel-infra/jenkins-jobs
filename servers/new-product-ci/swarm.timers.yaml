@@ -1,0 +1,34 @@
+- job-template:
+    name: '{version-id}.swarm.timer.{repo_type}'
+    description: |
+      Trigger {version-id}.swarm.runner with latest stable iso build.
+    node: 'runner'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: TEST_JOB
+          default: '{version-id}.test_all'
+          description: 'Job from which we get latest stable ISO'
+    triggers:
+        - timed: '{trigger}'
+    builders:
+      - shell:
+          !include-raw-escape builders/swarm.timer.sh
+    publishers:
+      - archive:
+          allow-empty: false
+          artifacts: 'links.txt'
+          latest-only: false
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+      - email-default:
+          mail-to: 'devops+alert@mirantis.com'
+      - trigger-parameterized-builds:
+        - project: '{version-id}.swarm.runner'
+          condition: UNSTABLE_OR_BETTER
+          property-file: links.txt
+          boolean-parameters:
+            ENABLE_PROPOSED: '{enable_proposed}'
+          triggerWithNoParameters: false
