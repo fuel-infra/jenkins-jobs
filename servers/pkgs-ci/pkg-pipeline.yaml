@@ -86,6 +86,8 @@
           RPM_REPO_PATH={rel-path-prefix}/{os}/${{RPM_DIST_NAME}}/os/x86_64/
           export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
 
+          export IS_UPDATES={is_updates}
+
           # DEB-specific parameters
           if [ "${{GERRIT_CHANGE_STATUS}}" = "MERGED" ]; then
               export ORIGIN=Mirantis
@@ -125,10 +127,15 @@
 
           # Added for publisher
           ORIGIN=${{ORIGIN}}
+          IS_UPDATES={is_updates}
           REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
           REPO_BASE_PATH={repo-base-path}
           DEB_DIST_NAME=${{DEB_DIST_NAME}}
           DEB_REPO_PATH=${{DEB_REPO_PATH}}
+          DEB_PROPOSED_DIST_NAME=${{DEB_PROPOSED_DIST_NAME}}
+          DEB_UPDATES_DIST_NAME=${{DEB_UPDATES_DIST_NAME}}
+          DEB_SECURITY_DIST_NAME=${{DEB_SECURITY_DIST_NAME}}
+          DEB_HOLDBACK_DIST_NAME=${{DEB_HOLDBACK_DIST_NAME}}
           RPM_REPO_PATH=${{RPM_REPO_PATH}}
           RPM_OS_REPO_PATH=${{RPM_OS_REPO_PATH}}
           RPM_PROPOSED_REPO_PATH=${{RPM_PROPOSED_REPO_PATH}}
