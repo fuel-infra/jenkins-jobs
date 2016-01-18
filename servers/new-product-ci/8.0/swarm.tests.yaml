@@ -67,6 +67,8 @@
          timeout: '540'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'cic_maintenance_mode'
+         properties: |
+           SLAVE_NODE_MEMORY=5120
          timeout: '600'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'offloading'
