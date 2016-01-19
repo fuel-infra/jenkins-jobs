@@ -28,7 +28,7 @@
           allowed-multiselect: true
       - string:
           name: SHA
-          default: master
+          default: stable/7.0
           description: 'Commit SHA of fuel-qa repository'
       - string:
           name: VENV_PATH
