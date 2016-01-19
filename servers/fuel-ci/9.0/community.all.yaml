@@ -33,7 +33,7 @@
     publishers:
       - archive:
           allow-empty: true
-          artifacts: listing.txt, *torrent_link.txt, artifacts/*changelog
+          artifacts: listing.txt, *torrent_link.txt, artifacts/*changelog, listing-build.txt, listing-local-mirror.txt, listing-package-changelog.txt
           latest-only: false
       - email:
           notify-every-unstable-build: false

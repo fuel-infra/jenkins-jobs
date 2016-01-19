@@ -76,7 +76,7 @@ EOF
 #########################################
 
 echo "STEP 1. Make everything"
-make ${make_args} iso version-yaml
+make ${make_args} iso listing
 
 #########################################
 
@@ -97,7 +97,9 @@ done
 cd ${WORKSPACE}
 
 cp $LOCAL_MIRROR/*changelog ${ARTS_DIR}/ || true
-cp ${BUILD_DIR}/iso/isoroot/version.yaml ${WORKSPACE}/version.yaml.txt || true
+cp ${BUILD_DIR}/listing-build.txt ${WORKSPACE}/listing-build.txt || true
+cp ${BUILD_DIR}/listing-local-mirror.txt ${WORKSPACE}/listing-local-mirror.txt || true
+cp ${BUILD_DIR}/listing-package-changelog.txt ${WORKSPACE}/listing-package-changelog.txt || true
 (cd ${BUILD_DIR}/iso/isoroot && find . | sed -s 's/\.\///') > ${WORKSPACE}/listing.txt || true
 
 grep MAGNET_LINK ${ARTS_DIR}/fuel-*.iso.data.txt > ${WORKSPACE}/magnet_link.txt
@@ -113,8 +115,7 @@ ISO_HTTP_TORRENT=`grep HTTP_TORRENT ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_TORR
 echo "<a href="$ISO_HTTP_LINK">ISO download link</a> <a href="$ISO_HTTP_TORRENT">ISO torrent link</a><br>${ISO_MAGNET_LINK}<br>"
 
 if [ "${trigger_community_build}" = "true" ]; then
-  scp ${WORKSPACE}/version.yaml.txt build1.fuel-infra.org:/home/jenkins/workspace/fuel_commits/${PROD_VER}-${BUILD_NUMBER}.yaml
-  curl -X POST https://ci.fuel-infra.org/job/${PROD_VER}-community.all/buildWithParameters\?FUEL_COMMITS\=${PROD_VER}-${BUILD_NUMBER}.yaml \
+  curl -X POST https://ci.fuel-infra.org/job/${PROD_VER}-community.all/buildWithParameters \
   --user product-ci:${FUEL_CI_API_TOKEN}
 fi
 

@@ -153,7 +153,7 @@ echo "ENV VARIABLES START"
 printenv
 echo "ENV VARIABLES END"
 
-make $make_args iso version-yaml
+make $make_args iso listing
 
 #########################################
 
@@ -189,7 +189,9 @@ echo FUELUPGRADE_GERRIT_COMMIT="${fuelupgrade_gerrit_commit}" >> "${ARTS_DIR}/ge
 
 
 cp "${LOCAL_MIRROR}"/*changelog "${ARTS_DIR}/" || true
-cp "${BUILD_DIR}/iso/isoroot/version.yaml" "${ARTS_DIR}/version.yaml.txt" || true
+cp "${BUILD_DIR}/listing-build.txt" "${ARTS_DIR}/listing-build.txt" || true
+cp "${BUILD_DIR}/listing-local-mirror.txt" "${ARTS_DIR}/listing-local-mirror.txt" || true
+cp "${BUILD_DIR}/listing-package-changelog.txt" "${ARTS_DIR}/listing-package-changelog.txt" || true
 (cd "${BUILD_DIR}/iso/isoroot" && find . | sed -s 's/\.\///') > "${ARTS_DIR}/listing.txt" || true
 
 grep MAGNET_LINK "${ARTS_DIR}"/*iso.data.txt > "${ARTS_DIR}/magnet_link.txt"
