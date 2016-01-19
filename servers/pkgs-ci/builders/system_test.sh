@@ -4,10 +4,6 @@ set -o errexit
 set -o pipefail
 set -o xtrace
 
-###################### Set defaults ###############
-# When job is triggerred by Zuul, parameters for job are set by Zuul, and job
-# defaults are not applied.
-
 get_deb_snapshot() {
     # Remove quotes
     local repo_url=$(tr -d \" <<< "${1}")
@@ -28,24 +24,12 @@ get_rpm_snapshot() {
     echo "${repo_url%/*}/${snapshot}/x86_64"
 }
 
+###################### Set defaults ###############
+# When job is triggerred by Zuul, parameters for job are set by Zuul, and job
+# defaults are not applied.
+
 export EXTRA_RPM_REPOS_PRIORITY=${EXTRA_RPM_REPOS_PRIORITY:-1}
 export EXTRA_DEB_REPOS_PRIORITY=${EXTRA_DEB_REPOS_PRIORITY:-1052}
-
-if [ -z "${EXTRA_RPM_REPOS}" ]; then
-    EXTRA_RPM_REPOS="release-repo,$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}"),98"
-    if [ -n "${RPM_REPO_URL}" ]; then
-        EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}|test-repo,$(get_rpm_snapshot "${RPM_REPO_URL}"),${EXTRA_RPM_REPOS_PRIORITY}"
-    fi
-fi
-
-if [ -z "${EXTRA_DEB_REPOS}" ]; then
-    EXTRA_DEB_REPOS="deb $(get_deb_snapshot "http://${REMOTE_REPO_HOST}/${DEB_REPO_PATH}") ${DEB_DIST_NAME} ${DEB_COMPONENTS},1010"
-    if [ -n "${DEB_REPO_URL}" ]; then
-        EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}|deb $(get_deb_snapshot "${DEB_REPO_URL}"),${EXTRA_DEB_REPOS_PRIORITY}"
-    fi
-fi
-
-export EXTRA_RPM_REPOS EXTRA_DEB_REPOS
 
 ###################### Set required parameters ###############
 
@@ -112,16 +96,19 @@ fi
 if [ "${REBUILD_ISO}" = "true" ]; then
     # Build an ISO with custom repository
 
-    read MIRROR_UBUNTU_METHOD MIRROR_UBUNTU_HOST MIRROR_UBUNTU_ROOT <<< $(awk '{match($0, "^(.+)://([^/]+)(.*)$", a); print a[1], a[2], a[3]}' <<< "${UBUNTU_MIRROR_URL}")
+    if [ -z "${EXTRA_RPM_REPOS}" -a -n "${RPM_REPO_URL}" ]; then
+        EXTRA_RPM_REPOS="test-repo,$(get_rpm_snapshot ${RPM_REPO_URL})"
+    fi
 
-    # EXTRA_DEB_REPOS is used for tests but should not be used for ISO building
-    SAVE_EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}"
-    unset EXTRA_DEB_REPOS
+    read MIRROR_UBUNTU_METHOD MIRROR_UBUNTU_HOST MIRROR_UBUNTU_ROOT <<< $(awk '{match($0, "^(.+)://([^/]+)(.*)$", a); print a[1], a[2], a[3]}' <<< "${UBUNTU_MIRROR_URL}")
 
     pushd fuel-main
     rm -rf "/var/tmp/yum-${USER}-*"
     make deep_clean
-    make iso USE_MIRROR="${LOCATION}" EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}" \
+    make iso \
+        USE_MIRROR="${LOCATION}" \
+        MIRROR_FUEL=$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}") \
+        EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}" \
         MIRROR_MOS_UBUNTU_METHOD="${MIRROR_UBUNTU_METHOD}" \
         MIRROR_MOS_UBUNTU="${MIRROR_UBUNTU_HOST}" \
         MIRROR_UBUNTU_METHOD="${MIRROR_UBUNTU_METHOD}" \
@@ -131,9 +118,6 @@ if [ "${REBUILD_ISO}" = "true" ]; then
     popd
 
     ISO_PATH=$(find "${WORKSPACE}/fuel-main/build/artifacts/" -name "*.iso" -print)
-
-    # Restore EXTRA_DEB_REPOS
-    export EXTRA_DEB_REPOS="${SAVE_EXTRA_DEB_REPOS}"
 else
     # Use last BVT-tested ISO
     ISO_MAGNET_FILE="lastSuccessfulBuild/artifact/magnet_link.txt"
@@ -180,6 +164,24 @@ if [[ ${OS_TYPE} == 'rhel' ]]; then
 fi
 
 ###################### Run test ###############
+
+export PERESTROIKA_REPO=$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}")
+
+if [ -z "${EXTRA_RPM_REPOS}" ]; then
+    EXTRA_RPM_REPOS="release-repo,$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}"),98"
+    if [ -n "${RPM_REPO_URL}" ]; then
+        EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}|test-repo,$(get_rpm_snapshot "${RPM_REPO_URL}"),${EXTRA_RPM_REPOS_PRIORITY}"
+    fi
+fi
+
+if [ -z "${EXTRA_DEB_REPOS}" ]; then
+    EXTRA_DEB_REPOS="deb $(get_deb_snapshot "http://${REMOTE_REPO_HOST}/${DEB_REPO_PATH}") ${DEB_DIST_NAME} ${DEB_COMPONENTS},1010"
+    if [ -n "${DEB_REPO_URL}" ]; then
+        EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}|deb $(get_deb_snapshot "${DEB_REPO_URL}") ${DEB_DIST_NAME} ${DEB_COMPONENTS},${EXTRA_DEB_REPOS_PRIORITY}"
+    fi
+fi
+
+export EXTRA_RPM_REPOS EXTRA_DEB_REPOS
 
 pushd fuel-qa
 sh -x "utils/jenkins/system_tests.sh" -t test -w "${WORKSPACE}/fuel-qa" -e "${ENV_NAME}" -o --group="${TEST_GROUP}" -i "${ISO_PATH}"
