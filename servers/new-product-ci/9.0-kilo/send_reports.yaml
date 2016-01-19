@@ -1,0 +1,5 @@
+- project:
+    name: '9.0-kilo-reporting'
+    jobs:
+      - '{version-id}.send_reports':
+          version-id: '9.0-kilo'
