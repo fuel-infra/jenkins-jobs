@@ -1,23 +1,47 @@
-#!/bin/bash -xe
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o xtrace
 
 ###################### Set defaults ###############
 # When job is triggerred by Zuul, parameters for job are set by Zuul, and job
 # defaults are not applied.
 
+get_deb_snapshot() {
+    # Remove quotes
+    local repo_url=$(tr -d \" <<< "${1}")
+    # Remove trailing slash
+    repo_url=${repo_url%/}
+    local snapshot=$(curl -fLsS "${repo_url}.target.txt" | head -1)
+    echo "${repo_url%/*}/${snapshot}"
+}
+
+get_rpm_snapshot() {
+    # Remove quotes
+    local repo_url=$(tr -d \" <<< "${1}")
+    # Remove trailing slash
+    repo_url=${repo_url%/}
+    # Remove architecture
+    repo_url=${repo_url%/*}
+    local snapshot=$(curl -fLsS "${repo_url}.target.txt" | head -1)
+    echo "${repo_url%/*}/${snapshot}/x86_64"
+}
+
 export EXTRA_RPM_REPOS_PRIORITY=${EXTRA_RPM_REPOS_PRIORITY:-1}
 export EXTRA_DEB_REPOS_PRIORITY=${EXTRA_DEB_REPOS_PRIORITY:-1052}
 
 if [ -z "${EXTRA_RPM_REPOS}" ]; then
-    EXTRA_RPM_REPOS="release-repo,http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH},98"
+    EXTRA_RPM_REPOS="release-repo,$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}"),98"
     if [ -n "${RPM_REPO_URL}" ]; then
-        EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}|test-repo,${RPM_REPO_URL},${EXTRA_RPM_REPOS_PRIORITY}"
+        EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}|test-repo,$(get_rpm_snapshot "${RPM_REPO_URL}"),${EXTRA_RPM_REPOS_PRIORITY}"
     fi
 fi
 
 if [ -z "${EXTRA_DEB_REPOS}" ]; then
-    EXTRA_DEB_REPOS="deb http://${REMOTE_REPO_HOST}/${DEB_REPO_PATH} ${DEB_DIST_NAME} ${DEB_COMPONENTS},1010"
+    EXTRA_DEB_REPOS="deb $(get_deb_snapshot "http://${REMOTE_REPO_HOST}/${DEB_REPO_PATH}") ${DEB_DIST_NAME} ${DEB_COMPONENTS},1010"
     if [ -n "${DEB_REPO_URL}" ]; then
-        EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}|deb ${DEB_REPO_URL},${EXTRA_DEB_REPOS_PRIORITY}"
+        EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}|deb $(get_deb_snapshot "${DEB_REPO_URL}"),${EXTRA_DEB_REPOS_PRIORITY}"
     fi
 fi
 
