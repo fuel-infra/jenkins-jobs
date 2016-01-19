@@ -12,9 +12,6 @@
           !include-raw-escape scripts/update-jenkins-jobs.sh
     parameters:
       - string:
-          name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
-      - string:
           name: JOBS_LIST
           description: 'Space separated list of jobs to update. Will update all jobs if empty'
     publishers:
@@ -26,12 +23,11 @@
     scm:
       - git:
           branches:
-            - $GERRIT_BRANCH
+            - master
           remotes:
             - gerrit:
-                refspec: $GERRIT_REFSPEC
                 url: 'https://review.fuel-infra.org/fuel-infra/jenkins-jobs.git'
-          choosing-strategy: gerrit
+          choosing-strategy: default
     triggers:
       - gerrit:
           trigger-on:
