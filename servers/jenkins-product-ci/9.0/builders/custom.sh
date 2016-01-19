@@ -5,7 +5,7 @@ set -ex
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin:${PATH}
 
 if [ -z "${PROD_VER}" ]; then
-    PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
+    PROD_VER=$(grep '^PRODUCT_VERSION' config.mk | cut -d= -f2)
 fi
 
 export PRODUCT_VERSION="$PROD_VER"

@@ -6,7 +6,7 @@ echo STARTED_TIME="`date -u +'%Y-%m-%dT%H:%M:%S'`" > ci_status_params.txt
 
 export FEATURE_GROUPS="mirantis"
 
-PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
+PROD_VER=$(grep '^PRODUCT_VERSION' config.mk | cut -d= -f2)
 export ISO_NAME=fuel-$PROD_VER-liberty-$BUILD_NUMBER-${BUILD_TIMESTAMP}
 
 export BUILD_DIR=${WORKSPACE}/../tmp/${JOB_NAME}/build
