@@ -22,16 +22,31 @@
          testgroup: 'ha_vlan_group_4'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_vlan_group_5'
+         properties: |
+           EXTERNAL_DNS=8.8.4.4, 172.18.80.136
+           EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_vlan_group_6'
+         properties: |
+           EXTERNAL_DNS=8.8.4.4, 172.18.80.136
+           EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_vlan_group_7'
+         properties: |
+           EXTERNAL_DNS=8.8.4.4, 172.18.80.136
+           EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_tun_group_1'
+         properties: |
+           EXTERNAL_DNS=8.8.4.4, 172.18.80.136
+           EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_tun_group_2'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_tun_group_3'
+         properties: |
+           EXTERNAL_DNS=8.8.4.4, 172.18.80.136
+           EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ha_scale_group_1'
      - '{version-id}.{id}.{dist}.{testgroup}':
