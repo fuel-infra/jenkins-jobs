@@ -15,6 +15,7 @@ export SOURCE_BRANCH='stable/8.0'
 export GERRIT_CHANGE_STATUS=NEW
 
 export REMOTE_REPO_HOST=perestroika-repo-tst.infra.mirantis.net
+export DIST=centos7
 # rpm part
 export RPM_OS_REPO_PATH="/mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-${DIST}-fuel/os/"
 # debian part

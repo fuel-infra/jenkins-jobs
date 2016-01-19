@@ -33,12 +33,6 @@
           default: 'none'
           description: Refspecs for commits in fuel-mirror gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
-      - choice:
-          name: DIST
-          choices:
-            - centos6
-            - centos7
-          description: Choose CentOS distro for build packages
 
       - string:
           name: ASTUTE_COMMIT
