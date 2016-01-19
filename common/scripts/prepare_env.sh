@@ -71,6 +71,21 @@ if [[ ${update_devops_2_9_x} == "true" ]]; then
   update_devops "-2.9" "fuel-qa" "master"
 fi
 
+# Release 6.1
+if [[ ${update_release_6_1} == "true" ]]; then
+  update_devops "-release-6.1" "fuel-qa" "stable/6.1"
+fi
+
+# Release 7.0
+if [[ ${update_release_7_0} == "true" ]]; then
+  update_devops "-release-7.0" "fuel-qa" "stable/7.0"
+fi
+
+# Release 8.0
+if [[ ${update_release_8_0} == "true" ]]; then
+  update_devops "-release-8.0" "fuel-qa" "stable/8.0"
+fi
+
 if [[ ${download_images} == "true" ]]; then
   download_images
 fi

@@ -17,6 +17,15 @@
           name: 'update_devops_2_5_x'
           default: false
       - bool:
+          name: 'update_release_6_1'
+          default: false
+      - bool:
+          name: 'update_release_7_0'
+          default: false
+      - bool:
+          name: 'update_release_8_0'
+          default: false
+      - bool:
           name: 'download_images'
           default: false
       - node:

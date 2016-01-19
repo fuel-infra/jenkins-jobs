@@ -4,7 +4,7 @@
    id: 'system_test'
    repobranch: 'origin/stable/6.1'
    reponame: 'fuel-qa'
-   venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+   venvpath: '/home/jenkins/venv-nailgun-tests-release-6.1'
    default_pool: '10.109.0.0/16:24'
    description: '6.1 test group with full list of tests'
    node: 'systest'
