@@ -1,5 +1,5 @@
 - job:
-    name: 'custom_9.0_packages'
+    name: '9.0.custom.packages'
     description: |
       Build <b>custom fuel packages</b>. Job allows to build (using perestroika) fuel packages from:<br>
         1. Explicitly defined commit (for example, FUELLIB_COMMIT, SHOTGUN_COMMIT, etc.)<br>
