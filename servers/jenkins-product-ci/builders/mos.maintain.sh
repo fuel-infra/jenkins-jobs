@@ -43,7 +43,7 @@ main "${@}"
 
 # clean old mirrors
 # path to the custom mirrors on node
-PATH_TO_CUSTOM_MIRROR=/var/www/custom_mirrors/custom_8.0_packages
+PATH_TO_CUSTOM_MIRROR=/var/www/custom_mirrors/9.0.custom.packages
 # for how many days keep the custom mirror
 DAYS_TO_KEEP=7
 echo "Cleaning old mirrors"

@@ -16,7 +16,7 @@
       - git:
           url: 'https://github.com/openstack/fuel-mirror'
           branches:
-            - 'origin/stable/8.0'
+            - 'origin/master'
     triggers:
       - timed: '@midnight'
     wrappers:
