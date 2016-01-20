@@ -228,7 +228,10 @@
             - name: '8.0.system_test.ubuntu.ironic_base'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.services_reconfiguration'
+            - name: '8.0.system_test.ubuntu.services_reconfiguration_thread_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.system_test.ubuntu.services_reconfiguration_thread_2'
               current-parameters: true
               kill-phase-on: NEVER
             # FIXME: upgrades

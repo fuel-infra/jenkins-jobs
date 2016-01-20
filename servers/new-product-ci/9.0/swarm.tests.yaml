@@ -231,7 +231,12 @@
          properties: |
            IRONIC_ENABLED=true
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'services_reconfiguration'
+         testgroup: 'services_reconfiguration_thread_1'
+         properties: |
+           DISABLE_SSL=true
+           SLAVE_NODE_CPU=2
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'services_reconfiguration_thread_2'
          properties: |
            DISABLE_SSL=true
            SLAVE_NODE_CPU=2
