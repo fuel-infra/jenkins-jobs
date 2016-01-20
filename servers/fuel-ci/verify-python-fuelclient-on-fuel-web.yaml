@@ -41,6 +41,10 @@
           default: 'refs/heads/master'
       - string:
           name: PIP_OPTION
+      - bool:
+          name: VENV_CLEANUP
+          default: true
+          description: 'Check this option to rebuild virtual environment'
     properties:
       - heavy-job:
           weight: 1

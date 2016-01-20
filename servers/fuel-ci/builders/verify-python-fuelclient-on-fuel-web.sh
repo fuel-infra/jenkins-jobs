@@ -18,6 +18,7 @@
 set -ex
 
 VENV="${WORKSPACE}_VENV"
+[ "${VENV_CLEANUP}" == "true" ] && rm -rf "${VENV}"
 virtualenv -p python2.7 "${VENV}"
 "${VENV}/bin/pip" install tox\>=2.1.0
 
