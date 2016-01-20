@@ -1,18 +1,7 @@
-- project:
-    name: 7.0.systests
-    jobs:
-      - '7.0-system_tests':
-          dist: 'ubuntu'
-
-- project:
-    name: 7.0.swarm-helpers
-    jobs:
-      - '7.0.swarm.runner'
-
 - job:
-    name: '7.0.swarm.runner'
+    name: '6.1.small.runner'
     project-type: multijob
-    description: 'Run all system tests'
+    description: 'Run small set of system tests'
     concurrent: false
     node: 'runner'
     properties:
@@ -21,18 +10,18 @@
     parameters:
       - string:
           name: MAGNET_LINK
-          default: 'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
+          default: 'magnet:?xt=urn:btih:9d59953417e0c2608f8fa0ffe43ceac00967708f&dn=MirantisOpenStack-6.1.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-6.1.iso'
           description: 'ISO magnet link'
       - string:
           name: UPGRADE_TARBALL_MAGNET_LINK
-          default: 'magnet:?xt=urn:btih:e4521941a159cbbf345884c7c7ec6a484a139d3b&dn=MirantisOpenStack-7.0-upgrade.tar.lrz&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0-upgrade.tar.lrz'
+          default: 'magnet:?xt=urn:btih:ee1222ff4b8633229f49daa6e6e62d02ef77b606&dn=MirantisOpenStack-6.1-upgrade.tar.lrz&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-mnv.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-6.1-upgrade.tar.lrz'
           description: 'Upgrade tarball magnet link'
       - string:
           name: DEB_LATEST
-          default: 'latest'
-          description: "Snapshot timestamp without version id. E.g.: '2015-09-27-173001' or 'latest'"
+          default: 'snapshots/ubuntu-latest'
       - string:
           name: RPM_LATEST
+          default: 'snapshots/centos-6-latest'
       - string:
           name: UBUNTU_MIRROR_ID
           default: 'latest-stable'
@@ -59,20 +48,21 @@
           name: 'Run system tests'
           condition: COMPLETED
           projects:
+            # CentOS
+            - name: '6.1.system_test.centos.thread_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters:
+            - name: '6.1.system_test.centos.ceph_ha_one_controller'
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters:
             # Ubuntu
-            - name: '7.0.system_test.ubuntu.thread_1'
+            - name: '6.1.system_test.ubuntu.thread_1'
               current-parameters: true
               kill-phase-on: NEVER
               predefined-parameters:
-            - name: '7.0.system_test.ubuntu.ceph_ha_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters:
-            - name: '7.0.system_test.ubuntu.bonding_ha'
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters:
-            - name: '7.0.system_test.ubuntu.ha_neutron'
+            - name: '6.1.system_test.ubuntu.ceph_ha_one_controller'
               current-parameters: true
               kill-phase-on: NEVER
               predefined-parameters:
