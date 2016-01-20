@@ -40,6 +40,9 @@
     spec-project-prefix: ''
     spec-project-suffix: '-build'
 
+    # Enables paching workflow
+    is_updates: 'false'
+
     # Job slave nodes
     build-node: 'new-builder'
     publish-node: 'new-publisher'

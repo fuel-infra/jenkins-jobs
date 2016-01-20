@@ -17,6 +17,7 @@
           default: '{mos_version}'
       - bool:
           name: IS_UPDATES
+          default: '{is_updates}'
       - bool:
           name: RESYNC_ONLY
           default: false
