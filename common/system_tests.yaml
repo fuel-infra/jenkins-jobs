@@ -1,3 +1,9 @@
+- defaults:
+    name: '{version-id}.{id}.{dist}.{testgroup}'
+    pre-script: |
+        echo "-SKIP-"
+    post-script: |
+        echo "-SKIP-"
 
 - job-template:
     # General system test. Downloads ISO image via magnet link
@@ -36,6 +42,7 @@
     #     List of strings "VAR=value".
     #     These variables will be injected in job environment before the build
     name: '{version-id}.{id}.{dist}.{testgroup}'
+    defaults: '{version-id}.{id}.{dist}.{testgroup}'
     block-downstream: false
     block-upstream: false
     builders:
@@ -49,8 +56,16 @@
           TEST_ISO_JOB={version-id}.test_all
     - inject: # overrides
         properties-content: '{properties}'
+    - shell: |
+        #!/bin/bash
+        echo "=== [systest PRE-script] ==="
+        {pre-script}
     - shell:
         !include-raw-escape 'scripts/run_system_test.sh'
+    - shell: |
+        #!/bin/bash
+        echo "=== [systest POST-script] ==="
+        {post-script}
     concurrent: true
     description: '{description}'
     disabled: false
