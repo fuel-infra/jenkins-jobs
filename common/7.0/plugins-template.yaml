@@ -30,7 +30,7 @@
           weight: 8
     scm:
       - openstack:
-          branch: 'master'
+          branch: 'stable/7.0'
           repo: 'fuel-qa'
     parameters:
     - string:
