@@ -225,7 +225,7 @@
             - name: '9.0.system_test.ubuntu.check_radosgw'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '9.0.system_test.ubuntu.ironic_base'
+            - name: '9.0.system_test.ubuntu.ironic_deploy_swift'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '9.0.system_test.ubuntu.services_reconfiguration_thread_1'
