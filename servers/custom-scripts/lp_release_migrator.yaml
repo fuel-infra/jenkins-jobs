@@ -7,8 +7,12 @@
       - shell:
           !include-raw builders/docker_run.sh
     description: |
-      The job to migrate Launchpad bugs between milestones.
-      Related bug https://bugs.launchpad.net/fuel/+bug/1483968
+      <p><strong>The job to migrate Launchpad bugs between milestones.</strong></p>
+
+      <p>Specify source Milestones, description Milestone and press build.</p>
+      <p>You can filter what bugs will be processed setting <strong>Priority</strong> anb <strong>Status</strong></p>
+
+      Related bug <a href="https://bugs.launchpad.net/fuel/+bug/1483967">LP#1483968</a>
     logrotate:
       daysToKeep: '1000'
       numToKeep: '100'
