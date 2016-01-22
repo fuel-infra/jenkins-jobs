@@ -18,15 +18,15 @@
 set -ex
 
 VENV="${WORKSPACE}_VENV"
-[ "${VENV_CLEANUP}" == "true" ] && rm -rf "${VENV}"
+[ -d "${VENV}" ] && rm -rf "${VENV}"
 virtualenv -p python2.7 "${VENV}"
 "${VENV}/bin/pip" install tox\>=2.1.0
 
 source "${VENV}/bin/activate"
 
-export TEST_NAILGUN_DB=nailgun
 export FUEL_WEB_ROOT="${WORKSPACE}"
 export FUEL_WEB_CLONE="no"
+export FUEL_COMMIT="."
 
 cd "${WORKSPACE}/python-fuelclient"
 trap "tox -e cleanup" SIGINT SIGTERM

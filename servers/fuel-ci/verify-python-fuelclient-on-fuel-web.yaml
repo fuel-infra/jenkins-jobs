@@ -40,11 +40,8 @@
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
       - string:
-          name: PIP_OPTION
-      - bool:
-          name: VENV_CLEANUP
-          default: true
-          description: 'Check this option to rebuild virtual environment'
+          name: TEST_NAILGUN_DB
+          default: nailgun
     properties:
       - heavy-job:
           weight: 1
