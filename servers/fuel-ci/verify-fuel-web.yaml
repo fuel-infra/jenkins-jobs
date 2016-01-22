@@ -1,12 +1,11 @@
 - job-template:
     name: '{prefix}-fuel-web'
     builders:
-      - shell:
-          !include-raw-escape builders/verify-fuel-web.sh
+      - shell: |
+          #!/bin/bash -ex
+          run_tests.sh --with-xunit --no-webui
     description: |
       Test requests for fuel-web master branch (without UI tests)
-
-      Uses venv with python2.7
     node: verify-fuel-web
     concurrent: true
     parameters:
@@ -14,17 +13,14 @@
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
       - string:
-          name: PIP_OPTION
+          name: TEST_WORKERS
+          default: "4"
       - string:
-          name: PYTHON_EXEC
-          default: python2.7
+          name: TEST_NAILGUN_DB
+          default: nailgun
       - string:
           name: TOXENV
           default: py27
-      - bool:
-          name: VENV_CLEANUP
-          default: true
-          description: 'Check this option to rebuild virtual environment'
     properties:
       - heavy-job:
           weight: 1
@@ -91,4 +87,3 @@
           refspec: refs/heads/$GERRIT_BRANCH
           choosing-strategy: default
           timed: ''
-
