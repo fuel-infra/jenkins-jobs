@@ -1,6 +1,6 @@
 - job:
     name: 'create-mos-compliance-reports'
-    properties:
+    builders:
       - inject:
           properties-content: |
             GERRIT_USER=openstack-ci-jenkins
@@ -9,11 +9,9 @@
             MIRROR_HOST=perestroika-repo-tst.infra.mirantis.net
             JENKINS_PRODUCT=https://product-ci.infra.mirantis.net
             BLACKDUCK_USER=testuser@mirantis.com
-            RPM_DIST_NAME=centos6
             SDKPATH=/home/jenkins/Export-6.1.1-SDK-V6.1/
             CUSTOMCLASS=/usr/local/bin
             KEYPATH=/etc/blackduck/credentials.json
-    builders:
       - copyartifact:
           project: create-mos-compliance-reports
           filter: "projects.tar.gz"
@@ -44,6 +42,9 @@
              - proposed
              - security
           description: "Which component is scan?"
+      - string:
+          name: RPM_DIST_NAME
+          default: centos7
       - bool:
           name: UPDATES
           default:
