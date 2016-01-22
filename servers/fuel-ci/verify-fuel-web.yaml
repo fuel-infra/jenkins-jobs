@@ -3,7 +3,7 @@
     builders:
       - shell: |
           #!/bin/bash -ex
-          run_tests.sh --with-xunit --no-webui
+          ./run_tests.sh --with-xunit --no-webui
     description: |
       Test requests for fuel-web master branch (without UI tests)
     node: verify-fuel-web
