@@ -228,6 +228,9 @@
             - name: '8.0.system_test.ubuntu.ironic_deploy_swift'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '8.0.system_test.ubuntu.ironic_deploy_ceph'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '8.0.system_test.ubuntu.services_reconfiguration_thread_1'
               current-parameters: true
               kill-phase-on: NEVER
