@@ -1,0 +1,43 @@
+- job:
+    name: verify-fuel-infra-jeepyb-config-projects-file
+    builders:
+      - shell:
+          !include-raw './builders/verify-fuel-infra-jeepyb-config-projects-file.py'
+    description: 'This job makes syntax check for jeepyb config projects.yml'
+    logrotate:
+      numToKeep: 100
+      daysToKeep: 90
+    node: fuel-infra-jeepyb-config
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'https://review.fuel-infra.org/fuel-infra/jeepyb-config'
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: fuel-infra/jeepyb-config
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 10
