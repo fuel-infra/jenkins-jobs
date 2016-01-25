@@ -68,6 +68,11 @@
                   branch-pattern: 'master'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/8.0'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
