@@ -41,15 +41,6 @@ ENV_NAME=${ENV_NAME:0:68}
 
 ###################### Get MIRROR HOST ###############
 
-UBUNTU_MIRROR_FILE="lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt"
-UBUNTU_MIRROR_ART="${PRODUCT_JENKINS_URL}/job/${ISO_JOB_NAME}/${UBUNTU_MIRROR_FILE}"
-
-if MIRROR_RES=$(curl -ksf "${UBUNTU_MIRROR_ART}"); then
-    if [ "${MIRROR_RES%=*}" = "UBUNTU_MIRROR_ID" ]; then
-        export UBUNTU_MIRROR_ID=${MIRROR_RES#*=}
-    fi
-fi
-
 LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
 LOCATION=${LOCATION_FACT:-bud}
 UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
@@ -120,13 +111,13 @@ if [ "${REBUILD_ISO}" = "true" ]; then
 
     ISO_PATH=$(find "${WORKSPACE}/fuel-main/build/artifacts/" -name "*.iso" -print)
 else
-    # Use last BVT-tested ISO
-    ISO_MAGNET_FILE="lastSuccessfulBuild/artifact/magnet_link.txt"
-
-    # Getting MAGNET_LINK from last built ISO and force rebuild the environment if it has successfully passed smoke test.
-    ISO_MAGNET_ART="${PRODUCT_JENKINS_URL}/job/${ISO_JOB_NAME}/${ISO_MAGNET_FILE}"
-
     if [ -z "${MAGNET_LINK}" ]; then
+        # Use last BVT-tested ISO
+        ISO_MAGNET_FILE="lastSuccessfulBuild/artifact/magnet_link.txt"
+
+        # Getting MAGNET_LINK from last built ISO and force rebuild the environment if it has successfully passed smoke test.
+        ISO_MAGNET_ART="${PRODUCT_JENKINS_URL}/job/${ISO_JOB_NAME}/${ISO_MAGNET_FILE}"
+
         MAGNET_LINK=$(curl -kLs "${ISO_MAGNET_ART}" | awk '/^MAGNET_LINK=/ {print gensub(/^[^=]+=/,"",1)}')
     fi
     if [ -n "${MAGNET_LINK}" ]; then
@@ -183,6 +174,11 @@ if [ -z "${EXTRA_DEB_REPOS}" ]; then
 fi
 
 export EXTRA_RPM_REPOS EXTRA_DEB_REPOS
+
+# Checkout specified revision of fuel-qa if set.
+if [ -n "${FUEL_QA_COMMIT}" ]; then
+    git -C fuel-qa checkout "${FUEL_QA_COMMIT}"
+fi
 
 pushd fuel-qa
 sh -x "utils/jenkins/system_tests.sh" -t test -w "${WORKSPACE}/fuel-qa" -e "${ENV_NAME}" -o --group="${TEST_GROUP}" -i "${ISO_PATH}"
