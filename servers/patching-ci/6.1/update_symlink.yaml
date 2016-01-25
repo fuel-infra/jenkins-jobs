@@ -54,3 +54,4 @@
       - archive:
           artifacts: '*.txt'
           latest-only: false
+          allow-empty: true
