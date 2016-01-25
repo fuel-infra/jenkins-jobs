@@ -257,3 +257,12 @@
     scm-branch: 'master'
     scm-basedir: ''
     sync-node: 'sync-deb-spec'
+
+- project:
+    name: 'devops.env'
+    version-id:
+      - 'master'
+      - '8.0'
+      - '9.0'
+    jobs:
+      - 'devops.{version-id}.env'
