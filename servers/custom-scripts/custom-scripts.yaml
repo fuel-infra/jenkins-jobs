@@ -154,3 +154,23 @@
 
     jobs:
       - '{name}'
+
+- project:
+    name: 'escalate_reviews'
+    credentials: '87e8f7c8-9d04-4ffa-bd9c-9ef88acffec0'
+    days: 30
+    description: 'Job to detect and escalate Gerrit changes neglected by core reviewers.'
+    docker_image: 'python-jenkins-14-04'
+    label_server: 'custom-scripts'
+    mode: '-v'
+    num: 60
+    properties: ''
+    recipients: 'devops+alert@mirantis.com'
+    repository: 'ssh://custom-scripts-ci@review.fuel-infra.org:29418/tools/custom-scripts'
+    script_path: 'review-escalator/escalate-reviews.py'
+    trigger: 'H 12 * * 1-5'
+    volumes: '-v /etc/custom_scripts/escalate-reviews:/etc/custom_scripts/escalate-reviews -v /home/jenkins/.ssh/known_hosts:/root/.ssh/known_hosts'
+
+    jobs:
+      - '{name}'
+
