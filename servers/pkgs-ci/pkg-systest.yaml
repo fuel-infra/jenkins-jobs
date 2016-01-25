@@ -26,18 +26,11 @@
             RPM_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{main_centos_release}-fuel/os/x86_64/
     parameters:
       - string:
-          name: MAGNET_LINK
-      - string:
           name: TEST_GROUP
           default: 'bvt_2'
       - bool:
           name: NEUTRON_ENABLE
           default: 'true'
-      - string:
-          name: UBUNTU_MIRROR_ID
-          default: latest
-          description: |
-            'latest' - latest available; 'latest-stable' - mirror from successful run of 7.0.test_all job; 'ubuntu-2015-01-01-030500'
       - string:
           name: MIRROR_UBUNTU
           description: |
@@ -93,11 +86,26 @@
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
           optional: true
+      - copyartifact:
+          project: 'devops.{mos_version}.env'
+          filter: 'fuel_qa_commit.txt,magnet_link.txt,ubuntu_mirror_id.txt'
+          which-build: last-successful
       - shell: /bin/bash -xec 'touch {{deb,rpm}}.publish.setenvfile'
       - inject:
+          # injects set of variables about published RPM packages
           properties-file: 'rpm.publish.setenvfile'
       - inject:
+          # injects set of variables about published DEB packages
           properties-file: 'deb.publish.setenvfile'
+      - inject:
+          # injects variable FUEL_QA_COMMIT
+          properties-file: 'fuel_qa_commit.txt'
+      - inject:
+          # injects variable MAGNET_LINK
+          properties-file: 'magnet_link.txt'
+      - inject:
+          # injects variable UBUNTU_MIRROR_ID
+          properties-file: 'ubuntu_mirror_id.txt'
       - systest
     wrappers:
       - timeout:
