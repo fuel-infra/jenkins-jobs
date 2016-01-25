@@ -5,10 +5,11 @@ set -o pipefail
 set -o xtrace
 
 get_deb_snapshot() {
-    # Remove quotes
-    local repo_url=$(tr -d \" <<< "${1}")
+    # Remove quotes and assign values to array
+    # Debian repos may have format "URL DISTRO COMPONENT1 [COMPONENTN]"
+    local repo_url=( $(tr -d \" <<< "${1}") )
     # Remove trailing slash
-    repo_url=${repo_url%/}
+    repo_url=${repo_url[0]%/}
     local snapshot=$(curl -fLsS "${repo_url}.target.txt" | head -1)
     echo "${repo_url%/*}/${snapshot}"
 }
