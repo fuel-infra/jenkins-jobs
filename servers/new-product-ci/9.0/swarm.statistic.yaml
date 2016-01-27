@@ -1,16 +1,18 @@
 - job:
     name: '9.0.swarm.statistic'
-    description: <iframe width="100%" height="600px" frameborder='0' src='https://product-ci.infra.mirantis.net/view/9.0_swarm/job/9.0.swarm.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'</iframe>
+    description: <iframe width="100%" height="600px" frameborder='0' src='https://product-ci.infra.mirantis.net/job/9.0.swarm.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'</iframe>
     builders:
       - inject:
            properties-content: |
-             TESTS_RUNNER=9.0.swarm.runner
-             TESTRAIL_TEST_SUITE=[9.0] Swarm
+             TEST_RUNNER_JOB_NAME=9.0.swarm.runner
              TESTRAIL_MILESTONE=9.0
              LAUNCHPAD_MILESTONE=9.0
-             BUG_STATISTIC=true
+             HANDLE_BLOCKED=true
+             PUBLISH=true
+             OUTPUT_FILE=bugs_link_stat
+             CREATE_HTML=true
       - shell:
-          !include-raw builders/test-reports-Testrail.sh
+          !include-raw builders/testrail_generate_statistics.sh
     node: testrail
 
     triggers:
@@ -37,5 +39,5 @@
           recipients: ci+swarm@mirantis.com
 
       - description-setter:
-          regexp: '^.*Report URL:\s*(.*)'
-          description: '<a href="\1">TestRail Report URL</a>'
+          regexp: '^.*Found TestPlan (.*)'
+          description: 'Bugs stats for \1'
