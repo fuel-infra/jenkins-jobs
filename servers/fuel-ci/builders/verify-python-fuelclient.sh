@@ -18,6 +18,7 @@
 set -ex
 
 VENV=${WORKSPACE}_VENV
+rm -Rf "${VENV}"
 virtualenv -p python2.7 "${VENV}"
 ${VENV}/bin/pip install --upgrade tox\>=2.3.1
 
