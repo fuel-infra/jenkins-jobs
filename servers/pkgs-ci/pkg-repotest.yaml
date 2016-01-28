@@ -32,6 +32,12 @@
           REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
           EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
 
-          bash -x repo-test-{pkg_type}-docker
+          script_log='repo-test-{pkg_type}-docker.log'
+          rm -f "${{script_log}}"
+          bash -x repo-test-{pkg_type}-docker |& tee "${{script_log}}"
 
     node: '{install-node}'
+    publishers:
+      - archive:
+          artifacts: repo-test-{pkg_type}-docker.log
+          allow-empty: true

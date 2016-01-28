@@ -52,7 +52,7 @@
           do
               script_log="${{script}}.log"
               rm -f "${{script_log}}"
-              bash -x "${{WORKSPACE}}/${{script}}" 2>> "${{script_log}}" | tee -a "${{script_log}}"
+              bash -x "${{WORKSPACE}}/${{script}}" |& tee "${{script_log}}"
           done
 
     publishers:
