@@ -21,6 +21,13 @@ function update_devops () {
     source ${VIRTUAL_ENV}/bin/activate
   fi
 
+  #
+  # fuel-devops use ~/.devops directory to store log configuration
+  # we need to delete log.yaml befeore update to get it in current
+  # version
+  #
+  test -f ~/.devops/log.yaml && rm ~/.devops/log.yaml
+
   # Prepare requirements file
   if [[ -n "${VENV_REQUIREMENTS}" ]]; then
     echo "Install with custom requirements"
