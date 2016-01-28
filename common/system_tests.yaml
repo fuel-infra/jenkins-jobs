@@ -101,7 +101,7 @@
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
     - trigger-parameterized-builds:
-      - project: '{version-id}-test-reports-Testrail'
+      - project: '{version-id}.{id}.test-reports'
         condition: ALWAYS
         property-file: links.txt
         predefined-parameters: TEST_JOB_NAME=$JOB_NAME

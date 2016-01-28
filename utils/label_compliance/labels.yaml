@@ -69,5 +69,7 @@ systest:
     name: 8.0.system_test.ubuntu.setup
     params:
       ENV_PREFIX: 8.0.system_test.ubuntu.setup
-testrail:
-  job_name: 8.0-test-reports-Testrail
+testrail_swarm:
+  job_name: 8.0-system_test-test-reports-Testrail
+testrail_acceptance:
+  job_name: 8.0-acceptance-test-reports-Testrail
