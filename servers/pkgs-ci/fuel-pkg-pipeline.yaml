@@ -133,8 +133,10 @@
             which-build: 'last-completed'
     publishers:
       - 'email-alert-on-merge'
+      - junit:
+          results: 'buildresult.xml'
       - archive:
-          artifacts: 'buildresult.params, {pkg_type}.publish.setenvfile'
+          artifacts: 'buildresult.params, buildresult.xml, {pkg_type}.publish.setenvfile'
           allow-empty: True
 
     node: '{build-node}'
