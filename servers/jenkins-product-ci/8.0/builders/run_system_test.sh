@@ -30,6 +30,8 @@ export VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
 
 ENV_NAME=${ENV_PREFIX}.${BUILD_NUMBER}.${BUILD_ID}
 ENV_NAME=${ENV_NAME:0:68}
+echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
+
 ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 PATH_TO_CERT=${WORKSPACE}"/"${ENV_NAME}".crt"
 PATH_TO_PEM=${WORKSPACE}"/"${ENV_NAME}".pem"

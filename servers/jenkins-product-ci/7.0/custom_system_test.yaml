@@ -154,6 +154,7 @@
       - description-setter:
           regexp: 'Description string: (.*)'
           regexp-for-failed: 'Description string: (.*)'
+      - post-destroy-vms
       - email-ext:
           default-subject: '$DEFAULT_SUBJECT'
           failure: true

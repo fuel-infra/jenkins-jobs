@@ -95,6 +95,7 @@ fi
 
 ENV_NAME=${ENV_PREFIX}.${BUILD_NUMBER}.${BUILD_ID}
 export ENV_NAME=${ENV_NAME:0:68}
+echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
 export PATH_TO_CERT=${WORKSPACE}"/"${ENV_NAME}".crt"
 export PATH_TO_PEM=${WORKSPACE}"/"${ENV_NAME}".pem"
