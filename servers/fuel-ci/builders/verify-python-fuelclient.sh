@@ -26,8 +26,18 @@ source "${VENV}/bin/activate"
 export TEST_NAILGUN_DB=nailgun
 export FUEL_WEB_ROOT="${WORKSPACE}/fuel-web"
 
-trap "tox -e cleanup" SIGINT SIGTERM
-tox -e functional,cleanup
+function cleanup {
+    trap - SIGINT SIGTERM
+    pkill -TERM -s ${TOX_PID}
+    tox -e cleanup
+    exit 1
+}
+
+trap "cleanup" SIGINT SIGTERM
+# Bash ignores signals when running foreground process
+setsid tox -e functional,cleanup &
+TOX_PID=$!
+wait ${TOX_PID}
 trap - SIGINT SIGTERM
 
 deactivate
