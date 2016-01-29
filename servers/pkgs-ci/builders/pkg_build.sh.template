@@ -89,8 +89,22 @@ export RPM_HOLDBACK_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/holdba
 # Use parameters set by Zuul instead of guessing ones
 test "${{SKIP_DEF_PARAMS:-true}}" = true && sed -ri '/set_default_params/ d' build-${{IS_FUEL:+fuel-}}{pkg_type}.sh || :
 
+# Save time of build start
+BUILD_START_AT=$(date -u +%s)
+
 # ... and build a package
 bash -x build-${{IS_FUEL:+fuel-}}{pkg_type}.sh
+
+# Print build job duration
+BUILD_FINISH_AT=$(date -u +%s)
+BUILD_DURATION=$(( ${{BUILD_FINISH_AT}} - ${{BUILD_START_AT}} ))
+H=$(( ${{BUILD_DURATION}}/3600 ))    # Hours
+M=$(( ${{BUILD_DURATION}}%3600/60 )) # Minutes
+S=$(( ${{BUILD_DURATION}}%60 ))      # Seconds
+
+echo ##############################
+printf "Package building took %02d:%02d:%02d\n" ${{H}} ${{M}} ${{S}}
+echo ##############################
 
 rm -rf {repo-base-path}/${{REQUEST_NUM:-CR-${{GERRIT_CHANGE_NUMBER}}}}
 
