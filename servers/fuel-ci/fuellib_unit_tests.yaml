@@ -33,13 +33,9 @@
               project-pattern: openstack/fuel-library
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-                - branch-compare-type: PLAIN
                   branch-pattern: 'stable/6.1'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/7.0'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/8.0'
           custom-url: '* $JOB_NAME $BUILD_URL'
           skip-vote:
             successful: true
