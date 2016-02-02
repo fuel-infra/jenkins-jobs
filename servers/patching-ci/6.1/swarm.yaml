@@ -1,83 +1,14 @@
 - project:
-    name: 6.1.systests
+    name: 6.1.full
+    is-disabled: ''
     jobs:
-      - '6.1-system_tests':
-          dist: 'centos'
       - '6.1-system_tests':
           dist: 'ubuntu'
+      - '6.1-system_tests':
+          dist: 'centos'
 
 - project:
-    name: 6.1.swarm-helpers
+    name: 6.1.full-helpers
     jobs:
-      - '6.1.swarm.runner'
-
-- job:
-    name: '6.1.swarm.runner'
-    project-type: multijob
-    description: 'Run all system tests'
-    concurrent: false
-    node: 'runner'
-    properties:
-      - heavy-job:
-          weight: 1
-    parameters:
-      - string:
-          name: MAGNET_LINK
-          default: 'magnet:?xt=urn:btih:9d59953417e0c2608f8fa0ffe43ceac00967708f&dn=MirantisOpenStack-6.1.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-6.1.iso'
-          description: 'ISO magnet link'
-      - string:
-          name: UPGRADE_TARBALL_MAGNET_LINK
-          default: 'magnet:?xt=urn:btih:9d59953417e0c2608f8fa0ffe43ceac00967708f&dn=MirantisOpenStack-6.1.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-6.1.iso'
-          description: 'Upgrade tarball magnet link'
-      - string:
-          name: DEB_LATEST
-          default: 'snapshots/ubuntu-latest'
-      - string:
-          name: RPM_LATEST
-          default: 'snapshots/centos-6-latest'
-      - string:
-          name: UBUNTU_MIRROR_ID
-          default: 'latest-stable'
-      - bool:
-          name: ENABLE_PROPOSED
-          default: false
-      - bool:
-          name: ENABLE_SECURITY
-          default: true
-      - bool:
-          name: ENABLE_UPDATES
-          default: true
-    publishers:
-      - description-setter:
-          regexp: "'Description string: (.*)'"
-      - email-default:
-          mail-to: 'devops+alert@mirantis.com'
-    wrappers:
-      - timeout:
-          fail: true
-          timeout: 1200
-    builders:
-      - shell: # Get description from MAGNET_LINK variable
-          !include-raw builders/get_version_from_magnet.sh
-      - multijob:
-          name: 'Run system tests'
-          condition: COMPLETED
-          projects:
-            # CentOS
-            - name: '6.1.system_test.centos.thread_1'
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters:
-            - name: '6.1.system_test.centos.ceph_ha_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters:
-            # Ubuntu
-            - name: '6.1.system_test.ubuntu.thread_1'
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters:
-            - name: '6.1.system_test.ubuntu.ceph_ha_one_controller'
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters:
+      - '6.1.full.runner'
+      - '6.1.small.runner'
