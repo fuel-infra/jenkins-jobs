@@ -30,8 +30,8 @@ if [ "${TEST_RUNNER_JOB_NAME:-none}" != "none" ]; then
     OPTIONS+=" --job-name ${TEST_RUNNER_JOB_NAME}"
 fi
 
-if [ "${BUILD_NUMBER:-none}" != "none" ]; then
-    OPTIONS+=" --build-number ${BUILD_NUMBER}"
+if [ "${TEST_RUNNER_BUILD_NUMBER:-none}" != "none" ]; then
+    OPTIONS+=" --build-number ${TEST_RUNNER_BUILD_NUMBER}"
 fi
 
 if [ "${SEPARATE_RUNS}" == "true" ]; then
