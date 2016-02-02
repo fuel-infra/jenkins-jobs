@@ -13,8 +13,8 @@ else
 fi
 
 # prepare image list
-IMAGES=$(git diff --stat HEAD~1 \
-  | grep Dockerfile | cut -f 2 -d ' ' \
+IMAGES=$(git diff --name-only HEAD~1 \
+  | grep Dockerfile \
   | sed 's/\/Dockerfile//g' \
   | sed 's/\//:/g' \
   | tr '\n' ' ')
