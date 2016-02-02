@@ -1,10 +1,10 @@
 - job-template:
-    name: '{prefix}-fuel-web-ui'
+    name: '8.0.{prefix}-fuel-web-ui'
     builders:
       - shell:
           !include-raw-escape builders/verify-fuel-web-ui.sh
     description: |
-      Test requests for fuel-web UI (npm run lint && npm test) master branch
+      Test requests for fuel-web UI (./run_tests.sh --webui) stable/8.0 branch
 
       Uses venv with python2.7
     node: verify-fuel-web-ui
@@ -54,7 +54,7 @@
               project-pattern: openstack/fuel-web
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
+                  branch-pattern: 'stable/8.0'
               custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - ansicolor:
@@ -65,9 +65,9 @@
           timeout: 45
 
 - project:
-    name: dualcheck-fuel-web-ui
+    name: 8.0.dualcheck-fuel-web-ui
     jobs:
-      - '{prefix}-fuel-web-ui':
+      - '8.0.{prefix}-fuel-web-ui':
           prefix: verify
           trigger_on:
             - patchset-created-event
@@ -77,7 +77,7 @@
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
           timed: '0 11 * * *'
-      - '{prefix}-fuel-web-ui':
+      - '8.0.{prefix}-fuel-web-ui':
           prefix: gate
           trigger_on:
             - change-merged-event

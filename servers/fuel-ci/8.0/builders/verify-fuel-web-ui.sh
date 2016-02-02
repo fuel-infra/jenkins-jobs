@@ -4,6 +4,7 @@ set -ex
 
 export DISPLAY=:99
 
+export TEST_WORKERS=4
 export PATH=$PATH:${NPM_CONFIG_PREFIX}/bin
 
 VENV="${WORKSPACE}_VENV"
@@ -20,7 +21,9 @@ npm install
 
 export TEST_NAILGUN_DB=nailgun
 
+cd "${WORKSPACE}"
+
 # Run UI tests
-npm run lint && npm test
+./run_tests.sh --webui
 
 deactivate
