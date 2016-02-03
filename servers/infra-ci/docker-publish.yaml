@@ -6,6 +6,7 @@
           project: 'docker-build'
           filter: 'to_publish.txt'
           which-build: 'upstream-build'
+          optional: true
       - shell:
           !include-raw './builders/docker-publish.sh'
     description: |
@@ -16,6 +17,10 @@
           name: REGISTRY_URLS
           default: 'registry01-bud.fuel-infra.org registry01-scc.fuel-infra.org'
           description: 'docker registry hosts (space separated)'
+      - string:
+          name: IMAGE
+          default: ''
+          description: 'image to publish (used on image rebuild)'
     wrappers:
       - timeout:
           fail: true

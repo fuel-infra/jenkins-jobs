@@ -2,8 +2,16 @@
 
 set -ex
 
-source to_publish.txt
+# if ${IMAGE} parameter is not set - use copied artifacts
+if [ -z "${IMAGE}" ]
+then
+  source to_publish.txt
+else
+  PREFIX=$(echo "$IMAGE" | cut -f 1 -d /)
+  IMAGES=$(echo "$IMAGE" | cut -f 2 -d /)
+fi
 
+# iterate through all the images
 for IMAGE in ${IMAGES}
 do
   IMAGE_NAME=$(echo "$IMAGE" | cut -f 1 -d :)
