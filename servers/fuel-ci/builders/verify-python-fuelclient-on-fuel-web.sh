@@ -18,9 +18,9 @@
 set -ex
 
 VENV="${WORKSPACE}_VENV"
-[ -d "${VENV}" ] && rm -rf "${VENV}"
+rm -Rf "${VENV}"
 virtualenv -p python2.7 "${VENV}"
-"${VENV}/bin/pip" install tox\>=2.1.0
+"${VENV}/bin/pip" install --upgrade tox\>=2.3.1
 
 source "${VENV}/bin/activate"
 
@@ -28,9 +28,18 @@ export FUEL_WEB_ROOT="${WORKSPACE}"
 export FUEL_WEB_CLONE="no"
 export FUEL_COMMIT="."
 
+function cleanup {
+    trap - SIGINT SIGTERM
+    pkill -TERM -s "${TOX_PID}"
+    tox -e cleanup
+    exit 1
+}
+
 cd "${WORKSPACE}/python-fuelclient"
-trap "tox -e cleanup" SIGINT SIGTERM
-tox -e functional,cleanup
+trap "cleanup" SIGINT SIGTERM
+setsid tox -e functional,cleanup &
+TOX_PID=$!
+wait "${TOX_PID}"
 trap - SIGINT SIGTERM
 
 deactivate
