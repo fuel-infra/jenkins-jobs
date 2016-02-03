@@ -2,9 +2,9 @@
     name: patching-ci-cleaner
     devops_25: false
     devops_29: true
-    time_staging: '168'
-    time_systemtest: '168'
-    time_other: '168'
+    time_staging: '24'
+    time_systemtest: '24'
+    time_other: '24'
     jobs:
       - cleaner
       - cleaner-on-labels
