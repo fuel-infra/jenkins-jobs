@@ -60,7 +60,7 @@ case "${LOCATION}" in
         MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
         LOCATION="cz"
         ;;
-    mnv)
+    mnv|scc)
         MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/pkgs/"
         LOCATION="usa"
         ;;

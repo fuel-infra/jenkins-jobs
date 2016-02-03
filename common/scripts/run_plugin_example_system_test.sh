@@ -29,7 +29,7 @@ case "${LOCATION}" in
     bud-ext)
         MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
         ;;
-    mnv)
+    mnv|scc)
         MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/pkgs/"
         ;;
     *)
