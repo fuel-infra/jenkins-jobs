@@ -70,7 +70,11 @@
           description: 'https://bugs.launchpad.net/fuel/+bug/1519757'
       - string:
           name: QA_CENTOS_COMPUTE
-          default: 'magnet:?xt=urn:btih:5a5dfbbc101eee3f22a47b75507165f46a4ae9e9&dn=qa-centos-compute-2015-12-03.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Fqa-centos-compute-2015-12-03.qcow2'
+          default: 'magnet:?xt=urn:btih:41e6b045115e7a8d61e4f6b844859034a1f8d0a8&dn=centos7%5Fdevops%5F04022016.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Fcentos7%5Fdevops%5F04022016.qcow2'
+          description: 'https://bugs.launchpad.net/fuel/+bug/1522446'
+      - string:
+          name: QA_RHEL_COMPUTE
+          default: 'magnet:?xt=urn:btih:d079dd9f4872a3a063a2324c4dced153f0a7aea4&dn=rhel7%5F04022016.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Frhel7%5F04022016.qcow2'
           description: 'https://bugs.launchpad.net/fuel/+bug/1522446'
     publishers:
       - email:
