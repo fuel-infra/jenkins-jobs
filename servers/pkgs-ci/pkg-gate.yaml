@@ -38,7 +38,7 @@
           RE_OPT_CENTOS=""
 
           # Regexes for files to skip Ubuntu
-          FILES_SKIP_UBUNTU=( "^\." "^rpm/" "^centos\d/" )
+          FILES_SKIP_UBUNTU=( "^\." "^rpm/" "^centos[0-9]+/" )
           RE_OPT_UBUNTU=""
 
           # Generate command line options for grep to skip CentOS
