@@ -59,6 +59,7 @@ function download_images () {
   TMP_SAHARA_LIBERTY_VANILLA=$(seedclient-wrapper -d -m "${SAHARA_LIBERTY_VANILLA}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
 
   TMP_QA_CENTOS_COMPUTE=$(seedclient-wrapper -d -m "${QA_CENTOS_COMPUTE}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
+  TMP_QA_RHEL_COMPUTE=$(seedclient-wrapper -d -m "${QA_RHEL_COMPUTE}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
 }
 
 # DevOps 2.5.x

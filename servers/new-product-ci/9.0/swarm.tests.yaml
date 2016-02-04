@@ -143,14 +143,17 @@
          properties: |
             ADMIN_NODE_VOLUME_SIZE=100
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'rhel.basic'
+         testgroup: 'rhel'
+         node: 'systest-rhel'
+         pre-script: !include-raw-escape '../builders/rhel-libvirt-fix-script.sh'
+         post-script: !include-raw-escape '../builders/rhel-libvirt-fix-script.sh'
          properties: |
-            RHEL_IMAGE=qa-centos-compute-2015-12-03.qcow2
+            RHEL_IMAGE=rhel7_04022016.qcow2
             RHEL_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
-            RHEL_IMAGE_MD5=524136c435d3e17143029b3431e46ae1
+            RHEL_IMAGE_MD5=73f82a4d60fc1eb701b393bb6d684a60
             RHEL_IMAGE_USER=root
             RHEL_IMAGE_PASSWORD=r00tme
-            CENTOS_DUMMY_DEPLOY=True
+            CENTOS_DUMMY_DEPLOY=False
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha'
          weight: '11'
