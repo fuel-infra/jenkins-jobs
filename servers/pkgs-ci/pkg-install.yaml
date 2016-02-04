@@ -62,8 +62,8 @@
               operator: AND
           script:
             !include-raw-escape builders/mos.install.destroy.vm.sh
-#      - junit:
-#          results: 'report.xml'
+      - junit:
+          results: 'report.xml'
       - archive:
           artifacts: '**/*.xml, {pkg_type}.install.setenvfile,
                       version-test-{pkg_type}.log, vm-test.log, repo-test-{pkg_type}-docker.log'

@@ -55,6 +55,8 @@
               operator: AND
           script:
             !include-raw-escape builders/mos.install.destroy.vm.sh
+      - junit:
+          results: 'report.xml'
       - archive:
           artifacts: '**/*.xml, {pkg_type}.install.setenvfile'
           allow-empty: true

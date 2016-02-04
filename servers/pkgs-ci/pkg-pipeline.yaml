@@ -66,10 +66,10 @@
             ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}" || :
     publishers:
       - 'email-alert-on-merge'
-#      - junit:
-#          results: 'buildresult.xml'
+      - junit:
+          results: 'buildresult.xml'
       - archive:
-          artifacts: 'buildresult.params, {pkg_type}.publish.setenvfile, tests.envfile'
+          artifacts: 'buildresult.params, buildresult.xml, {pkg_type}.publish.setenvfile, tests.envfile'
           allow-empty: True
 
     node: '{build-node}'
