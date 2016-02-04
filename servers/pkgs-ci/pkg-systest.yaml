@@ -57,6 +57,9 @@
       - bool:
           name: REBUILD_ISO
           default: false
+      - string:
+          name: ENV_PREFIX
+          default: '{mos_version}-pkg-systest-{os}-{distro}'
     scm:
       - upstream:
           branch: '{fuel-main-branch}'
