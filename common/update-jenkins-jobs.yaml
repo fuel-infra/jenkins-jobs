@@ -20,6 +20,21 @@
           - log-text: '.'
           escalate-status: true
           script: !include-raw-escape scripts/update-jenkins-jobs-cleanup.sh
+      - email-ext:
+          body: $DEFAULT_CONTENT
+          aborted: true
+          failure: true
+          still-failing: true
+          fixed: true
+          send-to:
+            - recipients
+            - requester
+          recipients: ci+alert@mirantis.com
+          subject: '[Jenkins] {ci-name} $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+      - naginator:
+          max-failed-builds: 3
+          fixed-delay: 10
+          regular-expression: 'authentication failed \[401\]'
     scm:
       - git:
           branches:
