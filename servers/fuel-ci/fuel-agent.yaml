@@ -15,5 +15,4 @@
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
-            KEEP_BEFORE=yes
             FUEL_AGENT_REPO_PATH=/home/jenkins/workspace/{version-id}.{project}.pkgs.{dist}.{testgroup}/{project}/
