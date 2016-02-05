@@ -5,6 +5,21 @@ set -ex
 echo "puppet=$(puppet --version)"
 echo "puppet-lint=$(puppet-lint --version | awk '{print $NF}')"
 
+find . -name '*.pp' -print0 | xargs -0 -P1 -L1 file --mime-encoding | awk '
+BEGIN {
+  cnt = 0
+}
+{
+  if($NF != "us-ascii") {
+    print $0
+    cnt += 1
+  }
+} END {
+  if(cnt > 0) {
+    exit(1)
+  }
+}'
+
 find . -name '*.pp' -print0 | xargs -0 -P1 -L1 puppet parser validate --verbose
 
 find . -name '*.pp' -print0 | xargs -0 -P1 -L1 puppet-lint \
