@@ -1,0 +1,142 @@
+- defaults:
+    name: '{version}{mod}.main.{dist}.{testgroup}'
+    email: 'ci+bvt@mirantis.com'
+    description: 'Run Build Verification Tests'
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    reponame: 'fuel-qa'
+    repobranch: 'master'
+    properties: ''
+    timeout: '180'
+    weight: '7'
+    node: 'bvt'
+
+- job-template:
+    # General system test. Downloads ISO image via magnet link
+    # and runs system test with specified test group.
+    #
+    # Uses predefined ``main-git`` macros for access to ``fuel-main/`` repository.
+    #
+    # Variables required:
+    #
+    # {version}{mod}
+    #     Version and modificator of the Fuel ISO used in this job.
+    #     For example: ``6.1``, ``6.1-community``, ``6.0-icehouse``.
+    #     mod should start from '-'
+    # dist
+    #     OPENSTACK_RELEASE variable. 'centos' or 'ubuntu'.
+    # testgroup
+    #     Test group used as --group parameter in system_test.sh
+    # description
+    #     Job description
+    # node
+    #     Jenkins slave label
+    # timeout
+    #     Job timeout
+    # reponame
+    #     Name of the repository with system tests code
+    # repobranch
+    #     Branch of the repository
+    # venvpath
+    #     Path to virtual env with fuel-devops installed (VENV_PATH)
+    # weight
+    #     Job weight
+    # properties
+    #     List of strings "VAR=value".
+    #     These variables will be injected in job environment before the build
+    name: '{version}{mod}.main.{dist}.{testgroup}'
+    defaults: '{version}{mod}.main.{dist}.{testgroup}'
+
+    builders:
+    - inject: # Defaults
+        properties-content: |
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          VENV_PATH={venvpath}
+          ENV_PREFIX={version}{mod}.main.{dist}.{testgroup}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          TEST_ISO_JOB={version}{mod}.test_all
+    - inject: # Overrides
+        properties-content: '{properties}'
+    - shell:
+        !include-raw-escape 'scripts/run_bvt.sh'
+    - shell: # This step is executed only if previous one was successful
+        !include-raw-escape 'scripts/erase_env.sh'
+
+    concurrent: true
+    disabled: false
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          description: "iso magnet link"
+      - string:
+          name: UBUNTU_MIRROR_ID
+          description: "snapshot of upstream ubuntu mirror"
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
+
+    publishers:
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+    - post-destroy-vms # Destroy envs if left undestroyed
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+    - email-ext: # Failure email
+        body: |
+          Verification test {testgroup} failed on {version}{mod} ISO
+
+          $BUILD_URL
+
+          $BUILD_LOG
+
+          $BUILD_URL
+
+        aborted: true
+        failure: true
+        still-failing: true
+        fixed: false
+        send-to:
+          - recipients
+          - requester
+        recipients: '{email}'
+        subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+    - email-ext: # Fixed email
+        body: |
+          Test passed. Thanks, everyone.
+
+          $BUILD_URL
+
+        failure: false
+        fixed: true
+        send-to:
+          - recipients
+          - requester
+        recipients: '{email}'
+        subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+
+    scm:
+    - main-git:
+        reponame: '{reponame}'
+        repobranch: '{repobranch}'
+        basedir: ''
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm

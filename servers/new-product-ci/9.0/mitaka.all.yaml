@@ -1,0 +1,23 @@
+- project:
+    name: '9.0 iso with MOS Mitaka packages'
+    version: '9.0'
+    branch: 'master'
+    mod: '-mitaka'
+    jobs:
+      - '{version}{mod}.all':
+          description: 'Build ISO with Mirantis OpenStack Mitaka packages'
+          variables: |
+            MOS_UBUNTU_TARGET=master.target.txt
+            MIRROR_MOS_UBUNTU_SUITE=mos-master
+            MIRROR_DOCKER=http://mirror.fuel-infra.org/docker/9.0
+            MIRROR_FUEL=http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos9.0-centos7-fuel/os/x86_64/
+      - '{version}{mod}.test_all'
+      - '{version}{mod}.main.{dist}.{testgroup}':
+          dist: 'ubuntu'
+          testgroup: 'bvt_2'
+          repobranch: '{branch}'
+      - '{version}{mod}.main.{dist}.{testgroup}':
+          dist: 'ubuntu'
+          testgroup: 'smoke_neutron'
+          repobranch: '{branch}'
+
