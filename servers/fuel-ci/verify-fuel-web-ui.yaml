@@ -35,7 +35,7 @@
           regexp-for-failed: '(Failed tests: (.*))'
       - archive:
           allow-empty: true
-          artifacts: 'test_run/ui_func/*.png, test_run/ui_func/app.log'
+          artifacts: 'nailgun/test_run/ui_func/*.png, nailgun/test_run/ui_func/app.log'
           latest-only: false
     scm:
       - git:
