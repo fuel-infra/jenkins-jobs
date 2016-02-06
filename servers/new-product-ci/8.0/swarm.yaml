@@ -184,7 +184,7 @@
             - name: '8.0.system_test.ubuntu.fuel_plugin_vip_reservation'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.rhel'
+            - name: '8.0.system_test.ubuntu.rh'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '8.0.system_test.ubuntu.services_ha'
