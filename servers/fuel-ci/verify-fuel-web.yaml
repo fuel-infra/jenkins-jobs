@@ -48,6 +48,7 @@
     triggers:
       - gerrit:
           trigger-on: '{obj:trigger_on}'
+          server: defaultServer
           projects:
             - project-compare-type: PLAIN
               project-pattern: openstack/fuel-web

@@ -19,6 +19,7 @@
             - change-restored-event
             - comment-added-contains-event:
                 comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          server: defaultServer
           projects:
             - project-compare-type: PLAIN
               project-pattern: 'openstack-dev/ci-sandbox'
