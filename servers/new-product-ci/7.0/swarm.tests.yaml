@@ -15,26 +15,26 @@
    jobs:
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'setup' # test job, not included in runner
-         weight: '4'
+         weight: '6'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'jumbo_frames'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'thread_1'
-         weight: '4'
+         weight: '6'
          timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'ceph_ha_one_controller'
-         weight: '4'
+         weight: '6'
          properties: |
            KVM_USE=true
          timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'one_controller_actions'
-         weight: '4'
+         weight: '6'
          timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'multirole'
-         weight: '4'
+         weight: '6'
          timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'thread_3'
@@ -55,7 +55,7 @@
            BONDING=true
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'bonding_ha_one_controller'
-         weight: '4'
+         weight: '6'
          properties: |
            BONDING=true
      - '7.0.{id}.{dist}.{testgroup}':
