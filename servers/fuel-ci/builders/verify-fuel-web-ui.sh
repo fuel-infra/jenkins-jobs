@@ -21,6 +21,7 @@ npm install
 export TEST_NAILGUN_DB=nailgun
 
 # Run UI tests
-npm run lint && npm test
+npm run lint
+npm test
 
 deactivate
