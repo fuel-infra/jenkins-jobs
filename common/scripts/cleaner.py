@@ -26,6 +26,10 @@ class Cleaner():
             self.devops.append('/home/jenkins/venv-nailgun-tests-2.9')
         if os.environ['DEVOPS_2_5'] == 'true':
             self.devops.append('/home/jenkins/venv-nailgun-tests')
+        if os.environ['RELEASE_60'] == 'true':
+            self.devops.append('/home/jenkins/qa-venv-6.0')
+        if os.environ['RELEASE_61'] == 'true':
+            self.devops.append('/home/jenkins/qa-venv-6.1')
 
         # get category lifetime from environment
         self.lifetimes = [('.*staging.*', int(os.environ['STAGING'])),

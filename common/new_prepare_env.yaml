@@ -1,21 +1,26 @@
 - job:
     builders:
       - shell:
-          !include-raw 'scripts/prepare_env.sh'
+          !include-raw 'scripts/new_prepare_env.sh'
     concurrent: true
     description: |
       Creates a python virtual environment for system tests. Stores additional images.<br><br>
-      For 6.1 and above environments choose 2.9.x DevOps version from fuel-qa repository and old, 2.5.x from fuel-main for prior to 6.1.
     logrotate:
       daysToKeep: 14
-    name: prepare_env
+    name: new_prepare_env
     parameters:
       - bool:
-          name: 'update_devops_2_9_x'
-          default: true
-      - bool:
-          name: 'update_devops_2_5_x'
+          name: 'update_release_6_1'
           default: false
+      - bool:
+          name: 'update_release_7_0'
+          default: false
+      - bool:
+          name: 'update_release_8_0'
+          default: false
+      - bool:
+          name: 'update_release_master'
+          default: true
       - bool:
           name: 'download_images'
           default: false
@@ -70,7 +75,7 @@
     publishers:
       - email:
           notify-every-unstable-build: false
-          recipients: 'devops+alert@mirantis.com'
+          recipients: 'ci+alert@mirantis.com'
     wrappers:
       - timeout:
           timeout: 60

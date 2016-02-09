@@ -24,6 +24,12 @@
         - bool:
             name: 'DEVOPS_2_5'
             default: '{devops_25}'
+        - bool:
+            name: 'RELEASE_60'
+            default: '{release_60}'
+        - bool:
+            name: 'RELEASE_61'
+            default: '{release_61}'
         - string:
             name: STAGING
             default: '{time_staging}'
