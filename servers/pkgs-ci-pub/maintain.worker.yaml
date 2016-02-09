@@ -1,0 +1,30 @@
+- job-template:
+    name: 'maintain.worker'
+    disabled: '{is-disabled}'
+    concurrent: true
+    node: ''
+    properties:
+      - heavy-job:
+          weight: 4
+    parameters:
+      - label:
+          name: 'reBuilder-build-hosts'
+          default: 'none'
+    wrappers:
+      - jenkins
+      - build-timeout:
+          timeout: 120
+    scm:
+      - perestroika
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+          # Remove private DNS settings
+          cat /dev/null > ${{WORKSPACE}}/fuel-mirror/perestroika/docker-builder/config
+      - shell:
+          !include-raw-escape builders/mos.maintain.sh
+    publishers:
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: false

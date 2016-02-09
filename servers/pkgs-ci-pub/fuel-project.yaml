@@ -1,0 +1,75 @@
+#
+# Project definitions
+#
+
+- fuel_template: &fuel_template
+    name: ''
+
+    project-name: 'openstack'
+
+    repo-host: 'packages.fuel-infra.org'
+
+    base-path: 'base/'
+    updates-path: 'updates/'
+    security-path: 'security/'
+
+    cr-path-prefix: 'review/'
+
+    deb-origin-release: 'OpenStack'
+    deb-origin-test: 'testing'
+
+    deb-dist-name: '{project-version}-{distro}'
+    deb-repo-path: '/repositories/ubuntu/{project-version}-{distro}'
+    rpm-repo-path: '/repositories/centos/{project-version}-{distro}'
+
+    repo-base-path: '/home/jenkins/pubrepos'
+
+    pkg-sign-key: '1FA22B08'
+
+    spec-path-prefix: ''
+    spec-path-suffix: '-build'
+    spec-project-prefix: ''
+    spec-project-suffix: '-build'
+
+    # Enables paching workflow
+    is_updates: 'false'
+
+    # Parameters for install-test
+    scm-user: 'changeme'
+    scm-credentials-id: 'changeme'
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'origin/master'
+
+    # Job slave nodes
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+    install-node: 'install-node'
+    systest-node: 'systest'
+
+    jobs:
+      - '{project-version}-fuel-pkg-build-{distro}'
+      - '{project-version}-fuel-pkg-publish-{distro}'
+      - '{project-version}-fuel-pkg-install-{distro}'
+      - '{project-version}-fuel-pkg-repotest-{distro}'
+
+- project:
+    name: 'pkg-fuel'
+    <<: *fuel_template
+    project-version:
+      - 'master':
+          mos-version: 'master'
+          mos-repo-name-sep: '-'
+      - 'mitaka':
+          mos-version: '9.0'
+          mos-repo-name-sep: ''
+    distro:
+      - centos7:
+          os: centos
+          openstack_release: 'centos'
+          pkg_type: 'rpm'
+          spec_path_prefix: '/rpm'
+      - trusty:
+          os: ubuntu
+          openstack_release: 'ubuntu'
+          pkg_type: 'deb'
+          spec_path_prefix: '/trusty'

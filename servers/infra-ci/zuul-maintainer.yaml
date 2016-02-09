@@ -1,0 +1,65 @@
+- job-template:
+    name: 'zuul-maintainer'
+    project-type: freestyle
+    concurrent: false
+    description: |
+        This job works as 'all in one' tool for managing 'Zuul'.
+        Pick and run it with desired action as parameter.
+
+    node: '{build-node}'
+
+    properties:
+      - inject:
+          properties-content: |
+            GERRIT_USER={scm-user}
+
+    scm:
+      - git:
+          branches:
+            - master
+          remotes:
+            - gerrit:
+                url: 'ssh://{scm-user}@review.fuel-infra.org:29418/{scm-repo}'
+                credentials-id: '{scm-credentials-id}'
+          choosing-strategy: gerrit
+
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{scm-credentials-id}'
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: '{scm-repo}'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+              file-paths:
+                - compare-type: ANT
+                  pattern: 'servers/{zuul-fqdn}/**'
+
+    builders:
+      - shell: |
+          #!/bin/bash -ex
+
+          make clean
+          make all
+
+    publishers:
+        - archive:
+            artifacts: 'build/**/*'
+            allow-empty: true
+
+- project:
+    name: 'zuul-updater'
+    zuul-fqdn: 'gate01-scc.fuel-infra.org'
+    scm-user: 'infra-ci'
+    scm-credentials-id: '70105253-c857-4463-a927-f47307911e45'
+    scm-repo: 'fuel-infra/zuul-layouts'
+    build-node: 'tox'
+    jobs:
+      - 'zuul-maintainer'

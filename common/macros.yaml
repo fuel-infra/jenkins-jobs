@@ -26,3 +26,143 @@
           source "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
           source "${VENV_PATH}/bin/activate"
           dos.py destroy "${ENV_NAME}"
+
+########################################################################
+# Builder guessing nearest mirror
+########################################################################
+
+- builder:
+    name: guess-mirror
+    builders:
+      - shell: !include-raw scripts/guess-mirror.sh
+
+########################################################################
+# Gerrit parameters
+########################################################################
+
+- parameter:
+    name: gerrit
+    parameters:
+      - string:
+          name: GERRIT_PROJECT
+          description: 'The name of the project.'
+      - choice:
+          name: GERRIT_EVENT_TYPE
+          description: 'The type of this event.'
+          choices:
+            - 'patchset-created'
+            - 'change-abandoned'
+            - 'change-merged'
+            - 'change-restored'
+            - 'comment-added'
+            - 'draft-published'
+            - 'dropped-output'
+            - 'hashtags-changed'
+            - 'project-created'
+            - 'merge-failed'
+            - 'ref-updated'
+            - 'reviewer-added'
+            - 'topic-changed'
+      - string:
+          name: GERRIT_EVENT_HASH
+          description: 'A unique hash making all triggered builds unique in the queue.'
+      - string:
+          name: GERRIT_EVENT_ACCOUNT
+          description: 'The name and email of the account associated with the event, if any. "Name" <name@somewhere.com>'
+      - string:
+          name: GERRIT_EVENT_ACCOUNT_NAME
+          description: 'The name of the account associated with the event, if any.'
+      - string:
+          name: GERRIT_EVENT_ACCOUNT_EMAIL
+          description: 'The email of the account associated with the event, if any.'
+      - string:
+          name: GERRIT_HOST
+          description: 'The hostname of the Gerrit instance that provided the event.'
+      - string:
+          name: GERRIT_PORT
+          description: 'The port number of the Gerrit instance that provided the event.'
+          default: '29418'
+      - choice:
+          name: GERRIT_SCHEME
+          description: 'The protocol name of the Gerrit instance that provided the event.'
+          choices:
+            - 'ssh'
+            - 'http'
+            - 'https'
+            - 'git'
+      - string:
+          name: GERRIT_CHANGE_ID
+          description: 'The Change-Id.'
+      - string:
+          name: GERRIT_CHANGE_SUBJECT
+          description: 'The first line of the commit message.'
+      - text:
+          name: GERRIT_CHANGE_COMMIT_MESSAGE
+          description: 'The full commit message, UTF-8 Base64 encoded.'
+      - string:
+          name: GERRIT_CHANGE_NUMBER
+          description: 'The change number.'
+      - string:
+          name: GERRIT_CHANGE_URL
+          description: 'The URL to the change.'
+      - string:
+          name: GERRIT_PATCHSET_NUMBER
+          description: 'The Patch Set number.'
+      - string:
+          name: GERRIT_PATCHSET_REVISION
+          description: 'The Patch Set revision id.'
+      - string:
+          name: GERRIT_BRANCH
+          description: 'The name of the branch.'
+          default: 'master'
+      - string:
+          name: GERRIT_TOPIC
+          description: 'The name of the topic.'
+      - string:
+          name: GERRIT_REFSPEC
+          description: 'The ref-spec. (refs/changes/xx/xxxx/z).'
+      - string:
+          name: GERRIT_CHANGE_OWNER
+          description: 'The name and email of the owner of the change "Name" <name@somewhere.com>'
+      - string:
+          name: GERRIT_CHANGE_OWNER_NAME
+          description: 'The name of the owner of the change.'
+      - string:
+          name: GERRIT_CHANGE_OWNER_EMAIL
+          description: 'The email of the owner of the change.'
+      - string:
+          name: GERRIT_PATCHSET_UPLOADER
+          description: 'The name and email of the uploader of the Patch Set "Name" <name@somewhere.com>'
+      - string:
+          name: GERRIT_PATCHSET_UPLOADER_NAME
+          description: 'The name of the uploader of the Patch Set.'
+      - string:
+          name: GERRIT_PATCHSET_UPLOADER_EMAIL
+          description: 'The email of the uploader of the Patch Set.'
+      - string:
+          name: GERRIT_PATCHSET_ABANDONER
+          description: 'The name and email of the abandoner of the Patch Set "Name" <name@somewhere.com>'
+      - string:
+          name: GERRIT_PATCHSET_ABANDONER_NAME
+          description: 'The name of the abandoner of the Patch Set.'
+      - string:
+          name: GERRIT_PATCHSET_ABANDONER_EMAIL
+          description: 'The email of the abandoner of the Patch Set.'
+      - string:
+          name: GERRIT_PATCHSET_RESTORER
+          description: 'The name and email of the restorer of the Patch Set "Name" <name@somewhere.com>'
+      - string:
+          name: GERRIT_PATCHSET_RESTORER_NAME
+          description: 'The name of the restorer of the Patch Set.'
+      - string:
+          name: GERRIT_PATCHSET_RESTORER_EMAIL
+          description: 'The email of the restorer of the Patch Set.'
+      - string:
+          name: GERRIT_REFNAME
+          description: 'Ref name within project.'
+      - string:
+          name: GERRIT_OLDREV
+          description: 'The old value of the ref, prior to the update.'
+      - string:
+          name: GERRIT_NEWREV
+          description: 'The new value the ref was updated to.'
