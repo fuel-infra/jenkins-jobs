@@ -41,6 +41,7 @@
       - gerrit:
           trigger-on:
             - patchset-created-event
+          server: defaultServer
           projects:
             - project-compare-type: PLAIN
               project-pattern: '{project-pattern}'

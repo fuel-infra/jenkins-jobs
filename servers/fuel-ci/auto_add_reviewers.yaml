@@ -21,6 +21,7 @@
           trigger-on:
             - comment-added-contains-event:
                 comment-contains-value: 'Verified\+1'
+          server: defaultServer
           projects:
             - project-compare-type: ANT
               project-pattern: 'openstack/fuel**'
