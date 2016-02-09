@@ -1,0 +1,88 @@
+#
+# Tempated job parameters (using YAML anchors)
+#
+
+- common-sync-params: &common-sync-params
+    name: ''
+
+    # Branches to sync (see also short names below)
+    upstream-branch: 'master'
+    downstream-branch: 'mos/mitaka'
+
+    # Branch short names for jobs naming
+    src-branch: master
+    dst-branch: mitaka
+
+    # Syncronization schedule
+    sync-schedule: 'H 3 * * 3'  # every Wednesday at 3:00 am, spread evenly
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: 'openstack-ci-mirrorer-jenkins'
+    gerrit-creds: 'a4be8c41-43e0-4269-94d8-53133cfe3ae5'
+    gerrit-topic: 'sync/{src-branch}/{dst-branch}'
+
+    # Jobs
+    jobs:
+      - 'sync-{name}-{src-branch}-{dst-branch}'
+
+#
+# Projects definitions
+#
+
+- project:
+    name: 'fuel-agent'
+    <<: *common-sync-params
+
+- project:
+    name: 'fuel-astute'
+    <<: *common-sync-params
+
+- project:
+    name: 'fuel-library'
+    <<: *common-sync-params
+
+- project:
+    name: 'fuel-main'
+    <<: *common-sync-params
+
+- project:
+    name: 'fuel-menu'
+    <<: *common-sync-params
+
+- project:
+    name: 'fuel-mirror'
+    <<: *common-sync-params
+
+- project:
+    name: 'fuel-nailgun-agent'
+    <<: *common-sync-params
+
+- project:
+    name: 'fuel-octane'
+    <<: *common-sync-params
+
+- project:
+    name: 'fuel-ostf'
+    <<: *common-sync-params
+
+- project:
+    name: 'fuel-upgrade'
+    <<: *common-sync-params
+
+- project:
+    name: 'fuel-web'
+    <<: *common-sync-params
+
+- project:
+    name: 'network-checker'
+    <<: *common-sync-params
+
+- project:
+    name: 'python-fuelclient'
+    <<: *common-sync-params
+
+- project:
+    name: 'shotgun'
+    <<: *common-sync-params

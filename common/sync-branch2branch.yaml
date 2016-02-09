@@ -1,0 +1,37 @@
+#
+# Job syncronizes code from one branch to another via Gerrit CR
+#
+# Parameters:
+#   [*name*] - Project name will be prepended by 'openstack/'
+#   [*gerrit-host*] - Gerrit host
+#   [*gerrit-port*] - Gerrit port (usually 29418)
+#   [*gerrit-topic*] - Topic for newly created CR
+#   [*gerrit-user*] - User for Gerrit
+#   [*gerrit-creds*] - Credentials ID for specified user
+#   [*upstream-branch*] - Source branch to sync code from
+#   [*src-branch*] - Short name of source branch (used for job naming)
+#   [*downstream-branch*] - Destination branch to sync code to
+#   [*dst-branch*] - Short name of destination branch (used for job naming)
+#   [*sync-schedule*] - Job schedule (cron syntax)
+#
+# Note, using SSH for accessing Gerrit requires to export credentials
+# via ssh-agent-credentials wrapper!!!
+#
+
+- job-template:
+    name: 'sync-{name}-{src-branch}-{dst-branch}'
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{gerrit-creds}'
+    builders:
+      - inject:
+          properties-content: |
+            SYNC_GERRIT_URI=ssh://{gerrit-user}@{gerrit-host}:{gerrit-port}/openstack/{name}
+            SYNC_DOWNSTREAM_BRANCH={downstream-branch}
+            SYNC_UPSTREAM_BRANCH={upstream-branch}
+            SYNC_GERRIT_TOPIC={gerrit-topic}
+      - shell:
+          !include-raw-escape scripts/codesync.py
+    triggers:
+        - timed: '{sync-schedule}'
