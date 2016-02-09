@@ -79,5 +79,9 @@
          testgroup: 'failover_group_2'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'failover_group_mongo'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'load'
+         properties: |
+           PATCHING_RUN_RALLY=true
      - '{version-id}.{id}.{dist}.plugins.{testgroup}':
          testgroup: 'thread_separate_services_ceph'

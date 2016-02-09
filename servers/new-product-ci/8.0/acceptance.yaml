@@ -134,6 +134,9 @@
             - name: '8.0.acceptance.ubuntu.failover_group_mongo'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.load'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '8.0.acceptance.ubuntu.plugins.thread_separate_services_ceph'
               current-parameters: true
               kill-phase-on: NEVER
