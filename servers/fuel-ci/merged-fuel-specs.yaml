@@ -37,7 +37,7 @@
       - gerrit:
           trigger-on:
             - change-merged-event
-          server: defaultServer
+          server-name: defaultServer
           projects:
             - project-compare-type: PLAIN
               project-pattern: 'openstack/fuel-specs'

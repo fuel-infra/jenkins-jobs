@@ -38,7 +38,7 @@
       - timed: '{timed}'
       - gerrit:
           trigger-on: '{obj:trigger_on}'
-          server: defaultServer
+          server-name: defaultServer
           projects:
             - project-compare-type: PLAIN
               project-pattern: 'openstack/fuel-astute'

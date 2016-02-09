@@ -22,7 +22,7 @@
       - gerrit:
           trigger-on:
             - change-merged-event
-          server: defaultServer
+          server-name: defaultServer
           projects:
             - project-compare-type: ANT
               project-pattern: 'openstack/fuel**'

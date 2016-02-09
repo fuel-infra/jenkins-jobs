@@ -28,7 +28,7 @@
       - gerrit:
           trigger-on:
             - patchset-created-event
-          server: defaultServer
+          server-name: defaultServer
           projects:
             - project-compare-type: PLAIN
               project-pattern: openstack/fuel-qa
