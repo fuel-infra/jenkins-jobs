@@ -211,8 +211,6 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'bvt_ubuntu_bootstrap'
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'bvt_centos_bootstrap'
-     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'full_cluster_reinstallation'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'partition_preservation'
