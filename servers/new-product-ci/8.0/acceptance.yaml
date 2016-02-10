@@ -125,6 +125,12 @@
             - name: '8.0.acceptance.ubuntu.cli_acceptance_ceph_deployment_tests'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.cli_component_role_tests'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.acceptance.ubuntu.tests_gpg_singing_check'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '8.0.acceptance.ubuntu.failover_group_1'
               current-parameters: true
               kill-phase-on: NEVER
