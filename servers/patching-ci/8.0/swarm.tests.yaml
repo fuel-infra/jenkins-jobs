@@ -1,107 +1,131 @@
 - job-group:
-   name: '7.0-system_tests'
-   version-id: '7.0'
+   name: '8.0-system_tests'
+   version-id: '8.0'
    id: 'system_test'
-   repobranch: 'origin/stable/7.0'
+   repobranch: 'origin/stable/8.0'
    reponame: 'fuel-qa'
-   venvpath: '/home/jenkins/qa-venv-7.0'
+   venvpath: '/home/jenkins/qa-venv-8.0'
    default_pool: '10.109.0.0/16:24'
-   description: '7.0 test group with full list of tests'
+   description: '8.0 test group with full list of tests'
    node: 'systest'
    timeout: '480'
    properties: |
-     SLAVE_NODE_MEMORY=4096
+     SLAVE_NODE_MEMORY=3072
    weight: '7'
    jobs:
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'setup' # test job, not included in runner
-         weight: '4'
-     - '7.0.{id}.{dist}.{testgroup}':
+         weight: '6'
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'jumbo_frames'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'thread_1'
-         weight: '4'
+         weight: '6'
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ceph_ha_one_controller'
-         weight: '4'
+         weight: '6'
          properties: |
            KVM_USE=true
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'one_controller_actions'
-         weight: '4'
+         weight: '6'
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'multirole'
-         weight: '4'
+         weight: '6'
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'thread_3'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'thread_7'
          properties: |
            MULTIPLE_NETWORKS=true
            FUEL_STATS_ENABLED=true
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'thread_usb'
          properties: |
            ADMIN_BOOT_DEVICE=usb
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'thread_non_func_1'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'bonding_ha'
          properties: |
            BONDING=true
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'bonding_ha_one_controller'
-         weight: '4'
+         weight: '6'
          properties: |
            BONDING=true
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'cluster_actions'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'cluster_actions_ha'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'controller_replacement'
-     - '7.0.{id}.{dist}.{testgroup}':
+         timeout: '540'
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'cic_maintenance_mode'
+         properties: |
+           SLAVE_NODE_MEMORY=5120
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'offloading'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
+         testgroup: 'filling_root'
+         timeout: '600'
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron'
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_tun'
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_tun_scale'
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_public'
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
-         testgroup: 'ha_neutron_destructive_2'
+     - '8.0.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_destructive_gre'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_destructive_vlan'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '8.0.{id}.{dist}.{testgroup}':
+         testgroup: 'ha_neutron_destructive_vxlan'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'command_line'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
+         testgroup: 'logrotate'
+         properties: |
+           NEUTRON_ENABLE=true
+           ADMIN_NODE_MEMORY=3072
+         timeout: '600'
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_destructive_ceph_neutron'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'huge_ha_neutron'
          weight: '20'
          properties: |
@@ -110,13 +134,15 @@
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
          timeout: '600'
          node: 'huge-systest'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'repeatable_image_based'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'known_issues'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'backup_restore_master'
-     - '7.0.{id}.{dist}.{testgroup}':
+         properties: |
+            ADMIN_NODE_VOLUME_SIZE=100
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha'
          weight: '11'
          node: 'services-systest'
@@ -131,7 +157,7 @@
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
          timeout: '1200'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha.ceilometer'
          weight: '11'
          node: 'services-systest'
@@ -146,7 +172,7 @@
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
          timeout: '1200'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha_one_controller'
          weight: '11'
          node: 'services-systest'
@@ -161,37 +187,63 @@
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
          timeout: '1200'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'custom_hostname'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'fuel_master_migrate'
          properties: |
            SLAVE_NODE_MEMORY=6144
            SLAVE_NODE_CPU=4
-         weight: 11
-     - '7.0.{id}.{dist}.{testgroup}':
+         weight: '11'
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ready_node_reinstallation'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'error_node_reinstallation'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'bvt_ubuntu_bootstrap'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
+         testgroup: 'bvt_centos_bootstrap'
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'full_cluster_reinstallation'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'partition_preservation'
-     - '7.0.system_test.{dist}.plugins.{testgroup}':
+     - '8.0.{id}.{dist}.plugins.{testgroup}':
          testgroup:
            - 'thread_db_separate_services'
            - 'thread_keystone_separate_services'
            - 'thread_2_separate_services'
            - 'fuel_plugin_example'
          timeout: '600'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'fuel_plugin_reboot'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'fuel_plugin_vip_reservation'
-     - '7.0.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'network_templates'
-     - '7.0.{id}.{dist}.{testgroup}':
+         timeout: '600'
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'reduced_footprint'
-
+     - '8.0.{id}.{dist}.{testgroup}':
+         testgroup: 'ironic_deploy_swift'
+         properties: |
+           SLAVE_NODE_MEMORY=4096
+           IRONIC_ENABLED=true
+           IRONIC_NODES_COUNT=1
+     - '8.0.{id}.{dist}.{testgroup}':
+         testgroup: 'ironic_deploy_ceph'
+         properties: |
+           SLAVE_NODE_MEMORY=4096
+           IRONIC_ENABLED=true
+           IRONIC_NODES_COUNT=1
+     - '8.0.{id}.{dist}.{testgroup}':
+         testgroup: 'services_reconfiguration_thread_1'
+         properties: |
+           DISABLE_SSL=true
+           SLAVE_NODE_CPU=2
+     - '8.0.{id}.{dist}.{testgroup}':
+         testgroup: 'services_reconfiguration_thread_2'
+         properties: |
+           DISABLE_SSL=true
+           SLAVE_NODE_CPU=2
+     - '8.0.system_test.{dist}.check_radosgw':
+         testgroup: 'system_test.deploy_and_check_radosgw.3ctrl_3comp_ceph_neutronVLAN'
