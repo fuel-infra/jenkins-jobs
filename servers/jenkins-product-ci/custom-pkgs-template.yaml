@@ -78,6 +78,11 @@
           name: FUEL_QA_COMMIT
           default: '{version-id}'
           description: 'Commit SHA of fuel-qa repository for system test'
+      - string:
+          name: FUEL_QA_GERRIT_COMMIT
+          default: 'none'
+          description: 'Refspecs for commits in fuel-qa gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
       - choice:
           name: TEST_GROUP
           description: Choose TEST_GROUP from the list or use CUSTOM_TEST_GROUP field below.
