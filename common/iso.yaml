@@ -1,0 +1,130 @@
+- defaults:
+    name: '{version}{mod}.all'
+    node: iso
+    description: 'Build ISO'
+    email: 'ci+builds@mirantis.com, fuel-build@mirantis.com'
+    timer: ''
+    variables: ''
+
+- defaults:
+    name: '{version}{mod}.test_all'
+    description: 'Test ISO'
+    email: 'ci+tests@mirantis.com'
+
+- job-template:
+    name: '{version}{mod}.all'
+    defaults: '{version}{mod}.all'
+    properties:
+      - build-timestamp
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    parameters:
+      - text:
+          name: ADDITIONAL_VARIABLES
+          default: '{variables}'
+
+    builders:
+      - inject: # Defaults
+          properties-content: |
+            ISO_ID={version}{mod}
+            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
+            MOS_UBUNTU_TARGET={version}.target.txt
+            MOS_CENTOS_ROOT=/mos-repos/centos/mos{version}-centos7-fuel/
+      - inject: # Overrides
+          properties-content: |
+            $ADDITIONAL_VARIABLES
+      - shell:
+          !include-raw-escape scripts/all.sh
+
+    publishers:
+      - archive:
+          allow-empty: false
+          artifacts: artifacts/*.txt, artifacts/*changelog
+          latest-only: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+      - email-default:
+          mail-to: '{email}'
+      - trigger-parameterized-builds:
+        - project: 'deploy_iso_on_cachers'
+          property-file: magnet_link.txt
+          condition: UNSTABLE_OR_BETTER
+        - project: '{version}{mod}.test_all'
+          condition: UNSTABLE_OR_BETTER
+          predefined-parameters: |
+            UPSTREAM_BUILD_URL=$BUILD_URL
+            UPSTREAM_BUILD_NUMBER=$BUILD_NUMBER
+            BUILD_MIRROR_URL=$BUILD_MIRROR_URL
+
+    scm:
+      - openstack:
+          branch: '{branch}'
+          repo: fuel-main
+    triggers:
+      - timed: '{timer}'
+    wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
+
+- job-template:
+    name: '{version}{mod}.test_all'
+    defaults: '{version}{mod}.test_all'
+    project-type: multijob
+    concurrent: true
+    node: runner
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: UPSTREAM_JOB_URL
+          default: '${{JENKINS_URL}}job/{version}{mod}.all/'
+          description: URL of ISO build
+      - string:
+          name: UPSTREAM_BUILD_NUMBER
+          default: 'lastSuccessfulBuild'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: 'latest'
+          description: Use ubuntu-<timestamp> or latest for latest mirror available.
+    builders:
+      - shell:
+          !include-raw-escape scripts/test_all.sh
+      - multijob:
+          name: Run_BVT_and_Smoke
+          condition: COMPLETED
+          projects:
+            - name: '{version}{mod}.main.ubuntu.bvt_2'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+            - name: '{version}{mod}.main.ubuntu.smoke_neutron'
+              kill-phase-on: NEVER
+              property-file: properties_file.txt
+    publishers:
+      - email-systest:
+          body-failed: |
+
+            Something is wrong with the {version}{mod} ISO: it did not
+            pass one of the tests.
+
+            Please get into the IRC (#fuel-qa) to check if someone is fixing
+            this already, or start fixing it yourself.
+
+            $BUILD_URL
+
+          mail-to: '{email}'
+      - description-setter:
+          regexp: |
+            'Description string: (.*)'
+          set-for-matrix: false
+      - archive:
+          allow-empty: false
+          artifacts: '*.txt'
+          latest-only: false
