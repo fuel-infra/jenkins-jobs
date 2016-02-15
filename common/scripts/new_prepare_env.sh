@@ -70,17 +70,17 @@ function download_images () {
 
 # Release 6.1
 if [[ ${update_release_6_1} == "true" ]]; then
-  update_devops "release-6.1" "stable/6.1"
+  update_devops "6.1" "stable/6.1"
 fi
 
 # Release 7.0
 if [[ ${update_release_7_0} == "true" ]]; then
-  update_devops "release-7.0" "stable/7.0"
+  update_devops "7.0" "stable/7.0"
 fi
 
 # Release 8.0
 if [[ ${update_release_8_0} == "true" ]]; then
-  update_devops "release-8.0" "stable/8.0"
+  update_devops "8.0" "stable/8.0"
 fi
 
 # Master branch
