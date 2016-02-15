@@ -15,7 +15,7 @@
           option: category
     publishers:
       - email:
-          recipients: ksambor@mirantis.com, skalinowski@mirantis.com, devops+alert@mirantis.com
+          recipients: ksambor@mirantis.com, skalinowski@mirantis.com, ci+alert@mirantis.com
           send-to-individuals: false
       - archive:
           artifacts: results/tests/*, results/last/*, results/results/*, nailgun/nailgun_perf_test_report.csv, nailgun/failed_tests.txt
@@ -55,7 +55,7 @@
           option: category
     publishers:
       - email:
-          recipients: ksambor@mirantis.com, skalinowski@mirantis.com, devops+alert@mirantis.com
+          recipients: ksambor@mirantis.com, skalinowski@mirantis.com, ci+alert@mirantis.com
           send-to-individuals: false
     scm:
       - git:

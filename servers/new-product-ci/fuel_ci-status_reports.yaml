@@ -38,7 +38,7 @@
     publishers:
       - email:
           notify-every-unstable-build: true
-          recipients: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
+          recipients: 'ci+alert@mirantis.com, fuel-osci@mirantis.com'
           send-to-individuals: false
     wrappers:
       - inject-passwords:

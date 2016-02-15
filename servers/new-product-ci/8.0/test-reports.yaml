@@ -16,7 +16,7 @@
     node: testrail
     publishers:
       - email:
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
 
 # FIXME: timer
 #    triggers:

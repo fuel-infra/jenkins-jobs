@@ -25,7 +25,7 @@
           regexp: "^META: (.*)"
       - email:
           notify-every-unstable-build: false
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
           send-to-individuals: false
       - trigger-parameterized-builds:
         - project:  9.0.fuel_community.ubuntu.bvt_2

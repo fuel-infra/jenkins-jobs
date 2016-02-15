@@ -42,5 +42,5 @@
           flatten: true
       - email:
           notify-every-unstable-build: false
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
           send-to-individuals: false

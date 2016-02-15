@@ -58,7 +58,7 @@
 
     publishers:
       - email-default:
-          mail-to: devops+alert@mirantis.com, fuel-build+alert@mirantis.com
+          mail-to: ci+alert@mirantis.com, fuel-build+alert@mirantis.com
       - description-setter:
           regexp: 'Description string: (.*)'
       - archive:

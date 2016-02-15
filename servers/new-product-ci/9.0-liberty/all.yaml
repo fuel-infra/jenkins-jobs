@@ -43,7 +43,7 @@
           regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
           set-for-matrix: false
       - email-default:
-          mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
+          mail-to: 'ci+alert@mirantis.com, fuel-osci@mirantis.com'
       - trigger-parameterized-builds:
 
         - project: '9.0-liberty.send_reports'
@@ -138,7 +138,7 @@
       - email-systest:
           body-failed:
             !include-raw notifications/test_all.failed
-          mail-to: 'devops+alert@mirantis.com, mos-qa@mirantis.com'
+          mail-to: 'ci+alert@mirantis.com, mos-qa@mirantis.com'
       - description-setter:
           regexp: |
             'Description string: (.*)'
@@ -177,7 +177,7 @@
     node: testrail
     publishers:
       - email:
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
 
     scm:
      - main-git:

@@ -34,7 +34,7 @@
             $COMMENT
 
             See https://mirantis.jira.com/wiki/display/PRD/Debug+session+workflow for details.'
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
     wrappers:
       - timeout:
           timeout: 210

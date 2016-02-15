@@ -24,7 +24,7 @@
       - description-setter:
           regexp: "'Description string: (.*)'"
       - email-default:
-          mail-to: 'devops+alert@mirantis.com'
+          mail-to: 'ci+alert@mirantis.com'
       - trigger-parameterized-builds:
         - project: '{version-id}.swarm.runner'
           condition: UNSTABLE_OR_BETTER

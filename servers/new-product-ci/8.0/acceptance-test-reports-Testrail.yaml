@@ -19,7 +19,7 @@
     node: testrail
     publishers:
       - email:
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
 
     scm:
      - main-git:

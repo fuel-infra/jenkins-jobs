@@ -37,7 +37,7 @@
       - email-systest:
           body-failed:
             !include-raw notifications/smoke.failed
-          mail-to: devops+alert@mirantis.com,mos-qa@mirantis.com
+          mail-to: ci+alert@mirantis.com,mos-qa@mirantis.com
     scm:
       - openstack:
           branch: 'stable/7.0'

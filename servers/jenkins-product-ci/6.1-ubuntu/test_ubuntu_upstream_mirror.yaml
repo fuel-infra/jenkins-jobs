@@ -75,4 +75,4 @@
           regexp: (^[^\s]* is stable.*a href.*)
           set-for-matrix: false
       - email-default:
-          mail-to: devops+alert@mirantis.com,fuel-osci@mirantis.com
+          mail-to: ci+alert@mirantis.com,fuel-osci@mirantis.com

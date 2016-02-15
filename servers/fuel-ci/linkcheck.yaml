@@ -60,7 +60,7 @@
           allow-empty: 'true'
           fingerprint: true
       - email:
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
 
 - project:
     name: 'multi-linkcheck'

@@ -19,5 +19,5 @@
       - email-ext:
           attach-build-log: true
           body: $DEFAULT_CONTENT
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
           subject: $DEFAULT_SUBJECT

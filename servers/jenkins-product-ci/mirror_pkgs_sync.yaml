@@ -65,7 +65,7 @@
           regexp-for-failed: ^\[mirror\](.*)
           set-for-matrix: true
       - email:
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
 
 - project:
     name: mirror_pkgs_sync

@@ -55,5 +55,5 @@
           regexp-for-failed: 'Description string: (.*)'
       - email:
           notify-every-unstable-build: true
-          recipients: 'devops+alert@mirantis.com'
+          recipients: 'ci+alert@mirantis.com'
           send-to-individuals: false

@@ -7,7 +7,7 @@
     fuel-branch: 'stable/7.0'
     prjsuffix: '-stable'
     build-node: ''
-    mailto: 'devops+alert@mirantis.com'
+    mailto: 'ci+alert@mirantis.com'
     is-disabled: ''
     jobs:
       - '{release}.{project}.test-runner'

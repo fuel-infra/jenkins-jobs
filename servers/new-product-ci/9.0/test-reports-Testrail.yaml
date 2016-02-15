@@ -19,7 +19,7 @@
     node: testrail
     publishers:
       - email:
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
 
     triggers:
       - timed: 'H */2 * * *'

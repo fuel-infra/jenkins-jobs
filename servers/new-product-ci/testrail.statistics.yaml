@@ -56,7 +56,7 @@
           latest-only: false
 
       - email:
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
 
       - description-setter:
           regexp: '^.*Found\s+TestPlan\s+(.*)$'

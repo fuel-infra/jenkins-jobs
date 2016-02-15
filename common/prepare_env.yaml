@@ -79,7 +79,7 @@
     publishers:
       - email:
           notify-every-unstable-build: false
-          recipients: 'devops+alert@mirantis.com'
+          recipients: 'ci+alert@mirantis.com'
     wrappers:
       - timeout:
           timeout: 60

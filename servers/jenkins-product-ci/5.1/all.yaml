@@ -51,7 +51,7 @@
           regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
           set-for-matrix: false
       - email-default:
-          mail-to: 'devops+alert@mirantis.com, fuel-osci@mirantis.com'
+          mail-to: 'ci+alert@mirantis.com, fuel-osci@mirantis.com'
       - trigger-parameterized-builds:
 
         - project: 'deploy_iso_on_cachers,5.1.2.smoke,5.1.2.centos.bvt_1,5.1.2.ubuntu.bvt_2'

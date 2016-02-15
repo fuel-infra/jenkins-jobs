@@ -35,7 +35,7 @@
           option: category
     publishers:
       - email-default:
-          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com
+          mail-to: ci+alert@mirantis.com, fuel-osci@mirantis.com
       - description-setter:
           regexp: ^Updated:.*a href.*
       - archive:

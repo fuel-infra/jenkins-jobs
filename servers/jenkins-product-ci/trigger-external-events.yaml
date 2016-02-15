@@ -24,4 +24,4 @@
           regexp: 'Description string: (.*)'
           set-for-matrix: false
       - email-default:
-          mail-to: 'devops+alert@mirantis.com'
+          mail-to: 'ci+alert@mirantis.com'

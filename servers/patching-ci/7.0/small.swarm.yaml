@@ -39,7 +39,7 @@
       - description-setter:
           regexp: "'Description string: (.*)'"
       - email-default:
-          mail-to: 'devops+alert@mirantis.com'
+          mail-to: 'ci+alert@mirantis.com'
     wrappers:
       - timeout:
           fail: true

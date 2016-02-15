@@ -28,7 +28,7 @@
           !include-raw './builders/testrail_reports.sh'
     publishers:
       - email:
-          recipients: devops+alert@mirantis.com
+          recipients: ci+alert@mirantis.com
     scm:
       - main-git:
           reponame: 'fuel-qa'

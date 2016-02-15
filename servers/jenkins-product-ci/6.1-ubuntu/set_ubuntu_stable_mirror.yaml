@@ -39,6 +39,6 @@
           project: '6.1-ubuntu.all'
           threshold: SUCCESS
       - email-default:
-          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com
+          mail-to: ci+alert@mirantis.com, fuel-osci@mirantis.com
     scm:
       - osci-mirrors

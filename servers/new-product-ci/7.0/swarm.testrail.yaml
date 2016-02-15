@@ -34,7 +34,7 @@
           latest-only: false
 
       - email:
-          recipients: ishamrai@mirantis.com, devops+alert@mirantis.com
+          recipients: ishamrai@mirantis.com, ci+alert@mirantis.com
 
       - description-setter:
           regexp: '^.*Report URL:\s*(.*)'

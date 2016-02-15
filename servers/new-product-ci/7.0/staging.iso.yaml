@@ -51,7 +51,7 @@
           regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
           set-for-matrix: false
       - email-default:
-          mail-to: devops+alert@mirantis.com, fuel-osci@mirantis.com
+          mail-to: ci+alert@mirantis.com, fuel-osci@mirantis.com
       - trigger-parameterized-builds:
         - project: fuel_build_reports
           condition: UNSTABLE_OR_BETTER
