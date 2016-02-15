@@ -8,9 +8,8 @@ ACT=0
 
 function update_devops () {
   ACT=1
-  VIRTUAL_ENV=/home/jenkins/venv-nailgun-tests${1}
-  REPO_NAME=${2}
-  BRANCH=${3}
+  VIRTUAL_ENV=/home/jenkins/qa-venv-${1}
+  BRANCH=${2}
 
   if [ -f ${VIRTUAL_ENV}/bin/activate ]; then
     source ${VIRTUAL_ENV}/bin/activate
@@ -33,7 +32,7 @@ function update_devops () {
     echo "Install with custom requirements"
     echo "${VENV_REQUIREMENTS}" >"${WORKSPACE}/venv-requirements.txt"
   else
-    if ! curl -fsS "https://raw.githubusercontent.com/openstack/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt" > "${WORKSPACE}/venv-requirements.txt"; then
+    if ! curl -fsS "https://raw.githubusercontent.com/openstack/fuel-qa/${BRANCH}/fuelweb_test/requirements.txt" > "${WORKSPACE}/venv-requirements.txt"; then
       echo "Problem with downloading requirements"
       exit 1
     fi
@@ -69,14 +68,24 @@ function download_images () {
   TMP_QA_RHEL_COMPUTE=$(seedclient-wrapper -d -m "${QA_RHEL_COMPUTE}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
 }
 
-# DevOps 2.5.x
-if [[ ${update_devops_2_5_x} == "true" ]]; then
-  update_devops "" "fuel-main" "stable/6.1"
+# Release 6.1
+if [[ ${update_release_6_1} == "true" ]]; then
+  update_devops "-release-6.1" "stable/6.1"
 fi
 
-# DevOps 2.9.x
-if [[ ${update_devops_2_9_x} == "true" ]]; then
-  update_devops "-2.9" "fuel-qa" "master"
+# Release 7.0
+if [[ ${update_release_7_0} == "true" ]]; then
+  update_devops "-release-7.0" "stable/7.0"
+fi
+
+# Release 8.0
+if [[ ${update_release_8_0} == "true" ]]; then
+  update_devops "-release-8.0" "stable/8.0"
+fi
+
+# Master branch
+if [[ ${update_release_master} == "true" ]]; then
+  update_devops "master" "master"
 fi
 
 if [[ ${download_images} == "true" ]]; then
