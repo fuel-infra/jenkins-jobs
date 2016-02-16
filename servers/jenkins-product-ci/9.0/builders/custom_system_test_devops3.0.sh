@@ -92,7 +92,7 @@ if [[ ${FUEL_DEVOPS_COMMIT} != "none" ]] ; then
       git fetch https://review.openstack.org/openstack/fuel-devops "${fuel_devops_gerrit_commit}" && git cherry-pick FETCH_HEAD
     done
   fi
-  pip uninstall fuel-devops
+  pip uninstall -y fuel-devops
   pip install ./ --upgrade
   cd ${WORKSPACE}
   export DEVOPS_DB_ENGINE="django.db.backends.sqlite3"
