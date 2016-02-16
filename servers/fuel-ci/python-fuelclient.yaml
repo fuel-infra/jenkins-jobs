@@ -13,7 +13,6 @@
           dist: ubuntu
           testgroup: review_fuel_client
           properties: |
-            CUSTOM_ENV=false
-            KEEP_BEFORE=false
+            KEEP_BEFORE=true
             BUILD_IMAGES=true
             UPLOAD_PATCHSET=true
