@@ -1,0 +1,32 @@
+- project:
+    name: '9.0 iso with Fuel downstream packages'
+    version: '9.0'
+    branch: 'master'
+    mod: '-mos'
+    timer: 'H */6 * * *'
+    jobs:
+      - '{version}-mos.all':
+          description: 'Build ISO with Fuel Downstream code'
+          variables: |
+            FUELLIB_COMMIT=master
+            NAILGUN_COMMIT=mos/mitaka
+            PYTHON_FUELCLIENT_COMMIT=master
+            FUEL_AGENT_COMMIT=master
+            FUEL_NAILGUN_AGENT_COMMIT=master
+            ASTUTE_COMMIT=master
+            OSTF_COMMIT=master
+            FUEL_MIRROR_COMMIT=master
+            FUELMENU_COMMIT=master
+            SHOTGUN_COMMIT=master
+            NETWORKCHECKER_COMMIT=master
+            FUELUPGRADE_COMMIT=master
+      - '{version}{mod}.test_all'
+      - '{version}{mod}.main.{dist}.{testgroup}':
+          dist: 'ubuntu'
+          testgroup: 'bvt_2'
+          repobranch: 'master'
+      - '{version}{mod}.main.{dist}.{testgroup}':
+          dist: 'ubuntu'
+          testgroup: 'smoke_neutron'
+          repobranch: 'master'
+

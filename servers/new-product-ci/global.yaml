@@ -31,3 +31,10 @@
       - ssh-agent-credentials:
           users:
             - '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'
+
+- wrapper:
+    name: product-ci-credentials
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - 'a563ede0-8dc2-41bb-a970-ef7f5e26af9f'
