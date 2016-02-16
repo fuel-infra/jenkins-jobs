@@ -1,0 +1,67 @@
+- job:
+    name: 'verify-fuel-web-ui'
+    builders:
+      - shell:
+          !include-raw builders/verify-fuel-web-ui.sh
+    description: |
+      Test requests for fuel-web UI (npm run lint && npm test) master branch
+
+      Uses venv with python2.7
+    node: verify-fuel-web-ui
+    concurrent: false
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/mos/mitaka'
+      - string:
+          name: PIP_OPTION
+      - string:
+          name: NPM_CONFIG_PREFIX
+          default: '/home/jenkins/npm'
+      - bool:
+          name: VENV_CLEANUP
+          default: true
+          description: 'Check this option to rebuild virtual environment'
+    properties:
+      - heavy-job:
+          weight: 1
+
+    publishers:
+      - description-setter:
+          regexp-for-failed: '(Failed tests: (.*))'
+      - archive:
+          allow-empty: true
+          artifacts: 'nailgun/test_run/ui_func/*.png, nailgun/test_run/ui_func/app.log'
+          latest-only: false
+
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://infra-ci@review.fuel-infra.org:29418/openstack/fuel-web'
+                credentials-id: '70105253-c857-4463-a927-f47307911e45'
+          choosing-strategy: gerrit
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-web
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: 'mos/*'
+              custom-url: '* $JOB_NAME $BUILD_URL'
+      - timed: '0 11 * * *'
+
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
