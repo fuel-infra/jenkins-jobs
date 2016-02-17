@@ -1,0 +1,84 @@
+- job-template:
+    name: '{version-id}-deb-repo-monitor'
+    project-type: freestyle
+    description: "Repo monitor for {version-id} ubuntu repository"
+    node: '{build-node}'
+    triggers:
+      - timed: "H H H H 1-5"
+    builders:
+      - inject:
+          properties-content: |
+            REPO={version-id}
+            TEMP_DIR=${{WORKSPACE}}/tmp
+            SRC_DIR=${{WORKSPACE}}/src
+            PACKAGES_REPO_HOST=perestroika-repo-tst.infra.mirantis.net/mos-repos
+            GERRIT_HOST=review.fuel-infra.org
+            GERRIT_PORT=29418
+            GERRIT_USER={scm-user}
+            GERRIT_QUERY_FORMAT=TEXT
+      - shell: |
+          #!/bin/bash
+          set -ex
+          "${{WORKSPACE}}/deb-repo-monitor.sh"
+    publishers:
+      - archive:
+          allow-empty: 'false'
+          artifacts: '**/report.txt'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: ''
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: 'master'
+    wrappers:
+       - gerrit-creds
+
+- job-template:
+    name: '{version-id}-rpm-repo-monitor'
+    project-type: freestyle
+    description: "Repo monitor job for {version-id} {distro} repository"
+    node: '{build-node}'
+    triggers:
+      - timed: "H H H H 1-5"
+    builders:
+      - inject:
+          properties-content: |
+            DISTRO={distro}
+            REPO=mos{version-id}-{distro}-fuel
+            TEMP_DIR=${{WORKSPACE}}/tmp
+            SRC_DIR=${{WORKSPACE}}/src
+            PACKAGES_REPO_HOST=perestroika-repo-tst.infra.mirantis.net/mos-repos
+            GERRIT_HOST=review.fuel-infra.org
+            GERRIT_PORT=29418
+            GERRIT_USER={scm-user}
+            GERRIT_QUERY_FORMAT=TEXT
+      - shell: |
+          #!/bin/bash
+          set -ex
+          "${{WORKSPACE}}/rpm-repo-monitor.sh"
+    publishers:
+      - archive:
+          allow-empty: 'false'
+          artifacts: '**/report.txt'
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{scm-repo}'
+          scm-basedir: ''
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: 'master'
+    wrappers:
+       - gerrit-creds
+
+- project:
+    name: '8.0-repo-monitors'
+    version-id: '8.0'
+    scm-user: 'openstack-ci-jenkins'
+    scm-repo: 'fuel-infra/repo-monitor'
+    scm-credentials-id: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
+    build-node: 'new-builder'
+    jobs:
+      - '{version-id}-deb-repo-monitor'
+      - '{version-id}-rpm-repo-monitor':
+         distro: 'centos7'
