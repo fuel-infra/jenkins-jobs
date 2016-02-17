@@ -28,7 +28,7 @@ echo "Description string: <a href=\"${UPSTREAM_BUILD_URL}\">ISO ${REAL_UPSTREAM_
 echo "ISO_BUILD_URL=${UPSTREAM_BUILD_URL}" > iso_build_url.txt
 echo "UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID}" > ubuntu_mirror_id.txt
 
-curl "${UPSTREAM_BUILD_URL}artifact/magnet_link.txt" -o magnet_link.txt
+curl "${UPSTREAM_BUILD_URL}artifact/artifacts/magnet_link.txt" -o magnet_link.txt
 
 # Create properties file for downstream jobs
 
