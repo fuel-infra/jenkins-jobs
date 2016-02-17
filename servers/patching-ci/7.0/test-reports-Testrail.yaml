@@ -1,0 +1,42 @@
+- job:
+    name: '7.0-test-reports-Testrail'
+    builders:
+      - inject:
+           properties-content: |
+             TESTS_RUNNER=7.0.full.runner
+             TESTRAIL_TEST_SUITE=Swarm 7.0 patching
+             TESTRAIL_MILESTONE=7.0
+             LAUNCHPAD_MILESTONE=7.0
+      - shell:
+          !include-raw builders/test-reports-Testrail-upload_cases.sh
+      - shell:
+          !include-raw builders/test-reports-Testrail.sh
+    parameters:
+      - string:
+          name: TEST_JOB_NAME
+          description: 'Name of Jenkins job with tests results'
+          default: 'none'
+    node: testrail
+    publishers:
+      - email:
+          recipients: mos-maintenance@mirantis.com
+
+    triggers:
+      - timed: 'H */2 * * *'
+
+    scm:
+     - main-git:
+          reponame: 'fuel-qa'
+          repobranch: 'origin/stable/7.0'
+          basedir: ''
+
+
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
+
+    publishers:
+      - description-setter:
+          regexp: '^.*Report URL:\s*(.*)'
+          description: '<a href="\1">TestRail Report URL</a>'

@@ -1,0 +1,63 @@
+- job:
+    name: 'testrail.bugs.statistics'
+    description: 'Collect statistics for given test plan (run) in TestRail'
+    builders:
+      - inject:
+           properties-content: |
+             OUTPUT_FILE=bugs_stats
+      - shell:
+          !include-raw builders/testrail_generate_statistics.sh
+    parameters:
+      - string:
+          name: TEST_PLAN_ID
+          description: 'Test plan ID from TestRail'
+      - string:
+          name: TESTRAIL_RUN_IDS
+          description: 'Test run ID(s) from TestRail separated by comma. If empty then all runs will be checked. Example: 123,456'
+      - string:
+          name: HANDLE_BLOCKED
+          default: 'true'
+          description: 'Copy bug links from failed tests to appropriate downstream blocked tests'
+      - string:
+          name: SEPARATE_RUNS
+          default: 'false'
+          description: 'Create separate reports for each test run (in addition to entire report)'
+      - string:
+          name: CREATE_HTML
+          default: 'true'
+          description: 'Save statistics in HTML format (in addition to raw JSON)'
+      - string:
+          name: PUBLISH
+          default: 'false'
+          description: 'Publish generated statistics to the TestRail (overwrites previously posted stats)'
+    node: testrail
+
+    scm:
+     - main-git:
+          reponame: 'fuel-qa'
+          repobranch: 'origin/master'
+          basedir: ''
+
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
+
+    properties:
+      - authorization:
+          authenticated:
+            - job-read
+            - job-build
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'bugs_stats*'
+          latest-only: false
+
+      - email:
+          recipients: mos-maintenance@mirantis.com
+
+      - description-setter:
+          regexp: '^.*Found\s+TestPlan\s+(.*)$'
+          description: 'Bugs stats for \1'

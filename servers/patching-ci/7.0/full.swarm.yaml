@@ -38,7 +38,7 @@
           default: true
       - string:
           name: CUSTOM_VERSION
-          default: ''
+          default: 'MU'
           description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
     publishers:
       - description-setter:
