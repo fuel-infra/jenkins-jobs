@@ -17,7 +17,7 @@ function update_devops () {
     echo "Python virtual env exist"
   else
     rm -rf ${VIRTUAL_ENV}
-    virtualenv --system-site-packages  ${VIRTUAL_ENV}
+    virtualenv --no-site-packages  ${VIRTUAL_ENV}
     source ${VIRTUAL_ENV}/bin/activate
   fi
 
