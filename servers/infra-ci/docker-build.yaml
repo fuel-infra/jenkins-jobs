@@ -36,7 +36,7 @@
     wrappers:
       - timeout:
           fail: true
-          timeout: 5
+          timeout: 30
     publishers:
       - archive:
           allow-empty: false

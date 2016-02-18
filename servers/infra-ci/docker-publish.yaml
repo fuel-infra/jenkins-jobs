@@ -24,4 +24,4 @@
     wrappers:
       - timeout:
           fail: true
-          timeout: 20
+          timeout: 30
