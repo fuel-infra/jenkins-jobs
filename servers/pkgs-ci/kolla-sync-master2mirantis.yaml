@@ -1,0 +1,42 @@
+#
+# Tempated job parameters (using YAML anchors)
+#
+
+- kolla-sync-params: &kolla-sync-params
+    name: ''
+
+    # Branches to sync (see also short names below)
+    upstream-branch: 'master'
+    downstream-branch: 'mirantis'
+    mail-to: mos-kolla@mirantis.com
+
+    # Branch short names for jobs naming
+    src-branch: master
+    dst-branch: mirantis
+
+    # Syncronization schedule
+    sync-schedule: 'H 3 * * 4'  # every Thursday at 3:00 am, spread evenly
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: 'openstack-ci-mirrorer-jenkins'
+    gerrit-creds: 'a4be8c41-43e0-4269-94d8-53133cfe3ae5'
+    gerrit-topic: 'sync/{src-branch}/{dst-branch}'
+
+    # Jobs
+    jobs:
+      - 'sync-{name}-{src-branch}-{dst-branch}'
+
+#
+# Projects definitions
+#
+
+- project:
+    name: 'kolla'
+    <<: *kolla-sync-params
+
+- project:
+    name: 'kolla-mesos'
+    <<: *kolla-sync-params
+
