@@ -19,6 +19,8 @@ ln -s "${NODE_MODULES}" node_modules
 npm install
 
 export TEST_NAILGUN_DB=nailgun
+export NAILGUN_DB_HOST=127.0.0.1
+export DB_ROOTPW=insecurepassword
 
 # Run UI tests
 npm run lint
