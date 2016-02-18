@@ -12,80 +12,80 @@
    properties: ''
    weight: '7'
    jobs:
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_vlan_group_1'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_vlan_group_2'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_vlan_group_3'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_vlan_group_4'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_vlan_group_5'
          properties: |
            EXTERNAL_DNS=8.8.4.4, 172.18.80.136
            EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_vlan_group_6'
          properties: |
            EXTERNAL_DNS=8.8.4.4, 172.18.80.136
            EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_vlan_group_7'
          properties: |
            EXTERNAL_DNS=8.8.4.4, 172.18.80.136
            EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_tun_group_1'
          properties: |
            EXTERNAL_DNS=8.8.4.4, 172.18.80.136
            EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_tun_group_2'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_tun_group_3'
          properties: |
            EXTERNAL_DNS=8.8.4.4, 172.18.80.136
            EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_scale_group_1'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_scale_group_2'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_scale_group_3'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_scale_group_4'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_scale_group_5'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_scale_group_6'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'mongo_multirole'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'multirole_group_1'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'mixed_os_components'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'murano_os_component'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'sahara_os_component'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'cli_acceptance_deployment_tests'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'cli_acceptance_ceph_deployment_tests'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'cli_component_role_tests'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'tests_gpg_singing_check'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'failover_group_1'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'failover_group_2'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'failover_group_mongo'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'load'
          properties: |
            PATCHING_RUN_RALLY=true
-     - '{version-id}.{id}.{dist}.plugins.{testgroup}':
+     - '8.0.{id}.{dist}.plugins.{testgroup}':
          testgroup: 'thread_separate_services_ceph'
