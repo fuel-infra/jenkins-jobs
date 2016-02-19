@@ -7,12 +7,12 @@
     parameters:
       - string:
           name: TEST_RUNNER
-          default: '6.1.test_all'
+          default: '6.1.full.runner'
       - string:
           name: BUILD_NUMBER
       - string:
           name: TESTRAIL_TEST_SUITE
-          default: "Smoke/BVT"
+          default: "Swarm 6.1 patching"
       - string:
           name: MANUAL
           default: 'true'
@@ -21,7 +21,7 @@
           default: "https://mirantis.testrail.com"
       - string:
           name: VENV_PATH
-          default: "/home/jenkins/venv-nailgun-tests-2.9"
+          default: "/home/jenkins/qa-venv-6.1"
 
     builders:
       - shell:
