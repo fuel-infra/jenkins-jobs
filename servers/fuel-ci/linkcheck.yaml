@@ -59,8 +59,6 @@
           artifacts: 'build_*.txt'
           allow-empty: 'true'
           fingerprint: true
-      - email:
-          recipients: ci+alert@mirantis.com
 
 - project:
     name: 'multi-linkcheck'
