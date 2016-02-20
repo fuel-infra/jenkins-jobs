@@ -208,6 +208,11 @@
            SLAVE_NODE_CPU=4
          weight: 11
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'repetitive_restart'
+         properties: |
+           PATCHING_RUN_RALLY=true
+         timeout: '960'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ready_node_reinstallation'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'error_node_reinstallation'

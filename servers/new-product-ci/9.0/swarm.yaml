@@ -201,6 +201,9 @@
             - name: '9.0.system_test.ubuntu.fuel_master_migrate'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.system_test.ubuntu.repetitive_restart'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '9.0.system_test.ubuntu.ready_node_reinstallation'
               current-parameters: true
               kill-phase-on: NEVER
