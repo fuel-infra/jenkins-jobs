@@ -14,7 +14,7 @@
 
           send-to:
             - recipients
-          recipients: 'devops+alert@mirantis.net'
+          recipients: 'ci+alert@mirantis.net'
           subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
           presend-script:
             !include-raw 'email_ext_groovy.inc'
@@ -26,7 +26,7 @@
           body: $DEFAULT_CONTENT
           send-to:
             - recipients
-          recipients: '$GERRIT_CHANGE_OWNER_EMAIL, devops+fuel-ci-gating@mirantis.com'
+          recipients: '$GERRIT_CHANGE_OWNER_EMAIL, ci+fuel-ci-gating@mirantis.com'
           subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
           failure: true
 
