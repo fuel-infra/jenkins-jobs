@@ -88,6 +88,7 @@
       - '{mos_version}-fuel-pkg-repotest-{distro}'
 
 - project:
+    <<: *common_template
     name: 'pkg-mos-rhel'
     os: 'rhel'
     openstack_release: 'ubuntu'
@@ -105,9 +106,10 @@
     gerrit-host: 'review.fuel-infra.org'
     gerrit-user: 'openstack-ci-jenkins'
     gerrit-port: '29418'
-    <<: *common_template
 
 - project:
+    <<: *common_template
+    <<: *mos_template
     name: 'pkg-mos-centos'
     os: 'centos'
     mos_version:
@@ -130,10 +132,10 @@
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
     openstack_release: 'centos'
-    <<: *common_template
-    <<: *mos_template
 
 - project:
+    <<: *common_template
+    <<: *mos_template
     name: 'pkg-mos-debian'
     os: 'debian'
     mos_version:
@@ -156,10 +158,10 @@
           pkg_type: 'deb'
           spec_path_prefix: '/jessie'
     openstack_release: 'debian'
-    <<: *common_template
-    <<: *mos_template
 
 - project:
+    <<: *common_template
+    <<: *mos_template
     name: 'pkg-mos-ubuntu'
     os: 'ubuntu'
     mos_version:
@@ -182,21 +184,21 @@
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
     openstack_release: 'ubuntu'
-    <<: *common_template
-    <<: *mos_template
 
 - project:
+    <<: *gerrit_params
+    <<: *common_template
     name: 'gate'
     mos_version:
       - 'master'
       - '8.0'
       - '9.0'
-    <<: *gerrit_params
-    <<: *common_template
     jobs:
       - '{mos_version}-pkg-gate'
 
 - project:
+    <<: *common_template
+    <<: *fuel_template
     name: 'pkg-fuel'
     mos_version:
       - 'master':
@@ -219,8 +221,6 @@
           openstack_release: 'ubuntu'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
-    <<: *common_template
-    <<: *fuel_template
 
 - project:
     name: 'maintenace'
