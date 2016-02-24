@@ -125,6 +125,7 @@
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
+          is_updates: 'true'
       - '9.0':
           fuel-main-branch: 'master'
           fuel-qa-branch: 'master'
@@ -177,6 +178,7 @@
           distro: 'trusty'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
+          is_updates: 'true'
       - '9.0':
           fuel-main-branch: 'master'
           fuel-qa-branch: 'master'
@@ -207,6 +209,7 @@
       - '8.0':
           fuel-main-branch: 'stable/8.0'
           fuel-qa-branch: 'stable/8.0'
+          is_updates: 'true'
       - '9.0':
           fuel-main-branch: 'master'
           fuel-qa-branch: 'master'
