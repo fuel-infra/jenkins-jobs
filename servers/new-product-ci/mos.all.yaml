@@ -39,10 +39,12 @@
             SHOTGUN_REPO={git-root}shotgun.git
             NETWORKCHECKER_REPO={git-root}network-checker.git
             FUELUPGRADE_REPO={git-root}fuel-upgrade.git
-            ISO_ID={version}-mos
-            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
-            MOS_UBUNTU_TARGET={version}.target.txt
+
+            ISO_ID={version}{mod}
             MOS_CENTOS_ROOT=/mos-repos/centos/mos{version}-centos7-fuel/
+            MOS_UBUNTU_TARGET=master.target.txt
+            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
+            MIRROR_MOS_UBUNTU_SUITE=mos-master
       - inject: # Overrides
           properties-content: |
             $ADDITIONAL_VARIABLES
