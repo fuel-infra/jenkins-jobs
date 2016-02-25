@@ -11,6 +11,8 @@
    timeout: '480'
    properties: |
      SLAVE_NODE_MEMORY=3072
+     FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+     ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
    weight: '7'
    jobs:
      - '{version-id}.{id}.{dist}.{testgroup}':
@@ -154,6 +156,7 @@
             RH_IMAGE_USER=root
             RH_IMAGE_PASSWORD=r00tme
             CENTOS_DUMMY_DEPLOY=False
+            PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos9.0-centos7/os/x86_64/
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha'
          weight: '11'
