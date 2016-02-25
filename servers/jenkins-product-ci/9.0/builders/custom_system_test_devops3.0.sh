@@ -76,6 +76,10 @@ if [[ "${fuel_qa_gerrit_commit}" != "none" ]] ; then
   done
 fi
 
+# LP Bug:1549769 , seedclient should be started without activated virtualenv
+ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
+echo "${ISO_PATH}"
+
 export VENV_PATH="/home/jenkins/venv-nailgun-tests-2.9"
 
 # Checking gerrit commits for fuel-devops
@@ -114,8 +118,6 @@ fi
 rm -rf logs/*
 
 export MAKE_SNAPSHOT=${MAKE_SNAPSHOT}
-ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
-echo "${ISO_PATH}"
 
 # Fix parameters for ha_neutron_destructive test
 if [[ "${TEST_GROUP}" == "ha_neutron_destructive" ]]; then

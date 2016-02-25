@@ -239,7 +239,9 @@ if eval \$${ENABLE_CUSTOM_VAR}; then
         fi
         export PATCHING_CUSTOM_TEST
         if [[ ! -r ${ISO_PATH} ]]; then
+            deactivate    #  LP Bug:1549769
             ISO_PATH="$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")"
+            source "${VENV_PATH}/bin/activate"
         fi
         sh -x "${SYSTEM_TESTS}" -V "${VENV_PATH}" -t test -e "${ENV_NAME}" -i "${ISO_PATH}" -o --group="${TEST_GROUP}" -w "${FUEL_WORKSPACE}" && TESTS_EXIT_CODE="${?}" || TESTS_EXIT_CODE="${?}"
         TESTS_EXIT_CODES+=("${TESTS_EXIT_CODE}")
