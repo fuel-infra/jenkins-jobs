@@ -109,7 +109,7 @@
       - inject:
           # injects variable UBUNTU_MIRROR_ID
           properties-file: 'ubuntu_mirror_id.txt'
-      - systest
+      - shell: !include-raw-escape builders/system_test.sh
     wrappers:
       - timeout:
           fail: true
