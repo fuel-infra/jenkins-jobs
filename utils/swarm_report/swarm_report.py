@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def get_build_data(
         job_name,
         build_number="lastBuild",
-        jenkins_url="http://jenkins-product.srt.mirantis.net:8080",
+        jenkins_url="https://product-ci.infra.mirantis.net",
         params=None):
 
     build_url = "{0}/job/{1}/{2}/api/json".format(jenkins_url, job_name, build_number)
@@ -115,8 +115,8 @@ def plot_data(swarm_data, builds_data, nodes):
     set_hourly_x_ticks(plt)
 
     plt.xlabel('Time')
-    plt.title('Swarm run #%s - %s' %
-              (swarm_data['number'], datetime_from_id(swarm_data['id']))
+    plt.title('Swarm run #%s' %
+              (swarm_data['number'])
     )
 
     # Set labels for every bar
