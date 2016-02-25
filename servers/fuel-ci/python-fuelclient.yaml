@@ -12,6 +12,7 @@
       - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
           dist: ubuntu
           testgroup: review_fuel_client
+          timed: '15 */12 * * *'
           properties: |
             KEEP_BEFORE=true
             BUILD_IMAGES=true

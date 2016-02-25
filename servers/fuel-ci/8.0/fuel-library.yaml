@@ -12,6 +12,7 @@
       - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
           dist: ubuntu
           testgroup: smoke_neutron
+          timed: '0 */12 * * *'
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -19,6 +20,7 @@
       - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
           dist: ubuntu
           testgroup: neutron_vlan_ha
+          timed: '59 */12 * * *'
           properties: |
             SYNC_DEPL_TASKS=true
             KEEP_BEFORE=yes
