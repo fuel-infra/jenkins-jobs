@@ -80,22 +80,27 @@ export VENV_PATH="/home/jenkins/venv-nailgun-tests-2.9"
 
 # Checking gerrit commits for fuel-devops
 if [[ ${FUEL_DEVOPS_COMMIT} != "none" ]] ; then
-  virtualenv --system-site-packages ${WORKSPACE}/devops-venv
   export VENV_PATH="${WORKSPACE}/devops-venv"
-  . ./devops-venv/bin/activate
+  virtualenv ${VENV_PATH}
+  . ${VENV_PATH}/bin/activate
   pip install -r ./fuelweb_test/requirements.txt --upgrade
   git clone https://github.com/openstack/fuel-devops.git
   cd ./fuel-devops
   git checkout ${FUEL_DEVOPS_COMMIT}
   if [[ "${fuel_devops_gerrit_commit}" != "none" ]] ; then
     for devops_commit in ${fuel_devops_gerrit_commit} ; do
-      git fetch https://review.openstack.org/openstack/fuel-devops "${fuel_devops_gerrit_commit}" && git cherry-pick FETCH_HEAD
+      git fetch https://review.openstack.org/openstack/fuel-devops "${devops_commit}" && git cherry-pick FETCH_HEAD
     done
   fi
   pip uninstall -y fuel-devops
   pip install ./ --upgrade
   cd ${WORKSPACE}
+  export DEVOPS_DB_NAME=${VENV_PATH}/fuel_devops.sqlite3
   export DEVOPS_DB_ENGINE="django.db.backends.sqlite3"
+  echo "export DEVOPS_DB_ENGINE='django.db.backends.sqlite3'" >> ${VENV_PATH}/bin/activate
+  echo "export DEVOPS_DB_NAME=\${VIRTUAL_ENV}/fuel_devops.sqlite3" >> ${VENV_PATH}/bin/activate
+# Ability to unset custom variables to avoid confusion with variables in case of manual check of job results.
+  sed -i "s/\(unset VIRTUAL_ENV\)/\1 DEVOPS_DB_ENGINE DEVOPS_DB_NAME/" ${VENV_PATH}/bin/activate
   django-admin.py syncdb --settings=devops.settings
   django-admin.py migrate devops --settings=devops.settings
 fi
