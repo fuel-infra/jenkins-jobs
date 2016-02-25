@@ -76,16 +76,10 @@
       - shell: |
           #!/bin/bash -xe
           # Clean logs from previous runs
-          rm -vf fuel-qa/logs/* {{deb,rpm}}.publish.setenvfile
+          rm -vf fuel-qa/logs/* buildresult.params
       - copyartifact:
-          project: '{mos_version}-pkg-pipeline-centos'
-          filter: 'rpm.publish.setenvfile'
-          which-build: last-successful
-          parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
-          optional: true
-      - copyartifact:
-          project: '{mos_version}-pkg-pipeline-ubuntu'
-          filter: 'deb.publish.setenvfile'
+          project: '{mos_version}-pkg-pipeline-{os}'
+          filter: 'buildresult.params'
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
           optional: true
@@ -93,13 +87,25 @@
           project: 'devops.{mos_version}.env'
           filter: 'fuel_qa_commit.txt,magnet_link.txt,ubuntu_mirror_id.txt'
           which-build: last-successful
-      - shell: /bin/bash -xec 'touch {{deb,rpm}}.publish.setenvfile'
       - inject:
-          # injects set of variables about published RPM packages
-          properties-file: 'rpm.publish.setenvfile'
-      - inject:
-          # injects set of variables about published DEB packages
-          properties-file: 'deb.publish.setenvfile'
+          # injects set of variables about built packages
+          properties-file: 'buildresult.params'
+      - conditional-step:
+          condition-kind: strings-match
+          condition-string1: '{pkg_type}'
+          condition-string2: 'rpm'
+          steps:
+            - inject:
+                properties-content: |
+                  EXTRA_RPM_REPOS=${{EXTRAREPO}}
+      - conditional-step:
+          condition-kind: strings-match
+          condition-string1: '{pkg_type}'
+          condition-string2: 'deb'
+          steps:
+            - inject:
+                properties-content: |
+                  EXTRA_DEB_REPOS=${{EXTRAREPO}}
       - inject:
           # injects variable FUEL_QA_COMMIT
           properties-file: 'fuel_qa_commit.txt'

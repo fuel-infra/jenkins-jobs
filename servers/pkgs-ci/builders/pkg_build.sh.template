@@ -66,14 +66,10 @@ if [ "${{GERRIT_CHANGE_STATUS}}" = "MERGED" ]; then
 else
     export ORIGIN=testing
 fi
-export DEB_PROPOSED_REPO_PATH=
-export DEB_PROPOSED_DIST_NAME={project-name}{mos_version}-proposed
-export DEB_UPDATES_REPO_PATH=
-export DEB_UPDATES_DIST_NAME={project-name}{mos_version}-updates
-export DEB_SECURITY_REPO_PATH=
-export DEB_SECURITY_DIST_NAME={project-name}{mos_version}-security
-export DEB_HOLDBACK_REPO_PATH=
-export DEB_HOLDBACK_DIST_NAME={project-name}{mos_version}-holdback
+export DEB_PROPOSED_DIST_NAME=${{DEB_DIST_NAME}}-proposed
+export DEB_UPDATES_DIST_NAME=${{DEB_DIST_NAME}}-updates
+export DEB_SECURITY_DIST_NAME=${{DEB_DIST_NAME}}-security
+export DEB_HOLDBACK_DIST_NAME=${{DEB_DIST_NAME}}-holdback
 
 # RPM-specific parameters
 export RPM_OS_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/os
@@ -113,7 +109,7 @@ cat >> buildresult.params <<EOF
 
 # Added for publisher
 ORIGIN=${{ORIGIN}}
-IS_UPDATES={is_updates}
+IS_UPDATES=${{IS_UPDATES}}
 REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
 REPO_BASE_PATH={repo-base-path}
 DEB_DIST_NAME=${{DEB_DIST_NAME}}
