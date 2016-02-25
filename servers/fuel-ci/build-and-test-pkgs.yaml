@@ -118,6 +118,8 @@
                   branch-pattern: '{projectbranch}'
           readable-message: true
           custom-url: '* $JOB_NAME $BUILD_URL'
+      # check for monitoring
+      - timed: '{timed}'
 
     wrappers:
       - timeout:
