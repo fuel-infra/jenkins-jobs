@@ -2,8 +2,6 @@
 
 set -ex
 
-echo STARTED_TIME="`date -u +'%Y-%m-%dT%H:%M:%S'`" > ci_status_params.txt
-
 export FEATURE_GROUPS="mirantis"
 
 PROD_VER=$(grep '^PRODUCT_VERSION' config.mk | cut -d= -f2)
@@ -120,5 +118,3 @@ if [ "${trigger_community_build}" = "true" ]; then
 fi
 
 echo "BUILD FINISHED."
-
-echo FINISHED_TIME="`date -u +'%Y-%m-%dT%H:%M:%S'`" >> ci_status_params.txt
