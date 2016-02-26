@@ -45,6 +45,7 @@ export FUELMENU_GERRIT_COMMIT="${fuelmenu_gerrit_commit}"
 export SHOTGUN_GERRIT_COMMIT="${shotgun_gerrit_commit}"
 export NETWORKCHECKER_GERRIT_COMMIT="${networkchecker_gerrit_commit}"
 export FUELUPGRADE_GERRIT_COMMIT="${fuelupgrade_gerrit_commit}"
+export FUEL_UI_GERRIT_COMMIT="${fuel_ui_gerrit_commit}"
 
 ######## Get node location to choose closer mirror ###############
 # We are building everything with USE_MIRROR=none
@@ -187,6 +188,7 @@ echo FUELMENU_GERRIT_COMMIT="${fuelmenu_gerrit_commit}" >> "${ARTS_DIR}/gerrit_c
 echo SHOTGUN_GERRIT_COMMIT="${shotgun_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo NETWORKCHECKER_GERRIT_COMMIT="${networkchecker_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo FUELUPGRADE_GERRIT_COMMIT="${fuelupgrade_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
+echo FUEL_UI_GERRIT_COMMIT="${fuel_ui_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 
 
 cp "${LOCAL_MIRROR}"/*changelog "${ARTS_DIR}/" || true

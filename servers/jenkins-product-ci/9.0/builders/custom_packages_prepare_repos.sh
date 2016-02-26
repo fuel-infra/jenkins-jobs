@@ -29,6 +29,7 @@ FUEL_AGENT_GERRIT_URL=https://review.openstack.org/openstack/fuel-agent
 FUEL_MAIN_GERRIT_URL=https://review.openstack.org/openstack/fuel-main
 FUEL_MIRROR_GERRIT_URL=https://review.openstack.org/openstack/fuel-mirror
 FUEL_NAILGUN_AGENT_GERRIT_URL=https://review.openstack.org/openstack/fuel-nailgun-agent
+FUEL_UI_GERRIT_URL=https://review.openstack.org/openstack/fuel-ui
 FUELLIB_GERRIT_URL=https://review.openstack.org/openstack/fuel-library
 FUELMENU_GERRIT_URL=https://review.openstack.org/openstack/fuel-menu
 FUELUPGRADE_GERRIT_URL=https://review.openstack.org/openstack/fuel-upgrade
@@ -45,6 +46,7 @@ SHOTGUN_GERRIT_URL=https://review.openstack.org/openstack/shotgun
   echo FUEL_MAIN_GERRIT_COMMIT="${FUEL_MAIN_GERRIT_COMMIT}";
   echo FUEL_MIRROR_GERRIT_COMMIT="${FUEL_MIRROR_GERRIT_COMMIT}";
   echo FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${FUEL_NAILGUN_AGENT_GERRIT_COMMIT}";
+  echo FUEL_UI_GERRIT_COMMIT="${FUEL_UI_GERRIT_COMMIT}";
   echo FUELLIB_GERRIT_COMMIT="${FUELLIB_GERRIT_COMMIT}";
   echo FUELMENU_GERRIT_COMMIT="${FUELMENU_GERRIT_COMMIT}";
   echo FUELUPGRADE_GERRIT_COMMIT="${FUELUPGRADE_GERRIT_COMMIT}";
@@ -67,3 +69,4 @@ build_repo fuelmenu "${FUELMENU_REPO}" "${FUELMENU_COMMIT}" "${FUELMENU_GERRIT_U
 build_repo network-checker "${NETWORKCHECKER_REPO}" "${NETWORKCHECKER_COMMIT}" "${NETWORKCHECKER_GERRIT_URL}" "${NETWORKCHECKER_GERRIT_COMMIT}"
 build_repo python-fuelclient "${PYTHON_FUELCLIENT_REPO}" "${PYTHON_FUELCLIENT_COMMIT}" "${PYTHON_FUELCLIENT_GERRIT_URL}" "${PYTHON_FUELCLIENT_GERRIT_COMMIT}"
 build_repo shotgun "${SHOTGUN_REPO}" "${SHOTGUN_COMMIT}" "${SHOTGUN_GERRIT_URL}" "${SHOTGUN_GERRIT_COMMIT}"
+build_repo shotgun "${FUEL_UI_REPO}" "${FUEL_UI_COMMIT}" "${FUEL_UI_GERRIT_URL}" "${FUEL_UI_GERRIT_COMMIT}"

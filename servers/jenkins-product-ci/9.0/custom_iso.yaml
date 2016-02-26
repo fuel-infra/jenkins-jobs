@@ -32,6 +32,7 @@
           name: make_args
           default: ''
           description: Additional make arguments
+
       - string:
           name: FUELLIB_COMMIT
           default: 'master'
@@ -72,6 +73,10 @@
           name: FUELMAIN_COMMIT
           default: 'master'
       - string:
+          name: FUEL_UI_COMMIT
+          default: 'master'
+
+      - string:
           name: FUELLIB_REPO
           default: 'https://git.openstack.org/openstack/fuel-library.git'
       - string:
@@ -110,11 +115,16 @@
       - string:
           name: FUELMAIN_REPO
           default: 'https://git.openstack.org/openstack/fuel-main.git'
+      - string:
+          name: FUEL_UI_REPO
+          default: 'https://git.openstack.org/openstack/fuel-ui.git'
+
       - choice:
           name: USE_MIRROR
           choices:
             - none
           description: 'take closest mirror'
+
       - string:
           name: fuelmain_gerrit_commit
           default: 'none'
@@ -180,6 +190,12 @@
           default: 'none'
           description: Refspecs for commits in fuel-upgrade gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuel_ui_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-ui gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+
       - string:
           name: EXTRA_RPM_REPOS
           default: ''

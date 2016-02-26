@@ -73,6 +73,9 @@
       - string:
           name: SHOTGUN_COMMIT
           default: 'master'
+      - string:
+          name: FUEL_UI_COMMIT
+          default: 'master'
 
       - string:
           name: ASTUTE_REPO
@@ -113,6 +116,9 @@
       - string:
           name: SHOTGUN_REPO
           default: 'https://git.openstack.org/openstack/shotgun.git'
+      - string:
+          name: FUE_UI_REPO
+          default: 'https://git.openstack.org/openstack/fuel-ui.git'
 
       - string:
           name: ASTUTE_GERRIT_COMMIT
@@ -178,6 +184,11 @@
           name: SHOTGUN_GERRIT_COMMIT
           default: 'none'
           description: Refspecs for commits in shotgun gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - string:
+          name: fuel_ui_gerrit_commit
+          default: 'none'
+          description: Refspecs for commits in fuel-ui gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
 
       - string:
