@@ -19,6 +19,10 @@
       - bool:
           name: 'download_images'
           default: false
+      - bool:
+          name: FORCE_DELETE_DEVOPS
+          default: false
+          description: 'Force to delete devops venv before update'
       - node:
           name: NODE
           allowed-multiselect: true
