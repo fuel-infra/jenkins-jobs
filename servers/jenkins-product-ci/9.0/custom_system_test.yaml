@@ -112,7 +112,9 @@
             deb http://../ubuntu trusty main universe multiverse|deb http://../ubuntu trusty-updates main universe multiverse|deb http://../ubuntu trusty-security main universe multiverse|deb http://../ubuntu trusty-proposed main universe multiverse
       - string:
           name: FUEL_QA_COMMIT
-          default: 'master'
+          default: 'origin/master'
+          description: |
+            git-sha commit in any format, for example: origin/master or 90a7d02bf
       - string:
           name: fuel_qa_gerrit_commit
           default: 'none'
@@ -165,7 +167,7 @@
     scm:
       - git:
           branches:
-            - 'origin/$FUEL_QA_COMMIT'
+            - '$FUEL_QA_COMMIT'
           url: 'https://github.com/openstack/fuel-qa.git'
     wrappers:
       - ansicolor:
