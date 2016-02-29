@@ -164,6 +164,8 @@ if [ -z "${EXTRA_RPM_REPOS}" ]; then
     if [ -n "${RPM_REPO_URL}" ]; then
         EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}|test-repo,$(get_rpm_snapshot "${RPM_REPO_URL}"),${EXTRA_RPM_REPOS_PRIORITY}"
     fi
+else
+    EXTRA_RPM_REPOS="$(tr -d \\\" <<< ${EXTRA_RPM_REPOS})"
 fi
 
 if [ -z "${EXTRA_DEB_REPOS}" ]; then
@@ -171,6 +173,8 @@ if [ -z "${EXTRA_DEB_REPOS}" ]; then
     if [ -n "${DEB_REPO_URL}" ]; then
         EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}|deb $(get_deb_snapshot "${DEB_REPO_URL}") ${DEB_DIST_NAME} ${DEB_COMPONENTS},${EXTRA_DEB_REPOS_PRIORITY}"
     fi
+else
+    EXTRA_DEB_REPOS="$(tr -d \\\" <<< ${EXTRA_DEB_REPOS})"
 fi
 
 export EXTRA_RPM_REPOS EXTRA_DEB_REPOS
