@@ -146,7 +146,7 @@
             LATEST_MAGNET_LINK={latest_magnet_link}
             VENV_PATH={venvpath}
             SYSTEST_ROOT=$WORKSPACE/fuel-qa
-            ENV_NAME=env_{version-id}_$TEST_GROUP-$BUILD_NUMBER
+            ENV_NAME={version-id}_$TEST_GROUP-$BUILD_NUMBER
       - inject:
           # deployment test variables
           properties-content: |
