@@ -139,10 +139,6 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'known_issues'
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'backup_restore_master'
-         properties: |
-            ADMIN_NODE_VOLUME_SIZE=100
-     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'rh'
          node: 'systest-rh'
          pre-script: !include-raw-escape '../builders/rh-libvirt-fix-script.sh'
