@@ -1,0 +1,57 @@
+- job-template:
+    name: 'puppet-openstack.fuel.noop'
+    builders:
+      - shell:
+          !include-raw-escape builders/prepare-puppet-module.sh
+      - shell:
+          !include-raw-escape builders/fuellib_noop_tests.sh
+    concurrent: true
+    description: Runs fuel-library noop tests using master of puppet-openstack modules.
+    node: fuel-library-unit-tests
+    parameters:
+      - string:
+          name: GERRIT_PROJECT
+          default: 'openstack/puppet-nova'
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 2
+      - throttle:
+          max-per-node: 1
+          option: project
+    scm:
+      - git:
+          branches:
+            - master
+          remotes:
+            - gerrit:
+                url: https://review.openstack.org/openstack/fuel-library.git
+          choosing-strategy: default
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                url: https://review.openstack.org/$GERRIT_PROJECT.git
+                refspec: $GERRIT_REFSPEC
+          basedir: upstream_module/$GERRIT_PROJECT
+          choosing-strategy: gerrit
+    triggers:
+      - timed: 'H 2 * * *'
+      - puppet-openstack-request:
+          fuel-infra-request-recheck_regexp: '{gerrit_trigger_on_recheck_regexp}'
+          projects_regexp: '{puppet_openstack_projects_regexp}'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 90
+          write-description: true
+
+- project:
+    name: puppet-openstack-noop
+    jobs:
+      - 'puppet-openstack.fuel.noop'
