@@ -68,6 +68,10 @@
     <<: *common-sync-params
 
 - project:
+    name: 'fuel-ui'
+    <<: *common-sync-params
+
+- project:
     name: 'fuel-upgrade'
     <<: *common-sync-params
 
