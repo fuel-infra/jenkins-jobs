@@ -73,10 +73,10 @@ function download_images () {
   TMP_QA_CENTOS_COMPUTE=$(seedclient-wrapper -d -m "${QA_CENTOS_COMPUTE}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
   TMP_QA_RHEL_COMPUTE=$(seedclient-wrapper -d -m "${QA_RHEL_COMPUTE}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
 
-  TMP_INSTALL_PACKAGES_CENTOS-6.4=$(seedclient-wrapper -d -m "${INSTALL_PACKAGES_CENTOS-6.4}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
-  TMP_INSTALL_PACKAGES_CENTOS-7.0=$(seedclient-wrapper -d -m "${INSTALL_PACKAGES_CENTOS-7.0}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
-  TMP_INSTALL_PACKAGES_UBUNTU-12.04=$(seedclient-wrapper -d -m "${INSTALL_PACKAGES_UBUNTU-12.04}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
-  TMP_INSTALL_PACKAGES_UBUNTU-14.04=$(seedclient-wrapper -d -m "${INSTALL_PACKAGES_UBUNTU-14.04}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
+  TMP_INSTALL_PACKAGES_CENTOS_6_4=$(seedclient-wrapper -d -m "${INSTALL_PACKAGES_CENTOS_6_4}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
+  TMP_INSTALL_PACKAGES_CENTOS_7_0=$(seedclient-wrapper -d -m "${INSTALL_PACKAGES_CENTOS_7_0}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
+  TMP_INSTALL_PACKAGES_UBUNTU_12_04=$(seedclient-wrapper -d -m "${INSTALL_PACKAGES_UBUNTU_12_04}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
+  TMP_INSTALL_PACKAGES_UBUNTU_14_04=$(seedclient-wrapper -d -m "${INSTALL_PACKAGES_UBUNTU_14_04}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
 }
 
 # DevOps 2.5.x

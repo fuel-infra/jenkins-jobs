@@ -72,19 +72,19 @@
           default: 'magnet:?xt=urn:btih:d079dd9f4872a3a063a2324c4dced153f0a7aea4&dn=rhel7%5F04022016.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Frhel7%5F04022016.qcow2'
           description: 'https://bugs.launchpad.net/fuel/+bug/1522446'
       - string:
-          name: INSTALL_PACKAGES_CENTOS-6.4
+          name: INSTALL_PACKAGES_CENTOS_6_4
           default: 'magnet:?xt=urn:btih:5cc692e7d3ec6647c8229611aed3f4fff2713181&dn=centos-6.4-x86%5F64-20151213015813.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Fcentos-6.4-x86%5F64-20151213015813.qcow2'
           description: 'https://bugs.launchpad.net/fuel/+bug/1524807'
       - string:
-          name: INSTALL_PACKAGES_CENTOS-7.0
+          name: INSTALL_PACKAGES_CENTOS_7_0
           default: 'magnet:?xt=urn:btih:77b6373134b22b002e494cd84a754c89369880cf&dn=centos-7.0-x86%5F64-20151213015813.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Fcentos-7.0-x86%5F64-20151213015813.qcow2'
           description: 'https://bugs.launchpad.net/fuel/+bug/1524807'
       - string:
-          name: INSTALL_PACKAGES_UBUNTU-12.04
+          name: INSTALL_PACKAGES_UBUNTU_12_04
           default: 'magnet:?xt=urn:btih:5bb9f364bb3d2810487c6cf9eba2a835430f6acb&dn=ubuntu-12.04-amd64-20151213015813.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Fubuntu-12.04-amd64-20151213015813.qcow2'
           description: 'https://bugs.launchpad.net/fuel/+bug/1524807'
       - string:
-          name: INSTALL_PACKAGES_UBUNTU-14.04
+          name: INSTALL_PACKAGES_UBUNTU_14_04
           default: 'magnet:?xt=urn:btih:c6014d5cd0d1bf9e7bd83b0e1a3a2e0161de68f2&dn=ubuntu-14.04-amd64-20151213015813.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Fubuntu-14.04-amd64-20151213015813.qcow2'
           description: 'https://bugs.launchpad.net/fuel/+bug/1524807'
     publishers:
