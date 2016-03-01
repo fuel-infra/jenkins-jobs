@@ -45,7 +45,10 @@ export DEBEMAIL=$(git -C "${PROJECT_ROOT}" log -1 --pretty=format:%ae)
 DEBMSG=$(git -C "${PROJECT_ROOT}" log -1 --pretty=%s)
 
 # for rpm
-git archive --format=tar.gz --worktree-attributes HEAD --output="${SOURCE_PATH}/${PROJECT_PACKAGE}-${RPM_PACKAGE_VERSION}.tar.gz"
+# add local modifications (e.g. prepared upstream puppet modules) to source archive
+git add -A
+uploadStash=$(git stash create)
+git archive --format=tar.gz --worktree-attributes ${uploadStash:-HEAD} --output="${SOURCE_PATH}/${PROJECT_PACKAGE}-${RPM_PACKAGE_VERSION}.tar.gz"
 cp -v "${PROJECT_ROOT}/specs/${PROJECT_PACKAGE}.spec" "${SOURCE_PATH}"
 # update spec with proper version
 sed -i "s|Release:.*$|Release: ${RELEASE}|" "${SOURCE_PATH}/${PROJECT_PACKAGE}.spec"
