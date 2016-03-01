@@ -7,7 +7,7 @@
       Test requests for fuel-web UI (./run_tests.sh --webui) stable/8.0 branch
 
       Uses venv with python2.7
-    node: verify-fuel-web-ui
+    node: 'old-verify-fuel-web-ui'
     concurrent: true
     parameters:
       - string:
