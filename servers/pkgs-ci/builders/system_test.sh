@@ -25,6 +25,12 @@ get_rpm_snapshot() {
     echo "${repo_url%/*}/${snapshot}/x86_64"
 }
 
+join () {
+    local IFS="${1}"
+    shift
+    echo "$*"
+}
+
 ###################### Set defaults ###############
 # When job is triggerred by Zuul, parameters for job are set by Zuul, and job
 # defaults are not applied.
@@ -174,7 +180,24 @@ if [ -z "${EXTRA_DEB_REPOS}" ]; then
         EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}|deb $(get_deb_snapshot "${DEB_REPO_URL}") ${DEB_DIST_NAME} ${DEB_COMPONENTS},${EXTRA_DEB_REPOS_PRIORITY}"
     fi
 else
+    # Remove double quotes
     EXTRA_DEB_REPOS="$(tr -d \\\" <<< ${EXTRA_DEB_REPOS})"
+
+    # Each element must be repository description as used in sources.list (prepended by "deb")
+    # 1. Split EXTRA_DEB_REPOS to individual repository description
+    OLDIFS=${IFS}
+    IFS='|'
+    DEB_REPOS=( ${EXTRA_DEB_REPOS} )
+    IFS=${OLDIFS}
+
+    # 2. Check that first element is word "deb" and prepend it otherwise
+    for REPO_NUM in ${!DEB_REPOS[@]}; do
+      REPO_ELEMENTS=( ${DEB_REPOS[${REPO_NUM}]} )
+      test "${REPO_ELEMENTS[0]}" != "deb" && DEB_REPOS[${REPO_NUM}]="deb ${REPO_ELEMENTS[@]}"
+    done
+
+    # 3. Join repository descriptions to EXTRA_DEB_REPOS
+    EXTRA_DEB_REPOS=$( join '|' "${DEB_REPOS[@]}" )
 fi
 
 export EXTRA_RPM_REPOS EXTRA_DEB_REPOS
