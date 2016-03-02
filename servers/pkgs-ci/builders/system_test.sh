@@ -134,7 +134,7 @@ fi
 # If job is triggerred by Zuul, job defaults are not applied and TEST_GROUP is empty
 # In this case run BVT if there is DEB_REPO_URL, or prepare_slaves_3 otherwise
 if [ -z "${TEST_GROUP}" ]; then
-    if [ -n "${DEB_REPO_URL}" ]; then
+    if [ -n "${DEB_REPO_URL}" -o -n "${EXTRA_DEB_REPOS}" ]; then
         TEST_GROUP=bvt_2
     else
         TEST_GROUP=prepare_slaves_3
