@@ -19,16 +19,6 @@
             BUILD=$BUILD
             REPORTED_JOB_URL=$REPORTED_JOB_URL
 
-        - project: fuel_ci-status_reports
-          condition: UNSTABLE_OR_BETTER
-          property-file: ci_status_params.txt
-          predefined-parameters: |
-            RELEASE=$RELEASE
-            BUILD=$BUILD
-            STAGE=$STAGE
-            VALUE=$VALUE
-            REPORTED_JOB_URL=$REPORTED_JOB_URL
-
         - project: '8.0.all-Testrail'
           condition: UNSTABLE_OR_BETTER
           trigger-with-no-params: true
@@ -37,4 +27,3 @@
     name: '8.0-reporting'
     jobs:
       - '{name}.send_reports'
-
