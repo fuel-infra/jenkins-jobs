@@ -1,6 +1,15 @@
 - job:
     name: '9.0-community.all'
     builders:
+      - inject: # Defaults
+          properties-content: |
+            ISO_ID=community-9.0
+            UBUNTU_MIRROR_ID=latest
+            CENTOS_MIRROR_ID=latest
+            MOS_CENTOS_ROOT=/mos-repos/centos/mos9.0-centos7-fuel/
+            MOS_UBUNTU_TARGET=master.target.txt
+            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
+            MIRROR_MOS_UBUNTU_SUITE=mos-master
       - shell:
           !include-raw builders/community.all.sh
     concurrent: true
@@ -21,26 +30,17 @@
             - iso_builds
           max-per-node: 1
           option: category
-    parameters:
-      - string:
-          name: deep_clean
-          default: 'true'
-          description: Perform deep_clean or not. Default is "true". Set any other value
-            to disable it.
-      - string:
-          name: FUEL_COMMITS
-          description: Path to version.yaml with commit ids of Fuel components.
     publishers:
       - archive:
           allow-empty: true
-          artifacts: listing.txt, *torrent_link.txt, artifacts/*changelog, listing-build.txt, listing-local-mirror.txt, listing-package-changelog.txt
+          artifacts: artifacts/*txt, artifacts/*changelog
           latest-only: false
       - email:
           notify-every-unstable-build: false
           recipients: ci+alert@mirantis.com
           send-to-individuals: false
       - naginator:
-          max-failed-builds: 3
+          max-failed-builds: 1
           rerun-unstable-builds: false
           fixed-delay: 60
       - trigger-parameterized-builds:
@@ -73,7 +73,7 @@
           branches:
             - 'origin/master'
     triggers:
-      - timed: 'H 4 * * *'
+      - timed: 'H */6 * * *'
     wrappers:
       - ansicolor:
           colormap: xterm
