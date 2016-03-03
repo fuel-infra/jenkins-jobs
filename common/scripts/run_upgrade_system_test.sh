@@ -86,7 +86,5 @@ echo "Description string: ${VERSION_STRING}"
 export UPGRADE_FUEL_FROM=$(basename "${ISO_PATH}" | cut -d '-' -f 2 | sed s/.iso//g)
 export UPGRADE_FUEL_TO=$(basename "${TARBALL_PATH}" | cut -d '-' -f 2)
 
-export VENV_PATH="/home/jenkins/venv-nailgun-tests-2.9"
-
 # Use -k to reuse environment
 sh -x "UPGRADE/utils/jenkins/system_tests.sh" -k -t test -w "${WORKSPACE}/UPGRADE" -e "${ENV_NAME}" -o --group="${UPGRADE_TEST_GROUP}" -i "${ISO_PATH}"
