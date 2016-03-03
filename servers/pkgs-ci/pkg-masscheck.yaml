@@ -4,7 +4,7 @@
     description: |
         This job is worker for mass-check case.<br>
         It builds a package to check that "openstack/*" and "openstack-build/" repos are in consistent state
-    node: '{build-node}-{mos_version}'
+    node: '{build-node}-{mos_version}-check'
     wrappers:
       - timeout:
           timeout: 300
