@@ -269,3 +269,25 @@
       - '9.0'
     jobs:
       - 'devops.{version-id}.env'
+
+- project:
+    <<: *common_template
+    <<: *mos_template
+    name: 'check-code-vs-spec-for-ubuntu'
+
+    os: 'ubuntu'
+    openstack_release: 'ubuntu'
+
+    mos_version:
+      - 'master':
+          fuel-main-branch: 'master'
+          fuel-qa-branch: 'master'
+          distro: 'trusty'
+          pkg_type: 'deb'
+          spec_path_prefix: '/trusty'
+
+    package_name: !include openstack-projects.yaml.inc
+    jobs:
+      - '{mos_version}-pkg-masscheck-starter-{os}'
+      - '{mos_version}-pkg-masscheck-{os}--{package_name}'
+

@@ -1,10 +1,9 @@
 - job-template:
-    name: '{mos_version}-pkg-massrebuild-{os}'
+    name: '{mos_version}-pkg-masscheck-{os}--{package_name}'
     concurrent: true
     description: |
-        This job is worker for mass-rebuild case.<br>
-        It builds a package and then publishes it by triggerring publisher job<br>
-        with enabled downgrade feature.<br>
+        This job is worker for mass-check case.<br>
+        It builds a package to check that "openstack/*" and "openstack-build/" repos are in consistent state
     node: '{build-node}-{mos_version}'
     wrappers:
       - timeout:
@@ -18,18 +17,9 @@
       - inject:
           properties-content: |
             PKG_TYPE={pkg_type}
-    parameters:
-      - string:
-          name: PACKAGENAME
-          default: ''
     builders:
       - shell:
           !include-raw builders/massrebuild.sh.template
-      - trigger-builds:
-          - project: '{mos_version}-pkg-publish-{os}'
-            current-parameters: true
-            property-file: buildresult.params
-            block: true
     publishers:
       - archive:
           artifacts: buildresult.params
