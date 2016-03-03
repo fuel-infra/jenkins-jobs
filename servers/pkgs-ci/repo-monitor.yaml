@@ -4,7 +4,7 @@
     description: "Repo monitor for {version-id} ubuntu repository"
     node: '{build-node}'
     triggers:
-      - timed: "H H H H 1-5"
+      - timed: "H 10 * * *"
     builders:
       - inject:
           properties-content: |
@@ -40,7 +40,7 @@
     description: "Repo monitor job for {version-id} {distro} repository"
     node: '{build-node}'
     triggers:
-      - timed: "H H H H 1-5"
+      - timed: "H 10 * * *"
     builders:
       - inject:
           properties-content: |
