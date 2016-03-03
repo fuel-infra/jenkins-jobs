@@ -1,0 +1,17 @@
+- project:
+    name: 'fuel-astute master tests'
+    version-id: master
+    project: fuel-astute
+    projectpackage: astute
+    projectbranch: master
+    mos: '9.0'
+    properties: ''
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    timeout: 200
+    jobs:
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+          dist: ubuntu
+          testgroup: review_astute_patched
+          timed: '20 */12 * * *'
+          properties: |
+            KEEP_BEFORE=yes
