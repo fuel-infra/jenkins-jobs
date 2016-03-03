@@ -1,0 +1,45 @@
+- job:
+    name: 'publish-packages-database'
+    description: |
+       <p>Publish databases file from repository metadata to /mcv on mirror.fuel-infra.org</p>
+       <p><b>Ownership:</b> Issues with this job are tracked by Fuel Build team.</p>
+       <p><b>Contacts:</b> #infra</p>
+    parameters:
+       - string:
+           name: TARGET_BUILD_NUMBER
+           default:
+           description: "Number of generate-packages-database job which result needs publishing"
+       - bool:
+           name: DRY_RUN
+           default: true
+           description: "All the changes will not be pushed on mirror if this option enabled"
+    builders:
+       - copyartifact:
+           project: generate-packages-database
+           filter: "*.sqlite,filename.properties"
+           target:
+           which-build: specific-build
+           build-number: ${TARGET_BUILD_NUMBER}
+           optional: true
+           flatten:
+           parameter-filters:
+       - inject:
+           properties-file: filename.properties
+           properties-content: |
+             MIRROR_HOST=mirror.fuel-infra.org
+             HOSTS_TO_SYNC=mirror.seed-cz1.fuel-infra.org mirror.seed-us1.fuel-infra.org
+       - shell:
+           !include-raw builders/publish-packages-database.sh
+    wrapper:
+        name: openstack-ci-jenkins
+    publishers:
+       - post-tasks:
+          - matches:
+             - log-text: Building
+               operator: AND
+            script:
+               rm -rf ${WORKSPACE}/*
+       - email:
+           notify-every-unstable-build: true
+           recipients: 'fuel-build+alert@mirantis.com'
+           send-to-individuals: false
