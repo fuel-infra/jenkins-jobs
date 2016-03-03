@@ -17,6 +17,7 @@
       - inject:
           properties-content: |
             PKG_TYPE={pkg_type}
+            PACKAGENAME={package_name}
     builders:
       - shell:
           !include-raw builders/massrebuild.sh.template
