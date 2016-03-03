@@ -1,0 +1,12 @@
+- project:
+    name: 8.0.full
+    is-disabled: ''
+    jobs:
+      - '8.0-system_tests':
+          dist: 'ubuntu'
+
+- project:
+    name: 8.0.full-helpers
+    jobs:
+      - '8.0.full.runner'
+      - '8.0.small.runner'

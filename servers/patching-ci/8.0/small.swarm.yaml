@@ -1,0 +1,73 @@
+- job-template:
+    name: '8.0.small.runner'
+    defaults: '8.0.system_tests'
+    project-type: multijob
+    description: 'Run full list of system tests'
+    concurrent: false
+    node: 'runner'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          default: '{iso-magnet-link}'
+          description: 'ISO magnet link'
+      - string:
+          name: UPGRADE_TARBALL_MAGNET_LINK
+          description: 'Upgrade tarball magnet link'
+      - string:
+          name: DEB_LATEST
+          default: 'latest'
+      - string:
+          name: RPM_LATEST
+          default: 'latest'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: 'ubuntu-latest'
+          description: |
+            'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+      - bool:
+          name: ENABLE_PROPOSED
+          default: false
+      - bool:
+          name: ENABLE_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_UPDATES
+          default: true
+      - string:
+          name: CUSTOM_VERSION
+          default: ''
+          description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+    publishers:
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+      - email-default:
+          mail-to: 'ci+alert@mirantis.com'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 1200
+    builders:
+      - multijob:
+          name: 'Run system tests'
+          condition: COMPLETED
+          projects:
+            # Ubuntu
+            - name: '8.0.system_test.ubuntu.thread_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters:
+            - name: '8.0.system_test.ubuntu.ceph_ha_one_controller'
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters:
+            - name: '8.0.system_test.ubuntu.bonding_ha'
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters:
+            - name: '8.0.system_test.ubuntu.ha_neutron'
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters:

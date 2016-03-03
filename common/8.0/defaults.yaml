@@ -1,0 +1,10 @@
+- defaults:
+    name: '8.0.system_tests'
+    pre-script: |
+        echo "-SKIP-"
+    post-script: |
+        echo "-SKIP-"
+
+    # Magnet link to ISO used in 8.0 tests
+    # It contain link to final version of 8.0
+    iso-magnet-link: !include-raw ../data/8.0-iso
