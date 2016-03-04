@@ -142,10 +142,10 @@ def _upload_for_review(repo, commit, branch, topic=None):
         if 'no changes made' in stdout or 'no changes made' in stderr:
             LOG.info('No changes since the last sync. Skip.')
         else:
-            LOG.error('Failed to push the commit %s to %s', commit, branch)
-            raise RuntimeError(
-                'Failed to push the commit %s to %s' % (commit, branch)
-            )
+            LOG.error('Failed to push the commit %s to %s',
+                      commit, branch, stderr)
+            raise RuntimeError('Failed to push the commit %s to %s:\n\n%s' % (
+                               commit, branch, stderr))
 
 
 def _cleanup(repo):
