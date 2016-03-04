@@ -14,5 +14,5 @@ source /home/jenkins/qa-venv-6.1/bin/activate
 # Report tests results from swarm (Ubuntu)
 
 export USE_UBUNTU=true
-export USE_CENTOS=false
+export USE_CENTOS=true
 python ${TESTRAIL_REPORTER_PATH} -v -l -j ${TESTS_RUNNER} ${OPTIONS}
