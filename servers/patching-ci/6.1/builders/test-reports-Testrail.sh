@@ -9,7 +9,7 @@ export TESTRAIL_PASSWORD=${TESTRAIL_PASSWORD}
 export TESTRAIL_REPORTER_PATH="fuelweb_test/testrail/report.py"
 
 # Prepare venv
-source /home/jenkins/qa-venv-7.0/bin/activate
+source /home/jenkins/qa-venv-6.1/bin/activate
 
 # Report tests results from swarm (Ubuntu)
 

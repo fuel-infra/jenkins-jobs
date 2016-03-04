@@ -10,6 +10,7 @@ function update_devops () {
   ACT=1
   VIRTUAL_ENV=/home/jenkins/qa-venv-${1}
   BRANCH=${2}
+  REPO=${3:-fuel-qa}
 
   if [ -f ${VIRTUAL_ENV}/bin/activate ]; then
     source ${VIRTUAL_ENV}/bin/activate
@@ -32,7 +33,7 @@ function update_devops () {
     echo "Install with custom requirements"
     echo "${VENV_REQUIREMENTS}" >"${WORKSPACE}/venv-requirements.txt"
   else
-    if ! curl -fsS "https://raw.githubusercontent.com/openstack/fuel-qa/${BRANCH}/fuelweb_test/requirements.txt" > "${WORKSPACE}/venv-requirements.txt"; then
+    if ! curl -fsS "https://raw.githubusercontent.com/openstack/${REPO}/${BRANCH}/fuelweb_test/requirements.txt" > "${WORKSPACE}/venv-requirements.txt"; then
       echo "Problem with downloading requirements"
       exit 1
     fi
@@ -67,6 +68,11 @@ function download_images () {
   TMP_QA_CENTOS_COMPUTE=$(seedclient-wrapper -d -m "${QA_CENTOS_COMPUTE}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
   TMP_QA_RHEL_COMPUTE=$(seedclient-wrapper -d -m "${QA_RHEL_COMPUTE}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
 }
+
+# Release 6.0
+if [[ ${update_release_6_0} == "true" ]]; then
+  update_devops "6.0" "stable/6.0" "fuel-main"
+fi
 
 # Release 6.1
 if [[ ${update_release_6_1} == "true" ]]; then

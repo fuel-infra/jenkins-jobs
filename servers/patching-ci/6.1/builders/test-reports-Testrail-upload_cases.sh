@@ -8,7 +8,7 @@ export TESTRAIL_USER=${TESTRAIL_USER}
 export TESTRAIL_PASSWORD=${TESTRAIL_PASSWORD}
 
 # Prepare venv
-source /home/jenkins/qa-venv-7.0/bin/activate
+source /home/jenkins/qa-venv-6.1/bin/activate
 
 export PYTHONPATH="$(pwd):$PYTHONPATH"
 
