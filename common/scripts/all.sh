@@ -56,7 +56,7 @@ fi
 # parameters and concatenates them
 
 export MIRROR_UBUNTU="${CLOSEST_MIRROR_URL#http://}"
-export MIRROR_UBUNTU_ROOT="pkgs/${UBUNTU_MIRROR_ID}"
+export MIRROR_UBUNTU_ROOT="/pkgs/${UBUNTU_MIRROR_ID}"
 
 echo "UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID}" > "${ARTS_DIR}/ubuntu_mirror_id.txt"
 

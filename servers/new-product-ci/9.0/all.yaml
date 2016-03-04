@@ -1,18 +1,23 @@
 - project:
-    name: '9.0 iso with MOS Mitaka packages'
+    name: 'Main 9.0 iso'
     version: '9.0'
     branch: 'master'
-    mod: '-mitaka'
+    mod: ''
+    bvt-mail: 'mos-qa@mirantis.com'
     jobs:
       - '{version}{mod}.all':
-          description: 'Build ISO with Mirantis OpenStack Mitaka packages'
-      - '{version}{mod}.test_all'
+          description: 'Build main product ISO'
+          timer: 'H */6 * * *'
+      - '{version}{mod}.test_all':
+          email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'bvt_2'
           repobranch: '{branch}'
+          email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'smoke_neutron'
           repobranch: '{branch}'
+          email: '{bvt-mail}'
 
