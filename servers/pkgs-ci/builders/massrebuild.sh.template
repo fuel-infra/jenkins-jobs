@@ -21,8 +21,6 @@ export PROJECT_VERSION={mos_version}
 # Global parameters
 ############################
 
-SOURCE_BRANCH=openstack-ci/fuel-{mos_version}/liberty
-SPEC_BRANCH=openstack-ci/fuel-{mos_version}/liberty
 export SRC_PROJECT_PATH=openstack
 export SPEC_PROJECT_PATH=openstack-build
 export IS_UPDATES=false
@@ -38,20 +36,24 @@ export REMOTE_REPO_HOST={repo-host}
 # Parameters for package specs
 export SPEC_PROJECT_SUFFIX={spec-project-suffix}
 
-DEB_DIST_NAME={project-name}{mos_version}
-RPM_DIST_NAME={project-name}{mos_version}-${{DIST}}-fuel
 
-# New scheme
-if [ "{mos_version}" = "master" ]; then
-    DEB_DIST_NAME={project-name}-{mos_version}
+if [ "{mos_version}" = "master" ]
+then
+    export SOURCE_BRANCH={mos_version}
+    export SPEC_BRANCH={mos_version}
+
+    export DEB_DIST_NAME={project-name}-{mos_version}
     RPM_DIST_NAME={project-name}-{mos_version}-${{DIST}}
-    SOURCE_BRANCH={mos_version}
-    SPEC_BRANCH={mos_version}
+else
+    export SOURCE_BRANCH=${{SOURCE_BRANCH:-openstack-ci/fuel-{mos_version}/liberty}}
+    export SPEC_BRANCH=${{SPEC_BRANCH:-openstack-ci/fuel-{mos_version}/liberty}}
+
+    export DEB_DIST_NAME={project-name}{mos_version}
+    RPM_DIST_NAME={project-name}{mos_version}-${{DIST}}-fuel
 fi
-DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
-RPM_REPO_PATH={rel-path-prefix}/{os}/${{RPM_DIST_NAME}}/os/x86_64/
-export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
-export SOURCE_BRANCH SPEC_BRANCH
+
+export DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
+export RPM_REPO_PATH={rel-path-prefix}/{os}/${{RPM_DIST_NAME}}/os/x86_64/
 
 # DEB-specific parameters
 export ORIGIN=Mirantis
