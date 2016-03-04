@@ -5,8 +5,7 @@
     builders:
       - shell: |
           exit 0
-    publishers:
-      - trigger-parameterized-builds:
+      - trigger-builds:
           - project:
               - '{mos_version}-pkg-masscheck-{os}--ceilometer'
               - '{mos_version}-pkg-masscheck-{os}--ceilometermiddleware'
@@ -76,4 +75,6 @@
               - '{mos_version}-pkg-masscheck-{os}--python-zaqarclient'
               - '{mos_version}-pkg-masscheck-{os}--sahara'
               - '{mos_version}-pkg-masscheck-{os}--swift'
+            current-parameters: True
+            block: true
 
