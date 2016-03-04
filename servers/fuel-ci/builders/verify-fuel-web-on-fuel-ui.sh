@@ -16,8 +16,10 @@ NODE_MODULES="${VENV}/node_modules"
 mkdir -p "${NODE_MODULES}"
 
 [ -L node_modules ] || ln -s "${NODE_MODULES}" node_modules
-npm install
 
+npm install
+export ARTS="${WORKSPACE}"/test_run/ui_func
+export ARTIFACTS="${WORKSPACE}"/test_run/ui_func
 export FUEL_WEB_ROOT="${WORKSPACE}/fuel-web"
 export NAILGUN_DB_HOST=127.0.0.1
 export DB_ROOTPW=insecurepassword
