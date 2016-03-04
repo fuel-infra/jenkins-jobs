@@ -8,8 +8,7 @@
       <p>Work In Progress
       <p>Contacts: ci-team at #infra
     logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 100
+      daysToKeep: 30
     node: docs
     concurrent: false
     parameters:
