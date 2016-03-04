@@ -20,6 +20,7 @@ pushd "${WORKSPACE}"/fuel-ui
 [ -L node_modules ] || ln -s "${NODE_MODULES}" node_modules
 
 npm install
+export ARTS="${WORKSPACE}"/test_run/ui_func
 export ARTIFACTS="${WORKSPACE}"/test_run/ui_func
 export FUEL_WEB_ROOT="${WORKSPACE}"
 export NAILGUN_DB_HOST=127.0.0.1
