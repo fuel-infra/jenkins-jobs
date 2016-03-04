@@ -10,6 +10,9 @@
     name: new_prepare_env
     parameters:
       - bool:
+          name: 'update_release_6_0'
+          default: false
+      - bool:
           name: 'update_release_6_1'
           default: false
       - bool:

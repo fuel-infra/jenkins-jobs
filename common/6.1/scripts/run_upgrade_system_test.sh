@@ -71,8 +71,6 @@ export DEVOPS_DB_NAME='devops'
 export DEVOPS_DB_USER='devops'
 export DEVOPS_DB_PASSWORD='devops'
 
-export VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
-
 ###################### Get MIRROR_UBUNTU ###############
 
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
