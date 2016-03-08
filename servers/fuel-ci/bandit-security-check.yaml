@@ -1,0 +1,73 @@
+- job:
+    name: 'bandit-security-check'
+    builders:
+      - shell:
+          !include-raw builders/bandit-security-check.sh
+    description: |
+      Security tests for python code.
+    node: bandit-security-check
+    concurrent: true
+    parameters:
+      - string:
+          name: BANDIT_PLUGIN_EXCLUDE
+          default: 'assert_used, try_except_pass, password_config_option_not_marked_secret, use_of_mako_templates'
+      - string:
+          name: 'BANDIT_PACKAGE_VERSION'
+          default: '0.17.3'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          max-per-node: 1
+          option: project
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/$GERRIT_PROJECT
+          timeout: 20
+          basedir: $GERRIT_PROJECT
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-web
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-agent
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-mirror
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-ostf
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+            - project-compare-type: PLAIN
+              project-pattern: openstack/shotgun
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          silent: true
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
