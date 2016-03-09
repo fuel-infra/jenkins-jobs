@@ -1,0 +1,15 @@
+- job:
+    name: 'maintain.starter'
+    concurrent: false
+    node: pbuilder
+    triggers:
+      - timed: '@midnight'
+    builders:
+      - trigger-builds:
+          - project: 'maintain.worker'
+            parameter-factories:
+              - factory: allnodesforlabel
+                name: 'reBuilder-build-hosts'
+                node-label: pbuilder
+                ignore-offline-nodes: true
+            block: false
