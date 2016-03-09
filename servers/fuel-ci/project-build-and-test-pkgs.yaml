@@ -45,6 +45,15 @@
             SYNC_DEPL_TASKS=true
             KEEP_BEFORE=yes
 
+      - fuel-library:
+          projectpackage: fuel-library10.0
+          testgroup: review_in_fuel_library
+          non_voting: true # override
+          timed: '30 */12 * * *'
+          properties: |
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+
       - fuel-ostf:
           projectpackage: fuel-ostf
           testgroup: gate_ostf_update
