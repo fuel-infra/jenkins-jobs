@@ -222,7 +222,7 @@
          testgroup: 'full_cluster_reinstallation'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'partition_preservation'
-     - '{version-id}.system_test.{dist}.plugins.{testgroup}':
+     - '{version-id}.{id}.{dist}.plugins.{testgroup}':
          testgroup:
            - 'thread_db_separate_services'
            - 'thread_keystone_separate_services'
