@@ -65,6 +65,9 @@
           name: NESSUS_PASSWORD
           default: 'r00tme'
       - string:
+          name: NESSUS_ADDRESS
+          default: '10.109.0.253'
+      - string:
           name: SECURITY_TEST
           default: 'True'
 
