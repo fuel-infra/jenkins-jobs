@@ -54,7 +54,7 @@
       - 'email-{email-type}'
       - archive:
           allow-empty: true
-          artifacts: 'test_run/ui_func/*.png, test_run/ui_func/app.log'
+          artifacts: 'test_run/ui_func/*.png, test_run/ui_func/*.log'
           latest-only: false
     scm:
       - gerrit-fuel-ui-git-fuel-web
