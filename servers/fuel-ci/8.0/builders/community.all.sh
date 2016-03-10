@@ -3,6 +3,7 @@
 set -ex
 
 export FEATURE_GROUPS="experimental"
+export FUELMENU_GERRIT_COMMIT="refs/changes/36/289536/1"
 
 PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
 export ISO_NAME="fuel-community-${PROD_VER}-${BUILD_NUMBER}-${BUILD_TIMESTAMP}"
