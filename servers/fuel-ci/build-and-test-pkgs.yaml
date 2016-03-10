@@ -42,6 +42,13 @@
           option: project
       - heavy-job:
           weight: 6
+
+    logrotate:
+      daysToKeep: 90
+      numToKeep: -1
+      artifactDaysToKeep: 7
+      artifactNumToKeep: -1
+
     scm:
       - git:
           branches:
