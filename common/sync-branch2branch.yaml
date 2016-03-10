@@ -24,6 +24,8 @@
       - ssh-agent-credentials:
           users:
             - '{gerrit-creds}'
+      - timeout:
+          timeout: 10
     builders:
       - inject:
           properties-content: |
