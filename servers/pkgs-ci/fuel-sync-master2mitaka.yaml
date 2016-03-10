@@ -6,8 +6,9 @@
     name: ''
 
     # Branches to sync (see also short names below)
-    upstream-branch: 'master'
+    upstream-branch: 'stable/mitaka'
     downstream-branch: 'mos/mitaka'
+    fallback-branch: 'master'
 
     # Branch short names for jobs naming
     src-branch: master

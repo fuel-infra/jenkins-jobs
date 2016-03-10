@@ -170,8 +170,25 @@ def _cleanup(repo):
     LOG.info('Cleanups done.')
 
 
+def _branch_exists(repo, branch):
+    if not branch.startswith('origin/'):
+        branch = 'origin/' + branch
+
+    LOG.info('Checking if branch %s exists...', branch)
+
+    output = subprocess.check_output(
+        ['git', 'branch', '-r'],
+        cwd=repo
+    )
+
+    existing_branches = [b.strip(' \t*') for b in output.splitlines()]
+    LOG.debug('Existing branches:\n%s', '\n'.join(existing_branches))
+
+    return branch in existing_branches
+
+
 def sync_project(gerrit_uri, downstream_branch, upstream_branch, topic=None,
-                 dry_run=False):
+                 dry_run=False, fallback_branch=None):
     '''Merge the tip of the tracked upstream branch and upload it for review.
 
     Tries to clone (fetch, if path already exists) the git repo and do a
@@ -184,6 +201,8 @@ def sync_project(gerrit_uri, downstream_branch, upstream_branch, topic=None,
     :param gerrit_uri: gerrit git repo uri
     :param downstream_branch: name of the downstream branch
     :param upstream_branch: name of the corresponding upstream branch
+    :param fallback_branch: name of the branch to be used if the given upstream
+                            branch does not exist
     :param topic: a Gerrit topic to be used
     :param dry_run: don't actually upload commits to Gerrit, just try to merge
                     the branch locally
@@ -194,6 +213,12 @@ def sync_project(gerrit_uri, downstream_branch, upstream_branch, topic=None,
 
     repo = _clone_or_fetch(gerrit_uri)
     try:
+        if not _branch_exists(repo, upstream_branch) and fallback_branch:
+            LOG.info(
+                'Upstream branch %s is missing, using %s instead...',
+                upstream_branch, fallback_branch)
+            upstream_branch = fallback_branch
+
         commit = _merge_tip(repo, downstream_branch, upstream_branch)
 
         if not dry_run:
@@ -240,6 +265,15 @@ def main():
         default=os.getenv('SYNC_UPSTREAM_BRANCH')
     )
     parser.add_argument(
+        '--fallback-branch',
+        help=('branch to sync the state from if the given '
+              'upstream branch does not exist. Useful to have '
+              'code sync enabled in advance, when the corresponding '
+              'upstream has not been cut yet '
+              '(defaults to $SYNC_FALLBACK_BRANCH)'),
+        default=os.getenv('SYNC_FALLBACK_BRANCH', None)
+    )
+    parser.add_argument(
         '--topic',
         help='a Gerrit topic to be used',
         default=os.getenv('SYNC_GERRIT_TOPIC')
@@ -262,6 +296,7 @@ def main():
         commit = sync_project(gerrit_uri=args.gerrit_uri,
                               downstream_branch=args.downstream_branch,
                               upstream_branch=args.upstream_branch,
+                              fallback_branch=args.fallback_branch,
                               topic=args.topic,
                               dry_run=args.dry_run)
         print(commit)
