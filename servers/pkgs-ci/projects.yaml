@@ -74,21 +74,6 @@
       - '{mos_version}-pkg-massrebuild-starter-{os}'
       - '{mos_version}-pkg-massrebuild-{os}'
 
-- fuel_gerrit_template: &fuel_template
-    name: ''
-
-    gerrit-host: 'review.openstack.org'
-    gerrit-user: 'openstack-ci-jenkins'
-    gerrit-port: '29418'
-
-    install-node: 'fuel-install-node'
-
-    jobs:
-      - '{mos_version}-fuel-pkg-pipeline-{distro}'
-      - '{mos_version}-fuel-pkg-publish-{distro}'
-      - '{mos_version}-fuel-pkg-install-{distro}'
-      - '{mos_version}-fuel-pkg-repotest-{distro}'
-
 - project:
     <<: *common_template
     name: 'pkg-mos-rhel'
@@ -204,35 +189,6 @@
       - '9.0'
     jobs:
       - '{mos_version}-pkg-gate'
-
-- project:
-    <<: *common_template
-    <<: *fuel_template
-    name: 'pkg-fuel'
-    mos_version:
-      - 'master':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-          repo_name_sep: '-'
-      - '8.0':
-          fuel-main-branch: 'stable/8.0'
-          fuel-qa-branch: 'stable/8.0'
-          is_updates: 'true'
-          repo_suff_rpm: '-fuel'
-      - '9.0':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-    distro:
-      - centos7:
-          os: centos
-          openstack_release: 'centos'
-          pkg_type: 'rpm'
-          spec_path_prefix: '/rpm'
-      - trusty:
-          os: ubuntu
-          openstack_release: 'ubuntu'
-          pkg_type: 'deb'
-          spec_path_prefix: '/trusty'
 
 - project:
     name: 'maintenace'
