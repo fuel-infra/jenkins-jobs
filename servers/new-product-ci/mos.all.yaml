@@ -39,6 +39,7 @@
             SHOTGUN_REPO={git-root}shotgun.git
             NETWORKCHECKER_REPO={git-root}network-checker.git
             FUELUPGRADE_REPO={git-root}fuel-upgrade.git
+            FUEL_UI_REPO={git-root}fuel-ui.git
 
             ISO_ID={version}{mod}
             UBUNTU_MIRROR_ID=latest
