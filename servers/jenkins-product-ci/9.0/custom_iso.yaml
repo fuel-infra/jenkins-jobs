@@ -203,14 +203,6 @@
             Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
             Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
             Example: <b> foo,http://my.cool.repo/rpm   bar,ftp://repo.foo </b>
-      - string:
-          name: MIRANTIS
-          default: 'yes'
-          description: yes or no. Deprecated.
-      - string:
-          name: FEATURE_GROUPS
-          default: 'mirantis'
-          description: https://git.openstack.org/openstack/fuel-specs/blob/master/specs/5.1/feature-groups.rst
     scm:
       - git:
           url: '$FUELMAIN_REPO'
