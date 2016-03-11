@@ -1,6 +1,6 @@
 - job-group:
    name: '6.1-system_tests'
-   version-id: 6.1
+   version-id: '6.1'
    id: 'system_test'
    repobranch: 'origin/stable/6.1'
    reponame: 'fuel-qa'
@@ -8,38 +8,34 @@
    default_pool: '10.109.0.0/16:24'
    description: '6.1 test group with full list of tests'
    node: 'systest'
-   timeout: '480'
+   timeout: '1200'
    properties: |
+     SLAVE_NODE_CPU=3
      SLAVE_NODE_MEMORY=4096
    weight: '7'
    jobs:
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'setup' # test job, not included in runner
-         weight: '4'
+         weight: '6'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'thread_1'
-         weight: '4'
-         timeout: '600'
+         weight: '6'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'ceph_ha_one_controller'
-         weight: '4'
+         weight: '6'
          properties: |
             KVM_USE=true
-         timeout: '600'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'thread_2'
-         weight: '4'
-         timeout: '600'
+         weight: '6'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'thread_3'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'thread_4'
-         properties: |
-           SLAVE_NODE_MEMORY=2560
-         timeout: '600'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'thread_5'
-         properties: 'ADMIN_NODE_MEMORY=3072'
+         properties: |
+           ADMIN_NODE_MEMORY=3072
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'thread_7'
          properties: |
@@ -58,29 +54,25 @@
            BONDING=true
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'bonding_ha_one_controller'
-         weight: '4'
+         weight: '6'
          properties: |
            BONDING=true
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'cluster_actions'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'cic_maintenance_mode'
-         timeout: '600'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron'
-         timeout: '600'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
-         timeout: '600'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'command_line'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
-         timeout: '600'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'ha_destructive_ceph_nova'
      - '6.1.{id}.{dist}.{testgroup}':
@@ -92,7 +84,6 @@
            SLAVE_NODE_CPU=2
            SLAVE_NODE_MEMORY=3072
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
-         timeout: '600'
          node: 'huge-systest'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'huge_ha_nova'
@@ -101,7 +92,6 @@
            SLAVE_NODE_CPU=2
            SLAVE_NODE_MEMORY=3072
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
-         timeout: '600'
          node: 'huge-systest'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'repeatable_image_based'
@@ -125,7 +115,6 @@
            EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
-         timeout: '1200'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha.ceilometer'
          weight: '11'
@@ -140,7 +129,6 @@
            EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
-         timeout: '1200'
      - '6.1.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha_one_controller'
          weight: '11'
@@ -155,5 +143,4 @@
            EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
-         timeout: '1200'
      - '6.1.system_test.{dist}.fuel_plugins'
