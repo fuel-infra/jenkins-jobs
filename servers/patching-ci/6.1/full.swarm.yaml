@@ -46,7 +46,7 @@
     wrappers:
       - timeout:
           fail: true
-          timeout: 1200
+          timeout: 2400
     builders:
       - multijob:
           name: 'Run system tests'

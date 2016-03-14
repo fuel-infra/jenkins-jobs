@@ -4,7 +4,7 @@
       - inject:
            properties-content: |
              TESTS_RUNNER=6.1.full.runner
-             TESTRAIL_TEST_SUITE=Swarm 6.1 patching
+             TESTRAIL_TEST_SUITE=Swarm 6.1
              TESTRAIL_MILESTONE=6.1
              LAUNCHPAD_MILESTONE=6.1
       - shell:

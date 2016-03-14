@@ -67,9 +67,7 @@ echo "Description string: ${VERSION_STRING}"
 export UPGRADE_FUEL_FROM=$(basename "${ISO_PATH}" | cut -d '-' -f 2 | sed s/.iso//g)
 export UPGRADE_FUEL_TO=$(basename "${TARBALL_PATH}" | cut -d '-' -f 2)
 
-export DEVOPS_DB_NAME='devops'
-export DEVOPS_DB_USER='devops'
-export DEVOPS_DB_PASSWORD='devops'
+export VENV_PATH='/home/jenkins/qa-venv-6.1'
 
 ###################### Get MIRROR_UBUNTU ###############
 

@@ -143,4 +143,5 @@
            EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
-     - '6.1.system_test.{dist}.fuel_plugins'
+     - '6.1.{id}.{dist}.{testgroup}':
+        testgroup: 'fuel_plugins'

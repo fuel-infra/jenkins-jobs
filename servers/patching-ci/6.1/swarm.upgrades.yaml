@@ -3,7 +3,7 @@
     version-id: '6.1'
     id: 'system_test'
     node: 'systest'
-    timeout: '480'
+    timeout: '600'
     base_reponame: 'fuel-main'
     base_repobranch: 'origin/stable/6.0'
     base_iso_magnet_link:
