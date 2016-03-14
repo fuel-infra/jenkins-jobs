@@ -95,8 +95,6 @@ done
 cd ${WORKSPACE}
 
 cp $LOCAL_MIRROR/*changelog ${ARTS_DIR}/ || true
-cp ${BUILD_DIR}/listing-build.txt ${WORKSPACE}/listing-build.txt || true
-cp ${BUILD_DIR}/listing-local-mirror.txt ${WORKSPACE}/listing-local-mirror.txt || true
 cp ${BUILD_DIR}/listing-package-changelog.txt ${WORKSPACE}/listing-package-changelog.txt || true
 (cd ${BUILD_DIR}/iso/isoroot && find . | sed -s 's/\.\///') > ${WORKSPACE}/listing.txt || true
 
