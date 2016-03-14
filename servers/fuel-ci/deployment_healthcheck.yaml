@@ -1,0 +1,27 @@
+- job:
+    name: 'deployment_healthcheck'
+    node: 'healthcheck'
+    builders:
+      - shell:
+          !include-raw './builders/deployment_healthcheck.py'
+    description: |
+      Checks status of jobs from deployments tests view and generates report.
+    concurrent: true
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 5
+    triggers:
+      - timed: '0 * * * *'
+    publishers:
+      - archive:
+          artifacts: 'raw-*'
+          allow-empty: true
+          fingerprint: true
+      - html-publisher:
+          name: 'Failed jobs'
+          dir: '.'
+          files: 'failed.html'
+          keep-all: true
+          allow-missing: true
+          wrapper-name: 'htmlpublisher-wrapper.html'
