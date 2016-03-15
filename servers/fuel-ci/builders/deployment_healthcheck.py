@@ -21,6 +21,19 @@ def form_html(list):
     output_html += '</table><body>'
     return output_html
 
+def status_html(list):
+    output_html = '<body><table>'
+    output_html += '<tr><td>Name</td><td>ISO version</td><td>Result</td></tr>'
+    for build in list:
+        job_name = build['fullDisplayName'].split()[0]
+        url = build['url']
+        result = build.get('result')
+        description = build.get('description')
+        output_html += '<tr><td><a href=%s>%s</a></td><td>%s</td><td>%s</td></tr>' % \
+            (url, job_name, description, result)
+    output_html += '</table></body>'
+    return output_html
+
 # http://stackoverflow.com/questions/7684333 by K3---rnc
 def etree_to_dict(t):
     d = {t.tag: {} if t.attrib else None}
@@ -76,6 +89,7 @@ for build in builds:
     if result == 'FAILURE':
         failed_builds.append(build)
 write_to_file('raw-status', raw_status)
+write_to_file('status.html', status_html(builds))
 write_to_file('failed.html', form_html(failed_builds))
 
 if failed_builds:

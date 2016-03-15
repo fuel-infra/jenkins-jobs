@@ -19,9 +19,9 @@
           allow-empty: true
           fingerprint: true
       - html-publisher:
-          name: 'Failed jobs'
+          name: 'Jobs report'
           dir: '.'
-          files: 'failed.html'
+          files: 'failed.html, status.html'
           keep-all: true
           allow-missing: true
           wrapper-name: 'htmlpublisher-wrapper.html'
