@@ -1,9 +1,9 @@
-- job:
-    name: docker-build
-    node: docker-builder
+- job-template:
+    name: 'docker-build-{action}'
+    node: 'docker-builder'
     builders:
       - shell:
-          !include-raw './builders/docker-build.sh'
+          !include-raw-escape './builders/docker-build.sh'
       - trigger-builds:
         - project: 'docker-publish'
     description: |
@@ -17,15 +17,16 @@
       - string:
           name: GERRIT_EVENT_TYPE
           default: 'manual-start'
+      - string:
+          name: FORCE_PREFIX
+          default: '{force_prefix}'
     scm:
       - main:
           reponame: 'fuel-infra/dockerfiles'
           repobranch: '$GERRIT_BRANCH'
     triggers:
       - gerrit:
-          trigger-on:
-            - patchset-created-event
-            - change-merged-event
+          trigger-on: '{obj:trigger_on}'
           projects:
             - project-compare-type: PLAIN
               project-pattern: fuel-infra/dockerfiles
@@ -40,8 +41,22 @@
     publishers:
       - archive:
           allow-empty: false
-          artifacts: 'to_publish.txt'
+          artifacts: 'publish_env.sh'
           latest-only: false
       - description-setter:
           regexp: ^\[urls\](.*)
           set-for-matrix: true
+
+- project:
+    name: 'docker-build'
+    jobs:
+      - 'docker-build-{action}':
+          action: 'patchset'
+          force_prefix: 'jenkins'
+          trigger_on:
+            - patchset-created-event
+      - 'docker-build-{action}':
+          action: 'merge'
+          force_prefix: ''
+          trigger_on:
+            - change-merged-event

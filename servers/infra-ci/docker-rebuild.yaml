@@ -11,20 +11,16 @@
           name: IMAGE
           description: 'image to rebuild'
           script: |
-            String output = 'http://registry.fuel-infra.org:5002/?name=infra/.*&tag=.*&format=select'.toURL().text
+            String output = 'http://registry.fuel-infra.org:5002/?name=(infra|fuel-ci)/&tag=.*&format=select'.toURL().text
             List images = output.split()
             return images
-      - string:
-          name: REGISTRY_URLS
-          default: 'registry01-bud.fuel-infra.org registry01-scc.fuel-infra.org'
-          description: 'docker registry hosts (space separated)'
       - string:
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
     scm:
       - main:
           reponame: 'fuel-infra/dockerfiles'
-          repobranch: ''
+          repobranch: 'master'
     publishers:
       - trigger-parameterized-builds:
         - project: docker-publish

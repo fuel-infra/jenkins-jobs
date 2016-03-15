@@ -3,8 +3,13 @@
     node: docker-builder
     builders:
       - copyartifact:
-          project: 'docker-build'
-          filter: 'to_publish.txt'
+          project: 'docker-build-merge'
+          filter: 'publish_env.sh'
+          which-build: 'upstream-build'
+          optional: true
+      - copyartifact:
+          project: 'docker-build-patchset'
+          filter: 'publish_env.sh'
           which-build: 'upstream-build'
           optional: true
       - shell:
