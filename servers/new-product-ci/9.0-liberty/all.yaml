@@ -36,7 +36,7 @@
     publishers:
       - archive:
           allow-empty: false
-          artifacts: artifacts/*.data.txt, artifacts/*.data.html, listing-build.txt, listing-local-mirror.txt, listing-package-changelog.txt,
+          artifacts: artifacts/*.data.txt, artifacts/*.data.html, listing-package-changelog.txt,
             *magnet_link.txt, listing.txt, artifacts/*changelog, data_build_url.txt
           latest-only: false
       - description-setter:

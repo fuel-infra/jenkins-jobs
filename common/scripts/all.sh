@@ -157,8 +157,6 @@ do
 done
 
 cp "${LOCAL_MIRROR}"/*changelog "${ARTS_DIR}/" || true
-cp "${BUILD_DIR}/listing-build.txt" "${ARTS_DIR}/listing-build.txt" || true
-cp "${BUILD_DIR}/listing-local-mirror.txt" "${ARTS_DIR}/listing-local-mirror.txt" || true
 cp "${BUILD_DIR}/listing-package-changelog.txt" "${ARTS_DIR}/listing-package-changelog.txt" || true
 (cd "${BUILD_DIR}/iso/isoroot" && find . | sed -s 's/\.\///') > "${ARTS_DIR}/listing.txt" || true
 
