@@ -102,7 +102,7 @@
           project: 'devops.{mos_version}.env'
           filter: 'fuel_qa_commit.txt,magnet_link.txt,ubuntu_mirror_id.txt'
           which-build: last-successful
-      - shell: /bin/bash -xec 'touch buildresult.params'
+      - shell: /bin/bash -xec 'touch buildresult.params {pkg_type}.publish.setenvfile'
       - inject:
           # injects set of variables about built packages
           properties-file: 'buildresult.params'
