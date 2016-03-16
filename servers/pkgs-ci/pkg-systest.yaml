@@ -94,7 +94,7 @@
           rm -vf fuel-qa/logs/* buildresult.params
       - copyartifact:
           project: '{mos_version}-pkg-pipeline-{os}'
-          filter: 'buildresult.params'
+          filter: 'buildresult.params,{pkg_type}.publish.setenvfile'
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
           optional: true
@@ -106,6 +106,8 @@
       - inject:
           # injects set of variables about built packages
           properties-file: 'buildresult.params'
+      - inject:
+          properties-file: '{pkg_type}.publish.setenvfile'
       - conditional-step:
           condition-kind: strings-match
           condition-string1: '{pkg_type}'
@@ -113,7 +115,7 @@
           steps:
             - inject:
                 properties-content: |
-                  EXTRA_RPM_REPOS=${{EXTRAREPO}}
+                  EXTRA_RPM_REPOS="${{EXTRAREPO}}|cr-repo,${{RPM_REPO_URL}}"
       - conditional-step:
           condition-kind: strings-match
           condition-string1: '{pkg_type}'
@@ -121,7 +123,7 @@
           steps:
             - inject:
                 properties-content: |
-                  EXTRA_DEB_REPOS=${{EXTRAREPO}}
+                  EXTRA_DEB_REPOS="${{EXTRAREPO}}|${{DEB_REPO_URL}}"
       - inject:
           # injects variable FUEL_QA_COMMIT
           properties-file: 'fuel_qa_commit.txt'
