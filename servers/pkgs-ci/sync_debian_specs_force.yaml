@@ -1,0 +1,66 @@
+- job-template:
+    name: sync_debian_specs_force
+    description: |
+      <p>Syncronizes package specs from upstream debian packages to OpenStack spec projects with `--force`.</p>
+      <p><b>Ownership:</b> Issues with this job are tracked by MOS packaging and DevOps teams.</p>
+      <p><b>Contacts:</b> #mos-packaging or #infra</p>
+    concurrent: false
+    properties:
+      - authorization:
+          devops:
+            - job-read
+            - job-build
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-mirrorer-jenkins}'
+      - timestamps
+      - ansicolor
+    scm:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: '{scm-repo}'
+          branch: '{scm-branch}'
+          basedir: '{scm-basedir}'
+    parameters:
+      - string:
+          name: LP_BUG_URL
+          description: 'Launchpad bug URL'
+      - string:
+          name: PROJECTS
+          description: 'Projects where packaging specs will be synced.'
+      - string:
+          name: GIT_PUSH_USERNAME
+          default: 'openstack-ci-mirrorer-jenkins'
+          description: 'Pushing username'
+    builders:
+      - shell: |
+          #!/bin/bash
+          set -ex
+          if [ -z "${{LP_BUG_URL}}" ]
+          then
+            printf 'LP_BUG_URL is required parameter'
+            exit 1
+          fi
+          if [ -z "${{PROJECTS}}" ]
+          then
+            printf 'PROJECTS is required parameter'
+            exit 1
+          fi
+          for p in ${{PROJECTS}}
+          do
+            opts="$opts -p ${{p}}"
+          done
+          sync-git-repos/sync-git-repos -m sync-git-repos/debian-fuel-infra.yaml ${{opts}} --force
+    publishers:
+      - email-ext:
+          body: $DEFAULT_CONTENT
+          send-to:
+            - recipients
+          recipients: 'ci+sync-specs@mirantis.com, mos-da+sync-specs@mirantis.com, devops+sync-specs@mirantis.com'
+          subject: '[Sync debian specs] Force syncronization of Debian package specifications failed - # $BUILD_NUMBER'
+          failure: true
+      - description-setter:
+          description: '$LP_BUG_URL'
+    node: '{sync-node}'

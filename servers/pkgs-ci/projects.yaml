@@ -341,6 +341,7 @@
     name: 'sync'
     jobs:
       - 'sync_debian_specs'
+      - 'sync_debian_specs_force'
     scm-repo: 'infra/mirrors'
     scm-branch: 'master'
     scm-basedir: ''
