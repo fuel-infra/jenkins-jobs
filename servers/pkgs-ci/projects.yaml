@@ -24,6 +24,7 @@
     rel-path-prefix: 'mos-repos/'
 
     repo-base-path: '/home/jenkins/pubrepos'
+    repo_name_sep: ''
 
     pkg-sign-key: '1FA22B08'
 
@@ -119,6 +120,7 @@
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
+          repo_name_sep: '-'
       - '8.0':
           fuel-main-branch: 'stable/8.0'
           fuel-qa-branch: 'stable/8.0'
@@ -146,6 +148,7 @@
           distro: 'jessie'
           pkg_type: 'deb'
           spec_path_prefix: '/jessie'
+          repo_name_sep: '-'
       - '8.0':
           fuel-main-branch: 'stable/8.0'
           fuel-qa-branch: 'stable/8.0'
@@ -172,6 +175,7 @@
           distro: 'trusty'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
+          repo_name_sep: '-'
       - '8.0':
           fuel-main-branch: 'stable/8.0'
           fuel-qa-branch: 'stable/8.0'
@@ -206,6 +210,7 @@
       - 'master':
           fuel-main-branch: 'master'
           fuel-qa-branch: 'master'
+          repo_name_sep: '-'
       - '8.0':
           fuel-main-branch: 'stable/8.0'
           fuel-qa-branch: 'stable/8.0'
@@ -285,6 +290,7 @@
           distro: 'trusty'
           pkg_type: 'deb'
           spec_path_prefix: '/trusty'
+          repo_name_sep: '-'
 
     package_name: !include openstack-projects.yaml.inc
     jobs:

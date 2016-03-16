@@ -46,10 +46,10 @@
           # New lines will become spaces. So don't add newline near "|" because it possibly will break parsing inside scripts
           default: >-
             deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{mos_version} main restricted,1200|deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{mos_version}-security main restricted,1201|deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{mos_version}-proposed main restricted,1202|deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{mos_version}-updates  main restricted,1201
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{repo_name_sep}{mos_version} main restricted,1200|deb
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{repo_name_sep}{mos_version}-security main restricted,1201|deb
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{repo_name_sep}{mos_version}-proposed main restricted,1202|deb
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{repo_name_sep}{mos_version}-updates  main restricted,1201
           description: >-
             <p>
             Additional deb repos. Note, that empty repos will bring some errors into console output.
