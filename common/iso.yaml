@@ -34,7 +34,7 @@
             ISO_ID={version}{mod}
             UBUNTU_MIRROR_ID=latest
             CENTOS_MIRROR_ID=latest
-            MOS_CENTOS_ROOT=/mos-repos/centos/mos{version}-centos7-fuel/
+            MOS_CENTOS_ROOT=/mos-repos/centos/mos-master-centos7/
             MOS_UBUNTU_TARGET=master.target.txt
             MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
             MIRROR_MOS_UBUNTU_SUITE=mos-master
