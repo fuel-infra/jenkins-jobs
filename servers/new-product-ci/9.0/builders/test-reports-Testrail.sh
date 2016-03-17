@@ -11,6 +11,7 @@ export SWARM_RUNNER_JOB_NAME='9.0.swarm.runner'
 
 # Prepare venv
 source /home/jenkins/venv-nailgun-tests-2.9/bin/activate
+export PYTHONPATH="$(pwd):$PYTHONPATH"
 
 if [ "${BUG_STATISTIC}" == "true" ]; then
  RUNNER_BUILD_NUMBER=$(curl "${JENKINS_URL}/job/${SWARM_RUNNER_JOB_NAME}/lastBuild/buildNumber")
