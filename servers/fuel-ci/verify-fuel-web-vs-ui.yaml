@@ -1,4 +1,4 @@
-- job-template:
+- job-template: &verify-fuel-web-vs-ui-base-job-template
     name: '{prefix}-{proj_helper}-on-{proj_main}'
     description: |
       Run {proj_main} {prefix} tests with help of {proj_helper}.
@@ -43,7 +43,10 @@
 
     triggers:
       - gerrit:
-          trigger-on: '{obj:trigger_on}'
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           server-name: defaultServer
           projects:
             - project-compare-type: PLAIN
@@ -74,14 +77,18 @@
           artifacts: 'artifacts/*.png, artifacts/*.log'
           latest-only: false
 
-- project:
+- job-template:
+    <<: *verify-fuel-web-vs-ui-base-job-template
+
+    name: 'nightly-{proj_helper}-on-{proj_main}'
+    triggers:
+      - timed: '{timed}'
+
+
+- project: &dualcheck-fuel-ui-on-fuel-web
     name: dualcheck-fuel-ui-on-fuel-web
     email-type: default
     ui_test_group: 'test'
-    trigger_on:
-      - patchset-created-event
-      - comment-added-contains-event:
-          comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
     timed: '@midnight'
     branches:
       - branch-compare-type: PLAIN
@@ -101,13 +108,20 @@
           proj_main: fuel-ui
           proj_helper: fuel-web
 
-      - nightly:
-          proj_main: fuel-ui
-          proj_helper: fuel-web
-          trigger_on: []
-          ui_test_group: 'nightly-func-tests'
-
     jobs:
       - '{prefix}-{proj_helper}-on-{proj_main}'
+
+- project:
+    <<: *dualcheck-fuel-ui-on-fuel-web
+
+    name: nightly-dualcheck-fuel-ui-on-fuel-web
+
+    prefix: nightly
+    proj_main: fuel-ui
+    proj_helper: fuel-web
+    ui_test_group: 'nightly-func-tests'
+
+    jobs:
+      - 'nightly-{proj_helper}-on-{proj_main}'
 
 
