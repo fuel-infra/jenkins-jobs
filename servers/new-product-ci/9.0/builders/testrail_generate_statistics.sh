@@ -4,6 +4,7 @@ set -ex
 
 # Prepare venv
 source "${VENV_PATH:-/home/jenkins/venv-nailgun-tests-2.9/bin/activate}"
+export PYTHONPATH="$(pwd):$PYTHONPATH"
 
 # Initialize variables
 export TESTRAIL_STATS_GENERATOR="fuelweb_test/testrail/generate_statistics.py"
