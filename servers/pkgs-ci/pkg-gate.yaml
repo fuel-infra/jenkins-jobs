@@ -165,15 +165,6 @@
             ;;
           esac
 
-          # https://bugs.launchpad.net/fuel/+bug/1541923
-          # temporarily disable centos packaging master branch due inconsistency
-          # and out of date state of RPM packages specifications.
-          MOS_VERSION={mos_version}
-          if [ "${{MOS_VERSION}}" = "master" ]; then
-            unset PKG_CENTOS
-          fi
-
-
           for OS in ${{PKG_CENTOS}} ${{PKG_UBUNTU}}; do
           echo "Will build package for ${{OS}}"
           cat > build-param-${{CHANGE_IDS[${{i}}]}}-${{OS}}.setenvfile <<EOF
