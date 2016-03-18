@@ -69,7 +69,7 @@
       - junit:
           results: 'buildresult.xml'
       - archive:
-          artifacts: 'buildresult.params, buildresult.xml, {pkg_type}.publish.setenvfile, tests.envfile'
+          artifacts: 'buildresult.params, buildresult.xml, {pkg_type}.publish.setenvfile, tests.envfile, systest.params'
           allow-empty: True
 
     node: '{build-node}'

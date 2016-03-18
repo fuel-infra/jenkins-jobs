@@ -46,16 +46,18 @@ case ${{ZUUL_PROJECT}} in
         ;;
 esac
 
+# OS-specific parameters by package type
+case "{pkg_type}" in
+    rpm )
+        UPDATE_FUEL=true
+        ;;
+esac
+
 # New scheme
-if [ "{mos_version}" = "master" ]; then
-    DEB_DIST_NAME={project-name}-{mos_version}
-    RPM_DIST_NAME={project-name}-{mos_version}-${{DIST}}
-else
-    DEB_DIST_NAME={project-name}{mos_version}
-    RPM_DIST_NAME={project-name}{mos_version}-${{DIST}}-fuel
-fi
-DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
-RPM_REPO_PATH={rel-path-prefix}/{os}/${{RPM_DIST_NAME}}/os/x86_64/
+DEB_DIST_NAME={project-name}{repo_name_sep}{mos_version}
+RPM_DIST_NAME={project-name}{repo_name_sep}{mos_version}-{distro}{repo_suff_rpm}
+DEB_REPO_PATH={rel-path-prefix}/ubuntu/{mos_version}
+RPM_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/os/x86_64/
 export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
 
 export IS_UPDATES={is_updates}
@@ -132,3 +134,9 @@ EOF
 touch tests.envfile
 
 test "${{UNSET_LP_BUG:-false}}" == "true" && sed -ri '/^LP_BUG=/ d' buildresult.params || :
+
+cat >> systest.params <<EOF
+IS_FUEL=${{IS_FUEL:-false}}
+UPDATE_FUEL=${{UPDATE_FUEL:-false}}
+REBUILD_ISO=${{REBUILD_ISO:-false}}
+EOF
