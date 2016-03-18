@@ -63,7 +63,7 @@
       - git:
           url: 'https://git.openstack.org/openstack/fuel-mirror.git'
           branches:
-            - 'origin/master'
+            - $GERRIT_BRANCH
           basedir: 'fuel-mirror'
 
     builders:

@@ -1,9 +1,12 @@
 - project:
-    name: 'python-fuelclient master tests'
-    version-id: master
+    version-id:
+      - master:
+          projectbranch: master
+      - mitaka:
+          projectbranch: 'stable/mitaka'
+    name: 'python-fuelclient master and mitaka tests'
     project: python-fuelclient
     projectpackage: python-fuelclient
-    projectbranch: master
     mos: '9.0'
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'

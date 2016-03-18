@@ -1,9 +1,12 @@
 - project:
-    name: 'fuel-ostf master tests'
-    version-id: master
+    version-id:
+      - master:
+          projectbranch: master
+      - mitaka:
+          projectbranch: 'stable/mitaka'
+    name: 'fuel-ostf master and mitaka tests'
     project: fuel-ostf
     projectpackage: fuel-ostf
-    projectbranch: master
     mos: '9.0'
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
@@ -17,3 +20,4 @@
             UPDATE_FUEL=true
             KEEP_BEFORE=true
             SLAVE_NODE_MEMORY=5140
+

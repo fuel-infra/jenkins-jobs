@@ -66,6 +66,8 @@
                   branch-pattern: 'master'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/8.0'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/mitaka'
           skip-vote:
             successful: true
             failed: true

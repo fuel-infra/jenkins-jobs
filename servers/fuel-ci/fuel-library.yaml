@@ -1,9 +1,12 @@
 - project:
-    name: 'fuel-library master tests'
-    version-id: master
+    version-id:
+      - master:
+          projectbranch: master
+      - mitaka:
+          projectbranch: 'stable/mitaka'
+    name: 'fuel-library master and mitaka tests'
     project: fuel-library
     projectpackage: fuel-library9.0
-    projectbranch: master
     mos: '9.0'
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
