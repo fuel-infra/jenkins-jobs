@@ -2,6 +2,32 @@
 
 set -ex
 
+###################### Get MIRROR HOST ###############
+
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION=${LOCATION_FACT:-bud}
+
+case "${LOCATION}" in
+    srt)
+        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/"
+        ;;
+    msk)
+        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/"
+        ;;
+    kha)
+        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/"
+        ;;
+    poz|bud|bud-ext|undef)
+        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/"
+        ;;
+    mnv|scc)
+        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/"
+        ;;
+    *)
+        MIRROR_HOST="http://mirror.fuel-infra.org/"
+esac
+
+
 if echo "${GERRIT_CHANGE_COMMIT_MESSAGE}" | grep -q -iE "Fuel-CI:\s+disable"; then
   echo "Fuel CI check disabled"
   exit -1
@@ -55,7 +81,7 @@ sed -i "s|Release:.*$|Release: ${RELEASE}|" "${SOURCE_PATH}/${PROJECT_PACKAGE}.s
 ## build rpm
 "${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
   --build-target centos7 \
-  --ext-repos "mos,http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos${MOS}-centos7-fuel/os/x86_64/" \
+  --ext-repos "mos,${MIRROR_HOST}mos-repos/centos/mos${MOS}-centos7-fuel/os/x86_64/" \
   --source "${SOURCE_PATH}" \
   --output-dir "${RPM_RESULT_DIR}"
 
@@ -69,7 +95,7 @@ if [ -d "${PROJECT_ROOT}/debian" ]; then
   ## build deb
   "${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
     --build-target trusty \
-    --ext-repos "http://mirror.seed-cz1.fuel-infra.org/mos-repos/ubuntu/${MOS} mos${MOS} main restricted" \
+    --ext-repos "${MIRROR_HOST}mos-repos/ubuntu/${MOS} mos${MOS} main restricted" \
     --source "${SOURCE_PATH}" \
     --output-dir "${DEB_RESULT_DIR}"
 fi

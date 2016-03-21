@@ -2,7 +2,43 @@
 
 set -ex
 
-export MIRROR_UBUNTU="$(curl -sSf "${JENKINS_URL}job/${ENV_JOB}/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt")"
+###################### Get MIRROR HOST ###############
+
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION=${LOCATION_FACT:-bud}
+
+case "${LOCATION}" in
+    srt)
+        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/"
+        ;;
+    msk)
+        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/"
+        ;;
+    kha)
+        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/"
+        ;;
+    poz|bud|bud-ext|undef)
+        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/"
+        ;;
+    mnv|scc)
+        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/"
+        ;;
+    *)
+        MIRROR_HOST="http://mirror.fuel-infra.org/"
+esac
+
+curl -sSf "${JENKINS_URL}job/${ENV_JOB}/lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt"
+source ubuntu_mirror_id.txt # -> UBUNTU_MIRROR_ID
+case "${UBUNTU_MIRROR_ID}" in
+    latest)
+        UBUNTU_MIRROR_URL="$(curl ${MIRROR_HOST}ubuntu-latest.htm)"
+        ;;
+    *)
+        UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
+esac
+
+export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-proposed main universe multiverse"
+
 
 export SYSTEM_TESTS="${SYSTEST_ROOT}/utils/jenkins/system_tests.sh"
 export LOGS_DIR=/home/jenkins/workspace/${JOB_NAME}/logs/${BUILD_NUMBER}
