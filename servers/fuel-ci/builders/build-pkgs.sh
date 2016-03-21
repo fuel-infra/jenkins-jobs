@@ -17,10 +17,10 @@ case "${LOCATION}" in
     kha)
         MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/"
         ;;
-    poz|bud|bud-ext|undef)
+    poz|bud|bud-ext|budext|undef)
         MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/"
         ;;
-    mnv|scc)
+    mnv|scc|sccext)
         MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/"
         ;;
     *)

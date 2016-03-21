@@ -17,17 +17,17 @@ case "${LOCATION}" in
     kha)
         MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/"
         ;;
-    poz|bud|bud-ext|undef)
+    poz|bud|bud-ext|budext|undef)
         MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/"
         ;;
-    mnv|scc)
+    mnv|scc|sccext)
         MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/"
         ;;
     *)
         MIRROR_HOST="http://mirror.fuel-infra.org/"
 esac
 
-curl -sSf "${JENKINS_URL}job/${ENV_JOB}/lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt"
+curl -sSf "${JENKINS_URL}job/${ENV_JOB}/lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt" > ubuntu_mirror_id.txt
 source ubuntu_mirror_id.txt # -> UBUNTU_MIRROR_ID
 case "${UBUNTU_MIRROR_ID}" in
     latest)
