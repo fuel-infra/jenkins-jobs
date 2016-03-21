@@ -137,7 +137,6 @@
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
-          repo_suff_rpm: '-fuel'
     openstack_release: 'centos'
 
 - project:
@@ -223,7 +222,6 @@
       - '9.0':
           fuel-main-branch: 'master'
           fuel-qa-branch: 'master'
-          repo_suff_rpm: '-fuel'
     distro:
       - centos7:
           os: centos
