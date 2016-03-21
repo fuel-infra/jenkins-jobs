@@ -5,13 +5,13 @@ set -o pipefail
 set -o xtrace
 
 get_deb_snapshot() {
-    # Remove quotes and assign values to array
     # Debian repos may have format "URL DISTRO COMPONENT1 [COMPONENTN]"
-    local repo_url=( $(tr -d \" <<< "${1}") )
+    # Remove quotes and assign values to variables
+    read repo_url dist_name components <<< $(tr -d \" <<< "${@}")
     # Remove trailing slash
-    repo_url=${repo_url[0]%/}
+    repo_url=${repo_url%/}
     local snapshot=$(curl -fLsS "${repo_url}.target.txt" | head -1)
-    echo "${repo_url%/*}/${snapshot}"
+    echo "${repo_url%/*}/${snapshot}${dist_name:+ ${dist_name}}${components:+ ${components}}"
 }
 
 get_rpm_snapshot() {
@@ -47,31 +47,31 @@ ENV_NAME=${ENV_NAME:0:68}
 
 ###################### Get MIRROR HOST ###############
 
-LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location || :)
 LOCATION=${LOCATION_FACT:-bud}
 UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
 
 case "${LOCATION}" in
     srt)
-        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/pkgs/"
+        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net"
         ;;
     msk)
-        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/pkgs/"
+        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net"
         ;;
     kha)
-        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/pkgs/"
+        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net"
         LOCATION="hrk"
         ;;
     poz|bud|bud-ext|undef)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
+        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org"
         LOCATION="cz"
         ;;
     mnv|scc)
-        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/pkgs/"
+        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org"
         LOCATION="usa"
         ;;
     *)
-        MIRROR_HOST="http://mirror.fuel-infra.org/pkgs/"
+        MIRROR_HOST="http://mirror.fuel-infra.org"
 esac
 
 ###################### Get MIRROR_UBUNTU ###############
@@ -80,10 +80,10 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
 
     case "${UBUNTU_MIRROR_ID}" in
         latest)
-            UBUNTU_MIRROR_URL="$(curl ${MIRROR_HOST}ubuntu-latest.htm)"
+            UBUNTU_MIRROR_URL="$(curl -fLsS ${MIRROR_HOST}/pkgs/ubuntu-latest.htm)"
             ;;
         *)
-            UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
+            UBUNTU_MIRROR_URL="${MIRROR_HOST}/pkgs/${UBUNTU_MIRROR_ID}/"
     esac
 
     export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-proposed main universe multiverse"
@@ -91,12 +91,19 @@ fi
 
 ###################### Get ISO image ###############
 
+# RPM repository parameters if set are used for all tests
+# Append RPM_REPO_URL to EXTRA_RPM_REPOS
+if [ -n "${RPM_REPO_URL}" ]; then
+    EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS:+${EXTRA_RPM_REPOS}|}test-repo,$(get_rpm_snapshot "${RPM_REPO_URL}"),${EXTRA_RPM_REPOS_PRIORITY}"
+fi
+
+if [ -n "${EXTRA_RPM_REPOS}" ]; then
+    EXTRA_RPM_REPOS="$(tr -d \\\" <<< ${EXTRA_RPM_REPOS})"
+    export EXTRA_RPM_REPOS
+fi
+
 if [ "${REBUILD_ISO}" = "true" ]; then
     # Build an ISO with custom repository
-
-    if [ -z "${EXTRA_RPM_REPOS}" -a -n "${RPM_REPO_URL}" ]; then
-        EXTRA_RPM_REPOS="test-repo,$(get_rpm_snapshot ${RPM_REPO_URL})"
-    fi
 
     read MIRROR_UBUNTU_METHOD MIRROR_UBUNTU_HOST MIRROR_UBUNTU_ROOT <<< $(awk '{match($0, "^(.+)://([^/]+)(.*)$", a); print a[1], a[2], a[3]}' <<< "${UBUNTU_MIRROR_URL}")
 
@@ -105,7 +112,7 @@ if [ "${REBUILD_ISO}" = "true" ]; then
     make deep_clean
     make iso \
         USE_MIRROR="${LOCATION}" \
-        MIRROR_FUEL=$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}") \
+        MIRROR_FUEL=$(get_rpm_snapshot "${MIRROR_HOST}/${RPM_REPO_PATH}") \
         EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}" \
         MIRROR_MOS_UBUNTU_METHOD="${MIRROR_UBUNTU_METHOD}" \
         MIRROR_MOS_UBUNTU="${MIRROR_UBUNTU_HOST}" \
@@ -161,26 +168,30 @@ if [[ ${OS_TYPE} == 'rhel' ]]; then
     export CENTOS_DUMMY_DEPLOY=True
 fi
 
-###################### Run test ###############
+###################### Set Fuel update parameters ###############
 
-export PERESTROIKA_REPO=$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}")
-
-if [ -z "${EXTRA_RPM_REPOS}" ]; then
-    EXTRA_RPM_REPOS="release-repo,$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}"),98"
-    if [ -n "${RPM_REPO_URL}" ]; then
-        EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}|test-repo,$(get_rpm_snapshot "${RPM_REPO_URL}"),${EXTRA_RPM_REPOS_PRIORITY}"
+if [ "${UPDATE_FUEL}" = "true" ]; then
+    export UPDATE_MASTER=true
+    export CUSTOM_ENV=true
+    # Note: URL must be ended by a slash symbol!
+    if [ -z "${RPM_REPO_URL}" ]; then
+        export UPDATE_FUEL_MIRROR=$(get_rpm_snapshot "${MIRROR_HOST}/${RPM_REPO_PATH}")/
+    else
+        export UPDATE_FUEL_MIRROR="${RPM_REPO_URL}/"
     fi
-else
-    EXTRA_RPM_REPOS="$(tr -d \\\" <<< ${EXTRA_RPM_REPOS})"
 fi
 
-if [ -z "${EXTRA_DEB_REPOS}" ]; then
-    EXTRA_DEB_REPOS="deb $(get_deb_snapshot "http://${REMOTE_REPO_HOST}/${DEB_REPO_PATH}") ${DEB_DIST_NAME} ${DEB_COMPONENTS},1010"
-    if [ -n "${DEB_REPO_URL}" ]; then
-        EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}|deb $(get_deb_snapshot "${DEB_REPO_URL}") ${DEB_DIST_NAME} ${DEB_COMPONENTS},${EXTRA_DEB_REPOS_PRIORITY}"
+###################### Run test ###############
+
+# Append DEB_REPO_URL to EXTRA_DEB_REPOS
+if [ -n "${DEB_REPO_URL}" ]; then
+    if [ -z "${EXTRA_DEB_REPOS}" ]; then
+        EXTRA_DEB_REPOS="deb $(get_deb_snapshot ${MIRROR_HOST}/${DEB_REPO_PATH} ${DEB_DIST_NAME} main restricted),${EXTRA_DEB_REPOS_PRIORITY}"
     fi
-else
-    # Remove double quotes
+    EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS:+${EXTRA_DEB_REPOS}|}deb $(get_deb_snapshot ${DEB_REPO_URL}),${EXTRA_DEB_REPOS_PRIORITY}"
+fi
+
+if [ -n "${EXTRA_DEB_REPOS}" ]; then
     EXTRA_DEB_REPOS="$(tr -d \\\" <<< ${EXTRA_DEB_REPOS})"
 
     # Each element must be repository description as used in sources.list (prepended by "deb")
@@ -192,15 +203,15 @@ else
 
     # 2. Check that first element is word "deb" and prepend it otherwise
     for REPO_NUM in ${!DEB_REPOS[@]}; do
-      REPO_ELEMENTS=( ${DEB_REPOS[${REPO_NUM}]} )
-      test "${REPO_ELEMENTS[0]}" != "deb" && DEB_REPOS[${REPO_NUM}]="deb ${REPO_ELEMENTS[@]}"
+        REPO_ELEMENTS=( ${DEB_REPOS[${REPO_NUM}]} )
+        test "${REPO_ELEMENTS[0]}" != "deb" && DEB_REPOS[${REPO_NUM}]="deb ${REPO_ELEMENTS[@]}"
     done
 
     # 3. Join repository descriptions to EXTRA_DEB_REPOS
     EXTRA_DEB_REPOS=$( join '|' "${DEB_REPOS[@]}" )
-fi
 
-export EXTRA_RPM_REPOS EXTRA_DEB_REPOS
+    export EXTRA_DEB_REPOS
+fi
 
 # Checkout specified revision of fuel-qa if set.
 if [ -n "${FUEL_QA_COMMIT}" ]; then

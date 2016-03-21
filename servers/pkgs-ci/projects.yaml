@@ -25,6 +25,7 @@
 
     repo-base-path: '/home/jenkins/pubrepos'
     repo_name_sep: ''
+    repo_suff_rpm: ''
 
     pkg-sign-key: '1FA22B08'
 
@@ -100,6 +101,7 @@
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
+          repo_suff_rpm: '-fuel'
 
     jobs:
       - '{mos_version}-pkg-systest-{os}'
@@ -128,12 +130,14 @@
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
           is_updates: 'true'
+          repo_suff_rpm: '-fuel'
       - '9.0':
           fuel-main-branch: 'master'
           fuel-qa-branch: 'master'
           distro: 'centos7'
           pkg_type: 'rpm'
           spec_path_prefix: '/centos7'
+          repo_suff_rpm: '-fuel'
     openstack_release: 'centos'
 
 - project:
@@ -215,9 +219,11 @@
           fuel-main-branch: 'stable/8.0'
           fuel-qa-branch: 'stable/8.0'
           is_updates: 'true'
+          repo_suff_rpm: '-fuel'
       - '9.0':
           fuel-main-branch: 'master'
           fuel-qa-branch: 'master'
+          repo_suff_rpm: '-fuel'
     distro:
       - centos7:
           os: centos

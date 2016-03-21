@@ -11,19 +11,15 @@
           properties-content: |
             PRODUCT_JENKINS_URL={product_jenkins_url}
             ISO_JOB_NAME={mos_version}.test_all
-            OPENSTACK_RELEASE={os}
+            OPENSTACK_RELEASE=ubuntu
             OS_TYPE={os}
 
             ENV_PREFIX={mos_version}-pkg-systest-{os}-{distro}
             UBUNTU_DIST={main_ubuntu_release}
 
-            REMOTE_REPO_HOST={repo-host}
-
-            DEB_DIST_NAME={project-name}{mos_version}
+            DEB_DIST_NAME={project-name}{repo_name_sep}{mos_version}
             DEB_REPO_PATH={rel-path-prefix}/ubuntu/{mos_version}
-            DEB_COMPONENTS=main restricted
-
-            RPM_REPO_PATH={rel-path-prefix}/centos/{project-name}{mos_version}-{main_centos_release}-fuel/os/x86_64/
+            RPM_REPO_PATH={rel-path-prefix}/centos/{project-name}{repo_name_sep}{mos_version}-{main_centos_release}{repo_suff_rpm}/os/x86_64/
     parameters:
       - string:
           name: TEST_GROUP
@@ -61,7 +57,7 @@
           default: '1052'
       - string:
           name: EXTRA_RPM_REPOS
-          default: 'release-repo,http://{repo-host}/{rel-path-prefix}/centos/{project-name}{mos_version}-{main_centos_release}-fuel/os/x86_64/,98'
+          default: 'release-repo,http://{repo-host}/{rel-path-prefix}/centos/{project-name}{repo_name_sep}{mos_version}-{main_centos_release}{repo_suff_rpm}/os/x86_64/,98'
           description: 'reponame1,http://...(,prio1)|reponame2,http://...(,prio2)'
       - string:
           name: EXTRA_RPM_REPOS_PRIORITY
@@ -72,6 +68,9 @@
       - bool:
           name: REBUILD_ISO
           default: false
+      - bool:
+          name: UPDATE_FUEL
+          default: true
       - string:
           name: ENV_PREFIX
           default: '{mos_version}-pkg-systest-{os}-{distro}'
@@ -91,10 +90,10 @@
       - shell: |
           #!/bin/bash -xe
           # Clean logs from previous runs
-          rm -vf fuel-qa/logs/* buildresult.params
+          rm -vf fuel-qa/logs/* *.publish.setenvfile
       - copyartifact:
           project: '{mos_version}-pkg-pipeline-{os}'
-          filter: 'buildresult.params,{pkg_type}.publish.setenvfile'
+          filter: '{pkg_type}.publish.setenvfile,systest.params'
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
           optional: true
@@ -102,28 +101,13 @@
           project: 'devops.{mos_version}.env'
           filter: 'fuel_qa_commit.txt,magnet_link.txt,ubuntu_mirror_id.txt'
           which-build: last-successful
-      - shell: /bin/bash -xec 'touch buildresult.params {pkg_type}.publish.setenvfile'
+      - shell: /bin/bash -xec 'touch {pkg_type}.publish.setenvfile systest.params'
       - inject:
-          # injects set of variables about built packages
-          properties-file: 'buildresult.params'
-      - inject:
+          # injects variable {pkg_type}_REPO_URL
           properties-file: '{pkg_type}.publish.setenvfile'
-      - conditional-step:
-          condition-kind: strings-match
-          condition-string1: '{pkg_type}'
-          condition-string2: 'rpm'
-          steps:
-            - inject:
-                properties-content: |
-                  EXTRA_RPM_REPOS="${{EXTRAREPO}}|cr-repo,${{RPM_REPO_URL}}"
-      - conditional-step:
-          condition-kind: strings-match
-          condition-string1: '{pkg_type}'
-          condition-string2: 'deb'
-          steps:
-            - inject:
-                properties-content: |
-                  EXTRA_DEB_REPOS="${{EXTRAREPO}}|${{DEB_REPO_URL}}"
+      - inject:
+          # injects variables for systest: UPDATE_FUEL and REBUILD_ISO
+          properties-file: 'systest.params'
       - inject:
           # injects variable FUEL_QA_COMMIT
           properties-file: 'fuel_qa_commit.txt'
