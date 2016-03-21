@@ -71,6 +71,11 @@
       - archive:
           artifacts: 'buildresult.params, buildresult.xml, {pkg_type}.publish.setenvfile, tests.envfile, systest.params'
           allow-empty: True
+      - post-tasks:
+        - matches:
+            - log-text: 'Started'
+          run-if-job-successful: true
+          script: rm -rf *
 
     node: '{build-node}'
 
