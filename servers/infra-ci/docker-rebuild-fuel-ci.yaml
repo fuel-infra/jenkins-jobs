@@ -1,0 +1,32 @@
+- job:
+    name: 'docker-rebuild-fuel-ci'
+    node: 'docker-builder'
+    builders:
+      - shell:
+          !include-raw './builders/docker-rebuild-fuel-ci.sh'
+    description: |
+      This job rebuilds Fuel CI Docker images and pushes them to Registry.
+    concurrent: false
+    parameters:
+      - string:
+          name: REGISTRY_URLS
+          default: >-
+            registry01-bud.fuel-infra.org
+            registry01-scc.fuel-infra.org
+          description: 'docker registry hosts (space separated)'
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: PREFIX
+          default: 'fuel-ci'
+    scm:
+      - main:
+          reponame: 'fuel-infra/dockerfiles'
+          repobranch: 'master'
+    triggers:
+      - timed: '0 2 * * *'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 60
