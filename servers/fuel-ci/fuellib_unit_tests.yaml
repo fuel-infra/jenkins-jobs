@@ -37,6 +37,7 @@
                   branch-pattern: 'stable/6.1'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/7.0'
+                # in 8.0 moved to upstream
           custom-url: '* $JOB_NAME $BUILD_URL'
           skip-vote:
             successful: true

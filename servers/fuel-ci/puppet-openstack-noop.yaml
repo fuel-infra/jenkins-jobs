@@ -24,7 +24,7 @@
     scm:
       - git:
           branches:
-            - master
+            - $GERRIT_BRANCH
           remotes:
             - gerrit:
                 url: https://review.openstack.org/openstack/fuel-library.git
@@ -41,6 +41,9 @@
     triggers:
       - timed: 'H 2 * * *'
       - puppet-openstack-request:
+          fuel-infra-request-recheck_regexp: '{gerrit_trigger_on_recheck_regexp}'
+          projects_regexp: '{puppet_openstack_projects_regexp}'
+      - puppet-openstack-request-mitaka:
           fuel-infra-request-recheck_regexp: '{gerrit_trigger_on_recheck_regexp}'
           projects_regexp: '{puppet_openstack_projects_regexp}'
     wrappers:

@@ -1,9 +1,12 @@
 - project:
-    name: 'fuel-agent master tests'
-    version-id: master
+    version-id:
+      - master:
+          projectbranch: master
+      - mitaka:
+          projectbranch: 'stable/mitaka'
+    name: 'fuel-agent master and mitaka tests'
     project: fuel-agent
     projectpackage: fuel-agent
-    projectbranch: master
     mos: '9.0'
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'

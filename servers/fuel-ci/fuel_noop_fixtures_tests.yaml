@@ -19,7 +19,7 @@
     scm:
       - git:
           branches:
-            - master
+            - $GERRIT_BRANCH
           remotes:
             - gerrit:
                 url: https://review.openstack.org/openstack/fuel-library.git
@@ -44,6 +44,8 @@
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/mitaka'
           custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - ansicolor:

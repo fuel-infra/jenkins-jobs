@@ -33,6 +33,8 @@
                   branch-pattern: 'master'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/8.0'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/mitaka'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
