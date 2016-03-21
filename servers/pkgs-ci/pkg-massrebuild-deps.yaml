@@ -59,15 +59,11 @@
           export REMOTE_REPO_HOST={repo-host}
 
           # New scheme
-          if [ "{mos_version}" = "master" ]; then
-              DEB_DIST_NAME={project-name}-{mos_version}
-              RPM_DIST_NAME={project-name}-{mos_version}-${{DIST}}
-          else
-              DEB_DIST_NAME={project-name}{mos_version}
-              RPM_DIST_NAME={project-name}{mos_version}-${{DIST}}-fuel
-          fi
-          DEB_REPO_PATH={rel-path-prefix}/{os}/{mos_version}
-          RPM_REPO_PATH={rel-path-prefix}/{os}/${{RPM_DIST_NAME}}/os/x86_64/
+          DEB_DIST_NAME={project-name}{repo_name_sep}{mos_version}
+          RPM_DIST_NAME={project-name}{repo_name_sep}{mos_version}-{distro}{repo_suff_rpm}
+
+          DEB_REPO_PATH={rel-path-prefix}/ubuntu/{mos_version}
+          RPM_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/os/x86_64/
           export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
 
           # DEB-specific parameters
