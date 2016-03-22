@@ -8,8 +8,10 @@
       - '{version}-mos.all':
           description: 'Build ISO with Fuel Downstream code'
           variables: |
-            FUELLIB_COMMIT=master
+            FUEL_UI_COMMIT=mos/mitaka
             NAILGUN_COMMIT=mos/mitaka
+
+            FUELLIB_COMMIT=master
             PYTHON_FUELCLIENT_COMMIT=master
             FUEL_AGENT_COMMIT=master
             FUEL_NAILGUN_AGENT_COMMIT=master
