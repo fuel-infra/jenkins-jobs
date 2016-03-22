@@ -24,7 +24,7 @@
     scm:
       - git:
           branches:
-            - $GERRIT_BRANCH
+            - master
           remotes:
             - gerrit:
                 url: https://review.openstack.org/openstack/fuel-library.git
