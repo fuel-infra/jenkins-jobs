@@ -67,22 +67,6 @@
                branches:
                  - branch-compare-type: 'PLAIN'
                    branch-pattern: 'master'
-           custom-url: '* $JOB_NAME $BUILD_URL'
-           silent: false
-           silent-start: true
-- trigger:
-     name: puppet-openstack-request-mitaka
-     triggers:
-       - gerrit:
-           trigger-on:
-             - patchset-created-event
-             - comment-added-contains-event:
-                 comment-contains-value: '{fuel-infra-request-recheck_regexp}'
-           server-name: defaultServer
-           projects:
-             - project-compare-type: 'REG_EXP'
-               project-pattern: '{projects_regexp}'
-               branches:
                  - branch-compare-type: 'PLAIN'
                    branch-pattern: 'stable/mitaka'
            custom-url: '* $JOB_NAME $BUILD_URL'
