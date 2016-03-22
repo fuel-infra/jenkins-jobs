@@ -21,7 +21,7 @@
           default: 'nessus'
       - string:
           name: TEST_ALL_JOB_NAME
-          default: '9.0-mitaka.test_all'  # TODO: should be replaced with 9.0.test_all some day
+          default: '9.0.test_all'
           description: Job to take artifacts from
       - string:
           name: OPENSTACK_RELEASE
@@ -81,7 +81,7 @@
           colormap: xterm
       - timeout:
           fail: true
-          timeout: 210
+          timeout: 400
     publishers:
       - archive:
           allow-empty: true
