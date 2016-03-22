@@ -6,6 +6,7 @@ set -ex
 
 LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
 LOCATION=${LOCATION_FACT:-bud}
+UBUNTU_DIST="trusty"
 
 case "${LOCATION}" in
     srt)
