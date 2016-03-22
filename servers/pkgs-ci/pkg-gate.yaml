@@ -163,6 +163,9 @@
             packages/trusty*)
               unset PKG_CENTOS
             ;;
+            openstack/fuel-main|openstack/fuel-menu|openstack/fuel-octane|openstack/fuel-ostf|openstack/fuel-ui|openstack/fuel-upgrade|openstack/python-fuelclient|openstack/shotgun)
+              unset PKG_UBUNTU
+            ;;
           esac
 
           for OS in ${{PKG_CENTOS}} ${{PKG_UBUNTU}}; do
