@@ -39,7 +39,7 @@ export SPEC_PROJECT_SUFFIX={spec-project-suffix}
 
 # Set parameters specific to project(s)
 case ${{ZUUL_PROJECT}} in
-    openstack/fuel-*|openstack/network-checker|openstack/python-fuelclient|openstack/solar|openstack/shotgun )
+    openstack/fuel-*|openstack/network-checker|openstack/python-fuelclient|openstack/solar|openstack/shotgun|openstack/tuning-box )
         IS_FUEL=true
         IS_OPENSTACK=false
         unset SPEC_PROJECT
