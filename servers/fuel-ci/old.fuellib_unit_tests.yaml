@@ -1,15 +1,18 @@
 - job:
     name: fuellib_unit_tests
     builders:
-      - shell:
-          !include-raw builders/fuellib_unit_tests.sh
+      - shell: |
+          #!/bin/bash
+          set -e
+          source /etc/profile
+          /bin/bash $WORKSPACE/utils/jenkins/fuel_unit_tests.sh
     concurrent: true
     description: Runs ./utils/jenkins/fuel_unit_tests.sh
     node: fuel-library-unit-tests
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/stable/7.0'
     properties:
       - heavy-job:
           weight: 1
