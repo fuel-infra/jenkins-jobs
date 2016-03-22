@@ -1,16 +1,13 @@
-- job:
-    name: '9.0-test-reports-Testrail'
+- job-template:
+    name: '9.0.{id}.test-reports'
     builders:
       - inject:
            properties-content: |
-             TESTS_RUNNER=9.0.swarm.runner
-             TESTRAIL_TEST_SUITE=[9.0] Swarm
-             TESTRAIL_MILESTONE=9.0
-             LAUNCHPAD_MILESTONE=9.0
+             {properties}
       - shell:
-          !include-raw builders/test-reports-Testrail-upload_cases.sh
+          !include-raw-escape builders/test-reports-Testrail-upload_cases.sh
       - shell:
-          !include-raw builders/test-reports-Testrail.sh
+          !include-raw-escape builders/test-reports-Testrail.sh
     parameters:
       - string:
           name: TEST_JOB_NAME
@@ -21,8 +18,9 @@
       - email:
           recipients: ci+alert@mirantis.com
 
-    triggers:
-      - timed: 'H */2 * * *'
+# FIXME: timer
+#    triggers:
+#      - timed: 'H */2 * * *'
 
     scm:
      - main-git:

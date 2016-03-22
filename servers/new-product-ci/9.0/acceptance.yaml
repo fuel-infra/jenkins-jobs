@@ -1,0 +1,151 @@
+- project:
+    name: 9.0.acceptance
+    jobs:
+      - '9.0-acceptance':
+          dist: 'ubuntu'
+      - '9.0.{id}.test-reports':
+          id: 'acceptance'
+          properties: |
+            TESTS_RUNNER=9.0.acceptance.runner
+            TESTRAIL_TEST_SUITE=[9.0][Fuel] Release Acceptance
+            TESTRAIL_MILESTONE=9.0
+            LAUNCHPAD_MILESTONE=9.0
+
+- job:
+    name: '9.0.acceptance.runner'
+    project-type: multijob
+    description: |
+      Run system tests wich were automated according to acceptance test plan.
+
+      <p>
+        Owned by: Fuel QA Team<br/>
+        Job owner is responsible for keeping builds green.<br/>
+        Maintenance contacts: #fuel-qa<br/>
+      </p>
+    concurrent: false
+    node: 'runner'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          description: 'ISO magnet link'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: 'ubuntu-latest'
+          description: |
+            'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+      - string:
+          name: CUSTOM_VERSION
+          default: ''
+          description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+    publishers:
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+      - email-default:
+          mail-to: 'ci+acceptance@mirantis.com'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 1200
+    builders:
+      - shell: # Get description from MAGNET_LINK variable
+          !include-raw builders/get_version_from_magnet.sh
+      - multijob:
+          name: 'Run acceptance tests'
+          condition: COMPLETED
+          projects:
+            - name: '9.0.acceptance.ubuntu.ha_vlan_group_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_vlan_group_2'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_vlan_group_3'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_vlan_group_4'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_vlan_group_5'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_vlan_group_6'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_vlan_group_7'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_tun_group_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_tun_group_2'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_tun_group_3'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_scale_group_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_scale_group_2'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_scale_group_3'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_scale_group_4'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_scale_group_5'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.ha_scale_group_6'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.mongo_multirole'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.multirole_group_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.mixed_os_components'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.murano_os_component'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.sahara_os_component'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.cli_acceptance_deployment_tests'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.cli_acceptance_ceph_deployment_tests'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.cli_component_role_tests'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.tests_gpg_singing_check'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.failover_group_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.failover_group_2'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.failover_group_mongo'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.load'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.plugins.thread_separate_services_ceph'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.change_vip_manually'
+              current-parameters: true
+              kill-phase-on: NEVER
