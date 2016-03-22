@@ -1,0 +1,113 @@
+- project:
+    name: Collection deployment tests
+    dist: ubuntu
+    properties: ''
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    mos: '9.0'
+
+    version-id:
+      - master:
+          projectbranch: master
+      - mitaka:
+          projectbranch: stable/mitaka
+
+    timeout: 200
+
+    jobs:
+
+      - 'devops.{version-id}.create-env'
+
+      - 'devops.{version-id}.env'
+
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+
+          project: fuel-agent
+          projectpackage: fuel-agent
+
+          testgroup: review_fuel_agent_one_node_provision
+
+          timed: '30 */12 * * *'
+
+          properties: |
+            KEEP_BEFORE=true
+            BUILD_IMAGES=true
+            FUEL_AGENT_REPO_PATH=/home/jenkins/workspace/{version-id}.{project}.pkgs.{dist}.{testgroup}/{project}/
+
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+
+          project: fuel-astute
+          projectpackage: astute
+
+          testgroup: review_astute_patched
+
+          timed: '20 */12 * * *'
+
+          properties: |
+            KEEP_BEFORE=yes
+
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+
+          project: fuel-library
+          projectpackage: fuel-library9.0
+
+          testgroup: smoke_neutron
+
+          timed: '0 */12 * * *'
+
+          properties: |
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+
+          project: fuel-library
+          projectpackage: fuel-library9.0
+
+          testgroup: neutron_vlan_ha
+
+          timed: '59 */12 * * *'
+
+          properties: |
+            SYNC_DEPL_TASKS=true
+            KEEP_BEFORE=yes
+
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+          project: fuel-ostf
+          projectpackage: fuel-ostf
+
+          testgroup: gate_ostf_update
+
+          timed: '45 */12 * * *'
+
+          timeout: 300  # override
+
+          properties: |
+            UPDATE_FUEL=true
+            KEEP_BEFORE=true
+            SLAVE_NODE_MEMORY=5140
+
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+          project: fuel-web
+          projectpackage: fuel-nailgun
+
+          testgroup: review_fuel_web_deploy
+
+          timed: '15 */12 * * *'
+
+          properties: |
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}':
+          project: python-fuelclient
+          projectpackage: python-fuelclient
+
+          testgroup: review_fuel_client
+
+          timed: '15 */12 * * *'
+
+          properties: |
+            KEEP_BEFORE=true
+            BUILD_IMAGES=true
+            UPLOAD_PATCHSET=true
+
