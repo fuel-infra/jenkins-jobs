@@ -10,6 +10,10 @@
       - string:
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
+    parameters:
+      - string:
+          name: GERRIT_BRANCH
+          default: 'master'
     properties:
       - heavy-job:
           weight: 2

@@ -28,6 +28,9 @@
       - string:
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
+      - string:
+          name: GERRIT_BRANCH
+          default: 'master'
     properties:
       - throttle:
           max-per-node: 1
