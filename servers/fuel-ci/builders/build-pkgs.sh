@@ -59,7 +59,7 @@ pushd "${PROJECT_ROOT}" &>/dev/null
 
 RPM_PACKAGE_VERSION=$(rpm -q --specfile "${PROJECT_ROOT}"/specs/"${PROJECT_PACKAGE}".spec --queryformat %{VERSION}"\n" | head -1 )
 
-if [ -z "${GERRIT_BRANCH}" ]; then
+if [[ -z "${GERRIT_BRANCH}" || "${GERRIT_PROJECT}" == openstack/puppet* ]]; then
 # we start job from master branch (by timer)
   RELEASE="$(git -C "${PROJECT_ROOT}" rev-list --no-merges HEAD --count).1.git$(git -C "${PROJECT_ROOT}" rev-parse --short HEAD)"
 else
