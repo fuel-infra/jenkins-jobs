@@ -23,7 +23,7 @@ echo "STEP 0. Export path to MOS kilo"
 export MIRROR_MOS_UBUNTU="perestroika-repo-tst.infra.mirantis.net"
 export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/9.0-kilo/"
 export MIRROR_MOS_UBUNTU_SUITE="mos9.0-kilo"
-export MIRROR_FUEL="http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64"
+export MIRROR_FUEL="http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos9.0-centos7/os/x86_64"
 export MIRROR_UBUNTU="mirror.seed-cz1.fuel-infra.org"
 export USE_MIRROR=none
 
