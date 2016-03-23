@@ -150,6 +150,7 @@
             RH_IMAGE_USER=root
             RH_IMAGE_PASSWORD=r00tme
             CENTOS_DUMMY_DEPLOY=False
+            PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos9.0-centos7/os/x86_64/
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha'
          weight: '11'
