@@ -1,0 +1,104 @@
+########################################################################
+# Section: Builders
+########################################################################
+
+########################################################################
+# Section: Wrappers
+########################################################################
+
+- wrapper:
+    name: build-timeout
+    wrappers:
+      - timeout:
+          timeout: '{timeout}'
+          timeout-var: 'BUILD_TIMEOUT'
+          fail: True
+
+- wrapper:
+    name: jenkins
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - 'dbc6bbcb-c229-421b-8c1a-7a9afdc4a2e8'
+
+- wrapper:
+    name: install-vm-creds
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - 'c201573d-7026-42c2-b134-fd5a02fab5cb'
+            - 'f978ea2a-9ba8-424f-909d-6db24c1494b9'
+
+########################################################################
+# Section: Triggers
+########################################################################
+
+########################################################################
+# Section: SCM
+########################################################################
+
+- scm:
+    name: fuel-infra
+    scm:
+      - git:
+          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/{scm-repo}.git'
+          basedir: '{scm-basedir}'
+          credentials-id: '{scm-credentials-id}'
+          branches:
+            - '{scm-branch}'
+          browser: gitweb
+          browser-url: https://review.fuel-infra.org/gitweb?p={scm-repo}.git
+
+- scm:
+    name: openstack-gerrit
+    scm:
+      - git:
+          url: 'https://review.openstack.org/${{GERRIT_PROJECT}}.git'
+          basedir: '{scm-basedir}'
+          branches:
+            - 'FETCH_HEAD'
+          refspec: '${{GERRIT_REFSPEC}}'
+          skip-tag: true
+          browser: gitweb
+          browser-url: 'https://review.openstack.org/gitweb?p=${{GERRIT_PROJECT}}.git'
+
+- scm:
+    name: zuul
+    scm:
+      - git:
+          url: '${{ZUUL_URL}}/${{ZUUL_PROJECT}}'
+          branches:
+            - FETCH_HEAD
+          refspec: '${{ZUUL_REF}}'
+          basedir: '{basedir}'
+          wipe-workspace: False
+
+- scm:
+    name: perestroika
+    scm:
+      - git:
+          url: 'https://git.openstack.org/openstack/fuel-mirror.git'
+          branches:
+            - master
+          basedir: 'fuel-mirror'
+
+########################################################################
+# Section: Parameters
+########################################################################
+
+########################################################################
+# Section: Publushers
+########################################################################
+
+- publisher:
+    name: email-alert-on-merge
+    publishers:
+      - email-ext:
+          body: $DEFAULT_CONTENT
+          send-to:
+            - recipients
+          recipients: 'ci+publishing-alert@mirantis.com, fuel-build+publishing-alert@mirantis.com'
+          subject: '[Packaging-ci][$PROJECT_NAME] Package build/publish on merge failed - # $BUILD_NUMBER'
+          presend-script:
+            !include-raw 'email_ext_groovy.inc'
+          failure: true

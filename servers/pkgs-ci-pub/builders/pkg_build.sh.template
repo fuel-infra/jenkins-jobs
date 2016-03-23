@@ -1,0 +1,167 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o xtrace
+
+############################
+# Some useful functions
+############################
+
+get_deb_snapshot() {{
+    # Debian repos may have format "URL DISTRO COMPONENT1 [COMPONENTN]"
+    # Remove quotes and assign values to variables
+    read repo_url dist_name components <<< $(tr -d \" <<< "${{@}}")
+    # Remove trailing slash
+    repo_url=${{repo_url%/}}
+    local snapshot=$(curl -fLsS "${{repo_url}}.target.txt" | head -1)
+    echo "${{repo_url%/*}}/${{snapshot}}${{dist_name:+ ${{dist_name}}}}${{components:+ ${{components}}}}"
+}}
+
+get_rpm_snapshot() {{
+    # Remove quotes
+    local repo_url=$(tr -d \" <<< "${{1}}")
+    # Remove trailing slash
+    repo_url=${{repo_url%/}}
+    # Remove architecture
+    repo_url=${{repo_url%/*}}
+    local snapshot=$(curl -fLsS "${{repo_url}}.target.txt" | head -1)
+    echo "${{repo_url%/*}}/${{snapshot}}/x86_64"
+}}
+
+join() {{
+    local IFS="${{1}}"
+    shift
+    echo "${{*}}"
+}}
+
+############################
+# Project parameters
+############################
+
+export PROJECT_NAME={project-name}
+export PROJECT_VERSION={project-version}
+
+############################
+# Global parameters
+############################
+
+export PKG_TYPE="{pkg_type}"
+export DIST="${{DIST:-{distro}}}"
+export DISTRO_PATH="${{DIST}}/"
+export SPEC_PREFIX_PATH="{spec_path_prefix}"
+export REPO_REQUEST_PATH_PREFIX="{cr-path-prefix}"
+
+# Publish host parameters
+export REMOTE_REPO_HOST={repo-host}
+
+# Parameters for package specs
+export SPEC_PROJECT_SUFFIX={spec-project-suffix}
+
+# Set parameters specific to project(s)
+case ${{ZUUL_PROJECT}} in
+    openstack/fuel-*|openstack/network-checker|openstack/python-fuelclient|openstack/shotgun|openstack/tuning-box )
+        IS_FUEL=true
+        IS_OPENSTACK=false
+        unset SPEC_PROJECT
+        ;;
+esac
+
+DEB_DIST_NAME={deb-dist-name}
+DEB_REPO_PATH={deb-repo-path}
+RPM_REPO_PATH={rpm-repo-path}/os/x86_64/
+export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
+
+export IS_UPDATES={is_updates}
+
+# DEB-specific parameters
+if [ "${{GERRIT_CHANGE_STATUS}}" = "MERGED" ]; then
+    export ORIGIN={deb-origin-release}
+else
+    export ORIGIN={deb-origin-test}
+fi
+export DEB_PROPOSED_DIST_NAME={deb-dist-name}-proposed
+export DEB_UPDATES_DIST_NAME={deb-dist-name}-updates
+export DEB_SECURITY_DIST_NAME={deb-dist-name}-security
+export DEB_HOLDBACK_DIST_NAME={deb-dist-name}-holdback
+
+# RPM-specific parameters
+export RPM_OS_REPO_PATH={rpm-repo-path}/os
+export RPM_PROPOSED_REPO_PATH={rpm-repo-path}/proposed
+export RPM_UPDATES_REPO_PATH={rpm-repo-path}/updates
+export RPM_SECURITY_REPO_PATH={rpm-repo-path}/security
+export RPM_HOLDBACK_REPO_PATH={rpm-repo-path}/holdback
+
+if [ -f mirror.setenvfile ]; then
+    source mirror.setenvfile
+else
+    MIRROR_HOST="mirror.fuel-infra.org"
+fi
+
+# Extra repos containing build dependecies
+case ${{PKG_TYPE}} in
+    deb)
+        export EXTRAREPO=$(get_deb_snapshot http://${{MIRROR_HOST}}/mos-repos/ubuntu/{mos-version} mos{mos-repo-name-sep}{mos-version} main restricted)
+        ;;
+    rpm)
+        export EXTRAREPO="deps,$(get_rpm_snapshot http://${{MIRROR_HOST}}/mos-repos/centos/mos{mos-repo-name-sep}{mos-version}-{distro}/os/x86_64)"
+        ;;
+esac
+
+############################
+# Build package
+############################
+
+# Use parameters set by Zuul instead of guessing ones
+test "${{SKIP_DEF_PARAMS:-true}}" = true && sed -ri '/set_default_params/ d' build-${{IS_FUEL:+fuel-}}{pkg_type}.sh || :
+
+# Don't use perestroika to get Fuel sources
+sed -ri '/fetch_upstream/ d' build-fuel-{pkg_type}.sh
+
+# Save time of build start
+BUILD_START_AT=$(date -u +%s)
+
+# ... and build a package
+bash -x build-${{IS_FUEL:+fuel-}}{pkg_type}.sh
+
+# Print build job duration
+BUILD_FINISH_AT=$(date -u +%s)
+BUILD_DURATION=$(( ${{BUILD_FINISH_AT}} - ${{BUILD_START_AT}} ))
+H=$(( ${{BUILD_DURATION}}/3600 ))    # Hours
+M=$(( ${{BUILD_DURATION}}%3600/60 )) # Minutes
+S=$(( ${{BUILD_DURATION}}%60 ))      # Seconds
+
+echo ##############################
+printf "Package building took %02d:%02d:%02d\n" ${{H}} ${{M}} ${{S}}
+echo ##############################
+
+rm -rf {repo-base-path}/${{REQUEST_NUM:-CR-${{GERRIT_CHANGE_NUMBER}}}}
+
+# Extra parameters for publisher
+cat >> buildresult.params <<EOF
+
+# Added for publisher
+ORIGIN=${{ORIGIN}}
+IS_UPDATES={is_updates}
+REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
+REPO_BASE_PATH={repo-base-path}
+DEB_DIST_NAME=${{DEB_DIST_NAME}}
+DEB_REPO_PATH=${{DEB_REPO_PATH}}
+DEB_PROPOSED_DIST_NAME=${{DEB_PROPOSED_DIST_NAME}}
+DEB_UPDATES_DIST_NAME=${{DEB_UPDATES_DIST_NAME}}
+DEB_SECURITY_DIST_NAME=${{DEB_SECURITY_DIST_NAME}}
+DEB_HOLDBACK_DIST_NAME=${{DEB_HOLDBACK_DIST_NAME}}
+RPM_REPO_PATH=${{RPM_REPO_PATH}}
+RPM_OS_REPO_PATH=${{RPM_OS_REPO_PATH}}
+RPM_PROPOSED_REPO_PATH=${{RPM_PROPOSED_REPO_PATH}}
+RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
+RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
+RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
+REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
+EOF
+
+# Package may not have custom tests. This will create empty file but will not
+# affect test parameters if any
+touch tests.envfile
+
+test "${{UNSET_LP_BUG:-false}}" == "true" && sed -ri '/^LP_BUG=/ d' buildresult.params || :

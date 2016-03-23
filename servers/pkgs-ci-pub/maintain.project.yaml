@@ -1,0 +1,12 @@
+#
+# Project definitions
+#
+
+- project:
+    name: 'maintenace'
+    jobs:
+      - 'maintain.starter'
+      - 'maintain.worker'
+    maintain-node: 'new-builder'
+    is-disabled: ''
+    mailto: 'fuel-build+ci-packaging@mirantis.com'
