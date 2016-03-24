@@ -1,17 +1,23 @@
 #!/bin/bash
 
 set -ex
+export LANG=C
 
 DEBMIRROR=/usr/bin/debmirror
-DEBMIRROR_OPTS=(-a amd64,i386 --di-arch=amd64 -method=rsync --no-check-gpg --progress --nosource --rsync-extra=indices,trace --exclude=i386.deb --exclude-deb-section=games --checksums)
+DEBMIRROR_OPTS=(-a amd64,i386 --di-arch=amd64 --method=rsync --no-check-gpg --progress \
+                --nosource --rsync-extra=indices,trace \
+                --exclude=i386.deb \
+                --exclude-deb-section=games --checksums)
 
-RSYNC_PATH=/usr/bin/rsync
+RSYNC=/usr/bin/rsync
 RSYNC_OPTS=(-av --delete)
 RSYNC_REMOTE_OPTS=(-aH --delete)
 
 OUTPUT="[mirror]"
+MAX_DAYS="${MAX_DAYS:-30}"
 
-if [ -z "${DST_DIR}" ] || [ -z "${SRC_URL}" ] || [ -z "${DST_PREFIX}" ] || [ -z "${TMP_PREFIX}" ] || [ -z "${DEFAULT_URL}" ] || [ -z "${MIRRORS}" ]
+if [ -z "${DST_DIR}" ] || [ -z "${SRC_URL}" ] || [ -z "${DST_PREFIX}" ] \
+    || [ -z "${TMP_PREFIX}" ] || [ -z "${DEFAULT_URL}" ] || [ -z "${MIRRORS}" ]
 then
   echo 'ERROR: Environment settings are not set!'
   exit 1
@@ -69,12 +75,14 @@ then
     # run debmirror
     HOST=$(echo "${SRC_URL}" | cut -f 3 -d '/')
     URL=$(echo "${SRC_URL}" | cut -f 4- -d '/')
-    ${DEBMIRROR} "${DEBMIRROR_OPTS[@]}" -s "${SECTIONS}" -h "${HOST}" -r /"${URL}" -d "${DISTRIBUTIONS}" --di-dist="${INST_DISTRIBUTIONS}" "${TMP_DIR}" || STATUS=${?}
+    ${DEBMIRROR} "${DEBMIRROR_OPTS[@]}" -s "${SECTIONS}" -h "${HOST}" \
+        -r /"${URL}" -d "${DISTRIBUTIONS}" --di-dist="${INST_DISTRIBUTIONS}" "${TMP_DIR}" \
+        || STATUS=${?}
     # remove .temp directory
     rm -rf "${TMP_DIR}"/.temp
   else
     # run rsync
-    ${RSYNC_PATH} "${RSYNC_OPTS[@]}" "${SRC_URL}" "${TMP_DIR}" || STATUS=${?}
+    ${RSYNC} "${RSYNC_OPTS[@]}" "${SRC_URL}" "${TMP_DIR}" || STATUS=${?}
   fi
 else
   echo 'Upstream synchronization skipped - setting link/htm files only!'
@@ -139,11 +147,11 @@ do
   echo "http://${HOST}/${URL}/${LINK}" > \
     "${TMPSYNC_DIR}"/"${PREFIX_DIR}"-latest.htm
   # synchronzie mirror without symlink and htm file
-  ${RSYNC_PATH} -v "${RSYNC_REMOTE_OPTS[@]}" \
+  # and add symbolic link and htm synchronization to queue
+  ${RSYNC} -v "${RSYNC_REMOTE_OPTS[@]}" \
     --include "${PREFIX_DIR}-*/***" \
     --exclude "*" "${DST_PREFIX}"/ "${MIRROR}" && \
-    # add symbolic link and htm synchronization to queue
-    echo "${RSYNC_PATH}" -av "${TMPSYNC_DIR}"/ "${MIRROR}" >> "${TMP_SYNC}" || STATUS=${?}
+    echo "${RSYNC}" -av "${TMPSYNC_DIR}"/ "${MIRROR}" >> "${TMP_SYNC}" || STATUS=${?}
   echo rm -rf "${TMPSYNC_DIR}" >> "${TMP_SYNC}"
 done
 
