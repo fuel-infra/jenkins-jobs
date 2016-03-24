@@ -1,0 +1,10 @@
+- project:
+    name: 'deployment healthcheck'
+    jobs:
+      - '{prefix}_healthcheck':
+          prefix: 'deployment'
+          timer: 'H * * * *'
+          jenkins_view: 'deployment tests'
+          table_headers: 'Name,Description,Timestamp,Started by,Result'
+          table_columns: 'NAME,BUILD_DESCRIPTION,TIMESTAMP,CAUSES/shortDescription,RESULT'
+          build_selection_criterion: 'PARAMETERS/GERRIT_REFSPEC=None'
