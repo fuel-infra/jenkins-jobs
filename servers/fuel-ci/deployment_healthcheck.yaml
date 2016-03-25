@@ -1,27 +1,10 @@
-- job:
-    name: 'deployment_healthcheck'
-    node: 'healthcheck'
-    builders:
-      - shell:
-          !include-raw './builders/deployment_healthcheck.py'
-    description: |
-      Checks status of jobs from deployments tests view and generates report.
-    concurrent: true
-    wrappers:
-      - timeout:
-          fail: true
-          timeout: 5
-    triggers:
-      - timed: '0 * * * *'
-    publishers:
-      - archive:
-          artifacts: 'raw-*, *.html'
-          allow-empty: true
-          fingerprint: true
-      - html-publisher:
-          name: 'Jobs report'
-          dir: '.'
-          files: 'failed.html, status.html'
-          keep-all: true
-          allow-missing: true
-          wrapper-name: 'htmlpublisher-wrapper.html'
+- project:
+    name: 'deployment healthcheck'
+    jobs:
+      - '{prefix}_healthcheck':
+          prefix: 'deployment'
+          timer: 'H * * * *'
+          jenkins_view: 'deployment tests'
+          table_headers: 'Name,Description,Timestamp,Started by,Result'
+          table_columns: 'NAME,BUILD_DESCRIPTION,TIMESTAMP,CAUSES/shortDescription,RESULT'
+          build_selection_criterion: 'PARAMETERS/GERRIT_REFSPEC=refs/heads/master'
