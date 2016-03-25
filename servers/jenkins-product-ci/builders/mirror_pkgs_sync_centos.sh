@@ -158,8 +158,8 @@ for MIRROR in ${SYNC_LOCATIONS}; do
     "${LOCAL_STORAGE}/${SNAPSHOTS_DIR}"/ "${MIRROR}/${SNAPSHOTS_DIR}"/ \
         && echo "${RSYNC}" -alv "${TMPSYNC_DIR}"/ "${MIRROR}"/ >> "${TMP_SYNC}" \
         || STATUS=${?}
-  echo rm -rf "${TMPSYNC_DIR}" >> "${TMP_SYNC}"
 done
+echo rm -rf "${TMPSYNC_DIR}" >> "${TMP_SYNC}"
 
 
 # update links on main node and all satellite mirrors
