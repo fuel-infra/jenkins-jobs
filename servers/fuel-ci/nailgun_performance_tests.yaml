@@ -79,9 +79,6 @@
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
-              file-paths:
-                - compare-type: ANT
-                  pattern: nailgun/nailgun/test/performance/**
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '0 9 * * *'
     wrappers:
