@@ -44,6 +44,9 @@ function update_devops () {
     fi
   fi
 
+  # Upgrade pip inside virtualenv
+  pip install pip --upgrade
+
   pip install -r "${WORKSPACE}/venv-requirements.txt" --upgrade
   echo "=============================="
   pip freeze
