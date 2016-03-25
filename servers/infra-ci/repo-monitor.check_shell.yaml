@@ -33,9 +33,4 @@
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
-          skip-vote:
-            successful: true
-            failed: true
-            unstable: true
-            notbuilt: true
           custom-url: '* $JOB_NAME $BUILD_URL'
