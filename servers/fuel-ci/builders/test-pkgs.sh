@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "STEP 2: run deployment test"
+
 set -ex
 
 ###################### Get MIRROR HOST ###############
@@ -28,8 +30,7 @@ case "${LOCATION}" in
         MIRROR_HOST="http://mirror.fuel-infra.org/"
 esac
 
-curl -sSf "${JENKINS_URL}job/${ENV_JOB}/lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt" > ubuntu_mirror_id.txt
-source ubuntu_mirror_id.txt # -> UBUNTU_MIRROR_ID
+export $(curl -sSf "${JENKINS_URL}job/${ENV_JOB}/lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt")
 case "${UBUNTU_MIRROR_ID}" in
     latest)
         UBUNTU_MIRROR_URL="$(curl ${MIRROR_HOST}pkgs/ubuntu-latest.htm)"
@@ -45,8 +46,10 @@ export SYSTEM_TESTS="${SYSTEST_ROOT}/utils/jenkins/system_tests.sh"
 export LOGS_DIR=/home/jenkins/workspace/${JOB_NAME}/logs/${BUILD_NUMBER}
 
 #test params
-
-VERSION_STRING=`readlink ${ISO_PATH} | cut -d '-' -f 2-4`
-echo "Description string: ${VERSION_STRING}"
-
-sh -x "${SYSTEM_TESTS}" -w "${SYSTEST_ROOT}" -V "${VENV_PATH}" -i "${ISO_PATH}" -t test -e "${ENV_NAME}" -o --group=${TEST_GROUP}
+sh -x "${SYSTEM_TESTS}" \
+  -w "${SYSTEST_ROOT}" \
+  -V "${VENV_PATH}" \
+  -i "${ISO_PATH}" \
+  -t test \
+  -e "${ENV_NAME}" \
+  -o --group="${TEST_GROUP}"

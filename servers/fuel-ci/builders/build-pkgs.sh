@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "STEP 1: build package"
+
 set -ex
 
 ###################### Get MIRROR HOST ###############
@@ -69,8 +71,10 @@ else
 # this is patchset
   RELEASE="$(git -C "${PROJECT_ROOT}" rev-list --no-merges "gerrit/${GERRIT_BRANCH}" --count).2.gerrit${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}.git$(git -C "${PROJECT_ROOT}" rev-parse --short "gerrit/${GERRIT_BRANCH}")"
 fi
-export DEBFULLNAME=$(git -C "${PROJECT_ROOT}" log -1 --pretty=format:%an)
-export DEBEMAIL=$(git -C "${PROJECT_ROOT}" log -1 --pretty=format:%ae)
+DEBFULLNAME=$(git -C "${PROJECT_ROOT}" log -1 --pretty=format:%an)
+DEBEMAIL=$(git -C "${PROJECT_ROOT}" log -1 --pretty=format:%ae)
+export DEBFULLNAME
+export DEBEMAIL
 DEBMSG=$(git -C "${PROJECT_ROOT}" log -1 --pretty=%s)
 
 # for rpm
