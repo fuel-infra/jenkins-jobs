@@ -152,8 +152,8 @@ do
     --include "${PREFIX_DIR}-*/***" \
     --exclude "*" "${DST_PREFIX}"/ "${MIRROR}" && \
     echo "${RSYNC}" -av "${TMPSYNC_DIR}"/ "${MIRROR}" >> "${TMP_SYNC}" || STATUS=${?}
-  echo rm -rf "${TMPSYNC_DIR}" >> "${TMP_SYNC}"
 done
+echo rm -rf "${TMPSYNC_DIR}" >> "${TMP_SYNC}"
 
 # update links on main node and all satellite mirrors
 if [ ${STATUS} -eq -1 ]
