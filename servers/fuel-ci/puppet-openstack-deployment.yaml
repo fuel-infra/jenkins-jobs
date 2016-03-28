@@ -14,7 +14,7 @@
     #     List of strings "VAR=value".
     #     Additional variables injected in job environment.
 
-    name: 'puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}'
+    name: '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}'
     properties: ''
     concurrent: true
 
@@ -27,10 +27,10 @@
           default: 'openstack/puppet-nova'
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/{puppet-branch}'
       - string:
           name: GERRIT_BRANCH
-          default: 'master'
+          default: '{puppet-branch}'
     properties:
       - throttle:
           max-per-node: 1
@@ -40,7 +40,7 @@
     scm:
       - git:
           branches:
-            - 'master'
+            - '{fuellib-branch}'
           remotes:
             - gerrit:
                 url: 'https://review.openstack.org/openstack/fuel-library.git'
@@ -50,7 +50,7 @@
       - git:
           url: 'https://git.openstack.org/openstack/fuel-mirror.git'
           branches:
-            - 'master'
+            - '{fuelmirror-branch}'
           basedir: 'fuel-mirror'
       - git:
           branches:
@@ -74,7 +74,7 @@
             VENV_PATH={venvpath}
             SYSTEST_ROOT=/home/jenkins/workspace/systest/master
             ISO_PATH=/home/jenkins/workspace/iso/fuel_master.iso
-            ENV_NAME=env_puppet_{testgroup}
+            ENV_NAME=env_{branch-id}_{testgroup}
             ENV_JOB=devops.master.env
       - inject:
           # deployment test variables
@@ -101,8 +101,8 @@
 
     triggers:
       - timed: 'H 2 * * *'
-      - puppet-openstack-request:
-          fuel-infra-request-recheck_regexp: '{gerrit_trigger_on_recheck_regexp}'
+      - '{gerrit-macro}':
+          recheck_regexp: '{puppet_openstack_recheck_regexp}'
           projects_regexp: '{puppet_openstack_projects_regexp}'
     publishers:
       - archive:
@@ -120,21 +120,53 @@
           write-description: true
 
 - project:
-    name: 'fuel-library puppet-openstack deployment tests'
+    name: 'Mitaka fuel-library puppet-openstack deployment tests'
     projectpackage: 'fuel-library9.0'
     mos: '9.0'
+    branch-id: 'mitaka'
+    fuellib-branch: 'stable/mitaka'
+    fuelmirror-branch: 'stable/mitaka'
+    puppet-branch: 'stable/mitaka'
+    gerrit-macro: 'puppet-openstack-request-mitaka'
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     timeout: 200
     jobs:
-      - 'puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
+      - '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
           dist: ubuntu
           testgroup: smoke_neutron
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
 
-      - 'puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
+      - '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
+          dist: ubuntu
+          testgroup: neutron_vlan_ha
+          properties: |
+            SYNC_DEPL_TASKS=true
+            KEEP_BEFORE=yes
+
+- project:
+    name: 'Master fuel-library puppet-openstack deployment tests'
+    projectpackage: 'fuel-library9.0'
+    mos: '9.0'
+    branch-id: 'master'
+    fuellib-branch: 'master'
+    fuelmirror-branch: 'master'
+    puppet-branch: 'master'
+    gerrit-macro: 'puppet-openstack-request-master'
+    properties: ''
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    timeout: 200
+    jobs:
+      - '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
+          dist: ubuntu
+          testgroup: smoke_neutron
+          properties: |
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+
+      - '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
           dist: ubuntu
           testgroup: neutron_vlan_ha
           properties: |
