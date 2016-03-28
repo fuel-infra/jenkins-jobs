@@ -1,7 +1,7 @@
 - project:
     name: '9.0 iso with Fuel downstream packages'
     version: '9.0'
-    branch: 'master'
+    branch: 'mos/mitaka'
     mod: '-mos'
     timer: 'H */6 * * *'
     jobs:
