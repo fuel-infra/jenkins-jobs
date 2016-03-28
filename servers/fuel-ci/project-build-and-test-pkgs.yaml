@@ -19,7 +19,7 @@
           timed: '30 */12 * * *'
 
           properties: |
-            KEEP_BEFORE=true
+            KEEP_BEFORE=yes
             BUILD_IMAGES=true
             FUEL_AGENT_REPO_PATH=/home/jenkins/workspace/{version-id}.{project}.pkgs.{dist}.review_fuel_agent_one_node_provision/{project}/
 
@@ -62,7 +62,7 @@
 
           properties: |
             UPDATE_FUEL=true
-            KEEP_BEFORE=true
+            KEEP_BEFORE=yes
             SLAVE_NODE_MEMORY=5140
 
       - fuel-web:
@@ -82,7 +82,7 @@
           timed: '15 */12 * * *'
 
           properties: |
-            KEEP_BEFORE=true
+            KEEP_BEFORE=yes
             BUILD_IMAGES=true
             UPLOAD_PATCHSET=true
 
@@ -113,7 +113,7 @@
           timed: '30 */12 * * *'
 
           properties: |
-            KEEP_BEFORE=true
+            KEEP_BEFORE=yes
             BUILD_IMAGES=true
             FUEL_AGENT_REPO_PATH=/home/jenkins/workspace/{version-id}.{project}.pkgs.{dist}.review_fuel_agent_one_node_provision/{project}/
 
@@ -156,7 +156,7 @@
 
           properties: |
             UPDATE_FUEL=true
-            KEEP_BEFORE=true
+            KEEP_BEFORE=yes
             SLAVE_NODE_MEMORY=5140
 
       - fuel-web:
@@ -176,7 +176,7 @@
           timed: '15 */12 * * *'
 
           properties: |
-            KEEP_BEFORE=true
+            KEEP_BEFORE=yes
             BUILD_IMAGES=true
             UPLOAD_PATCHSET=true
 
