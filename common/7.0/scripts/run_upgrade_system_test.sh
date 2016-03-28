@@ -69,7 +69,7 @@ echo "Description string: ${VERSION_STRING}"
 export UPGRADE_FUEL_FROM=$(basename "${ISO_PATH}" | cut -d '-' -f 2 | sed s/.iso//g)
 export UPGRADE_FUEL_TO=$(basename "${TARBALL_PATH}" | cut -d '-' -f 2)
 
-export VENV_PATH="/home/jenkins/venv-nailgun-tests-2.9"
+export VENV_PATH="/home/jenkins/qa-venv-7.0"
 
 ###################### Get MIRROR_UBUNTU ###############
 

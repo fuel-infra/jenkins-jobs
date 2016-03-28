@@ -8,34 +8,31 @@
    default_pool: '10.109.0.0/16:24'
    description: '7.0 test group with full list of tests'
    node: 'systest'
-   timeout: '480'
+   timeout: '1200'
    properties: |
+     SLAVE_NODE_CPU=3
      SLAVE_NODE_MEMORY=4096
    weight: '7'
    jobs:
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'setup' # test job, not included in runner
-         weight: '4'
+         weight: '6'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'jumbo_frames'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'thread_1'
-         weight: '4'
-         timeout: '600'
+         weight: '6'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'ceph_ha_one_controller'
-         weight: '4'
+         weight: '6'
          properties: |
            KVM_USE=true
-         timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'one_controller_actions'
-         weight: '4'
-         timeout: '600'
+         weight: '6'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'multirole'
-         weight: '4'
-         timeout: '600'
+         weight: '6'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'thread_3'
      - '7.0.{id}.{dist}.{testgroup}':
@@ -55,7 +52,7 @@
            BONDING=true
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'bonding_ha_one_controller'
-         weight: '4'
+         weight: '6'
          properties: |
            BONDING=true
      - '7.0.{id}.{dist}.{testgroup}':
@@ -66,39 +63,31 @@
          testgroup: 'controller_replacement'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'cic_maintenance_mode'
-         timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'offloading'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron'
-         timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_tun'
-         timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_tun_scale'
-         timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_public'
-         timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
-         timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive_2'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
-         timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'command_line'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
-         timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'ha_destructive_ceph_neutron'
      - '7.0.{id}.{dist}.{testgroup}':
@@ -108,7 +97,6 @@
            SLAVE_NODE_CPU=2
            SLAVE_NODE_MEMORY=3072
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
-         timeout: '600'
          node: 'huge-systest'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'repeatable_image_based'
@@ -121,8 +109,8 @@
          weight: '11'
          node: 'services-systest'
          properties: |
-           SLAVE_NODE_MEMORY=6144
-           SLAVE_NODE_CPU=2
+           SLAVE_NODE_MEMORY=8196
+           SLAVE_NODE_CPU=3
            KVM_USE=true
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
            EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
@@ -130,14 +118,12 @@
            EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
-         timeout: '1200'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha.ceilometer'
          weight: '11'
          node: 'services-systest'
          properties: |
-           SLAVE_NODE_MEMORY=6144
-           SLAVE_NODE_CPU=2
+           SLAVE_NODE_MEMORY=8196
            KVM_USE=true
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
            EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
@@ -145,14 +131,12 @@
            EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
-         timeout: '1200'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'services_ha_one_controller'
          weight: '11'
          node: 'services-systest'
          properties: |
-           SLAVE_NODE_MEMORY=6144
-           SLAVE_NODE_CPU=2
+           SLAVE_NODE_MEMORY=8196
            KVM_USE=true
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
            EXTERNAL_MONGO_URLS=172.18.10.137,172.18.10.138,172.18.10.139
@@ -160,7 +144,6 @@
            EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
-         timeout: '1200'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'custom_hostname'
      - '7.0.{id}.{dist}.{testgroup}':
@@ -185,7 +168,6 @@
            - 'thread_keystone_separate_services'
            - 'thread_2_separate_services'
            - 'fuel_plugin_example'
-         timeout: '600'
      - '7.0.{id}.{dist}.{testgroup}':
          testgroup: 'fuel_plugin_reboot'
      - '7.0.{id}.{dist}.{testgroup}':
