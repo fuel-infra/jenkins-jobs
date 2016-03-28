@@ -234,6 +234,9 @@
             - name: '9.0.system_test.ubuntu.services_reconfiguration_thread_2'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.system_test.ubuntu.cgroup_ha'
+              current-parameters: true
+              kill-phase-on: NEVER
             # FIXME: upgrades
             #   # Upgrades
 #            - name: '9.0.system_test.ubuntu.os_upgrade'
