@@ -11,6 +11,7 @@
             REPO={version-id}
             TEMP_DIR=${{WORKSPACE}}/tmp
             SRC_DIR=${{WORKSPACE}}/src
+            KNOWN_ISSUES_LIST=${{WORKSPACE}}/exceptions/deb/{version-id}_known_issues.txt
             PACKAGES_REPO_HOST=perestroika-repo-tst.infra.mirantis.net/mos-repos
             GERRIT_HOST=review.fuel-infra.org
             GERRIT_PORT=29418
@@ -48,6 +49,7 @@
             REPO={repo_name_sep}{version-id}-{distro}{repo_suff_rpm}
             TEMP_DIR=${{WORKSPACE}}/tmp
             SRC_DIR=${{WORKSPACE}}/src
+            KNOWN_ISSUES_LIST=${{WORKSPACE}}/exceptions/rpm/{version-id}_known_issues.txt
             PACKAGES_REPO_HOST=perestroika-repo-tst.infra.mirantis.net/mos-repos
             GERRIT_HOST=review.fuel-infra.org
             GERRIT_PORT=29418
