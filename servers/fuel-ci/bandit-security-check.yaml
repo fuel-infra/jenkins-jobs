@@ -10,7 +10,7 @@
     parameters:
       - string:
           name: BANDIT_PLUGIN_EXCLUDE
-          default: 'assert_used, try_except_pass, password_config_option_not_marked_secret, use_of_mako_templates'
+          default: 'assert_used try_except_pass password_config_option_not_marked_secret use_of_mako_templates'
       - string:
           name: 'BANDIT_PACKAGE_VERSION'
           default: '0.17.3'
