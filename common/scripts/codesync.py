@@ -106,17 +106,26 @@ def _merge_tip(repo, downstream_branch, upstream_branch):
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     try:
+        head_path = os.path.join(repo, '.git', 'HEAD')
         m = _get_merge_commit_message(repo, downstream_branch, upstream_branch)
-        LOG.info('Commit message:\n\n%s\n\n', m)
 
+        state_before_merge = open(head_path, 'rt').read().strip()
         subprocess.check_call(
             ['git', 'merge', '--no-ff', '-m', m, upstream_branch],
             cwd=repo,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
+        state_after_merge = open(head_path, 'rt').read().strip()
+
+        # merge can also succeed as a no-op, which is fine, but we need to skip
+        # uploading of a merge commit in this case, as there is no merge commit
+        if state_before_merge == state_after_merge:
+            LOG.info('Branch is already up-to-date. Do nothing.')
+            return None
     except subprocess.CalledProcessError:
         raise FailedToMerge
     else:
+        LOG.info('Commit message:\n\n%s\n\n', m)
         commit = _get_commit_id(repo)
         LOG.info('Merge commit id: %s', commit)
         return commit
@@ -221,10 +230,10 @@ def sync_project(gerrit_uri, downstream_branch, upstream_branch, topic=None,
 
         commit = _merge_tip(repo, downstream_branch, upstream_branch)
 
-        if not dry_run:
-            _upload_for_review(repo, commit, downstream_branch, topic=topic)
-        else:
+        if dry_run:
             LOG.info('Dry run, do not attempt to upload the merge commit')
+        elif commit:
+            _upload_for_review(repo, commit, downstream_branch, topic=topic)
 
         return commit
     finally:
