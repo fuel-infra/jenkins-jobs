@@ -101,6 +101,9 @@
     name: 'murano'
     <<: *common-sync-params
 - project:
+    name: 'murano-dashboard'
+    <<: *common-sync-params
+- project:
     name: 'python-muranoclient'
     <<: *common-sync-params
 
