@@ -27,11 +27,9 @@ PATTERN = re.compile(r'''
 def _clone_or_fetch(gerrit_uri):
     LOG.info('Cloning %s...', gerrit_uri)
 
-    repo = os.path.splitext(
-        os.path.basename(
-            urlparse.urlsplit(gerrit_uri).path
-        )
-    )[0]  # split trailing .git, if necessary
+    repo = os.path.basename(
+        urlparse.urlsplit(gerrit_uri).path
+    ).partition('.git')[0]  # split trailing .git, if necessary
 
     retcode = subprocess.call(
         ['git', 'clone', '-q', gerrit_uri],
