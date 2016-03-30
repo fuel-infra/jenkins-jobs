@@ -1,12 +1,12 @@
 - job:
-    name: '7.0-test-reports-Testrail'
+    name: '8.0.system_test.test-reports'
     builders:
       - inject:
            properties-content: |
-             TESTS_RUNNER=7.0.full.runner
-             TESTRAIL_TEST_SUITE=Swarm 7.0
-             TESTRAIL_MILESTONE=7.0
-             LAUNCHPAD_MILESTONE=7.0
+             TESTS_RUNNER=8.0.full.runner
+             TESTRAIL_TEST_SUITE=[8.0] Swarm
+             TESTRAIL_MILESTONE=8.0
+             LAUNCHPAD_MILESTONE=8.0
       - shell:
           !include-raw builders/test-reports-Testrail-upload_cases.sh
       - shell:
@@ -27,7 +27,7 @@
     scm:
      - main-git:
           reponame: 'fuel-qa'
-          repobranch: 'origin/stable/7.0'
+          repobranch: 'origin/stable/8.0'
           basedir: ''
 
 
