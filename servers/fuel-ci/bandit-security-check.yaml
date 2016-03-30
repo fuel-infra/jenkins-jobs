@@ -63,7 +63,11 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'
           custom-url: '* $JOB_NAME $BUILD_URL'
-          silent: true
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
     wrappers:
       - ansicolor:
           colormap: css
