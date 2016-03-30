@@ -1,0 +1,16 @@
+<h3>Build verification test for Ubuntu</h3>
+
+<pre style="font-size: 10px">
+Case: ha_neutron_ceph
+1. Create cluster
+2. Add 3 nodes with controller and ceph OSD roles
+3. Add 1 node with ceph OSD roles
+4. Add 2 nodes with compute and ceph OSD roles
+5. Deploy the cluster
+6. Check ceph status
+</pre>
+
+<p>
+For earlier versions use <a href="https://custom-ci.infra.mirantis.net/view/custom_iso/job/old.custom.ubuntu.bvt_2/">old.custom.ubuntu.bvt_2</a>.
+<p>
+

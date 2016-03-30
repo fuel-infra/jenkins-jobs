@@ -1,0 +1,14 @@
+- property:
+    name: authorization-allow-authorized
+    properties:
+      - authorization:
+          anonymous:
+            - job-read
+            - job-extended-read
+            - job-discover
+          authenticated:
+            - job-read
+            - job-extended-read
+            - job-discover
+            - job-build
+            - job-cancel
