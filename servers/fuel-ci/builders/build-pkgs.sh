@@ -28,11 +28,6 @@ case "${LOCATION}" in
 esac
 
 
-if echo "${GERRIT_CHANGE_COMMIT_MESSAGE}" | grep -q -iE "Fuel-CI:\s+disable"; then
-  echo "Fuel CI check disabled"
-  exit -1
-fi
-
 ## we MUST use external DNS
 echo "DNSPARAM=\"--dns 8.8.8.8\"" > "${WORKSPACE}"/fuel-mirror/perestroika/docker-builder/config
 
@@ -42,14 +37,22 @@ SOURCE_PATH="${WORKSPACE}/sources/"
 PACKAGES_DIR="${WORKSPACE}/packages"
 # where we checkout fuel-library code
 PROJECT_ROOT="${WORKSPACE}/${PROJECT}"
-
-rm -rf "${SOURCE_PATH}" "${PACKAGES_DIR}"
-mkdir -p "${SOURCE_PATH}" "${PACKAGES_DIR}"
-
 # where docker will store results (builded packages)
 RPM_RESULT_DIR="${WORKSPACE}/packages_rpm"
 DEB_RESULT_DIR="${WORKSPACE}/packages_deb"
+
+# clean previous artifacts
+rm -rf "${SOURCE_PATH}" "${PACKAGES_DIR}"
 rm -rf "${RPM_RESULT_DIR}" "${DEB_RESULT_DIR}"
+
+# exit on disabled Fuel CI check
+if echo "${GERRIT_CHANGE_COMMIT_MESSAGE}" | grep -q -iE "Fuel-CI:\s+disable"; then
+  echo "Fuel CI check disabled"
+  exit -1
+fi
+
+# recreate folders
+mkdir -p "${SOURCE_PATH}" "${PACKAGES_DIR}"
 mkdir -p "${RPM_RESULT_DIR}" "${DEB_RESULT_DIR}"
 
 # prepare fuel-library sources
