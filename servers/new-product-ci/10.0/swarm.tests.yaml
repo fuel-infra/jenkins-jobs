@@ -266,4 +266,7 @@
          testgroup: 'system_test.deploy_and_check_radosgw.3ctrl_3comp_ceph_neutronVLAN'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'cgroup_ha'
-
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'multiracks_2'
+         properties: |
+           MULTIPLE_NETWORKS=true

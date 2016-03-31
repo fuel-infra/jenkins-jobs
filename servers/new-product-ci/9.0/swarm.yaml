@@ -236,3 +236,6 @@
             - name: '9.0.system_test.ubuntu.cgroup_ha'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.system_test.ubuntu.multiracks_2'
+              current-parameters: true
+              kill-phase-on: NEVER
