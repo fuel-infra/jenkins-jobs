@@ -5,6 +5,13 @@ set -o pipefail
 set -o xtrace
 
 ############################
+# Guess mirror host
+############################
+
+test -f mirror.setenvfile && source mirror.setenvfile
+export REMOTE_REPO_HOST=${{MIRROR_HOST:-mirror.fuel-infra.org}}
+
+############################
 # Project parameters
 ############################
 
@@ -22,7 +29,6 @@ export PROJECT_NAME PROJECT_VERSION
 ############################
 
 export DIST="${{DIST:-{distro}}}"
-export DISTRO_PATH="${{DIST}}/"
 export SPEC_PREFIX_PATH="{spec_path_prefix}"
 export REPO_REQUEST_PATH_PREFIX="{cr-path-prefix}"
 
@@ -30,9 +36,6 @@ export REPO_REQUEST_PATH_PREFIX="{cr-path-prefix}"
 export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
 export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
 export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
-
-# Publish host parameters
-export REMOTE_REPO_HOST={repo-host}
 
 # Parameters for package specs
 export SPEC_PROJECT_SUFFIX={spec-project-suffix}
@@ -56,29 +59,52 @@ esac
 # New scheme
 DEB_DIST_NAME={project-name}{repo_name_sep}{mos_version}
 RPM_DIST_NAME={project-name}{repo_name_sep}{mos_version}-{distro}{repo_suff_rpm}
-DEB_REPO_PATH={rel-path-prefix}/ubuntu/{mos_version}
-RPM_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/os/x86_64/
-export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH
 
-export IS_UPDATES={is_updates}
+BASE_DEB_REPO_PATH={rel-path-prefix}/ubuntu
+BASE_RPM_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}
+
+# Repository pathes for publisher
+PUBLISH_DEB_REPO_PATH=${{BASE_DEB_REPO_PATH}}/{mos_version}
+PUBLISH_RPM_OS_REPO_PATH=${{BASE_RPM_REPO_PATH}}/os
+PUBLISH_RPM_UPDATES_REPO_PATH=${{BASE_RPM_REPO_PATH}}/updates
+PUBLISH_RPM_PROPOSED_REPO_PATH=${{BASE_RPM_REPO_PATH}}/proposed
+PUBLISH_RPM_SECURITY_REPO_PATH=${{BASE_RPM_REPO_PATH}}/security
+PUBLISH_RPM_HOLDBACK_REPO_PATH=${{BASE_RPM_REPO_PATH}}/holdback
+
+# Get latest snapshots
+SNAPSHOT_DEB=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_DEB_REPO_PATH}}/{mos_version}.target.txt" | head -1)
+SNAPSHOT_RPM_OS=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/os.target.txt" | head -1 || :)
+SNAPSHOT_RPM_UPDATES=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/updates.target.txt" | head -1 || :)
+SNAPSHOT_RPM_PROPOSED=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/proposed.target.txt" | head -1 || :)
+SNAPSHOT_RPM_SECURITY=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/security.target.txt" | head -1 || :)
+SNAPSHOT_RPM_HOLDBACK=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/holdback.target.txt" | head -1 || :)
+
+# Repository pathes for builder (for build dependencies)
+DEB_REPO_PATH=${{BASE_DEB_REPO_PATH}}/${{SNAPSHOT_DEB}}
+RPM_OS_REPO_PATH=${{BASE_RPM_REPO_PATH}}/${{SNAPSHOT_RPM_OS:-os}}
+RPM_UPDATES_REPO_PATH=${{BASE_RPM_REPO_PATH}}/${{SNAPSHOT_RPM_UPDATES:-updates}}
+RPM_PROPOSED_REPO_PATH=${{BASE_RPM_REPO_PATH}}/${{SNAPSHOT_RPM_PROPOSED:-proposed}}
+RPM_SECURITY_REPO_PATH=${{BASE_RPM_REPO_PATH}}/${{SNAPSHOT_RPM_SECURITY:-security}}
+RPM_HOLDBACK_REPO_PATH=${{BASE_RPM_REPO_PATH}}/${{SNAPSHOT_RPM_HOLDBACK:-holdback}}
 
 # DEB-specific parameters
-if [ "${{GERRIT_CHANGE_STATUS}}" = "MERGED" ]; then
-    export ORIGIN=Mirantis
-else
-    export ORIGIN=testing
-fi
+export DEB_DIST_NAME DEB_REPO_PATH
 export DEB_PROPOSED_DIST_NAME=${{DEB_DIST_NAME}}-proposed
 export DEB_UPDATES_DIST_NAME=${{DEB_DIST_NAME}}-updates
 export DEB_SECURITY_DIST_NAME=${{DEB_DIST_NAME}}-security
 export DEB_HOLDBACK_DIST_NAME=${{DEB_DIST_NAME}}-holdback
 
+if [ "${{GERRIT_CHANGE_STATUS}}" = "MERGED" ]; then
+    export ORIGIN=Mirantis
+else
+    export ORIGIN=testing
+fi
+
 # RPM-specific parameters
-export RPM_OS_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/os
-export RPM_PROPOSED_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/proposed
-export RPM_UPDATES_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/updates
-export RPM_SECURITY_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/security
-export RPM_HOLDBACK_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/holdback
+export RPM_OS_REPO_PATH RPM_UPDATES_REPO_PATH RPM_PROPOSED_REPO_PATH RPM_SECURITY_REPO_PATH RPM_HOLDBACK_REPO_PATH
+
+# Updates?
+export IS_UPDATES={is_updates}
 
 ############################
 # Build package
@@ -115,18 +141,17 @@ IS_UPDATES=${{IS_UPDATES}}
 REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
 REPO_BASE_PATH={repo-base-path}
 DEB_DIST_NAME=${{DEB_DIST_NAME}}
-DEB_REPO_PATH=${{DEB_REPO_PATH}}
+DEB_REPO_PATH=${{PUBLISH_DEB_REPO_PATH}}
 DEB_PROPOSED_DIST_NAME=${{DEB_PROPOSED_DIST_NAME}}
 DEB_UPDATES_DIST_NAME=${{DEB_UPDATES_DIST_NAME}}
 DEB_SECURITY_DIST_NAME=${{DEB_SECURITY_DIST_NAME}}
 DEB_HOLDBACK_DIST_NAME=${{DEB_HOLDBACK_DIST_NAME}}
-RPM_REPO_PATH=${{RPM_REPO_PATH}}
-RPM_OS_REPO_PATH=${{RPM_OS_REPO_PATH}}
-RPM_PROPOSED_REPO_PATH=${{RPM_PROPOSED_REPO_PATH}}
-RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
-RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
-RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
-REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
+RPM_OS_REPO_PATH=${{PUBLISH_RPM_OS_REPO_PATH}}
+RPM_PROPOSED_REPO_PATH=${{PUBLISH_RPM_PROPOSED_REPO_PATH}}
+RPM_UPDATES_REPO_PATH=${{PUBLISH_RPM_UPDATES_REPO_PATH}}
+RPM_SECURITY_REPO_PATH=${{PUBLISH_RPM_SECURITY_REPO_PATH}}
+RPM_HOLDBACK_REPO_PATH=${{PUBLISH_RPM_HOLDBACK_REPO_PATH}}
+REMOTE_REPO_HOST={repo-host}
 EOF
 
 # Package may not have custom tests. This will create empty file but will not

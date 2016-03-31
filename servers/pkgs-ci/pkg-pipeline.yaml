@@ -30,6 +30,7 @@
           # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
           # and then copy perestroika directory to root ${{WORKSPACE}}
           cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
+      - guess-mirror
       - shell:
           !include-raw builders/pkg_build.sh.template
       - trigger-builds:
