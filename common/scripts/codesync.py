@@ -147,11 +147,13 @@ def _upload_for_review(repo, commit, branch, topic=None):
 
     stdout, stderr = process.communicate()
 
+    all_outp = stdout + '#' + stderr
+
     if process.returncode:
-        if 'no changes made' in stdout or 'no changes made' in stderr:
+        if 'no changes made' in all_outp or 'no new changes' in all_outp:
             LOG.info('No changes since the last sync. Skip.')
         else:
-            LOG.error('Failed to push the commit %s to %s',
+            LOG.error('Failed to push the commit %s to %s:\n\n%s',
                       commit, branch, stderr)
             raise RuntimeError('Failed to push the commit %s to %s:\n\n%s' % (
                                commit, branch, stderr))
