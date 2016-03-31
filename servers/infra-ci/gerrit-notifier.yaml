@@ -1,0 +1,58 @@
+- job:
+    name: 'gerrit-notifier'
+    builders:
+      - shell:
+          !include-raw builders/gerrit_notifier.sh
+    description: Job to notify about Gerrit events made on selected projects.
+    node: gerrit-notifier
+    concurrent: true
+    properties:
+      - inject:
+          properties-content: |
+            GERRIT_NOTIFIER_CONFIG_PATH=/etc/gerrit-notifier/settings.yaml
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://infra-ci@review.fuel-infra.org:29418/tools/gerrit-notifier'
+                credentials-id: '70105253-c857-4463-a927-f47307911e45'
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-uploaded-event
+            - patchset-created-event
+            - change-abandoned-event
+            - change-merged-event
+            - change-restored-event
+            - comment-added-event:
+                approval-category: 'CRVW'
+                approval-value: 0
+            - draft-published-event
+            - ref-updated-event
+          projects:
+            - project-compare-type: ANT
+              project-pattern: 'packaging/trusty/**'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: '9.0'
+                - branch-compare-type: PLAIN
+                  branch-pattern: '9.0/mitaka'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+            - project-compare-type: ANT
+              project-pattern: 'packaging/centos7/**'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+            - project-compare-type: ANT
+              project-pattern: 'openstack-build/**'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
