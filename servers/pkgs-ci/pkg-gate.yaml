@@ -163,8 +163,13 @@
             packages/trusty*)
               unset PKG_CENTOS
             ;;
+            # Fuel RPM-only projects
             openstack/fuel-main|openstack/fuel-menu|openstack/fuel-octane|openstack/fuel-ostf|openstack/fuel-ui|openstack/fuel-upgrade|openstack/python-fuelclient|openstack/shotgun)
               unset PKG_UBUNTU
+            ;;
+            # Control-plane projects
+            openstack/aodh|openstack/ceilometer|openstack/ceilometermiddleware|openstack/designate|openstack/designate-dashboard|openstack/django_openstack_auth|openstack/heat|openstack/horizon|openstack/horizon-vendor-theme|openstack/murano|openstack/murano-dashboard|openstack/sahara|openstack/sahara-dashboard)
+              unset PKG_CENTOS
             ;;
           esac
 
