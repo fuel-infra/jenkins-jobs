@@ -47,10 +47,10 @@
       - inject:
           properties-content: |
             DISTRO={distro}
-            REPO={repo_name_sep}{version-id}-{distro}{repo_suff_rpm}
+            REPO=mos{repo_name_sep}{version-id}-{distro}{repo_suff_rpm}
             TEMP_DIR=${{WORKSPACE}}/tmp
             SRC_DIR=${{WORKSPACE}}/src
-            KNOWN_ISSUES_LIST=${{WORKSPACE}}/exceptions/rpm/{version-id}_known_issues.txt
+            KNOWN_ISSUES_LIST=${{WORKSPACE}}/exceptions/rpm/mos{repo_name_sep}{version-id}-{distro}{repo_suff_rpm}_known_issues.txt
             PACKAGES_REPO_HOST=perestroika-repo-tst.infra.mirantis.net/mos-repos
             INCLUDE_REPOS={include-repo}
             GERRIT_HOST=review.fuel-infra.org
@@ -77,14 +77,14 @@
 
 - project:
     name: 'repo-monitors'
-    repo_name_sep: 'mos'
+    repo_name_sep: ''
     repo_suff_rpm: ''
     version-id:
       - '8.0':
           repo_suff_rpm: '-fuel'
       - '9.0'
       - 'master':
-          repo_name_sep: 'mos-'
+          repo_name_sep: '-'
     scm-user: 'openstack-ci-jenkins'
     scm-repo: 'fuel-infra/repo-monitor'
     scm-credentials-id: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
