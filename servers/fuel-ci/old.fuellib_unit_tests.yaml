@@ -1,5 +1,5 @@
 - job:
-    name: fuellib_unit_tests
+    name: old.fuellib_unit_tests
     builders:
       - shell: |
           #!/bin/bash
