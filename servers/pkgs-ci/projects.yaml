@@ -301,3 +301,20 @@
       - '{mos_version}-pkg-masscheck-starter-{os}'
       - '{mos_version}-pkg-masscheck-{os}--{package_name}'
 
+- project:
+    <<: *common_template
+    name: 'resync-repos-to-mirrors'
+    trsync-node: 'mirror-sync'
+    trsync-scm-repo: 'infra/trsync'
+    trsync-scm-branch: 'master'
+    trsync-scm-basedir: 'trsync'
+    mailto: 'fuel-build+ci-packaging@mirantis.com'
+    mos_version:
+        - '8.0':
+            rpm-repo-name: 'mos{mos_version}-centos7-fuel'
+        - '9.0':
+            rpm-repo-name: 'mos{mos_version}-centos7'
+        - master:
+            rpm-repo-name: 'mos-{mos_version}-centos7'
+    jobs:
+        - '{mos_version}.resync-repos-to-mirrors'
