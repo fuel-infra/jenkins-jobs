@@ -1,0 +1,5 @@
+- project:
+    name: custom-ci.update-jenkins-jobs
+    ci-name: custom-ci
+    jobs:
+      - update-jenkins-jobs
