@@ -17,6 +17,7 @@
     scm:
       - perestroika
     builders:
+      - guess-mirror
       - shell:
           !include-raw-escape builders/mos.maintain.sh
     publishers:

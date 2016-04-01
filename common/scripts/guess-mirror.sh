@@ -47,5 +47,6 @@ fi
 # Save parameters to file
 cat > mirror.setenvfile <<EOF
 MIRROR_HOST="${MIRROR_HOST}"
+UBUNTU_MIRROR_URL="${UBUNTU_MIRROR_URL}"
 MIRROR_UBUNTU="${MIRROR_UBUNTU}"
 EOF

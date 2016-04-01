@@ -5,6 +5,8 @@ set -o errexit
 
 main () {
 
+    test -f mirror.setenvfile && source mirror.setenvfile
+
     # FIXME: use perestroika from openstack/fuel-mirror
     # checkout fuel-mirror to ${WORKSPACE}/fuel-mirror
     # so docker builder is in ${WORKSPACE}/fuel-mirror/perestroika
@@ -36,7 +38,7 @@ main () {
     local _debchroots="$(ls -1 /var/cache/docker-builder/sbuild/)"
     for target in trusty ; do
         if [ $(echo "${_debchroots}" | grep -Fc -e "${target}") -eq 0 ] ; then
-            env "DIST=${target}" bash "${_dpath}/create-deb-chroot.sh"
+            env "DIST=${target}" "UPSTREAM_MIRROR=${UBUNTU_MIRROR_URL}" bash "${_dpath}/create-deb-chroot.sh"
         else
             env "DIST=${target}" bash "${_dpath}/update-deb-chroot.sh"
         fi
