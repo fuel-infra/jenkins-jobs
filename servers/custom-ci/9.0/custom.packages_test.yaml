@@ -1,0 +1,13 @@
+- project:
+    name: 'custom master pkgs tests'
+    version-id: master
+    latest_magnet_link: 'https://product-ci.infra.mirantis.net/job/9.0.all/lastSuccessfulBuild/artifact/artifacts/magnet_link.txt'
+    projectbranch: master
+    mos: '9.0'
+    properties: ''
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    mirror_artifact: 'https://ci.fuel-infra.org/job/devops.master.env/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt'
+    timeout: 360
+    jobs:
+      - '{mos}.custom.packages_test.{dist}':
+          dist: ubuntu
