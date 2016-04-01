@@ -35,6 +35,8 @@
     name: guess-mirror
     builders:
       - shell: !include-raw scripts/guess-mirror.sh
+      - inject:
+          properties-file: mirror.setenvfile
 
 ########################################################################
 # Gerrit parameters
