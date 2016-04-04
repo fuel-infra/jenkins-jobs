@@ -1,5 +1,5 @@
 - job:
-    name: fuellib_review_syntax_check
+    name: old.fuellib_review_syntax_check
     builders:
       - shell:
           !include-raw builders/fuellib_review_syntax_check.sh
@@ -9,7 +9,7 @@
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/stable/7.0'
     properties:
       - heavy-job:
           weight: 1
