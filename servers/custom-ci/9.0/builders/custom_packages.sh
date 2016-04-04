@@ -260,4 +260,4 @@ mkdir -p "${WEB_SHARE_ROOT}/${WEB_SHARE_REPO}/ubuntu/${PROJECT_NAME}${PROJECT_VE
 rsync -av "${LOCAL_REPO_PATH}/centos/" "${WEB_SHARE_ROOT}/${WEB_SHARE_REPO}/centos"
 rsync -av "${LOCAL_REPO_PATH}/ubuntu/public/" "${WEB_SHARE_ROOT}/${WEB_SHARE_REPO}/ubuntu/${PROJECT_NAME}${PROJECT_VERSION}"
 
-echo "http://$(hostname)/${WEB_SHARE_REPO}" > "${WORKSPACE}/mirror.txt"
+echo "http://$(hostname)/packages/${WEB_SHARE_REPO}" > "${WORKSPACE}/mirror.txt"
