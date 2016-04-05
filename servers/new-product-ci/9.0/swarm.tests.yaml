@@ -49,6 +49,7 @@
          testgroup: 'thread_usb'
          properties: |
            ADMIN_BOOT_DEVICE=usb
+           SHOW_FUELMENU=true
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'thread_non_func_1'
      - '{version-id}.{id}.{dist}.{testgroup}':
