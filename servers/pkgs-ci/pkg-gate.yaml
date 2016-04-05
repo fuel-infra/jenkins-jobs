@@ -171,6 +171,10 @@
             openstack/aodh|openstack/ceilometer|openstack/ceilometermiddleware|openstack/designate|openstack/designate-dashboard|openstack/django_openstack_auth|openstack/heat|openstack/horizon|openstack/horizon-vendor-theme|openstack/murano|openstack/murano-dashboard|openstack/sahara|openstack/sahara-dashboard)
               unset PKG_CENTOS
             ;;
+            # Control-plane specs
+            openstack-build/aodh-build|openstack-build/ceilometer-build|openstack-build/ceilometermiddleware-build|openstack-build/designate-build|openstack-build/designate-dashboard-build|openstack-build/django_openstack_auth-build|openstack-build/heat-build|openstack-build/horizon-build|openstack-build/horizon-vendor-theme-build|openstack-build/murano-build|openstack-build/murano-dashboard-build|openstack-build/sahara-build|openstack-build/sahara-dashboard-build)
+              unset PKG_CENTOS
+            ;;
           esac
 
           for OS in ${{PKG_CENTOS}} ${{PKG_UBUNTU}}; do
