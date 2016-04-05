@@ -39,6 +39,30 @@
           properties-file: mirror.setenvfile
 
 ########################################################################
+# Builders for publishing ISO
+########################################################################
+- builder:
+    name: publish-community-iso
+    builders:
+      - inject:
+          properties-content: |
+            HTTP_ROOT=http://seed-cz1.fuel-infra.org/fuelweb-iso,http://seed-us1.fuel-infra.org/fuelweb-iso
+            TRACKER_URL=http://retracker.local:80/announce,http://seed-us1.fuel-infra.org:8080/announce,http://seed-cz1.fuel-infra.org:8080/announce
+            SEED_HOST=seed-us1.fuel-infra.org:17333,seed-cz1.fuel-infra.org:17333
+      - shell:
+          !include-raw scripts/publish_artifacts.sh
+
+- builder:
+    name: publish-product-iso
+    builders:
+      - inject:
+          properties-content: |
+            HTTP_ROOT=http://$(hostname -f)/fuelweb-iso"
+            TRACKER_URL=http://tracker01-bud.infra.mirantis.net:8080/announce,http://tracker01-scc.infra.mirantis.net:8080/announce,http://tracker01-msk.infra.mirantis.net:8080/announce
+      - shell:
+          !include-raw scripts/publish_artifacts.sh
+
+########################################################################
 # Gerrit parameters
 ########################################################################
 

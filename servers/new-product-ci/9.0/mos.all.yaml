@@ -5,7 +5,7 @@
     mod: '-mos'
     timer: 'H */6 * * *'
     jobs:
-      - '{version}-mos.all':
+      - 'mos-{version}{mod}.all':
           description: 'Build ISO with Fuel Downstream code'
           variables: |
             FUEL_UI_COMMIT=mos/mitaka
@@ -22,7 +22,7 @@
             SHOTGUN_COMMIT=master
             NETWORKCHECKER_COMMIT=master
             FUELUPGRADE_COMMIT=master
-      - '{version}{mod}.test_all'
+      - 'product-{version}{mod}.test_all'
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'bvt_2'

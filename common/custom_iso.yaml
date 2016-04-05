@@ -1,0 +1,155 @@
+- defaults:
+    name: '{version}.custom.iso'
+    branch: 'origin/master'
+    concurrent: true
+    default_commit: 'master'
+    fuelmain_defaults: |
+      FUELLIB_COMMIT={default_commit}
+      NAILGUN_COMMIT={default_commit}
+      PYTHON_FUELCLIENT_COMMIT={default_commit}
+      FUEL_AGENT_COMMIT={default_commit}
+      FUEL_NAILGUN_AGENT_COMMIT={default_commit}
+      ASTUTE_COMMIT={default_commit}
+      OSTF_COMMIT={default_commit}
+      FUEL_MIRROR_COMMIT={default_commit}
+      FUELMENU_COMMIT={default_commit}
+      SHOTGUN_COMMIT={default_commit}
+      NETWORKCHECKER_COMMIT={default_commit}
+      FUELUPGRADE_COMMIT={default_commit}
+      FUEL_UI={default_commit}
+
+      FUELLIB_REPO=https://github.com/openstack/fuel-library.git
+      NAILGUN_REPO=https://github.com/openstack/fuel-web.git
+      PYTHON_FUELCLIENT_REPO=https://github.com/openstack/python-fuelclient.git
+      FUEL_AGENT_REPO=https://github.com/openstack/fuel-agent.git
+      FUEL_NAILGUN_AGENT_REPO=https://github.com/openstack/fuel-nailgun-agent.git
+      ASTUTE_REPO=https://github.com/openstack/fuel-astute.git
+      OSTF_REPO=https://github.com/openstack/fuel-ostf.git
+      FUEL_MIRROR_REPO=https://github.com/openstack/fuel-mirror.git
+      FUELMENU_REPO=https://github.com/openstack/fuel-menu.git
+      SHOTGUN_REPO=https://github.com/openstack/shotgun.git
+      NETWORKCHECKER_REPO=https://github.com/openstack/network-checker.git
+      FUELUPGRADE_REPO=https://github.com/openstack/fuel-upgrade.git
+      FUEL_UI_REPO=https://github.com/openstack/fuel-ui.git
+
+      FUELLIB_GERRIT_COMMIT=none
+      NAILGUN_GERRIT_COMMIT=none
+      PYTHON_FUELCLIENT_GERRIT_COMMIT=none
+      FUEL_AGENT_GERRIT_COMMIT=none
+      FUEL_NAILGUN_AGENT_GERRIT_COMMIT=none
+      ASTUTE_GERRIT_COMMIT=none
+      OSTF_GERRIT_COMMIT=none
+      FUEL_MIRROR_GERRIT_COMMIT=none
+      FUELMENU_GERRIT_COMMIT=none
+      SHOTGUN_GERRIT_COMMIT=none
+      NETWORKCHECKER_GERRIT_COMMIT=none
+      FUELUPGRADE_GERRIT_COMMIT=none
+      FUEL_UI_GERRIT_COMMIT=none
+    node: custom_iso
+    overridden_parameters: ''
+    variables: ''
+
+- job-template:
+    name: '{version}.custom.iso'
+    defaults: '{version}.custom.iso'
+    builders:
+      - inject: # fuel-main parameters overridden by default
+          properties-content: |
+            ARTS_DIR=${{WORKSPACE}}/artifacts
+            ISO_TYPE=custom
+            UBUNTU_MIRROR_ID=latest
+            CENTOS_MIRROR_ID=latest
+            MOS_CENTOS_ROOT=/mos-repos/centos/mos{version}-centos7/
+            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
+            MOS_UBUNTU_TARGET={version}.target.txt
+            {overridden_parameters}
+      - inject: # Manual overrides
+          properties-content: |
+            $MANUAL_PARAMETERS
+      - shell:
+          !include-raw-escape scripts/all.sh
+      - publish-product-iso
+    description: '{description}'
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    properties:
+      - authorization-allow-authorized
+      - build-timestamp
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - iso_builds
+          max-per-node: 1
+          option: category
+    parameters:
+      - string:
+          name: PROD_VER
+          default: ''
+          description: Version of production. If empty - it will be taken from 'config.mk'
+      - string:
+          name: CLOSEST_MIRROR_URL
+          default: ''
+          description: Mirror baseurl. For example http://perestroika-repo-tst.infra.mirantis.net
+            Otherwise it is calculated depending on the worker location.
+      - string:
+          name: make_args
+          default: ''
+          description: Additional make arguments
+      - string:
+          name: FUELMAIN_REPO
+          default: 'https://git.openstack.org/openstack/fuel-main.git'
+      - string:
+          name: FUELMAIN_COMMIT
+          default: '{default_commit}'
+      - string:
+          name: FUELMAIN_GERRIT_COMMIT
+          default: 'none'
+          description: Refspecs for commits in fuel-main gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+      - choice:
+          name: USE_MIRROR
+          choices:
+            - none
+          description: 'take closest mirror'
+      - string:
+          name: EXTRA_RPM_REPOS
+          default: ''
+          description: |
+            Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
+            Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
+            Example: <b> foo,http://my.cool.repo/rpm   bar,ftp://repo.foo </b>
+      - text:
+          name: MANUAL_PARAMETERS
+          default: |
+            # Fuel-Main defaults
+            {fuelmain_defaults}
+            # Already overridden parameters
+            {overridden_parameters}
+
+    scm:
+      - git:
+          url: '$FUELMAIN_REPO'
+          branches:
+            - '{branch}'
+    wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
+      - ansicolor:
+          colormap: xterm
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: artifacts/*txt, artifacts/*changelog
+          latest-only: false
+      - description-setter:
+          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          set-for-matrix: false
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'
+          failure: true
+          success: true
+          send-to:
+            - requester

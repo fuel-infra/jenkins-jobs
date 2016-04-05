@@ -5,10 +5,10 @@
     mod: ''
     bvt-mail: 'mos-qa@mirantis.com'
     jobs:
-      - '{version}{mod}.all':
+      - 'product-{version}{mod}.all':
           description: 'Build main product ISO'
           timer: '0 2,8,14,20 * * *'
-      - '{version}{mod}.test_all':
+      - 'product-{version}{mod}.test_all':
           email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'

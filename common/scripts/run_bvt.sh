@@ -18,16 +18,10 @@ case "${LOCATION}" in
     kha)
         MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/pkgs/"
         ;;
-    poz)
-        MIRROR_HOST="http://osci-mirror-poz.poz.mirantis.net/pkgs/"
-        ;;
-    bud)
+    poz|bud|budext|cz)
         MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
         ;;
-    bud-ext)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
-        ;;
-    mnv|scc)
+    scc)
         MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/pkgs/"
         ;;
     *)
@@ -65,10 +59,15 @@ rm -rf logs/*
 
 export VENV_PATH=${VENV_PATH:-/home/jenkins/venv-nailgun-tests}
 
-ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER
+ENV_NAME=${ENV_PREFIX}.${BUILD_NUMBER}
 ENV_NAME=${ENV_NAME:0:68}
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
 ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
-sh -x "utils/jenkins/system_tests.sh" -t test -w "$WORKSPACE" -e "$ENV_NAME" -o --group="$TEST_GROUP" -i "$ISO_PATH"
+sh -x "utils/jenkins/system_tests.sh" \
+    -t test \
+    -w "${WORKSPACE}" \
+    -e "${ENV_NAME}" \
+    -o --group="${TEST_GROUP}" \
+    -i "${ISO_PATH}"

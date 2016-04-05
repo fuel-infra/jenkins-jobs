@@ -29,7 +29,30 @@
           recipients: '$GERRIT_CHANGE_OWNER_EMAIL, ci+fuel-ci-gating@mirantis.com'
           subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
           failure: true
-
+- publisher:
+    name: email-systest
+    publishers:
+      - email-ext:
+          body: '{body-failed}'
+          aborted: true
+          failure: true
+          still-failing: true
+          fixed: false
+          send-to:
+            - recipients
+            - requester
+          recipients: '{mail-to}'
+          subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+      - email-ext:
+          body:
+            !include-raw notifications/test.passed
+          failure: false
+          fixed: true
+          send-to:
+            - recipients
+            - requester
+          recipients: '{mail-to}'
+          subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
 
 ########################################################################
 # Section: Triggers
@@ -87,7 +110,8 @@
           branches:
             - '{scm-branch}'
           wipe-workspace: false
-          clean: true
+          clean:
+            before: true
 
 - scm:
     name: fuel-infra
@@ -100,4 +124,14 @@
                 refspec: $GERRIT_REFSPEC
                 url: https://review.fuel-infra.org/$GERRIT_PROJECT
           choosing-strategy: gerrit
-          clean: true
+          clean:
+            before: true
+
+- scm:
+    name: main-git
+    scm:
+      - git:
+         url: 'https://git.openstack.org/openstack/{reponame}.git'
+         branches:
+          - '{repobranch}'
+         basedir: '{basedir}'

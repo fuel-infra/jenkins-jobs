@@ -7,6 +7,7 @@
     repobranch: 'master'
     properties: ''
     timeout: '180'
+    trigger_projects: ''
     weight: '7'
     node: 'bvt'
 
@@ -14,7 +15,7 @@
     # General system test. Downloads ISO image via magnet link
     # and runs system test with specified test group.
     #
-    # Uses predefined ``main-git`` macros for access to ``fuel-main/`` repository.
+    # Uses predefined ``main-git`` macros for access to ``fuel-qa/`` repository.
     #
     # Variables required:
     #
@@ -50,11 +51,12 @@
     - inject: # Defaults
         properties-content: |
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-          VENV_PATH={venvpath}
+          ENABLE_PROPOSED=false
           ENV_PREFIX={version}{mod}.main.{dist}.{testgroup}
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
           TEST_ISO_JOB={version}{mod}.test_all
+          VENV_PATH={venvpath}
     - inject: # Overrides
         properties-content: '{properties}'
     - shell:
@@ -126,6 +128,8 @@
           - requester
         recipients: '{email}'
         subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+    - trigger-parameterized-builds:
+        '{obj:trigger_projects}'
 
     scm:
     - main-git:

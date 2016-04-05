@@ -1,8 +1,12 @@
 - defaults:
     name: '{version}{mod}.all'
     node: iso
+    concurrent: true
+    default_variables: ''
     description: 'Build ISO'
     email: 'ci+builds@mirantis.com, fuel-build@mirantis.com'
+    git-root: 'https://git.openstack.org/openstack/'
+    reponame: 'fuel-main'
     timer: ''
     variables: ''
 
@@ -11,9 +15,126 @@
     description: 'Test ISO'
     email: 'ci+tests@mirantis.com'
 
+- scm:
+    name: 'iso-git'
+    scm:
+    - git:
+        url: '{git-root}{reponame}.git'
+        branches:
+          - 'origin/{branch}'
+        wipe-workspace: false
+        clean:
+          before: true
+
+- wrapper:
+    name: 'iso-timeout'
+    wrappers:
+    - timeout:
+        timeout: 120
+        fail: true
+
+#####################################################
+# Groups with predefined values for ISO template
+#####################################################
+# Product ISO
+- job-group:
+    name: 'product-{version}{mod}.all'
+    additional_projects:
+    - project: 'deploy_iso_on_cachers'
+      property-file: magnet_link.txt
+      condition: UNSTABLE_OR_BETTER
+    default_variables: |
+      ISO_TYPE=product
+    iso_id: '{version}{mod}'
+    publish_iso_builder: 'publish-product-iso'
+    wrappers:
+    - iso-timeout
+    jobs:
+    - '{version}{mod}.all'
+
+# Product MOS ISO
+- job-group:
+    name: 'mos-{version}{mod}.all'
+    additional_projects:
+    - project: 'deploy_iso_on_cachers'
+      property-file: magnet_link.txt
+      condition: UNSTABLE_OR_BETTER
+    default_variables: |
+      FUELLIB_REPO={git-root}fuel-library.git
+      NAILGUN_REPO={git-root}fuel-web.git
+      PYTHON_FUELCLIENT_REPO={git-root}python-fuelclient.git
+      FUEL_AGENT_REPO={git-root}fuel-agent.git
+      FUEL_NAILGUN_AGENT_REPO={git-root}fuel-nailgun-agent.git
+      ASTUTE_REPO={git-root}fuel-astute.git
+      OSTF_REPO={git-root}fuel-ostf.git
+      FUEL_MIRROR_REPO={git-root}fuel-mirror.git
+      FUELMENU_REPO={git-root}fuel-menu.git
+      SHOTGUN_REPO={git-root}shotgun.git
+      NETWORKCHECKER_REPO={git-root}network-checker.git
+      FUELUPGRADE_REPO={git-root}fuel-upgrade.git
+      FUEL_UI_REPO={git-root}fuel-ui.git
+      ISO_TYPE=product-mos
+    git-root: 'ssh://product-ci@review.fuel-infra.org:29418/openstack/'
+    iso_id: '{version}{mod}'
+    publish_iso_builder: 'publish-product-iso'
+    wrappers:
+    - iso-timeout
+    - product-ci-credentials
+    jobs:
+    - '{version}{mod}.all'
+
+# Community ISO
+- job-group:
+    name: 'community-{version}{mod}.all'
+    additional_projects:
+    - project: fuel_community_build_reports
+      condition: UNSTABLE_OR_BETTER
+      predefined-parameters: |
+        RELEASE={version}
+        BUILD=fuel-community-{version}-$BUILD_NUMBER-$BUILD_TIMESTAMP
+        STAGE=build
+        VALUE=ok
+        REPORTED_JOB_URL=$BUILD_URL
+    - project: fuel_community_build_reports
+      condition: UNSTABLE_OR_BETTER
+      predefined-parameters: |
+        RELEASE={version}
+        BUILD=fuel-community-{version}-$BUILD_NUMBER-$BUILD_TIMESTAMP
+        STAGE=publish
+        VALUE=ok
+        REPORTED_JOB_URL=$BUILD_URL
+    - project: fuel_community_build_reports
+      condition: FAILED
+      predefined-parameters: |
+        RELEASE={version}
+        BUILD=fuel-community-{version}-$BUILD_NUMBER-$BUILD_TIMESTAMP
+        STAGE=build
+        VALUE=fail
+        REPORTED_JOB_URL=$BUILD_URL
+    - project: fuel_community_build_reports
+      condition: FAILED
+      predefined-parameters: |
+        RELEASE={version}
+        BUILD=fuel-community-{version}-$BUILD_NUMBER-$BUILD_TIMESTAMP
+        STAGE=publish
+        VALUE=fail
+        REPORTED_JOB_URL=$BUILD_URL
+    iso_id: '{mod}-{version}'
+    publish_iso_builder: 'publish-community-iso'
+    default_variables: |
+      FEATURE_GROUPS=experimental
+      ISO_TYPE=community
+    wrappers:
+    - iso-timeout
+    jobs:
+      - '{version}{mod}.all'
+##################################################
+# ISO all job template
+##################################################
 - job-template:
     name: '{version}{mod}.all'
     defaults: '{version}{mod}.all'
+    description: '{description}'
     properties:
       - build-timestamp
       - heavy-job:
@@ -31,7 +152,9 @@
     builders:
       - inject: # Defaults
           properties-content: |
-            ISO_ID={version}{mod}
+            {default_variables}
+            ARTS_DIR=${{WORKSPACE}}/artifacts
+            ISO_ID={iso_id}
             UBUNTU_MIRROR_ID=latest
             CENTOS_MIRROR_ID=latest
             MOS_CENTOS_ROOT=/mos-repos/centos/mos{version}-centos7/
@@ -42,6 +165,7 @@
             $ADDITIONAL_VARIABLES
       - shell:
           !include-raw-escape scripts/all.sh
+      - '{publish_iso_builder}'
 
     publishers:
       - archive:
@@ -54,27 +178,58 @@
       - email-default:
           mail-to: '{email}'
       - trigger-parameterized-builds:
-        - project: 'deploy_iso_on_cachers'
-          property-file: magnet_link.txt
-          condition: UNSTABLE_OR_BETTER
+          '{obj:additional_projects}'
+      - trigger-parameterized-builds:
         - project: '{version}{mod}.test_all'
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
             UPSTREAM_BUILD_URL=$BUILD_URL
             UPSTREAM_BUILD_NUMBER=$BUILD_NUMBER
             BUILD_MIRROR_URL=$BUILD_MIRROR_URL
-
     scm:
-      - openstack:
+      - iso-git:
+          git-root: '{git-root}'
+          reponame: '{reponame}'
           branch: '{branch}'
-          repo: fuel-main
     triggers:
       - timed: '{timer}'
     wrappers:
-      - timeout:
-          timeout: 120
-          fail: true
+      '{obj:wrappers}'
 
+#####################################################
+# Groups with predefined values for test_all template
+#####################################################
+# Group for Product and Product MOS
+- job-group:
+    name: 'product-{version}{mod}.test_all'
+    multijob_phase_name: Run_BVT_and_Smoke
+    multijob_projects:
+      - name: '{version}{mod}.main.ubuntu.bvt_2'
+        kill-phase-on: NEVER
+        property-file: properties_file.txt
+      - name: '{version}{mod}.main.ubuntu.smoke_neutron'
+        kill-phase-on: NEVER
+        property-file: properties_file.txt
+    jobs:
+    - '{version}{mod}.test_all'
+
+# Group for Community
+- job-group:
+    name: 'community-{version}{mod}.test_all'
+    multijob_phase_name: Run_BVT_and_UCA_neutron
+    multijob_projects:
+      - name: '{version}{mod}.main.ubuntu.bvt_2'
+        kill-phase-on: NEVER
+        property-file: properties_file.txt
+      - name: '{version}{mod}.main.ubuntu.uca_neutron_ha'
+        kill-phase-on: NEVER
+        property-file: properties_file.txt
+    jobs:
+    - '{version}{mod}.test_all'
+
+#####################################################
+# ISO test_all job template
+#####################################################
 - job-template:
     name: '{version}{mod}.test_all'
     defaults: '{version}{mod}.test_all'
@@ -100,15 +255,10 @@
       - shell:
           !include-raw-escape scripts/test_all.sh
       - multijob:
-          name: Run_BVT_and_Smoke
+          name: '{multijob_phase_name}'
           condition: COMPLETED
           projects:
-            - name: '{version}{mod}.main.ubuntu.bvt_2'
-              kill-phase-on: NEVER
-              property-file: properties_file.txt
-            - name: '{version}{mod}.main.ubuntu.smoke_neutron'
-              kill-phase-on: NEVER
-              property-file: properties_file.txt
+            '{obj:multijob_projects}'
     publishers:
       - email-systest:
           body-failed: |

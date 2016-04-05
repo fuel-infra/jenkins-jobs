@@ -5,7 +5,7 @@
     mod: ''
     bvt-mail: 'mos-qa@mirantis.com'
     jobs:
-      - '{version}{mod}.all':
+      - 'product-{version}{mod}.all':
           description: 'Build main product ISO'
           timer: '50 2,8,14,20 * * *'
           variables: |
@@ -14,7 +14,7 @@
             MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
             MIRROR_MOS_UBUNTU_SUITE=mos-master
 
-      - '{version}{mod}.test_all':
+      - 'product-{version}{mod}.test_all':
           email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
