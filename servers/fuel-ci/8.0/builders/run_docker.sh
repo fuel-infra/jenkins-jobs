@@ -10,7 +10,7 @@ JOB_DOCKER_PATH="/opt/jenkins/${JOB_NAME}"
 SCRIPT_PATH="/opt/jenkins/runner.sh"
 
 # Docker Registry to use
-REGISTRY="registry.fuel-infra.org/jenkins/fuel-ci-tests"
+REGISTRY="registry.fuel-infra.org/fuel-ci/fuel-ci-tests"
 
 # Container ID path
 CONTAINER_ID="${WORKSPACE}/container.id"
