@@ -73,3 +73,11 @@
           src_url: 'rsync://ftp.fi.muni.cz/pub/linux/{mirrorname}/{mirrorversion}'
           updated_symlinks: '{mirrorname}/{mirrorversion} {mirrorname}/%symlink_target%'
           rsync_extra_params: '--exclude=isos'
+      - 'mirror_pkgs_{mirrorname}_{mirrorversion}':
+          mirrorname: centos
+          mirrorversion: 7
+          mirror_dir: '{mirrorname}%symlink_target%%timestamp%'
+          snapshots_dir: 'snapshots'
+          src_url: 'rsync://ftp.fi.muni.cz/pub/linux/{mirrorname}/{mirrorversion}'
+          updated_symlinks: '{mirrorname}/{mirrorversion} {mirrorname}/%symlink_target%'
+          rsync_extra_params: '--exclude=isos'
