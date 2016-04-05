@@ -12,6 +12,7 @@
     node: custom_iso
     properties:
       - authorization-allow-authorized
+      - build-timestamp
       - heavy-job:
           weight: 1
       - throttle:
