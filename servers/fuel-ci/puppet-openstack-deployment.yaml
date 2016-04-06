@@ -20,7 +20,7 @@
 
     description: |
       Runs Fuel deployment test with TEST_GROUP={testgroup} for patches to puppet-openstack modules
-    node: 'puppet-fuel-library-pkgs'
+    node: '{branch-id}-puppet-openstack-pkgs'
     parameters:
       - string:
           name: GERRIT_PROJECT
