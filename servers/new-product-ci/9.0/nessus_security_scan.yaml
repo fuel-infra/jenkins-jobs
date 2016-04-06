@@ -75,7 +75,7 @@
       - git:
           url: 'https://git.openstack.org/openstack/fuel-qa.git'
           branches:
-            - 'origin/master'  # TODO: change to origin/stable/9.0 after branching
+            - 'origin/stable/mitaka'
     wrappers:
       - ansicolor:
           colormap: xterm
