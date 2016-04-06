@@ -37,46 +37,46 @@
 
       - string:
           name: ASTUTE_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: FUEL_AGENT_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: FUEL_MAIN_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: FUEL_MIRROR_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: FUEL_NAILGUN_AGENT_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: FUELLIB_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: FUELMENU_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: FUELUPGRADE_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: NAILGUN_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: NETWORKCHECKER_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: OSTF_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: PYTHON_FUELCLIENT_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: SHOTGUN_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
       - string:
           name: FUEL_UI_COMMIT
-          default: 'master'
+          default: 'stable/mitaka'
 
       - string:
           name: ASTUTE_REPO
@@ -213,7 +213,7 @@
       - git:
           url: 'https://github.com/openstack/fuel-mirror'
           branches:
-            - 'origin/master'
+            - 'origin/stable/mitaka'
 
     wrappers:
       - timeout:
