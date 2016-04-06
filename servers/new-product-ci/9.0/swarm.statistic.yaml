@@ -1,6 +1,11 @@
 - job:
     name: '9.0.swarm.statistic'
-    description: <iframe width="100%" height="600px" frameborder='0' src='https://product-ci.infra.mirantis.net/job/9.0.swarm.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'</iframe>
+    description: |
+      <iframe width="100%"
+              height="600px"
+              frameborder='0'
+              src='https://product-ci.infra.mirantis.net/job/9.0.swarm.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'>
+      </iframe>
     builders:
       - inject:
            properties-content: |
@@ -21,7 +26,7 @@
     scm:
      - main-git:
           reponame: 'fuel-qa'
-          repobranch: 'origin/master'
+          repobranch: 'origin/stable/mitaka'
           basedir: ''
 
     wrappers:
