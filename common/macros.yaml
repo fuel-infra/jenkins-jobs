@@ -46,6 +46,7 @@
     builders:
       - inject:
           properties-content: |
+            FRONT_URL=http://mirror.fuel-infra.org/fuelweb-iso
             HTTP_ROOT=http://seed-cz1.fuel-infra.org/fuelweb-iso,http://seed-us1.fuel-infra.org/fuelweb-iso
             TRACKER_URL=http://retracker.local:80/announce,http://seed-us1.fuel-infra.org:8080/announce,http://seed-cz1.fuel-infra.org:8080/announce
             SEED_HOST=seed-us1.fuel-infra.org:17333,seed-cz1.fuel-infra.org:17333
