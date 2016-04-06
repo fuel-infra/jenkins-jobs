@@ -1,0 +1,48 @@
+#
+# Tempated job parameters (using YAML anchors)
+#
+
+- sync-params: &sync-params
+    name: ''
+
+    src-branch:
+      - 'master':
+          dst-branch: 'newton'
+          upstream-branch: 'stable/newton'
+          downstream-branch: 'mos/newton'
+          fallback-branch: 'master'
+      - 'mitaka':
+          dst-branch: 'mitaka'
+          upstream-branch: 'stable/mitaka'
+          downstream-branch: 'mos/mitaka'
+          fallback-branch: ''
+
+    # Syncronization schedule
+    sync-schedule: 'H 3 * * 3'  # every Wednesday at 3:00 am, spread evenly
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: 'openstack-ci-mirrorer-jenkins'
+    gerrit-creds: 'a4be8c41-43e0-4269-94d8-53133cfe3ae5'
+    gerrit-topic: 'sync/{src-branch}/{dst-branch}'
+
+    # Jobs
+    jobs:
+      - 'sync-{name}-{src-branch}-{dst-branch}'
+
+#
+# Projects definitions
+#
+
+- project:
+    name: 'fuel-main'
+    <<: *sync-params
+
+- project:
+    name: 'fuel-ui'
+    <<: *sync-params
+
+- project:
+    name: 'fuel-web'
+    <<: *sync-params
