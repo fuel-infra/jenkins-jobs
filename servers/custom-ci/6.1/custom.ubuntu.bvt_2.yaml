@@ -28,7 +28,7 @@
           default: 'true'
       - string:
           name: UBUNTU_MIRROR_ID
-          default: latest-stable
+          default: latest
           description: |
             'latest' - latest available; 'latest-stable' - mirror from successful run of 6.1.test_all job; 'ubuntu-2015-01-01-030500'
       - string:
