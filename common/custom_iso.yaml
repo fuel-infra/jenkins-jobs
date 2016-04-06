@@ -16,7 +16,7 @@
       SHOTGUN_COMMIT={default_commit}
       NETWORKCHECKER_COMMIT={default_commit}
       FUELUPGRADE_COMMIT={default_commit}
-      FUEL_UI={default_commit}
+      FUEL_UI_COMMIT={default_commit}
 
       FUELLIB_REPO=https://github.com/openstack/fuel-library.git
       NAILGUN_REPO=https://github.com/openstack/fuel-web.git
