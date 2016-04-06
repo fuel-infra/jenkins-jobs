@@ -1,5 +1,5 @@
 - job-template:
-    name: 'puppet-openstack.fuel.noop'
+    name: '{branch-id}.puppet-openstack.fuel.noop'
     builders:
       - shell:
           !include-raw-escape builders/prepare-puppet-module.sh
@@ -14,10 +14,10 @@
           default: 'openstack/puppet-nova'
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/{puppet-branch}'
       - string:
           name: GERRIT_BRANCH
-          default: 'master'
+          default: '{puppet-branch}'
     properties:
       - heavy-job:
           weight: 2
@@ -27,7 +27,7 @@
     scm:
       - git:
           branches:
-            - master
+            - '{fuellib-branch}'
           remotes:
             - gerrit:
                 url: https://review.openstack.org/openstack/fuel-library.git
@@ -43,8 +43,8 @@
           choosing-strategy: gerrit
     triggers:
       - timed: 'H 2 * * *'
-      - puppet-openstack-request:
-          fuel-infra-request-recheck_regexp: '{gerrit_trigger_on_recheck_regexp}'
+      - '{gerrit-macro}':
+          recheck_regexp: '{puppet_openstack_recheck_regexp}'
           projects_regexp: '{puppet_openstack_projects_regexp}'
     wrappers:
       - ansicolor:
@@ -55,6 +55,19 @@
           write-description: true
 
 - project:
-    name: puppet-openstack-noop
+    name: 'Mitaka puppet-openstack-noop'
+    branch-id: 'mitaka'
+    fuellib-branch: 'stable/mitaka'
+    puppet-branch: 'stable/mitaka'
+    gerrit-macro: 'puppet-openstack-request-mitaka'
     jobs:
-      - 'puppet-openstack.fuel.noop'
+      - '{branch-id}.puppet-openstack.fuel.noop'
+
+- project:
+    name: 'Master puppet-openstack-noop'
+    branch-id: 'master'
+    fuellib-branch: 'master'
+    puppet-branch: 'master'
+    gerrit-macro: 'puppet-openstack-request-master'
+    jobs:
+      - '{branch-id}.puppet-openstack.fuel.noop'
