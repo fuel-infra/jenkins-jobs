@@ -32,6 +32,11 @@ esac
 
 ###################### Get MIRROR_UBUNTU ###############
 
+# If UBUNTU_MIRROR_ARTIFACT is set get UBUNTU_MIRROR_ID from artifact
+if [[ -n "${UBUNTU_MIRROR_ARTIFACT}" ]]; then
+    export $(curl -sSf "${UBUNTU_MIRROR_ARTIFACT}")
+fi
+
 UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
 UBUNTU_DIST=${UBUNTU_DIST:-trusty}
 
@@ -44,9 +49,15 @@ if [ -z "${MIRROR_UBUNTU}" ]; then
     MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-proposed main universe multiverse"
 fi
 
-# Save parameters to file
+# Save parameters to file in format required by source in bash
 cat > mirror.setenvfile <<EOF
 MIRROR_HOST="${MIRROR_HOST}"
 UBUNTU_MIRROR_URL="${UBUNTU_MIRROR_URL}"
 MIRROR_UBUNTU="${MIRROR_UBUNTU}"
+EOF
+# Save parameters to file in format required by jenkins inject
+cat > mirror.jenkins-injectfile <<EOF
+MIRROR_HOST=${MIRROR_HOST}
+UBUNTU_MIRROR_URL=${UBUNTU_MIRROR_URL}
+MIRROR_UBUNTU=${MIRROR_UBUNTU}
 EOF

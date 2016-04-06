@@ -36,7 +36,7 @@
     builders:
       - shell: !include-raw scripts/guess-mirror.sh
       - inject:
-          properties-file: mirror.setenvfile
+          properties-file: mirror.jenkins-injectfile
 
 ########################################################################
 # Builder used to download ISO
