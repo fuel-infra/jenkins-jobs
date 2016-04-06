@@ -9,7 +9,7 @@ process_artifacts() {
     local HOSTNAME=$(hostname -f)
     local LOCAL_STORAGE="$2"
     local TRACKER_URL="$3"
-    local HTTP_ROOT="$4"
+    local HTTP_ROOT="${4//@HOSTNAME@/${HOSTNAME}}"
 
     echo "MD5SUM is:"
     md5sum "${ARTIFACT}"
@@ -17,12 +17,11 @@ process_artifacts() {
     echo "SHA1SUM is:"
     sha1sum "${ARTIFACT}"
 
-    mkdir -p "${LOCAL_STORAGE}"
-    mv "${ARTIFACT}" "${LOCAL_STORAGE}"
-
     # seedclient.py comes from python-seed devops package
     case ${ISO_TYPE} in
         product|product-mos|custom)
+            mkdir -p "${LOCAL_STORAGE}"
+            mv "${ARTIFACT}" "${LOCAL_STORAGE}"
             local MAGNET_LINK=$(seedclient.py -v -u \
                                   -f "${LOCAL_STORAGE}/${ARTIFACT}"\
                                   --tracker-url="${TRACKER_URL}"\
@@ -30,7 +29,7 @@ process_artifacts() {
             ;;
         community)
             local MAGNET_LINK=$(seedclient.py -v -p \
-                                  -f "${LOCAL_STORAGE}/${ARTIFACT}"\
+                                  -f "${ARTIFACT}"\
                                   --tracker-url="${TRACKER_URL}"\
                                   --http-root="${HTTP_ROOT}"\
                                   --seed-host="${SEED_HOST}" || true)
@@ -72,7 +71,7 @@ ISO_HTTP_LINK=$(grep HTTP_LINK "${ARTS_DIR}"/*iso.data.txt |
 ISO_HTTP_TORRENT=$(grep HTTP_TORRENT "${ARTS_DIR}"/*iso.data.txt |
                     sed 's/HTTP_TORRENT=//')
 
-echo "<a href=${ISO_HTTP_LINK}>ISO download link</a> "\
+echo "<a href=${ISO_HTTP_LINK}>ISO download link</a>"\
      "<a href=${ISO_HTTP_TORRENT}>ISO torrent link</a>"\
      "<br>${ISO_MAGNET_LINK}<br>"
 

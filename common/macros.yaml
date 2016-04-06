@@ -57,7 +57,7 @@
     builders:
       - inject:
           properties-content: |
-            HTTP_ROOT=http://$(hostname -f)/fuelweb-iso"
+            HTTP_ROOT=http://@HOSTNAME@/fuelweb-iso"
             TRACKER_URL=http://tracker01-bud.infra.mirantis.net:8080/announce,http://tracker01-scc.infra.mirantis.net:8080/announce,http://tracker01-msk.infra.mirantis.net:8080/announce
       - shell:
           !include-raw scripts/publish_artifacts.sh
