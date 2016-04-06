@@ -97,6 +97,7 @@
         REPORTED_JOB_URL=$BUILD_URL
     - project: fuel_community_build_reports
       condition: UNSTABLE_OR_BETTER
+      property-file: description.txt
       predefined-parameters: |
         RELEASE={version}
         BUILD=fuel-community-{version}-$BUILD_NUMBER-$BUILD_TIMESTAMP

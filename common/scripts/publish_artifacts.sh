@@ -72,6 +72,9 @@ ISO_HTTP_LINK=$(grep HTTP_LINK "${ARTS_DIR}"/*iso.data.txt |
 ISO_HTTP_TORRENT=$(grep HTTP_TORRENT "${ARTS_DIR}"/*iso.data.txt |
                     sed 's/HTTP_TORRENT=//')
 
+echo "DESCRIPTION=<a href=${ISO_HTTP_TORRENT}?from=status>ISO</a>" > \
+    "${WORKSPACE}/description.txt"
+
 echo "<a href=${ISO_HTTP_LINK}>ISO download link</a>"\
      "<a href=${ISO_HTTP_TORRENT}>ISO torrent link</a>"\
      "<br>${ISO_MAGNET_LINK}<br>"
