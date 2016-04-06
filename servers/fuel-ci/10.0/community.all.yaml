@@ -1,14 +1,18 @@
 - project:
-    name: 'Community 9.0 iso'
-    version: '9.0'
-    branch: 'stable/mitaka'
+    name: 'Community 10.0 iso'
+    version: '10.0'
+    branch: 'master'
     mod: '-community'
     bvt-mail: 'ci+alert@mirantis.com'
     jobs:
       - 'community-{version}{mod}.all':
-          description: "Build: 9.0 iso"
+          description: "Build: 10.0 iso"
           email: '{bvt-mail}'
           timer: 'H */6 * * *'
+          variables: |
+            MOS_CENTOS_ROOT=/mos-repos/centos/mos-master-centos7/
+            MOS_UBUNTU_TARGET=master.target.txt
+            MIRROR_MOS_UBUNTU_SUITE=mos-master
       - 'community-{version}{mod}.test_all':
           email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
