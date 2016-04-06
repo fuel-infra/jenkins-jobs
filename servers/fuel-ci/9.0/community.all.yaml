@@ -1,7 +1,7 @@
 - project:
     name: 'Community 9.0 iso'
     version: '9.0'
-    branch: 'master'
+    branch: 'stable/mitaka'
     mod: '-community'
     bvt-mail: 'ci+alert@mirantis.com'
     jobs:

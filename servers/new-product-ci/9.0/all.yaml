@@ -1,7 +1,7 @@
 - project:
     name: 'Main 9.0 iso'
     version: '9.0'
-    branch: 'master'
+    branch: 'stable/mitaka'
     mod: ''
     bvt-mail: 'mos-qa@mirantis.com'
     jobs:

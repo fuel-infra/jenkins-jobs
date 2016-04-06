@@ -1,7 +1,8 @@
 - project:
     name: '9.0 custom iso'
     version: '9.0'
-    default_commit: 'master'
+    branch: 'origin/stable/mitaka'
+    default_commit: 'stable/mitaka'
     defaults: '{version}.custom.iso'
     description:
       !include-raw descriptions/custom.iso
