@@ -3,7 +3,7 @@
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
-    mos: '9.0'
+    mos: '10.0'
 
     version-id: master
     projectbranch: master
@@ -33,7 +33,7 @@
             KEEP_BEFORE=yes
 
       - fuel-library:
-          projectpackage: fuel-library9.0
+          projectpackage: fuel-library10.0
           testgroup: smoke_neutron
 
           timed: '0 */12 * * *'
@@ -43,7 +43,7 @@
             BUILD_IMAGES=true
 
       - fuel-library:
-          projectpackage: fuel-library9.0
+          projectpackage: fuel-library10.0
           testgroup: neutron_vlan_ha
 
           timed: '59 */12 * * *'

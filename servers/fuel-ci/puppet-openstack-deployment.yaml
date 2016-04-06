@@ -122,7 +122,7 @@
 - project:
     name: 'Mitaka fuel-library puppet-openstack deployment tests'
     projectpackage: 'fuel-library9.0'
-    mos: '9.0'
+    mos: '10.0'
     branch-id: 'mitaka'
     fuellib-branch: 'stable/mitaka'
     fuelmirror-branch: 'stable/mitaka'
@@ -148,7 +148,7 @@
 
 - project:
     name: 'Master fuel-library puppet-openstack deployment tests'
-    projectpackage: 'fuel-library9.0'
+    projectpackage: 'fuel-library10.0'
     mos: '9.0'
     branch-id: 'master'
     fuellib-branch: 'master'
