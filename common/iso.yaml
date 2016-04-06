@@ -43,6 +43,12 @@
     - project: 'deploy_iso_on_cachers'
       property-file: magnet_link.txt
       condition: UNSTABLE_OR_BETTER
+    - project: 'trigger-external-events'
+      predefined-parameters: |
+        ISO_VERSION=$ISO_VERSION
+        BUILD=$BUILD
+        REPORTED_JOB_URL=$REPORTED_JOB_URL
+      condition: UNSTABLE_OR_BETTER
     default_variables: |
       ISO_TYPE=product
     iso_id: '{version}{mod}'
