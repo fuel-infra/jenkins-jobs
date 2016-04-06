@@ -65,7 +65,8 @@
       - inject:
           # pkgs variables
           properties-content: |
-            MOS={mos}
+            RPM_MIRROR_BASE_NAME={rpm-mirror-base-name}
+            DEB_MIRROR_BASE_NAME={deb-mirror-base-name}
             PROJECT=fuel-library
             PROJECT_PACKAGE={projectpackage}
       - inject:
@@ -122,7 +123,8 @@
 - project:
     name: 'Mitaka fuel-library puppet-openstack deployment tests'
     projectpackage: 'fuel-library9.0'
-    mos: '10.0'
+    deb-mirror-base-name: '9.0 mos9.0'
+    rpm-mirror-base-name: 'mos9.0-centos7'
     branch-id: 'mitaka'
     fuellib-branch: 'stable/mitaka'
     fuelmirror-branch: 'stable/mitaka'
@@ -149,7 +151,8 @@
 - project:
     name: 'Master fuel-library puppet-openstack deployment tests'
     projectpackage: 'fuel-library10.0'
-    mos: '9.0'
+    deb-mirror-base-name: 'master mos-master'
+    rpm-mirror-base-name: 'mos-master-centos7'
     branch-id: 'master'
     fuellib-branch: 'master'
     fuelmirror-branch: 'master'

@@ -84,7 +84,7 @@ sed -i "s|Release:.*$|Release: ${RELEASE}|" "${SOURCE_PATH}/${PROJECT_PACKAGE}.s
 ## build rpm
 "${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
   --build-target centos7 \
-  --ext-repos "mos,${MIRROR_HOST}mos-repos/centos/mos${MOS}-centos7-fuel/os/x86_64/" \
+  --ext-repos "mos,${MIRROR_HOST}mos-repos/centos/${RPM_MIRROR_BASE_NAME}/os/x86_64/" \
   --source "${SOURCE_PATH}" \
   --output-dir "${RPM_RESULT_DIR}"
 
@@ -98,7 +98,7 @@ if [ -d "${PROJECT_ROOT}/debian" ]; then
   ## build deb
   "${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
     --build-target trusty \
-    --ext-repos "${MIRROR_HOST}mos-repos/ubuntu/${MOS} mos${MOS} main restricted" \
+    --ext-repos "${MIRROR_HOST}mos-repos/ubuntu/${DEB_MIRROR_BASE_NAME} main restricted" \
     --source "${SOURCE_PATH}" \
     --output-dir "${DEB_RESULT_DIR}"
 fi

@@ -3,7 +3,8 @@
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
-    mos: '10.0'
+    deb-mirror-base-name: 'master mos-master'
+    rpm-mirror-base-name: 'mos-master-centos7'
 
     version-id: master
     projectbranch: master
@@ -97,7 +98,8 @@
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
-    mos: '9.0'
+    deb-mirror-base-name: '9.0 mos9.0'
+    rpm-mirror-base-name: 'mos9.0-centos7'
 
     version-id: mitaka
     projectbranch: stable/mitaka
@@ -191,7 +193,8 @@
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
-    mos: '8.0'
+    deb-mirror-base-name: '8.0 mos8.0'
+    rpm-mirror-base-name: 'mos8.0-centos7-fuel'
 
     version-id: '8.0'
     projectbranch: 'stable/8.0'
