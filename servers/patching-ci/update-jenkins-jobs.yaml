@@ -1,0 +1,5 @@
+- project:
+    name: patching-ci.update-jenkins-jobs
+    ci-name: patching-ci
+    jobs:
+      - update-jenkins-jobs
