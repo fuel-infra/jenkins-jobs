@@ -60,10 +60,17 @@ cp -v "${PROJECT_ROOT}/specs/${PROJECT_PACKAGE}.spec" "${SOURCE_PATH}"
 # update spec with proper version
 sed -i "s|Release:.*$|Release: ${RELEASE}|" "${SOURCE_PATH}/${PROJECT_PACKAGE}.spec"
 
+# select correct repository suffix for new MOS versions
+if [[ "${MOS}" =~ ^[4-8].* ]]; then
+  REPO_SUFFIX='-fuel'
+else
+  REPO_SUFFIX=''
+fi
+
 ## build rpm
 "${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
   --build-target centos7 \
-  --ext-repos "mos,http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos${MOS}-centos7-fuel/os/x86_64/" \
+  --ext-repos "mos,http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos${MOS}-centos7${REPO_SUFFIX}/os/x86_64/" \
   --source "${SOURCE_PATH}" \
   --output-dir "${RPM_RESULT_DIR}"
 

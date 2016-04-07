@@ -24,10 +24,10 @@
     name: '{mos}.custom.packages_test.{dist}'
     properties: ''
     concurrent: true
-
     description: |
-      Prepares package and runs deployment test with custom params
-      and custom testgroup
+      Build <b>custom fuel package</b> (using perestroika) and execute deployment<br>
+      test with required parameters. This job is a custom version of jobs
+      from <a href="https://ci.fuel-infra.org/view/deployment%20tests/">fuel-ci</a>
 
     node: 'custom_packages_test'
 
@@ -76,7 +76,7 @@
           description: 'Refspec of the PROJECT package'
       - string:
           name: FUEL_QA_COMMIT
-          default: '{version-id}'
+          default: '{projectbranch}'
           description: 'Commit SHA of fuel-qa repository for system test'
       - string:
           name: FUEL_QA_GERRIT_COMMIT
