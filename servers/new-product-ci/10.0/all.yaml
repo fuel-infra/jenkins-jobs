@@ -7,7 +7,7 @@
     jobs:
       - 'product-{version}{mod}.all':
           description: 'Build main product ISO'
-          timer: '50 2,8,14,20 * * *'
+          timer: '0 5-23/ * * *'
           variables: |
             MOS_CENTOS_ROOT=/mos-repos/centos/mos-master-centos7/
             MOS_UBUNTU_TARGET=master.target.txt

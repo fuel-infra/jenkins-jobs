@@ -7,7 +7,7 @@
     jobs:
       - 'product-{version}{mod}.all':
           description: 'Build main product ISO'
-          timer: '0 2,8,14,20 * * *'
+          timer: '0 2-23/6 * * *'
       - 'product-{version}{mod}.test_all':
           email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
