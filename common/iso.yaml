@@ -51,7 +51,6 @@
       condition: UNSTABLE_OR_BETTER
     default_variables: |
       ISO_TYPE=product
-    iso_id: '{version}{mod}'
     publish_iso_builder: 'publish-product-iso'
     wrappers:
     - iso-timeout
@@ -81,7 +80,6 @@
       FUEL_UI_REPO={git-root}fuel-ui.git
       ISO_TYPE=product-mos
     git-root: 'ssh://product-ci@review.fuel-infra.org:29418/openstack/'
-    iso_id: '{version}{mod}'
     publish_iso_builder: 'publish-product-iso'
     wrappers:
     - iso-timeout
@@ -97,7 +95,7 @@
       condition: UNSTABLE_OR_BETTER
       predefined-parameters: |
         RELEASE={version}
-        BUILD=fuel-community-{version}-$BUILD_NUMBER-$BUILD_TIMESTAMP
+        BUILD=fuel-{version}{mod}-$BUILD_NUMBER-$BUILD_TIMESTAMP
         STAGE=build
         VALUE=ok
         REPORTED_JOB_URL=$BUILD_URL
@@ -106,7 +104,7 @@
       property-file: description.txt
       predefined-parameters: |
         RELEASE={version}
-        BUILD=fuel-community-{version}-$BUILD_NUMBER-$BUILD_TIMESTAMP
+        BUILD=fuel-{version}{mod}-$BUILD_NUMBER-$BUILD_TIMESTAMP
         STAGE=publish
         VALUE=ok
         REPORTED_JOB_URL=$BUILD_URL
@@ -114,7 +112,7 @@
       condition: FAILED
       predefined-parameters: |
         RELEASE={version}
-        BUILD=fuel-community-{version}-$BUILD_NUMBER-$BUILD_TIMESTAMP
+        BUILD=fuel-{version}{mod}-$BUILD_NUMBER-$BUILD_TIMESTAMP
         STAGE=build
         VALUE=fail
         REPORTED_JOB_URL=$BUILD_URL
@@ -122,11 +120,10 @@
       condition: FAILED
       predefined-parameters: |
         RELEASE={version}
-        BUILD=fuel-community-{version}-$BUILD_NUMBER-$BUILD_TIMESTAMP
+        BUILD=fuel-{version}{mod}-$BUILD_NUMBER-$BUILD_TIMESTAMP
         STAGE=publish
         VALUE=fail
         REPORTED_JOB_URL=$BUILD_URL
-    iso_id: '{mod}-{version}'
     publish_iso_builder: 'publish-community-iso'
     default_variables: |
       FEATURE_GROUPS=experimental
@@ -161,7 +158,7 @@
           properties-content: |
             {default_variables}
             ARTS_DIR=${{WORKSPACE}}/artifacts
-            ISO_ID={iso_id}
+            ISO_ID={version}{mod}
             UBUNTU_MIRROR_ID=latest
             CENTOS_MIRROR_ID=latest
             MOS_CENTOS_ROOT=/mos-repos/centos/mos{version}-centos7/

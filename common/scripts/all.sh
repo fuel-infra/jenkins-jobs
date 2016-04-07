@@ -4,21 +4,7 @@ set -ex
 
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin:${PATH}
 
-if [ -z "${PROD_VER}" ]; then
-    PROD_VER=$(grep '^PRODUCT_VERSION' config.mk | cut -d= -f2)
-fi
-
-export PRODUCT_VERSION="$PROD_VER"
-case "${ISO_TYPE}" in
-    custom)
-        export ISO_NAME="fuel-gerrit-${PROD_VER}-${BUILD_NUMBER}-${BUILD_ID}"
-        export UPGRADE_TARBALL_NAME="fuel-gerrit-${PROD_VER}-upgrade-${BUILD_NUMBER}-${BUILD_ID}"
-        ;;
-    *)
-        export ISO_ID="${ISO_ID/-/}"
-        export ISO_NAME="fuel-${ISO_ID}-${BUILD_NUMBER}-${BUILD_TIMESTAMP}"
-        ;;
-esac
+export ISO_NAME="fuel-${ISO_ID}-${BUILD_NUMBER}-${BUILD_TIMESTAMP}"
 
 export BUILD_DIR="${WORKSPACE}/../tmp/${JOB_NAME}/build"
 export LOCAL_MIRROR="${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror"

@@ -1,6 +1,7 @@
 - project:
     name: '10.0 custom iso'
     version: '10.0'
+    mod: '-custom'
     default_commit: 'master'
     defaults: '{version}.custom.iso'
     overridden_parameters: |

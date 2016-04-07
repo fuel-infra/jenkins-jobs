@@ -56,6 +56,7 @@
       - inject: # fuel-main parameters overridden by default
           properties-content: |
             ARTS_DIR=${{WORKSPACE}}/artifacts
+            ISO_ID={version}{mod}
             ISO_TYPE=custom
             UBUNTU_MIRROR_ID=latest
             CENTOS_MIRROR_ID=latest
@@ -84,10 +85,6 @@
           max-per-node: 1
           option: category
     parameters:
-      - string:
-          name: PROD_VER
-          default: ''
-          description: Version of production. If empty - it will be taken from 'config.mk'
       - string:
           name: CLOSEST_MIRROR_URL
           default: ''
