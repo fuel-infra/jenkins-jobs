@@ -74,7 +74,7 @@
           properties-content: |
             VENV_PATH={venvpath}
             SYSTEST_ROOT=/home/jenkins/workspace/systest/master
-            ISO_PATH=/home/jenkins/workspace/iso/fuel_master.iso
+            ISO_PATH=/home/jenkins/workspace/iso/fuel_{branch-id}.iso
             ENV_NAME=env_{branch-id}_{testgroup}
             ENV_JOB=devops.master.env
       - inject:
