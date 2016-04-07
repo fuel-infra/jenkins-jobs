@@ -145,7 +145,7 @@
           artifacts: artifacts/*txt, artifacts/*changelog
           latest-only: false
       - description-setter:
-          regexp: (<a href=.*a> <a href=.*a><br>magnet.*<br>)
+          regexp: (<a href=.*a>\s*<a href=.*a>\s*<br>magnet.*<br>)
           set-for-matrix: false
       - email-ext:
           default-subject: '$DEFAULT_SUBJECT'
