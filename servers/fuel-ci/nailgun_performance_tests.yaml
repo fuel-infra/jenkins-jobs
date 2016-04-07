@@ -14,9 +14,6 @@
           max-per-node: 1
           option: category
     publishers:
-      - email:
-          recipients: ksambor@mirantis.com, skalinowski@mirantis.com, ci+alert@mirantis.com
-          send-to-individuals: false
       - archive:
           artifacts: results/tests/*, results/last/*, results/results/*, nailgun/nailgun_perf_test_report.csv, nailgun/failed_tests.txt
     scm:
@@ -41,6 +38,7 @@
       Uses artifacts from "nailgun_performance_tests" and do not store it's own.
       Uses venv with python2.7"
     node: fuel-web-master
+    concurrent: true
     parameters:
       - string:
           name: GERRIT_REFSPEC
@@ -77,8 +75,8 @@
             - project-compare-type: PLAIN
               project-pattern: openstack/fuel-web
               branches:
-                - branch-compare-type: ANT
-                  branch-pattern: '**'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '0 9 * * *'
     wrappers:
