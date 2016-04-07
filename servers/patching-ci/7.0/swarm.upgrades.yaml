@@ -11,9 +11,10 @@
     upgrade_reponame: 'fuel-qa'
     upgrade_repobranch: 'origin/stable/7.0'
     venvpath: '/home/jenkins/qa-venv-6.1'
-    properties: |
+    job-group-properties: |
       KEYSTONE_PASSWORD=newpass
       SLAVE_NODE_MEMORY=3072
+      NODE_VOLUME_SIZE=100
     weight: '8'
     jobs:
       - '7.0.{id}.{dist}.{upgrade_testgroup}':
