@@ -45,9 +45,9 @@
       condition: UNSTABLE_OR_BETTER
     - project: 'trigger-external-events'
       predefined-parameters: |
-        ISO_VERSION=$ISO_VERSION
+        ISO_VERSION={version}
         BUILD=$BUILD
-        REPORTED_JOB_URL=$REPORTED_JOB_URL
+        REPORTED_JOB_URL=$BUILD_URL
       condition: UNSTABLE_OR_BETTER
     default_variables: |
       ISO_TYPE=product
