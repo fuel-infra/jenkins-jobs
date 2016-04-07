@@ -135,6 +135,8 @@ export OPENSTACK_RELEASE="${OPENSTACK_RELEASE}"
 
 echo "Description string: ${TEST_GROUP} on ${NODE_NAME}: ${ENV_NAME}"
 
+set +e
+
 sh -x "utils/jenkins/system_tests.sh" \
   -t test \
   -w "${WORKSPACE}" \
@@ -144,6 +146,8 @@ sh -x "utils/jenkins/system_tests.sh" \
   -i "${ISO_PATH}"
 
 test_exit_code=$?
+
+set -e
 
 #Removing old env
 if [[ ${FUEL_DEVOPS_COMMIT} != "none" ]] ; then
