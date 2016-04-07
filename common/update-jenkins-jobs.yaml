@@ -44,6 +44,7 @@
                 url: 'https://review.fuel-infra.org/fuel-infra/jenkins-jobs.git'
           choosing-strategy: default
     triggers:
+      - timed: '0 * * * *'
       - gerrit:
           trigger-on:
             - change-merged-event
