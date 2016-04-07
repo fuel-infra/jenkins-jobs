@@ -1,0 +1,47 @@
+- job-template:
+    name: '{project-version}-pkg-publish-{os}'
+    project-type: freestyle
+    concurrent: false
+    quiet-period: 60
+    properties:
+      - inject:
+          properties-content: |
+            REPO_BASE_PATH={repo-base-path}
+            SIGKEYID={pkg-sign-key}
+    parameters:
+      - string:
+          name: PROJECT_NAME
+          default: '{project-name}'
+      - string:
+          name: PROJECT_VERSION
+          default: '{project-version}'
+      - bool:
+          name: IS_UPDATES
+          default: '{is_updates}'
+      - bool:
+          name: RESYNC_ONLY
+          default: false
+    wrappers:
+      - jenkins
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+    scm:
+      - perestroika
+    builders:
+        - shell: |
+            #!/bin/bash -xe
+
+            # FIXME: use perestroika from openstack/fuel-mirror
+            # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
+            # and then copy perestroika directory to root ${{WORKSPACE}}
+
+            cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
+            /bin/bash -xe publisher.v5/publish-{pkg_type}-binaries.sh
+    publishers:
+      - archive:
+           artifacts: '*.publish.setenvfile'
+           allow-empty: true
+
+    node: '{publish-node}'

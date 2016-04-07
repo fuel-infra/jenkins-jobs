@@ -1,0 +1,345 @@
+################################################################################
+# Job Templates
+################################################################################
+
+- job-template:
+    name: '{project-version}-rpm-packaging-build'
+    concurrent: True
+    description: |
+        This job renders RPM spec from project openstack/rpm-packaging using
+        openstack/renderspec and then builds a package.
+    scm:
+      - openstack-gerrit:
+          scm-basedir: ''
+      - git:
+          url: 'https://github.com/dburm/docker-builder'
+          basedir: 'docker-builder'
+          wipe-workspace: false
+          skip-tag: true
+          browser: githubweb
+          browser-url: 'https://github.com/dburm/docker-builder'
+      - git:
+          url: 'https://review.fuel-infra.org/packaging/openstack-rpm-ci'
+          basedir: 'openstack-rpm-ci'
+          wipe-workspace: false
+          skip-tag: true
+          browser: gitweb
+          browser-url: 'https://review.fuel-infra.org/gitweb?p=packaging/openstack-rpm-ci.git'
+    wrappers:
+      - timeout:
+          timeout: 300
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+    parameters:
+      - gerrit
+    builders:
+      - guess-mirror
+      - shell: |
+          #!/bin/bash
+
+          set -o errexit
+          set -o pipefail
+          set -o xtrace
+
+          ############################
+          # Some useful functions
+          ############################
+
+          get_deb_snapshot() {{
+              # Debian repos may have format "URL DISTRO COMPONENT1 [COMPONENTN]"
+              # Remove quotes and assign values to variables
+              read repo_url dist_name components <<< $(tr -d \" <<< "${{@}}")
+              # Remove trailing slash
+              repo_url=${{repo_url%/}}
+              local snapshot=$(curl -fLsS "${{repo_url}}.target.txt" | head -1)
+              echo "${{repo_url%/*}}/${{snapshot}}${{dist_name:+ ${{dist_name}}}}${{components:+ ${{components}}}}"
+          }}
+
+          get_rpm_snapshot() {{
+              # Remove quotes
+              local repo_url=$(tr -d \" <<< "${{1}}")
+              # Remove trailing slash
+              repo_url=${{repo_url%/}}
+              # Remove architecture
+              repo_url=${{repo_url%/*}}
+              local snapshot=$(curl -fLsS "${{repo_url}}.target.txt" | head -1)
+              echo "${{repo_url%/*}}/${{snapshot}}/x86_64"
+          }}
+
+          join(){{
+              local IFS="${{1}}"
+              shift
+              echo "${{*}}"
+          }}
+
+          PKG_DIR=${{HOME}}/built_packages
+
+          # Parameter containing repository for build requirements
+          if [ -f mirror.setenvfile ]; then
+              source mirror.setenvfile
+          else
+              MIRROR_HOST="mirror.fuel-infra.org"
+          fi
+          EXTRAREPO=$(get_rpm_snapshot "http://${{MIRROR_HOST}}/mos-repos/centos/mos{mos-repo-name-sep}{mos-version}-{distro}/os/x86_64")
+
+          OVERALL_RESULT=0
+
+          CHANGED_FILES=$(git diff --name-only HEAD~1)
+
+          # Directory for artifacts (specs and others)
+          mkdir artifacts
+
+          # Prepare renderspec
+          virtualenv -p python2.7 rpm-packaging-venv
+          source rpm-packaging-venv/bin/activate
+          pip install --upgrade pbr git+https://github.com/openstack/pymod2pkg.git
+          pip install -r test-requirements.txt -r openstack-rpm-ci/requirements.txt
+
+          for spec_src in ${{CHANGED_FILES}}; do
+              test "${{spec_src##*.}}" = "j2" || continue
+              spec=${{spec_src##*/}}
+              spec=${{spec%.j2}}
+
+              spec_name=${{spec%.spec}}
+
+              case "${{spec_src}}" in
+                  *.spec )
+                      cp -v "${{spec_src}}" .
+                      ;;
+                  *.spec.j2 )
+                      renderspec --spec-style fedora "${{spec_src}}" -o "${{spec}}"
+                      ;;
+                  * )
+                      continue
+                      ;;
+              esac
+
+              if python openstack-rpm-ci/project-params \
+                      --override openstack-rpm-ci/overrides.yaml \
+                      --output ${{spec_name}}-project.params \
+                      ${{spec_name}}
+              then
+                  source ${{spec_name}}-project.params
+              else
+                  SOURCE_CODE_GIT_URL="https://github.com/openstack/${{spec_name}}"
+                  RUNTESTS_ENABLED=true
+                  RUNTESTS_GIT_URL="https://review.fuel-infra.org/p/openstack-build/${{spec_name}}-build"
+                  RUNTESTS_GIT_BRANCH=master
+              fi
+
+              # Ensure that current directory contains all requred sources
+              for source in $(rpmspec -P ${{spec}} | awk '$1 ~ /^Source/ {{print $2}}'); do
+                  if [ -f "${{spec_src%/*}}/${{source}}" ]; then
+                      # Copy source file
+                      cp -v "${{spec_src%/*}}/${{source}}" .
+                  else
+                      # Assume source contains URL
+                      curl -fLsSO "${{source}}"
+                  fi
+
+                  # Get tests contents
+                  if [ $(tr '[:upper:]' '[:lower:]' <<< "${{RUNTESTS_ENABLED:-false}}") = "true" ]; then
+                      git clone "${{RUNTESTS_GIT_URL}}" --depth 1 -b "${{RUNTESTS_GIT_BRANCH:-master}}" "${{spec_name}}-build" || :
+                  fi
+              done
+
+              # Output directory
+              tmpdir=$(mktemp -d ${{PKG_DIR}}/build-XXXXXXXX)
+
+              cat <<-EOF
+          	##################################################################
+          	#
+          	# Building packages using spec "${{spec_src}}"
+          	#
+          	##################################################################
+          	EOF
+
+              # Build package
+              docker-builder/build \
+                --verbose \
+                --no-keep-chroot \
+                --dist {distro} \
+                --build \
+                --repository "${{EXTRAREPO}}" \
+                --source "$(pwd -P)" \
+                --output "${{tmpdir}}"
+              test -f "${{tmpdir}}/exitstatus" && BUILD_STATUS=$(cat "${{tmpdir}}/exitstatus") || BUILD_STATUS=1
+
+              # Move rendered spec to artifacts directory
+              mv -v "${{spec}}" artifacts/
+
+              # Prepare packages and artifacts
+              if [ ${{BUILD_STATUS}} -eq 0 ]; then
+                  # Create buildresult file
+                  cat > "artifacts/${{spec_name}}-buildresult.params" <<-EOF
+          		BUILD_HOST=$(hostname -f)
+          		PKG_PATH=${{tmpdir}}
+          		EXTRAREPO="repo1,${{EXTRAREPO}}"
+          		GERRIT_CHANGE_STATUS=NEW
+          		GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}
+          		DIST={distro}
+          		CUSTOM_REPO_ID=RPM-${{GERRIT_CHANGE_NUMBER}}
+          		# Builds/artifacts linking parameters
+          		RPM_SPECNAME=${{spec_name}}
+          		# Publisher parameters
+          		REMOTE_REPO_HOST={repo-host}
+          		REPO_BASE_PATH={repo-base-path}
+          		REPO_REQUEST_PATH_PREFIX={cr-path-prefix}
+          		RPM_OS_REPO_PATH={rpm-repo-path}/os
+          		RPM_PROPOSED_REPO_PATH={rpm-repo-path}/proposed
+          		RPM_UPDATES_REPO_PATH={rpm-repo-path}/updates
+          		RPM_SECURITY_REPO_PATH={rpm-repo-path}/security
+          		RPM_HOLDBACK_REPO_PATH={rpm-repo-path}/holdback
+          		# Test parameters if any
+          		EOF
+                # Append tests content
+                test -d "${{spec_name}}-build/tests/" && echo "TESTS_CONTENT='$(tar -cz -C "${{spec_name}}-build" tests | base64 -w0)'" >> "artifacts/${{spec_name}}-buildresult.params"
+              else
+                  mv -vf *.src.rpm artifacts/
+                  mv -vf "${{tmpdir}}/build.log" "artifacts/${{spec_name}}-buildlog.txt"
+                  mv -vf "${{tmpdir}}/root.log"  "artifacts/${{spec_name}}-rootlog.txt"
+              fi
+
+              # Cleanup
+              rm -vf ${{tmpdir}}/*.log ${{tmpdir}}/exitstatus *.src.rpm
+
+              (( OVERALL_RESULT += BUILD_STATUS )) || :
+          done
+          # Save result to use after package publishing
+          echo ${{OVERALL_RESULT}} > job_result
+      - trigger-builds:
+          - project: '{project-version}-pkg-publish-{os}'
+            current-parameters: false
+            block: true
+            parameter-factories:
+              - factory: filebuild
+                file-pattern: 'artifacts/*-buildresult.params'
+#      - trigger-builds:
+#          - project: '{project-version}-rpm-packaging-install'
+#            current-parameters: false
+#            block: true
+#            parameter-factories:
+#              - factory: filebuild
+#                file-pattern: 'artifacts/*-buildresult.params'
+      - shell: |
+          OVERALL_RESULT=$(cat job_result)
+          exit ${{OVERALL_RESULT}}
+    publishers:
+      - archive:
+          artifacts: 'artifacts/*'
+          allow-empty: True
+
+    node: '{build-node}'
+
+- job-template:
+    name: '{project-version}-rpm-packaging-install'
+    concurrent: true
+    description: |
+        This job installs RPM package and runs some tests if defined.
+    wrappers:
+      - install-vm-creds
+      - pre-scm-buildstep:
+        - shell: 'rm -rf *'
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{install-scm-repo}'
+          scm-basedir: ''
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{install-scm-branch}'
+    builders:
+      - shell:
+          !include-raw-escape builders/install.cleanup.sh
+      - copyartifact:
+          project: '{project-version}-fuel-pkg-publish-{distro}'
+          filter: 'rpm.publish.setenvfile'
+          which-build: last-successful
+          parameter-filters: PKG_PATH=${{PKG_PATH}}
+      - inject:
+          properties-file: 'rpm.publish.setenvfile'
+      - shell: |
+          #!/bin/bash
+
+          set -o errexit
+          set -o pipefail
+          set -o xtrace
+
+          export DIST=${{DIST:-{distro}}}
+          export PACKAGELIST=${{RPM_BINARIES}}
+          export REPO_URL=${{RPM_REPO_URL}}
+          export GERRIT_PROJECT=${{ZUUL_PROJECT}}
+
+          # Remove quotes, double and trailing slashes
+          export REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+          export EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+          export PACKAGELIST=$(echo "${{PACKAGELIST}}" | sed 's|,| |g')
+
+          bash -x vm-test |& tee vm-test.log
+    publishers:
+      - post-tasks:
+        - matches:
+            - log-text: '/run/shm/'
+              operator: AND
+          script:
+            !include-raw-escape builders/install.destroy.vm.sh
+      - junit:
+          results: 'report.xml'
+      - archive:
+          artifacts: '**/*.xml, rpm.install.setenvfile, vm-test.log'
+          allow-empty: true
+
+    node: '{install-node}'
+
+################################################################################
+# Jobs
+################################################################################
+
+################################################################################
+# Job Groups
+################################################################################
+
+################################################################################
+# Projets
+################################################################################
+
+- project:
+    name: 'rpm-packaging'
+
+    project-name: 'openstack'
+    project-version:
+      - 'master':
+          mos-version: 'master'
+          mos-repo-name-sep: '-'
+    os: 'centos'
+    distro: 'centos7'
+    pkg_type: 'rpm'
+    rpm-repo-path: '/repositories/centos/{project-version}-{distro}'
+
+    # Publisher's parameters
+    pkg-sign-key: '1FA22B08'
+    repo-host: 'packages.fuel-infra.org'
+    repo-base-path: '/home/jenkins/pubrepos'
+    cr-path-prefix: 'review/'
+
+    is_updates: false
+
+    # Install test
+    scm-user: 'sandbox-pkgs-ci'
+    scm-credentials-id: '9d59873c-4e57-42b3-ac97-11c7974d082d'
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'origin/master'
+
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+    install-node: 'install-node'
+
+    jobs:
+      - '{project-version}-rpm-packaging-build'
+      - '{project-version}-rpm-packaging-install'
+      - '{project-version}-pkg-publish-{os}'
