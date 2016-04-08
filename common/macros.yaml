@@ -39,6 +39,20 @@
           properties-file: mirror.setenvfile
 
 ########################################################################
+# Builder used to download ISO
+#
+# This builder require additional variables described in script header
+#
+########################################################################
+
+- builder:
+    name: iso-download
+    builders:
+      - shell: !include-raw scripts/iso_download.sh
+      - inject:
+          properties-file: iso.setenvfile
+
+########################################################################
 # Builders for publishing ISO
 ########################################################################
 - builder:
