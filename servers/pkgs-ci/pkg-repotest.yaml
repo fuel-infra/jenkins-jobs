@@ -25,7 +25,12 @@
       - inject:
           properties-file: '{pkg_type}.publish.setenvfile'
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash
+
+          set -o xtrace
+          set -o errexit
+          set -o pipefail
+
           export REPO_URL=${{DEB_REPO_URL:-${{RPM_REPO_URL}}}}
 
           # Remove quotes, double and trailing slashes
