@@ -2,8 +2,6 @@
 
 set -ex
 
-TEST_ISO_JOB_URL="https://product-ci.infra.mirantis.net/job/7.0.test_all/"
-
 ###################### Get MIRROR HOST ###############
 
 LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
@@ -81,7 +79,6 @@ if [[ ! -z "${CUSTOM_TEST_GROUP}" ]]; then
   export TEST_GROUP="${CUSTOM_TEST_GROUP}"
 fi
 
-export VENV_PATH="/home/jenkins/venv-nailgun-tests-2.9"
 rm -rf logs/*
 
 export MAKE_SNAPSHOT=${MAKE_SNAPSHOT}
@@ -97,11 +94,17 @@ ENV_NAME=${ENV_PREFIX}.${BUILD_NUMBER}.${BUILD_ID}
 export ENV_NAME=${ENV_NAME:0:68}
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
-export PATH_TO_CERT=${WORKSPACE}"/"${ENV_NAME}".crt"
-export PATH_TO_PEM=${WORKSPACE}"/"${ENV_NAME}".pem"
+export PATH_TO_CERT="${WORKSPACE}/${ENV_NAME}.crt"
+export PATH_TO_PEM="${WORKSPACE}/${ENV_NAME}.pem"
 
 export OPENSTACK_RELEASE="${OPENSTACK_RELEASE}"
 
 echo "Description string: ${TEST_GROUP} on ${NODE_NAME}: ${ENV_NAME}"
 
-sh -x "utils/jenkins/system_tests.sh" -t test -w "${WORKSPACE}" -V "${VENV_PATH}" -j "${JOB_NAME}" -o --group="${TEST_GROUP}" -i "${ISO_PATH}"
+sh -x "utils/jenkins/system_tests.sh" \
+  -t test \
+  -w "${WORKSPACE}" \
+  -V "${VENV_PATH}" \
+  -j "${JOB_NAME}" \
+  -o --group="${TEST_GROUP}" \
+  -i "${ISO_PATH}"
