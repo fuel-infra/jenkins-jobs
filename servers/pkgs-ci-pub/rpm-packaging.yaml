@@ -82,7 +82,8 @@
           else
               MIRROR_HOST="mirror.fuel-infra.org"
           fi
-          EXTRAREPO=$(get_rpm_snapshot "http://${{MIRROR_HOST}}/mos-repos/centos/mos{mos-repo-name-sep}{mos-version}-{distro}/os/x86_64")
+          MOS_REPO=$(get_rpm_snapshot "http://${{MIRROR_HOST}}/mos-repos/centos/mos{mos-repo-name-sep}{mos-version}-{distro}/os/x86_64")
+          RPMCI_REPO="http://{repo-host}/{rpm-repo-path}/os/x86_64"
 
           OVERALL_RESULT=0
 
@@ -162,7 +163,8 @@
                 --no-keep-chroot \
                 --dist {distro} \
                 --build \
-                --repository "${{EXTRAREPO}}" \
+                --repository "${{RPMCI_REPO}},90" \
+                --repository "${{MOS_REPO}},95" \
                 --source "$(pwd -P)" \
                 --output "${{tmpdir}}"
               test -f "${{tmpdir}}/exitstatus" && BUILD_STATUS=$(cat "${{tmpdir}}/exitstatus") || BUILD_STATUS=1
@@ -176,8 +178,8 @@
                   cat > "artifacts/${{spec_name}}-buildresult.params" <<-EOF
           		BUILD_HOST=$(hostname -f)
           		PKG_PATH=${{tmpdir}}
-          		EXTRAREPO="repo1,${{EXTRAREPO}}"
-          		GERRIT_CHANGE_STATUS=NEW
+          		EXTRAREPO="rpmci_repo,${{RPMCI_REPO}}|mos-repo,${{MOS_REPO}}"
+          		GERRIT_CHANGE_STATUS=${{GERRIT_CHANGE_STATUS}}
           		GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}
           		DIST={distro}
           		CUSTOM_REPO_ID=RPM-${{GERRIT_CHANGE_NUMBER}}
@@ -319,7 +321,7 @@
     os: 'centos'
     distro: 'centos7'
     pkg_type: 'rpm'
-    rpm-repo-path: '/repositories/centos/{project-version}-{distro}'
+    rpm-repo-path: '/rpm-packaging/{project-version}/{distro}'
 
     # Publisher's parameters
     pkg-sign-key: '1FA22B08'
