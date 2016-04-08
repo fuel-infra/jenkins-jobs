@@ -33,17 +33,9 @@ RPM_PACKAGE_VERSION=$(rpm -q \
   --specfile "${PROJECT_ROOT}"/specs/"${PROJECT_PACKAGE}".spec \
   --queryformat %{VERSION}"\n" | head -1 )
 
-if [ -z "${GERRIT_BRANCH}" ] || [ "${GERRIT_BRANCH}" == 'master' ]; then
-# we start job from master branch
-  NUMBER_OF_COMMITS=$(git -C "${PROJECT_ROOT}" rev-list --no-merges HEAD --count)
-  LAST_COMMIT_SHORT_HASH=$(git -C "${PROJECT_ROOT}" rev-parse --short HEAD)
-  IDENTIFIER="1.git"
-else
-# this is patchset
-  NUMBER_OF_COMMITS=$(git -C "${PROJECT_ROOT}" rev-list --no-merges "gerrit/${GERRIT_BRANCH}" --count)
-  LAST_COMMIT_SHORT_HASH=$(git -C "${PROJECT_ROOT}" rev-parse --short "gerrit/${GERRIT_BRANCH}")
-  IDENTIFIER="2.gerrit${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}.git"
-fi
+NUMBER_OF_COMMITS=$(git -C "${PROJECT_ROOT}" rev-list --no-merges HEAD --count)
+LAST_COMMIT_SHORT_HASH=$(git -C "${PROJECT_ROOT}" rev-parse --short HEAD)
+IDENTIFIER="1.git"
 
 RELEASE="${NUMBER_OF_COMMITS}.${IDENTIFIER}${LAST_COMMIT_SHORT_HASH}"
 
