@@ -322,6 +322,9 @@
       - 'master':
           mos-version: 'master'
           mos-repo-name-sep: '-'
+      - 'mitaka':
+          mos-version: '9.0'
+          mos-repo-name-sep: ''
     os: 'centos'
     distro: 'centos7'
     pkg_type: 'rpm'
