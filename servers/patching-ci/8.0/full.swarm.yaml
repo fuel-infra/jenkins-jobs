@@ -44,11 +44,11 @@
       - description-setter:
           regexp: "'Description string: (.*)'"
       - email-default:
-          mail-to: 'ci+alert@mirantis.com'
+          mail-to: 'mos-maintenance@mirantis.com'
     wrappers:
       - timeout:
           fail: true
-          timeout: 1200
+          timeout: 2400
     builders:
       - multijob:
           name: 'Run system tests'
@@ -115,9 +115,6 @@
             - name: '8.0.system_test.ubuntu.ha_neutron_destructive'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '8.0.system_test.ubuntu.ha_neutron_destructive_gre'
-              current-parameters: true
-              kill-phase-on: NEVER
             - name: '8.0.system_test.ubuntu.ha_neutron_destructive_vlan'
               current-parameters: true
               kill-phase-on: NEVER
@@ -166,6 +163,9 @@
             - name: '8.0.system_test.ubuntu.fuel_plugin_vip_reservation'
               current-parameters: true
               kill-phase-on: NEVER
+#            - name: '8.0.system_test.ubuntu.rh'
+#              current-parameters: true
+#              kill-phase-on: NEVER
             - name: '8.0.system_test.ubuntu.services_ha'
               current-parameters: true
               kill-phase-on: NEVER

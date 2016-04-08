@@ -10,6 +10,8 @@
             OCTANE_PATH=fuel-octane
       - shell:
           !include-raw-escape 'scripts/run_upgrade_system_test.sh'
+      - shell:
+          !include-raw-escape '../scripts/erase_env.sh'
     disabled: false
     logrotate:
       artifactDaysToKeep: -1
