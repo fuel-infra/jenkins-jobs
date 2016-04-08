@@ -91,6 +91,9 @@
           # Directory for artifacts (specs and others)
           mkdir artifacts
 
+          # Get global requirements
+          curl -fLsS -o artifacts/global-requirements.txt https://raw.githubusercontent.com/openstack/requirements/${{GERRIT_BRANCH}}/global-requirements.txt
+
           # Prepare renderspec
           virtualenv -p python2.7 rpm-packaging-venv
           source rpm-packaging-venv/bin/activate
@@ -109,7 +112,10 @@
                       cp -v "${{spec_src}}" .
                       ;;
                   *.spec.j2 )
-                      renderspec --spec-style fedora "${{spec_src}}" -o "${{spec}}"
+                      renderspec \
+                          --spec-style fedora \
+                          --requirements artifacts/global-requirements.txt \
+                          "${{spec_src}}" -o "${{spec}}"
                       ;;
                   * )
                       continue
