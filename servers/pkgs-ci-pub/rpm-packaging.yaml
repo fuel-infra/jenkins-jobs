@@ -200,6 +200,7 @@
           		RPM_UPDATES_REPO_PATH={rpm-repo-path}/updates
           		RPM_SECURITY_REPO_PATH={rpm-repo-path}/security
           		RPM_HOLDBACK_REPO_PATH={rpm-repo-path}/holdback
+          		IS_DOWNGRADE=true
           		# Test parameters if any
           		EOF
                 # Append tests content
