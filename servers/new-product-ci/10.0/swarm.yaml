@@ -2,8 +2,6 @@
     name: 10.0.systests
     jobs:
       - '10.0-system_tests':
-          dist: 'centos'
-      - '10.0-system_tests':
           dist: 'ubuntu'
 
 - project:

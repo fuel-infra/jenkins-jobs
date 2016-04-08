@@ -2,8 +2,6 @@
     name: 9.0.systests
     jobs:
       - '9.0-system_tests':
-          dist: 'centos'
-      - '9.0-system_tests':
           dist: 'ubuntu'
 
 - project:
