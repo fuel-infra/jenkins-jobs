@@ -18,75 +18,12 @@ class HTMLStatusReport():
         # Map build results to CSS classes
         self.trclasses = {
             "SUCCESS": "success",
-            "FAILURE": "failure",
-            "ABORTED": "failure",
-            None: "notfound"
+            "FAILURE": "danger",
+            "ABORTED": "danger",
+            None: "warning"
         }
         self.styles = '''<head>
-<style>
-a {color: black;}
-
-table {
-border-collapse: collapse;
-font-family: Arial
-font-size: small;
-}
-
-caption {
-padding: 5px;
-display: table-caption;
-text-align: left;
-caption-side: bottom;
-font-size: small
-}
-
-table, tr {border-bottom:1px solid #e5e5e5}
-
-th, td {
-padding: 8px;
-padding-left: 20px;
-padding-right: 20px;
-text-align: left;
-}
-
-th {
-padding-top: 12px;
-padding-bottom: 12px;
-font-size: medium;
-}
-
-tr.notfound td {background-color:#fcf8e3}
-tr.notfound:hover td { background-color:#f7ecb5}
-tr.failure td {background-color:#f2dede}
-tr.failure:hover td {background-color:#e4b9b9}
-tr.success td {background-color:#dff0d8}
-tr.success:hover td { background-color:#c1e2b3}
-
-.tooltip {
-position: relative;
-display: inline-block;
-}
-
-.tooltip:hover{text-decoration: underline}
-
-.tooltip .tooltiptext {
-visibility: hidden;
-width: 120px;
-background-color: black;
-color: #fff;
-text-align: center;
-border-radius: 6px;
-padding: 5px 0;
-
-/* Position the tooltip */
-position: absolute;
-z-index: 1;
-top: -35px;
-left: 55%;
-}
-
-.tooltip:hover .tooltiptext {visibility: visible}
-</style>
+<link rel="stylesheet" href="https://static.fuel-infra.org/bootstrap/3.3.4/css/bootstrap.min.css"/>
 </head>
 '''
         self.a_regexp_str = r'<a\s+href="(.*)"\s*>'
@@ -221,10 +158,10 @@ left: 55%;
             self.jobs_list.append(job_record)
 
     def createTableHeaders(self):
-        header_html = "<tr>"
+        header_html = "<thead><tr>"
         for item in xrange(len(self.headers)):
             header_html += "<th>{{{0}}}</th>".format(item)
-        header_html += "</tr>\n"
+        header_html += "</tr></thead>\n"
         return header_html
 
     def cellData(self, data_dict, column):
@@ -234,9 +171,9 @@ left: 55%;
                 url = data_dict["URL"]
             else:
                 url = data_dict["BUILD_URL"]
-            cell_html += '<td><a href="{0}" target="_blank">' \
-                '<div class="tooltip">{1}<span class="tooltiptext">' \
-                'Build #{2}</span></div></a></td>'.format(
+            cell_html += '<td><a href="{0}" target="_blank" ' \
+                'data-toggle="tooltip" title="Build #{2}">{1}' \
+                '</a></td>'.format(
                     url, data_dict["NAME"], data_dict.get("BUILD_ID"))
         elif column == "BUILD_DESCRIPTION" and \
                 data_dict.get(column) is not None:
@@ -255,8 +192,10 @@ left: 55%;
         with open(self.report_file, "w") as report:
             report.write('<body>\n')
             report.write(self.styles)
-            report.write('<div style="overflow-x:auto;"><table>\n')
+            report.write('<div style="overflow-x:auto;">')
+            report.write('<table  class="table table-hover">\n')
             report.write(self.createTableHeaders().format(*self.headers))
+            report.write('<tbody>\n')
             for job in self.jobs_list:
                 if job.get('RESULT') in ['FAILURE', 'ABORTED']:
                     success = False
@@ -266,9 +205,9 @@ left: 55%;
                     line += self.cellData(job, column)
                 line += '</tr>\n'
                 report.write(line)
-            report.write('<caption>Created at {0}</caption>\n'.format(
+            report.write('<caption align="bottom">Created at {0}</caption>\n'.format(
                 datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")))
-            report.write('</div></table></body>\n')
+            report.write('</tbody></table></div></body>\n')
         return success
 
 
