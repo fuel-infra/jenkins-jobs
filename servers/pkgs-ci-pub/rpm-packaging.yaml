@@ -83,7 +83,7 @@
               MIRROR_HOST="mirror.fuel-infra.org"
           fi
           MOS_REPO=$(get_rpm_snapshot "http://${{MIRROR_HOST}}/mos-repos/centos/mos{mos-repo-name-sep}{mos-version}-{distro}/os/x86_64")
-          RPMCI_REPO="http://{repo-host}/{rpm-repo-path}/os/x86_64"
+          RPMCI_REPO=$(get_rpm_snapshot "http://{repo-host}/{rpm-repo-path}/os/x86_64")
 
           OVERALL_RESULT=0
 
