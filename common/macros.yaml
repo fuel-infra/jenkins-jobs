@@ -117,6 +117,12 @@
             - 'http'
             - 'https'
             - 'git'
+      - choice:
+          name: GERRIT_CHANGE_STATUS
+          description: 'Status of change'
+          choices:
+            - 'NEW'
+            - 'MERGED'
       - string:
           name: GERRIT_CHANGE_ID
           description: 'The Change-Id.'
