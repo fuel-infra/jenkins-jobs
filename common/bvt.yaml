@@ -3,6 +3,7 @@
     email: 'ci+bvt@mirantis.com'
     description: 'Run Build Verification Tests'
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    env_suffix: .$BUILD_ID
     reponame: 'fuel-qa'
     repobranch: 'master'
     properties: ''
@@ -53,6 +54,7 @@
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
           ENABLE_PROPOSED=false
           ENV_PREFIX={version}{mod}.main.{dist}.{testgroup}
+          ENV_SUFFIX={env_suffix}
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
           TEST_ISO_JOB={version}{mod}.test_all

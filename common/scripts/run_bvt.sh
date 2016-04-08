@@ -59,7 +59,7 @@ rm -rf logs/*
 
 export VENV_PATH=${VENV_PATH:-/home/jenkins/venv-nailgun-tests}
 
-ENV_NAME=${ENV_PREFIX}.${BUILD_NUMBER}
+ENV_NAME=${ENV_PREFIX}${ENV_SUFFIX}
 ENV_NAME=${ENV_NAME:0:68}
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 

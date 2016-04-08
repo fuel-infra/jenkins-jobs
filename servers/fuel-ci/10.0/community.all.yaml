@@ -18,6 +18,7 @@
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'bvt_2'
+          env_suffix: ''
           repobranch: 'origin/{branch}'
           email: '{bvt-mail}'
           trigger_projects:
@@ -40,5 +41,6 @@
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'uca_neutron_ha'
+          env_suffix: ''
           repobranch: 'origin/{branch}'
           email: '{bvt-mail}'
