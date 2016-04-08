@@ -11,7 +11,7 @@
     upgrade_reponame: 'fuel-qa'
     upgrade_repobranch: 'origin/stable/7.0'
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
-    properties: |
+    job-group-properties: |
       KEYSTONE_PASSWORD=newpass
       SLAVE_NODE_MEMORY=3072
     weight: '8'

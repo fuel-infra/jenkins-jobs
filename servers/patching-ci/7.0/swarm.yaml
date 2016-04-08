@@ -4,6 +4,14 @@
     jobs:
       - '7.0-system_tests':
           dist: 'ubuntu'
+      - '7.0-system_tests-upgrades':
+          dist: 'ubuntu'
+      - '7.0-system_tests-upgrades':
+          dist: 'centos'
+      - '7.0-system_tests-test_upgrade_chain':
+          dist: 'ubuntu'
+      - '7.0-system_tests-test_upgrade_chain':
+          dist: 'centos'
 
 - project:
     name: 7.0.full-helpers

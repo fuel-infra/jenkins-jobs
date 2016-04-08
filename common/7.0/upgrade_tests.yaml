@@ -37,7 +37,9 @@
         properties-content: |
           VENV_PATH={venvpath}
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-    - inject: # overrides
+    - inject: # overrides to job-group properties
+        properties-content: '{job-group-properties}'
+    - inject: # overrides to job properties
         properties-content: '{properties}'
     - shell:
         !include-raw-escape 'scripts/run_upgrade_system_test.sh'
