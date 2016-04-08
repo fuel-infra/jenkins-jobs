@@ -75,6 +75,7 @@ function download_images () {
 
   TMP_QA_CENTOS_COMPUTE=$(seedclient-wrapper -d -m "${QA_CENTOS_COMPUTE}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
   TMP_QA_RHEL_COMPUTE=$(seedclient-wrapper -d -m "${QA_RHEL_COMPUTE}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
+  TMP_QA_OL_COMPUTE=$(seedclient-wrapper -d -m "${QA_OL_COMPUTE}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
 
   TMP_INSTALL_PACKAGES_CENTOS_6_4=$(seedclient-wrapper -d -m "${INSTALL_PACKAGES_CENTOS_6_4}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
   TMP_INSTALL_PACKAGES_CENTOS_7_0=$(seedclient-wrapper -d -m "${INSTALL_PACKAGES_CENTOS_7_0}" -v --force-set-symlink -o "${TARGET_CLOUD_DIR}")
