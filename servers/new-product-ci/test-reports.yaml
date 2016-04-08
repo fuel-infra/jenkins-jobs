@@ -1,13 +1,21 @@
+- defaults:
+    name: '{version}.{id}.test-reports'
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+
 - job-template:
-    name: '9.0.{id}.test-reports'
+    name: '{version}.{id}.test-reports'
+    defaults: '{version}.{id}.test-reports'
     builders:
       - inject:
-           properties-content: |
-             {properties}
+          properties-content: |
+            VENV_PATH={venvpath}
+      - inject:
+          properties-content: |
+            {properties}
       - shell:
-          !include-raw-escape builders/test-reports-Testrail-upload_cases.sh
+          !include-raw-escape ./builders/testrail-upload-cases.sh
       - shell:
-          !include-raw-escape builders/test-reports-Testrail.sh
+          !include-raw-escape ./builders/testrail-report.sh
     parameters:
       - string:
           name: TEST_JOB_NAME
@@ -18,14 +26,10 @@
       - email:
           recipients: ci+alert@mirantis.com
 
-# FIXME: timer
-#    triggers:
-#      - timed: 'H */2 * * *'
-
     scm:
      - main-git:
           reponame: 'fuel-qa'
-          repobranch: 'origin/stable/mitaka'
+          repobranch: '{repobranch}'
           basedir: ''
 
 

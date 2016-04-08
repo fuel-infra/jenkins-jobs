@@ -9,7 +9,9 @@
     jobs:
       - '9.0.swarm.runner'
       - '9.0.swarm.timers'
-      - '9.0.{id}.test-reports':
+      - '{version}.{id}.test-reports':
+          version: '9.0'
+          repobranch: 'origin/stable/mitaka'
           id: 'system_test'
           properties: |
             TESTS_RUNNER=9.0.swarm.runner
