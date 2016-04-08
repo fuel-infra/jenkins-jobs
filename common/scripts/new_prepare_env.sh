@@ -12,6 +12,11 @@ function update_devops () {
   BRANCH=${2}
   REPO=${3:-fuel-qa}
 
+  if [[ -d "${VIRTUAL_ENV}" ]] && [[ "${FORCE_DELETE_DEVOPS}" == "true" ]]; then
+    echo "Delete venv from ${VIRTUAL_ENV}"
+    rm -rf ${VIRTUAL_ENV}
+  fi
+
   if [ -f ${VIRTUAL_ENV}/bin/activate ]; then
     source ${VIRTUAL_ENV}/bin/activate
     echo "Python virtual env exist"
