@@ -16,9 +16,11 @@ rm -rf "${SYSTEST_ROOT}"
 cp -r fuel-qa/ "${SYSTEST_ROOT}"
 
 source "${VENV_PATH}/bin/activate"
-ENV_NAMES=$(dos.py list | grep "^${ENV_PREFIX}")
-for ENV_NAME in ${ENV_NAMES}; do
-    dos.py erase "${ENV_NAME}" || echo "Can not erase $ENV_NAME"
-done
-deactivate
 
+ENV_NAMES=$(dos.py list | grep "^${ENV_PREFIX}" || true)
+
+for ENV_NAME in ${ENV_NAMES}; do
+  dos.py erase "${ENV_NAME}" || echo "Can not erase ${ENV_NAME}"
+done
+
+deactivate
