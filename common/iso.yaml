@@ -47,7 +47,7 @@
     - project: 'trigger-external-events'
       predefined-parameters: |
         ISO_VERSION={version}
-        BUILD=$BUILD
+        BUILD=fuel-{version}-$BUILD_ID
         REPORTED_JOB_URL=$BUILD_URL
       condition: UNSTABLE_OR_BETTER
     default_variables: |

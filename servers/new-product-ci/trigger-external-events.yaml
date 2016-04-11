@@ -17,8 +17,9 @@
           weight: 1
     parameters:
       - string:
-          name: ISO_VERSION
-          default: '6.1'
+          name: TRIGGER_ONLY_FOR_ISO_VERSION
+          default: '9.0'
+          description: 'Limit trigger execution to specified ISO version'
     publishers:
       - description-setter:
           regexp: 'Description string: (.*)'
