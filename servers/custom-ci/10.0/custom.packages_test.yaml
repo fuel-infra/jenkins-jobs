@@ -4,9 +4,10 @@
     latest_magnet_link: 'https://product-ci.infra.mirantis.net/job/{mos}.all/lastSuccessfulBuild/artifact/artifacts/magnet_link.txt'
     projectbranch: master
     mos: '10.0'
+    deb-mirror-base-name: '{version-id} mos-{version-id}'
+    rpm-mirror-base-name: 'mos-{version-id}-centos7'
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
-    mirror_artifact: 'https://ci.fuel-infra.org/job/devops.master.env/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt'
     timeout: 360
     jobs:
       - '{mos}.custom.packages_test.{dist}':
