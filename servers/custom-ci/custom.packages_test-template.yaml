@@ -140,7 +140,8 @@
           # pkgs variables
           properties-content: |
             MOS={mos}
-            MIRROR_ARTIFACT={mirror_artifact}
+            RPM_MIRROR_BASE_NAME={rpm-mirror-base-name}
+            DEB_MIRROR_BASE_NAME={deb-mirror-base-name}
       - inject:
           # env variables
           properties-content: |
