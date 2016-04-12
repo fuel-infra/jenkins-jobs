@@ -3,7 +3,9 @@
     jobs:
       - '8.0-acceptance':
           dist: 'ubuntu'
-      - '8.0.{id}.test-reports':
+      - '{version}.{id}.test-reports':
+          version: '8.0'
+          repobranch: 'origin/stable/8.0'
           id: 'acceptance'
           properties: |
             TESTS_RUNNER=8.0.acceptance.runner

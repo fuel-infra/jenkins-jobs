@@ -3,7 +3,9 @@
     jobs:
       - '9.0-acceptance':
           dist: 'ubuntu'
-      - '9.0.{id}.test-reports':
+      - '{version}.{id}.test-reports':
+          version: '9.0'
+          repobranch: 'origin/stable/mitaka'
           id: 'acceptance'
           properties: |
             TESTS_RUNNER=9.0.acceptance.runner

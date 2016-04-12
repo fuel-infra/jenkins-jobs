@@ -18,7 +18,9 @@
     name: 8.0.swarm-helpers
     jobs:
       - '8.0.swarm.runner'
-      - '8.0.{id}.test-reports':
+      - '{version}.{id}.test-reports':
+          version: '8.0'
+          repobranch: 'origin/stable/8.0'
           id: 'system_test'
           properties: |
             TESTS_RUNNER=8.0.swarm.runner
