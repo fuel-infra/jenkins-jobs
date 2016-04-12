@@ -236,3 +236,6 @@
             - name: '10.0.system_test.ubuntu.multiracks_2'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '10.0.system_test.ubuntu.uca_neutron_ha'
+              current-parameters: true
+              kill-phase-on: NEVER

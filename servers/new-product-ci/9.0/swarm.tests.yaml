@@ -270,4 +270,6 @@
          testgroup: 'multiracks_2'
          properties: |
            MULTIPLE_NETWORKS=true
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'uca_neutron_ha'
 
