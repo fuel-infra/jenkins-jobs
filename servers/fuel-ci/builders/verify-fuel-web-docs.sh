@@ -10,6 +10,8 @@ VENV=${WORKSPACE}_VENV
 virtualenv "${VENV}"
 source "${VENV}/bin/activate"
 
+pip install --upgrade pip
+
 cd "${WORKSPACE}/nailgun"
 pip install -r test-requirements.txt
 
