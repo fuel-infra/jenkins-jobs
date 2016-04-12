@@ -33,6 +33,9 @@
         - shell: |
             #!/bin/bash -xe
 
+            # Remove stale artifacts
+            rm -f *.publish.setenvfile
+
             # FIXME: use perestroika from openstack/fuel-mirror
             # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
             # and then copy perestroika directory to root ${{WORKSPACE}}

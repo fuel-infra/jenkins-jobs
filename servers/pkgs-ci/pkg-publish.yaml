@@ -8,6 +8,7 @@
           properties-content: |
             REPO_BASE_PATH={repo-base-path}
             SIGKEYID={pkg-sign-key}
+            PKG_JSON_REPORT=/home/jenkins/{mos_version}-pkg-versions.json
     parameters:
       - string:
           name: PROJECT_NAME
@@ -33,6 +34,9 @@
         - shell: |
             #!/bin/bash -xe
 
+            # Remove stale artifacts
+            rm -vf *.publish.setenvfile pkg-versions.*
+
             # FIXME: use perestroika from openstack/fuel-mirror
             # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
             # and then copy perestroika directory to root ${{WORKSPACE}}
@@ -40,8 +44,9 @@
             cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
             /bin/bash -xe publisher.v5/publish-{pkg_type}-binaries.sh
     publishers:
+      - pkg-version-report
       - archive:
-           artifacts: '*.publish.setenvfile'
+           artifacts: '*.publish.setenvfile, pkg-versions.*'
            allow-empty: true
 
     node: '{publish-node}'
