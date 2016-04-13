@@ -48,4 +48,9 @@ popd
 
 popd
 mkdir -p ${WORKSPACE}/results
+
+# dirty hack for pbr
+echo "pbr==1.8.1" >> ./nailgun/test-requirements.txt
+cat ./nailgun/test-requirements.txt
+
 ./run_tests.sh -x
