@@ -1,5 +1,5 @@
 - job-template:
-    name: '{prefix}-fuel-web'
+    name: '8.0.{prefix}-fuel-web'
     builders:
       - shell: |
           #!/bin/bash -ex
@@ -54,11 +54,7 @@
               project-pattern: openstack/fuel-web
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-                - branch-compare-type: PLAIN
                   branch-pattern: 'stable/8.0'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/mitaka'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
@@ -72,7 +68,7 @@
 - project:
     name: dualcheck-fuel-web
     jobs:
-      - '{prefix}-fuel-web':
+      - '8.0.{prefix}-fuel-web':
           prefix: verify
           trigger_on:
             - patchset-created-event
@@ -82,7 +78,7 @@
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
           timed: '0 11 * * *'
-      - '{prefix}-fuel-web':
+      - '8.0.{prefix}-fuel-web':
           prefix: gate
           trigger_on:
             - change-merged-event
