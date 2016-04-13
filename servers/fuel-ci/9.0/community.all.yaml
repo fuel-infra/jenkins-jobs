@@ -21,6 +21,7 @@
           - project: fuel_community_build_reports
             condition: UNSTABLE_OR_BETTER
             current-parameters: true
+            property-file: iso_report.properties
             predefined-parameters: |
               RELEASE={version}
               STAGE=bvt_2
@@ -29,6 +30,7 @@
           - project: fuel_community_build_reports
             condition: FAILED
             current-parameters: true
+            property-file: iso_report.properties
             predefined-parameters: |
               RELEASE={version}
               STAGE=bvt_2

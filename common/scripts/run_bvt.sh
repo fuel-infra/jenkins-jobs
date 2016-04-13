@@ -65,6 +65,10 @@ echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE
 
 ISO_PATH=$(seedclient.py -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
+ISO_NAME_REPORT=$(basename "${ISO_PATH}")
+ISO_NAME_REPORT="${ISO_NAME_REPORT//.iso/}"
+echo "BUILD=${ISO_NAME_REPORT}" > "${WORKSPACE}/iso_report.properties"
+
 sh -x "utils/jenkins/system_tests.sh" \
     -t test \
     -w "${WORKSPACE}" \
