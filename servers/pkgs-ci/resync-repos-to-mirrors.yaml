@@ -1,0 +1,59 @@
+- job-template:
+    name: '{mos_version}.resync-repos-to-mirrors'
+    disabled: ''
+    concurrent: false
+    node: '{trsync-node}'
+    logrotate:
+        daysToKeep: 10
+    properties:
+        - inject:
+            properties-content: |
+              REPOCACHE_DIR=${{HOME}}/resync-repocache
+    parameters:
+        - string:
+            name: SRCURI
+            default: 'rsync://{repo-host}/mirror'
+            description: |
+                URI of rsync root of source repositories
+        - text:
+            name: SRCPATHS
+            default: |
+                mos-repos/centos/{rpm-repo-name}/os
+                mos-repos/centos/{rpm-repo-name}/proposed
+                mos-repos/centos/{rpm-repo-name}/updates
+                mos-repos/centos/{rpm-repo-name}/security
+                mos-repos/centos/{rpm-repo-name}/holdback
+                mos-repos/ubuntu/{mos_version}
+            description: |
+                List of rsync root relative paths to the repositories
+        - text:
+            name: HOSTS_TO_SYNC
+            default: |
+                rsync://seed-cz1.fuel-infra.org/mirror-sync
+                rsync://seed-us1.fuel-infra.org/mirror-sync
+            description: |
+                Host list sync to
+                Default:
+                    rsync://seed-cz1.fuel-infra.org/mirror-sync
+                    rsync://seed-us1.fuel-infra.org/mirror-sync
+                    rsync://osci-mirror-msk.msk.mirantis.net/mirror-sync
+                    rsync://osci-mirror-srt.srt.mirantis.net/mirror-sync
+                    rsync://osci-mirror-kha.kha.mirantis.net/mirror-sync
+                    rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync
+    scm:
+      - fuel-infra:
+          scm-user: '{scm-user}'
+          scm-repo: '{trsync-scm-repo}'
+          scm-basedir: '{trsync-scm-basedir}'
+          scm-credentials-id: '{scm-credentials-id}'
+          scm-branch: '{trsync-scm-branch}'
+    triggers:
+        - timed: 'H/30 * * * *'
+    builders:
+        - shell:
+            !include-raw-escape builders/resync-repo-to-mirrors.sh
+    publishers:
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: false
