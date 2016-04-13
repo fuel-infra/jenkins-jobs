@@ -11,12 +11,7 @@ virtualenv -p python2.7 "${VENV}"
 source "${VENV}/bin/activate"
 pip install --upgrade 'tox>=2.3.1'
 
-NODE_MODULES="${VENV}/node_modules"
-
 pushd "${WORKSPACE}"/fuel-ui
-mkdir -p "${NODE_MODULES}"
-
-[ -L node_modules ] || ln -s "${NODE_MODULES}" node_modules
 
 npm install
 export ARTS="${WORKSPACE}"/artifacts
