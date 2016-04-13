@@ -4,6 +4,14 @@ set -ex
 
 TEST_ISO_JOB_URL="${JENKINS_URL}job/${ENV_PREFIX:0:3}.test_all/"
 
+#### Set statistics job-group properties for swarm tests ####
+
+FUEL_STATS_HOST="fuel-collect-systest.infra.mirantis.net"
+ANALYTICS_IP="fuel-stats-systest.infra.mirantis.net"
+
+export FUEL_STATS_HOST="${FUEL_STATS_HOST}"
+export ANALYTICS_IP="${ANALYTICS_IP}"
+
 ###################### Get MIRROR HOST ###############
 
 LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
