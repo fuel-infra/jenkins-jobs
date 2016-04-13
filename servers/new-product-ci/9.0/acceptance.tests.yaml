@@ -91,3 +91,5 @@
          testgroup: 'thread_separate_services_ceph'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'change_vip_manually'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'failover_group_3'

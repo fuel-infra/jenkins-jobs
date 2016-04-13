@@ -151,3 +151,6 @@
             - name: '9.0.acceptance.ubuntu.change_vip_manually'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.failover_group_3'
+              current-parameters: true
+              kill-phase-on: NEVER
