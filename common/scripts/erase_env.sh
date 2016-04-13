@@ -2,9 +2,7 @@
 
 set -ex
 
-source ${VENV_PATH}/bin/activate
+source "${VENV_PATH}/bin/activate"
+source "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
-ENV_NAME=${ENV_PREFIX}.${BUILD_NUMBER}
-ENV_NAME=${ENV_NAME:0:68}
-
-dos.py erase ${ENV_NAME}
+dos.py erase "${ENV_NAME}"
