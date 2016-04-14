@@ -116,6 +116,7 @@
                       renderspec \
                           --spec-style fedora \
                           --requirements artifacts/global-requirements.txt \
+                          --epochs epoch/fedora.yaml \
                           "${{spec_src}}" -o "${{spec}}"
                       ;;
                   * )
