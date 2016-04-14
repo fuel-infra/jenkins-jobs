@@ -1,0 +1,5 @@
+- project:
+    name: new-product-ci.update-jenkins-views
+    ci-name: new-product-ci
+    jobs:
+      - update-jenkins-views
