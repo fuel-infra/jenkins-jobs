@@ -58,6 +58,8 @@
         #!/bin/bash
         echo "=== [systest POST-script] ==="
         {post-script}
+    - shell:
+        !include-raw-escape '../scripts/erase_env.sh'
     concurrent: true
     description: '{description}'
     disabled: false

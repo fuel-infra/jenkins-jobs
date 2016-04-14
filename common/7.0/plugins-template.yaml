@@ -16,6 +16,8 @@
             SLAVE_NODE_MEMORY=3072
       - shell:
           !include-raw-escape 'scripts/run_plugin_example_system_test.sh'
+      - shell:
+          !include-raw-escape '../scripts/erase_env.sh'
     disabled: false
     logrotate:
       artifactDaysToKeep: -1

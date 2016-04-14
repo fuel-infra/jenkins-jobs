@@ -121,7 +121,6 @@ ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "
 VERSION_STRING=$(basename "${ISO_PATH}" | cut -d '-' -f 2-3)
 echo "Description string: ${TEST_GROUP} on ${VERSION_STRING}"
 
-export MAKE_SNAPSHOT=true
 
 ################ PLUGINS  ###############
 
