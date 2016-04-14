@@ -26,13 +26,17 @@
     node: 'systest'
     concurrent: true
     description: '{version-id} {id} test group'
+
     properties:
       - heavy-job:
           weight: 8
+
     scm:
-      - openstack:
-          branch: 'master'
-          repo: 'fuel-qa'
+    - main-git:
+        reponame: '{reponame}'
+        repobranch: '{repobranch}'
+        basedir: ''
+
     parameters:
     - string:
         name: MAGNET_LINK
@@ -41,6 +45,7 @@
         name: ENV_PREFIX
         default: '{version-id}.{id}.{dist}.{testgroup}'
         description: 'Environment prefix'
+
     publishers:
     - archive:
         allow-empty: true
@@ -59,6 +64,7 @@
         property-file: links.txt
         predefined-parameters: TEST_JOB_NAME=$JOB_NAME
         triggerWithNoParameters: false
+
     wrappers:
     - timeout:
         fail: false
