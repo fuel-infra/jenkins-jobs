@@ -1,44 +1,37 @@
 - project:
     name: Collection deployment tests
+    version-id: master
+    projectbranch: master
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     deb-mirror-base-name: 'master mos-master'
     rpm-mirror-base-name: 'mos-master-centos7'
-
-    version-id: master
-    projectbranch: master
-
     timeout: 200
 
     project:
-
       - fuel-agent:
           projectpackage: fuel-agent
-          testgroup: review_fuel_agent_one_node_provision
-
+          testgroup: review_fuel_agent_ironic_deploy
           timed: '30 */12 * * *'
-
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
-            FUEL_AGENT_REPO_PATH=/home/jenkins/workspace/{version-id}.{project}.pkgs.{dist}.review_fuel_agent_one_node_provision/{project}/
+            SLAVE_NODE_MEMORY=4096
+            IRONIC_ENABLED=true
+            IRONIC_NODES_COUNT=1
 
       - fuel-astute:
           projectpackage: astute
           testgroup: review_astute_patched
-
           timed: '20 */12 * * *'
-
           properties: |
             KEEP_BEFORE=yes
 
       - fuel-library:
           projectpackage: fuel-library10.0
           testgroup: smoke_neutron
-
           timed: '0 */12 * * *'
-
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -46,9 +39,7 @@
       - fuel-library:
           projectpackage: fuel-library10.0
           testgroup: neutron_vlan_ha
-
           timed: '59 */12 * * *'
-
           properties: |
             SYNC_DEPL_TASKS=true
             KEEP_BEFORE=yes
@@ -56,11 +47,8 @@
       - fuel-ostf:
           projectpackage: fuel-ostf
           testgroup: gate_ostf_update
-
           timed: '45 */12 * * *'
-
           timeout: 300  # override
-
           properties: |
             UPDATE_FUEL=true
             KEEP_BEFORE=yes
@@ -69,9 +57,7 @@
       - fuel-web:
           projectpackage: fuel-nailgun
           testgroup: review_fuel_web_deploy
-
           timed: '15 */12 * * *'
-
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -79,9 +65,7 @@
       - python-fuelclient:
           projectpackage: python-fuelclient
           testgroup: review_fuel_client
-
           timed: '15 */12 * * *'
-
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
@@ -95,45 +79,38 @@
 
 - project:
     name: Collection deployment tests for 9.0
+    version-id: mitaka
+    projectbranch: stable/mitaka
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     deb-mirror-base-name: '9.0 mos9.0'
     rpm-mirror-base-name: 'mos9.0-centos7'
-
-    version-id: mitaka
-    projectbranch: stable/mitaka
-
     timeout: 200
 
     project:
-
       - fuel-agent:
           projectpackage: fuel-agent
-          testgroup: review_fuel_agent_one_node_provision
-
+          testgroup: review_fuel_agent_ironic_deploy
           timed: '30 */12 * * *'
-
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
-            FUEL_AGENT_REPO_PATH=/home/jenkins/workspace/{version-id}.{project}.pkgs.{dist}.review_fuel_agent_one_node_provision/{project}/
+            SLAVE_NODE_MEMORY=4096
+            IRONIC_ENABLED=true
+            IRONIC_NODES_COUNT=1
 
       - fuel-astute:
           projectpackage: astute
           testgroup: review_astute_patched
-
           timed: '20 */12 * * *'
-
           properties: |
             KEEP_BEFORE=yes
 
       - fuel-library:
           projectpackage: fuel-library9.0
           testgroup: smoke_neutron
-
           timed: '0 */12 * * *'
-
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -141,9 +118,7 @@
       - fuel-library:
           projectpackage: fuel-library9.0
           testgroup: neutron_vlan_ha
-
           timed: '59 */12 * * *'
-
           properties: |
             SYNC_DEPL_TASKS=true
             KEEP_BEFORE=yes
@@ -151,11 +126,8 @@
       - fuel-ostf:
           projectpackage: fuel-ostf
           testgroup: gate_ostf_update
-
           timed: '45 */12 * * *'
-
           timeout: 300  # override
-
           properties: |
             UPDATE_FUEL=true
             KEEP_BEFORE=yes
@@ -164,9 +136,7 @@
       - fuel-web:
           projectpackage: fuel-nailgun
           testgroup: review_fuel_web_deploy
-
           timed: '15 */12 * * *'
-
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -174,9 +144,7 @@
       - python-fuelclient:
           projectpackage: python-fuelclient
           testgroup: review_fuel_client
-
           timed: '15 */12 * * *'
-
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
@@ -190,24 +158,20 @@
 
 - project:
     name: Collection deployment tests for 8.0
+    version-id: '8.0'
+    projectbranch: 'stable/8.0'
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     deb-mirror-base-name: '8.0 mos8.0'
     rpm-mirror-base-name: 'mos8.0-centos7-fuel'
-
-    version-id: '8.0'
-    projectbranch: 'stable/8.0'
-
     timeout: 200
 
     project:
       - fuel-library:
           projectpackage: fuel-library8.0
           testgroup: smoke_neutron
-
           timed: '0 */12 * * *'
-
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -215,9 +179,7 @@
       - fuel-library:
           projectpackage: fuel-library8.0
           testgroup: neutron_vlan_ha
-
           timed: '59 */12 * * *'
-
           properties: |
             SYNC_DEPL_TASKS=true
             KEEP_BEFORE=yes
