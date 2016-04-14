@@ -5,11 +5,10 @@ set -ex
 OUTPUT="[urls]"
 
 # prepare image list
+
 IMAGES=$(git diff --name-only HEAD~1 \
-  | grep Dockerfile \
-  | sed 's/\/Dockerfile//g' \
-  | sed 's/\//:/g' \
-  | tr '\n' ' ')
+  | awk -F "/" -vORS=" " \
+  '/^[^\.]+\/[^\.]/ {if (!seen[$1$2]++) {print $1":"$2}}')
 
 # build all images
 for IMAGE in ${IMAGES}
