@@ -69,7 +69,7 @@
 
     scm:
       - openstack:
-          branch: 'master'
+          branch: 'stable/mitaka'
           repo: fuel-main
     triggers:
       - timed: 'H 3,10,16,22 * * *'
@@ -171,7 +171,7 @@
     scm:
       - main-git:
           reponame: 'fuel-qa'
-          repobranch: 'origin/master'
+          repobranch: 'stable/mitaka'
           basedir: ''
 
 

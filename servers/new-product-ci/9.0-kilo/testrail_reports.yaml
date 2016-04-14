@@ -32,7 +32,7 @@
     scm:
       - main-git:
           reponame: 'fuel-qa'
-          repobranch: 'origin/master'
+          repobranch: 'origin/stable/mitaka'
           basedir: ''
     wrappers:
       - inject-passwords:

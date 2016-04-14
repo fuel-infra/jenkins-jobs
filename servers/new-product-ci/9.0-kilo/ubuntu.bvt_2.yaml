@@ -35,7 +35,7 @@
           mail-to: ci+alert@mirantis.com,mos-qa@mirantis.com
     scm:
       - openstack:
-          branch: 'master'
+          branch: 'stable/mitaka'
           repo: 'fuel-qa'
     wrappers:
       - timeout:
