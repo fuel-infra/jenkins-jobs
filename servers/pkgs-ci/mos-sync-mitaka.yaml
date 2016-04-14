@@ -94,6 +94,9 @@
     name: 'sahara'
     <<: *common-sync-params
 - project:
+    name: 'sahara-dashboard'
+    <<: *common-sync-params
+- project:
     name: 'python-saharaclient'
     <<: *common-sync-params
 
