@@ -8,6 +8,7 @@
           properties-content: |
             REPO_BASE_PATH={repo-base-path}
             SIGKEYID={pkg-sign-key}
+            PKG_JSON_REPORT=/home/jenkins/{project-version}-pkg-versions.json
 
     parameters:
       - string:
@@ -44,6 +45,9 @@
       - shell: |
           #!/bin/bash -xe
 
+          # Remove stale artifacts
+          rm -vf *.publish.setenvfile pkg-versions.*
+
           # FIXME: Remove private DNS settings
           cat /dev/null > ${{WORKSPACE}}/fuel-mirror/perestroika/docker-builder/config
 
@@ -56,8 +60,9 @@
 
     publishers:
       - 'email-alert-on-merge'
+      - pkg-version-report
       - archive:
-           artifacts: '*.publish.setenvfile'
+           artifacts: '*.publish.setenvfile, pkg-versions.*'
            allow-empty: true
 
     node: '{publish-node}'

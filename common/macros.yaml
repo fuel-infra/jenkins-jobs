@@ -78,6 +78,28 @@
           !include-raw scripts/publish_artifacts.sh
 
 ########################################################################
+# Publisher creating report about published package versions
+########################################################################
+
+- publisher:
+    name: pkg-version-report
+    publishers:
+      - post-tasks:
+        - matches:
+            - log-text: 'Started'
+          run-if-job-successful: true
+          script: !include-raw scripts/pkg-report.py
+      - post-tasks:
+        - matches:
+            - log-text: 'Started'
+          run-if-job-successful: true
+          script: |
+              #!/bin/bash -xe
+              if [ -n "${PKG_JSON_REPORT}" -a "${PKG_JSON_REPORT}" != "pkg-versions.json" ]; then
+                  cp -f ${PKG_JSON_REPORT} pkg-versions.json
+              fi
+
+########################################################################
 # Gerrit parameters
 ########################################################################
 
