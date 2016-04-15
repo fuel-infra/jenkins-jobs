@@ -28,6 +28,8 @@
       - gerrit:
           trigger-on:
             - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           server-name: defaultServer
           projects:
             - project-compare-type: PLAIN
