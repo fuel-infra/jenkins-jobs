@@ -139,6 +139,9 @@
             - name: '9.0.acceptance.ubuntu.failover_group_2'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.failover_group_3'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '9.0.acceptance.ubuntu.failover_group_mongo'
               current-parameters: true
               kill-phase-on: NEVER
@@ -151,6 +154,9 @@
             - name: '9.0.acceptance.ubuntu.change_vip_manually'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '9.0.acceptance.ubuntu.failover_group_3'
+            - name: '9.0.acceptance.ubuntu.ssl'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.network_outage'
               current-parameters: true
               kill-phase-on: NEVER
