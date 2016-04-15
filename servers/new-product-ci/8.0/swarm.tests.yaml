@@ -145,8 +145,8 @@
      - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'rh'
          node: 'systest-rh'
-         pre-script: !include-raw-escape '../builders/rh-libvirt-fix-script.sh'
-         post-script: !include-raw-escape '../builders/rh-libvirt-fix-script.sh'
+         pre-script: |
+            source ~/.rhel_creds
          properties: |
             RH_IMAGE=rhel7_04022016.qcow2
             RH_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
