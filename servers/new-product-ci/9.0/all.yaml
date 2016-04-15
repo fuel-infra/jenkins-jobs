@@ -20,4 +20,6 @@
           testgroup: 'smoke_neutron'
           repobranch: '{branch}'
           email: '{bvt-mail}'
+      - '{version}{mod}.iso-report':
+          repobranch: '{branch}'
 

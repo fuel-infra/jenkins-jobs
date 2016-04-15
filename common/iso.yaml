@@ -14,6 +14,7 @@
     name: '{version}{mod}.test_all'
     description: 'Test ISO'
     email: 'ci+tests@mirantis.com'
+    trigger_projects: ''
 
 - scm:
     name: 'iso-git'
@@ -215,7 +216,12 @@
         kill-phase-on: NEVER
         property-file: properties_file.txt
     jobs:
-    - '{version}{mod}.test_all'
+    - '{version}{mod}.test_all':
+        trigger_projects:
+        - project: '{version}{mod}.iso-report'
+          condition: ALWAYS
+          predefined-parameters: |
+            RUNNER_BUILD_NUMBER=$BUILD_NUMBER
 
 # Group for Community
 - job-group:
@@ -284,3 +290,5 @@
           allow-empty: false
           artifacts: '*.txt'
           latest-only: false
+      - trigger-parameterized-builds:
+          '{obj:trigger_projects}'

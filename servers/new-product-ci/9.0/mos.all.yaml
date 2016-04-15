@@ -32,4 +32,6 @@
           dist: 'ubuntu'
           testgroup: 'smoke_neutron'
           repobranch: '{upstream_branch}'
+      - '{version}{mod}.iso-report':
+          repobranch: '{branch}'
 
