@@ -202,6 +202,7 @@
           		RPM_SECURITY_REPO_PATH={rpm-repo-path}/security
           		RPM_HOLDBACK_REPO_PATH={rpm-repo-path}/holdback
           		IS_DOWNGRADE=true
+          		PKG_JSON_REPORT=/home/jenkins/{name}-{project-version}-rpm-versions.json
           		# Test parameters if any
           		EOF
                 # Append tests content
@@ -220,7 +221,7 @@
           # Save result to use after package publishing
           echo ${{OVERALL_RESULT}} > job_result
       - trigger-builds:
-          - project: '{project-version}-pkg-publish-{os}'
+          - project: '{project-version}-fuel-pkg-publish-{distro}'
             current-parameters: false
             block: true
             parameter-factories:
@@ -355,4 +356,3 @@
     jobs:
       - '{project-version}-rpm-packaging-build'
       - '{project-version}-rpm-packaging-install'
-      - '{project-version}-pkg-publish-{os}'
