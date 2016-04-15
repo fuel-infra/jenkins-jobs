@@ -1,16 +1,21 @@
-- job:
-    name: '8.0-acceptance-test-reports-Testrail'
+- defaults:
+    name: '{version}.{id}.test-reports'
+    venvpath: '/home/jenkins/qa-venv-8.0'
+
+- job-template:
+    name: '{version}.{id}.test-reports'
+    defaults: '{version}.{id}.test-reports'
     builders:
       - inject:
-           properties-content: |
-             TESTS_RUNNER=8.0.acceptance.runner
-             TESTRAIL_TEST_SUITE=[8.0][Fuel] Release Acceptance
-             TESTRAIL_MILESTONE=8.0
-             LAUNCHPAD_MILESTONE=8.0
+          properties-content: |
+            VENV_PATH={venvpath}
+      - inject:
+          properties-content: |
+            {properties}
       - shell:
-          !include-raw builders/test-reports-Testrail-upload_cases.sh
+          !include-raw-escape ./builders/testrail-upload-cases.sh
       - shell:
-          !include-raw builders/test-reports-Testrail.sh
+          !include-raw-escape ./builders/testrail-report.sh
     parameters:
       - string:
           name: TEST_JOB_NAME
@@ -24,7 +29,7 @@
     scm:
      - main-git:
           reponame: 'fuel-qa'
-          repobranch: 'origin/stable/8.0'
+          repobranch: '{repobranch}'
           basedir: ''
 
 

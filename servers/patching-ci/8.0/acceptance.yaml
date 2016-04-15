@@ -34,10 +34,25 @@
           name: MAGNET_LINK
           description: 'ISO magnet link'
       - string:
+          name: DEB_LATEST
+          default: 'latest'
+      - string:
+          name: RPM_LATEST
+          default: 'latest'
+      - string:
           name: UBUNTU_MIRROR_ID
-          default: 'ubuntu-latest'
+          default: 'latest'
           description: |
             'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+      - bool:
+          name: ENABLE_PROPOSED
+          default: false
+      - bool:
+          name: ENABLE_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_UPDATES
+          default: true
       - string:
           name: CUSTOM_VERSION
           default: ''
@@ -46,14 +61,12 @@
       - description-setter:
           regexp: "'Description string: (.*)'"
       - email-default:
-          mail-to: 'ci+acceptance@mirantis.com'
+          mail-to: 'mos-maintenance@mirantis.com'
     wrappers:
       - timeout:
           fail: true
-          timeout: 1200
+          timeout: 2400
     builders:
-      - shell: # Get description from MAGNET_LINK variable
-          !include-raw builders/get_version_from_magnet.sh
       - multijob:
           name: 'Run acceptance tests'
           condition: COMPLETED
