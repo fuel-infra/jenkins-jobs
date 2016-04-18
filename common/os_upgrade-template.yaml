@@ -8,6 +8,7 @@
             CLASSIC_PROVISIONING=false
             SLAVE_NODE_MEMORY=3072
             OCTANE_PATH=fuel-octane
+            NODE_VOLUME_SIZE=100
       - shell:
           !include-raw-escape 'scripts/run_upgrade_system_test.sh'
     disabled: false

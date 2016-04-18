@@ -4,11 +4,11 @@
    id: 'acceptance'
    repobranch: 'origin/stable/8.0'
    reponame: 'fuel-qa'
-   venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+   venvpath: '/home/jenkins/qa-venv-8.0'
    default_pool: '10.109.0.0/16:24'
    description: '8.0 acceptance test group'
    node: 'acceptance'
-   timeout: '480'
+   timeout: '600'
    properties: ''
    weight: '7'
    jobs:
