@@ -1,0 +1,56 @@
+- job:
+    name: 'generate-packages-database'
+    description: |
+       <p>Generate databases file from repository metadata</p>
+       <p><b>Ownership:</b> Issues with this job are tracked by Fuel Build team.</p>
+       <p><b>Contacts:</b> #infra</p>
+    parameters:
+       - string:
+           name: RELEASE_VERSION
+           description: Version of MOS release (e.g. 8.0)
+       - choice:
+           name: DISTRO
+           choices:
+              - centos
+              - ubuntu
+           description: "Type of OS (e.g centos, ubuntu)"
+       - string:
+           name: URLS
+           description: "Repository URL (See links on https://mirantis.jira.com/wiki/display/PRD/Repository+structure+for+every+release)"
+       - string:
+           name: URL_TO_DB
+           description: "Published reports URL"
+           default: http://mirror.fuel-infra.org/mcv/mos/
+       - string:
+           name: MU_NUMBER
+           description: "MU number (e.g. 1, 2)"
+       - bool:
+           name: IS_UPDATES
+           description: "Use to create MU/proposed/security report"
+       - choice:
+           name: UPDATES_REPO_NAME
+           choices:
+              - updates
+              - proposed
+              - security
+           description: "Which component to scan? Need IS_UPDATES=true"
+    node: mirror
+    builders:
+       - shell:
+          !include-raw builders/generate-packages-database.sh
+    scm:
+       - git:
+           url: ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/mirrors
+           branches:
+              - origin/master
+           wipe-workspace: true
+    wrapper:
+        name: openstack-ci-jenkins
+    publishers:
+       - email:
+           notify-every-unstable-build: true
+           recipients: 'fuel-build+alert@mirantis.com'
+           send-to-individuals: false
+       - archive:
+           artifacts: '$RELEASE_VERSION-$DISTRO*.sqlite,filename.properties'
+           latest-only: false
