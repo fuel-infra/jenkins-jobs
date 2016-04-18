@@ -239,3 +239,6 @@
             - name: '10.0.system_test.ubuntu.uca_neutron_ha'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '10.0.system_test.ubuntu.numa_cpu_pinning'
+              current-parameters: true
+              kill-phase-on: NEVER

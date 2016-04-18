@@ -272,4 +272,11 @@
            MULTIPLE_NETWORKS=true
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'uca_neutron_ha'
-
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'numa_cpu_pinning'
+         properties: |
+           export KVM_USE=True
+           export SLAVE_NODE_CPU=6
+           export DRIVER_ENABLE_ACPI=true
+           export NUMA_NODES=2
+         timeout: '600'
