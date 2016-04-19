@@ -82,6 +82,8 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'failover_group_2'
      - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'failover_group_3'
+     - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'failover_group_mongo'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'load'
@@ -92,4 +94,7 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'change_vip_manually'
      - '{version-id}.{id}.{dist}.{testgroup}':
-         testgroup: 'failover_group_3'
+         testgroup: 'ssl'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'network_outage'
+         node: 'network-systest'
