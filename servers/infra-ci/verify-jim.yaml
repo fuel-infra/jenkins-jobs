@@ -44,5 +44,6 @@
     reponame: 'fuel-infra/jim'
     tox-test:
       - 'flake8'
+      - 'unittests'
     jobs:
       - 'verify-jim-{tox-test}'
