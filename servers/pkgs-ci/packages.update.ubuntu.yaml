@@ -1,0 +1,147 @@
+- job-template:
+    name: 'packages.update.ubuntu'
+    project-type: multijob
+    concurrent: true
+
+    parameters:
+
+      # Project definition
+      # -----------------------------------
+
+      - string:
+          name: PACKAGENAME
+          description: "Name of project to build"
+      - string:
+          name: IS_OPENSTACK
+          description: "If code and specs are in separate repos then set true, set false otherwise"
+      - string:
+          name: IS_FUEL
+          description: "If project is from fuel family, then set true (* fuel is not openstack)"
+      - string:
+          name: PROJECT_VERSION
+          description: "version of project"
+      - string:
+          name: DESTINATION_REPO_NAMESPACE
+          default: "trash/"
+          description: "namespace for project (set empty for master)"
+
+
+      # Tweaks
+      # -----------------------------------
+
+      - string:
+          name: IS_DOWNGRADE
+          # IS_DOWNGRADE is set "true" because we want to update package in master
+          # even if there is some package in binary repo which has bigger version for
+          # unknown reasons.
+          default: "true"
+          description: "version of project"
+
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 210
+      - timestamps
+      - ansicolor
+
+    builders:
+
+      - shell: |
+          #!/bin/bash
+          set -xe
+          echo "Description string: Updating ${{PACKAGENAME}} for ${{DESTINATION_REPO_NAMESPACE}}"
+
+          # protect repository, when job is triggered accidentally
+          if [ ${{DESTINATION_REPO_NAMESPACE}} = 'trash/' ] ; then
+            exit 1
+          fi
+
+      # STEP I:
+      #   just build package(s) and get information where to find results
+      # -----------------------------------
+
+      - multijob:
+          name: 'Build'
+          condition: SUCCESSFUL
+          projects:
+            - name: 'packages.build.ubuntu'
+              predefined-parameters: |
+                PACKAGENAME=$PACKAGENAME
+                IS_OPENSTACK=$IS_OPENSTACK
+                IS_FUEL=$IS_FUEL
+                PROJECT_VERSION=$PROJECT_VERSION
+                BUILD_MARKER=$BUILD_TAG
+
+      - copyartifact:
+          project: 'packages.build.ubuntu'
+          filter: 'buildresult.setenvfile'
+          parameter-filters: BUILD_MARKER=$BUILD_MARKER
+
+      - inject:
+          # BUILD_HOST   -> name of host where build run
+          # PKG_PATH     -> path to built package
+          # EXTRAREPO    -> list of repos used as dependencies
+          properties-file: buildresult.setenvfile
+
+      # STEP II:
+      #   publish package(s) into temp. repository
+      # -----------------------------------
+
+      - multijob:
+          name: 'Publish to tmp'
+          condition: SUCCESSFUL
+          projects:
+            - name: 'packages.publish.ubuntu'
+              predefined-parameters: |
+                IS_DOWNGRADE=true
+                ORIGIN=testing
+                DEB_REPO_PATH_PREFIX=tmp-master-builds/$PROJECT_NAME/
+                BUILD_HOST=$BUILD_HOST
+                PKG_PATH=$PKG_PATH
+                EXTRAREPO=$EXTRAREPO
+                BUILD_MARKER=$BUILD_TAG
+
+      - copyartifact:
+          project: 'packages.publish.ubuntu'
+          filter: 'deb.publish.setenvfile'
+          parameter-filters: BUILD_MARKER=$BUILD_TAG
+
+      - inject:
+          # DEB_REPO_URL     -> url of repository
+          # DEB_PACKAGENAME  -> name of package
+          # DEB_VERSION      -> version of package
+          # DEB_BINARIES     -> list of binaries
+          properties-file: deb.publish.setenvfile
+
+      # STEP III:
+      #   test package(s) vs master repository
+      # -----------------------------------
+
+
+      # Step IV:
+      #   if package(s) pass tests then publishing to master is required
+      # -----------------------------------
+
+      - multijob:
+          # todo: impl. tests jobs and then try to publish to master
+          name: 'Publish to trunk'
+          condition: SUCCESSFUL
+          projects:
+            - name: 'packages.publish.ubuntu'
+              predefined-parameters: |
+                IS_DOWNGRADE=$IS_DOWNGRADE
+                ORIGIN=Mirantis
+                DEB_REPO_PATH_PREFIX=$DESTINATION_REPO_NAMESPACE
+                BUILD_HOST=$BUILD_HOST
+                PKG_PATH=$PKG_PATH
+                EXTRAREPO=$EXTRAREPO
+                BUILD_MARKER=$BUILD_TAG
+
+      # Step IV:
+      #   report result ?
+      # -----------------------------------
+    publishers:
+      - description-setter:
+          regexp: "Description string: (.*)"
+          regexp-for-failed: "Description string: (.*)"
+
