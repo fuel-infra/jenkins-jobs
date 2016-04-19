@@ -37,6 +37,7 @@
 import itertools
 import json
 import os
+import time
 
 
 # Use GERRIT_URL as base for links or https://<GERRIT_HOST>, if GERRIT_URL
@@ -103,6 +104,7 @@ if (os.environ.get('GERRIT_CHANGE_STATUS') == 'MERGED'):
     deb_info_found = False
     if (os.path.isfile(DEB_PUBLISHER_FILE)):
         deb_pkg_info['project'] = project
+        deb_pkg_info['timestamp'] = os.path.getmtime(DEB_PUBLISHER_FILE)
         with open(DEB_PUBLISHER_FILE, 'r') as statfile:
             for string in statfile:
                 varname, varvalue = string.split('=')
@@ -123,6 +125,7 @@ if (os.environ.get('GERRIT_CHANGE_STATUS') == 'MERGED'):
     rpm_info_found = False
     if (os.path.isfile(RPM_PUBLISHER_FILE)):
         rpm_pkg_info['project'] = project
+        rpm_pkg_info['timestamp'] = os.path.getmtime(RPM_PUBLISHER_FILE)
         with open(RPM_PUBLISHER_FILE, 'r') as statfile:
             for string in statfile:
                 varname, varvalue = string.split('=')
@@ -161,7 +164,7 @@ for distro in distros:
     tr += ('<td>'
            '<a href="' + GERRIT_URL + 'gitweb?p={' + distro + '_project}.git;'
            'a=commitdiff;h={' + distro + '_refsha}">{' + distro + '_version}'
-           '</a></td>')
+           '</a>{' + distro + '_timestamp}</td>')
     th += '<th>' + distro + '</th>'
 th += '</tr></thead>'
 tr += '</tr>'
@@ -180,13 +183,19 @@ with open(HTML_REPORT, 'w') as html_report:
         for distro in sorted(distros):
             info_distro = info.get(
                 distro,
-                {'version': '', 'project': '', 'refsha': ''}
+                {'version': '', 'project': '', 'refsha': '', 'timestamp': None}
             )
             pkg[distro + '_version'] = info_distro['version'][2:] \
                 if (info_distro['version'][0:2] == '0:') \
                 else info_distro['version']
             pkg[distro + '_project'] = info_distro['project']
             pkg[distro + '_refsha'] = info_distro['refsha']
+            ts = info_distro.get('timestamp')
+            if (ts):
+                pkg[distro + '_timestamp'] = time.strftime(
+                    ' (%Y-%m-%d %H:%M:%S UTC)', time.gmtime(ts))
+            else:
+                pkg[distro + '_timestamp'] = ''
         html_report.write(tr.format(**pkg))
     html_report.write('</tbody>')
     html_report.write(HTML_FOOTER)
