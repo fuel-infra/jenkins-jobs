@@ -262,8 +262,6 @@
            DISABLE_SSL=true
            SLAVE_NODE_CPU=2
          timeout: '600'
-     - '9.0.system_test.{dist}.check_radosgw':
-         testgroup: 'system_test.deploy_and_check_radosgw.3ctrl_3comp_ceph_neutronVLAN'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'cgroup_ha'
      - '{version-id}.{id}.{dist}.{testgroup}':
