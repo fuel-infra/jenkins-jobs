@@ -1,0 +1,74 @@
+- job:
+    name: build-mos-docs
+    builders:
+      - inject:
+          properties-content: |
+            DOCS_HOST=docs@docs.fuel-infra.org
+            DOCS_ROOT=/var/www/fuel-qa
+      - shell:
+          !include-raw builders/build-mos-docs.sh
+    description: |
+      Build mos/mos-docs for all branches and publish them to <a
+      href="http://docs.mirantis.com">docs.mirantis.com</a>
+      <p>Work In Progress
+      <p>Contacts: ci-team at #infra
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 100
+    node: docs
+    concurrent: false
+    parameters:
+      - string:
+          name: GERRIT_BRANCH
+          default: 'master'
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/mos/mos-docs'
+          choosing-strategy: gerrit
+          clean: true
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'mos/mos-docs'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+                - branch-compare-type: ANT
+                  branch-pattern: 'stable/**'
+          silent: true
+    wrappers:
+      - openstack-ci-jenkins
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+    publishers:
+      - html-publisher:
+          name: 'MOS Docs build results'
+          dir: '_build/html'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+      - description-setter:
+          regexp: 'Description string: (.*)'
+          regexp-for-failed: 'Description string: (.*)'
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'ci@mirantis.com'
+          send-to-individuals: false
