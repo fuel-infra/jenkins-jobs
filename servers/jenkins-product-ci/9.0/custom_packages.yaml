@@ -15,9 +15,9 @@
 
     builders:
       - shell:
-          !include-raw builders/custom_packages_prepare_repos.sh
+          !include-raw: builders/custom_packages_prepare_repos.sh
       - shell:
-          !include-raw builders/custom_packages.sh
+          !include-raw: builders/custom_packages.sh
     concurrent: true
 
     logrotate:

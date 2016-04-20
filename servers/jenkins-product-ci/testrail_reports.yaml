@@ -1,7 +1,7 @@
 - job:
     name: 'testrail_reports'
     description:
-      !include-raw descriptions/testrail_reports
+      !include-raw: descriptions/testrail_reports
     node: testrail
 
     parameters:
@@ -25,7 +25,7 @@
 
     builders:
       - shell:
-          !include-raw './builders/testrail_reports.sh'
+          !include-raw: './builders/testrail_reports.sh'
     publishers:
       - email:
           recipients: ci+alert@mirantis.com

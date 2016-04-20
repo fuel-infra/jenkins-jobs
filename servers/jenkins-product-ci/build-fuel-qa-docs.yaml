@@ -2,7 +2,7 @@
     name: build-fuel-qa-docs
     builders:
       - shell:
-          !include-raw './builders/build-fuel-qa-docs.sh'
+          !include-raw: './builders/build-fuel-qa-docs.sh'
     description: |
       Build fuel-qa-docs for all branches and publish them to <a
       href="http://docs.mirantis.com">docs.mirantis.com</a>

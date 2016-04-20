@@ -2,7 +2,7 @@
     name: 'trigger-external-events'
     builders:
       - shell:
-          !include-raw builders/trigger-external-events.sh
+          !include-raw: builders/trigger-external-events.sh
     description: |
       Trigger events on external Jenkins instances
 

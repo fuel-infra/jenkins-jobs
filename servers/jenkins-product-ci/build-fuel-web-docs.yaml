@@ -2,7 +2,7 @@
     name: build-fuel-web-docs
     builders:
       - shell:
-          !include-raw './builders/build-fuel-web-docs.sh'
+          !include-raw: './builders/build-fuel-web-docs.sh'
     description: |
       Build docs from master branch of fuel-web repository and publish them to <a
       href="http://docs.mirantis.com">docs.mirantis.com</a>

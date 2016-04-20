@@ -2,7 +2,7 @@
     name: '6.1-ubuntu.set_ubuntu_stable_mirror'
     builders:
       - shell:
-          !include-raw builders/set_ubuntu_stable_mirror.sh
+          !include-raw: builders/set_ubuntu_stable_mirror.sh
     description: |
       Update Upstream Ubuntu stable symlink target to specified mirror
       version.<br>

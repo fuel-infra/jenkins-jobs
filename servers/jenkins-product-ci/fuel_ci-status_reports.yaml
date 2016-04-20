@@ -2,9 +2,9 @@
     name: 'fuel_ci-status_reports'
     builders:
       - shell:
-          !include-raw builders/fuel_ci-status_reports.sh
+          !include-raw: builders/fuel_ci-status_reports.sh
     description:
-          !include-raw descriptions/fuel_ci-status_reports
+          !include-raw: descriptions/fuel_ci-status_reports
     node: reports
     parameters:
       - string:
