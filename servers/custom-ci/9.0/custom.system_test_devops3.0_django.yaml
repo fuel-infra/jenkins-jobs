@@ -2,7 +2,7 @@
     name: 9.0.custom.system_test_devops3.0_django_1.7up
     concurrent: true
     description:
-      !include-raw './descriptions/custom_system_test_devops3.0'
+      !include-raw: './descriptions/custom_system_test_devops3.0'
     logrotate:
       artifactDaysToKeep: 10
       daysToKeep: 30
@@ -24,7 +24,7 @@
           wget --no-verbose --input-file="${WORKSPACE}/${PLUGINS_URLS_FILE}" --directory-prefix="${PLUGINS_DIR}"
 
       - shell:
-          !include-raw './builders/custom_system_test_devops3.0_django.sh'
+          !include-raw: './builders/custom_system_test_devops3.0_django.sh'
     parameters:
       - string:
           name: MAGNET_LINK

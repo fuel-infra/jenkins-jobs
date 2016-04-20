@@ -6,6 +6,6 @@
     default_commit: 'stable/mitaka'
     defaults: '{version}.custom.iso'
     description:
-      !include-raw descriptions/custom.iso
+      !include-raw: descriptions/custom.iso
     jobs:
       - '{version}.custom.iso'

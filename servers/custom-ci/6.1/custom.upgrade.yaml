@@ -2,10 +2,10 @@
     name: '6.1.custom.upgrade'
     builders:
       - shell:
-          !include-raw builders/custom_upgrade.sh
+          !include-raw: builders/custom_upgrade.sh
     concurrent: true
     description:
-      !include-raw descriptions/custom.upgrade
+      !include-raw: descriptions/custom.upgrade
     logrotate:
       artifactDaysToKeep: 90
       daysToKeep: 90

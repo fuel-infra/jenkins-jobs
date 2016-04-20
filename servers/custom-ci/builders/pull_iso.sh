@@ -9,7 +9,7 @@ if [[ "${MAGNET_LINK}" == 'latest' ]]; then
     # for web links on latest artefact
     export $(curl -sSf "${LATEST_MAGNET_LINK}")
   elif [[ "${LATEST_MAGNET_LINK}" =~ ^magnet ]]; then
-    # for !include-raw links
+    # for !include-raw: links
     MAGNET_LINK="${LATEST_MAGNET_LINK}"
   else
     echo "Cannot define latest ISO"
