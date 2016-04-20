@@ -1,7 +1,7 @@
 - job:
     name: 'update_symlink'
     description:
-      !include-raw descriptions/update_symlink.html
+      !include-raw: descriptions/update_symlink.html
     logrotate:
       daysToKeep: 90
       artifactDaysToKeep: 90
@@ -33,7 +33,7 @@
 
     builders:
       - shell:
-          !include-raw builders/update_symlink.sh
+          !include-raw: builders/update_symlink.sh
 
     scm:
       - trsync:

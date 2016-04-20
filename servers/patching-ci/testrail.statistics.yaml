@@ -6,7 +6,7 @@
            properties-content: |
              OUTPUT_FILE=bugs_stats
       - shell:
-          !include-raw builders/testrail_generate_statistics.sh
+          !include-raw: builders/testrail_generate_statistics.sh
     parameters:
       - string:
           name: TEST_PLAN_ID

@@ -1,7 +1,7 @@
 - job:
     name: '7.0.create_snapshot.ubuntu'
     description:
-      !include-raw descriptions/create_snapshot.html
+      !include-raw: descriptions/create_snapshot.html
     logrotate:
       daysToKeep: 90
       artifactDaysToKeep: 90
@@ -23,7 +23,7 @@
           default: 'ubuntu'
           description: 'Name of repo on obs-1 (currently ubuntu | centos-6)'
       - dynamic-string:
-          name: TIMESTAMP 
+          name: TIMESTAMP
           script: |
               TimeZone.setDefault(TimeZone.getTimeZone('UTC'))
               def now = new Date()
@@ -41,9 +41,9 @@
 
     builders:
       - shell:
-          !include-raw builders/define_timestamp.sh
+          !include-raw: builders/define_timestamp.sh
       - shell:
-          !include-raw builders/prepare_repos_for_iso.sh
+          !include-raw: builders/prepare_repos_for_iso.sh
 
     scm:
       - git:

@@ -2,7 +2,7 @@
     name: '6.1.create_snapshot.centos-6'
     project-type: multijob
     description:
-      !include-raw descriptions/create_snapshot.html
+      !include-raw: descriptions/create_snapshot.html
     logrotate:
       daysToKeep: 90
       artifactDaysToKeep: 90
@@ -33,9 +33,9 @@
 
     builders:
       - shell:
-          !include-raw builders/define_timestamp.sh
+          !include-raw: builders/define_timestamp.sh
       - shell:
-          !include-raw builders/prepare_repos_for_iso.sh
+          !include-raw: builders/prepare_repos_for_iso.sh
       - multijob:
           name: Build late artifacts
           condition: SUCCESSFUL
@@ -45,13 +45,13 @@
               property-file: noartifact_mirror.txt
 
       - shell:
-          !include-raw builders/get_late_artifact_url.py
+          !include-raw: builders/get_late_artifact_url.py
       - shell:
-          !include-raw builders/push_late_artifacts.sh
+          !include-raw: builders/push_late_artifacts.sh
       - shell:
-          !include-raw builders/add_late_artifacts_to_proposed.sh
+          !include-raw: builders/add_late_artifacts_to_proposed.sh
       - shell:
-          !include-raw builders/push_updates_candidate.sh
+          !include-raw: builders/push_updates_candidate.sh
 
     scm:
       - osci-mirrors:

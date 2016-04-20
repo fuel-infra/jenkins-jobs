@@ -2,7 +2,7 @@
     name: '6.1.proposed-to-updates'
     project-type: freestyle
     #description:
-    #  !include-raw descriptions/create_snapshot.html
+    #  !include-raw: descriptions/create_snapshot.html
     logrotate:
       daysToKeep: 90
       artifactDaysToKeep: 90
@@ -33,11 +33,11 @@
 
     builders:
       - shell:
-          !include-raw builders/define_timestamp.sh
+          !include-raw: builders/define_timestamp.sh
       - shell:
-          !include-raw builders/merge-proposed-to-updates.sh
+          !include-raw: builders/merge-proposed-to-updates.sh
       - shell:
-          !include-raw builders/push_updates_candidate_after_proposed.sh
+          !include-raw: builders/push_updates_candidate_after_proposed.sh
 
     scm:
       - osci-mirrors:

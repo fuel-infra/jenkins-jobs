@@ -124,9 +124,9 @@
     builders:
       - logs-url
       - shell:
-          !include-raw-escape builders/mos.test.patching.fetch_gerrit_commits.sh
+          !include-raw-escape: builders/mos.test.patching.fetch_gerrit_commits.sh
       - shell:
-          !include-raw-escape builders/mos.test.patching.sh
+          !include-raw-escape: builders/mos.test.patching.sh
     publishers:
       - nosetests
       - publish_to_external

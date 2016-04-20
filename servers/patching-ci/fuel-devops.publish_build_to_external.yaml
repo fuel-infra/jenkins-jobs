@@ -21,7 +21,7 @@
 
     builders:
       - shell:
-          !include-raw builders/publish_build_to_external.sh
+          !include-raw: builders/publish_build_to_external.sh
       - copyartifact:
           project: $REPORTED_JOB_NAME
           target: logs/

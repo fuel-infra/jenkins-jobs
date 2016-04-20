@@ -1,7 +1,7 @@
 - job-template:
     name: '6.1.{name}.test-plan-generator'
     description:
-      !include-raw descriptions/test_plan_generator.html
+      !include-raw: descriptions/test_plan_generator.html
     project-type: freestyle
     disabled: '{is-disabled}'
     concurrent: true
@@ -85,13 +85,13 @@
           basedir: fuel-qa
     builders:
       - shell:
-          !include-raw-escape builders/mos.test.patching.fetch_gerrit_commits.sh
+          !include-raw-escape: builders/mos.test.patching.fetch_gerrit_commits.sh
       - shell:
-          !include-raw-escape builders/mos.test.patching.runner.py
+          !include-raw-escape: builders/mos.test.patching.runner.py
       - shell:
-          !include-raw-escape builders/mos.test.plan.generator.sh
+          !include-raw-escape: builders/mos.test.plan.generator.sh
       - shell:
-          !include-raw-escape builders/mos.test.plan.parser.py
+          !include-raw-escape: builders/mos.test.plan.parser.py
     publishers:
       - archive:
           allow-empty: true

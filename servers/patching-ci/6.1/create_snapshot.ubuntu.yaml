@@ -1,7 +1,7 @@
 - job:
     name: '6.1.create_snapshot.ubuntu'
     description:
-      !include-raw descriptions/create_snapshot.html
+      !include-raw: descriptions/create_snapshot.html
     logrotate:
       daysToKeep: 90
       artifactDaysToKeep: 90
@@ -32,11 +32,11 @@
 
     builders:
       - shell:
-          !include-raw builders/define_timestamp.sh
+          !include-raw: builders/define_timestamp.sh
       - shell:
-          !include-raw builders/prepare_repos_for_iso.sh
+          !include-raw: builders/prepare_repos_for_iso.sh
       - shell:
-          !include-raw builders/push_updates_candidate.sh
+          !include-raw: builders/push_updates_candidate.sh
 
     scm:
       - osci-mirrors:

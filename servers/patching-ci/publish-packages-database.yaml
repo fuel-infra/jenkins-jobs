@@ -29,7 +29,7 @@
              MIRROR_HOST=mirror.fuel-infra.org
              HOSTS_TO_SYNC=mirror.seed-cz1.fuel-infra.org mirror.seed-us1.fuel-infra.org
        - shell:
-           !include-raw builders/publish-packages-database.sh
+           !include-raw: builders/publish-packages-database.sh
     wrapper:
         name: openstack-ci-jenkins
     publishers:

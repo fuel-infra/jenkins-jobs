@@ -2,7 +2,7 @@
     name: '7.0-build.late.artifacts'
     builders:
       - shell:
-          !include-raw builders/build_late_artifacts.sh
+          !include-raw: builders/build_late_artifacts.sh
     concurrent: true
     description: |
       Build late artifacts:<br>

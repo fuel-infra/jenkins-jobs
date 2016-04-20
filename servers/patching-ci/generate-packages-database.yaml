@@ -37,7 +37,7 @@
     node: mirror
     builders:
        - shell:
-          !include-raw builders/generate-packages-database.sh
+          !include-raw: builders/generate-packages-database.sh
     scm:
        - git:
            url: ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/mirrors

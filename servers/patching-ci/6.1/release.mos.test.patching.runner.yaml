@@ -65,9 +65,9 @@
       - patching-tests
     builders:
       - shell:
-          !include-raw-escape builders/mos.test.patching.fetch_gerrit_commits.sh
+          !include-raw-escape: builders/mos.test.patching.fetch_gerrit_commits.sh
       - shell:
-          !include-raw-escape builders/mos.test.patching.runner.py
+          !include-raw-escape: builders/mos.test.patching.runner.py
       - multijob:
           name: 'Build Late Artifacts'
           projects:

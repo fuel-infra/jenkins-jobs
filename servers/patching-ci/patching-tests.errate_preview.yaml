@@ -13,7 +13,7 @@
           default: 'refs/heads/stable/6.1'
     builders:
       - shell:
-          !include-raw builders/errata_preview.sh
+          !include-raw: builders/errata_preview.sh
     publishers:
       - html-publisher:
           keep-all: true

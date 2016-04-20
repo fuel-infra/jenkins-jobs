@@ -20,7 +20,7 @@
 
     builders:
       - shell:
-          !include-raw builders/test_publishing.sh
+          !include-raw: builders/test_publishing.sh
 
     publishers:
       - archive:

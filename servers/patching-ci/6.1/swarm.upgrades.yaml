@@ -7,7 +7,7 @@
     base_reponame: 'fuel-main'
     base_repobranch: 'origin/stable/6.0'
     base_iso_magnet_link:
-        !include-raw ../data/6.0-iso
+        !include-raw: ../data/6.0-iso
     base_venv_path: '/home/jenkins/qa-venv-6.0'
     old_devops_db: 'true'
     upgrade_reponame: 'fuel-qa'
