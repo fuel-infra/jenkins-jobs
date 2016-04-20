@@ -3,7 +3,7 @@
     node: 'docker-builder'
     builders:
       - shell:
-          !include-raw-escape './builders/docker-build.sh'
+          !include-raw-escape: './builders/docker-build.sh'
       - trigger-builds:
         - project: 'docker-publish'
     description: |

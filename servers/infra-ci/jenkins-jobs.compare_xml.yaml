@@ -7,7 +7,7 @@
     node: 'jjb_compare_xml'
     builders:
       - shell:
-            !include-raw './builders/jjb_compare_xml.sh'
+            !include-raw: './builders/jjb_compare_xml.sh'
     properties:
       - heavy-job:
           weight: 1

@@ -6,7 +6,7 @@
     node: 'shellcheck'
     builders:
       - shell:
-          !include-raw builders/check_shell.sh
+          !include-raw: builders/check_shell.sh
     properties:
       - heavy-job:
           weight: 1

@@ -2,7 +2,7 @@
     name: verify-fuel-infra-puppet-manifests
     builders:
       - shell:
-          !include-raw './builders/verify-fuel-infra-puppet-manifests.sh'
+          !include-raw: './builders/verify-fuel-infra-puppet-manifests.sh'
     description: 'This job makes syntax check for puppet manifests'
     logrotate:
       numToKeep: 100

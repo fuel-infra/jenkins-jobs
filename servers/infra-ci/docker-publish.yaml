@@ -13,7 +13,7 @@
           which-build: 'upstream-build'
           optional: true
       - shell:
-          !include-raw './builders/docker-publish.sh'
+          !include-raw: './builders/docker-publish.sh'
     description: |
       This job will use docker image on host and publish it to registries.
     concurrent: false

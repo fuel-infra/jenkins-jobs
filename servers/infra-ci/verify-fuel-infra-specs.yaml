@@ -2,7 +2,7 @@
     name: verify-fuel-infra-specs
     builders:
       - shell:
-          !include-raw './builders/verify-fuel-infra-specs.sh'
+          !include-raw: './builders/verify-fuel-infra-specs.sh'
     description: 'This job builds documentation of fuel-infra/specs and archives it.'
     logrotate:
       numToKeep: 100

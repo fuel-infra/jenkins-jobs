@@ -2,7 +2,7 @@
     name: verify-mos-docs
     builders:
       - shell:
-          !include-raw './builders/verify-mos-docs.sh'
+          !include-raw: './builders/verify-mos-docs.sh'
     description: |
       Check patchsets in mos/mos-docs repository
       <p>Work In Progress

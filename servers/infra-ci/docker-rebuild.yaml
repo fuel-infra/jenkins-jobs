@@ -2,7 +2,7 @@
     name: docker-rebuild
     builders:
       - shell:
-          !include-raw './builders/docker-rebuild.sh'
+          !include-raw: './builders/docker-rebuild.sh'
     description: |
       This job will rebuild specific image from repository.
     concurrent: true

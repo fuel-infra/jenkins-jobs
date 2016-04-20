@@ -3,7 +3,7 @@
     node: 'docker-builder'
     builders:
       - shell:
-          !include-raw './builders/docker-rebuild-fuel-ci.sh'
+          !include-raw: './builders/docker-rebuild-fuel-ci.sh'
     description: |
       This job rebuilds Fuel CI Docker images and pushes them to Registry.
     concurrent: false
