@@ -43,6 +43,9 @@
           set -o pipefail
           set -o xtrace
 
+          # GERRIT_BRANCH must be set
+          : ${{GERRIT_BRANCH?}}
+
           ############################
           # Some useful functions
           ############################
@@ -87,7 +90,15 @@
 
           OVERALL_RESULT=0
 
-          CHANGED_FILES=$(git diff --name-only HEAD~1)
+          if [ -z "${{GERRIT_CHANGE_NUMBER}}" ]; then
+              # No CR, rebuild all packages for branch
+              GERRIT_CHANGE_STATUS='MERGED'
+              GERRIT_CHANGE_NUMBER="${{GERRIT_BRANCH##*/}}-rebuild"
+              CHANGED_FILES=$(find . -name "*.spec" -o -name "*.spec.j2")
+          else
+              # Test only changed specs
+              CHANGED_FILES=$(git diff --name-only HEAD~1)
+          fi
 
           # Directory for artifacts (specs and others)
           mkdir artifacts
