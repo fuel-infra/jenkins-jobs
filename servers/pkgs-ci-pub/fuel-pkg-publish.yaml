@@ -8,7 +8,7 @@
           properties-content: |
             REPO_BASE_PATH={repo-base-path}
             SIGKEYID={pkg-sign-key}
-            PKG_JSON_REPORT=/home/jenkins/{project-version}-pkg-versions.json
+            PKG_JSON_REPORT=/home/jenkins/{name}-{project-version}-pkg-versions.json
 
     parameters:
       - string:
@@ -40,13 +40,15 @@
           filter: 'buildresult.params'
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
+          optional: true
+      - shell: touch 'buildresult.params'
       - inject:
           properties-file: 'buildresult.params'
       - shell: |
           #!/bin/bash -xe
 
           # Remove stale artifacts
-          rm -vf *.publish.setenvfile pkg-versions.*
+          rm -vf *.publish.setenvfile buildresult.params pkg-versions.*
 
           # FIXME: Remove private DNS settings
           cat /dev/null > ${{WORKSPACE}}/fuel-mirror/perestroika/docker-builder/config
