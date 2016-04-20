@@ -179,6 +179,8 @@ if [ "${UPDATE_FUEL}" = "true" ]; then
     else
         export UPDATE_FUEL_MIRROR="${RPM_REPO_URL}/"
     fi
+    # Clear stale package cache
+    rm -rvf ${UPDATE_FUEL_PATH:-~/fuel/pkgs}
 fi
 
 ###################### Run test ###############
