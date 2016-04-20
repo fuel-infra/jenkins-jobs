@@ -5,7 +5,7 @@
       - shell:
           tox
       - shell:
-          !include-raw-escape './builders/rpm_check.sh'
+          !include-raw-escape: './builders/rpm_check.sh'
     description: '<a href=https://github.com/openstack/{plugin_repo}>Build {plugin_name} plugin when a new tag is created and start system tests.</a>'
     logrotate:
       numToKeep: 10
@@ -53,9 +53,9 @@
     name: 'fuel-plugin.{plugin_name}.tag'
     builders:
       - shell:
-          !include-raw-escape './builders/build-plugin-from-tag.sh'
+          !include-raw-escape: './builders/build-plugin-from-tag.sh'
       - shell:
-          !include-raw-escape './builders/rpm_check.sh'
+          !include-raw-escape: './builders/rpm_check.sh'
     description: '<a href=https://github.com/openstack/{plugin_repo}>Build {plugin_name} plugin when a new tag is created and start system tests.</a>'
     logrotate:
       numToKeep: 10

@@ -4,7 +4,7 @@
       - shell:
           tox
       - shell:
-          !include-raw-escape './builders/rpm_check.sh'
+          !include-raw-escape: './builders/rpm_check.sh'
     description: '<a href=https://github.com/openstack/{plugin_repo}>Build {plugin_name} plugin from fuel-plugins project</a>'
     logrotate:
       numToKeep: 10
@@ -54,9 +54,9 @@
     name: 'fuel-plugin.{plugin_name}.build'
     builders:
       - shell:
-          !include-raw-escape './builders/build-plugin.sh'
+          !include-raw-escape: './builders/build-plugin.sh'
       - shell:
-          !include-raw-escape './builders/rpm_check.sh'
+          !include-raw-escape: './builders/rpm_check.sh'
     description: '<a href=https://github.com/openstack/{plugin_repo}>Build {plugin_name} plugin from fuel-plugins project</a>'
     logrotate:
       numToKeep: 10
