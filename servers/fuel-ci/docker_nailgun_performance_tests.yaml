@@ -1,0 +1,145 @@
+- job-template:
+    name: docker-nailgun_performance_tests
+    builders:
+      - shell:
+          !include-raw-escape builders/run_docker.sh
+    description: |
+      Nailgun performance tests.
+
+      Uses Docker container with python2.7 venv
+    node: fuel-web-master
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: DOCKER_IMAGE
+          default: 'nailgun_performance_tests'
+      - string:
+          name: ENVVARS
+          default: '{envvars}'
+          description: 'Environment variables'
+      - string:
+          name: VOLUMES
+          default: '{volumes}'
+          description: 'Volumes to mount into container separated with spaces'
+      - string:
+          name: MODE
+          default: '{mode}'
+          description: 'Optional arguments to runner script'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - one-nailgun-db-per-node
+          max-per-node: 1
+          option: category
+    publishers:
+      - archive:
+          artifacts: results/tests/*, results/last/*, results/results/*, nailgun/nailgun_perf_test_report.csv, nailgun/failed_tests.txt
+    scm:
+      - git:
+          url: https://review.openstack.org/openstack/fuel-web.git
+          branches:
+            - '*/master'
+    triggers:
+      - timed: '{timed}'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          timeout: 45
+
+- job-template:
+    name: '{prefix}-docker-nailgun_performance_tests'
+    builders:
+      - shell:
+          !include-raw-escape builders/run_docker.sh
+    description: |
+      Verify nailgun performance tests for patches.
+
+      Uses artifacts from "docker-nailgun_performance_tests" and do not store its own
+      Uses Docker container with python2.7 venv
+      Job is currently running in non-voting mode
+    node: fuel-web-master
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: DOCKER_IMAGE
+          default: 'nailgun_performance_tests'
+      - string:
+          name: ENVVARS
+          default: '{envvars}'
+          description: 'Environment variables'
+      - string:
+          name: VOLUMES
+          default: '{volumes}'
+          description: 'Volumes to mount into container separated with spaces'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - one-nailgun-db-per-node
+          max-per-node: 1
+          option: category
+    publishers:
+      - email:
+          recipients: ksambor@mirantis.com, skalinowski@mirantis.com, ci+alert@mirantis.com
+          send-to-individuals: false
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: '{refspec}'
+                url: https://review.openstack.org/openstack/fuel-web.git
+          choosing-strategy: '{choosing-strategy}'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-web
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+      - timed: '{timed}'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          timeout: 45
+
+- project:
+    name: docker-nailgun_performance_tests
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
+    envvars: '-e JENKINS_URL=$JENKINS_URL'
+    mode: ''
+    jobs:
+      - 'docker-nailgun_performance_tests':
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+          timed: '0 8,20 * * *'
+      - '{prefix}-docker-nailgun_performance_tests':
+          prefix: verify
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+          timed: '0 9 * * *'
