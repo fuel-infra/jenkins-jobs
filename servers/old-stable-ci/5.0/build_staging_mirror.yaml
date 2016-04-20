@@ -2,9 +2,9 @@
     name: '5.0.3.build_staging_mirror'
     builders:
       - shell:
-          !include-raw builders/build_staging_mirror.sh
+          !include-raw: builders/build_staging_mirror.sh
     description:
-      !include-raw descriptions/build_staging_mirror
+      !include-raw: descriptions/build_staging_mirror
     logrotate:
       daysToKeep: 45
       numToKeep: 100

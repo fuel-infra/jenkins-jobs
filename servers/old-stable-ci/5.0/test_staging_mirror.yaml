@@ -2,7 +2,7 @@
     name: '5.0.3.test_staging_mirror'
     project-type: multijob
     description:
-      !include-raw descriptions/test_staging_mirror
+      !include-raw: descriptions/test_staging_mirror
     concurrent: true
     node: mirror
     properties:
@@ -26,7 +26,7 @@
           description: http://osci-mirror-msk.msk.mirantis.net/fwm/files/6.1-2014-12-10-175744
     builders:
       - shell:
-          !include-raw builders/test_staging_mirror_1.sh
+          !include-raw: builders/test_staging_mirror_1.sh
       - multijob:
           name: ISO Building
           condition: SUCCESSFUL
@@ -62,7 +62,7 @@
           filter: build_description.txt
           which-build: last-successful
       - shell:
-          !include-raw builders/test_staging_mirror_2.sh
+          !include-raw: builders/test_staging_mirror_2.sh
     publishers:
       - description-setter:
           regexp: (^[^\s]* is stable.*a href.*)

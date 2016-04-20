@@ -2,7 +2,7 @@
     name: '5.0.3.iso'
     builders:
       - shell:
-          !include-raw builders/iso.sh
+          !include-raw: builders/iso.sh
     description: |
       Build artifacts: iso and img
 

@@ -7,7 +7,7 @@
           which-build: last-successful
           optional: true
       - shell:
-          !include-raw builders/set_stable_mirror.sh
+          !include-raw: builders/set_stable_mirror.sh
     description: |
       Update stable symlink target to specified mirror version.<br>
 

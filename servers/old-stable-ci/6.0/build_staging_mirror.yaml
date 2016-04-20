@@ -2,13 +2,13 @@
     name: '6.0.1.build_staging_mirror'
     builders:
       - shell:
-          !include-raw builders/update_reprepro.sh
+          !include-raw: builders/update_reprepro.sh
       - shell:
-          !include-raw builders/build_staging_mirror_1.sh
+          !include-raw: builders/build_staging_mirror_1.sh
       - shell:
-          !include-raw builders/build_staging_mirror_2.sh
+          !include-raw: builders/build_staging_mirror_2.sh
     description:
-      !include-raw descriptions/build_staging_mirror
+      !include-raw: descriptions/build_staging_mirror
     logrotate:
       daysToKeep: 45
       numToKeep: 100

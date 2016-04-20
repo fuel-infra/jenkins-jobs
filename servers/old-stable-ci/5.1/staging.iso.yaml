@@ -2,7 +2,7 @@
     name: '5.1.2.staging.iso'
     builders:
       - shell:
-          !include-raw builders/staging.iso.sh
+          !include-raw: builders/staging.iso.sh
     concurrent: true
     description: |
       Build fuel master code on top of staging files/5.1.2-timestamp Fuel mirror.

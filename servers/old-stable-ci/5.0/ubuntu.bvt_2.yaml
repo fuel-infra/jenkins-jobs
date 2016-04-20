@@ -6,7 +6,7 @@
       - systest
     concurrent: true
     description:
-      !include-raw descriptions/ubuntu.bvt_2
+      !include-raw: descriptions/ubuntu.bvt_2
     logrotate:
       daysToKeep: 30
       numToKeep: 50
@@ -27,7 +27,7 @@
       - nosetests
       - email-systest:
           body-failed:
-            !include-raw notifications/bvt.failed
+            !include-raw: notifications/bvt.failed
           mail-to: ci+alert@mirantis.com,mos-qa@mirantis.com
     scm:
       - openstack:

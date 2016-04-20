@@ -6,7 +6,7 @@
       - systest
     concurrent: true
     description:
-      !include-raw descriptions/smoke
+      !include-raw: descriptions/smoke
     logrotate:
       daysToKeep: 30
       numToKeep: 50
@@ -27,7 +27,7 @@
       - nosetests
       - email-systest:
           body-failed:
-            !include-raw notifications/smoke.failed
+            !include-raw: notifications/smoke.failed
           mail-to: ci+alert@mirantis.com,mos-qa@mirantis.com
     scm:
       - openstack:
