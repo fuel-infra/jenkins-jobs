@@ -275,9 +275,9 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'numa_cpu_pinning'
          properties: |
-           export KVM_USE=True
-           export SLAVE_NODE_CPU=6
-           export DRIVER_ENABLE_ACPI=true
-           export NUMA_NODES=2
+           KVM_USE=true
+           SLAVE_NODE_CPU=6
+           DRIVER_ENABLE_ACPI=true
+           NUMA_NODES=2
          timeout: '600'
 
