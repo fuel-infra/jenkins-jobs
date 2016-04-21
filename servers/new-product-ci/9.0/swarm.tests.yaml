@@ -278,4 +278,7 @@
            DRIVER_ENABLE_ACPI=true
            NUMA_NODES=2
          timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'idempotency'
+         timeout: '600'
 
