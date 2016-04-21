@@ -215,9 +215,6 @@
             - name: '10.0.system_test.ubuntu.network_templates'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '10.0.system_test.ubuntu.check_radosgw'
-              current-parameters: true
-              kill-phase-on: NEVER
             - name: '10.0.system_test.ubuntu.ironic_deploy_swift'
               current-parameters: true
               kill-phase-on: NEVER
