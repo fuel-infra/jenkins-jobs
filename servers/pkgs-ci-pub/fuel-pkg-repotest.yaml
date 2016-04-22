@@ -9,17 +9,23 @@
       - zuul
     scm:
       - fuel-infra:
-          scm-user: '{scm-user}'
           scm-repo: '{install-scm-repo}'
-          scm-basedir: ''
-          scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{install-scm-branch}'
+          scm-basedir: ''
     builders:
       - copyartifact:
           project: '{project-version}-fuel-pkg-build-{distro}'
-          filter: 'buildresult.params, {pkg_type}.publish.setenvfile'
+          filter: 'buildresult.params'
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
+          optional: true
+      - copyartifact:
+          project: '{project-version}-fuel-pkg-publish-{distro}'
+          filter: '{pkg_type}.publish.setenvfile'
+          which-build: last-successful
+          parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
+          optional: true
+      - shell: touch 'buildresult.params' '{pkg_type}.publish.setenvfile'
       - inject:
           properties-file: 'buildresult.params'
       - inject:
