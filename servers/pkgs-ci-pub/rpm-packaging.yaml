@@ -233,18 +233,25 @@
           echo ${{OVERALL_RESULT}} > job_result
       - trigger-builds:
           - project: '{project-version}-fuel-pkg-publish-{distro}'
-            current-parameters: false
             block: true
+            current-parameters: false
+            predefined-parameters: |
+                ZUUL_PROJECT=${{ZUUL_PROJECT}}
+                ZUUL_CHANGE=${{ZUUL_CHANGE}}
+                ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
             parameter-factories:
               - factory: filebuild
                 file-pattern: 'artifacts/*-buildresult.params'
-#      - trigger-builds:
-#          - project: '{project-version}-rpm-packaging-install'
-#            current-parameters: false
-#            block: true
-#            parameter-factories:
-#              - factory: filebuild
-#                file-pattern: 'artifacts/*-buildresult.params'
+          - project: '{project-version}-fuel-pkg-install-{distro}'
+            block: true
+            current-parameters: false
+            predefined-parameters: |
+                ZUUL_PROJECT=${{ZUUL_PROJECT}}
+                ZUUL_CHANGE=${{ZUUL_CHANGE}}
+                ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
+            parameter-factories:
+              - factory: filebuild
+                file-pattern: 'artifacts/*-buildresult.params'
       - shell: |
           OVERALL_RESULT=$(cat job_result)
           exit ${{OVERALL_RESULT}}
@@ -254,69 +261,6 @@
           allow-empty: True
 
     node: '{build-node}'
-
-- job-template:
-    name: '{project-version}-rpm-packaging-install'
-    concurrent: true
-    description: |
-        This job installs RPM package and runs some tests if defined.
-    wrappers:
-      - install-vm-creds
-      - pre-scm-buildstep:
-        - shell: 'rm -rf *'
-      - timestamps
-      - ansicolor
-    triggers:
-      - zuul
-    scm:
-      - fuel-infra:
-          scm-user: '{scm-user}'
-          scm-repo: '{install-scm-repo}'
-          scm-basedir: ''
-          scm-credentials-id: '{scm-credentials-id}'
-          scm-branch: '{install-scm-branch}'
-    builders:
-      - shell:
-          !include-raw-escape builders/install.cleanup.sh
-      - copyartifact:
-          project: '{project-version}-fuel-pkg-publish-{distro}'
-          filter: 'rpm.publish.setenvfile'
-          which-build: last-successful
-          parameter-filters: PKG_PATH=${{PKG_PATH}}
-      - inject:
-          properties-file: 'rpm.publish.setenvfile'
-      - shell: |
-          #!/bin/bash
-
-          set -o errexit
-          set -o pipefail
-          set -o xtrace
-
-          export DIST=${{DIST:-{distro}}}
-          export PACKAGELIST=${{RPM_BINARIES}}
-          export REPO_URL=${{RPM_REPO_URL}}
-          export GERRIT_PROJECT=${{ZUUL_PROJECT}}
-
-          # Remove quotes, double and trailing slashes
-          export REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
-          export EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
-          export PACKAGELIST=$(echo "${{PACKAGELIST}}" | sed 's|,| |g')
-
-          bash -x vm-test |& tee vm-test.log
-    publishers:
-      - post-tasks:
-        - matches:
-            - log-text: '/run/shm/'
-              operator: AND
-          script:
-            !include-raw-escape builders/install.destroy.vm.sh
-      - junit:
-          results: 'report.xml'
-      - archive:
-          artifacts: '**/*.xml, rpm.install.setenvfile, vm-test.log'
-          allow-empty: true
-
-    node: '{install-node}'
 
 ################################################################################
 # Jobs
@@ -347,23 +291,13 @@
     rpm-repo-path: '/rpm-packaging/{project-version}/{distro}'
 
     # Publisher's parameters
-    pkg-sign-key: '1FA22B08'
     repo-host: 'packages.fuel-infra.org'
     repo-base-path: '/home/jenkins/pubrepos'
     cr-path-prefix: 'review/'
 
     is_updates: false
 
-    # Install test
-    scm-user: 'sandbox-pkgs-ci'
-    scm-credentials-id: '9d59873c-4e57-42b3-ac97-11c7974d082d'
-    install-scm-repo: 'infra/ci-test-request'
-    install-scm-branch: 'origin/master'
-
     build-node: 'new-builder'
-    publish-node: 'new-publisher'
-    install-node: 'install-node'
 
     jobs:
       - '{project-version}-rpm-packaging-build'
-      - '{project-version}-rpm-packaging-install'
