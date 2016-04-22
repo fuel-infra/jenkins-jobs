@@ -35,8 +35,6 @@
     is_updates: 'false'
 
     # Parameters for install-test
-    scm-user: 'changeme'
-    scm-credentials-id: 'changeme'
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/master'
 
