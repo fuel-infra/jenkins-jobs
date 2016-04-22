@@ -44,8 +44,10 @@
            branches:
               - origin/master
            wipe-workspace: true
-    wrapper:
-        name: openstack-ci-jenkins
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - openstack-ci-jenkins
     publishers:
        - email:
            notify-every-unstable-build: true
