@@ -114,7 +114,7 @@ Shell-scripts
 
     set -ex
 
-  whenever possible. In case ``set -ex`` can not be used, leave a
+  whenever possible. In case this rule can not be used, leave a
   comment in the script.
 
 * Use ``source`` command instead of ``dot``
@@ -124,6 +124,11 @@ Shell-scripts
 * Follow usual BASH coding-style, for example use ``${SOME_VAR}``
   instead of ``$SOME_VAR`` whenever possible. See include-raw section
   for exceptions.
+
+* Try to limit line length to 100 symbols whenever possible.
+
+* Try to avoid ``cmd1 && cmd2 || cmd3``,
+  see https://github.com/koalaman/shellcheck/wiki/SC2015 for details
 
 include-raw vs include-raw-escape
 ---------------------------------
@@ -139,16 +144,15 @@ When script/text file is included into *job-template* config:
 
    - use ``!include-raw-escape``
 
-When script/text file is included into *job-template* config and you
+When script file is included into *job-template* config and you
 need to pass certain parameters from the template to it, consider
-injecting variables via env-inject plugin. If it is not possible:
+injecting variables via env-inject plugin.
+
+When text file is included into *job-template* config and you
+need to pass certain parameters from the template to it:
 
    - use ``!include-raw``
-   - in BASH scripts:
-
-     - use curly brackets only for template parameters,
-     - add a comment with list of parameters, which are going to be
-       substituted from template variables
+   - curly brackets only for template parameters
 
 Simple Fuel CI jobs (verify-<repo>-<smth>)
 ------------------------------------------
