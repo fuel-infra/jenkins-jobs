@@ -1,0 +1,138 @@
+- job-template:
+    # Variables required:
+    #
+    # version-id
+    #     Versioned identificator of the job.
+    #     For example: ``8.0``, ``8.0-kilo``, ``master``.
+    # dist
+    #     OPENSTACK_RELEASE variable (ex, 'Ubuntu').
+    # testgroup
+    #     Test group used as --group parameter in system_test.sh
+    #     (ex, smoke_neutron)
+    # mos
+    #     MOS version
+    # project
+    #     Name of the repository with code to test (ex, fuel-library)
+    # projectbranch
+    #     Branch of the repository above.
+    #     Used for Gerrit Trigger configuration.
+    # projectpackage
+    #     Name of the package to build from project repository
+    # venvpath
+    #     Path to virtual env with fuel-devops installed (VENV_PATH)
+    # properties
+    #     List of strings "VAR=value".
+    #     Additional variables injected in job environment.
+
+    name: '8.0.{project}.pkgs.{dist}.{testgroup}'
+    properties: ''
+    concurrent: true
+
+    description: |
+      Runs deployment test with TEST_GROUP={testgroup} for reviews in
+      openstack/{project}
+    node: '{version-id}-{project}-pkgs'
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/{projectbranch}'
+    properties:
+      - throttle:
+          max-per-node: 1
+          option: project
+      - heavy-job:
+          weight: 6
+
+    logrotate:
+      daysToKeep: 90
+      numToKeep: -1
+      artifactDaysToKeep: 7
+      artifactNumToKeep: -1
+
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/openstack/{project}.git
+          basedir: '{project}'
+          timeout: 20
+          choosing-strategy: gerrit
+      - git:
+          url: 'https://git.openstack.org/openstack/fuel-mirror.git'
+          branches:
+            - '{projectbranch}'
+          basedir: 'fuel-mirror'
+
+    builders:
+      - inject:
+          # pkgs variables
+          properties-content: |
+            RPM_MIRROR_BASE_NAME={rpm-mirror-base-name}
+            DEB_MIRROR_BASE_NAME={deb-mirror-base-name}
+            PROJECT={project}
+            PROJECT_PACKAGE={projectpackage}
+      - inject:
+          # env variables
+          properties-content: |
+            VENV_PATH={venvpath}
+            SYSTEST_ROOT=/home/jenkins/workspace/systest/{version-id}
+            ISO_PATH=/home/jenkins/workspace/iso/fuel_{version-id}.iso
+            ENV_NAME=env_{version-id}_{testgroup}
+            ENV_JOB=devops.{version-id}.env
+      - inject:
+          # deployment test variables
+          properties-content: |
+            OPENSTACK_RELEASE={dist}
+            TEST_GROUP={testgroup}
+            UPDATE_FUEL=true
+            UPDATE_FUEL_PATH=$WORKSPACE/packages/
+            UBUNTU_RELEASE=auxiliary
+            LOCAL_MIRROR_UBUNTU=/var/www/nailgun/ubuntu/auxiliary/
+            LOCAL_MIRROR_CENTOS=/var/www/nailgun/centos/auxiliary/
+            EXTRA_RPM_REPOS_PRIORITY=15
+            EXTRA_DEB_REPOS_PRIORITY=1100
+      - inject:
+          # overrides
+          properties-content: '{properties}'
+
+      - shell:
+          !include-raw-escape builders/build-pkgs.sh
+      - shell:
+          !include-raw-escape builders/test-pkgs.sh
+
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'logs/$BUILD_NUMBER/*,packages/*'
+          latest-only: false
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+          regexp-for-failed: "'Description string: (.*)'"
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'openstack/{project}'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: '{projectbranch}'
+          readable-message: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
+      # check for monitoring
+      - timed: '{timed}'
+
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: '{timeout}'
+          write-description: true
