@@ -12,3 +12,40 @@
             - job-discover
             - job-build
             - job-cancel
+
+- scm:
+    name: fuel-infra-tools
+    scm:
+      - git:
+          url: 'https://review.fuel-infra.org/{scm-repo}'
+          basedir: '{scm-basedir}'
+          skip-tag: true
+          branches:
+            - '{scm-branch}'
+          wipe-workspace: false
+          clean:
+            before: true
+
+- scm:
+    name: fuel-infra
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.fuel-infra.org/$GERRIT_PROJECT
+          choosing-strategy: gerrit
+          clean:
+            before: true
+
+- scm:
+    name: main-git
+    scm:
+      - git:
+         url: 'https://git.openstack.org/openstack/{reponame}.git'
+         branches:
+          - '{repobranch}'
+         basedir: '{basedir}'
+
