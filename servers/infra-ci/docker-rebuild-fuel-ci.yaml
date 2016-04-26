@@ -27,6 +27,9 @@
     triggers:
       - timed: '0 2 * * *'
     wrappers:
+      - ansicolor:
+          colormap: css
+      - timestamps
       - timeout:
           fail: true
           timeout: 60
