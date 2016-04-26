@@ -6,19 +6,20 @@
 # - EXTRA_RPM_REPOS         additional CentOS repos
 # - make_args               (array) additional parameters to make command
 
-export BUILD_DIR="${WORKSPACE}/${JOB_NAME}/build"
-export LOCAL_MIRROR="${WORKSPACE}/${JOB_NAME}/local_mirror"
+export BUILD_DIR="${WORKSPACE}/../tmp/${JOB_NAME}/build"
+export LOCAL_MIRROR="${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror"
 export ARTS_DIR="${WORKSPACE}/artifacts"
 export DEPS_DIR="${BUILD_DIR}/deps"
-export DESTINATION_DIR="${WORKSPACE}/${JOB_NAME}/late-artifacts"
+export DESTINATION_DIR="${WORKSPACE}/../tmp/${JOB_NAME}/late-artifacts"
 
 
 echo "STEP 1/4. Clean before start"
 # =================================
 
-rm -rf "${ARTS_DIR}"
-rm -rf "${DEPS_DIR}"
-rm -rf "${DESTINATION_DIR}"
+for _d in "${ARTS_DIR}" "${DEPS_DIR}" "${DESTINATION_DIR}" ; do
+    rm -rf "${_d}"
+    mkdir -p "${_d}"
+done
 
 
 echo "STEP 2/4. Apply crunches"
@@ -34,6 +35,7 @@ echo "STEP 3/4. Make packages-late target"
 # ========================================
 
 make deep_clean
+
 # make_args is list of additional args
 # shellcheck disable=SC2086
 make packages-late ${make_args}
@@ -42,9 +44,10 @@ echo "STEP 4/4. Gather results"
 # ========================================
 
 # copy pkgs
-mkdir -p "${DESTINATION_DIR}"
 find "${BUILD_DIR}/packages/rpm/RPMS/" -type f -name '*.rpm' -exec cp -v {} "${DESTINATION_DIR}" \;
 ls "${DESTINATION_DIR}"
+
+touch "${ARTS_DIR}/buildresult.params"
 
 # create artifact for publisher
 # shellcheck disable=SC2129
@@ -71,4 +74,5 @@ echo "RPM_UPDATES_REPO_PATH=mos-repos/centos/mos8.0-centos7-fuel/updates    " >>
 echo "RPM_SECURITY_REPO_PATH=mos-repos/centos/mos8.0-centos7-fuel/security  " >> "${ARTS_DIR}/buildresult.params"
 echo "RPM_HOLDBACK_REPO_PATH=mos-repos/centos/mos8.0-centos7-fuel/holdback  " >> "${ARTS_DIR}/buildresult.params"
 echo "REMOTE_REPO_HOST=perestroika-repo-tst.infra.mirantis.net              " >> "${ARTS_DIR}/buildresult.params"
+
 

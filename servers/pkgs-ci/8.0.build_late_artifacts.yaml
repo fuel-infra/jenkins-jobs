@@ -5,7 +5,6 @@
       <ul>
         <li>fuel-bootstrap-image</li>
         <li>fuel-docker-images</li>
-        <li>fuel-target-centos-images</li>
       </ul>
 
     concurrent: false
@@ -84,11 +83,31 @@
     builders:
       - shell:
           !include-raw builders/build_late_artifacts.sh
+      - trigger-builds:
+          - project: 'mos8.0-pkg-publish-centos'
+            current-parameters: false
+            predefined-parameters: |
+              PROJECT_NAME=mos
+              PROJECT_VERSION=8.0
+              IS_UPDATES=true
+              RESYNC_ONLY=false
+              MARKER=$BUILD_TAG
+            property-file: 'artifacts/buildresult.params'
+            block: true
+      - copyartifact:
+            project: 'mos8.0-pkg-publish-centos'
+            filter: 'rpm.publish.setenvfile'
+            parameter-filters: 'MARKER=$BUILD_TAG'
+            which-build: 'last-completed'
 
     publishers:
       - archive:
           allow-empty: false
-          artifacts: artifacts//buildresult.params
+          artifacts: artifacts/buildresult.params
+          latest-only: false
+      - archive:
+          allow-empty: false
+          artifacts: rpm.publish.setenvfile
           latest-only: false
       - email-ext:
           default-subject: '$DEFAULT_SUBJECT'
