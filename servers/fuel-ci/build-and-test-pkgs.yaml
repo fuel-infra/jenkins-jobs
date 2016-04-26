@@ -128,6 +128,12 @@
                   branch-pattern: '{projectbranch}'
           readable-message: true
           custom-url: '* $JOB_NAME $BUILD_URL'
+          # if true - then run in non-voting mode
+          skip-vote:
+            successful: '{obj:non_voting}'
+            failed: '{obj:non_voting}'
+            unstable: '{obj:non_voting}'
+            notbuilt: '{obj:non_voting}'
       # check for monitoring
       - timed: '{timed}'
 

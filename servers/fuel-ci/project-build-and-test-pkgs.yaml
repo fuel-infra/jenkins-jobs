@@ -8,6 +8,7 @@
     deb-mirror-base-name: 'master mos-master'
     rpm-mirror-base-name: 'mos-master-centos7'
     timeout: 200
+    non_voting: false
 
     project:
       - fuel-agent:
@@ -87,6 +88,7 @@
     deb-mirror-base-name: '9.0 mos9.0'
     rpm-mirror-base-name: 'mos9.0-centos7'
     timeout: 200
+    non_voting: false
 
     project:
       - fuel-agent:
