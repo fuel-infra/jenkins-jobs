@@ -13,7 +13,7 @@
       artifactDaysToKeep: 90
       daysToKeep: 90
 
-    node: new-builder
+    node: late-artifacts
 
     properties:
       - heavy-job:
