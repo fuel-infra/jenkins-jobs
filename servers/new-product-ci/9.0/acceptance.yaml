@@ -13,6 +13,11 @@
             TESTRAIL_MILESTONE=9.0
             LAUNCHPAD_MILESTONE=9.0
 
+- project:
+    name: 9.0.acceptance-helpers
+    jobs:
+      - '9.0.acceptance.timers'
+
 - job:
     name: '9.0.acceptance.runner'
     project-type: multijob

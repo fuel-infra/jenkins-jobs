@@ -1,7 +1,7 @@
 - job-template:
-    name: '{version-id}.swarm.timer.{repo_type}'
+    name: '{version-id}.{id}.timer.{repo_type}'
     description: |
-      Trigger {version-id}.swarm.runner with latest stable iso build.
+      Trigger {version-id}.{id}.runner with latest stable iso build.
     node: 'runner'
     properties:
       - heavy-job:
@@ -15,7 +15,7 @@
         - timed: '{trigger}'
     builders:
       - shell:
-          !include-raw-escape builders/swarm.timer.sh
+          !include-raw-escape builders/test.timer.sh
     publishers:
       - archive:
           allow-empty: false
@@ -26,7 +26,7 @@
       - email-default:
           mail-to: 'ci+alert@mirantis.com'
       - trigger-parameterized-builds:
-        - project: '{version-id}.swarm.runner'
+        - project: '{version-id}.{id}.runner'
           condition: UNSTABLE_OR_BETTER
           property-file: links.txt
           boolean-parameters:
