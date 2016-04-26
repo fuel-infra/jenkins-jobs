@@ -281,4 +281,8 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'idempotency'
          timeout: '600'
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'support_dpdk'
+         properties: |
+           KVM_USE=true
 

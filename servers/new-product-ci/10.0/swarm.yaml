@@ -242,3 +242,6 @@
             - name: '10.0.system_test.ubuntu.idempotency'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '10.0.system_test.ubuntu.support_dpdk'
+              current-parameters: true
+              kill-phase-on: NEVER
