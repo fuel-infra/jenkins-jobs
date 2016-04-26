@@ -29,6 +29,9 @@
           predefined-parameters: |
             IMAGE=$IMAGE
     wrappers:
+      - ansicolor:
+          colormap: css
+      - timestamps
       - timeout:
           fail: true
           timeout: 120
