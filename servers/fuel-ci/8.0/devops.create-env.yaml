@@ -1,0 +1,62 @@
+- job-template:
+    name: 'devops.8.0.create-env'
+    concurrent: true
+    description: |
+      Create environment for fuel-library system tests with fuel-devops 2.5.x
+    properties:
+      - heavy-job:
+          weight: '1'
+      - throttle:
+          max-per-node: 1
+          option: project
+
+    parameters:
+      - string:
+          name: ENV_PREFIX
+          default: 'env_{version-id}'
+          description: 'List of env prefixes to clean up'
+      - string:
+          name: ISO_PATH
+          default: '/home/jenkins/workspace/iso/fuel_{version-id}.iso'
+      - string:
+          name: VENV_PATH
+          default: '{venvpath}'
+      - string:
+          name: SYSTEST_ROOT
+          default: '/home/jenkins/workspace/systest/{version-id}'
+      - node:
+          name: NODE
+          description: "Select slave"
+          ignore-offline-nodes: true
+          allowed-multiselect: true
+      - string:
+          name: FUEL_QA_COMMIT
+          default: '{projectbranch}'
+          description: 'Commit SHA of fuel-qa repository'
+      - bool:
+          name: UPDATE_VENV
+          default: false
+          description: 'If true VENV_PATH will be recreated from scratch'
+
+    scm:
+      - git:
+          url: 'https://git.openstack.org/openstack/fuel-qa.git'
+          branches:
+            - $FUEL_QA_COMMIT
+          basedir: fuel-qa
+
+    builders:
+      - shell:
+          !include-raw-escape builders/update_venv.sh
+      - shell:
+          !include-raw-escape builders/update-env.sh
+
+    publishers:
+      - description-setter:
+          string: "Description string: (.*)"
+
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 10
+          write-description: true
