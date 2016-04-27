@@ -22,7 +22,7 @@
             PROJECT_NAME={project-name}
             PROJECT_VERSION={project-version}
 
-            IS_UPDATES={is_updates}
+            IS_UPDATES={is-updates}
 
             DIST={distro}
             PKG_TYPE={pkg_type}
@@ -89,7 +89,9 @@
             PROJECT_NAME={project-name}
             PROJECT_VERSION={project-version}
 
-            IS_UPDATES={is_updates}
+            IS_UPDATES={is-updates}
+
+            IS_DOWNGRADE={is-downgrade}
 
             DIST={distro}
 
@@ -162,6 +164,142 @@
 
     node: '{publish-node}'
 
+- job-template:
+    name: '{project-version}-pkg-{project-name}-install-{os}-{distro}'
+    project-type: freestyle
+    concurrent: true
+    parameters:
+      - gerrit
+    properties:
+      - inject:
+          properties-content: |
+            DIST={distro}
+            REPO_TYPE={pkg_type}
+            IS_DOWNGRADE={is-downgrade}
+    wrappers:
+      - install-vm-creds
+      - pre-scm-buildstep:
+        - shell: 'rm -rf ${{WORKSPACE?}}/*'
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+    scm:
+      - fuel-infra:
+          scm-repo: '{install-scm-repo}'
+          scm-branch: '{install-scm-branch}'
+          scm-basedir: ''
+          scm-user: '{scm-user}'
+          scm-credentials-id: '{scm-credentials-id}'
+    builders:
+      - shell:
+          !include-raw-escape builders/mos.install.cleanup.sh
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          filter: 'buildresult.params'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+          filter: '{pkg_type}.publish.setenvfile'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      - shell: touch 'buildresult.params' '{pkg_type}.publish.setenvfile'
+      - inject:
+          # Injects EXTRAREPO
+          properties-file: 'buildresult.params'
+      - inject:
+          # Injects package lists with version and repository URL
+          properties-file: '{pkg_type}.publish.setenvfile'
+      - shell: |
+          #!/bin/bash -xe
+
+          # Check parameters required by test script(s)
+          : "${{DIST?}}"
+          : "${{REPO_TYPE?}}"
+
+          # Prepare parameters for test
+          export PACKAGEVERSION=${{DEB_VERSION:-${{RPM_VERSION}}}}
+          export PACKAGELIST=${{DEB_BINARIES:-${{RPM_BINARIES}}}}
+          export REPO_URL=${{DEB_REPO_URL:-${{RPM_REPO_URL}}}}
+
+          # Remove quotes, double and trailing slashes
+          REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+          EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+          PACKAGELIST=$(echo "${{PACKAGELIST}}" | sed 's|,| |g')
+
+          for script in version-test-{pkg_type} vm-test
+          do
+            bash -x "${{WORKSPACE}}/${{script}}"
+          done
+
+    publishers:
+      - post-tasks:
+        - matches:
+            - log-text: '/run/shm/'
+          script:
+            !include-raw-escape builders/mos.install.destroy.vm.sh
+      - junit:
+          results: 'report.xml'
+      - archive:
+          artifacts: '**/*.xml, {pkg_type}.install.setenvfile'
+          allow-empty: true
+
+    node: '{install-node}'
+
+- job-template:
+    name: '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
+    project-type: freestyle
+    concurrent: true
+    parameters:
+      - gerrit
+    wrappers:
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+    scm:
+      - fuel-infra:
+          scm-repo: '{install-scm-repo}'
+          scm-branch: '{install-scm-branch}'
+          scm-basedir: ''
+          scm-user: '{scm-user}'
+          scm-credentials-id: '{scm-credentials-id}'
+    builders:
+      - shell: rm -vf 'buildresult.params' '{pkg_type}.publish.setenvfile'
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          filter: 'buildresult.params'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+          filter: '{pkg_type}.publish.setenvfile'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      - shell: touch 'buildresult.params' '{pkg_type}.publish.setenvfile'
+      - inject:
+          # Injects EXTRAREPO
+          properties-file: 'buildresult.params'
+      - inject:
+          # Injects package lists with version and repository URL
+          properties-file: '{pkg_type}.publish.setenvfile'
+      - shell: |
+          #!/bin/bash -xe
+          export REPO_URL=${{DEB_REPO_URL:-${{RPM_REPO_URL}}}}
+
+          # Remove quotes, double and trailing slashes
+          REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+          EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+
+          bash -x repo-test-{pkg_type}-docker
+
+    node: '{install-node}'
+
 ################################################################################
 # Job group(s)
 ################################################################################
@@ -173,7 +311,7 @@
     project-version:
     - 9.0:
         # Update workflow
-        is_updates: 'false'
+        is-updates: 'false'
 
         # Repository parameters for project
         deb-dist-name: 'mos{project-version}'
@@ -197,6 +335,8 @@
     jobs:
     - '{project-version}-pkg-{project-name}-build-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-install-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
 
 ################################################################################
 # Project definition(s)
@@ -204,6 +344,9 @@
 
 - project:
     name: 'feature'
+
+    # Allow package downgrade
+    is-downgrade: 'true'
 
     deb-origin-release: 'Mirantis'
     deb-origin-test: 'testing'
@@ -218,9 +361,16 @@
     gerrit-port: '29418'
     gerrit-user: 'openstack-ci-jenkins'
 
+    # Install test repository
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'master'
+    scm-user: 'openstack-ci-jenkins'
+    scm-credentials-id: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
+
     # Job slave nodes
     build-node: 'new-builder'
     publish-node: 'new-publisher'
+    install-node: 'install-node'
 
     jobs:
     - '{project-version}-pkg-{project-name}'
