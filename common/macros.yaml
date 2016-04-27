@@ -94,7 +94,8 @@
             - log-text: 'Started'
           run-if-job-successful: true
           script: |
-              #!/bin/bash -xe
+              #!/bin/bash
+              set -ex
               if [ -n "${PKG_JSON_REPORT}" -a "${PKG_JSON_REPORT}" != "pkg-versions.json" ]; then
                   cp -f ${PKG_JSON_REPORT} pkg-versions.json
               fi

@@ -1,5 +1,5 @@
-#!/bin/bash -ex
-
+#!/bin/bash
+set -ex
 #
 # Script used to download ISO, it requires MAGNET_LINK
 # variable to work correctly.
