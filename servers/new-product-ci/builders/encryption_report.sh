@@ -1,4 +1,5 @@
-#!/bin/bash -ex
+#!/bin/bash
+set -ex
 # Encryption compliance
 
 create_artifacts () {
