@@ -36,7 +36,8 @@
       - inject:
           properties-file: '{pkg_type}.publish.setenvfile'
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash
+          set -ex
           export DIST=${{DIST:-{distro}}}
           export PACKAGEVERSION=${{DEB_VERSION:-${{RPM_VERSION}}}}
           export PACKAGELIST=${{DEB_BINARIES:-${{RPM_BINARIES}}}}

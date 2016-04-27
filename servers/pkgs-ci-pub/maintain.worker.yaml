@@ -18,7 +18,8 @@
       - perestroika
     builders:
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash
+          set -ex
           # Remove private DNS settings
           cat /dev/null > ${{WORKSPACE}}/fuel-mirror/perestroika/docker-builder/config
       - shell:

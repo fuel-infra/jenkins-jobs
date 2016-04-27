@@ -45,7 +45,8 @@
       - inject:
           properties-file: 'buildresult.params'
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash
+          set -ex
 
           # Remove stale artifacts
           rm -vf *.publish.setenvfile buildresult.params pkg-versions.*
