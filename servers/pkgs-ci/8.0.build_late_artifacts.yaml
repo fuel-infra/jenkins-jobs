@@ -84,7 +84,7 @@
       - shell:
           !include-raw builders/build_late_artifacts.sh
       - trigger-builds:
-          - project: 'mos8.0-pkg-publish-centos'
+          - project: '8.0-pkg-publish-centos'
             current-parameters: false
             predefined-parameters: |
               PROJECT_NAME=mos
@@ -95,7 +95,7 @@
             property-file: 'artifacts/buildresult.params'
             block: true
       - copyartifact:
-            project: 'mos8.0-pkg-publish-centos'
+            project: '8.0-pkg-publish-centos'
             filter: 'rpm.publish.setenvfile'
             parameter-filters: 'MARKER=$BUILD_TAG'
             which-build: 'last-completed'
