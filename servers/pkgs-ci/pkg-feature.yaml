@@ -1,0 +1,226 @@
+################################################################################
+# Job Templates
+################################################################################
+
+- job-template:
+    name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+    concurrent: True
+    description: |
+        This job builds a package and then publishes it by triggerring publisher job.<br>
+        After publishing are triggered test jobs:
+        <ul>
+          <li> install test for just built packages
+          <li> system test using just built packages
+        </ul>
+    scm:
+      - perestroika
+    parameters:
+      - gerrit
+    properties:
+      - inject:
+          properties-content: |
+            PROJECT_NAME={project-name}
+            PROJECT_VERSION={project-version}
+
+            IS_UPDATES={is_updates}
+
+            DIST={distro}
+            PKG_TYPE={pkg_type}
+
+            REMOTE_REPO_HOST={publish-repo-host}
+            REPO_REQUEST_PATH_PREFIX=review/
+
+            SRC_PROJECT_PATH=openstack
+            SPEC_PROJECT_PATH=openstack-build
+            SPEC_PROJECT_SUFFIX=-build
+            SPEC_PREFIX_PATH={spec_prefix_path}
+
+            BASE_RPM_REPO_PATH={mos-rpm-repo-path}
+            BASE_DEB_REPO_PATH={mos-deb-repo-path}
+            DEB_DIST_NAME={deb-dist-name}
+
+            GERRIT_HOST={gerrit-host}
+            GERRIT_PORT={gerrit-port}
+            GERRIT_USER={gerrit-user}
+    wrappers:
+      - gerrit-creds
+      - timeout:
+          timeout: 300
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+
+          # FIXME: use perestroika from openstack/fuel-mirror
+          # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
+          # and then copy perestroika directory to root ${{WORKSPACE}}
+          cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
+      - guess-mirror
+      - shell:
+          !include-raw-escape builders/pkg_build.sh
+    publishers:
+      - email-alert-on-merge
+      - junit:
+          results: 'buildresult.xml'
+      - archive:
+          artifacts: 'buildresult.params, buildresult.xml, {pkg_type}.publish.setenvfile, tests.envfile, systest.params'
+          allow-empty: True
+      - post-tasks:
+        - matches:
+            - log-text: 'Started'
+          run-if-job-successful: true
+          script: rm -rf *
+
+    node: '{build-node}'
+
+- job-template:
+    name: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+    project-type: freestyle
+    concurrent: false
+    quiet-period: 60
+    parameters:
+      - gerrit
+    properties:
+      - inject:
+          properties-content: |
+            PROJECT_NAME={project-name}
+            PROJECT_VERSION={project-version}
+
+            IS_UPDATES={is_updates}
+
+            DIST={distro}
+
+            SIGKEYID={pkg-sign-key}
+
+            REMOTE_REPO_HOST={publish-repo-host}
+            REPO_REQUEST_PATH_PREFIX=review/
+            REPO_BASE_PATH={repo-base-path}
+
+            DEB_REPO_PATH={deb-repo-path}/{project-version}
+            DEB_DIST_NAME={deb-dist-name}
+            DEB_PROPOSED_DIST_NAME={deb-dist-name}-proposed
+            DEB_UPDATES_DIST_NAME={deb-dist-name}-updates
+            DEB_SECURITY_DIST_NAME={deb-dist-name}-security
+            DEB_HOLDBACK_DIST_NAME={deb-dist-name}-holdback
+
+            RPM_OS_REPO_PATH={rpm-repo-path}/os
+            RPM_UPDATES_REPO_PATH={rpm-repo-path}/updates
+            RPM_PROPOSED_REPO_PATH={rpm-repo-path}/proposed
+            RPM_SECURITY_REPO_PATH={rpm-repo-path}/security
+            RPM_HOLDBACK_REPO_PATH={rpm-repo-path}/holdback
+
+            DEB_ORIGIN_RELEASE={deb-origin-release}
+            DEB_ORIGIN_TEST={deb-origin-test}
+
+            PKG_JSON_REPORT=/home/jenkins/{project-version}-pkg-{project-name}-versions.json
+    wrappers:
+      - jenkins
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+    scm:
+      - perestroika
+    builders:
+      - shell: rm -vf 'buildresult.params'
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          filter: 'buildresult.params'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      - shell: touch 'buildresult.params'
+      - inject:
+          properties-file: 'buildresult.params'
+      - shell: |
+          #!/bin/bash -xe
+
+          # Remove stale artifacts
+          rm -vf *.publish.setenvfile pkg-versions.*
+
+          # FIXME: use perestroika from openstack/fuel-mirror
+          # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
+          # and then copy perestroika directory to root ${{WORKSPACE}}
+
+          cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
+
+          if [ "${{GERRIT_CHANGE_STATUS}}" = "MERGED" ]; then
+              export ORIGIN=${{DEB_ORIGIN_RELEASE}}
+          else
+              export ORIGIN=${{DEB_ORIGIN_TEST}}
+          fi
+
+          /bin/bash -xe publisher.v5/publish-{pkg_type}-binaries.sh
+    publishers:
+      - pkg-version-report
+      - archive:
+           artifacts: '*.publish.setenvfile, pkg-versions.*'
+           allow-empty: true
+
+    node: '{publish-node}'
+
+################################################################################
+# Job group(s)
+################################################################################
+
+- job-group:
+    name: '{project-version}-pkg-{project-name}'
+
+    project-name: '{name}'
+    project-version:
+    - 9.0:
+        # Update workflow
+        is_updates: 'false'
+
+        # Repository parameters for project
+        deb-dist-name: 'mos{project-version}'
+        deb-repo-path: '/{name}-repos/ubuntu'
+        rpm-repo-path: '/{name}-repos/centos/mos{project-version}-{distro}'
+
+        # MOS repositories (build/test dependencies)
+        mos-deb-repo-path: '/mos-repos/ubuntu'
+        mos-rpm-repo-path: '/mos-repos/centos/mos{project-version}-{distro}'
+
+    distro:
+    - centos7:
+        os: 'centos'
+        pkg_type: 'rpm'
+        spec_prefix_path: '/{distro}'
+    - trusty:
+        os: 'ubuntu'
+        pkg_type: 'deb'
+        spec_prefix_path: '/{distro}'
+
+    jobs:
+    - '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+
+################################################################################
+# Project definition(s)
+################################################################################
+
+- project:
+    name: 'feature'
+
+    deb-origin-release: 'Mirantis'
+    deb-origin-test: 'testing'
+
+    publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    repo-base-path: '/home/jenkins/pubrepos'
+
+    pkg-sign-key: '1FA22B08'
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: 'openstack-ci-jenkins'
+
+    # Job slave nodes
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+
+    jobs:
+    - '{project-version}-pkg-{project-name}'
