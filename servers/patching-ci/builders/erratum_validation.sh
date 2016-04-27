@@ -1,4 +1,5 @@
-#!/bin/bash -ex
+#!/bin/bash
+set -ex
 
 git clone https://review.fuel-infra.org/tools/sustaining
 

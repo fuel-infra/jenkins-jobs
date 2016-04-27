@@ -1,4 +1,5 @@
-#!/bin/bash -ex
+#!/bin/bash
+set -ex
 
 create_deb_repos () {
     DSC_DIR=$1

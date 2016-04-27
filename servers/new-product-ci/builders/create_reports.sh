@@ -1,4 +1,5 @@
-#!/bin/bash -ex
+#!/bin/bash
+set -ex
 
 [[ "${UPDATES}" == "true" ]] && export UPDATES_SUFFIX="-updates"
 

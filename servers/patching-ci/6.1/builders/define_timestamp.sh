@@ -1,4 +1,5 @@
-#!/bin/bash -ex
+#!/bin/bash
+set -ex
 
 WORKSPACE="${WORKSPACE:-.}"
 TIMESTAMP_ARTIFACT="${WORKSPACE}/timestamp.txt"
