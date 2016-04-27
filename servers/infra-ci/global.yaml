@@ -24,7 +24,7 @@
     name: main
     triggers:
       - gerrit:
-          server-name: 'main'
+          server-name: 'review.fuel-infra.org'
           projects:
             - project-compare-type: 'PLAIN'
               project-pattern: '{project-name}'
