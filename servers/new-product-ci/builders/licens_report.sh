@@ -41,22 +41,23 @@ create_deb_repos () {
 
 export WRK_DIR=$(pwd)
 MIRROR_HOST=${MIRROR_HOST:-"mirror.fuel-infra.org"}
-export RPM_DIST_NAME=${RPM_DIST_NAME:-"centos6"}
+export RPM_DIST_NAME=${RPM_DIST_NAME:-"centos7"}
 BASE="os"
 UPDATES_SUFFIX=''
 UPDATES_REPO_NAME=${UPDATES_REPO_NAME:-"updates"}
+
 [[ "$UPDATES" == "true" ]] && export UPDATES_SUFFIX="-updates" && export BASE="${UPDATES_REPO_NAME}"
 export UBUNTU_REPO=mirror/"${RELEASE}_deb_packages${UPDATES_SUFFIX}"
 export CENTOS_REPO=mirror/"${RELEASE}_rpm_packages${UPDATES_SUFFIX}"
 
 DEB_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/mos-repos/ubuntu/${RELEASE}" | awk '{print $7}' | cut -d'/' -f2)
-RPM_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/mos-repos/centos/mos${RELEASE}-${RPM_DIST_NAME}-fuel/${BASE}" | awk '{print $7}')
+RPM_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/mos-repos/centos/mos${RELEASE}-${RPM_DIST_NAME}/${BASE}" | awk '{print $7}')
 
 [ ! -d "mirror" ] && mkdir mirror
 # Copy src and bin packages for analyse from mirrors
 create_deb_repos "${UBUNTU_REPO}" "${DEB_SNAPSHOT}"
 RSYNC_OPTIONS="-avPzt --delete --chmod=a+rx"
-rsync ${RSYNC_OPTIONS} rsync://"${MIRROR_HOST}/mirror/mos-repos/centos/mos${RELEASE}-${RPM_DIST_NAME}-fuel/${RPM_SNAPSHOT}"/ "${CENTOS_REPO}"
+rsync ${RSYNC_OPTIONS} rsync://"${MIRROR_HOST}/mirror/mos-repos/centos/mos${RELEASE}-${RPM_DIST_NAME}/${RPM_SNAPSHOT}"/ "${CENTOS_REPO}"
 
 # Create License Report with delimited |||
 license-compliance/rpm_license.sh "${CENTOS_REPO}"/x86_64/Packages/* > license_mos_"${RELEASE}${UPDATES_SUFFIX}"_centos
