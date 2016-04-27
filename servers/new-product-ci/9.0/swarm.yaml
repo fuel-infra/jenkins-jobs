@@ -158,6 +158,9 @@
             - name: '9.0.system_test.ubuntu.plugins.fuel_plugin_example'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.system_test.ubuntu.plugins.install_plugin_after_cluster_create'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '9.0.system_test.ubuntu.plugins.thread_db_separate_services'
               current-parameters: true
               kill-phase-on: NEVER
