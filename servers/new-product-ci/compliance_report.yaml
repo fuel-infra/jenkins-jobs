@@ -45,6 +45,7 @@
       - string:
           name: RPM_DIST_NAME
           default: centos7
+          description: "Default centos7. Use centos7-fuel or centos6-fuel for 8.0 and earlier versions"
       - bool:
           name: UPDATES
           default:
