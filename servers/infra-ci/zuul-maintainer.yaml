@@ -44,7 +44,8 @@
 
     builders:
       - shell: |
-          #!/bin/bash -ex
+          #!/bin/bash
+          set -ex
 
           make clean
           make all
