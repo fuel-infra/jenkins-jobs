@@ -32,7 +32,8 @@
       - perestroika
     builders:
         - shell: |
-            #!/bin/bash -xe
+            #!/bin/bash
+            set -ex
 
             # Remove stale artifacts
             rm -vf *.publish.setenvfile pkg-versions.*

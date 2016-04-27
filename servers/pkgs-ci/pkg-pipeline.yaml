@@ -24,7 +24,8 @@
       - zuul
     builders:
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash
+          set -ex
 
           # FIXME: use perestroika from openstack/fuel-mirror
           # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
@@ -44,7 +45,8 @@
             parameter-filters: 'ZUUL_UUID=${{ZUUL_UUID}}'
             which-build: 'last-completed'
       - shell: |
-            #!/bin/bash -ex
+            #!/bin/bash
+            set -ex
             # Fail stage if packages are not published
             [ -f "{pkg_type}.publish.setenvfile" ] && source {pkg_type}.publish.setenvfile
             VAR="$(echo {pkg_type} | tr [[:lower:]] [[:upper:]])_PUBLISH_SUCCEEDED"

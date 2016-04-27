@@ -24,7 +24,8 @@
           default: ''
     builders:
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash
+          set -ex
 
           # FIXME: use perestroika from openstack/fuel-mirror
           # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
