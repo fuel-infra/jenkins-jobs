@@ -32,7 +32,8 @@
       - inject:
           properties-file: 'tests.envfile'
       - shell: |
-          #!/bin/bash -x
+          #!/bin/bash
+          set -x
 
           set -o errexit
           set -o pipefail

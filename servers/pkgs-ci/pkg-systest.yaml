@@ -88,7 +88,8 @@
       - timed: "H */12 * * *"
     builders:
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash
+          set -ex
           # Clean logs from previous runs
           rm -vf fuel-qa/logs/* *.publish.setenvfile
       - copyartifact:

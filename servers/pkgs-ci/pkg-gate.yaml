@@ -22,7 +22,8 @@
       - zuul
     builders:
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash
+          set -ex
 
           ############################
           # Prepare parameters for slave jobs

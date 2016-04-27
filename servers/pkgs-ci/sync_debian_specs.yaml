@@ -30,7 +30,8 @@
           description: "Pushing username"
     builders:
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash
+          set -ex
           sync-git-repos/sync-git-repos -m sync-git-repos/debian-fuel-infra.yaml ${{PROJECT:+ -p $PROJECT}}
     publishers:
       - email-ext:
