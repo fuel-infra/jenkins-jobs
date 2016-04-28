@@ -9,7 +9,6 @@
 
     master-mos-version: '9.0'
 
-    main_centos_release: 'centos7'
     main_ubuntu_release: 'trusty'
 
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
@@ -24,8 +23,6 @@
     rel-path-prefix: 'mos-repos/'
 
     repo-base-path: '/home/jenkins/pubrepos'
-    repo_name_sep: ''
-    repo_suff_rpm: ''
 
     pkg-sign-key: '1FA22B08'
 
@@ -53,131 +50,254 @@
 
 - gerrit_params: &gerrit_params
     name: ''
-
     gerrit-host: 'review.fuel-infra.org'
     gerrit-user: 'openstack-ci-jenkins'
     gerrit-port: '29418'
 
-- mos_gerrit_template: &mos_template
-    name: ''
 
-    gerrit-host: 'review.fuel-infra.org'
-    gerrit-user: 'openstack-ci-jenkins'
-    gerrit-port: '29418'
+- project:
+    <<: *common_template
+    <<: *gerrit_params
+    name: 'pkg-mos-rhel'
+    os: 'rhel'
+    openstack_release: 'ubuntu'
+    mos_version: '8.0'
+    fuel-main-branch: 'stable/8.0'
+    fuel-qa-branch: 'stable/8.0'
+    distro: 'centos7'
+    pkg_type: 'rpm'
+    spec_path_prefix: '/centos7'
+    deb-dist-name: mos8.0
+    rpm-dist-name: mos8.0-centos7-fuel
+    jobs:
+      - '{mos_version}-pkg-systest-{os}':
+          main-rpm-dist-name: 'mos8.0-centos7-fuel'
 
+
+- project:
+    <<: *common_template
+    <<: *gerrit_params
+    name: 'pkg-mos-master-centos'
+    os: 'centos'
+    openstack_release: 'ubuntu'
+    mos_version: master
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
+    distro: 'centos7'
+    pkg_type: 'rpm'
+    spec_path_prefix: '/centos7'
+    deb-dist-name: mos-master
+    rpm-dist-name: mos-master-centos7
     jobs:
       - '{mos_version}-pkg-pipeline-{os}'
       - '{mos_version}-pkg-publish-{os}'
       - '{mos_version}-pkg-install-{os}'
       - '{mos_version}-pkg-repotest-{os}'
-      - '{mos_version}-pkg-systest-{os}'
+      - '{mos_version}-pkg-systest-{os}':
+          main-rpm-dist-name: 'mos-master-centos7'
       - '{mos_version}-pkg-massrebuild-starter-{os}'
       - '{mos_version}-pkg-massrebuild-{os}'
 
 - project:
     <<: *common_template
-    name: 'pkg-mos-rhel'
-    os: 'rhel'
-    openstack_release: 'ubuntu'
-    mos_version:
-      - '8.0':
-          fuel-main-branch: 'stable/8.0'
-          fuel-qa-branch: 'stable/8.0'
-          distro: 'centos7'
-          pkg_type: 'rpm'
-          spec_path_prefix: '/centos7'
-          repo_suff_rpm: '-fuel'
-
-    jobs:
-      - '{mos_version}-pkg-systest-{os}'
-
-    gerrit-host: 'review.fuel-infra.org'
-    gerrit-user: 'openstack-ci-jenkins'
-    gerrit-port: '29418'
-
-- project:
-    <<: *common_template
-    <<: *mos_template
-    name: 'pkg-mos-centos'
+    <<: *gerrit_params
+    name: 'pkg-mos-8.0-centos'
     os: 'centos'
-    mos_version:
-      - 'master':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-          distro: 'centos7'
-          pkg_type: 'rpm'
-          spec_path_prefix: '/centos7'
-          repo_name_sep: '-'
-      - '8.0':
-          fuel-main-branch: 'stable/8.0'
-          fuel-qa-branch: 'stable/8.0'
-          distro: 'centos7'
-          pkg_type: 'rpm'
-          spec_path_prefix: '/centos7'
-          is_updates: 'true'
-          repo_suff_rpm: '-fuel'
-      - '9.0':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-          distro: 'centos7'
-          pkg_type: 'rpm'
-          spec_path_prefix: '/centos7'
-    openstack_release: 'centos'
-
-- project:
-    <<: *common_template
-    <<: *mos_template
-    name: 'pkg-mos-debian'
-    os: 'debian'
-    mos_version:
-      - 'master':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-          distro: 'jessie'
-          pkg_type: 'deb'
-          spec_path_prefix: '/jessie'
-          repo_name_sep: '-'
-      - '8.0':
-          fuel-main-branch: 'stable/8.0'
-          fuel-qa-branch: 'stable/8.0'
-          distro: 'jessie'
-          pkg_type: 'deb'
-          spec_path_prefix: '/jessie'
-      - '9.0':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-          distro: 'jessie'
-          pkg_type: 'deb'
-          spec_path_prefix: '/jessie'
-    openstack_release: 'debian'
-
-- project:
-    <<: *common_template
-    <<: *mos_template
-    name: 'pkg-mos-ubuntu'
-    os: 'ubuntu'
-    mos_version:
-      - 'master':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-          distro: 'trusty'
-          pkg_type: 'deb'
-          spec_path_prefix: '/trusty'
-          repo_name_sep: '-'
-      - '8.0':
-          fuel-main-branch: 'stable/8.0'
-          fuel-qa-branch: 'stable/8.0'
-          distro: 'trusty'
-          pkg_type: 'deb'
-          spec_path_prefix: '/trusty'
-          is_updates: 'true'
-      - '9.0':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-          distro: 'trusty'
-          pkg_type: 'deb'
-          spec_path_prefix: '/trusty'
+    mos_version: '8.0'
+    fuel-main-branch: 'stable/8.0'
+    fuel-qa-branch: 'stable/8.0'
+    distro: 'centos7'
+    pkg_type: 'rpm'
+    spec_path_prefix: '/centos7'
+    is_updates: 'true'
     openstack_release: 'ubuntu'
+    deb-dist-name: mos8.0
+    rpm-dist-name: mos8.0-centos7-fuel
+    jobs:
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
+      - '{mos_version}-pkg-systest-{os}':
+          main-rpm-dist-name: 'mos8.0-centos7-fuel'
+      - '{mos_version}-pkg-massrebuild-starter-{os}'
+      - '{mos_version}-pkg-massrebuild-{os}'
+
+- project:
+    <<: *common_template
+    <<: *gerrit_params
+    name: 'pkg-mos-9.0-centos'
+    os: 'centos'
+    mos_version: '9.0'
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
+    distro: 'centos7'
+    pkg_type: 'rpm'
+    spec_path_prefix: '/centos7'
+    openstack_release: 'ubuntu'
+    deb-dist-name: mos9.0
+    rpm-dist-name: mos9.0-centos7
+    jobs:
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
+      - '{mos_version}-pkg-systest-{os}':
+          main-rpm-dist-name: mos9.0-centos7
+      - '{mos_version}-pkg-massrebuild-starter-{os}'
+      - '{mos_version}-pkg-massrebuild-{os}'
+
+- project:
+    <<: *common_template
+    <<: *gerrit_params
+    name: 'pkg-mos-master-debian'
+    os: 'debian'
+    mos_version: 'master'
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
+    distro: 'jessie'
+    pkg_type: 'deb'
+    spec_path_prefix: '/jessie'
+    deb-dist-name: mos-master
+    rpm-dist-name: mos-master-jessie
+    openstack_release: 'ubuntu'
+    jobs:
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
+      - '{mos_version}-pkg-systest-{os}':
+          main-rpm-dist-name: 'mos-master-centos7'
+          rpm-dist-name: mos-master-centos7
+      - '{mos_version}-pkg-massrebuild-starter-{os}'
+      - '{mos_version}-pkg-massrebuild-{os}'
+
+- project:
+    <<: *common_template
+    <<: *gerrit_params
+    name: 'pkg-mos-8.0-debian'
+    os: 'debian'
+    mos_version: '8.0'
+    fuel-main-branch: 'stable/8.0'
+    fuel-qa-branch: 'stable/8.0'
+    distro: 'jessie'
+    pkg_type: 'deb'
+    spec_path_prefix: '/jessie'
+    deb-dist-name: mos8.0
+    rpm-dist-name: mos8.0-jessie
+    openstack_release: 'ubuntu'
+    jobs:
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
+      - '{mos_version}-pkg-systest-{os}':
+          main-rpm-dist-name: 'mos8.0-centos7'
+          rpm-dist-name: mos8.0-centos7
+      - '{mos_version}-pkg-massrebuild-starter-{os}'
+      - '{mos_version}-pkg-massrebuild-{os}'
+
+
+- project:
+    <<: *common_template
+    <<: *gerrit_params
+    name: 'pkg-mos-9.0-debian'
+    os: 'debian'
+    mos_version: '9.0'
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
+    distro: 'jessie'
+    pkg_type: 'deb'
+    spec_path_prefix: '/jessie'
+    deb-dist-name: mos9.0
+    rpm-dist-name: mos9.0-jessie
+    openstack_release: 'ubuntu'
+    jobs:
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
+      - '{mos_version}-pkg-systest-{os}':
+          main-rpm-dist-name: 'mos9.0-centos7'
+          rpm-dist-name: mos9.0-centos7
+      - '{mos_version}-pkg-massrebuild-starter-{os}'
+      - '{mos_version}-pkg-massrebuild-{os}'
+
+- project:
+    <<: *common_template
+    <<: *gerrit_params
+    name: 'pkg-mos-master-ubuntu'
+    os: 'ubuntu'
+    mos_version: 'master'
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
+    distro: 'trusty'
+    pkg_type: 'deb'
+    spec_path_prefix: '/trusty'
+    openstack_release: 'ubuntu'
+    deb-dist-name: mos-master
+    rpm-dist-name: mos-master-trusty
+    jobs:
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
+      - '{mos_version}-pkg-systest-{os}':
+          main-rpm-dist-name: 'mos-master-centos7'
+          rpm-dist-name: mos-master-centos7
+      - '{mos_version}-pkg-massrebuild-starter-{os}'
+      - '{mos_version}-pkg-massrebuild-{os}'
+
+- project:
+    <<: *common_template
+    <<: *gerrit_params
+    name: 'pkg-mos-8.0-ubuntu'
+    os: 'ubuntu'
+    mos_version: '8.0'
+    fuel-main-branch: 'stable/8.0'
+    fuel-qa-branch: 'stable/8.0'
+    distro: 'trusty'
+    pkg_type: 'deb'
+    spec_path_prefix: '/trusty'
+    is_updates: 'true'
+    openstack_release: 'ubuntu'
+    deb-dist-name: mos8.0
+    rpm-dist-name: mos8.0-trusty
+    jobs:
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
+      - '{mos_version}-pkg-systest-{os}':
+          main-rpm-dist-name: 'mos8.0-centos7'
+          rpm-dist-name: mos8.0-centos7
+      - '{mos_version}-pkg-massrebuild-starter-{os}'
+      - '{mos_version}-pkg-massrebuild-{os}'
+
+- project:
+    <<: *common_template
+    <<: *gerrit_params
+    name: 'pkg-mos-9.0-ubuntu'
+    os: 'ubuntu'
+    mos_version: '9.0'
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
+    distro: 'trusty'
+    pkg_type: 'deb'
+    spec_path_prefix: '/trusty'
+    openstack_release: 'ubuntu'
+    deb-dist-name: mos9.0
+    rpm-dist-name: mos9.0-trusty
+    jobs:
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
+      - '{mos_version}-pkg-systest-{os}':
+          main-rpm-dist-name: 'mos9.0-centos7'
+          rpm-dist-name: mos9.0-centos7
+      - '{mos_version}-pkg-massrebuild-starter-{os}'
+      - '{mos_version}-pkg-massrebuild-{os}'
 
 - project:
     <<: *gerrit_params
@@ -237,20 +357,18 @@
 
 - project:
     <<: *common_template
-    <<: *mos_template
+    <<: *gerrit_params
     name: 'check-code-vs-spec-for-ubuntu'
-
     os: 'ubuntu'
     openstack_release: 'ubuntu'
-
-    mos_version:
-      - 'master':
-          fuel-main-branch: 'master'
-          fuel-qa-branch: 'master'
-          distro: 'trusty'
-          pkg_type: 'deb'
-          spec_path_prefix: '/trusty'
-          repo_name_sep: '-'
+    mos_version: 'master'
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
+    distro: 'trusty'
+    pkg_type: 'deb'
+    spec_path_prefix: '/trusty'
+    deb-dist-name: mos-master
+    rpm-dist-name: mos-master-trusty
 
     package_name: !include openstack-projects.yaml.inc
     jobs:

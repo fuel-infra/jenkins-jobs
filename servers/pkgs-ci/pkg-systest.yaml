@@ -11,15 +11,15 @@
           properties-content: |
             PRODUCT_JENKINS_URL={product_jenkins_url}
             ISO_JOB_NAME={mos_version}.test_all
-            OPENSTACK_RELEASE=ubuntu
+            OPENSTACK_RELEASE={openstack_release}
             OS_TYPE={os}
 
             ENV_PREFIX={mos_version}-pkg-systest-{os}-{distro}
             UBUNTU_DIST={main_ubuntu_release}
 
-            DEB_DIST_NAME={project-name}{repo_name_sep}{mos_version}
+            DEB_DIST_NAME={deb-dist-name}
             DEB_REPO_PATH={rel-path-prefix}/ubuntu/{mos_version}
-            RPM_REPO_PATH={rel-path-prefix}/centos/{project-name}{repo_name_sep}{mos_version}-{main_centos_release}{repo_suff_rpm}/os/x86_64/
+            RPM_REPO_PATH={rel-path-prefix}/centos/{rpm-dist-name}/os/x86_64/
     parameters:
       - string:
           name: TEST_GROUP
@@ -42,10 +42,10 @@
           # New lines will become spaces. So don't add newline near "|" because it possibly will break parsing inside scripts
           default: >-
             deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{repo_name_sep}{mos_version} main restricted,1200|deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{repo_name_sep}{mos_version}-security main restricted,1201|deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{repo_name_sep}{mos_version}-proposed main restricted,1202|deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {project-name}{repo_name_sep}{mos_version}-updates  main restricted,1201
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name} main restricted,1200|deb
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name}-security main restricted,1201|deb
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name}-proposed main restricted,1202|deb
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name}-updates  main restricted,1201
           description: >-
             <p>
             Additional deb repos. Note, that empty repos will bring some errors into console output.
@@ -57,7 +57,7 @@
           default: '1052'
       - string:
           name: EXTRA_RPM_REPOS
-          default: 'release-repo,http://{repo-host}/{rel-path-prefix}/centos/{project-name}{repo_name_sep}{mos_version}-{main_centos_release}{repo_suff_rpm}/os/x86_64/,98'
+          default: 'release-repo,http://{repo-host}/{rel-path-prefix}/centos/{main-rpm-dist-name}/os/x86_64/,98'
           description: 'reponame1,http://...(,prio1)|reponame2,http://...(,prio2)'
       - string:
           name: EXTRA_RPM_REPOS_PRIORITY

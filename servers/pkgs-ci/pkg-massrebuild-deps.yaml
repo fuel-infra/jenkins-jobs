@@ -1,4 +1,5 @@
 - job-template:
+    # FIXME: looks like this job is not included to any project
     name: '{mos_version}-pkg-massrebuild-deps-{os}'
     concurrent: true
     description: |
@@ -60,8 +61,8 @@
           export REMOTE_REPO_HOST={repo-host}
 
           # New scheme
-          DEB_DIST_NAME={project-name}{repo_name_sep}{mos_version}
-          RPM_DIST_NAME={project-name}{repo_name_sep}{mos_version}-{distro}{repo_suff_rpm}
+          DEB_DIST_NAME={deb-dist-name}
+          RPM_DIST_NAME={rpm-dist-name}
 
           DEB_REPO_PATH={rel-path-prefix}/ubuntu/{mos_version}
           RPM_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/os/x86_64/

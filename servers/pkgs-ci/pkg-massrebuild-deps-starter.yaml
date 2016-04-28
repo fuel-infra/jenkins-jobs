@@ -425,6 +425,7 @@
           done
 
       - trigger-builds:
+          # FIXME: looks like this job is not included to any project
           - project: '{mos_version}-pkg-massrebuild-deps-{os}'
             block: true
             parameter-factories:

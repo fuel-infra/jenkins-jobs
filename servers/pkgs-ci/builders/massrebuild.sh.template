@@ -47,8 +47,8 @@ else
     export SPEC_BRANCH=${{SPEC_BRANCH:-openstack-ci/fuel-{mos_version}/liberty}}
 fi
 
-DEB_DIST_NAME={project-name}{repo_name_sep}{mos_version}
-RPM_DIST_NAME={project-name}{repo_name_sep}{mos_version}-{distro}{repo_suff_rpm}
+DEB_DIST_NAME={deb-dist-name}
+RPM_DIST_NAME={rpm-dist-name}
 DEB_REPO_PATH={rel-path-prefix}/ubuntu/{mos_version}
 RPM_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}/os/x86_64/
 export DEB_DIST_NAME DEB_REPO_PATH RPM_REPO_PATH

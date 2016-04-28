@@ -57,8 +57,8 @@ case "{pkg_type}" in
 esac
 
 # New scheme
-DEB_DIST_NAME={project-name}{repo_name_sep}{mos_version}
-RPM_DIST_NAME={project-name}{repo_name_sep}{mos_version}-{distro}{repo_suff_rpm}
+DEB_DIST_NAME={deb-dist-name}
+RPM_DIST_NAME={rpm-dist-name}
 
 BASE_DEB_REPO_PATH={rel-path-prefix}/ubuntu
 BASE_RPM_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}
