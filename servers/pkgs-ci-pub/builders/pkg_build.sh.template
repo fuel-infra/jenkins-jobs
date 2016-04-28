@@ -101,10 +101,10 @@ fi
 # Extra repos containing build dependecies
 case ${{PKG_TYPE}} in
     deb)
-        export EXTRAREPO=$(get_deb_snapshot http://${{MIRROR_HOST}}/mos-repos/ubuntu/{mos-version} mos{mos-repo-name-sep}{mos-version} main restricted)
+        export EXTRAREPO=$(get_deb_snapshot http://${{MIRROR_HOST}}/{mos-deb-repo-path} {mos-deb-dist-name} main restricted)
         ;;
     rpm)
-        export EXTRAREPO="deps,$(get_rpm_snapshot http://${{MIRROR_HOST}}/mos-repos/centos/mos{mos-repo-name-sep}{mos-version}-{distro}/os/x86_64)"
+        export EXTRAREPO="deps,$(get_rpm_snapshot http://${{MIRROR_HOST}}/{mos-rpm-repo-path}/os/x86_64)"
         ;;
 esac
 
@@ -131,9 +131,9 @@ H=$(( ${{BUILD_DURATION}}/3600 ))    # Hours
 M=$(( ${{BUILD_DURATION}}%3600/60 )) # Minutes
 S=$(( ${{BUILD_DURATION}}%60 ))      # Seconds
 
-echo ##############################
+echo '##############################'
 printf "Package building took %02d:%02d:%02d\n" ${{H}} ${{M}} ${{S}}
-echo ##############################
+echo '##############################'
 
 rm -rf {repo-base-path}/${{REQUEST_NUM:-CR-${{GERRIT_CHANGE_NUMBER}}}}
 

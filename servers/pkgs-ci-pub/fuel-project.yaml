@@ -31,9 +31,6 @@
     spec-project-prefix: ''
     spec-project-suffix: '-build'
 
-    # Enables paching workflow
-    is_updates: 'false'
-
     # Parameters for install-test
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/master'
@@ -55,15 +52,30 @@
     <<: *fuel_template
     project-version:
       - 'master':
-          mos-version: 'master'
-          mos-repo-name-sep: '-'
+          # Enables patching workflow
+          is_updates: 'false'
+          # Build requirements
+          mos-deb-dist-name: 'mos-master'
+          mos-deb-repo-path: '/mos-repos/ubuntu/master'
+          mos-rpm-repo-path: '/mos-repos/centos/mos-master-centos7'
       - 'mitaka':
-          mos-version: '9.0'
-          mos-repo-name-sep: ''
+          # Enables patching workflow
+          is_updates: 'false'
+          # Build requirements
+          mos-deb-dist-name: 'mos9.0'
+          mos-deb-repo-path: '/mos-repos/ubuntu/9.0'
+          mos-rpm-repo-path: '/mos-repos/centos/mos9.0-centos7'
+      - 'liberty':
+          # Enables patching workflow
+          is_updates: 'true'
+          # Build requirements
+          mos-deb-dist-name: 'mos8.0'
+          mos-deb-repo-path: '/mos-repos/ubuntu/8.0'
+          mos-rpm-repo-path: '/mos-repos/centos/mos8.0-centos7-fuel'
     distro:
       - centos7:
           os: centos
-          openstack_release: 'centos'
+          openstack_release: 'ubuntu'
           pkg_type: 'rpm'
           spec_path_prefix: '/rpm'
       - trusty:
