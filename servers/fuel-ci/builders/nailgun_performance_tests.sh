@@ -18,11 +18,11 @@ download_artifacts() {
   return $?
 }
 
-lastCompletedBuild=$(wget -q "${JENKINS_URL}job/nailgun_performance_tests/lastCompletedBuild/buildNumber" -O -)
-echo "Last completed build: ${lastCompletedBuild}"
+lastSuccessfulBuild=$(wget -q "${JENKINS_URL}job/nailgun_performance_tests/lastSuccessfulBuild/buildNumber" -O -)
+echo "Last successful build: ${lastSuccessfulBuild}"
 
 artifactsFound=0
-for buildId in $(seq $lastCompletedBuild -1 1); do
+for buildId in $(seq $lastSuccessfulBuild -1 1); do
   download_artifacts $buildId
   if [ $? -eq 0 ]; then
     echo "Artifacts found in ${buildId}"
