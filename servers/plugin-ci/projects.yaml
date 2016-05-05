@@ -1,0 +1,175 @@
+#
+# Example plugin repository definition:
+#
+#- project:
+#    name: plugins-standard
+#
+#    # include default variables
+#    defaults: plugins-defaults
+#
+#    # framework repository used in deployment tests
+#    test_framework_url: 'https://github.com/openstack/fuel-qa'
+#
+#    # macro definition used to prepare framework virtualenv
+#    plugin_prepare_env_builder: plugin-prepare-env
+#
+#    # This define fuel versions for which jobs will be created
+#    version:
+#
+#      # Definitions for fuel 9.0
+#      - 9.0:
+#
+#          # branch which will be used to clone code from plugin repository
+#          # you should use globally defined variables with branches, like
+#          # '{fuel-branch-9_0}' when it is realy needed please use direct
+#          # branch name stable/mitaka
+#          plugin_branch: '{fuel-branch-9_0}'
+#
+#          # branch which will be used to clone code from test framework repository
+#          test_framework_branch: '{fuel-branch-9_0}'
+#
+#          # iso which will be used to execute tests
+#          # here should be defined link to file with magnet link data
+#          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/9.0-community.test_all/lastSuccessfulBuild/artifact/magnet_link.txt
+#
+#    plugin_name:
+#
+#      # name is used to generate job name, final jobs will
+#      # have name 9.0.fuel-plugin.{plugin-name}.build
+#      - plugin-name:
+#
+#          # variable used to generate git repository:
+#          # https://github.com/openstack/{plugin_repo}
+#          plugin_repo: fuel-plugin-detach-rabbitmq
+#
+#          # variable with contact to person/team responsible by plugin
+#          plugin_owner: 'Owner Name'
+#
+#          # test group used to start deployment test
+#          plugin_test_group: 'thread_2_separate_services'
+#
+#          # variable used by test framework, job will define this variable
+#          # as a path to built plugin, test framework will upload and install
+#          # file from this variable on fuel master
+#          plugin_env_path_name: 'SEPARATE_SERVICE_RABBIT_PLUGIN_PATH'
+#
+#          # additional properties passed to deployment test, defined here will
+#          # be used only
+#          # for this plugin and will override global definition
+#          test_properties: ''
+#
+#          # in case when plugin is placed as a subdirectory in cloned
+#          # repository, correct
+#          # subdirectory can be defined here
+#          plugin_dir: ''
+#
+#          # in case when plugin require build with specific version of
+#          # fuel-plugins you can select refspec
+#          fuel_plugins_refspec: 'refs/heads/master'
+#
+#
+# New plugins should be added in plugin_name part, like this
+#
+#    plugin_name:
+#      - new-plugin-name:
+#          plugin_repo: new-plugin-repository
+#          plugin_owner: 'Owner Name'
+#          plugin_test_group: 'new-plugin-test-group'
+#          plugin_env_path_name: 'new-plugin-variable'
+#
+
+- defaults:
+    name: plugins-defaults
+
+    # Redefine variables from global defaults
+    fuel-branch-9_0: '{fuel-branch-9_0}'
+    fuel-branch-10_0: '{fuel-branch-10_0}'
+
+    # Default refspec fetched from fuel-plugins
+    fuel_plugins_refspec: refs/heads/master
+
+    # Default node label
+    node_label: plugin-build
+
+    # Use fuel-qa as standard test framework
+    test_framework_url: 'https://github.com/openstack/fuel-qa'
+
+    # Default framework branch
+    test_framework_branch: master
+
+    # Default additional properties used in deployment tests
+    test_properties: ''
+
+    # Default directory inside git repository with plugin code
+    plugin_dir: ''
+
+    # Default macro used to build VENV for test framework
+    plugin_prepare_env_builder: plugin-prepare-env
+
+
+#
+# Plugins tested with fuel-qa framework
+#
+- project:
+    name: plugins-standard
+    defaults: plugins-defaults
+    version:
+      - 9.0:
+          plugin_branch: '{fuel-branch-9_0}'
+          test_framework_branch: '{fuel-branch-9_0}'
+          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/9.0-community.test_all/lastSuccessfulBuild/artifact/magnet_link.txt
+      - 10.0:
+          plugin_branch: '{fuel-branch-10_0}'
+          test_framework_branch: '{fuel-branch-10_0}'
+          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/10.0-community.test_all/lastSuccessfulBuild/artifact/magnet_link.txt
+
+    plugin_name:
+      - detach-database:
+          plugin_repo: fuel-plugin-detach-database
+          plugin_owner: 'Owner Name'
+          plugin_test_group: 'thread_db_separate_services'
+          plugin_env_path_name: 'SEPARATE_SERVICE_DB_PLUGIN_PATH'
+
+      - detach-rabbitmq:
+          plugin_repo: fuel-plugin-detach-rabbitmq
+          plugin_owner: 'Owner Name'
+          plugin_test_group: 'detach-rabbitmq-ci-group'
+          plugin_env_path_name: 'SEPARATE_SERVICE_RABBIT_PLUGIN_PATH'
+
+      - detach-keystone:
+          plugin_repo: fuel-plugin-detach-keystone
+          plugin_owner: 'Owner Name'
+          plugin_test_group: 'thread_keystone_separate_services'
+          plugin_env_path_name: 'SEPARATE_SERVICE_KEYSTONE_PLUGIN_PATH'
+
+    jobs:
+      - '{version}.fuel-plugin.{plugin_name}.build'
+      - '{version}.fuel-plugin.{plugin_name}.deploy-test'
+
+#
+# Plugins tested with stacklight test framework
+#
+
+- project:
+    name: plugins-stacklight
+    defaults: plugins-defaults
+
+    # Override test framework
+    test_framework_url: 'https://github.com/openstack/stacklight-integration-tests'
+    plugin_prepare_env_builder: plugin-prepare-env-stacklight
+
+    version:
+      - 9.0:
+          plugin_branch: master
+          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/9.0-community.test_all/lastSuccessfulBuild/artifact/magnet_link.txt
+
+    plugin_name:
+      - influxdb-grafana:
+          plugin_repo: fuel-plugin-influxdb-grafana
+          plugin_owner: 'Owner Name'
+          plugin_test_group: 'smoke,influxdb_grafana'
+          plugin_env_path_name: 'INFLUXDB_GRAFANA_PLUGIN_PATH'
+
+    jobs:
+      - '{version}.fuel-plugin.{plugin_name}.build'
+      - '{version}.fuel-plugin.{plugin_name}.deploy-test'

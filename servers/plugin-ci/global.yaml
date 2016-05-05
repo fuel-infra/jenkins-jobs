@@ -1,0 +1,14 @@
+- defaults:
+    name: global
+    description: 'Do not edit this job through the web!'
+    project-type: freestyle
+    logrotate:
+      daysToKeep: -1
+      numToKeep: 10
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+
+    # Global branch definitions, this variables should be used
+    # in place of direct branch names
+    fuel-branch-9_0: stable/mitaka
+    fuel-branch-10_0: master

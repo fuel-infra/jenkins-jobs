@@ -1,0 +1,70 @@
+########################################################################
+# GIT sources and triggers
+########################################################################
+- scm:
+    name: review-openstack-org
+    scm:
+      - git:
+          basedir: '{project-basedir}'
+          branches:
+            - $GERRIT_BRANCH
+          choosing-strategy: gerrit
+          refspec: $GERRIT_REFSPEC
+          url: 'https://review.openstack.org/{project-name}'
+
+- trigger:
+    name: review-openstack-org
+    triggers:
+      - gerrit:
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: '{project-name-pattern}'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{project-branch-pattern}'
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: 'recheck'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+
+- scm:
+    name: fuel-plugins
+    scm:
+      - git:
+          basedir: 'fuel-plugins'
+          branches:
+            - master
+          url: 'https://github.com/openstack/fuel-plugins'
+          refspec: '{project-refspec}'
+
+- scm:
+    name: fuel-qa
+    scm:
+      - git:
+          basedir: 'fuel-qa'
+          branches:
+            - master
+          url: 'https://github.com/openstack/fuel-qa'
+
+########################################################################
+# Builders used to prepare environment
+########################################################################
+# Standard builder for fuel-qa
+- builder:
+    name: plugin-prepare-env
+    builders:
+      - shell:
+          !include-raw './builders/prepare-venv.sh'
+
+# Builder for stacklight framework
+- builder:
+    name: plugin-prepare-env-stacklight
+    builders:
+      - shell: |
+            #!/bin/bash
+            ./utils/fuel-qa-builder/prepare_env.sh
