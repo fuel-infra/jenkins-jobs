@@ -19,7 +19,7 @@
           !include-raw-escape 'scripts/run_plugin_example_system_test.sh'
     disabled: false
     logrotate:
-      artifactDaysToKeep: -1
+      artifactDaysToKeep: 14
       artifactNumToKeep: -1
       daysToKeep: 30
       numToKeep: 50
