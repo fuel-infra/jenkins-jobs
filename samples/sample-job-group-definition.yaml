@@ -1,0 +1,11 @@
+- job-group:
+    name: job.group.name
+
+    # Project specific parameters
+    prefix: name_prefix
+    type: job_type
+    description: |
+      job description
+
+    jobs:
+      - '{prefix}.job.template.{type}'

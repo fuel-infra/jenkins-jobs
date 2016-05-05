@@ -1,0 +1,60 @@
+- job:
+    name: simple.job.name
+    ## Use project-type only if it is differ from freestyle (value by default).
+    # project-type: freestyle
+    ## Use defaults only if it is differ from global (value by default).
+    ## Do not place project specific parameters into template, use defaults instead.
+    # defaults: global
+    description: |
+      Multiline job description
+    ## Use only if the job should be disabled. False by default
+    # disabled: false
+    concurrent: true
+    ## Optional. Path for a custom workspace. Defaults to Jenkins default configuration.
+    # workspace: /home/jenkins/workspace
+    ## Use only if needed. Defaults to 0
+    # quiet-period: 0
+    ## Use only if needed to set explicitely. False by default
+    # block-downstream: false
+    # block-upstream: false
+    ## Use only if needed
+    # retry-count: 3
+    ## Use if the job has to be run on definite nodes/set of nodes
+    # node: NodeLabel
+    logrotate:
+      daysToKeep: 3
+      numToKeep: 20
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+
+    properties:
+      - prop_1
+      - prop_2
+
+    parameters:
+      - param_1
+      - param_2
+
+    scm:
+      - scm_macros_1
+      - scm_2
+
+    triggers:
+      - trigger_macros_1
+      - trigger_2
+
+    wrappers:
+      - wrapper_1
+      - wrapper_2
+
+    builders:
+      - builder_1
+      - builder_2
+
+    notifications:
+      - notification_1
+      - notification_2
+
+    publishers:
+      - publisher_1
+      - publisher_2
