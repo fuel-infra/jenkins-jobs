@@ -98,3 +98,6 @@
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'network_outage'
          node: 'network-systest'
+         properties: |
+           PATCHING_RUN_RALLY=true
+           ENABLE_LIBVIRT_NWFILTERS=true
