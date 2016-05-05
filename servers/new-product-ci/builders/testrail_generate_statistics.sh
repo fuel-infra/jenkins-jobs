@@ -8,6 +8,8 @@ export PYTHONPATH="$(pwd):$PYTHONPATH"
 
 # Initialize variables
 export TESTRAIL_STATS_GENERATOR="fuelweb_test/testrail/generate_statistics.py"
+export TESTRAIL_PROJECT="Mirantis OpenStack"
+export TESTRAIL_URL="https://mirantis.testrail.com"
 
 OPTIONS=" --verbose"
 
