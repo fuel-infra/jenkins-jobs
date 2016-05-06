@@ -286,4 +286,9 @@
          testgroup: 'support_dpdk'
          properties: |
            KVM_USE=true
-
+     - '{version-id}.{id}.{dist}.{testgroup}':
+         testgroup: 'test_ensurability'
+         properties: |
+           SLAVE_NODE_CPU=6
+           SLAVE_NODE_MEMORY=4096
+         timeout: '600'
