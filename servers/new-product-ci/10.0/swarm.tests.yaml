@@ -159,7 +159,7 @@
          weight: '11'
          node: 'services-systest'
          properties: |
-           SLAVE_NODE_MEMORY=7168
+           SLAVE_NODE_MEMORY=8192
            SLAVE_NODE_CPU=2
            KVM_USE=true
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
@@ -189,7 +189,7 @@
          weight: '11'
          node: 'services-systest'
          properties: |
-           SLAVE_NODE_MEMORY=6144
+           SLAVE_NODE_MEMORY=8192
            SLAVE_NODE_CPU=2
            KVM_USE=true
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
