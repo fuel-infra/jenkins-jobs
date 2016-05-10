@@ -9,7 +9,7 @@
     parameters:
       - string:
           name: TEST_JOB
-          default: '{version-id}.test_all'
+          default: '{test-job-name}'
           description: 'Job from which we get latest stable ISO'
     triggers:
         - timed: '{trigger}'

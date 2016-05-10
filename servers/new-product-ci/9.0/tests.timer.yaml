@@ -2,6 +2,7 @@
     name: '9.0.swarm.timers'
     id: swarm
     version-id: 9.0
+    test-job-name: '{version-id}-mos.test_all'
     jobs:
       - '{version-id}.{id}.timer.{repo_type}':
          repo_type: stable
@@ -16,6 +17,7 @@
     name: '9.0.acceptance.timers'
     id: acceptance
     version-id: 9.0
+    test-job-name: '{version-id}-mos.test_all'
     jobs:
       - '{version-id}.{id}.timer.{repo_type}':
          repo_type: stable
