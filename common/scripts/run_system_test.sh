@@ -78,7 +78,8 @@ echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE
 
 ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
-VERSION_STRING=$(basename "$ISO_PATH" | cut -d '-' -f 2-3)
+VERSION_STRING=$(basename "${ISO_PATH}" | \
+    sed -n -e 's/^.*\(fuel\)\(-community\|-gerrit\)\?-\([0-9.]\+\(-[a-z]\+\)\?-[0-9]\+\).*/\3/p')
 echo "Description string: $TEST_GROUP on $VERSION_STRING"
 
 export MAKE_SNAPSHOT=false
