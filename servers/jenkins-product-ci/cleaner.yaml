@@ -4,9 +4,9 @@
     devops_29: true
     release_60: false
     release_61: false
-    time_staging: '48'
-    time_systemtest: '16'
-    time_other: '48'
+    lifetime_bvt: '24'
+    lifetime_swarm: '48'
+    lifetime_other: '48'
     jobs:
       - cleaner
       - cleaner-on-labels
