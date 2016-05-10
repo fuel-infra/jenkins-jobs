@@ -84,6 +84,23 @@
         name: ENV_PREFIX
         default: '{version-id}.{test-type}.{dist}.{testgroup}'
         description: 'Environment prefix'
+    - string:
+        name: UPGRADE_TARBALL_MAGNET_LINK
+        default: $UPGRADE_TARBALL_MAGNET_LINK
+        description: 'Upgrade tarball magnet link'
+    - string:
+        name: UBUNTU_MIRROR_ID
+        default: $UBUNTU_MIRROR_ID
+        description: |
+          'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+    - string:
+        name: CUSTOM_VERSION
+        default: $CUSTOM_VERSION
+        description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+    - bool:
+        name: ENABLE_PROPOSED
+        default: $ENABLE_PROPOSED
+        description: 'If false only stable repositories are used'
 
     properties:
     - heavy-job:
