@@ -32,9 +32,12 @@ set -ex
 
 # set defaults
 ENABLE_ISO_DOWNLOAD=${ENABLE_ISO_DOWNLOAD:-true}
-MAGNET_LINK_ISO_8_0='magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
 MAGNET_LINK_JENKINS_URL=${MAGNET_LINK_JENKINS_URL:-https://product-ci.infra.mirantis.net/}
 MAGNET_LINK_ISO_VERSION=${MAGNET_LINK_ISO_VERSION:-9.0}
+
+# Values with released ISO versions
+# It is used only when release-* parameter is used in MAGNET_LINK
+export MAGNET_LINK_ISO_8_0='magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
 
 # exit if ENABLE_ISO_DOWNLOAD not 'true'
 [[ "${ENABLE_ISO_DOWNLOAD}" == "true" ]] || exit
@@ -90,7 +93,32 @@ fi
 
 # Download ISO
 ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
-ISO_VERSION_STRING=$(readlink "${ISO_PATH}" | sed -n -e 's/^.*\(fuel\)\(-community\|-gerrit\)\?-\([0-9.]\+-[0-9]\+\).*/\3/p')
+
+# Detect version of downloaded ISO, name examples:
+# - fuel-9.0-community-4161-2016-05-13_10-26-43.iso - new community builds
+# - fuel-community-6.1-741-2016-05-13_04-59-02.iso  - old community builds
+# - fuel-9.0-custom-161-2016-05-13_11-03-31.iso     - new custom builds
+# - fuel-gerrit-7.0-1345-2016-03-31_09-35-03.iso    - old custom builds
+# - fuel-9.0-317-2016-05-13_08-00-00.iso            - product builds
+# - fuel-9.0-mos-356-2016-05-13_06-18-00.iso        - product builds with suffix
+#
+# This code will represent ISO version in standarized format:
+#  {MOS_VERSION}-{SUFFIX}-{BUILD}
+#
+# Where:
+#  MOS_VERSION - version of MOS
+#  SUFFIX      - additional suffix for MOS
+#  BUILD       - ISO build number
+#
+# Example:
+#  9.0-317            - for fuel-9.0-317-2016-05-13_08-00-00.iso
+#  9.0-mos-356        - for fuel-9.0-mos-356-2016-05-13_06-18-00.iso
+#  9.0-community-4161 - for fuel-9.0-community-4161-2016-05-13_10-26-43.iso
+#  6.1-community-741  - for fuel-community-6.1-741-2016-05-13_04-59-02.iso
+
+
+ISO_VERSION_STRING=$(readlink "${ISO_PATH}" | \
+    sed -n -r 's/^.*fuel(-[a-z]+)?-([0-9.]+)(-[a-z]+)?(-[0-9]+).*/\2\1\3\4/p')
 
 # save it as inject variables
 cat > iso.setenvfile <<EOF
