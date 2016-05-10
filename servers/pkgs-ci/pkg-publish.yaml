@@ -29,7 +29,8 @@
     triggers:
       - zuul
     scm:
-      - perestroika
+      - perestroika:
+          branch: '{perestroika-branch}'
     builders:
         - shell: |
             #!/bin/bash

@@ -12,7 +12,8 @@
       - ansicolor
       - gerrit-creds
     scm:
-      - perestroika
+      - perestroika:
+          branch: '{perestroika-branch}'
     properties:
       - inject:
           properties-content: |

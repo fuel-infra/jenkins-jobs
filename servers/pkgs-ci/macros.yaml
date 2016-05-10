@@ -118,7 +118,7 @@
       - git:
           url: 'https://git.openstack.org/openstack/fuel-mirror.git'
           branches:
-            - master
+            - '{branch}'
           basedir: 'fuel-mirror'
 
 ########################################################################

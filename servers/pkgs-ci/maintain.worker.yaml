@@ -15,7 +15,8 @@
       - build-timeout:
           timeout: 120
     scm:
-      - perestroika
+      - perestroika:
+          branch: 'master'
     builders:
       - guess-mirror
       - shell:

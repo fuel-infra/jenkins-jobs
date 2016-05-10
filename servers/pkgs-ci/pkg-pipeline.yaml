@@ -13,7 +13,8 @@
           <li> system test using just built packages
         </ul>
     scm:
-      - perestroika
+      - perestroika:
+          branch: '{perestroika-branch}'
     wrappers:
       - gerrit-creds
       - timeout:
