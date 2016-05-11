@@ -15,12 +15,12 @@ LOG = logging.getLogger('custompatches')
 
 
 PATTERN = re.compile(r'''
-    commit\s(?P<commitid>[a-f0-9]{40})       # git commit id
-    .*?                                      # lazily skip to the very bottom
-    Change-Id:\s(?P<changeid>I[a-f0-9]{40})  # gerrit change id
-    .*?\n\n                                  # lazily skip to the very bottom
+    ^commit\s(?P<commitid>[a-f0-9]{40})       # git commit id
+    .*?                                       # lazily skip to the very bottom
+    Change-Id:\s(?P<changeid>I[a-f0-9]{40})   # gerrit change id
+    .*?\n\n?                                  # lazily skip to the very bottom
     ''',
-    re.DOTALL | re.VERBOSE  # match newlines with .* and allow whitespaces
+    re.DOTALL | re.VERBOSE | re.MULTILINE  # match newlines with .* and allow whitespaces
 )
 
 CLOSED_RE = re.compile(r'.*\(change \d+ closed\).*', re.DOTALL)
