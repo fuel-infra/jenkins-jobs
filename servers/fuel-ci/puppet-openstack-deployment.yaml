@@ -104,7 +104,7 @@
       - timed: 'H 2 * * *'
       - '{gerrit-macro}':
           recheck_regexp: '{puppet_openstack_recheck_regexp}'
-          projects_regexp: '{puppet_openstack_projects_regexp}'
+          projects_regexp: '{puppet-projects-regexp}'
     publishers:
       - archive:
           allow-empty: true
@@ -129,6 +129,7 @@
     fuellib-branch: 'stable/mitaka'
     fuelmirror-branch: 'stable/mitaka'
     puppet-branch: 'stable/mitaka'
+    puppet-projects-regexp: '{mitaka_puppet_openstack_projects_regexp}'
     gerrit-macro: 'puppet-openstack-request-mitaka'
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
@@ -157,6 +158,7 @@
     fuellib-branch: 'master'
     fuelmirror-branch: 'master'
     puppet-branch: 'master'
+    puppet-projects-regexp: '{puppet_openstack_projects_regexp}'
     gerrit-macro: 'puppet-openstack-request-master'
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
