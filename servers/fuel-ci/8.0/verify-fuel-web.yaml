@@ -3,6 +3,8 @@
     builders:
       - shell: |
           #!/bin/bash -ex
+          # dirty hack for solving python dependencies (https://bugs.launchpad.net/fuel/+bug/1569768)
+          echo "pbr==1.8.1" >> ./nailgun/test-requirements.txt
           ./run_tests.sh --with-xunit --no-webui
     description: |
       Test requests for fuel-web master branch (without UI tests)
