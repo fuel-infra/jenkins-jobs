@@ -3,7 +3,8 @@
 
     gerrit_trigger_on_recheck_regexp: '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*fuel: recheck'
     puppet_openstack_recheck_regexp: '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck|reverify|fuel: recheck)'
-    puppet_openstack_projects_regexp: 'openstack/puppet-(aodh|ceilometer|cinder|glance|ironic|heat|horizon|keystone|murano|neutron|nova|openstacklib|oslo|pacemaker|sahara|swift)'
+    puppet_openstack_projects_regexp: 'openstack/puppet-(aodh|ceilometer|ceph|cinder|glance|ironic|heat|horizon|keystone|murano|neutron|nova|openstacklib|oslo|pacemaker|sahara|swift)'
+    mitaka_puppet_openstack_projects_regexp: 'openstack/puppet-(aodh|ceilometer|cinder|glance|ironic|heat|horizon|keystone|murano|neutron|nova|openstacklib|oslo|pacemaker|sahara|swift)'
 
     logrotate:
       daysToKeep: 90
