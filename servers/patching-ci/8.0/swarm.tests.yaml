@@ -218,6 +218,8 @@
            - 'thread_keystone_separate_services'
            - 'thread_2_separate_services'
            - 'fuel_plugin_example'
+         weight: '20'
+         node: 'huge-systest'
      - '8.0.{id}.{dist}.{testgroup}':
          testgroup: 'fuel_plugin_reboot'
      - '8.0.{id}.{dist}.{testgroup}':
