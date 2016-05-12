@@ -98,7 +98,7 @@ def _upload_for_review(repo, commit, branch, topic=None):
             LOG.info('Change %s is closed in Gerrit, skipping it...', commit)
             return
 
-        LOG.error('Failed to push the commit %s to %s', (commit, branch))
+        LOG.error('Failed to push the commit %s to %s', commit, branch)
         raise RuntimeError(
             'Failed to push the commit %s to %s' % (commit, branch)
         )
