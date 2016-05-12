@@ -15,10 +15,9 @@
       - inject:
           properties-content: |
             REPO_BASE_PATH=/home/jenkins/pubrepos
-            SIGKEYID=3E301371
-            PUBLISHER_HOST=perestroika-repo-tst.infra.mirantis.net
+            SIGKEYID=1FA22B08
+            PUBLISHER_HOST=publisher01-bud.infra.mirantis.net
             PROJECT_VERSION=8.0
-            REMOTE_PATH=/mos-repos/centos/mos8.0-centos7-fuel
 
     parameters:
       - string:
