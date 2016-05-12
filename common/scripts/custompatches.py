@@ -23,6 +23,8 @@ PATTERN = re.compile(r'''
     re.DOTALL | re.VERBOSE  # match newlines with .* and allow whitespaces
 )
 
+CLOSED_RE = re.compile(r'.*\(change \d+ closed\).*', re.DOTALL)
+
 
 def _clone_or_fetch(gerrit_uri):
     LOG.info('Cloning %s...', gerrit_uri)
@@ -91,6 +93,9 @@ def _upload_for_review(repo, commit, branch, topic=None):
     if process.returncode:
         if 'no changes' in stderr:
             LOG.info('No changes in %s, skipping it...', commit)
+            return
+        if CLOSED_RE.match(stderr):
+            LOG.info('Change %s is closed in Gerrit, skipping it...', commit)
             return
 
         LOG.error('Failed to push the commit %s to %s', (commit, branch))
