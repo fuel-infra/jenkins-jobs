@@ -326,3 +326,15 @@
            DEVOPS_SETTINGS_TEMPLATE=$WORKSPACE/system_test/tests_templates/tests_configs/multipath_3_nodes.yaml
            NODES_COUNT=4
          timeout: '600'
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
+         testgroup: 'support_hugepages'
+         properties: |
+            KVM_USE=True
+            DRIVER_ENABLE_ACPI=true
+            NUMA_NODES=2
+            SLAVE_NODE_CPU=4
+            SLAVE_NODE_MEMORY=5120
+            ENV_SLAVE_LOGIN=root
+            ENV_SLAVE_PASSWORD=r00tme
+         timeout: '600'
+         node: 'systest-hugepages'

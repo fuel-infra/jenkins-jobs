@@ -268,3 +268,6 @@
             - name: '9.0.system_test.ubuntu.deploy_multipath'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.system_test.ubuntu.support_hugepages'
+              current-parameters: true
+              kill-phase-on: NEVER
