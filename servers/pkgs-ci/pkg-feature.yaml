@@ -13,7 +13,8 @@
           <li> system test using just built packages
         </ul>
     scm:
-      - perestroika
+      - perestroika:
+          branch: 'stable/9.0'
     parameters:
       - gerrit
     properties:
@@ -125,7 +126,9 @@
     triggers:
       - zuul
     scm:
-      - perestroika
+      - perestroika:
+          branch: 'stable/9.0'
+
     builders:
       - shell: rm -vf 'buildresult.params'
       - copyartifact:
