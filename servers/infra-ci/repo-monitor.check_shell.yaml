@@ -1,7 +1,7 @@
 - job:
     name: 'repo-monitor.check_shell'
-    description: |
-            <h2>Run shellchek against *.sh files</h2>
+    description:
+      !include-raw descriptions/shellcheck.html
     concurrent: true
     node: 'shellcheck'
     builders:
