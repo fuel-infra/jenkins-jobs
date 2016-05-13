@@ -1,8 +1,7 @@
 - job:
     name: 'jenkins-jobs.check_shell'
-    description: |
-            <h2>Run shellchek against *.sh files</h2>
-            <h3>Job currently running in non-voting mode</h3>
+    description:
+      !include-raw descriptions/shellcheck.html
     concurrent: true
     node: 'shellcheck'
     builders:
