@@ -27,6 +27,9 @@
           default: ''
           description: 'image to publish (used on image rebuild)'
     wrappers:
+      - ansicolor:
+          colormap: css
+      - timestamps
       - timeout:
           fail: true
           timeout: 120
