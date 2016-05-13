@@ -95,6 +95,8 @@
          testgroup: 'change_vip_manually'
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'ssl'
+         properties: |
+           FORCE_HTTPS_MASTER_NODE=true
      - '{version-id}.{id}.{dist}.{testgroup}':
          testgroup: 'network_outage'
          node: 'network-systest'
