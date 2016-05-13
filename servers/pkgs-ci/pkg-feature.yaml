@@ -14,7 +14,7 @@
         </ul>
     scm:
       - perestroika:
-          branch: 'stable/9.0'
+          branch: 'stable/mitaka'
     parameters:
       - gerrit
     properties:
@@ -127,7 +127,7 @@
       - zuul
     scm:
       - perestroika:
-          branch: 'stable/9.0'
+          branch: 'stable/mitaka'
 
     builders:
       - shell: rm -vf 'buildresult.params'
