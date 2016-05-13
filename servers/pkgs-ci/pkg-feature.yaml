@@ -310,20 +310,17 @@
 - job-group:
     name: '{project-version}-pkg-{project-name}'
 
-    project-name: '{name}'
-    project-version:
-    - 9.0:
-        # Update workflow
-        is-updates: 'false'
+    # Update workflow
+    is-updates: 'false'
 
-        # Repository parameters for project
-        deb-dist-name: 'mos{project-version}'
-        deb-repo-path: '/{name}-repos/ubuntu'
-        rpm-repo-path: '/{name}-repos/centos/mos{project-version}-{distro}'
+    # Repository parameters for project
+    deb-dist-name: 'mos{project-version}'
+    deb-repo-path: '/{name}-repos/ubuntu'
+    rpm-repo-path: '/{name}-repos/centos/mos{project-version}-{distro}'
 
-        # MOS repositories (build/test dependencies)
-        mos-deb-repo-path: '/mos-repos/ubuntu'
-        mos-rpm-repo-path: '/mos-repos/centos/mos{project-version}-{distro}'
+    # MOS repositories (build/test dependencies)
+    mos-deb-repo-path: '/mos-repos/ubuntu'
+    mos-rpm-repo-path: '/mos-repos/centos/mos{project-version}-{distro}'
 
     distro:
     - centos7:
@@ -340,40 +337,3 @@
     - '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-install-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
-
-################################################################################
-# Project definition(s)
-################################################################################
-
-- project:
-    name: 'feature'
-
-    # Allow package downgrade
-    is-downgrade: 'true'
-
-    deb-origin-release: 'Mirantis'
-    deb-origin-test: 'testing'
-
-    publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
-    repo-base-path: '/home/jenkins/pubrepos'
-
-    pkg-sign-key: '1FA22B08'
-
-    # Gerrit parameters
-    gerrit-host: 'review.fuel-infra.org'
-    gerrit-port: '29418'
-    gerrit-user: 'openstack-ci-jenkins'
-
-    # Install test repository
-    install-scm-repo: 'infra/ci-test-request'
-    install-scm-branch: 'master'
-    scm-user: 'openstack-ci-jenkins'
-    scm-credentials-id: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
-
-    # Job slave nodes
-    build-node: 'new-builder'
-    publish-node: 'new-publisher'
-    install-node: 'install-node'
-
-    jobs:
-    - '{project-version}-pkg-{project-name}'

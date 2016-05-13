@@ -1,0 +1,34 @@
+- project:
+    name: 'feature-nfv'
+
+    # Allow package downgrade
+    is-downgrade: 'true'
+
+    deb-origin-release: 'Mirantis'
+    deb-origin-test: 'testing'
+
+    publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    repo-base-path: '/home/jenkins/pubrepos'
+
+    pkg-sign-key: '1FA22B08'
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: 'openstack-ci-jenkins'
+
+    # Install test repository
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'master'
+    scm-user: 'openstack-ci-jenkins'
+    scm-credentials-id: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
+
+    # Job slave nodes
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+    install-node: 'install-node'
+
+    jobs:
+    - '{project-version}-pkg-{project-name}':
+        project-name: '{name}'
+        project-version: '9.0'
