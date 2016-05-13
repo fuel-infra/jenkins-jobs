@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -ex
 
 #################################################
@@ -19,6 +20,9 @@ set -ex
 #
 # MU_NUMBER         : Number of Maintenance updates
 #
+# URL_TO_DB         : URL to published reports. Only for case IS_UPDATES=true
+#                     Default value http://mirror.fuel-infra.org/mcv/mos/
+#
 # URLS              : List of URLs separated by "|"
 #                   : e.g. centos repo http://mirror.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel
 #                   : ubuntu repo http://mirror.fuel-infra.org/mos-repos/ubuntu/7.0
@@ -27,8 +31,8 @@ set -ex
 #
 
 die () {
-   echo "$@"
-   exit 1
+    echo "$@"
+    exit 1
 }
 
 ##################################################
@@ -36,17 +40,22 @@ die () {
 # Initialize variables
 #
 
-MOS_COMPONENT="os"
 URLS_TO_METADATA=''
 
 if [ "${IS_UPDATES}" == "true" ] ; then
-    MU_SUFFIX="-mu-${MU_NUMBER}"
-    UPDATES_SUFFIX="-${UPDATES_REPO_NAME}"
-    MOS_COMPONENT="mu-${MU_NUMBER}-${UPDATES_REPO_NAME}"
+    MOS_COMPONENT="mu-${MU_NUMBER}"
+    CENTOS_TARGET_FILE="${MOS_COMPONENT}-${UPDATES_REPO_NAME}.target.txt"
+    OUTPUT_FILE="${RELEASE_VERSION}-${DISTRO}-mu-${MU_NUMBER}.sqlite"
+    UBUNTU_REPO_SUFFIX="dists/mos${RELEASE_VERSION}-${UPDATES_REPO_NAME}/main/binary-amd64/Packages"
+    UBUNTU_TARGET_FILE="${MOS_COMPONENT}.target.txt"
+else
+    MOS_COMPONENT="os"
+    CENTOS_TARGET_FILE="${MOS_COMPONENT}.target.txt"
+    OUTPUT_FILE="${RELEASE_VERSION}-${DISTRO}.sqlite"
+    UBUNTU_TARGET_FILE="release.target.txt"
+    UBUNTU_REPO_SUFFIX="dists/mos${RELEASE_VERSION}/main/binary-amd64/Packages"
 fi
 
-UBUNTU_REPO_SUFFIX="dists/mos${RELEASE_VERSION}${UPDATES_SUFFIX}/main/binary-amd64/Packages"
-OUTPUT_FILE="${RELEASE_VERSION}-${DISTRO}${MU_SUFFIX}.sqlite"
 OLDIFS="$IFS"
 IFS='|'
 
@@ -59,19 +68,20 @@ for URL in $URLS ; do
     IFS="$OLDIFS"
     case "${DISTRO}" in
        centos)
-          wget "${URL}/${MOS_COMPONENT}.target.txt" -O "${RELEASE_VERSION}-${DISTRO}-${MOS_COMPONENT}.target.txt"
-          SNAPSHOT=$(head -1 "${RELEASE_VERSION}-${DISTRO}-${MOS_COMPONENT}.target.txt")
-          wget "${URL}/${SNAPSHOT}/x86_64/repodata/repomd.xml" -O "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml"
-          CENTOS_REPO_FILENAME=$(grep "primary\.sqlite" "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml" |\
-              grep location | cut -d '"' -f2)
+          SNAPSHOT=$(curl -sSf "${URL}/${CENTOS_TARGET_FILE}" | head -1)
+          wget "${URL}/${SNAPSHOT}/x86_64/repodata/repomd.xml" \
+          -O "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml"
+          CENTOS_REPO_FILENAME=$(\
+              grep "primary\.sqlite" "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml" |
+              grep location | cut -d '"' -f2 \
+          )
           REPO_SUFFIX="x86_64/${CENTOS_REPO_FILENAME}"
           BASE_URL="${URL}"
           ;;
        ubuntu)
-          wget "${URL}.target.txt" -O "${RELEASE_VERSION}-${DISTRO}-target.txt"
-          SNAPSHOT=$(head -1 "${RELEASE_VERSION}-${DISTRO}-target.txt")
+          SNAPSHOT=$(curl -sSf "${URL}-${UBUNTU_TARGET_FILE}" | head -1)
           REPO_SUFFIX="${UBUNTU_REPO_SUFFIX}"
-          # Remove $RELEASE_VERSION from $URL for Ubuntu repository
+          # Remove $RELEASE_VERSION from URL for Ubuntu repository
           BASE_URL="${URL%$RELEASE_VERSION*}"
           ;;
        *)

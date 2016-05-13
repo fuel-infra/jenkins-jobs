@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -ex
 
 #####################################################################
@@ -42,6 +43,7 @@ MIRROR_HOST=${MIRROR_HOST:-"mirror.fuel-infra.org"}
 HOSTS_TO_SYNC=${HOSTS_TO_SYNC:-"mirror.seed-cz1.fuel-infra.org \
 mirror.seed-us1.fuel-infra.org"}
 DST_DIR="mcv/mos"
+TARGET_DIR="${DST_DIR}/${RELEASE_VERSION}"
 
 ##################################################
 #
@@ -58,15 +60,16 @@ die "ERROR: Mirroring of ${MIRROR_HOST} failed!"
 # copy new report to target directory
 #
 
-[ ! -d "${DST_DIR}/$RELEASE_VERSION" ] && mkdir "${DST_DIR}/$RELEASE_VERSION"
+[ ! -d "${TARGET_DIR}" ] && mkdir -p "${TARGET_DIR}"
 
-pushd "${DST_DIR}/$RELEASE_VERSION"
-    if [ ! -f "$FILE" ] ; then
+pushd "${TARGET_DIR}"
+    if [ ! -f "${FILE}" ] ; then
         cp "${WORKSPACE}/${FILE}" "."
     else
-        die "File $FILE already exist!"
+        die "File ${FILE} already exist!"
     fi
     ln -sf "${FILE}" "${DISTRO}-latest.sqlite"
+    md5sum "${FILE}" | cut -d ' ' -f1 > "${DISTRO}-latest.md5"
 popd
 
 ##################################################
