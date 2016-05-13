@@ -18,6 +18,14 @@
       - heavy-job:
           weight: 1
 
+      - authorization:
+          maintenance-mgmt:
+            - job-read
+            - job-build
+          ci:
+            - job-read
+            - job-build
+
     parameters:
       - string:
           name: make_args
