@@ -1,0 +1,697 @@
+commit 098ae2805a7692a59643db5253cfc398bff7e243
+Author: ZhiQiang Fan <aji.zqfan@gmail.com>
+Date:   Fri Feb 26 03:40:13 2016 +0800
+
+    Add validation for polling_namespaces option
+    
+    We find that if polling_namespaces is specified by config file
+    instead of in command line args, the validation doesn't work at all,
+    which cause the agent still running but in a wrong state.
+    This patch fixes it.
+    
+    Change-Id: I34a268da18549961eb1a3ccd862def5145725cd5
+    Closes-Bug: #1553013
+    (cherry picked from commit 55afd4fa763f62e75fb00e0622df9862811365b8)
+
+commit 9404e73f6c24bc72e25ead7338ce536bb7d86346
+Author: Chris Dent <cdent@anticdent.org>
+Date:   Sat Mar 19 20:20:43 2016 +0000
+
+    Remove gabbi tests that check content-location
+    
+    The content-location header is an artifact of using httplib2
+    and not something that ceilometer itself returns. Gabbi is going
+    to stop using httplib2 (and so is much of OpenStack) so to prepare
+    for that these tests need to stop testing something that doesn't
+    really mean anything.
+    
+    Closes-Bug: #1560987
+    
+    Change-Id: If5aacaf108402146d66fee474793dde1c0a59a7c
+    (cherry picked from commit 639b9476bd8554bee93512a81ae24605c766f080)
+    (cherry picked from commit 6563e6b08ba07dcd24bd99406fc801e04f2e7864)
+
+commit 19d5d3cf32f69a0e7acd86287dffa2df46d54c29
+Author: OpenStack Proposal Bot <openstack-infra@lists.openstack.org>
+Date:   Tue Mar 1 06:28:10 2016 +0000
+
+    Imported Translations from Zanata
+    
+    For more information about this automatic import see:
+    https://wiki.openstack.org/wiki/Translations/Infrastructure
+    
+    Change-Id: I0597080daf0b86d2464b0e7536dfda1186f066cf
+
+commit 962430338a0498a5d70f5f7d63b8db81b9011a67
+Author: gordon chung <gord@live.ca>
+Date:   Fri Feb 26 16:31:55 2016 -0500
+
+    close services in test
+    
+    our gate is hanging because oslo.messaging will persist if we don't
+    kill notification service at end of test.
+    
+    Change-Id: I8384b6078791bc46c7cc739835668fbdef5dfb80
+    (cherry picked from commit fd0d5c7a72e929090611b070ca7ff79bf260de58)
+
+commit 9203a8d1735b7fc3af1daabfa714ef6f5b1d3869
+Author: Mehdi Abaakouk <sileht@redhat.com>
+Date:   Mon Feb 29 10:41:01 2016 +0100
+
+    Fixing evaluation of gnocchi aggregation-by-metric
+    
+    A typo in metric parameters for requests
+    
+    Change-Id: I8bb81a645b69ee065dd8f88b9b996ab1d116f84d
+    Closes-bug: #1513738
+    (cherry picked from commit bbb9e3c7b0ab5a8cb35e7d3cd264f3d94ea43fe8)
+
+commit 4a4df73759cd78105ceb115ac0f4ec0980285d80
+Author: Pradeep Kilambi <pkilambi@redhat.com>
+Date:   Mon Feb 1 13:56:56 2016 -0500
+
+    Skip duplicate meter definitions
+    
+    Closes-bug: #1536498
+    
+    Change-Id: I531405d0153257ece38e2053a24d5c07cf4de90f
+    (cherry picked from commit 0c6f11cf88bf1a13a723879de46ec616678d2e0b)
+
+commit 44bb957eade7ecc6e6ecd2e0b328e54cee835268
+Author: gordon chung <gord@live.ca>
+Date:   Fri Feb 26 14:08:36 2016 -0500
+
+    ignore context in tests
+    
+    the context format changed in oslo.messaging. we don't really use
+    it so let's ignore it for test.
+    
+    Change-Id: I507bf8e1a5b3dce2df6aae913229fd4c627078b1
+
+commit 994c1d21205425c13798d86d0c4d6a118dd436ee
+Author: Pradeep Kilambi <pkilambi@redhat.com>
+Date:   Tue Feb 23 14:29:13 2016 -0500
+
+    Add gnocchi dispatcher opts to config
+    
+    Closes-bug: #1548877
+    
+    Change-Id: I41040f1dd0202032b7593b76e9df04f6b0a823f6
+    (cherry picked from commit 875ba56cfb73503b85998524c2f8b478f6cbfabb)
+
+commit 24fe1d6bbbbe35db45b22ad18aaf18bafddad176
+Author: ZhiQiang Fan <aji.zqfan@gmail.com>
+Date:   Thu Feb 18 02:57:00 2016 +0800
+
+    Gnocchi: fix ResourcesDefinitionException for py3
+    
+    In Python 3, Exception.message doesn't exist any more.
+    
+    Change-Id: I77b4f2111d23861ec093b66f02add8c92e220026
+    (cherry picked from commit 15f527479e6e41a3665c08303bc05fdb40c88700)
+
+commit caf0a9ef10834f7a65c683cc63659d91e1e61ced
+Author: Julien Danjou <julien@danjou.info>
+Date:   Tue Dec 22 16:30:09 2015 +0100
+
+    gnocchi: fix stack resource type
+    
+    There's no "orchestration" type in Gnocchi, it's called "stack".
+    
+    Change-Id: I28d98aee7b953d9dfb423571c297046226309602
+    (cherry picked from commit 0ae0e3ba14698aa3b5c426af1353a2328adc6fdb)
+
+commit 0a0f9a24678e795a57936b097a03b8e84752f7d7
+Author: gordon chung <gord@live.ca>
+Date:   Thu Nov 26 16:29:59 2015 -0500
+
+    add cpu.delta to gnocchi resources
+    
+    we added cpu.delta in liberty to capture cputime between polls.
+    this adds it to the metric list for instance resource.
+    
+    Change-Id: Ib494f7d119cda370aa8291fd404dad38c0c53817
+    (cherry picked from commit c5b8b799039ac5b8be7b2a3983a28a654630b536)
+
+commit 99a56e707a1bc9049b167b303501cceb7d37e65e
+Author: Pradeep Kilambi <pkilambi@redhat.com>
+Date:   Fri Feb 5 14:03:28 2016 -0500
+
+    Handle malformed resource definitions gracefully
+    
+    Closes-bug: #1542189
+    
+    Conflicts:
+    	ceilometer/dispatcher/gnocchi.py
+    	ceilometer/tests/unit/dispatcher/test_gnocchi.py
+    
+    Change-Id: Ibfe49741ad5df82a57cc1c344a471be4d23fdffb
+    (cherry picked from commit 02b1e1399bf885d03113a1cc125b1f97ed5540b9)
+
+commit c7646b2adff3da331392b1316b0a1d82e0b39389
+Author: gordon chung <gord@live.ca>
+Date:   Fri Jan 15 14:04:16 2016 -0500
+
+    raise coordination error if not registered
+    
+    in the scenario where an agent does not get registered in group,
+    try to rejoin group. if not successful after 5 attempts, give up
+    and raise.
+    
+    also, cherry-pick I6a48cf38b24a00a0db94d3dea0c6746b52526026
+    Change-Id: Ic0b6b62dace88e4e1ce7932024350bb211efb9ef
+
+commit 510aa7897a46688b9826ac8800455de03fe3dc34
+Author: OpenStack Proposal Bot <openstack-infra@lists.openstack.org>
+Date:   Mon Feb 1 06:34:33 2016 +0000
+
+    Imported Translations from Zanata
+    
+    For more information about this automatic import see:
+    https://wiki.openstack.org/wiki/Translations/Infrastructure
+    
+    Change-Id: I9d88ffb9b305c47a4a118da73a90f5daf12f4c10
+
+commit 67e47cda8e7e0d2649fef334a6e0db2826d5fbd1
+Author: gordon chung <gord@live.ca>
+Date:   Thu Jan 14 09:47:33 2016 -0500
+
+    better support notification coordination
+    
+    when launching multiple agents at same time, there is a chance that
+    agents will miss the registry of another agent. this is possible
+    because there is a lot of overhead involved when starting up agents,
+    specifically with initialising managers.
+    
+    this change makes it so the agent only joins the group AFTER it has
+    done all setup that does not require coordination. after it joins,
+    we start listening right away for other changes to group membership
+    
+    additionally, this adds a lock to pipeline queue setup so only one
+    event at any time can trigger a reconfiguration.
+    
+    Change-Id: I8100160a3aa83a190c4110e6e8be9b26aef8fd1c
+    Closes-Bug: #1533787
+
+commit 5861466ef4035cdd7f6d4dac8ebc30479637dfaa
+Author: Nadya Shakhat <nprivalova@mirantis.com>
+Date:   Wed Jan 20 14:03:09 2016 +0300
+
+    Remove transformers from pipeline.yaml
+    
+    In Liberty we cannot run more then one notification agent in cloud
+    without coordination. So, we have several approaches how to
+    solve this problem:
+    
+    1. Run one notification agent under pcs.
+       pros: we keep transformers
+       cons: one notification agent is not enough for big envs
+    
+    2. Change config and not to gather "delta" and "util" by default
+       pros: ok from performance PoV; no changes in puppet
+       cons: transformer-based meters are not generated
+    
+    We've chosen the second approach. If tranformers will be needed, we can
+    deploy our redis plugin, switch on coordination mode and add transformers
+    back to config.
+    Removed unit tests tested default pipeline.cfg, not the functionality.
+    That is why is is safe to remove them.
+    
+    Closes-bug: #1537708
+    Change-Id: Ib3b21b0a967be34eda002820228aa4892d733d5d
+
+commit 278c4846efd218c648b76510aba2b52c762866ff
+Author: gordon chung <gord@live.ca>
+Date:   Wed Jan 20 14:21:09 2016 -0500
+
+    fix unknown gnocchi db in liberty gate
+    
+    we set gnocchi as CEILOMETER_BACKEND now but ceilometer in liberty
+    does not know of this setting.
+    
+    Change-Id: I51d5eeb4ac3977e56f5410ea8713bc655e2e7efa
+
+commit 3b35c4087519981ba7dd062eec988e9ee5ddf076
+Author: gordon chung <gord@live.ca>
+Date:   Tue Jan 19 11:56:40 2016 -0500
+
+    add ceilometer 5.0.2 release notes
+    
+    Change-Id: Ifcd70e81e3895651461e5e876d8e48205bb0604c
+
+commit 5d1861821b7a3ac2cb827cf87bae4826ad8cb4e3
+Author: Pradeep Kilambi <pkilambi@redhat.com>
+Date:   Tue Oct 13 11:35:17 2015 -0400
+
+    Fix snmp pollster to not ignore valid meters
+    
+    Change-Id: Iecffab082f384df6c2fdb5f29754f674c9184b67
+    Closes-Bug: #1503189
+    (cherry picked from commit dc30bca3fb412735bc484f01b1165a786129bace)
+
+commit fd54d10f6d35ea00feee67d222a90e4ad3951faa
+Author: Kevin McDonald <kmcdonald@softlayer.com>
+Date:   Wed Jan 6 15:52:55 2016 -0600
+
+    Changes aggregator transformer to allow retention_time w/o size
+    
+    When using an aggregator transformer in pipeline.yaml that
+    looks like this:
+    ---
+    transformers:
+        - name: "aggregator"
+          parameters:
+              retention_time: 60
+              resource_metadata: last
+    ---
+    'size' will automatically be defaulted to 1. That means that
+    aggregation will not happen as expected with a retention_time of
+    60 seconds.
+    
+    This fix will only default sample size to 1 if neither
+    retention_time or size are defined.
+    
+    Change-Id: I4a3aa0f6de26173e6f9383d570ff2cf13d367e38
+    Closes-Bug: 1531626
+    (cherry picked from commit 5a9a41563e9c26fb91f4d5ebf863bf24bf395237)
+
+commit cd2065df67889354703f2a5d38af669630d67760
+Author: Davanum Srinivas <davanum@gmail.com>
+Date:   Wed Dec 2 23:43:34 2015 -0500
+
+    oslo.messaging option group/name change for notification topics
+    
+    In Ib51e2839f9035d0cc0e3f459939d9f9003a8c810, oslo.messaging
+    is introducing a new group for the notifiction options. This
+    review is the minimum needed to support both old and
+    newer oslo.messaging versions. (In other words, next
+    oslo.messaging release will break ceilometer unless we
+    work around for the new option group)
+    
+    Depends-On: Ieffb4184cd7bc47e7d71434175f75a5be07bd112
+    Change-Id: I4765b3b9627983a245aa5521a85ad89e83ab8551
+    (cherry picked from commit 155d4fa894ea07264c03db73ba0828d3b96de1ae)
+
+commit 0672eb4dc5281734ba4eb54c6677ac72964471aa
+Author: Igor Degtiarov <idegtiarov@mirantis.com>
+Date:   Wed Dec 16 15:48:57 2015 +0200
+
+    [MongoDB] add indexes in event collection
+    
+    Now in event collection only ttl index existed, that means response
+    on queries for event collection will become slower with collection growth.
+    Additional indexes based on timestamp and event_type fields in improves this.
+    
+    Closes-bug: #1527240
+    Change-Id: I87f13262a213828e1aca5fbe60544db78999a341
+    (cherry-picked from upstream change I87f13262a213828e1aca5fbe60544db78999a341)
+
+commit c8d778e58eee54cddae63c541075876379a5a388
+Author: Ilya Tyaptin <ityaptin@mirantis.com>
+Date:   Thu Dec 10 13:58:40 2015 +0300
+
+    Add exlude rules for meaningless meters
+    
+    This change request contains a declarative pipeline config fixing.
+    We exclude a non-metering meters which are duplicated by events,
+    polling meters which are mixed with notification and misleading
+    and samples/events which don't carry any meaning in monitoring or
+    billing context but bulk the db.
+    
+    Change-Id: Ia5c8371823cb8b8e32d2638ff022e8a63468df01
+    Closes-bug: #1524682
+
+commit a3e8b6901f0cd16c0560b45dfa3ae271c360b291
+Author: Ilya Tyaptin <ityaptin@mirantis.com>
+Date:   Fri Dec 25 17:34:03 2015 +0300
+
+    Fix a issue with failing nova notifications
+    
+    Currently nova could send a notifications without tenant_id or user_id.
+    This "instance" notification are not recorded because notification descriptions
+    strictly need this params.
+    In this patch set we tried to fix it.
+    
+    Change-Id: I865e2f664a5f146708e233b3342616be5405ec0c
+    Partially-closes-bug: #1524682
+
+commit 9aeb38a97d0ee097f45084577c5fe88300506382
+Author: OpenStack Proposal Bot <openstack-infra@lists.openstack.org>
+Date:   Sun Dec 20 17:21:22 2015 +0000
+
+    Updated from global requirements
+    
+    Change-Id: I9433d65ee6e035bcb29b3ab554ac7c4c2db93b8e
+
+commit 4b66eee331826ad71389e3e1a33b4963164502c4
+Author: gordon chung <gord@live.ca>
+Date:   Wed Dec 2 17:37:30 2015 -0500
+
+    fix functional gate
+    
+    new keystone libs are breaking the functional tests. it seems
+    keystonemiddleware is implicitly being loaded when calling
+    prepare_service. we don't really need to call this so let's see
+    if it changes anything if we stop calling it.
+    
+    Closes-Bug: #1522166
+    Change-Id: If01bcb6543fe164d79f785e20668106308244f75
+    (cherry picked from commit c14856a50d9a0c16e43abd79bdb2d82c7a24edfb)
+
+commit e253e7e0a73eb3cf38b2c6c01c2def7980a64130
+Author: Julien Danjou <julien@danjou.info>
+Date:   Wed Oct 14 16:33:00 2015 +0200
+
+    gnocchi: remove possible ending / in URL
+    
+    If the URL ends up with a /, then URL are built with 2 /
+    e.g. POST //v1/foobar and that does not work.
+    
+    Change-Id: I98e9a0e85e9dd6ae022bbc0543244e533b1307f7
+    (cherry picked from commit 0e776f8f096729d59760f8c5fc8a26e2b34567c4)
+
+commit 4f67ed8ff0b104b00f9a6647ea58249de9c38a67
+Author: liusheng <liusheng@huawei.com>
+Date:   Wed Nov 18 12:42:15 2015 +0800
+
+    Move the content of ReleaseNotes to README.rst
+    
+    For now, we have added reno for release notes management, and a folder
+    "releasenotes" was added in ceilometer. Because there is a file named
+    "ReleaseNotes" to provide release note location and ceilometer home, it
+    will broken some git operations in case insensitive OS (e.g. Windows).
+    This change simply move the content of ReleaseNotes to README.rst to avoid
+    the problem.
+    
+    Change-Id: Id883bef77eb74c798c8554d61db55e66c8d5e049
+    (cherry picked from commit f38091f2770c10e29cf2b2ef7683b1b069c6e540)
+
+commit 82b76dcf67d8eaea9752042e92dcabb9397f61c0
+Author: gordon chung <gord@live.ca>
+Date:   Thu Nov 26 16:03:30 2015 -0500
+
+    re-implement thread safe fnmatch
+    
+    fnmatch is not thread safe for versions <= 2.7.9. We have used
+    it in some places without any lock for concurrency scenario. This patch
+    re-implements a thread safe match() which is very similar to fnmatch by
+    using its translate function.
+    
+    Co-Authored-By: ZhiQiang Fan <aji.zqfan@gmail.com>
+    Change-Id: I4b6c2ea72841201519144eb09ecf8c82b16b6143
+    ref: https://hg.python.org/cpython/rev/fe12c34c39eb
+    Closes-Bug: #1519767
+
+commit 40c5ceefa96d93cf9b12fa189787ed3f26e853cc
+Author: ZhiQiang Fan <aji.zqfan@gmail.com>
+Date:   Tue Nov 17 00:34:16 2015 +0800
+
+    don't pass ceilometer options to oslo.db engine facade
+    
+    oslo.db EngineFacade class only support options defined by oslo.db,
+    but we're passing options defined by ceilometer, so oslo.db complains
+    with a warning message:
+    
+    NotSupportedWarning: Configuration option(s) ['alarm_connection', \
+    'alarm_history_time_to_live', 'db2nosql_resource_id_maxlen', \
+    'event_connection', 'event_time_to_live', 'metering_connection', \
+    'metering_time_to_live'] not supported exception.NotSupportedWarning
+    
+    This patch makes sure only options defined by oslo.db will be sent
+    to EngineFacade
+    
+    Note: Ceilometer stable/kilo still has alarm code, so this backport
+    also contains change in Aodh project.
+    
+    Change-Id: I2a39737a5f7824918c28ff2180f2ea95e7e82537
+    Closes-Bug: #1516515
+    (cherry picked from commit 43c65a3b658c0af03948780ab0452b5ec2d05963)
+
+commit fc00820ae8b25ca3934bc45b543474a234dff72f
+Author: OpenStack Proposal Bot <openstack-infra@lists.openstack.org>
+Date:   Tue Nov 24 18:35:16 2015 +0000
+
+    Updated from global requirements
+    
+    Change-Id: Ieac708d8131643fef35a0066f9d49c9c46ac0fe3
+
+commit 1fae4ddf0dd69746715a35159929c674876d7d68
+Author: Matt Riedemann <mriedem@us.ibm.com>
+Date:   Tue Nov 24 06:43:37 2015 -0800
+
+    Add WebTest to test-requirements.txt
+    
+    WebTest is used in the functional tests, so it should be listed
+    in test-requirements.txt.
+    
+    Change-Id: I801890bb614340962b28a7110c9f3b0f3a8b4752
+
+commit 415ee34dde33a4c9eb9af1b6d69f48b2de7b4dea
+Author: OpenStack Proposal Bot <openstack-infra@lists.openstack.org>
+Date:   Fri Nov 20 06:13:08 2015 +0000
+
+    Imported Translations from Zanata
+    
+    For more information about this automatic import see:
+    https://wiki.openstack.org/wiki/Translations/Infrastructure
+    
+    Change-Id: I853ba4d5a4bf3b74d286245afa2792cabbb7dbf5
+
+commit 20f88cced59fbea52c0d4b62f17bcaabae8ce93b
+Author: gordon chung <gord@live.ca>
+Date:   Tue Nov 10 07:53:29 2015 -0500
+
+    add reno for release notes management
+    
+    Change-Id: Id36eb9d88c6a8fba635779fc9a971f015908b5de
+    (cherry picked from commit 2d471862e75a01708d732c316426b8d0af24e95d)
+
+commit 949c343d12bbb27881ce11b11a2d0bd983fd6622
+Author: gordon chung <gord@live.ca>
+Date:   Tue Nov 10 09:42:13 2015 -0500
+
+    add first reno-based release note
+    
+    Change-Id: I876dbe4a5053c27003725da7e91f36a5d06f154a
+
+commit 8a1d6315f2bb982e8ac3fc7a3c0ec847f2eaa121
+Author: Ilya Tyaptin <ityaptin@mirantis.com>
+Date:   Wed Jul 22 15:59:40 2015 +0300
+
+    Wrap importing python-kafka by try..except
+    
+    Early we catch ImportError caused by kafka only in tests.
+    It allows to some another job runnings. This CR fix it.
+    
+    Change-Id: Ia8847da3b1224328d43d8d68ec468216ec978007
+
+commit 422e56f276f860f2d9b8c297ef62e561cb60c4b6
+Author: Ilya Tyaptin <ityaptin@mirantis.com>
+Date:   Mon Jul 6 14:24:18 2015 +0300
+
+    Disable adding meters link to resource in api
+    
+    With finding meter links for every resource, resource-list request
+    becomes very slow. This patch disable meters link finding by default
+    
+    Change-Id: Ied90fc9fdd529d788af1bc13777fd4c3eb76e3da
+    Closes-bug:1430740
+
+commit da75e1e1b7827f441e294af2d4bcf5b701ebbe16
+Author: Ilya Tyaptin <ityaptin@mirantis.com>
+Date:   Mon Jul 6 14:28:08 2015 +0300
+
+    Fix endpoint to poll if Swift uses RADOS
+    
+    Change-Id: Idc67debb2875fe041e9b00432975e3729ca0e025
+    Closes-bug: #1380800
+
+commit 81dded73ce81b9c62e196003f72451338db65649
+Author: ZhiQiang Fan <aji.zqfan@gmail.com>
+Date:   Sat Oct 24 09:30:53 2015 -0600
+
+    avoid unnecessary inner join in get_resources() for SQL backend
+    
+    To get distinct resource ids, we do a query on resource table which
+    inner join sample table, and apply filters on it.
+    
+    Note that when sql_expire_samples_only is enabled, there will be
+    some resources without any sample, in such case we must use inner
+    join to avoid wrong result, no matter if there is a timestamp filter
+    or not.
+    
+    But that option is disabled by default, so when there is no timestamp
+    filters, the inner join is unnecessary, we should avoid it to save
+    some RAM/CPU cost.
+    
+    Change-Id: If85dbea15d42d42c6b0be7402c06f258e278b2eb
+    Closes-Bug: #1509677
+    (cherry picked from commit a4f442940551a8a38e26e132c7efa766226daa15)
+
+commit 5e33801c6abb377e86dffd62095274dff09f18ee
+Author: Thierry Carrez <thierry@openstack.org>
+Date:   Mon Oct 5 12:18:07 2015 +0200
+
+    Update .gitreview for stable/liberty
+    
+    Update .gitreview for stable/liberty branch to simplify submitting
+    backports.
+    
+    Change-Id: I394ecd1a98ce286b49bbacb62674a3c80182ec51
+
+commit 6aae92f2f46c5b40b0be780b71b6b5a4a602d49b
+Author: liusheng <liusheng@huawei.com>
+Date:   Mon Oct 12 11:43:47 2015 +0800
+
+    Add Liberty release note link
+    
+    Change-Id: I6f9bc206c5f6b85e4b8bd99523d73d289ace7b15
+    (cherry picked from commit 13c5e9da48e900b9cd54e3ec2da8b6a014275610)
+
+commit ca45db1871c02a9c02f8f258ce128e2e4f7a4fcd
+Author: gordon chung <gord@live.ca>
+Date:   Wed Oct 21 08:44:58 2015 -0400
+
+    avoid using isolation level
+    
+    depending on sql driver, REPEATABLE READ isolation level may lock
+    an entire table and cause write timeouts. isolation level was set
+    originally to ensure consistent reads between 2 queries required to
+    build events. that said, we can avoid table locks by making
+    assumption that the 1st query is the correct base and any difference
+    given by 2nd query can be discarded.
+    
+    Change-Id: Ic53e1addf38a4d5934b4e627c4c974c6db42517e
+    Closes-Bug: #1506717
+    (cherry picked from commit 898cd3d036c4358aa16f7b3e2028365dc9829213)
+
+commit c91852db8393aa04132d27cf0ad3048015a19559
+Author: OpenStack Proposal Bot <openstack-infra@lists.openstack.org>
+Date:   Wed Oct 28 21:47:56 2015 +0000
+
+    Updated from global requirements
+    
+    Change-Id: Ib0c7a3d86bc2719da889fadddd251d61ac85c8ac
+
+commit 16af61a0de1ae1d6165babac0f026c4d4c3b5cb9
+Author: ZhiQiang Fan <aji.zqfan@gmail.com>
+Date:   Fri Oct 16 02:45:45 2015 -0700
+
+    avoid generate temporary table when query samples
+    
+    Currently, when we call query-samples API, for SQL backend, we do
+    an inner join to get a temporary table, then apply filters, orderby
+    and limit options on it. Such implementation will drain disk space
+    or cause timeout exception when data set is growing, even with specified
+    limit and filters.
+    
+    This patch applies filters and limit on the inner join itself, and
+    uses a fake mapper object instead of temporary table to suit current
+    query transformer.
+    
+    Change-Id: I261a2dd362ed51c16a6fa191dadcce1b45fce2e4
+    Closes-Bug: #1506738
+    (cherry picked from commit b9bf5f1f571f21aee4347c80a5a7ac8a1c456e45)
+
+commit 2a43a816da5fb23bf75c23313816a55df486d200
+Author: Lianhao Lu <lianhao.lu@intel.com>
+Date:   Fri Sep 25 17:12:16 2015 +0800
+
+    Ensure the test data sample has correct signature
+    
+    Set the timestamp to iso format and make sure the test data samples
+    generated by scripts under tools directory have the correct signature.
+    
+    Change-Id: I1520450ae4e82459b73cc411a698a6faa91a40e0
+    Closes-Bug: #1499651
+    (cherry picked from commit b5a49e79e301e9543e1ae3adfcc961bbe21bd363)
+
+commit 2dd9b77b6e1ab604fe067f2e14d52d69177ca61f
+Author: Cyril Roelandt <cyril@redhat.com>
+Date:   Wed Oct 14 19:18:00 2015 +0200
+
+    Remove dependency on sphinxcontrib-docbookrestapi
+    
+    This Sphinx extension is no longer used nor maintained and can be safely
+    removed.
+    
+    Change-Id: I98dc4fb5419f5af664ebfc86f0e7814d404b3b86
+    (cherry picked from commit 9a5651c190955849598475c1a6ee86a4214ffc72)
+
+commit 05416c2d967b3f10fcbc3827afa24d1ec30363d8
+Author: OpenStack Proposal Bot <openstack-infra@lists.openstack.org>
+Date:   Mon Oct 19 22:09:45 2015 +0000
+
+    Updated from global requirements
+    
+    Change-Id: I8594a8231f1e0b4a33c96fc06aa0ba28d06b98b7
+
+commit 46d2ede7e24f9f007e4bf9af67fcd48f4f6cf69a
+Author: Thierry Carrez <thierry@openstack.org>
+Date:   Thu Oct 15 11:52:48 2015 +0200
+
+    Switch to post-versioning
+    
+    No longer mention next version on setup.cfg on stable branch.
+    
+    Manually sync requirements to get this to land.
+    
+    Co-Authored-By: Tony Breeds <tony@bakeyournoodle.com>
+    Change-Id: Ic7a15c251084fb62a5dbaf659489cefeca7ca310
+
+commit be0f96599f89d5983643b825d9d35246da09f4c1
+Author: ZhiQiang Fan <aji.zqfan@gmail.com>
+Date:   Fri Oct 16 03:13:03 2015 -0700
+
+    support mysql+pymysql in functional test
+    
+    Currently, if we use PyMySQL as MySQL driver, database connection
+    url will be set to mysql+pymysql://, but our functional test doesn't
+    recognize such engine name, which finally will skip all the functional
+    test for mysql backend.
+    
+    This patch simply maps mysql+pymysql to mysql.
+    
+    Change-Id: I924de57e9f194f183a405846a6ac98968a2483d3
+    Closes-Bug: #1506777
+    (cherry picked from commit bf85df219e02dd1203457eb88eda32b3871aa3c4)
+
+commit d91e1916c6c34892dd1026954bc7327ee4c1898e
+Author: Chris Dent <chdent@redhat.com>
+Date:   Tue Oct 13 14:27:09 2015 +0000
+
+    If mongodb_replica_set is empty do not pass it to client
+    
+    Otherwise a replicaSet parameter in a db connection URL will be
+    clobbered by the empty configuration setting.
+    
+    Note that this is a direct patch to stable/liberty, not a backport from
+    master because master has changed such that there is no longer a
+    mongodb_replica_set configuration setting.
+    
+    Change-Id: Ic8de93f58ff1cf21888719597490f987d703cab6
+    Closes-Bug: #1505669
+
+commit e051e22f44d2f84727ca083632811c2efc5c8540
+Author: Mehdi Abaakouk <sileht@redhat.com>
+Date:   Tue Oct 6 17:21:16 2015 +0200
+
+    Add missing ceilometerclient repo location
+    
+    Change-Id: I7cbe0afa12c9d11ce2eaed1f4d29f41507e273f8
+    (cherry picked from commit 1305987b1713b82d3e8df38fb092080bcf45704e)
+
+commit 5cdeeacafb835c1d395663a4f74270e03fc06a35
+Author: Pradeep Kilambi <pkilambi@redhat.com>
+Date:   Tue Oct 6 15:35:21 2015 -0400
+
+    Skip bad meter definitions instead of erroring out
+    
+    Currently we raise an exception once we hit a bad
+    meter definition in the yaml. Instead, skip the
+    bad ones and proceed with rest of the yaml.
+    
+    Closes-Bug: #1503433
+    
+    Change-Id: I1dd5b69bf9a92b5af5692ea75010f11a863b0afc
+    (cherry picked from commit 5d5aaf58c8876370ff9729e08b3b41833f6e6efc)

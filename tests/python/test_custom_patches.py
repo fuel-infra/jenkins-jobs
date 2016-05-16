@@ -1,0 +1,80 @@
+import os
+import unittest
+
+import mock
+
+import custompatches
+
+REFERENCE_GIT_LOG_OUTPUT = os.path.join(os.path.dirname(__file__), 'ceilometer-commits.txt')
+REFERENCE_COMMITS = dict([
+    #               commit id                                     change id
+    ("098ae2805a7692a59643db5253cfc398bff7e243", "I34a268da18549961eb1a3ccd862def5145725cd5"),
+    ("9404e73f6c24bc72e25ead7338ce536bb7d86346", "If5aacaf108402146d66fee474793dde1c0a59a7c"),
+    ("19d5d3cf32f69a0e7acd86287dffa2df46d54c29", "I0597080daf0b86d2464b0e7536dfda1186f066cf"),
+    ("962430338a0498a5d70f5f7d63b8db81b9011a67", "I8384b6078791bc46c7cc739835668fbdef5dfb80"),
+    ("9203a8d1735b7fc3af1daabfa714ef6f5b1d3869", "I8bb81a645b69ee065dd8f88b9b996ab1d116f84d"),
+    ("4a4df73759cd78105ceb115ac0f4ec0980285d80", "I531405d0153257ece38e2053a24d5c07cf4de90f"),
+    ("44bb957eade7ecc6e6ecd2e0b328e54cee835268", "I507bf8e1a5b3dce2df6aae913229fd4c627078b1"),
+    ("994c1d21205425c13798d86d0c4d6a118dd436ee", "I41040f1dd0202032b7593b76e9df04f6b0a823f6"),
+    ("24fe1d6bbbbe35db45b22ad18aaf18bafddad176", "I77b4f2111d23861ec093b66f02add8c92e220026"),
+    ("caf0a9ef10834f7a65c683cc63659d91e1e61ced", "I28d98aee7b953d9dfb423571c297046226309602"),
+    ("0a0f9a24678e795a57936b097a03b8e84752f7d7", "Ib494f7d119cda370aa8291fd404dad38c0c53817"),
+    ("99a56e707a1bc9049b167b303501cceb7d37e65e", "Ibfe49741ad5df82a57cc1c344a471be4d23fdffb"),
+    ("c7646b2adff3da331392b1316b0a1d82e0b39389", "Ic0b6b62dace88e4e1ce7932024350bb211efb9ef"),
+    ("510aa7897a46688b9826ac8800455de03fe3dc34", "I9d88ffb9b305c47a4a118da73a90f5daf12f4c10"),
+    ("67e47cda8e7e0d2649fef334a6e0db2826d5fbd1", "I8100160a3aa83a190c4110e6e8be9b26aef8fd1c"),
+    ("5861466ef4035cdd7f6d4dac8ebc30479637dfaa", "Ib3b21b0a967be34eda002820228aa4892d733d5d"),
+    ("278c4846efd218c648b76510aba2b52c762866ff", "I51d5eeb4ac3977e56f5410ea8713bc655e2e7efa"),
+    ("3b35c4087519981ba7dd062eec988e9ee5ddf076", "Ifcd70e81e3895651461e5e876d8e48205bb0604c"),
+    ("5d1861821b7a3ac2cb827cf87bae4826ad8cb4e3", "Iecffab082f384df6c2fdb5f29754f674c9184b67"),
+    ("fd54d10f6d35ea00feee67d222a90e4ad3951faa", "I4a3aa0f6de26173e6f9383d570ff2cf13d367e38"),
+    ("cd2065df67889354703f2a5d38af669630d67760", "I4765b3b9627983a245aa5521a85ad89e83ab8551"),
+    ("0672eb4dc5281734ba4eb54c6677ac72964471aa", "I87f13262a213828e1aca5fbe60544db78999a341"),
+    ("c8d778e58eee54cddae63c541075876379a5a388", "Ia5c8371823cb8b8e32d2638ff022e8a63468df01"),
+    ("a3e8b6901f0cd16c0560b45dfa3ae271c360b291", "I865e2f664a5f146708e233b3342616be5405ec0c"),
+    ("9aeb38a97d0ee097f45084577c5fe88300506382", "I9433d65ee6e035bcb29b3ab554ac7c4c2db93b8e"),
+    ("4b66eee331826ad71389e3e1a33b4963164502c4", "If01bcb6543fe164d79f785e20668106308244f75"),
+    ("e253e7e0a73eb3cf38b2c6c01c2def7980a64130", "I98e9a0e85e9dd6ae022bbc0543244e533b1307f7"),
+    ("4f67ed8ff0b104b00f9a6647ea58249de9c38a67", "Id883bef77eb74c798c8554d61db55e66c8d5e049"),
+    ("82b76dcf67d8eaea9752042e92dcabb9397f61c0", "I4b6c2ea72841201519144eb09ecf8c82b16b6143"),
+    ("40c5ceefa96d93cf9b12fa189787ed3f26e853cc", "I2a39737a5f7824918c28ff2180f2ea95e7e82537"),
+    ("fc00820ae8b25ca3934bc45b543474a234dff72f", "Ieac708d8131643fef35a0066f9d49c9c46ac0fe3"),
+    ("1fae4ddf0dd69746715a35159929c674876d7d68", "I801890bb614340962b28a7110c9f3b0f3a8b4752"),
+    ("415ee34dde33a4c9eb9af1b6d69f48b2de7b4dea", "I853ba4d5a4bf3b74d286245afa2792cabbb7dbf5"),
+    ("20f88cced59fbea52c0d4b62f17bcaabae8ce93b", "Id36eb9d88c6a8fba635779fc9a971f015908b5de"),
+    ("949c343d12bbb27881ce11b11a2d0bd983fd6622", "I876dbe4a5053c27003725da7e91f36a5d06f154a"),
+    ("8a1d6315f2bb982e8ac3fc7a3c0ec847f2eaa121", "Ia8847da3b1224328d43d8d68ec468216ec978007"),
+    ("422e56f276f860f2d9b8c297ef62e561cb60c4b6", "Ied90fc9fdd529d788af1bc13777fd4c3eb76e3da"),
+    ("da75e1e1b7827f441e294af2d4bcf5b701ebbe16", "Idc67debb2875fe041e9b00432975e3729ca0e025"),
+    ("81dded73ce81b9c62e196003f72451338db65649", "If85dbea15d42d42c6b0be7402c06f258e278b2eb"),
+    ("5e33801c6abb377e86dffd62095274dff09f18ee", "I394ecd1a98ce286b49bbacb62674a3c80182ec51"),
+    ("6aae92f2f46c5b40b0be780b71b6b5a4a602d49b", "I6f9bc206c5f6b85e4b8bd99523d73d289ace7b15"),
+    ("ca45db1871c02a9c02f8f258ce128e2e4f7a4fcd", "Ic53e1addf38a4d5934b4e627c4c974c6db42517e"),
+    ("c91852db8393aa04132d27cf0ad3048015a19559", "Ib0c7a3d86bc2719da889fadddd251d61ac85c8ac"),
+    ("16af61a0de1ae1d6165babac0f026c4d4c3b5cb9", "I261a2dd362ed51c16a6fa191dadcce1b45fce2e4"),
+    ("2a43a816da5fb23bf75c23313816a55df486d200", "I1520450ae4e82459b73cc411a698a6faa91a40e0"),
+    ("2dd9b77b6e1ab604fe067f2e14d52d69177ca61f", "I98dc4fb5419f5af664ebfc86f0e7814d404b3b86"),
+    ("05416c2d967b3f10fcbc3827afa24d1ec30363d8", "I8594a8231f1e0b4a33c96fc06aa0ba28d06b98b7"),
+    ("46d2ede7e24f9f007e4bf9af67fcd48f4f6cf69a", "Ic7a15c251084fb62a5dbaf659489cefeca7ca310"),
+    ("be0f96599f89d5983643b825d9d35246da09f4c1", "I924de57e9f194f183a405846a6ac98968a2483d3"),
+    ("d91e1916c6c34892dd1026954bc7327ee4c1898e", "Ic8de93f58ff1cf21888719597490f987d703cab6"),
+    ("e051e22f44d2f84727ca083632811c2efc5c8540", "I7cbe0afa12c9d11ce2eaed1f4d29f41507e273f8"),
+    ("5cdeeacafb835c1d395663a4f74270e03fc06a35", "I1dd5b69bf9a92b5af5692ea75010f11a863b0afc"),
+])
+
+
+class TestGitLogParsing(unittest.TestCase):
+    @mock.patch('subprocess.check_output')
+    def test_commit_changeid_coupling(self, call_mock):
+        with open(REFERENCE_GIT_LOG_OUTPUT, 'rt') as f:
+            data = f.read()
+        call_mock.return_value = data
+
+        repo = 'ceilometer'
+        start = '026a5d475e1958bf761e41c2bb426b09e0f3d270'
+        end = 'origin/openstack-ci/fuel-8.0/liberty'
+
+        actual = custompatches._get_commits_info(repo, start, end)
+        reference = {v: k for k, v in REFERENCE_COMMITS.items()}
+
+        self.assertEqual(reference, actual)
