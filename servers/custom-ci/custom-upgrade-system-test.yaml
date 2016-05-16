@@ -1,0 +1,186 @@
+- job:
+    name: 'custom.upgrade_system_test'
+    concurrent: true
+    description: |
+      This is custom upgrade system test chain (7.0 -> 8.0).
+      Use "Build with Parameters" to run the test.
+      Specify TEST_GROUP (choose from available ones or fill in custom one).
+      Specify ADDITIONAL_PARAMETERS or ADDITIONAL_FILES  if you want.
+      Build description is in form "TEST_GROUP on NODE_NAME: ENV_NAME"
+
+    logrotate:
+      artifactDaysToKeep: 10
+      daysToKeep: 30
+
+    dist: ubuntu
+
+    node: custom_upgrade_test
+
+    parameters:
+      - string:
+          name: REPO_NAME
+          default: 'fuel-qa'
+      # BASE RELEASE related parameters
+      - string:
+          name: BASE_REPO_BRANCH
+          default: 'stable/7.0'
+      - string:
+          name: BASE_ISO_MAGNET_LINK
+          description: Magnet link to base ISO
+          default:
+              !include-raw data/7.0-iso
+      - string:
+          name: BASE_FUEL_QA_COMMIT
+          description: |
+              fuel-qa git commit in any format:'stable/7.0' or 'a4f989373f'
+          default: 'stable/7.0'
+      - string:
+          name: base_fuel_qa_gerrit_commit
+          description: |
+              fuel-qa gerrit commits refspecs separated with spaces
+              (refs/changes/7/215623/1 refs/changes/7/215623/2')
+          default: 'none'
+      - string:
+          name: BASE_FUEL_PROPOSED_REPO_URL
+          default: 'http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64/Packages'
+      - string:
+          name: BASE_TEST_GROUP
+          description: |
+              Use this field to specify test group to execute. Do not leave this field empty! Availble groups:
+              upgrade_smoke_backup
+              upgrade_ceph_ha_backup
+              upgrade_detach_plugin_backup
+      - text:
+          name: ADDITIONAL_PARAMETERS
+          default: >
+              UPGRADE_FUEL_FROM=7.0
+              UPGRADE_FUEL_TO=8.0
+              LOGS_DIR=$WORKSPACE/logs
+              FILES_DIR=$FILES_DIR
+              KEYSTONE_PASSWORD=newpass
+              UPDATE_MASTER=true
+              MAGNET_LINK=$BASE_ISO_MAGNET_LINK
+              FUEL_PROPOSED_REPO_URL=$BASE_FUEL_PROPOSED_REPO_URL
+      - text:
+          name: ADDITIONAL_FILES
+          description: |
+              Additional files URLs to download one by one
+              URL_1</br>
+              URL_2
+      - string:
+          name: FILES_DIR
+          descrition: 'Directory with downloaded files (an absolute path)'
+          default: '$WORKSPACE/additional_files'
+
+      # UPGRADE RELEASE related parameters
+      - string:
+          name: UPGRADE_REPO_BRANCH
+          default: 'stable/8.0'
+      - string:
+          name: UPGRADE_ISO_MAGNET_LINK
+          description: Magnet link to upgrade ISO
+          default:
+              !include-raw data/8.0-iso
+      - string:
+          name: UPGRADE_FUEL_QA_COMMIT
+          description: |
+              fuel-qa git commit in any format:'stable/8.0' or 'a4f989373f'
+          default: 'stable/8.0'
+      - string:
+          name: upgrade_fuel_qa_gerrit_commit
+          description: |
+              fuel-qa gerrit commits refspecs separated with spaces
+              (refs/changes/7/215623/1 refs/changes/7/215623/2')
+          default: 'none'
+      - string:
+          name: UPGRADE_FUEL_PROPOSED_REPO_URL
+          default: 'http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos8.0-centos7-fuel/proposed/x86_64/Packages'
+      - string:
+          name: UPGRADE_TEST_GROUP
+          description: |
+              Use this field to specify test group to run. Do not leave this field empty! Available groups:
+              upgrade_smoke_tests
+              upgrade_ceph_ha_tests
+              upgrade_detach_plugin_tests
+              upgrade_rollback_tests
+      - string:
+          name: ADDITIONAL_PARAMETERS
+          default: >
+              UPGRADE_FUEL_FROM=7.0
+              UPGRADE_FUEL_TO=8.0
+              LOGS_DIR=$WORKSPACE/logs
+              FILES_DIR=$FILES_DIR
+              KEYSTONE_PASSWORD=newpass
+              UPDATE_MASTER=true
+              MAGNET_LINK=$UPGRADE_ISO_MAGNET_LINK
+              FUEL_PROPOSED_REPO_URL=$UPGRADE_FUEL_PROPOSED_REPO_URL
+
+    scm:
+     - main-git:
+          reponame: $REPO_NAME
+          repobranch: $BASE_REPO_BRANCH
+          basedir: '$REPO_NAME-base'
+     - main-git:
+          reponame: $REPO_NAME
+          repobranch: $UPGRADE_REPO_BRANCH
+          basedir: '$REPO_NAME-upgrade'
+
+    builders:
+      - inject:
+          properties-content: |
+            ADMIN_NODE_MEMORY=3072
+            SLAVE_NODE_MEMORY=3072
+      - inject:
+          # env variables
+          properties-content: |
+            VENV_PATH=$HOME/venv-nailgun-tests-2.9
+            ENV_PREFIX=custom.upgrade_system_test
+      - inject:
+          # export custom parameters
+          properties-content: $ADDITIONAL_PARAMETERS
+        # download additional files
+      - shell: |
+          #!/bin/bash
+
+          set -ex
+
+          mkdir -p $FILES_DIR
+
+          FILE_LIST='$WORKSPACE/files_to_download'
+
+          if [ -z $ADDITIONAL_FILES ]; then
+            echo "There are no additional files to download"
+          else
+            echo "Downloading additional files..."
+            echo $ADDITIONAL_FILES > ${FILE_LIST}"
+            wget --no-verbose \
+               --input-file="${FILE_LIST}" \
+               --directory-prefix=$FILES_DIR"
+          fi
+
+      - shell:
+          !include-raw builders/custom_upgrade_system_test.sh
+
+    properties:
+      - authorization-allow-authorized
+      - heavy-job:
+          weight: 8
+      - throttle:
+          enabled: true
+          max-per-node: 1
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml,logs/*'
+          latest-only: false
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'
+          failure: true
+          success: true
+          send-to:
+            - requester
+
+    wrappers:
+      - ansicolor:
+          colormap: xterm
