@@ -29,6 +29,16 @@ if [ ! -z "${CUSTOM_PROJECT_PACKAGE}" ]; then
   PROJECT_PACKAGE="${CUSTOM_PROJECT_PACKAGE}"
 fi
 
+# Checking gerrit commits for fuel-mirror
+if [[ "${FUEL_MIRROR_GERRIT_COMMIT}" != "none" ]] ; then
+  cd "${WORKSPACE}"/fuel-mirror
+  for commit in ${FUEL_MIRROR_GERRIT_COMMIT} ; do
+    git fetch https://review.openstack.org/openstack/fuel-mirror "${commit}" && git cherry-pick FETCH_HEAD
+  done
+  cd "${WORKSPACE}"
+fi
+
+
 ## we MUST use external DNS
 echo "DNSPARAM=\"--dns 8.8.8.8\"" > "${WORKSPACE}"/fuel-mirror/perestroika/docker-builder/config
 
@@ -53,8 +63,8 @@ pushd "${PROJECT_ROOT}" &>/dev/null
 
 # taking version of package
 RPM_PACKAGE_VERSION=$(rpm -q \
-  --specfile "${PROJECT_ROOT}"/specs/"${PROJECT_PACKAGE}".spec \
-  --queryformat %{VERSION}"\n" | head -1 )
+  --specfile "${PROJECT_ROOT}/specs/${PROJECT_PACKAGE}".spec \
+  --queryformat "%{VERSION}\n" | head -1 )
 
 NUMBER_OF_COMMITS=$(git -C "${PROJECT_ROOT}" rev-list --no-merges HEAD --count)
 LAST_COMMIT_SHORT_HASH=$(git -C "${PROJECT_ROOT}" rev-parse --short HEAD)
