@@ -83,6 +83,11 @@
           default: 'none'
           description: 'Refspecs for commits in fuel-qa gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
+      - string:
+          name: FUEL_MIRROR_GERRIT_COMMIT
+          default: 'none'
+          description: 'Refspecs for commits in fuel-mirror gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
       - choice:
           name: TEST_GROUP
           description: Choose TEST_GROUP from the list or use CUSTOM_TEST_GROUP field below.
