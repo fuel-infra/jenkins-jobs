@@ -25,7 +25,7 @@
           dist: Ubuntu
           testgroup: bvt_2
           version-id: '7.0'
-          id: 'main'
+          test-type:  'main'
     publishers:
       - nosetests
       - post-destroy-vms

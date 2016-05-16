@@ -35,7 +35,7 @@
     # properties
     #     List of strings "VAR=value".
     #     These variables will be injected in job environment before the build
-    name: '7.0.{id}.{dist}.{testgroup}'
+    name: '7.0.{test-type}.{dist}.{testgroup}'
     block-downstream: false
     block-upstream: false
     builders:
@@ -70,7 +70,7 @@
         description: "iso magnet link"
     - string:
         name: ENV_PREFIX
-        default: '7.0.{id}.{dist}.{testgroup}'
+        default: '7.0.{test-type}.{dist}.{testgroup}'
         description: 'Environment prefix'
 
     properties:

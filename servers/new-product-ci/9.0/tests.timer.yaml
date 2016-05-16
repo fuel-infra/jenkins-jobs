@@ -1,25 +1,25 @@
 - job-group:
     name: '9.0.swarm.timers'
-    id: swarm
+    test-type: swarm
     version-id: 9.0
     test-job-name: '{version-id}-mos.test_all'
     jobs:
-      - '{version-id}.{id}.timer.{repo_type}':
+      - '{version-id}.{test-type}.timer.{repo_type}':
          repo_type: stable
          trigger: '0 21  * * 1-5'
          enable_proposed: false
-      - '{version-id}.{id}.timer.{repo_type}':
+      - '{version-id}.{test-type}.timer.{repo_type}':
          repo_type: proposed
          trigger: '0 21 * * 6,7'
          enable_proposed: true
 
 - job-group:
     name: '9.0.acceptance.timers'
-    id: acceptance
+    test-type: acceptance
     version-id: 9.0
     test-job-name: '{version-id}-mos.test_all'
     jobs:
-      - '{version-id}.{id}.timer.{repo_type}':
+      - '{version-id}.{test-type}.timer.{repo_type}':
          repo_type: stable
          trigger: '0 23 * * 1'
          enable_proposed: false

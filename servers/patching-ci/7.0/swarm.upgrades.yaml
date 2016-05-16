@@ -1,7 +1,7 @@
 - job-group:
     name: '7.0-system_tests-upgrades'
     version-id: '7.0'
-    id: 'system_test'
+    test-type: 'system_test'
     node: 'systest'
     timeout: '1200'
     base_reponame: 'fuel-qa'
@@ -17,18 +17,18 @@
       NODE_VOLUME_SIZE=100
     weight: '8'
     jobs:
-      - '7.0.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{test-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
           upgrade_testgroup:
             - 'upgrade_one_controller'
 
-      - '7.0.{id}.{dist}.os_upgrade':
+      - '7.0.{test-type}.{dist}.os_upgrade':
           testgroup: 'prepare_os_upgrade'
           upgrade_testgroup: 'os_upgrade'
           weight: '20'
           node: 'huge-systest'
 
-      - '7.0.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{test-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
           upgrade_testgroup:
             - 'upgrade_ha_one_controller'
@@ -36,7 +36,7 @@
           properties: |
             UPDATE_MASTER=true
 
-      - '7.0.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{test-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact'
           upgrade_testgroup:
             - 'upgrade_one_controller_classic'
@@ -44,7 +44,7 @@
             CLASSIC_PROVISIONING=true
             UPDATE_MASTER=true
 
-      - '7.0.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{test-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_ha_one_controller_compact_neutron'
           upgrade_testgroup:
             - 'upgrade_one_controller_neutron'
@@ -53,14 +53,14 @@
             NEUTRON_ENABLE=true
             UPDATE_MASTER=true
 
-      - '7.0.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{test-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre'
           upgrade_testgroup:
             - 'rollback_neutron_gre'
           properties: |
             UPDATE_MASTER=true
 
-      - '7.0.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{test-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre_ha'
           upgrade_testgroup:
             - 'upgrade_neutron_gre_ha'
@@ -68,7 +68,7 @@
           properties: |
             UPDATE_MASTER=true
 
-      - '7.0.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{test-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_rados_gw'
           upgrade_testgroup:
             - 'upgrade_neutron_ceph'
@@ -76,7 +76,7 @@
           properties: |
             NEUTRON_ENABLE=true
 
-      - '7.0.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{test-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'ceph_rados_gw'
           upgrade_testgroup:
             - 'upgrade_neutron_ceph_classic'
@@ -84,12 +84,12 @@
             NEUTRON_ENABLE=true
             CLASSIC_PROVISIONING=true
 
-      - '7.0.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{test-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_multirole_compute_cinder'
           upgrade_testgroup:
             - 'upgrade_nova_cinder'
 
-      - '7.0.{id}.{dist}.{upgrade_testgroup}':
+      - '7.0.{test-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'deploy_multirole_compute_cinder'
           upgrade_testgroup:
             - 'upgrade_nova_cinder_classic'
@@ -99,7 +99,7 @@
 - job-group:
     name: '7.0-system_tests-test_upgrade_chain'
     version-id: '7.0'
-    id: 'system_test'
+    test-type: 'system_test'
     node: 'systest'
     timeout: '480'
     base_reponame: 'fuel-main'
@@ -116,5 +116,5 @@
     upgrade_repobranch: 'origin/stable/7.0'
     properties: ''
     jobs:
-      - '7.0.{id}.{dist}.test.upgrade.chain':
+      - '7.0.{test-type}.{dist}.test.upgrade.chain':
           weight: '8'

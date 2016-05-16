@@ -1,5 +1,5 @@
 - job-template:
-    name: '{version-id}.{id}.{dist}.plugins.{testgroup}'
+    name: '{version-id}.{test-type}.{dist}.plugins.{testgroup}'
     builders:
       - inject:
           properties-content: |
@@ -25,7 +25,7 @@
       numToKeep: 50
     node: 'systest'
     concurrent: true
-    description: '{version-id} {id} test group'
+    description: '{version-id} {test-type} test group'
 
     properties:
       - heavy-job:
@@ -43,7 +43,7 @@
         description: "iso magnet link"
     - string:
         name: ENV_PREFIX
-        default: '{version-id}.{id}.{dist}.{testgroup}'
+        default: '{version-id}.{test-type}.{dist}.{testgroup}'
         description: 'Environment prefix'
 
     publishers:
@@ -59,7 +59,7 @@
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
     - trigger-parameterized-builds:
-      - project: '{version-id}.{id}.test-reports'
+      - project: '{version-id}.{test-type}.test-reports'
         condition: ALWAYS
         property-file: links.txt
         predefined-parameters: TEST_JOB_NAME=$JOB_NAME

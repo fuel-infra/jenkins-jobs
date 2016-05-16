@@ -3,10 +3,10 @@
     jobs:
       - '8.0-acceptance':
           dist: 'ubuntu'
-      - '{version}.{id}.test-reports':
+      - '{version}.{test-type}.test-reports':
           version: '8.0'
           repobranch: 'origin/stable/8.0'
-          id: 'acceptance'
+          test-type: 'acceptance'
           properties: |
             TESTS_RUNNER=8.0.acceptance.runner
             TESTRAIL_TEST_SUITE=[8.0][Fuel] Release Acceptance

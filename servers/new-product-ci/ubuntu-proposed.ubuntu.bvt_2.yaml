@@ -25,7 +25,7 @@
           dist: Ubuntu
           testgroup: bvt_2
           version-id: '{mos_version}'
-          id: 'main'
+          test-type:  'main'
     publishers:
       - nosetests
     scm:

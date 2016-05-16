@@ -23,7 +23,7 @@
           dist: Ubuntu
           testgroup: bvt_2
           version-id: '6.1-ubuntu'
-          id: 'ubuntu_upstream'
+          test-type: 'ubuntu_upstream'
     publishers:
       - nosetests
       - email-default:

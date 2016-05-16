@@ -3,10 +3,10 @@
     jobs:
       - '9.0-acceptance':
           dist: 'ubuntu'
-      - '{version}.{id}.test-reports':
+      - '{version}.{test-type}.test-reports':
           version: '9.0'
           repobranch: 'origin/stable/mitaka'
-          id: 'acceptance'
+          test-type: 'acceptance'
           properties: |
             TESTS_RUNNER=9.0.acceptance.runner
             TESTRAIL_TEST_SUITE=[9.0][Fuel] Auto Release Acceptance

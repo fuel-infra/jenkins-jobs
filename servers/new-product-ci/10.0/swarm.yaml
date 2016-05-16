@@ -9,10 +9,10 @@
     jobs:
       - '10.0.swarm.runner'
       - '10.0.swarm.timers'
-      - '{version}.{id}.test-reports':
+      - '{version}.{test-type}.test-reports':
           version: '10.0'
           repobranch: 'origin/master'
-          id: 'system_test'
+          test-type:  'system_test'
           properties: |
             TESTS_RUNNER=10.0.swarm.runner
             TESTRAIL_TEST_SUITE=[10.0] Swarm

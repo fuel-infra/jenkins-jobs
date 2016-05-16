@@ -1,7 +1,7 @@
 - job-group:
     name: '6.1-system_tests-upgrades'
     version-id: '6.1'
-    id: 'system_test'
+    test-type: 'system_test'
     node: 'systest'
     timeout: '480'
     base_reponame: 'fuel-main'
@@ -14,37 +14,37 @@
     upgrade_repobranch: 'origin/stable/6.1'
     properties: ''
     jobs:
-      - '6.1.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+      - '6.1.{test-type}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre_ha'
           upgrade_testgroup: 'upgrade'
           properties: |
             KEYSTONE_PASSWORD=newpass
           weight: '8'
-      - '6.1.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+      - '6.1.{test-type}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'ceph_multinode_compact'
           upgrade_testgroup: 'upgrade'
           weight: '8'
           properties: |
             KEYSTONE_PASSWORD=newpass
-      - '6.1.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+      - '6.1.{test-type}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'ceph_multinode_compact_neutron'
           upgrade_testgroup: 'upgrade'
           properties: |
             NEUTRON_ENABLE=true
           weight: '8'
-      - '6.1.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+      - '6.1.{test-type}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre_ha'
           upgrade_testgroup: 'rollback'
           properties: |
             KEYSTONE_PASSWORD=newpass
           weight: '8'
-      - '6.1.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+      - '6.1.{test-type}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'deploy_neutron_gre'
           upgrade_testgroup: 'rollback'
           properties: |
             KEYSTONE_PASSWORD=newpass
           weight: '8'
-      - '6.1.{id}.{dist}.{testgroup}.{upgrade_testgroup}':
+      - '6.1.{test-type}.{dist}.{testgroup}.{upgrade_testgroup}':
           testgroup: 'ceph_multinode_compact_neutron'
           upgrade_testgroup: 'rollback'
           properties: |
