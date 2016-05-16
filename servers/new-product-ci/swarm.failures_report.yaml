@@ -1,0 +1,48 @@
+- job-template:
+    name: '{version}.swarm.failures_report'
+    project-type: freestyle
+    description: |
+      <iframe frameborder="0"
+              scrolling="yes"
+              style="display:block; width:100%; height:150vh;"
+              src='https://product-ci.infra.mirantis.net/job/{version}.swarm.failures_report/lastSuccessfulBuild/artifact/{version}.swarm.runner.issues.html'>
+      </iframe>
+    node: testrail
+
+    scm:
+     - main-git:
+          reponame: 'fuel-qa'
+          repobranch: 'origin/stable/mitaka'
+          basedir: ''
+
+    triggers:
+      - timed: '0 * * * *'
+
+    wrappers:
+      - inject-passwords:
+          global: true
+          mask-password-params: true
+
+    builders:
+      - inject:
+           properties-content: |
+             TEST_RUNNER_JOB_NAME={version}.swarm.runner
+             TESTRAIL_PROJECT=Mirantis OpenStack
+             TESTRAIL_URL=https://mirantis.testrail.com
+             TESTRAIL_MILESTONE={version}
+             LAUNCHPAD_MILESTONE={version}
+             HTML_REPORT={version}.swarm.runner.issues.html
+      - shell:
+          !include-raw-escape builders/testrail_generate_failures_report.sh
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '{version}.swarm.runner.issues.html'
+          latest-only: false
+      - email:
+          recipients: ci+swarm@mirantis.com
+      - description-setter:
+          regexp: |
+            'description string: (.*)'
+          set-for-matrix: false
