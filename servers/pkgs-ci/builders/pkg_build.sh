@@ -137,6 +137,7 @@ case "${GERRIT_PROJECT}" in
         ;;
     * )
         export IS_OPENSTACK=false
+        export SRC_PROJECT_PATH="${GERRIT_PROJECT%/*}"
         unset SPEC_PROJECT
         ;;
 esac
