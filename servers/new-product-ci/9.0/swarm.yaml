@@ -9,10 +9,10 @@
     jobs:
       - '9.0.swarm.runner'
       - '9.0.swarm.timers'
-      - '{version}.{id}.test-reports':
+      - '{version}.{test-type}.test-reports':
           version: '9.0'
           repobranch: 'origin/stable/mitaka'
-          id: 'system_test'
+          test-type:  'system_test'
           properties: |
             TESTS_RUNNER=9.0.swarm.runner
             TESTRAIL_TEST_SUITE=[9.0] Swarm

@@ -30,7 +30,7 @@
           dist: 'ubuntu'
           testgroup: 'smoke_neutron'
           version-id: '9.0'
-          id: 'kilo'
+          test-type: 'kilo'
     publishers:
       - nosetests
       - post-destroy-vms

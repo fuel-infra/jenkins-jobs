@@ -30,7 +30,7 @@
           dist: 'ubuntu'
           testgroup: 'smoke_neutron'
           version-id: '{mos_version}'
-          id: 'main'
+          test-type:  'main'
     publishers:
       - nosetests
     scm:

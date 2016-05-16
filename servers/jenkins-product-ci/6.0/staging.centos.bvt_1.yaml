@@ -21,7 +21,7 @@
           dist: CentOS
           testgroup: bvt_1
           version-id: '6.0.1'
-          id: 'staging'
+          test-type: 'staging'
     publishers:
       - nosetests
       - email-default:

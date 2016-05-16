@@ -22,7 +22,7 @@
           dist: Ubuntu
           testgroup: bvt_2
           version-id: '6.0.1'
-          id: 'main'
+          test-type: 'main'
     publishers:
       - nosetests
       - email-systest:

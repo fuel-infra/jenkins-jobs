@@ -22,7 +22,7 @@
           dist: CentOS
           testgroup: bvt_1
           version-id: '5.1.2'
-          id: 'main'
+          test-type:  'main'
     publishers:
       - nosetests
       - email-systest:

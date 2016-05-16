@@ -23,9 +23,9 @@
 - project:
     name: system_test
     jobs:
-      - '{version-id}.{id}.{dist}.{testgroup}':
+      - '{version-id}.{test-type}.{dist}.{testgroup}':
            version-id: '5.1.1'
-           id: 'staging'
+           test-type: 'staging'
            dist: 'centos'
            testgroup: 'setup'
            node: 'systest'

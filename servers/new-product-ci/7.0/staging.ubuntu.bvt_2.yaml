@@ -23,7 +23,7 @@
           dist: Ubuntu
           testgroup: bvt_2
           version-id: '7.0'
-          id: 'staging'
+          test-type: 'staging'
     publishers:
       - nosetests
       - email-default:

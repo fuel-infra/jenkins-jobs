@@ -1,5 +1,5 @@
 - job-template:
-    name: '8.0.{id}.{dist}.plugins.{testgroup}'
+    name: '8.0.{test-type}.{dist}.plugins.{testgroup}'
     defaults: '8.0.system_tests'
     builders:
       - inject:
@@ -29,7 +29,7 @@
       numToKeep: 50
     node: 'systest'
     concurrent: true
-    description: '8.0 swarm {id} test group'
+    description: '8.0 swarm {test-type} test group'
     properties:
       - heavy-job:
           weight: 8
@@ -44,7 +44,7 @@
         description: "iso magnet link"
     - string:
         name: ENV_PREFIX
-        default: '8.0.{id}.{dist}.{testgroup}'
+        default: '8.0.{test-type}.{dist}.{testgroup}'
         description: 'Environment prefix'
     publishers:
     - archive:

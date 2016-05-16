@@ -30,7 +30,7 @@
           dist: 'ubuntu'
           testgroup: 'smoke_neutron'
           version-id: '7.0'
-          id: 'main'
+          test-type:  'main'
     publishers:
       - nosetests
       - post-destroy-vms

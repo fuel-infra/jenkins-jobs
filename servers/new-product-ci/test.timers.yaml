@@ -1,7 +1,7 @@
 - job-template:
-    name: '{version-id}.{id}.timer.{repo_type}'
+    name: '{version-id}.{test-type}.timer.{repo_type}'
     description: |
-      Trigger {version-id}.{id}.runner with latest stable iso build.
+      Trigger {version-id}.{test-type}.runner with latest stable iso build.
     node: 'runner'
     properties:
       - heavy-job:
@@ -26,7 +26,7 @@
       - email-default:
           mail-to: 'ci+alert@mirantis.com'
       - trigger-parameterized-builds:
-        - project: '{version-id}.{id}.runner'
+        - project: '{version-id}.{test-type}.runner'
           condition: UNSTABLE_OR_BETTER
           property-file: links.txt
           boolean-parameters:

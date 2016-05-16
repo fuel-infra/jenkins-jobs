@@ -34,7 +34,7 @@
     # properties
     #     List of strings "VAR=value".
     #     These variables will be injected in job environment before the build
-    name: '8.0.{id}.{dist}.{testgroup}'
+    name: '8.0.{test-type}.{dist}.{testgroup}'
     defaults: '8.0.system_tests'
     block-downstream: false
     block-upstream: false
@@ -78,7 +78,7 @@
         description: "ISO magnet link"
     - string:
         name: ENV_PREFIX
-        default: '8.0.{id}.{dist}.{testgroup}'
+        default: '8.0.{test-type}.{dist}.{testgroup}'
         description: 'Environment prefix'
 
     properties:
@@ -98,7 +98,7 @@
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
     - trigger-parameterized-builds:
-      - project: '{version-id}.{id}.test-reports'
+      - project: '{version-id}.{test-type}.test-reports'
         condition: ALWAYS
         property-file: links.txt
         predefined-parameters: TEST_JOB_NAME=$JOB_NAME

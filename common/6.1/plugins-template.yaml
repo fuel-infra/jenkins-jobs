@@ -1,5 +1,5 @@
 - job-template:
-    name: '6.1.{id}.{dist}.plugins.{testgroup}'
+    name: '6.1.{test-type}.{dist}.plugins.{testgroup}'
     block-downstream: false
     block-upstream: false
     builders:
@@ -33,7 +33,7 @@
         description: "iso magnet link"
     - string:
         name: ENV_PREFIX
-        default: '6.1.{id}.{dist}.{testgroup}'
+        default: '6.1.{test-type}.{dist}.{testgroup}'
         description: 'Environment prefix'
 
     properties:

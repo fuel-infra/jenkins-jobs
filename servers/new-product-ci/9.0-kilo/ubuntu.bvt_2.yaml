@@ -25,7 +25,7 @@
           dist: Ubuntu
           testgroup: bvt_2
           version-id: '9.0'
-          id: 'kilo'
+          test-type: 'kilo'
     publishers:
       - nosetests
       - post-destroy-vms

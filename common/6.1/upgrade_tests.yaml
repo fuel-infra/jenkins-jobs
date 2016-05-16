@@ -29,7 +29,7 @@
     #     Branch of the fuel-main/ repo, used for running upgrade test.
     # weight
     #     Job weight
-    name: '6.1.{id}.{dist}.{testgroup}.{upgrade_testgroup}'
+    name: '6.1.{test-type}.{dist}.{testgroup}.{upgrade_testgroup}'
     block-downstream: false
     block-upstream: false
     builders:
@@ -70,7 +70,7 @@
         default: '{upgrade_testgroup}'
     - string:
         name: ENV_PREFIX
-        default: '6.1.{id}.{dist}.{testgroup}.{upgrade_testgroup}'
+        default: '6.1.{test-type}.{dist}.{testgroup}.{upgrade_testgroup}'
 
     properties:
     - heavy-job:

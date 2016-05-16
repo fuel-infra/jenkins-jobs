@@ -1,5 +1,5 @@
 - defaults:
-    name: '{version-id}.{id}.{dist}.{testgroup}'
+    name: '{version-id}.{test-type}.{dist}.{testgroup}'
     pre-script: |
         echo "-SKIP-"
     post-script: |
@@ -41,8 +41,8 @@
     # properties
     #     List of strings "VAR=value".
     #     These variables will be injected in job environment before the build
-    name: '{version-id}.{id}.{dist}.{testgroup}'
-    defaults: '{version-id}.{id}.{dist}.{testgroup}'
+    name: '{version-id}.{test-type}.{dist}.{testgroup}'
+    defaults: '{version-id}.{test-type}.{dist}.{testgroup}'
     block-downstream: false
     block-upstream: false
     builders:
@@ -82,7 +82,7 @@
         description: "iso magnet link"
     - string:
         name: ENV_PREFIX
-        default: '{version-id}.{id}.{dist}.{testgroup}'
+        default: '{version-id}.{test-type}.{dist}.{testgroup}'
         description: 'Environment prefix'
 
     properties:
@@ -102,7 +102,7 @@
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
     - trigger-parameterized-builds:
-      - project: '{version-id}.{id}.test-reports'
+      - project: '{version-id}.{test-type}.test-reports'
         condition: ALWAYS
         property-file: links.txt
         predefined-parameters: TEST_JOB_NAME=$JOB_NAME

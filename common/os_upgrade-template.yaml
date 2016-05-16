@@ -1,5 +1,5 @@
 - job-template:
-    name: '{version-id}.{id}.{dist}.os_upgrade'
+    name: '{version-id}.{test-type}.{dist}.os_upgrade'
     builders:
       - inject: # default env variables
           properties-content: |
@@ -40,7 +40,7 @@
     parameters:
     - string:
         name: ENV_PREFIX
-        default: '{version-id}.{id}.{dist}.os_upgrade'
+        default: '{version-id}.{test-type}.{dist}.os_upgrade'
         description: 'Environment prefix'
     - string:
         name: BASE_ISO_MAGNET_LINK
