@@ -283,6 +283,12 @@
          timeout: '600'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'idempotency'
+         properties: |
+           ENV_SLAVE_LOGIN=root
+           ENV_SLAVE_PASSWORD=r00tme
+           SLAVE_NODE_MEMORY=3072
+           FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+           ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
          timeout: '600'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'support_dpdk'
@@ -293,6 +299,8 @@
          properties: |
            SLAVE_NODE_CPU=6
            SLAVE_NODE_MEMORY=4096
+           ENV_SLAVE_LOGIN=root
+           ENV_SLAVE_PASSWORD=r00tme
          timeout: '600'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'support_dpdk_bond'
