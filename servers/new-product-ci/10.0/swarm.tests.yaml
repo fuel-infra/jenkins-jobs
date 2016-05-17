@@ -294,7 +294,7 @@
            SLAVE_NODE_CPU=6
            SLAVE_NODE_MEMORY=4096
          timeout: '600'
-     - '{version-id}.{id}.{dist}.{testgroup}':
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'support_dpdk_bond'
          properties: |
            KVM_USE=true
