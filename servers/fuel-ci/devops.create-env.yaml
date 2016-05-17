@@ -5,7 +5,7 @@
       !include-raw descriptions/fuel-library.create_env
     properties:
       - heavy-job:
-          weight: '1'
+          weight: '4'
       - throttle:
           max-per-node: 1
           option: project
