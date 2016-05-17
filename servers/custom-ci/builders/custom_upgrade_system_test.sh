@@ -163,6 +163,14 @@ function apply_gerrit_commits(){
 BASE_REPO_DIR="${REPO_NAME}-base"
 UPGRADE_REPO_DIR="${REPO_NAME}-upgrade"
 
+# check logs and additional files directories exist, create otherwise
+function check_directories(){
+    pushd "${repo_dir}"
+        check_logs_dir
+        check_additional_files_dir
+    popd
+}
+
 # create test environment for specific release and start system tests
 function system_tests_wrapper(){
     case "${1}" in
@@ -170,18 +178,21 @@ function system_tests_wrapper(){
             iso_path="${BASE_ISO_PATH}"
             repo_dir="${BASE_REPO_DIR}"
             repo_branch="${BASE_REPO_BRANCH}"
+            keep_build_env="-K"
+            FUEL_PROPOSED_REPO_URL="${BASE_FUEL_PROPOSED_REPO_URL}"
             ;;
         upgrade)
             iso_path="${UPGRADE_ISO_PATH}"
             repo_dir="${UPGRADE_REPO_DIR}"
             repo_branch="${UPGRADE_REPO_BRANCH}"
+            keep_build_env="-k"
+            FUEL_PROPOSED_REPO_URL="${UPGRADE_FUEL_PROPOSED_REPO_URL}"
     esac
+
+    export FUEL_PROPOSED_REPO_URL
 
     info_message "Creating test environment for fuel-qa: ${repo_branch}..."
     pushd "${repo_dir}"
-        check_logs_dir
-        remove_old_logs
-        check_additional_files_dir
         apply_gerrit_commits "${1}"
         check_test_group "${1}"
     popd
@@ -194,14 +205,6 @@ function system_tests_wrapper(){
     # reuse (otherwise it is wiped/created for new product release)
     # utils is system tests starter (of fuel-qa origin)
     utils="utils/jenkins/system_tests.sh"
-
-    case "${1}" in
-        base)
-            keep_build_env="-K"
-            ;;
-        upgrade)
-            keep_build_env="-k"
-    esac
 
     info_message "Executing ${TEST_GROUP} tests for ${repo_branch}..."
 
@@ -225,6 +228,8 @@ function system_tests_wrapper(){
 }
 
 # set up test environment and execute particular groups of system tests
+check_directories
+remove_old_logs
 system_tests_wrapper base
 system_tests_wrapper upgrade
 

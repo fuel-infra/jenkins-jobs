@@ -52,20 +52,16 @@
               upgrade_detach_plugin_backup
       - text:
           name: ADDITIONAL_PARAMETERS
-          default: >
+          default: |
               UPGRADE_FUEL_FROM=7.0
               UPGRADE_FUEL_TO=8.0
-              LOGS_DIR=$WORKSPACE/logs
-              FILES_DIR=$FILES_DIR
               KEYSTONE_PASSWORD=newpass
               UPDATE_MASTER=true
-              MAGNET_LINK=$BASE_ISO_MAGNET_LINK
-              FUEL_PROPOSED_REPO_URL=$BASE_FUEL_PROPOSED_REPO_URL
       - text:
           name: ADDITIONAL_FILES
           description: |
-              Additional files URLs to download one by one
-              URL_1</br>
+              Additional files URLs to download one by one<br>
+              URL_1<br>
               URL_2
       - string:
           name: FILES_DIR
@@ -103,17 +99,13 @@
               upgrade_ceph_ha_tests
               upgrade_detach_plugin_tests
               upgrade_rollback_tests
-      - string:
+      - text:
           name: ADDITIONAL_PARAMETERS
-          default: >
+          default: |
               UPGRADE_FUEL_FROM=7.0
               UPGRADE_FUEL_TO=8.0
-              LOGS_DIR=$WORKSPACE/logs
-              FILES_DIR=$FILES_DIR
               KEYSTONE_PASSWORD=newpass
               UPDATE_MASTER=true
-              MAGNET_LINK=$UPGRADE_ISO_MAGNET_LINK
-              FUEL_PROPOSED_REPO_URL=$UPGRADE_FUEL_PROPOSED_REPO_URL
 
     scm:
      - main-git:
