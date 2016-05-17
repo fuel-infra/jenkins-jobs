@@ -52,6 +52,13 @@
     triggers:
       - zuul
     builders:
+      # fixme: fast solution, need to use correct variables and refactor this step
+      - shell: |
+          #!/bin/bash -xe
+          echo 'ADDITIONAL_EXTRAREPO_DEB=http://perestroika-repo-tst.infra.mirantis.net/{project-name}-repos/ubuntu/9.0/ mos9.0 main restricted' >  tmp.envfile
+          echo 'ADDITIONAL_EXTRAREPO_RPM=deps,http://perestroika-repo-tst.infra.mirantis.net/{project-name}-repos/centos/mos9.0-centos7/os/x86_64' >> tmp.envfile
+      - inject:
+          properties-file: tmp.envfile
       - shell: |
           #!/bin/bash -xe
 

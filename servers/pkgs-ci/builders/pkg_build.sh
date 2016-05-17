@@ -145,10 +145,18 @@ esac
 # Extra repos containing build dependecies
 case ${PKG_TYPE?} in
     deb)
-        export EXTRAREPO="http://${MIRROR_HOST}/${DEB_REPO_PATH} ${DEB_DIST_NAME} main restricted"
+        if [ ! -z "${ADDITIONAL_EXTRAREPO_DEB}" ] ; then
+            export EXTRAREPO="http://${MIRROR_HOST}/${DEB_REPO_PATH} ${DEB_DIST_NAME} main restricted|${ADDITIONAL_EXTRAREPO_DEB}"
+        else
+            export EXTRAREPO="http://${MIRROR_HOST}/${DEB_REPO_PATH} ${DEB_DIST_NAME} main restricted"
+        fi
         ;;
     rpm)
-        export EXTRAREPO="deps,http://${MIRROR_HOST}/${RPM_OS_REPO_PATH}/x86_64"
+        if [ ! -z "${ADDITIONAL_EXTRAREPO_RPM}" ] ; then
+            export EXTRAREPO="deps,http://${MIRROR_HOST}/${RPM_OS_REPO_PATH}/x86_64|${ADDITIONAL_EXTRAREPO_RPM}"
+        else
+            export EXTRAREPO="deps,http://${MIRROR_HOST}/${RPM_OS_REPO_PATH}/x86_64"
+        fi
         ;;
 esac
 
