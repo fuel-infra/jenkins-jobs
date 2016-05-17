@@ -1,0 +1,70 @@
+- job:
+    name: '9.0.proposed-to-updates'
+    project-type: freestyle
+    logrotate:
+      daysToKeep: 90
+      artifactDaysToKeep: 90
+      numToKeep: 100
+    node: mirror
+    concurrent: false
+    properties:
+      - heavy-job:
+          weight: 1
+      #fixme: remove REMOTE_PATH and PROJECT_VERSTION overrides
+      #after fix in infra/mirror lands
+      - inject:
+          properties-content: |
+            REPO_BASE_PATH=/home/jenkins/pubrepos
+            SIGKEYID=1FA22B08
+            PUBLISHER_HOST=publisher01-bud.infra.mirantis.net
+            PROJECT_VERSION=9.0
+
+    parameters:
+      - string:
+          #fixme: requires support on infra/mirros side, may not work at the moment
+          name: CUSTOM_SYMLINK
+          description: 'Custom symlink pointing to updates repo, e.g. MU-1'
+      - string:
+          name: DISTRO
+          default: 'centos-7'
+          description: 'Name of distro to merge (currently ubuntu | centos-7)'
+      - string:
+          name: TIMESTAMP_SOURCE
+          default: ''
+          description: 'timestamp of snapshot to download.<br>Examples: latest, 2015-06-25-000000'
+      - string:
+          name: REMOTE_HOST
+          default: 'perestroika-repo-tst.infra.mirantis.net osci-mirror-msk.infra.mirantis.net osci-mirror-srt.infra.mirantis.net osci-mirror-kha.infra.mirantis.net osci-mirror-poz.infra.mirantis.net mirror.seed-us1.fuel-infra.org mirror.seed-cz1.fuel-infra.org'
+          description: 'List of locations to sync to'
+      - bool:
+          name: UPDATE_HEAD
+          default: true
+          description: 'Update head repository symlink'
+
+    builders:
+      - shell:
+          !include-raw builders/define_timestamp.sh
+      - shell:
+          !include-raw builders/merge-proposed-to-updates.sh
+
+    scm:
+      - git:
+          basedir: osci-mirrors
+          url: ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/mirrors
+          branches:
+            - origin/stable/9.0
+          wipe-workspace: false
+      - trsync:
+          branch: 'mos_9.0'
+    wrappers:
+      - obs-user-credentials
+      - ansicolor:
+          colormap: xterm
+
+    publishers:
+      - description-setter:
+          regexp: 'Description string: (.*)'
+      - archive:
+          artifacts: '*.txt'
+          allow-empty: true
+          latest-only: false
