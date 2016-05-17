@@ -103,3 +103,5 @@
          properties: |
            PATCHING_RUN_RALLY=true
            ENABLE_LIBVIRT_NWFILTERS=true
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
+          testgroup: 'fuel_plugin_etckeeper'
