@@ -20,8 +20,6 @@
     # Install test repository
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'master'
-    scm-user: 'openstack-ci-jenkins'
-    scm-credentials-id: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
 
     # Job slave nodes
     build-node: 'new-builder'

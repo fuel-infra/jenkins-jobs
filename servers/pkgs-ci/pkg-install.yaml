@@ -3,7 +3,11 @@
     project-type: freestyle
     concurrent: true
     wrappers:
-      - install-vm-creds
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-unknown-3}'
+            - '{ssh-creds-unknown-4}'
       - pre-scm-buildstep:
         - shell: 'rm -rf *'
       - timestamps
@@ -12,10 +16,10 @@
       - zuul
     scm:
       - fuel-infra:
-          scm-user: '{scm-user}'
+          scm-user: '{username-openstack-ci-jenkins}'
           scm-repo: '{install-scm-repo}'
           scm-basedir: ''
-          scm-credentials-id: '{scm-credentials-id}'
+          scm-credentials-id: '{ssh-creds-openstack-ci-jenkins}'
           scm-branch: '{install-scm-branch}'
     builders:
       - shell:

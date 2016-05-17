@@ -16,7 +16,11 @@
       - perestroika:
           branch: '{perestroika-branch}'
     wrappers:
-      - gerrit-creds
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-unknown-1}'
+            - '{ssh-creds-unknown-2}'
       - timeout:
           timeout: 300
       - timestamps

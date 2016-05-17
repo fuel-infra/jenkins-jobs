@@ -12,15 +12,19 @@
           weight: 1
 
     wrappers:
-      - gerrit-creds
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-unknown-1}'
+            - '{ssh-creds-unknown-2}'
       - build-timeout:
           timeout: 10
     scm:
       - fuel-infra:
-          scm-user: '{scm-user}'
+          scm-user: '{username-openstack-ci-jenkins}'
           scm-repo: '{scm-repo}'
           scm-basedir: '{scm-basedir}'
-          scm-credentials-id: '{scm-credentials-id}'
+          scm-credentials-id: '{ssh-creds-openstack-ci-jenkins}'
           scm-branch: '{scm-branch}'
 
     triggers:

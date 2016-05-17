@@ -6,7 +6,9 @@
       <p><b>Contacts:</b> #mos-da or #ci-services</p>
     concurrent: false
     wrappers:
-      - openstack-ci-mirrorer-jenkins
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-mirrorer-jenkins}'
       - timestamps
       - ansicolor
       - timeout:
@@ -15,10 +17,10 @@
       - timed: "*/11 * * * *"
     scm:
       - fuel-infra:
-          scm-user: '{scm-user}'
+          scm-user: '{username-openstack-ci-jenkins}'
           scm-repo: '{scm-repo}'
           scm-basedir: '{scm-basedir}'
-          scm-credentials-id: '{scm-credentials-id}'
+          scm-credentials-id: '{ssh-creds-openstack-ci-jenkins}'
           scm-branch: '{scm-branch}'
     parameters:
       - string:

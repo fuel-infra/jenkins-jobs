@@ -30,8 +30,8 @@
     # Gerrit parameters
     gerrit-host: 'review.fuel-infra.org'
     gerrit-port: '29418'
-    gerrit-user: 'openstack-ci-mirrorer-jenkins'
-    gerrit-creds: 'a4be8c41-43e0-4269-94d8-53133cfe3ae5'
+    gerrit-user: '{username-openstack-ci-mirrorer-jenkins}'
+    gerrit-creds: '{ssh-creds-openstack-ci-mirrorer-jenkins}'
 
     project:
         - ceilometer
