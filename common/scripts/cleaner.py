@@ -40,8 +40,15 @@ class Cleaner():
         # cleaner itself
         for devops_path in self.devops:
             print 'Changing environment to: (%s)' % devops_path
+
             # get list of local environments
             dos_path = "%s/bin/dos.py" % devops_path
+
+            # skip non existent environment
+            if not os.path.isfile(dos_path):
+                print 'WARNING: VENV %s does not exists' % devops_path
+                continue
+
             local_environments = subprocess.check_output([dos_path, 'list', '--timestamp']).split('\n')[:-1]
             # workaround if header added
             if local_environments and local_environments[0].startswith('NAME'):
