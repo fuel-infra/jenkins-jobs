@@ -171,13 +171,13 @@
           # custom parameters
           properties-content: $ADDITIONAL_PARAMETERS
       - shell:
-          !include-raw-escape builders/pull_iso.sh
+          !include-raw-escape: builders/pull_iso.sh
       - inject:
           properties-file: 'iso_path.txt'
       - shell:
-          !include-raw-escape builders/packages-build.sh
+          !include-raw-escape: builders/packages-build.sh
       - shell:
-          !include-raw-escape builders/packages-test.sh
+          !include-raw-escape: builders/packages-test.sh
 
     publishers:
       - archive:

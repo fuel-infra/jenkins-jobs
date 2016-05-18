@@ -9,6 +9,6 @@
       MOS_UBUNTU_TARGET=master.target.txt
       MIRROR_MOS_UBUNTU_SUITE=mos-master
     description:
-      !include-raw descriptions/custom.iso
+      !include-raw: descriptions/custom.iso
     jobs:
       - '{version}.custom.iso'

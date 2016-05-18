@@ -154,9 +154,9 @@
       - inject:
           properties-content: $ADDITIONAL_PARAMETERS
       - shell:
-          !include-raw-escape builders/custom_system_test_plugins.sh
+          !include-raw-escape: builders/custom_system_test_plugins.sh
       - shell:
-          !include-raw-escape builders/custom_system_test.sh
+          !include-raw-escape: builders/custom_system_test.sh
 
     properties:
       - authorization-allow-authorized
