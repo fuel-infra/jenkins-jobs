@@ -28,4 +28,7 @@
     ssh-creds-unknown-3: 'd2f87345-ff0f-4470-bb25-9c9d944f81d1'
     ssh-creds-unknown-4: '7a9284db-cc0e-46e1-992d-7c5f163f0678'
 
+    # used in publishing
+    pkg-sign-key: '1FA22B08'
+
 

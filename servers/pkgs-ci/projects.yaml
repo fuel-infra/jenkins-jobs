@@ -24,9 +24,6 @@
 
     repo-base-path: '/home/jenkins/pubrepos'
 
-    pkg-sign-key: '1FA22B08'
-
-
     fuel-namespace: 'openstack'
 
     install-scm-repo: 'infra/ci-test-request'
