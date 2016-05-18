@@ -208,11 +208,11 @@
       - zuul
     scm:
       - fuel-infra:
-          scm-repo: '{install-scm-repo}'
-          scm-branch: '{install-scm-branch}'
-          scm-basedir: ''
-          scm-user: '{username-openstack-ci-jenkins}'
-          scm-credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: '{install-scm-repo}'
+          branch: '{install-scm-branch}'
+          basedir: ''
     builders:
       - shell:
           !include-raw-escape builders/mos.install.cleanup.sh
@@ -284,11 +284,11 @@
       - zuul
     scm:
       - fuel-infra:
-          scm-repo: '{install-scm-repo}'
-          scm-branch: '{install-scm-branch}'
-          scm-basedir: ''
-          scm-user: '{username-openstack-ci-jenkins}'
-          scm-credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: '{install-scm-repo}'
+          branch: '{install-scm-branch}'
+          basedir: ''
     builders:
       - shell: rm -vf 'buildresult.params' '{pkg_type}.publish.setenvfile'
       - copyartifact:
