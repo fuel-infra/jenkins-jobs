@@ -63,11 +63,6 @@
       - shell: |
           #!/bin/bash -xe
 
-          # cherrypick patchset which allows to pass ADDITIONAL_EXTRAREPO_DEB
-          pushd ${{WORKSPACE}}/fuel-mirror
-            git fetch https://git.openstack.org/openstack/fuel-mirror refs/changes/76/317676/1 && git cherry-pick FETCH_HEAD
-          popd
-
           # FIXME: use perestroika from openstack/fuel-mirror
           # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
           # and then copy perestroika directory to root ${{WORKSPACE}}
