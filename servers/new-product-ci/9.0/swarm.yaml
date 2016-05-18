@@ -9,6 +9,8 @@
     jobs:
       - '9.0.swarm.runner'
       - '9.0.swarm.timers'
+      - '{version}.swarm.failures_report':
+          version: '9.0'
       - '{version}.{test-type}.test-reports':
           version: '9.0'
           repobranch: 'origin/stable/mitaka'
