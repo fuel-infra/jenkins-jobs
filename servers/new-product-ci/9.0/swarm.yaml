@@ -259,3 +259,6 @@
             - name: '9.0.system_test.ubuntu.support_dpdk_bond'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.system_test.ubuntu.system_test.deploy_centos_master'
+              current-parameters: true
+              kill-phase-on: NEVER

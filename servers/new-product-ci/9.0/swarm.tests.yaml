@@ -307,3 +307,12 @@
          properties: |
            KVM_USE=true
            BONDING=true
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
+         testgroup: 'system_test.deploy_centos_master'
+         pre-script: |
+           wget -r --no-parent -A 'fuel-release*.noarch.rpm' -nd --directory-prefix=$WORKSPACE/ -e robots=off http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/os/x86_64/Packages/ && mv "$WORKSPACE"/fuel-release*.noarch.rpm "$WORKSPACE/fuel-release.noarch.rpm"
+         properties: |
+           CENTOS_CLOUD_IMAGE_PATH=/srv/downloads/qa-centos-cloud-2016-05-05.qcow2
+           EXTRA_DEB_REPOS=mos,deb http://mirror.fuel-infra.org/mos-repos/ubuntu/9.0/ mos9.0 main restricted
+           SLAVE_NODE_MEMORY=4096
+           FUEL_RELEASE_PATH=$WORKSPACE/fuel-release.noarch.rpm
