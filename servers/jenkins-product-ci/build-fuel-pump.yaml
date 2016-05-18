@@ -2,7 +2,7 @@
     name: 'build-fuel-pump'
     builders:
       - shell:
-          !include-raw './builders/build-fuel-pump.sh'
+          !include-raw: './builders/build-fuel-pump.sh'
     description: |
       Build fuel pump image.
       <p>Maintenance contacts: #converged-appliance

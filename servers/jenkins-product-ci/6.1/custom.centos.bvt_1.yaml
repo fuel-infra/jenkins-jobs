@@ -2,10 +2,10 @@
     name: '6.1.custom.centos.bvt_1'
     builders:
       - shell:
-          !include-raw builders/run_system_test.sh
+          !include-raw: builders/run_system_test.sh
     concurrent: true
     description:
-      !include-raw descriptions/custom.centos.bvt_1
+      !include-raw: descriptions/custom.centos.bvt_1
     logrotate:
       artifactDaysToKeep: 90
       daysToKeep: 90

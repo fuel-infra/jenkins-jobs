@@ -2,7 +2,7 @@
     name: build-express-docs
     builders:
       - shell:
-          !include-raw './builders/build-express-docs.sh'
+          !include-raw: './builders/build-express-docs.sh'
     description: |
       Build Mirantis OpenStack Express docs for all branches and publish them to <a
       href="http://docs.mirantis.com">docs.mirantis.com</a>

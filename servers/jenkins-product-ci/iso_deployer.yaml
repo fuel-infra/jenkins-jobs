@@ -1,7 +1,7 @@
 - job:
     builders:
       - shell:
-          !include-raw './builders/iso_deployer.sh'
+          !include-raw: './builders/iso_deployer.sh'
     concurrent: true
     logrotate:
       num-to-keep: 400

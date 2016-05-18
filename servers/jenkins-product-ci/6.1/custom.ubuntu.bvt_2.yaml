@@ -2,10 +2,10 @@
     name: '6.1.custom.ubuntu.bvt_2'
     builders:
       - shell:
-          !include-raw builders/run_system_test.sh
+          !include-raw: builders/run_system_test.sh
     concurrent: true
     description:
-      !include-raw descriptions/custom.ubuntu.bvt_2
+      !include-raw: descriptions/custom.ubuntu.bvt_2
     logrotate:
       artifactDaysToKeep: 90
       daysToKeep: 90

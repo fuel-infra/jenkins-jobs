@@ -2,7 +2,7 @@
     name: build-mos-docs
     builders:
       - shell:
-          !include-raw './builders/build-mos-docs.sh'
+          !include-raw: './builders/build-mos-docs.sh'
     description: |
       Build mos/mos-docs for all branches and publish them to <a
       href="http://docs.mirantis.com">docs.mirantis.com</a>

@@ -5,7 +5,7 @@
       <b>Howto: <a href=https://mirantis.jira.com/wiki/display/PRD/Publish+file+for+partners>Wiki</a></b>
     builders:
       - shell:
-          !include-raw builders/publish_for_partners.sh
+          !include-raw: builders/publish_for_partners.sh
     concurrent: true
     logrotate:
       daysToKeep: 20

@@ -1,7 +1,7 @@
 - job:
     concurrent: true
     description:
-      !include-raw './descriptions/custom_system_test'
+      !include-raw: './descriptions/custom_system_test'
     logrotate:
       artifactDaysToKeep: 10
       daysToKeep: 30
@@ -24,7 +24,7 @@
           wget --no-verbose --input-file="${WORKSPACE}/${PLUGINS_URLS_FILE}" --directory-prefix="${PLUGINS_DIR}"
 
       - shell:
-          !include-raw './builders/custom_system_test.sh'
+          !include-raw: './builders/custom_system_test.sh'
     parameters:
       - string:
           name: MAGNET_LINK

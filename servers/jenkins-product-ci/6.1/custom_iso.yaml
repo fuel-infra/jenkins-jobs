@@ -2,10 +2,10 @@
     name: 'custom_6.1_iso'
     builders:
       - shell:
-          !include-raw builders/custom.sh
+          !include-raw: builders/custom.sh
     concurrent: true
     description:
-      !include-raw descriptions/custom.iso
+      !include-raw: descriptions/custom.iso
     logrotate:
       artifactDaysToKeep: 90
       daysToKeep: 90

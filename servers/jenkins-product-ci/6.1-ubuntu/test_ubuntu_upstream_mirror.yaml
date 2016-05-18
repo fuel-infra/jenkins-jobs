@@ -2,7 +2,7 @@
     name: '6.1-ubuntu.test_ubuntu_upstream_mirror'
     project-type: multijob
     description:
-      !include-raw descriptions/6.1-ubuntu.test_ubuntu_upstream_mirror
+      !include-raw: descriptions/6.1-ubuntu.test_ubuntu_upstream_mirror
     concurrent: true
     node: mirror
     properties:
@@ -37,7 +37,7 @@
           default: 'none'
     builders:
       - shell:
-          !include-raw builders/test_staging_mirror_1.sh
+          !include-raw: builders/test_staging_mirror_1.sh
       - multijob:
           name: ISO Building
           condition: SUCCESSFUL
@@ -69,7 +69,7 @@
           filter: build_description.txt
           which-build: last-successful
       - shell:
-          !include-raw builders/test_staging_mirror_2.sh
+          !include-raw: builders/test_staging_mirror_2.sh
     publishers:
       - description-setter:
           regexp: (^[^\s]* is stable.*a href.*)

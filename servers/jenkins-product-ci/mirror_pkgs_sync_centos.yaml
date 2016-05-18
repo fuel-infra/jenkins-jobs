@@ -10,7 +10,7 @@
         Maintenance contacts: #fuel-build
     builders:
       - shell:
-          !include-raw-escape './builders/mirror_pkgs_sync_centos.sh'
+          !include-raw-escape: './builders/mirror_pkgs_sync_centos.sh'
     parameters:
         - string:
             name: FORCED_LINK

@@ -34,7 +34,7 @@
 
     builders:
       - shell:
-          !include-raw './builders/compare_repos.sh'
+          !include-raw: './builders/compare_repos.sh'
 
     publishers:
       - archive:
