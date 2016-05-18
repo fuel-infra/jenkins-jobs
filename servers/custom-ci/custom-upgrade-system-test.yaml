@@ -42,7 +42,7 @@
           default: 'none'
       - string:
           name: BASE_FUEL_PROPOSED_REPO_URL
-          default: 'http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64/Packages'
+          default: 'http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64'
       - string:
           name: BASE_TEST_GROUP
           description: |
@@ -90,7 +90,7 @@
           default: 'none'
       - string:
           name: UPGRADE_FUEL_PROPOSED_REPO_URL
-          default: 'http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos8.0-centos7-fuel/proposed/x86_64/Packages'
+          default: 'http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos8.0-centos7-fuel/proposed/x86_64'
       - string:
           name: UPGRADE_TEST_GROUP
           description: |
