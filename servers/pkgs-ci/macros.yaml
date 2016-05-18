@@ -31,36 +31,6 @@
           browser-url: https://review.fuel-infra.org/gitweb?p={repo}.git
 
 - scm:
-    name: fuel-infra-src
-    scm:
-      - git:
-          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/${{SRC_PROJECT}}.git'
-          basedir: 'wrk-build/${{PACKAGENAME}}-src'
-          credentials-id: '{scm-credentials-id}'
-          skip-tag: True
-          branches:
-            - ${{SOURCE_BRANCH}}
-          refspec: ${{SOURCE_REFSPEC}}
-          browser: gitweb
-          browser-url: https://review.fuel-infra.org/gitweb?p=${{SRC_PROJECT}}.git
-          wipe-workspace: False
-
-- scm:
-    name: fuel-infra-spec
-    scm:
-      - git:
-          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/${{SPEC_PROJECT}}.git'
-          basedir: 'wrk-build/${{PACKAGENAME}}-spec'
-          credentials-id: '{scm-credentials-id}'
-          skip-tag: True
-          branches:
-            - ${{SPEC_BRANCH}}
-          refspec: ${{SPEC_REFSPEC}}
-          browser: gitweb
-          browser-url: https://review.fuel-infra.org/gitweb?p=${{SPEC_PROJECT}}.git
-          wipe-workspace: False
-
-- scm:
     name: upstream
     scm:
       - git:
