@@ -55,7 +55,12 @@
           description: Build fuel packages locally( 0 - yes; 1 - use from upstream //need for patching-ci )
       - string:
           name: EXTRA_RPM_REPOS
-          default: 'base,http://mirror.fuel-infra.org/fwm/6.1-base/ security,http://mirror.fuel-infra.org/mos/centos-6/mos6.1/security/ updates,http://mirror.fuel-infra.org/mos/centos-6/mos6.1/updates/'
+          #  ">-" is used as space delimiters are required in the resulting string
+          default: >-
+            base,http://mirror.fuel-infra.org/fwm/6.1-base/
+            security,http://mirror.fuel-infra.org/mos/centos-6/mos6.1/security/
+            updates,http://mirror.fuel-infra.org/mos/centos-6/mos6.1/updates/
+            pkg-updates,http://pkg-updates.fuel-infra.org/centos6/
           description: |
             Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
             Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
