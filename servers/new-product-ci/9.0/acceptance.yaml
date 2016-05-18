@@ -165,3 +165,6 @@
             - name: '9.0.acceptance.ubuntu.network_outage'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.acceptance.ubuntu.fuel_plugin_etckeeper'
+              current-parameters: true
+              kill-phase-on: NEVER
