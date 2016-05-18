@@ -21,14 +21,14 @@
     name: fuel-infra
     scm:
       - git:
-          url: 'ssh://{scm-user}@review.fuel-infra.org:29418/{scm-repo}.git'
-          basedir: '{scm-basedir}'
-          credentials-id: '{scm-credentials-id}'
+          url: 'ssh://{username}@review.fuel-infra.org:29418/{repo}.git'
+          basedir: '{basedir}'
+          credentials-id: '{credentials-id}'
           skip-tag: True
           branches:
-            - '{scm-branch}'
+            - '{branch}'
           browser: gitweb
-          browser-url: https://review.fuel-infra.org/gitweb?p={scm-repo}.git
+          browser-url: https://review.fuel-infra.org/gitweb?p={repo}.git
 
 - scm:
     name: fuel-infra-src

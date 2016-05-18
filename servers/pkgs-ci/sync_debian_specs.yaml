@@ -17,11 +17,11 @@
       - timed: "*/11 * * * *"
     scm:
       - fuel-infra:
-          scm-user: '{username-openstack-ci-jenkins}'
-          scm-repo: '{scm-repo}'
-          scm-basedir: '{scm-basedir}'
-          scm-credentials-id: '{ssh-creds-openstack-ci-jenkins}'
-          scm-branch: '{scm-branch}'
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: '{scm-repo}'
+          branch: '{scm-branch}'
+          basedir: '{scm-basedir}'
     parameters:
       - string:
           name: PROJECT
