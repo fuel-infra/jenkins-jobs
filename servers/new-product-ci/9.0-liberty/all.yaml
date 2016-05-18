@@ -1,4 +1,5 @@
 - job:
+    disabled: true
     name: '9.0-liberty.all'
     builders:
       - shell:
@@ -71,8 +72,6 @@
       - openstack:
           branch: 'master'
           repo: fuel-main
-    triggers:
-      - timed: 'H 1,7,13,19 * * *'
     wrappers:
       - timeout:
           timeout: 120
