@@ -135,10 +135,6 @@
     <<: *common-sync-params
 
 - project:
-    name: 'python-brick-cinderclient-ext'
-    <<: *common-sync-params
-
-- project:
     name: 'oslo.cache'
     <<: *common-sync-params
 - project:
