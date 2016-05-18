@@ -56,7 +56,8 @@
             - '{ssh-creds-unknown-2}'
 
     scm:
-      - perestroika
+      - perestroika:
+          branch: master
 
     builders:
 
