@@ -357,27 +357,6 @@
 
 - project:
     <<: *common_template
-    <<: *gerrit_params
-    name: 'check-code-vs-spec-for-ubuntu'
-    os: 'ubuntu'
-    openstack_release: 'ubuntu'
-    mos_version: 'master'
-    fuel-main-branch: 'master'
-    fuel-qa-branch: 'master'
-    perestroika-branch: 'master'
-    distro: 'trusty'
-    pkg_type: 'deb'
-    spec_path_prefix: '/trusty'
-    deb-dist-name: mos-master
-    rpm-dist-name: mos-master-trusty
-
-    package_name: !include openstack-projects.yaml.inc
-    jobs:
-      - '{mos_version}-pkg-masscheck-starter-{os}'
-      - '{mos_version}-pkg-masscheck-{os}--{package_name}'
-
-- project:
-    <<: *common_template
     name: 'resync-repos-to-mirrors'
     trsync-node: 'mirror-sync'
     trsync-scm-repo: 'infra/trsync'
