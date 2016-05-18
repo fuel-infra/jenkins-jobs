@@ -60,7 +60,7 @@ fi
 docker run -v "${JOB_HOST_PATH}:${JOB_DOCKER_PATH}" ${CMDPARAM} \
            --cidfile="${CONTAINER_ID}" \
            ${ENVVARS} -t "${REGISTRY}:${DOCKER_IMAGE}" \
-           /bin/bash -exc "${SCRIPT_PATH}" ${MODE}
+           /bin/bash -exc "${SCRIPT_PATH} ${MODE}"
 
 # Stop container after job finishes, preserving exit code
 exitcode=$?

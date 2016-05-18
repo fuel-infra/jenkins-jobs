@@ -80,6 +80,10 @@
           name: VOLUMES
           default: '{volumes}'
           description: 'Volumes to mount into container separated with spaces'
+      - string:
+          name: MODE
+          default: '{mode}'
+          description: 'Optional arguments to runner script'
     properties:
       - heavy-job:
           weight: 1
