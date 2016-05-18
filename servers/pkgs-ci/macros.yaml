@@ -41,16 +41,6 @@
           wipe-workspace: false
 
 - scm:
-    name: zuul
-    scm:
-      - git:
-          url: '${ZUUL_URL}/${ZUUL_PROJECT}'
-          branches:
-            - '${ZUUL_BRANCH}'
-          refspec: '${ZUUL_REF}'
-          wipe-workspace: False
-
-- scm:
     name: perestroika
     scm:
       - git:
