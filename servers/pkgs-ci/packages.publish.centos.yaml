@@ -1,0 +1,128 @@
+- job-template:
+    name: 'packages.publish.centos'
+    description: 'Unified job for publishing any built package to any repository.'
+    concurrent: false
+    node: '{publish-node}'
+
+    parameters:
+
+      - string:
+          name: REMOTE_REPO_HOST
+          description: "Host which should be used as destination (here packages will be published)"
+          # fixme: extract as global defaults
+          default: 'perestroika-repo-tst.infra.mirantis.net'
+
+      - string:
+          name: REPO_BASE_PATH
+          default: /home/jenkins/pubrepos
+
+      - string:
+          name: RPM_REPO_PATH_PREFIX
+          # default is added for avoiding accidental publishing to master
+          # this param is checked in builder, so 'trash/' namespace will not be created actually
+          default: "trash/"
+          description: "Prefix to add for repo path"
+
+      - string:
+          name: ORIGIN
+          description: |
+            Origin of package (testing or Mirantis).
+            Value is saved in Release file and used for setting priority of
+            package sources.
+
+      - string:
+          name: PROJECT_VERSION
+          default: master
+
+      - string:
+          name: IS_DOWNGRADE
+          default: false
+
+      # Vars for perestroika/publisher for package lookup
+      # normally it should be set by upstream job
+      # -----------------------------------
+
+      - string:
+          name: BUILD_HOST
+          description: fqdn of build host for dowloading built package
+      - string:
+          name: PKG_PATH
+          description: path to built package on remote host
+      - string:
+          name: EXTRAREPO
+          description: extrarepos used for building package
+
+      # Sticky label for artifacts lookups
+      # -----------------------------------
+
+      - string:
+          name: BUILD_MARKER
+          description: "Mark downstream jobs with param"
+
+    wrappers:
+      - timeout:
+          timeout: 300
+      - timestamps
+      - ansicolor
+      - gerrit-creds
+
+    scm:
+      - perestroika
+
+    builders:
+
+      - inject:
+          properties-content: |
+            RPM_DIST_NAME=mos-master-centos7
+            BASE_RPM_REPO_PATH=mos-repos/centos/mos-master-centos7
+            RPM_OS_REPO_PATH=mos-repos/centos/mos-master-centos7/os
+            RPM_UPDATES_REPO_PATH=mos-repos/centos/mos-master-centos7/updates
+            RPM_PROPOSED_REPO_PATH=mos-repos/centos/mos-master-centos7/proposed
+            RPM_SECURITY_REPO_PATH=mos-repos/centos/mos-master-centos7/security
+            RPM_HOLDBACK_REPO_PATH=mos-repos/centos/mos-master-centos7/holdback
+
+      - inject:
+          properties-content: |
+            RPM_OS_REPO_PATH=${{RPM_REPO_PATH_PREFIX}}${{RPM_OS_REPO_PATH}}
+            PRODUCT_VERSION=PROJECT_VERSION
+
+      - shell: |
+          #!/bin/bash
+          set -xe
+
+          echo "Description string: Publishing ${{PKG_PATH}}"
+
+          # protect repository, when job is triggered accidentally
+          if [ ${{RPM_REPO_PATH_PREFIX}} ='trash/' ] ; then
+            exit 1
+          fi
+
+          cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
+
+          /bin/bash -xe publisher.v5/publish-rpm-binaries.sh
+
+          # Render artifact
+          # --------------------------------
+
+          touch rpm.publish.setenvfile
+
+          mv rpm.publish.setenvfile rpm.publish.setenvfile.old
+
+          for variable in "RPM_REPO_URL" "RPM_VERSION" "RPM_BINARIES" ; do
+            cat rpm.publish.setenvfile.old | grep "${{variable}}=" >> rpm.publish.setenvfile
+          done
+
+          cat rpm.publish.setenvfile
+
+    publishers:
+
+      - archive:
+          # RPM_REPO_URL     -> url of repository
+          # RPM_VERSION      -> version of package
+          # RPM_BINARIES     -> list of binaries
+          artifacts: 'rpm.publish.setenvfile'
+          allow-empty: false
+
+      - description-setter:
+          regexp: "Description string: (.*)"
+          regexp-for-failed: "Description string: (.*)"

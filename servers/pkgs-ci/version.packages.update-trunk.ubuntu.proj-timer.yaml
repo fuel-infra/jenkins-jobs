@@ -1,0 +1,23 @@
+- job-template:
+    name: '{project_version}.packages.update-trunk.ubuntu.{project_name}'
+    description: 'Update trunk repo with packages from {project_name} project'
+    concurrent: false
+
+    # TODO: Enable
+    # triggers:
+    #   - timed: '{timed}'
+
+    wrappers:
+      - timeout:
+          timeout: 300
+
+    builders:
+      - trigger-builds:
+          - project: 'packages.update.ubuntu'
+            block: true
+            predefined-parameters: |
+              PACKAGENAME={project_name}
+              IS_OPENSTACK={is_openstack}
+              IS_FUEL={is_fuel}
+              PROJECT_VERSION={project_version}
+              DESTINATION_REPO_NAMESPACE=trunk/

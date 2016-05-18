@@ -1,0 +1,131 @@
+- job-template:
+    name: 'packages.publish.ubuntu'
+    description: 'Unified job for publishing any built package to any repository.'
+    concurrent: false
+    node: '{publish-node}'
+
+    parameters:
+
+      - string:
+          name: REMOTE_REPO_HOST
+          description: "Host which should be used as destination (here packages will be published)"
+          # fixme: extract as global defaults
+          default: 'perestroika-repo-tst.infra.mirantis.net'
+      - string:
+          name: REPO_BASE_PATH
+          default: /home/jenkins/pubrepos
+      - string:
+          name: DEB_REPO_PATH
+          default: mos-repos/ubuntu/master
+      - string:
+          name: DEB_REPO_PATH_PREFIX
+          # default is added for avoiding accidental publishing to master
+          # this param is checked in builder, so 'trash/' namespace will not be created actually
+          default: "trash/"
+          description: "Prefix to add for repo path"
+      - string:
+          name: ORIGIN
+          description: |
+            Origin of package (testing or Mirantis).
+            Value is saved in Release file and used for setting priority of
+            package sources.
+      - string:
+          name: PROJECT_VERSION
+          default: master
+      - string:
+          name: IS_DOWNGRADE
+          default: false
+
+      # Vars for perestroika/publisher for package lookup
+      # normally it should be set by upstream job
+      # -----------------------------------
+
+      - string:
+          name: BUILD_HOST
+          description: fqdn of build host for dowloading built package
+      - string:
+          name: PKG_PATH
+          description: path to built package on remote host
+      - string:
+          name: EXTRAREPO
+          description: extrarepos used for building package
+
+      # Sticky label for artifacts lookups
+      # -----------------------------------
+
+      - string:
+          name: BUILD_MARKER
+          description: "Mark downstream jobs with param"
+
+    wrappers:
+      - timeout:
+          timeout: 300
+      - timestamps
+      - ansicolor
+      - gerrit-creds
+
+    scm:
+      - perestroika
+
+    builders:
+
+      - inject:
+          properties-content: |
+            DEB_DIST_NAME=mos-master
+            DEB_PROPOSED_DIST_NAME=mos-master-proposed
+            DEB_UPDATES_DIST_NAME=mos-master-updates
+            DEB_SECURITY_DIST_NAME=mos-master-security
+            DEB_HOLDBACK_DIST_NAME=mos-master-holdback
+
+      - inject:
+          properties-content: |
+            DEB_REPO_PATH=mos-repos/ubuntu/master
+            DEB_PROPOSED_REPO_PATH=
+            DEB_UPDATES_REPO_PATH=
+            DEB_SECURITY_REPO_PATH=
+            DEB_HOLDBACK_REPO_PATH=
+
+      - inject:
+          properties-content: |
+            DEB_REPO_PATH=${{DEB_REPO_PATH_PREFIX}}${{DEB_REPO_PATH}}
+            PRODUCT_VERSION=${{PROJECT_VERSION}}
+
+      - shell: |
+          #!/bin/bash
+          set -xe
+
+          echo "Description string: Publishing ${{PKG_PATH}}"
+
+          # protect repository, when job is triggered accidentally
+          if [ ${{DEB_REPO_PATH_PREFIX}} ='trash/' ] ; then
+            exit 1
+          fi
+
+          cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
+
+          /bin/bash -xe publisher.v5/publish-deb-binaries.sh
+
+          # Render artifact
+          # --------------------------------
+
+          touch deb.publish.setenvfile
+
+          mv deb.publish.setenvfile deb.publish.setenvfile.old
+
+          for variable in "DEB_REPO_URL" "DEB_PACKAGENAME" "DEB_VERSION" "DEB_BINARIES" ; do
+            cat deb.publish.setenvfile.old | grep "${{variable}}=" >> deb.publish.setenvfile
+          done
+
+          cat deb.publish.setenvfile
+
+    publishers:
+      - archive:
+          # DEB_REPO_URL     -> url of repository
+          # DEB_PACKAGENAME  -> name of package
+          # DEB_VERSION      -> version of package
+          # DEB_BINARIES     -> list of binaries
+          artifacts: 'deb.publish.setenvfile'
+          allow-empty: false
+      - description-setter:
+          regexp: "Description string: (.*)"
+          regexp-for-failed: "Description string: (.*)"
