@@ -13,7 +13,11 @@
           option: project
           max-per-node: 7
     wrappers:
-      - gerrit-creds
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-unknown-1}'
+            - '{ssh-creds-unknown-2}'
       - timestamps
       - ansicolor
       - timeout:

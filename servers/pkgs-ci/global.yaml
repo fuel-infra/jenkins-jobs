@@ -13,3 +13,19 @@
       numToKeep: -1
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
+
+    ssh-creds-jenkins: '0772133d-e02e-4385-9304-e87e7f830b4e'
+
+    # todo: rename to something verbose
+    username-openstack-ci-jenkins:  'openstack-ci-jenkins'
+    ssh-creds-openstack-ci-jenkins: 'a2a7e956-9dc7-4eb1-b396-ba981c2a8c81'
+    username-openstack-ci-mirrorer-jenkins:  'openstack-ci-mirrorer-jenkins'
+    ssh-creds-openstack-ci-mirrorer-jenkins: 'a4be8c41-43e0-4269-94d8-53133cfe3ae5'
+
+    # todo: who are they?
+    ssh-creds-unknown-1: '92ba60e8-9c4d-4977-b161-8621e39c0116'
+    ssh-creds-unknown-2: '04ec6ed9-b3c4-4a56-bcc8-becc889f19cb'
+    ssh-creds-unknown-3: 'd2f87345-ff0f-4470-bb25-9c9d944f81d1'
+    ssh-creds-unknown-4: '7a9284db-cc0e-46e1-992d-7c5f163f0678'
+
+

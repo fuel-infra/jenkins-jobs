@@ -23,7 +23,9 @@
           name: RESYNC_ONLY
           default: false
     wrappers:
-      - jenkins
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-jenkins}'
       - timestamps
       - ansicolor
     triggers:
