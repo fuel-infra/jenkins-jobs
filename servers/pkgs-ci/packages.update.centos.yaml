@@ -99,7 +99,7 @@
                 BUILD_HOST=$BUILD_HOST
                 PKG_PATH=$PKG_PATH
                 EXTRAREPO=$EXTRAREPO
-                BUILD_MARKER=$BUILD_MARKER
+                BUILD_MARKER=$BUILD_TAG
 
       - copyartifact:
           project: 'packages.publish.centos'

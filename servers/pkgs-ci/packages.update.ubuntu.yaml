@@ -75,7 +75,7 @@
       - copyartifact:
           project: 'packages.build.ubuntu'
           filter: 'buildresult.setenvfile'
-          parameter-filters: BUILD_MARKER=$BUILD_MARKER
+          parameter-filters: BUILD_MARKER=$BUILD_TAG
 
       - inject:
           # BUILD_HOST   -> name of host where build run
