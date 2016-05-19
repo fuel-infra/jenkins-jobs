@@ -1,6 +1,5 @@
 - job-template:
     name: '{mos_version}.resync-repos-to-mirrors'
-    disabled: ''
     concurrent: false
     node: '{trsync-node}'
     logrotate:

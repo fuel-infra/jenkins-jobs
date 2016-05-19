@@ -364,8 +364,7 @@
     trsync-scm-basedir: 'trsync'
     mailto: 'fuel-build+ci-packaging@mirantis.com'
     mos_version:
-        - '8.0':
-            rpm-repo-name: 'mos{mos_version}-centos7-fuel'
+        # fixme: remove this job after 9.0 GA
         - '9.0':
             rpm-repo-name: 'mos{mos_version}-centos7'
         - master:
