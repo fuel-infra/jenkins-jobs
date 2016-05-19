@@ -45,6 +45,21 @@ main () {
     else
         env "DIST=${target}" bash "${_dpath}/update-deb-chroot.sh"
     fi
+
+    # Init chroots for new version of perestroika
+    # `init` instead of `update` due to CentOS7 rolling release
+    if [ -f "${WRKDIR}/build" ] ; then
+        local _confpath="${WRKDIR}/conf"
+        while read -r conffile ; do
+            local confname=${conffile##*/}
+            local confname=${confname/.conf}
+            [ "$confname" == "common" ] && continue
+            "${WRKDIR}/build" \
+                --dist "${confname}" \
+                --init \
+                --verbose
+        done < <(find "${_confpath}" -name "*.conf")
+    fi
 }
 
 main "${@}"
