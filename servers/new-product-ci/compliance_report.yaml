@@ -6,9 +6,7 @@
             GERRIT_USER=openstack-ci-jenkins
             GERRIT_HOST=https://review.fuel-infra.org
             SRT_MIRROR_HOST=osci-mirror-srt.infra.mirantis.net
-            MIRROR_HOST=perestroika-repo-tst.infra.mirantis.net
             JENKINS_PRODUCT=https://product-ci.infra.mirantis.net
-            BLACKDUCK_USER=testuser@mirantis.com
             SDKPATH=/home/jenkins/Export-6.1.1-SDK-V6.1/
             CUSTOMCLASS=/usr/local/bin
             KEYPATH=/etc/blackduck/credentials.json
@@ -35,6 +33,13 @@
           name: RELEASE
       - string:
           name: BLACKDUCK_HOST
+          default: blackduck.infra.mirantis.net
+      - string:
+          name: BLACKDUCK_USER
+          default: testuser@mirantis.com
+      - string:
+          name: MIRROR_HOST
+          default: mirror.fuel-infra.org
       - choice:
           name: UPDATES_REPO_NAME
           choices:
