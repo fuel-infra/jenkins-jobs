@@ -85,6 +85,8 @@ mkdir -p ${PLUGINS}
 
 export EXAMPLE_PLUGIN_PATH="${PLUGINS}/fuel_plugin_example.fp"
 
+echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
+
 curl -s "${EXAMPLE_PLUGIN_URL}" -o ${EXAMPLE_PLUGIN_PATH}
 
 sh -x "utils/jenkins/system_tests.sh" -t test -w "${WORKSPACE}" -e "${ENV_NAME}" -o --group="${TEST_GROUP}" -i "${ISO_PATH}"

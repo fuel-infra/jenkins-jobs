@@ -17,6 +17,8 @@
         properties-content: '{properties}'
     - shell:
         !include-raw-escape 'scripts/run_plugin_example_system_test.sh'
+    - shell:
+        !include-raw-escape '../scripts/erase_env.sh'
     concurrent: true
     description: '{description}'
     disabled: false
