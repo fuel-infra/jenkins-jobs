@@ -44,12 +44,6 @@
     - project: 'deploy_iso_on_cachers'
       property-file: magnet_link.txt
       condition: UNSTABLE_OR_BETTER
-    - project: 'trigger-external-events'
-      predefined-parameters: |
-        ISO_VERSION={version}
-        BUILD=fuel-{version}-$BUILD_NUMBER
-        REPORTED_JOB_URL=$BUILD_URL
-      condition: UNSTABLE_OR_BETTER
     default_variables: |
       ISO_TYPE=product
     publish_iso_builder: 'publish-product-iso'
@@ -64,12 +58,6 @@
     additional_projects:
     - project: 'deploy_iso_on_cachers'
       property-file: magnet_link.txt
-      condition: UNSTABLE_OR_BETTER
-    - project: 'trigger-external-events'
-      predefined-parameters: |
-        ISO_VERSION={version}
-        BUILD=fuel-{version}{mod}-$BUILD_NUMBER
-        REPORTED_JOB_URL=$BUILD_URL
       condition: UNSTABLE_OR_BETTER
     default_variables: |
       FUELLIB_REPO={git-root}fuel-library.git
@@ -228,6 +216,12 @@
           condition: ALWAYS
           predefined-parameters: |
             RUNNER_BUILD_NUMBER=$BUILD_NUMBER
+        - project: 'trigger-external-events'
+          predefined-parameters: |
+            ISO_VERSION={version}
+            BUILD=fuel-{version}{mod}-$UPSTREAM_BUILD_NUMBER
+            REPORTED_JOB_URL=$UPSTREAM_BUILD_URL
+          condition: UNSTABLE_OR_BETTER
 
 # Group for Community
 - job-group:
