@@ -86,14 +86,12 @@
             RPM_SECURITY_REPO_PATH=mos-repos/centos/mos-master-centos7/security
             RPM_HOLDBACK_REPO_PATH=mos-repos/centos/mos-master-centos7/holdback
 
-      - inject:
-          properties-content: |
-            RPM_OS_REPO_PATH=${{RPM_REPO_PATH_PREFIX}}${{RPM_OS_REPO_PATH}}
-            PRODUCT_VERSION=PROJECT_VERSION
-
       - shell: |
           #!/bin/bash
           set -xe
+
+          RPM_OS_REPO_PATH=${{RPM_REPO_PATH_PREFIX}}${{RPM_OS_REPO_PATH}}
+          PRODUCT_VERSION=${{PROJECT_VERSION}}
 
           echo "Description string: Publishing ${{PKG_PATH}}"
 
