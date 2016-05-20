@@ -49,7 +49,7 @@
         - project: '9.0-kilo.send_reports'
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
-            ISO_VERSION=9.0
+            ISO_VERSION=9.0-kilo
             RELEASE=9.0
             STAGE=build
             VALUE=ok

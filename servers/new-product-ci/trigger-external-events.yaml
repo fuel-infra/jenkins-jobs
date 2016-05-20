@@ -18,7 +18,7 @@
     parameters:
       - string:
           name: TRIGGER_ONLY_FOR_ISO_VERSION
-          default: '9.0'
+          default: '9.0-mos'
           description: 'Limit trigger execution to specified ISO version'
     publishers:
       - description-setter:

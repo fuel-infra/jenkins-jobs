@@ -218,7 +218,7 @@
             RUNNER_BUILD_NUMBER=$BUILD_NUMBER
         - project: 'trigger-external-events'
           predefined-parameters: |
-            ISO_VERSION={version}
+            ISO_VERSION={version}{mod}
             BUILD=fuel-{version}{mod}-$UPSTREAM_BUILD_NUMBER
             REPORTED_JOB_URL=$UPSTREAM_BUILD_URL
           condition: UNSTABLE_OR_BETTER
