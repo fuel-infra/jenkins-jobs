@@ -95,7 +95,7 @@
               predefined-parameters: |
                 IS_DOWNGRADE=true
                 ORIGIN=testing
-                DEB_REPO_PATH_PREFIX=tmp-master-builds/$PROJECT_NAME/
+                DEB_REPO_PATH_PREFIX=tmp-master-builds/$PACKAGENAME/
                 BUILD_HOST=$BUILD_HOST
                 PKG_PATH=$PKG_PATH
                 EXTRAREPO=$EXTRAREPO
