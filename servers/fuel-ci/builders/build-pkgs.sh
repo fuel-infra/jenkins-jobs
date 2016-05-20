@@ -60,7 +60,7 @@ pushd "${PROJECT_ROOT}" &>/dev/null
 
 # taking version of package
 
-RPM_PACKAGE_VERSION=$(rpm -q --specfile "${PROJECT_ROOT}"/specs/"${PROJECT_PACKAGE}".spec --queryformat %{VERSION}"\n" | head -1 )
+RPM_PACKAGE_VERSION=$(rpm -q --specfile "${PROJECT_ROOT}/specs/${PROJECT_PACKAGE}.spec" --queryformat "%{VERSION}\n" | head -1 )
 
 if [[ -z "${GERRIT_BRANCH}" || "${GERRIT_PROJECT}" == openstack/puppet* ]]; then
 # we start job from master branch (by timer)
@@ -77,7 +77,7 @@ DEBMSG=$(git -C "${PROJECT_ROOT}" log -1 --pretty=%s)
 # add local modifications (e.g. prepared upstream puppet modules) to source archive
 git add -A
 uploadStash=$(git stash create)
-git archive --format=tar.gz --worktree-attributes ${uploadStash:-HEAD} --output="${SOURCE_PATH}/${PROJECT_PACKAGE}-${RPM_PACKAGE_VERSION}.tar.gz"
+git archive --format=tar.gz --worktree-attributes "${uploadStash:-HEAD}" --output="${SOURCE_PATH}/${PROJECT_PACKAGE}-${RPM_PACKAGE_VERSION}.tar.gz"
 cp -v "${PROJECT_ROOT}/specs/${PROJECT_PACKAGE}.spec" "${SOURCE_PATH}"
 # update spec with proper version
 sed -i "s|Release:.*$|Release: ${RELEASE}|" "${SOURCE_PATH}/${PROJECT_PACKAGE}.spec"
