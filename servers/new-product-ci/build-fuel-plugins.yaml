@@ -30,19 +30,19 @@
     scm:
       - main-git:
           reponame: fuel-plugins
-          repobranch: origin/$GERRIT_BRANCH
+          repobranch: origin/master
           basedir: ''
       - main-git:
           reponame: fuel-plugin-detach-database
-          repobranch: origin/$GERRIT_BRANCH
+          repobranch: origin/master
           basedir: examples/fuel-plugin-detach-database
       - main-git:
           reponame: fuel-plugin-detach-rabbitmq
-          repobranch: origin/$GERRIT_BRANCH
+          repobranch: origin/master
           basedir: examples/fuel-plugin-detach-rabbitmq
       - main-git:
           reponame: fuel-plugin-detach-keystone
-          repobranch: origin/$GERRIT_BRANCH
+          repobranch: origin/master
           basedir: examples/fuel-plugin-detach-keystone
     triggers:
       - timed: '0 22 * * *'
