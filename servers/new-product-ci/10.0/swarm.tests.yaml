@@ -316,3 +316,11 @@
            EXTRA_DEB_REPOS=mos,deb http://mirror.fuel-infra.org/mos-repos/ubuntu/master mos-master main restricted'
            SLAVE_NODE_MEMORY=4096
            FUEL_RELEASE_PATH=$WORKSPACE/fuel-release.noarch.rpm
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
+         testgroup: 'deploy_multipath'
+         properties: |
+           MULTIPATH=True
+           SLAVE_MULTIPATH_DISKS_COUNT=2
+           DEVOPS_SETTINGS_TEMPLATE=$WORKSPACE/system_test/tests_templates/tests_configs/multipath_3_nodes.yaml
+           NODES_COUNT=4
+         timeout: '600'
