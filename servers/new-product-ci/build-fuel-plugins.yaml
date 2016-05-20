@@ -1,0 +1,55 @@
+- job:
+    name: 'build-fuel-plugins'
+    builders:
+      - shell:
+          !include-raw builders/build-fuel-plugins.sh
+    description: |
+      Build plugins for fuel-plugins project <a href=https://github.com/openstack/fuel-plugins>github.com/openstack/fuel-plugins</a>
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 30
+    node: build-fuel-plugins
+    concurrent: true
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          max-per-node: 1
+          option: project
+    publishers:
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'ci+alert@mirantis.com'
+          send-to-individuals: false
+      - archive:
+          allow-empty: true
+          artifacts: 'built_plugins/*.fp, built_plugins/*.rpm'
+          latest-only: false
+      - description-setter:
+          regexp: '(<a href=.*a>)'
+    scm:
+      - main-git:
+          reponame: fuel-plugins
+          repobranch: origin/$GERRIT_BRANCH
+          basedir: ''
+      - main-git:
+          reponame: fuel-plugin-detach-database
+          repobranch: origin/$GERRIT_BRANCH
+          basedir: examples/fuel-plugin-detach-database
+      - main-git:
+          reponame: fuel-plugin-detach-rabbitmq
+          repobranch: origin/$GERRIT_BRANCH
+          basedir: examples/fuel-plugin-detach-rabbitmq
+      - main-git:
+          reponame: fuel-plugin-detach-keystone
+          repobranch: origin/$GERRIT_BRANCH
+          basedir: examples/fuel-plugin-detach-keystone
+    triggers:
+      - timed: '0 22 * * *'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 10
