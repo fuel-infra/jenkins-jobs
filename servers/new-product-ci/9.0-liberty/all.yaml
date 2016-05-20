@@ -50,7 +50,7 @@
         - project: '9.0-liberty.send_reports'
           condition: UNSTABLE_OR_BETTER
           predefined-parameters: |
-            ISO_VERSION=9.0
+            ISO_VERSION=9.0-liberty
             RELEASE=9.0
             STAGE=build
             VALUE=ok
