@@ -38,8 +38,9 @@
             - project-compare-type: PLAIN
               project-pattern: 'mos/mos-docs'
               branches:
-                - branch-compare-type: ANT
-                  branch-pattern: '**'
+                - branch-compare-type: REG_EXP
+                  # Any branch except 'feature/layout'
+                  branch-pattern: '^(?!feature\/layout)(.*)$'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 
