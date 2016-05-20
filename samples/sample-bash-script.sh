@@ -5,7 +5,7 @@
 #
 #   .. module:: sample-bash-script
 #       :platform: Unix, Windows
-#       :synopsis: Do some useful and unuseful things
+#       :synopsis: Do some useful and sometimes useless things
 #   .. vesionadded:: MOS-9.0
 #   .. vesionchanged:: MOS-9.0
 #   .. author:: John Snow <jsnow@mirantis.com>
@@ -56,7 +56,7 @@ WORKSPACE="${WORKSPACE:-.}"
 main () {
     #   .. function:: main
     #
-    #       Do some useless things, shows how to document functions,
+    #       Do some useless things, show how to document functions,
     #       and how to add documentation strings
     #
     #       :param A: just a first parameter of function
