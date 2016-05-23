@@ -37,8 +37,8 @@
       - ssh-agent-credentials:
           users:
             - '{ssh-creds-openstack-ci-jenkins}'
-            - '{ssh-creds-unknown-1}'
-            - '{ssh-creds-unknown-2}'
+            - '{ssh-creds-fuel-osci-bot}'
+            - '{ssh-creds-pkgs-ci}'
 
 - job-template:
     name: '{version-id}-rpm-repo-monitor'
@@ -80,8 +80,8 @@
       - ssh-agent-credentials:
           users:
             - '{ssh-creds-openstack-ci-jenkins}'
-            - '{ssh-creds-unknown-1}'
-            - '{ssh-creds-unknown-2}'
+            - '{ssh-creds-fuel-osci-bot}'
+            - '{ssh-creds-pkgs-ci}'
 
 - project:
     name: 'repo-monitors'
