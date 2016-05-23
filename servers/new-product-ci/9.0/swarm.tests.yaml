@@ -303,6 +303,8 @@
            ENV_SLAVE_PASSWORD=r00tme
          timeout: '600'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
+         testgroup: 'custom_graph'
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'support_dpdk_bond'
          properties: |
            KVM_USE=true
