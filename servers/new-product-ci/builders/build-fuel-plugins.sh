@@ -27,6 +27,11 @@
 
 set -ex
 
+# to avoid Ruby versions conflicts for fpm ruby gem source /etc/profile
+# (see details in https://bugs.launchpad.net/fuel/+bug/1584123)
+
+source /etc/profile
+
 HOTPLUGGABLE_V4_PATH="${WORKSPACE}/examples/fuel_plugin_example_v4_hotpluggable"
 rm -rf "${HOTPLUGGABLE_V4_PATH}"
 cp -r "${WORKSPACE}/examples/fuel_plugin_example_v4" "${HOTPLUGGABLE_V4_PATH}"
