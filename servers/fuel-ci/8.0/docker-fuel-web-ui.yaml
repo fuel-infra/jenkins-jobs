@@ -4,9 +4,8 @@
       - shell:
           !include-raw-escape builders/run_docker.sh
     description: |
-      Test requests for fuel-web UI (./run_tests.sh --webui) stable/8.0 branch
-
-      Uses Docker container with python2.7 venv
+      Test requests for fuel-web UI (./run_tests.sh --webui) stable/8.0 branch<br><br>
+      Uses Docker container with python2.7 venv<br>
       Job is currently running in non-voting mode
     node: 'old-verify-fuel-web-ui'
     concurrent: true

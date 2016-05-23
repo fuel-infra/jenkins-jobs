@@ -4,8 +4,7 @@
       - shell:
           !include-raw-escape builders/run_docker.sh
     description: |
-      Nailgun performance tests.
-
+      Nailgun performance tests.<br><br>
       Uses Docker container with python2.7 venv
     node: fuel-web-master
     parameters:

@@ -4,10 +4,9 @@
       - shell:
           !include-raw-escape builders/run_docker.sh
     description: |
-      Check that we dont add more warnings.
-      /image\.py.*rescaling/ and /pdf\/pdf_.*rst/ warnings are ignored
-
-      Uses Docker container with python2.7 venv
+      Check that we dont add more warnings.<br>
+      /image\.py.*rescaling/ and /pdf\/pdf_.*rst/ warnings are ignored<br><br>
+      Uses Docker container with python2.7 venv<br>
       Job is currently running in non-voting mode
     logrotate:
       numToKeep: 100
