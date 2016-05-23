@@ -280,6 +280,8 @@
            SLAVE_NODE_CPU=6
            DRIVER_ENABLE_ACPI=true
            NUMA_NODES=2
+           ENV_SLAVE_LOGIN=root
+           ENV_SLAVE_PASSWORD=r00tme
          timeout: '600'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'idempotency'
