@@ -120,6 +120,12 @@
           timeout: '{timeout}'
           write-description: true
 
+    logrotate:
+      daysToKeep: 30
+      numToKeep: -1
+      artifactDaysToKeep: 3
+      artifactNumToKeep: -1
+
 - project:
     name: 'Mitaka fuel-library puppet-openstack deployment tests'
     projectpackage: 'fuel-library9.0'
