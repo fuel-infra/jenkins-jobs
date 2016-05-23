@@ -13,6 +13,11 @@
     description: |
       Checks status of jobs from {jenkins_view} view and generates report.
     concurrent: true
+    logrotate:
+      daysToKeep: 3
+      numToKeep: -1
+      artifactDaysToKeep: 3
+      artifactNumToKeep: -1
     wrappers:
       - timeout:
           fail: true
