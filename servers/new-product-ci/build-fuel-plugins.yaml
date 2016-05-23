@@ -45,7 +45,7 @@
           repobranch: origin/master
           basedir: examples/fuel-plugin-detach-keystone
     triggers:
-      - timed: '0 22 * * *'
+        - timed: 'H 22 * * *'
     wrappers:
       - ansicolor:
           colormap: xterm
