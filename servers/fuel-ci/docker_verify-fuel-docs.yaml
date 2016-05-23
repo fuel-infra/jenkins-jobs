@@ -1,0 +1,108 @@
+- job-template:
+    name: '{prefix}-docker-fuel-docs'
+    builders:
+      - shell:
+          !include-raw-escape builders/run_docker.sh
+    description: |
+      Check that we dont add more warnings.
+      /image\.py.*rescaling/ and /pdf\/pdf_.*rst/ warnings are ignored
+
+      Uses Docker container with python2.7 venv
+      Job is currently running in non-voting mode
+    logrotate:
+      numToKeep: 100
+      daysToKeep: 90
+    node: fuel-web-docs
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: DOCKER_IMAGE
+          default: 'fuel-docs'
+      - string:
+          name: ENVVARS
+          default: '{envvars}'
+          description: 'Environment variables'
+      - string:
+          name: VOLUMES
+          default: '{volumes}'
+          description: 'Volumes to mount into container separated with spaces'
+      - string:
+          name: MODE
+          default: '{mode}'
+          description: 'Optional arguments to runner script'
+    properties:
+      - heavy-job:
+          weight: 1
+    publishers:
+      - 'email-{email-type}'
+      - html-publisher:
+          name: 'Fuel Docs build results'
+          dir: '_build/html'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+          wrapper-name: 'htmlpublisher-wrapper.html'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: '{refspec}'
+                url: https://review.openstack.org/openstack/fuel-docs.git
+          choosing-strategy: '{choosing-strategy}'
+    triggers:
+      - timed: '{timed}'
+      - gerrit:
+          trigger-on: '{obj:trigger_on}'
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-docs
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+      - timed: '{timed}'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+      - ssh-agent-credentials:
+          users:
+            - 'e0991f76-20e6-4617-9f6d-cf85600789fe'
+- project:
+    name: dualcheck-docker-fuel-docs
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-docs'
+    envvars: ''
+    mode: ''
+    jobs:
+      - '{prefix}-docker-fuel-docs':
+          prefix: verify
+          trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+          timed: 'H 2 * * *'
+      - '{prefix}-docker-fuel-docs':
+          prefix: gate
+          trigger_on:
+            - change-merged-event
+          email-type: alert-on-merge
+          refspec: refs/heads/$GERRIT_BRANCH
+          choosing-strategy: default
+          timed: ''

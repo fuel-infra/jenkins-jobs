@@ -1,0 +1,100 @@
+- job-template:
+    name: '{prefix}-docker-fuel-astute'
+    builders:
+      - shell:
+          !include-raw-escape builders/run_docker.sh
+    description: |
+      Test requests on gerrit
+
+      Uses Docker container with python2.7 venv
+      Job is currently running in non-voting mode
+    node: verify-fuel-astute
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: DOCKER_IMAGE
+          default: 'fuel-astute'
+      - string:
+          name: ENVVARS
+          default: '{envvars}'
+          description: 'Environment variables'
+      - string:
+          name: VOLUMES
+          default: '{volumes}'
+          description: 'Volumes to mount into container separated with spaces'
+      - string:
+          name: MODE
+          default: '{mode}'
+          description: 'Optional arguments to runner script'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          enabled: true
+          max-per-node: 1
+          max-total: 0
+          option: project
+    publishers:
+      - 'email-{email-type}'
+      - ruby-metrics:
+          report-dir: 'coverage/rcov'
+          target:
+            - code-coverage:
+                healthy: 80
+                unhealthy: 0
+                unstable: 0
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          refspec: '{refspec}'
+          url: https://review.openstack.org/openstack/fuel-astute.git
+          choosing-strategy: '{choosing-strategy}'
+    triggers:
+      - gerrit:
+          trigger-on: '{obj:trigger_on}'
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-astute
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+      - timed: '{timed}'
+    wrappers:
+      - ansicolor:
+          colormap: css
+
+- project:
+    name: dualcheck-docker-fuel-astute
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-astute'
+    envvars: ''
+    mode: ''
+    jobs:
+      - '{prefix}-docker-fuel-astute':
+          prefix: verify
+          trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+          timed: '0 2 * * *'
+      - '{prefix}-docker-fuel-astute':
+          prefix: gate
+          trigger_on:
+            - change-merged-event
+          email-type: alert-on-merge
+          refspec: refs/heads/$GERRIT_BRANCH
+          choosing-strategy: default
+          timed: ''
