@@ -51,8 +51,8 @@
       - ssh-agent-credentials:
           users:
             - '{ssh-creds-openstack-ci-jenkins}'
-            - '{ssh-creds-unknown-1}'
-            - '{ssh-creds-unknown-2}'
+            - '{ssh-creds-fuel-osci-bot}'
+            - '{ssh-creds-pkgs-ci}'
       - timeout:
           timeout: 300
       - timestamps
@@ -193,8 +193,8 @@
       - ssh-agent-credentials:
           users:
             - '{ssh-creds-openstack-ci-jenkins}'
-            - '{ssh-creds-unknown-3}'
-            - '{ssh-creds-unknown-4}'
+            - '{ssh-creds-install-vm-trusty-root}'
+            - '{ssh-creds-install-vm-centos7-root}'
       - pre-scm-buildstep:
         - shell: 'rm -rf ${{WORKSPACE?}}/*'
       - timestamps
