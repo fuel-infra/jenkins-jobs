@@ -4,6 +4,7 @@
         echo "-SKIP-"
     post-script: |
         echo "-SKIP-"
+    properties-file: ''
 
 - job-template:
     # General system test. Downloads ISO image via magnet link
@@ -56,6 +57,7 @@
           TEST_ISO_JOB={version-id}.test_all
     - inject: # overrides
         properties-content: '{properties}'
+        properties-file: '{properties-file}'
     - shell: |
         #!/bin/bash
         echo "=== [systest PRE-script] ==="
