@@ -70,7 +70,7 @@ if [[ ${DIFF} -eq 1 ]]; then
           exit 2
       else
         CHANGE=1
-        CHANGED+="\<a\ href\=${BUILD_URL}artifact/output/${TYPE}/diff/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>"
+        CHANGED+="<a href=${BUILD_URL}artifact/output/${TYPE}/diff/${JOB_ENV}/${JOB_NAME}/*view*/>${JOB_ENV}/${JOB_NAME}</a><br>"
       fi
     done
   done
@@ -87,10 +87,10 @@ if [[ ${DIFF} -eq 1 ]]; then
     JOB_ENV=$(echo "${JOB}" | awk -F "/" '{print $(NF?NF-0:0)}' | cut -f1 -d ':')
     if [[ ${ON} = 'old' ]]; then
       REMOVE=1
-      REMOVED+="\<a\ href\=${BUILD_URL}artifact/output/${TYPE}/old/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>"
+      REMOVED+="<a href=${BUILD_URL}artifact/output/${TYPE}/old/${JOB_ENV}/${JOB_NAME}/*view*/>${JOB_ENV}/${JOB_NAME}</a><br>"
     elif [[ ${ON} = 'new' ]]; then
       ADD=1
-      ADDED+="\<a\ href\=${BUILD_URL}artifact/output/${TYPE}/new/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>"
+      ADDED+="<a href=${BUILD_URL}artifact/output/${TYPE}/new/${JOB_ENV}/${JOB_NAME}/*view*/>${JOB_ENV}/${JOB_NAME}</a><br>"
     fi
   done
   # And print added/removed if any.
