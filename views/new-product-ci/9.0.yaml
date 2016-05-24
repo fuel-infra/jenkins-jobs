@@ -1,6 +1,18 @@
 - view:
       type: list
       name: '9.0'
+      jobs:
+        - 9.0.all
+        - 9.0.main.test-reports
+        - 9.0.main.ubuntu.bvt_2
+        - 9.0.main.ubuntu.smoke_neutron
+        - 9.0.nessus_security_scan
+        - 9.0.swarm.runner
+        - 9.0.swarm.statistic
+        - 9.0.swarm.timer.proposed
+        - 9.0.swarm.timer.stable
+        - 9.0.system_test.test-reports
+        - 9.0.test_all
       columns:
         - status
         - weather

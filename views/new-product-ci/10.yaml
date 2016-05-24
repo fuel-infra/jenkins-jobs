@@ -1,9 +1,11 @@
 - view:
       type: list
-      name: '6.1_swarm'
-      regex: '6.1.system_test.*'
+      name: '10.0'
       jobs:
-        - 6.1.swarm.runner
+        - 10.0.all
+        - 10.0.main.ubuntu.bvt_2
+        - 10.0.main.ubuntu.smoke_neutron
+        - 10.0.test_all
       columns:
         - status
         - weather

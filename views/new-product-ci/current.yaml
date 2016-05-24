@@ -1,12 +1,19 @@
 - view:
       type: list
-      name: '9.0-mos'
+      name: 'Current'
       jobs:
+        - 10.0.all
+        - 10.0.main.ubuntu.bvt_2
+        - 10.0.main.ubuntu.smoke_neutron
+        - 10.0.test_all
         - 9.0-mos.all
-        - 9.0-mos.iso-report
         - 9.0-mos.main.ubuntu.bvt_2
         - 9.0-mos.main.ubuntu.smoke_neutron
         - 9.0-mos.test_all
+        - 9.0.all
+        - 9.0.main.ubuntu.bvt_2
+        - 9.0.main.ubuntu.smoke_neutron
+        - 9.0.test_all
       columns:
         - status
         - weather

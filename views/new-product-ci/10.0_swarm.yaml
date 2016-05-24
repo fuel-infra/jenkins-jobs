@@ -1,7 +1,7 @@
 - view:
       type: list
-      name: '8.0_acceptance'
-      regex: '8.0.*acceptance.*'
+      name: '10.0_swarm'
+      regex: '10.0.(swarm|system_test).*'
       columns:
         - status
         - weather
