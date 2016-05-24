@@ -34,17 +34,17 @@
           url: https://review.openstack.org/openstack/fuel-plugins.git
       - git:
           branches:
-            - 'stable/mitaka'
+            - 'origin/stable/mitaka'
           url: https://git.openstack.org/openstack/fuel-plugin-detach-database.git
           basedir: examples/fuel-plugin-detach-database
       - git:
           branches:
-            - 'stable/mitaka'
+            - 'origin/stable/mitaka'
           url: https://git.openstack.org/openstack/fuel-plugin-detach-rabbitmq.git
           basedir: examples/fuel-plugin-detach-rabbitmq
       - git:
           branches:
-            - 'stable/mitaka'
+            - 'origin/stable/mitaka'
           url: https://git.openstack.org/openstack/fuel-plugin-detach-keystone.git
           basedir: examples/fuel-plugin-detach-keystone
     triggers:
