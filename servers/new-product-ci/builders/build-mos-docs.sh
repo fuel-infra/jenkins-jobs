@@ -46,7 +46,8 @@ deactivate
 
 # Publishing
 # DOCS_HOST and DOCS_ROOT variables are injected
-ssh "${DOCS_HOST}" "mkdir -p \${DOCS_ROOT}"
+# shellcheck disable=SC2029
+ssh "${DOCS_HOST}" "mkdir -p ${DOCS_ROOT}"
 
 BRANCH_ID="${GERRIT_BRANCH##*/}"
 
