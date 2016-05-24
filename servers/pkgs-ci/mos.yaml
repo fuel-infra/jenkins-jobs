@@ -1,0 +1,54 @@
+- project:
+
+    name: 'mos'
+
+    project-name: '{name}'
+    project-version: 'master'
+
+    deb-origin-release: 'Mirantis'
+    deb-origin-test: 'testing'
+
+    publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    repo-base-path: '/home/jenkins/pubrepos'
+
+    # Configure flows
+    is-downgrade: 'true'
+    is-updates: 'false'
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: 'openstack-ci-jenkins'
+
+    # Install test repository
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'master'
+
+    # Job slave nodes
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+    install-node: 'install-node'
+
+    # FIXME: While project name is 'mos', we publish results to /test/
+    # prefix. We need to remove it later, after initial testing.
+
+    # Repository parameters for project
+    deb-dist-name: 'mos-{project-version}'
+    deb-repo-path: '/test/{name}-repos/xenial'
+    rpm-repo-path: '/test/{name}-repos/centos/mos-master-centos7'
+
+    # MOS repositories (build/test dependencies)
+    mos-deb-repo-path: '/test/{name}-repos/xenial'
+    mos-rpm-repo-path: '/test/{name}-repos/centos/mos-master-centos7'
+
+    distro:
+    - xenial:
+        os: 'ubuntu'
+        pkg_type: 'deb'
+        spec_prefix_path: '/{distro}'
+
+    jobs:
+    - '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-install-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
