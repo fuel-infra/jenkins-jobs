@@ -77,8 +77,8 @@
           description: 'https://bugs.launchpad.net/fuel/+bug/1522446'
       - string:
           name: QA_OL_COMPUTE
-          default: 'magnet:?xt=urn:btih:8b90cd9494d962514feb89a1fc222cce9c84bf45&dn=oracle-linux-20160408042854.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Foracle-linux-20160408042854.qcow2'
-          description: 'https://bugs.launchpad.net/fuel/+bug/1564910'
+          default: 'magnet:?xt=urn:btih:d6334ca4a6c3989f8a234a10efda40b333cd03b3&dn=oracle-linux-20160523164500.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Foracle-linux-20160523164500.qcow2'
+          description: 'https://bugs.launchpad.net/fuel/+bug/1584883'
       - string:
           name: INSTALL_PACKAGES_CENTOS_6_4
           default: 'magnet:?xt=urn:btih:5cc692e7d3ec6647c8229611aed3f4fff2713181&dn=centos-6.4-x86%5F64-20151213015813.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Fcentos-6.4-x86%5F64-20151213015813.qcow2'
