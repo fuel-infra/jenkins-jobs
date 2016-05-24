@@ -82,7 +82,7 @@ if [[ ${DIFF} -eq 1 ]]; then
   fi
   # Now find added/removed Jobs...
   for JOB in $(awk '/Only in/ {print $3$4}' "${LOGFILE}"); do
-    ON=$(echo  "${JOB}"|awk -F/ '{print $7}')
+    ON=$(echo  "${JOB}"|awk -F/ '{print $8}')
     JOB_NAME=$(echo  "${JOB}"| awk -F: '{print $2}')
     JOB_ENV=$(echo "${JOB}" | awk -F "/" '{print $(NF?NF-0:0)}' | cut -f1 -d ':')
     if [[ ${ON} = 'old' ]]; then
