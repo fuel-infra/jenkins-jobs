@@ -1,0 +1,13 @@
+- view:
+      type: list
+      name: '9.0-mos'
+      regex: '9.0-mos.*'
+      columns:
+        - status
+        - weather
+        - job
+        - last_success
+        - last_failure
+        - last_duration
+        - build_button
+      recurse: False

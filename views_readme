@@ -1,0 +1,96 @@
+Jenkins View Builder is a command line tool for managing jenkins views using
+simple descriptions in YAML format. You can store your view descriptions in a
+version control system to make changes and control them.
+
+Installation
+============
+Install jenkins-view-builder by running the following command:
+  $ sudo pip install jenkins-view-builder
+
+
+Configuration file
+==================
+Jenkins View Builder uses configuration file which must contain the following
+properties to connect to Jenkins:
+ - Jenkins URL
+ - Jenkins user
+ - Password or token
+
+EXAMPLE:
+[jenkins]
+user=admin
+password=admin
+url=http://localhost:8080
+
+
+Running
+=======
+In command line you can invoke Jenkins View Builder by running
+'jenkins-view-builder'. To get it working you should run this tool in ```test```
+or ```update``` mode. In Test mode you must specify path to yaml file(s). In
+Update mode you also must specify path to configuration file.
+
+
+Test Mode
+=========
+Once you have a defined yaml configuration you can test the view to make sure
+that jenkins-view-builder creates the correct xml that can be applied to jenkins.
+The following command puts generated xml(s) to the ```out``` folder of the
+current working directory:
+
+```$ jenkins-view-builder test /path/to/foo.yaml```
+
+You can also use a wildcard or successively specify paths to yamls instead of one
+file name to use multiple definitions at once and specify output directory for
+generated xmls:
+
+```$ jenkins-view-builder test /path/to/defs/*.yaml -o /path/to/output```
+or
+```$ jenkins-view-builder test /path/to/defs/one.yaml /path/to/defs/two.yaml \
+     -o /path/to/output```
+
+
+Update Mode
+===========
+If generated XML looks good you can apply the view to jenkins using the following
+command:
+
+```$ jenkins-view-builder update --conf /path/to/conf /path/to/foo.yaml```
+
+To update a specific set of views, use a wildcard or successively specify paths
+to yamls instead of one file name:
+
+```$ jenkins-view-builder update --conf /path/to/conf /path/to/defs/*.yaml```
+or
+```$ jenkins-view-builder update --conf /path/to/conf /path/to/defs/one.yaml \
+     /path/to/defs/two.yaml```
+
+The command creates new views or updates already existing ones logging all the
+actions to stdout.
+
+
+View Definitions
+================
+Jenkins-view-builder takes yaml-formatted view definitions as input, transforms
+them to xml jenkins configs and applies to Jenkins instance, which is set in a
+config file.
+
+The example of List view defined in a yaml file:
+
+- view:
+    type: list
+    name: test-view
+    regex: 'Merge-.*'
+    description: This view is used as test view.
+    jobs:
+     - test-job
+     - debug-job
+    columns:
+     - status
+     - weather
+     - job
+     - last_success
+     - last_failure
+     - last_duration
+     - build_button
+    recurse: False

@@ -3,8 +3,10 @@
 set -ex
 
 GITHEAD=$(git rev-parse HEAD)
-OUT_DIR=${WORKSPACE}/output
-LOGFILE=${OUT_DIR}/jobs-diff.log
+JOBS_OUT_DIR=${WORKSPACE}/output/jobs
+JOBS_LOGFILE=${JOBS_OUT_DIR}/jobs-diff.log
+VIEWS_OUT_DIR=${WORKSPACE}/output/views
+VIEWS_LOGFILE=${VIEWS_OUT_DIR}/views-diff.log
 BLOCKED="[blocked]<br>"
 CHANGED="[changed]<br>"
 ADDED="[added]<br>"
@@ -20,12 +22,29 @@ for ENV in ${WORKSPACE}/servers/*; do
   tox -e compare-xml-old -- "${ENV##*/}"
 done
 
+for VIEW_ENV in ${WORKSPACE}/views/*; do
+  tox -e compare-view-xml-old -- "${VIEW_ENV##*/}"
+done
+
 # Then use that as a reference to compare against HEAD
 git checkout "${GITHEAD}"
 
 for ENV in ${WORKSPACE}/servers/*; do
   tox -e compare-xml-new -- "${ENV##*/}"
 done
+
+for VIEW_ENV in ${WORKSPACE}/views/*; do
+  tox -e compare-view-xml-new -- "${VIEW_ENV##*/}"
+done
+
+
+compare_xml() {
+
+# Replace arguments with built-in variables ($1 - path to jobs or views output directory, $2 - path to jobs or views log file)
+OUT_DIR=$1
+LOGFILE=$2
+# Specifying for http links type of comaprison (jobs or views)
+TYPE=$3
 
 DIFF=$(diff -q -r -u "${OUT_DIR}/old" "${OUT_DIR}/new" &>"${LOGFILE}"; echo "${?}")
 # Any changed job discovered? If exit code was 1, then there is a difference
@@ -51,7 +70,7 @@ if [[ ${DIFF} -eq 1 ]]; then
           exit 2
       else
         CHANGE=1
-        CHANGED+=\<a\ href\=${BUILD_URL}artifact/output/diff/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>
+        CHANGED+="\<a\ href\=${BUILD_URL}artifact/output/${TYPE}/diff/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>"
       fi
     done
   done
@@ -68,10 +87,10 @@ if [[ ${DIFF} -eq 1 ]]; then
     JOB_ENV=$(echo "${JOB}" | awk -F "/" '{print $(NF?NF-0:0)}' | cut -f1 -d ':')
     if [[ ${ON} = 'old' ]]; then
       REMOVE=1
-      REMOVED+=\<a\ href\=${BUILD_URL}artifact/output/old/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>
+      REMOVED+="\<a\ href\=${BUILD_URL}artifact/output/${TYPE}/old/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>"
     elif [[ ${ON} = 'new' ]]; then
       ADD=1
-      ADDED+=\<a\ href\=${BUILD_URL}artifact/output/new/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>
+      ADDED+="\<a\ href\=${BUILD_URL}artifact/output/${TYPE}/new/${JOB_ENV}/${JOB_NAME}/*view*/\>${JOB_ENV}/${JOB_NAME}\</a\>\<br\>"
     fi
   done
   # And print added/removed if any.
@@ -83,4 +102,8 @@ if [[ ${DIFF} -eq 1 ]]; then
   fi
 fi
 echo "${RESULT}"
+}
+
+compare_xml "${JOBS_OUT_DIR}" "${JOBS_LOGFILE}" "jobs"
+compare_xml "${VIEWS_OUT_DIR}" "${VIEWS_LOGFILE}" "views"
 exit "${BLOCK}"

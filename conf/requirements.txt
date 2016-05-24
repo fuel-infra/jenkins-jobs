@@ -1,1 +1,2 @@
 jenkins-job-builder==1.4.0
+jenkins-view-builder==0.7.0
