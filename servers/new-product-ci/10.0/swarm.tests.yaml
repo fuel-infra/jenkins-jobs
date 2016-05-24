@@ -351,6 +351,8 @@
          timeout: '600'
          node: 'systest-hugepages'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
+         testgroup: 'test_ibp'
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'unlock_settings_tab_states'
          timeout: '600'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
