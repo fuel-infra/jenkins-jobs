@@ -19,7 +19,7 @@
     concurrent: false
     parameters:
       - string:
-          name: GERRIT_BRANCH
+          name: GIT_BRANCH
           default: 'master'
     properties:
       - heavy-job:
@@ -27,19 +27,10 @@
     scm:
       - main-git:
           reponame: fuel-qa
-          repobranch: origin/$GERRIT_BRANCH
+          repobranch: origin/master
           basedir: ''
     triggers:
-      - gerrit:
-          trigger-on:
-            - change-merged-event
-          projects:
-            - project-compare-type: PLAIN
-              project-pattern: 'openstack/fuel-qa'
-              branches:
-                - branch-compare-type: ANT
-                  branch-pattern: '**'
-          silent: true
+      - timed: 'H 14 * * *'
     wrappers:
       - ansicolor:
           colormap: xterm

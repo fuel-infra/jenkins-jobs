@@ -17,7 +17,7 @@
 #       :var WORKSPACE: build starter location, defaults to ``.``
 #       :var VENV: build specific virtual environment path (deployed)
 #       :var BRANCH_ID: Fuel QA build branch (deployed)
-#       :var GERRIT_BRANCH: Fuel QA internal branch
+#       :var GIT_BRANCH: Fuel QA external official branch
 #       :var DOCS_HOST: credentials used for publishing, default to
 #                       ``docs@docs.fuel-infra.org`` (deployed)
 #       :var DOCS_ROOT: path to documentation directory (deployed)
@@ -33,7 +33,7 @@ set -ex
 
 # Building
 
-echo "Description string: ${GERRIT_BRANCH}"
+echo "Description string: ${GIT_BRANCH}"
 
 VENV="${WORKSPACE}_VENV"
 virtualenv "${VENV}"
@@ -50,7 +50,7 @@ deactivate
 # DOCS_HOST and DOCS_ROOT variables are injected
 ssh "${DOCS_HOST}" "mkdir -p \${DOCS_ROOT}"
 
-BRANCH_ID="${GERRIT_BRANCH##*/}"
+BRANCH_ID="${GIT_BRANCH##*/}"
 
 DOCS_PATH="${DOCS_HOST}:${DOCS_ROOT}/fuel-${BRANCH_ID}"
 
