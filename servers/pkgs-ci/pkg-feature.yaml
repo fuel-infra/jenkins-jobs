@@ -67,7 +67,7 @@
           # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
           # and then copy perestroika directory to root ${{WORKSPACE}}
           cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
-      - guess-mirror
+      # - guess-mirror  # fixme: disabled because we don't have sync for xenial and nfv
       - shell:
           !include-raw-escape builders/pkg_build.sh
     publishers:
