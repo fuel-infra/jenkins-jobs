@@ -70,7 +70,7 @@
           cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
 
       - inject:
-          properties-content:
+          properties-content: |
             GUESS_MIRROR={guess-mirror}
             MIRROR_HOST={mirror_host}
             UBUNTU_MIRROR_URL={ubuntu_mirror_url}
