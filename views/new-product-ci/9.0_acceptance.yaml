@@ -1,7 +1,7 @@
 - view:
       type: list
-      name: '8.0_acceptance'
-      regex: '8.0.*acceptance.*'
+      name: '9.0_acceptance'
+      regex: '9.0.*acceptance.*'
       columns:
         - status
         - weather

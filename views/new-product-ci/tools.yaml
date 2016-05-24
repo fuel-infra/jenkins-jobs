@@ -1,14 +1,19 @@
 - view:
       type: list
       name: 'tools'
-      regex: '.*(docker-.*|cleaner.*).*'
       jobs:
+        - cleaner
+        - cleaner-on-labels
         - create-mos-compliance-reports
+        - docker-build
+        - docker-deploy
+        - docker-publish
         - fuel_ci-status_reports
         - iso_deployer
         - prepare_env
         - run_on_node
         - trigger-external-events
+        - update-jenkins-jobs
         - verify-slave-on-label
       columns:
         - status

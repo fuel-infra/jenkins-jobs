@@ -1,7 +1,16 @@
 - view:
       type: list
       name: 'ubuntu-proposed'
-      regex: '.*ubuntu-proposed.*'
+      jobs:
+        - 6.1.ubuntu-proposed.test
+        - 6.1.ubuntu-proposed.ubuntu.bvt_2
+        - 6.1.ubuntu-proposed.ubuntu.smoke_neutron
+        - 7.0.ubuntu-proposed.test
+        - 7.0.ubuntu-proposed.ubuntu.bvt_2
+        - 7.0.ubuntu-proposed.ubuntu.smoke_neutron
+        - 8.0.ubuntu-proposed.test
+        - 8.0.ubuntu-proposed.ubuntu.bvt_2
+        - 8.0.ubuntu-proposed.ubuntu.smoke_neutron
       columns:
         - status
         - weather
