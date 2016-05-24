@@ -12,6 +12,7 @@
           <li> install test for just built packages
           <li> system test using just built packages
         </ul>
+
     scm:
       - perestroika:
           branch: 'stable/mitaka'
@@ -67,7 +68,15 @@
           # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
           # and then copy perestroika directory to root ${{WORKSPACE}}
           cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
-      # - guess-mirror  # fixme: disabled because we don't have sync for xenial and nfv
+
+      - inject:
+          properties-content:
+            GUESS_MIRROR={guess-mirror}
+            MIRROR_HOST={mirror_host}
+            UBUNTU_MIRROR_URL={ubuntu_mirror_url}
+            MIRROR_UBUNTU={mirror_ubuntu}
+
+      - guess-mirror
       - shell:
           !include-raw-escape builders/pkg_build.sh
     publishers:
