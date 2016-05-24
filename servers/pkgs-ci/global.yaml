@@ -31,4 +31,10 @@
     # used in publishing
     pkg-sign-key: '1FA22B08'
 
+    # fixme: this section is for disabling our mirror snapshots for xenial builds, need rework
+    guess-mirror: 'true'
+    mirror_host: ''
+    ubuntu_mirror_url: ''
+    mirror_ubuntu: ''
+
 
