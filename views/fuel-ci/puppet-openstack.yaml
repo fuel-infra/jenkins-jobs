@@ -1,0 +1,17 @@
+- view:
+    type: list
+    name: 'puppet-openstack'
+    description: |
+      <h2>Fuel CI for Puppet OpenStack modules</h2>
+      See <a href="https://wiki.openstack.org/wiki/Fuel/CI#CI_for_Puppet_OpenStack">
+      Fuel CI for Puppet OpenStack</a> for additional information.<br>
+    regex: '.*(puppet-openstack).*'
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False
