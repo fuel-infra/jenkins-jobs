@@ -19,7 +19,7 @@
         - matches:
           - log-text: '.'
           escalate-status: true
-          script: !include-raw-escape: scripts/update-jenkins-jobs-cleanup.sh
+          script: !include-raw-escape: scripts/update-jenkins-cleanup.sh
       - email-ext:
           body: $DEFAULT_CONTENT
           aborted: true
