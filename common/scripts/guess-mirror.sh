@@ -4,8 +4,9 @@ set -o xtrace
 
 # fixme: this section is for disabling our mirror snapshots for xenial builds, need rework
 if [ "${GUESS_MIRROR:-true}" == false ] ; then
-    touch mirror.setenvfile
-    touch mirror.jenkins-injectfile
+
+    echo > mirror.setenvfile
+    echo > mirror.jenkins-injectfile
     exit 0
 fi
 
