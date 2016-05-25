@@ -337,3 +337,6 @@
             ENV_SLAVE_PASSWORD=r00tme
          timeout: '600'
          node: 'systest-hugepages'
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
+         testgroup: 'unlock_settings_tab_states'
+         timeout: '600'
