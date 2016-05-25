@@ -77,10 +77,3 @@
           sections: 'main,restricted,universe,multiverse,main/debian-installer,restricted/debian-installer,universe/debian-installer,multiverse/debian-installer'
           distributions: 'trusty,trusty-security,trusty-updates,trusty-proposed,xenial,xenial-security,xenial-updates,xenial-proposed'
           inst_distributions: 'trusty,trusty-updates,trusty-proposed,xenial,xenial-updates,xenial-proposed'
-      - 'mirror_pkgs_{prefix}':
-          prefix: centos
-          dst_dir: 'centos%version%'
-          src_url: 'rsync://ftp.fi.muni.cz/pub/linux/centos/7/'
-          sections: ''
-          distributions: ''
-          inst_distributions: ''
