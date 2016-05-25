@@ -271,7 +271,7 @@
          properties: |
            MULTIPLE_NETWORKS=true
      - '{version-id}.{test-type}.{dist}.{testgroup}':
-         testgroup: 'uca_neutron_ha'
+         testgroup: 'deploy_from_uca'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'numa_cpu_pinning'
          properties: |

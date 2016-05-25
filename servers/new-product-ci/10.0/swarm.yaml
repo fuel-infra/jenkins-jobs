@@ -238,7 +238,7 @@
             - name: '10.0.system_test.ubuntu.multiracks_2'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '10.0.system_test.ubuntu.uca_neutron_ha'
+            - name: '10.0.system_test.ubuntu.deploy_from_uca'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '10.0.system_test.ubuntu.numa_cpu_pinning'
