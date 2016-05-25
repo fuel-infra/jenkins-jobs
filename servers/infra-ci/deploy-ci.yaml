@@ -1,0 +1,89 @@
+- job:
+    name: 'deploy-ci'
+    node: 'ci-lab-controler'
+    builders:
+      - shell:
+          !include-raw './builders/deploy-ci.sh'
+    description: |
+      This job builds complete environment using all available roles to test it.
+    concurrent: false
+    parameters:
+      # specify ci-lab version to use
+      - string:
+          name: CI_LAB_REFSPEC
+          default: 'refs/heads/master'
+          description: 'ci-lab refspec to use with tests'
+      # specify change on Gerrit
+      - string:
+          name: GERRIT_REFSPEC
+          default: ''
+          description: 'Gerrit refspec to test'
+      - string:
+          name: GERRIT_EVENT_TYPE
+          default: ''
+          description: 'Gerrit event type'
+      # specify ci-lab settings
+      - string:
+          name: DNS1
+          default: '8.8.8.8'
+          description: 'primary DNS server to use by VMs'
+      - string:
+          name: DNS2
+          default: '8.8.4.4'
+          description: 'secondary DNS server to use by VMs'
+      - string:
+          name: OS_FLAVOR_NAME
+          default: 'm1.small'
+          description: 'OpenStack flavor to use'
+      - string:
+          name: OS_IMAGE_NAME
+          default: 'ubuntu-trusty-cloud-image'
+          description: 'OpenStack image to use'
+      - string:
+          name: OS_OPENRC_PATH
+          default: '/home/jenkins/.deployment_ci'
+          description: 'OpenStack credentials file'
+      # node selection parameters
+      - string:
+          name: PARALLELISM
+          default: '5'
+          description: 'how many parallel tests to run'
+      - string:
+          name: INCLUDE
+          default: '^.*$'
+          description: 'roles to test (regex)'
+      - text:
+          name: EXCLUDE
+          default: |
+            puppetmaster
+          description: 'roles to exclude (list)'
+    scm:
+      - git:
+          branches:
+            - 'FETCH_HEAD'
+          remotes:
+            - gerrit:
+                refspec: $CI_LAB_REFSPEC
+                url: "ssh://infra-ci@review.fuel-infra.org:29418/fuel-infra/ci-lab"
+                credentials-id: '70105253-c857-4463-a927-f47307911e45'
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: fuel-infra/puppet-manifests
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 3600
