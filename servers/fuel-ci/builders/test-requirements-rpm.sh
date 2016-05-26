@@ -17,7 +17,7 @@ fi
 echo "MARK: checking MOS and Upstream repos..."
 
 # if we on master branch let's use mos-master repo
-if [ "$(git symbolic-ref HEAD --short)" == "master" ]; then
+if [ "${GERRIT_BRANCH}" == "master" ] || [ "${GERRIT_REFSPEC}" == "refs/heads/master" ]; then
     export MIRROR_FUEL="http://mirror.fuel-infra.org//mos-repos/centos/mos-master-centos7/os/x86_64/"
 fi
 
