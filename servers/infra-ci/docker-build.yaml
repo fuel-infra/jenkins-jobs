@@ -20,6 +20,10 @@
       - string:
           name: FORCE_PREFIX
           default: '{force_prefix}'
+      - string:
+          name: REBUILD
+          default: '{rebuild}'
+          description: 'Set --no-cache docker build option if true'
     scm:
       - main:
           reponame: 'fuel-infra/dockerfiles'
@@ -56,10 +60,19 @@
       - 'docker-build-{action}':
           action: 'patchset'
           force_prefix: 'jenkins'
+          rebuild: false
           trigger_on:
             - patchset-created-event
       - 'docker-build-{action}':
+          action: 'patchset-rebuild'
+          force_prefix: 'jenkins'
+          rebuild: true
+          trigger_on:
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_rebuild_regexp}'
+      - 'docker-build-{action}':
           action: 'merge'
           force_prefix: ''
+          rebuild: false
           trigger_on:
             - change-merged-event

@@ -2,6 +2,9 @@
     name: global
     description: 'Do not edit this job through the web!'
     project-type: freestyle
+
+    gerrit_trigger_on_rebuild_regexp: '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*infra: rebuild'
+
     logrotate:
       daysToKeep: 30
       numToKeep: -1
