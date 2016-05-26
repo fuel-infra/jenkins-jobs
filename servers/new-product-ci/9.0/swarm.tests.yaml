@@ -324,6 +324,7 @@
            SLAVE_MULTIPATH_DISKS_COUNT=2
            DEVOPS_SETTINGS_TEMPLATE=$WORKSPACE/system_test/tests_templates/tests_configs/multipath_3_nodes.yaml
            NODES_COUNT=4
+         node: 'huge-systest'
          timeout: '600'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'support_hugepages'
