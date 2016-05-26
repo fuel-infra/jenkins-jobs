@@ -146,11 +146,11 @@
          node: 'systest-rh'
          properties-file: /home/jenkins/.rhel_creds
          properties: |
-            RH_IMAGE=rhel7_04022016.qcow2
-            RH_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
-            RH_IMAGE_MD5=73f82a4d60fc1eb701b393bb6d684a60
-            RH_IMAGE_USER=root
-            RH_IMAGE_PASSWORD=r00tme
+            EXTRA_COMP_IMAGE=rhel7_04022016.qcow2
+            EXTRA_COMP_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
+            EXTRA_COMP_IMAGE_MD5=73f82a4d60fc1eb701b393bb6d684a60
+            EXTRA_COMP_IMAGE_USER=root
+            EXTRA_COMP_IMAGE_PASSWORD=r00tme
             CENTOS_DUMMY_DEPLOY=False
             PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos9.0-centos7/os/x86_64/
      - '{version-id}.{test-type}.{dist}.{testgroup}':
