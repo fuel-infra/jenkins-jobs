@@ -15,7 +15,7 @@
 
     scm:
       - perestroika:
-          branch: 'stable/mitaka'
+          branch: '{perestroika-branch}'
     parameters:
       - gerrit
     properties:

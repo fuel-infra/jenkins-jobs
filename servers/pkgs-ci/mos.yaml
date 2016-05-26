@@ -41,6 +41,8 @@
     mos-deb-repo-path: '/test/{name}-repos/xenial'
     mos-rpm-repo-path: '/test/{name}-repos/centos/mos-master-centos7'
 
+    perestroika-branch: 'master'
+
     distro:
     - xenial:
         os: 'ubuntu'

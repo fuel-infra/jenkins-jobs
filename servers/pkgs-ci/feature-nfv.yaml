@@ -18,6 +18,7 @@
     # Install test repository
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'master'
+    perestroika-branch: 'stable/mitaka'
 
     # Job slave nodes
     build-node: 'new-builder'
