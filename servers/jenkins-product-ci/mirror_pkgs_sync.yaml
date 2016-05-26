@@ -75,8 +75,8 @@
           dst_dir: 'ubuntu%version%'
           src_url: 'debmirror://mirror.vutbr.cz/ubuntu/archive/'
           sections: 'main,restricted,universe,multiverse,main/debian-installer,restricted/debian-installer,universe/debian-installer,multiverse/debian-installer'
-          distributions: 'trusty,trusty-security,trusty-updates,trusty-proposed'
-          inst_distributions: 'trusty,trusty-updates,trusty-proposed'
+          distributions: 'trusty,trusty-security,trusty-updates,trusty-proposed,xenial,xenial-security,xenial-updates,xenial-proposed'
+          inst_distributions: 'trusty,trusty-updates,trusty-proposed,xenial,xenial-updates,xenial-proposed'
       - 'mirror_pkgs_{prefix}':
           prefix: centos
           dst_dir: 'centos%version%'
