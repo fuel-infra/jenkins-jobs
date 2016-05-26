@@ -1,10 +1,11 @@
-- job:
-    name: 'build-fuel-plugins'
+---
+- job-template:
+    name: '{version-id}.build-fuel-plugins'
+    description: |
+        Build {version-id}.plugins for Fuel plugins project: <a href=https://github.com/openstack/fuel-plugins>github.com/openstack/fuel-plugins</a>
     builders:
       - shell:
-          !include-raw builders/build-fuel-plugins.sh
-    description: |
-      Build plugins for Fuel plugins project <a href=https://github.com/openstack/fuel-plugins>github.com/openstack/fuel-plugins</a>
+          !include-raw-escape: builders/build-fuel-plugins.sh
     logrotate:
       artifactDaysToKeep: 30
       daysToKeep: 30
@@ -34,26 +35,26 @@
           basedir: ''
       - main-git:
           reponame: fuel-plugin-detach-database
-          repobranch: origin/master
+          repobranch: origin/{repo_branch}
           basedir: examples/fuel-plugin-detach-database
       - main-git:
           reponame: fuel-plugin-detach-rabbitmq
-          repobranch: origin/master
+          repobranch: origin/{repo_branch}
           basedir: examples/fuel-plugin-detach-rabbitmq
       - main-git:
           reponame: fuel-plugin-detach-keystone
-          repobranch: origin/master
+          repobranch: origin/{repo_branch}
           basedir: examples/fuel-plugin-detach-keystone
       - main-git:
           reponame: fuel-plugin-detach-haproxy
-          repobranch: origin/master
+          repobranch: origin/{repo_branch}
           basedir: examples/fuel-plugin-detach-haproxy
       - main-git:
           reponame: fuel-plugin-external-lb
-          repobranch: origin/master
+          repobranch: origin/{repo_branch}
           basedir: examples/fuel-plugin-external-lb
     triggers:
-        - timed: 'H 22 * * *'
+      - timed: 'H 22 * * *'
     wrappers:
       - ansicolor:
           colormap: xterm

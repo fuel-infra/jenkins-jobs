@@ -1,0 +1,7 @@
+---
+- project:
+    name: 'build Fuel 10.0 plugins'
+    jobs:
+      - '{version-id}.build-fuel-plugins':
+          version-id: '10.0'
+          repo_branch: 'master'
