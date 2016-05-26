@@ -1,0 +1,15 @@
+- view:
+    type: list
+    name: '6.1.swarm'
+    regex: '6.1.(system_test.*|(full|small)\.runner)'
+    jobs:
+      - 6.1-test-reports-Testrail
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False

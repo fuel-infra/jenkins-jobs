@@ -1,0 +1,18 @@
+- view:
+    type: list
+    name: '7.0.patching'
+    jobs:
+      - 7.0-build.late.artifacts
+      - 7.0.create_snapshot.centos-6
+      - 7.0.create_snapshot.ubuntu
+      - 7.0.proposed-to-updates
+      - 7.0.update_symlink
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False
