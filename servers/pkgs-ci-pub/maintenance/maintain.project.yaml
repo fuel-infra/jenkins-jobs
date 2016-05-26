@@ -7,6 +7,6 @@
     jobs:
       - 'maintain.starter'
       - 'maintain.worker'
-    maintain-node: 'new-builder'
+    maintain-node: 'perestroika-builder'
     is-disabled: ''
     mailto: 'fuel-build+ci-packaging@mirantis.com'
