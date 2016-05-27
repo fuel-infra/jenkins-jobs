@@ -274,3 +274,6 @@
             - name: '9.0.system_test.ubuntu.unlock_settings_tab_states'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.system_test.ubuntu.unlock_settings_tab'
+              current-parameters: true
+              kill-phase-on: NEVER

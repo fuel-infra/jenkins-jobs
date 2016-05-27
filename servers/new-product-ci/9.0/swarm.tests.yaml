@@ -342,3 +342,6 @@
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'unlock_settings_tab_states'
          timeout: '600'
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
+         testgroup: 'unlock_settings_tab'
+         timeout: '1200'
