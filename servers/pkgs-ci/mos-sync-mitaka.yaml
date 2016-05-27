@@ -37,6 +37,9 @@
     name: 'python-neutronclient'
     <<: *common-sync-params
 - project:
+    name: 'neutron-lib'
+    <<: *common-sync-params
+- project:
     name: 'neutron-fwaas'
     <<: *common-sync-params
 - project:
