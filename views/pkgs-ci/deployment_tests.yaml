@@ -1,0 +1,29 @@
+- view:
+    type: list
+    name: 'deployment tests'
+    description: |
+      <style>
+       #frame_check { width: 100%; min-height: 200px; max-height: 600px; border: none}
+      </style>
+
+      <h2>Deployment tests healthcheck</h2>
+      Status of canary jobs (run on merged code) collected by
+      <a href="https://packaging-ci.infra.mirantis.net/job/deployment_healthcheck/">deployment_healthcheck</a> job
+      <p>
+      <iframe id="frame_check"
+      src="https://packaging-ci.infra.mirantis.net/job/deployment_healthcheck/lastCompletedBuild/artifact/status.html">
+      </iframe>
+    jobs:
+      - 9.0-pkg-systest-centos
+      - 9.0-pkg-systest-ubuntu
+      - master-pkg-systest-centos
+      - master-pkg-systest-ubuntu
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False
