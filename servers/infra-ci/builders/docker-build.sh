@@ -2,7 +2,7 @@
 
 set -ex
 
-if [ "${REBUILD}" == "True" ]; then
+if [ "${REBUILD}" == "true" ]; then
   MODE="--no-cache"
   echo "[ INFO ] Rebuild is called, setting --no-cache mode"
 fi

@@ -60,19 +60,19 @@
       - 'docker-build-{action}':
           action: 'patchset'
           force_prefix: 'jenkins'
-          rebuild: false
+          rebuild: 'false'
           trigger_on:
             - patchset-created-event
       - 'docker-build-{action}':
           action: 'patchset-rebuild'
           force_prefix: 'jenkins'
-          rebuild: true
+          rebuild: 'true'
           trigger_on:
             - comment-added-contains-event:
                 comment-contains-value: '{gerrit_trigger_on_rebuild_regexp}'
       - 'docker-build-{action}':
           action: 'merge'
           force_prefix: ''
-          rebuild: false
+          rebuild: 'false'
           trigger_on:
             - change-merged-event
