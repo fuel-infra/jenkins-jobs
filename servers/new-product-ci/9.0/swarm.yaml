@@ -127,9 +127,6 @@
             - name: '9.0.system_test.ubuntu.ha_neutron_destructive'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '9.0.system_test.ubuntu.ha_neutron_destructive_gre'
-              current-parameters: true
-              kill-phase-on: NEVER
             - name: '9.0.system_test.ubuntu.ha_neutron_destructive_vlan'
               current-parameters: true
               kill-phase-on: NEVER
