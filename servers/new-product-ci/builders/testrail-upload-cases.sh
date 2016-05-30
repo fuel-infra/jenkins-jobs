@@ -13,4 +13,4 @@ export TESTRAIL_URL="https://mirantis.testrail.com"
 source "${VENV_PATH}/bin/activate"
 export PYTHONPATH="$(pwd):$PYTHONPATH"
 
-python fuelweb_test/testrail/upload_cases_description.py -v -j ${TESTS_RUNNER}
+python fuelweb_test/testrail/upload_cases_description.py -v -l -j "${TESTS_RUNNER}"
