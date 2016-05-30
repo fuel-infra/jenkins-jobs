@@ -79,5 +79,5 @@
           mirror_dir: '{mirrorname}%symlink_target%%timestamp%'
           snapshots_dir: 'snapshots'
           src_url: 'rsync://ftp.fi.muni.cz/pub/linux/{mirrorname}/{mirrorversion}'
-          updated_symlinks: '{mirrorname}/{mirrorversion} {mirrorname}/%symlink_target%'
+          updated_symlinks: '{mirrorname}/{mirrorversion} {mirrorname}/%symlink_target% {mirrorname}-latest'
           rsync_extra_params: '--exclude=isos'
