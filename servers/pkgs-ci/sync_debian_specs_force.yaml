@@ -7,7 +7,7 @@
     concurrent: false
     properties:
       - authorization:
-          devops:
+          devops-eng:
             - job-read
             - job-build
     wrappers:
