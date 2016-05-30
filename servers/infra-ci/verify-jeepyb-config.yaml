@@ -1,0 +1,57 @@
+- job-template:
+    name: 'verify-{name}'
+    description: 'Run syntax check for project.yaml file in fuel-infra/jeepyb-config'
+    project-type: freestyle
+    concurrent: true
+    node: '{node}'
+
+    properties:
+      - inject:
+          properties-content: |
+            GERRIT_USER={scm-user}
+
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://{scm-user}@review.fuel-infra.org:29418/{scm-repo}'
+                credentials-id: '{scm-credentials-id}'
+          choosing-strategy: gerrit
+
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{scm-credentials-id}'
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: '{scm-repo}'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: 'master'
+              file-paths:
+                - compare-type: 'PLAIN'
+                  pattern: '{files}'
+          silent: true
+          server-name: fuel-infra
+
+    builders:
+      - shell:
+          !include-raw-escape builders/verify-jeepyb-config.sh
+
+- project:
+    name: 'jeepyb-config'
+    files: 'projects.yaml'
+    node: 'verify-{name}'
+    scm-user: 'infra-ci'
+    scm-repo: 'fuel-infra/jeepyb-config'
+    scm-credentials-id: '70105253-c857-4463-a927-f47307911e45'
+    jobs:
+        - 'verify-{name}'
