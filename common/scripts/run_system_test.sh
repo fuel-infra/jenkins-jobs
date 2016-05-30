@@ -82,6 +82,6 @@ VERSION_STRING=$(basename "${ISO_PATH}" | \
     sed -n -e 's/^.*\(fuel\)\(-community\|-gerrit\)\?-\([0-9.]\+\(-[a-z]\+\)\?-[0-9]\+\).*/\3/p')
 echo "Description string: $TEST_GROUP on $VERSION_STRING"
 
-export MAKE_SNAPSHOT=false
+export MAKE_SNAPSHOT=${MAKE_SNAPSHOT:-false}
 
 sh -x "utils/jenkins/system_tests.sh" -t test -w "$WORKSPACE" -e "$ENV_NAME" -o --group="$TEST_GROUP" -i "$ISO_PATH"
