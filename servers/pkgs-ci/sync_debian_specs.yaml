@@ -14,7 +14,7 @@
       - timeout:
           timeout: 660
     triggers:
-      - timed: "*/11 * * * *"
+      - timed: "* */4 * * *"
     scm:
       - fuel-infra:
           username: '{username-openstack-ci-jenkins}'
