@@ -146,7 +146,7 @@
             EXTRA_COMP_IMAGE_USER=root
             EXTRA_COMP_IMAGE_PASSWORD=r00tme
             CENTOS_DUMMY_DEPLOY=False
-            PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos10.0-centos7/os/x86_64/
+            PERESTROIKA_REPO=http://nailgun.test.domain.local:8080/mos-centos/x86_64/
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'ol'
          properties: |
