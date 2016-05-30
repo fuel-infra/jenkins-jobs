@@ -1,15 +1,21 @@
-- job-template:
-    name: 'verify-{name}'
-    description: 'Run syntax check for project.yaml file in fuel-infra/jeepyb-config'
-    project-type: freestyle
+- job:
+    name: verify-jeepyb-config
+    builders:
+      - shell:
+          !include-raw: './builders/verify-jeepyb-config.py'
+    description: 'This job makes syntax check for jeepyb config projects.yml'
+    logrotate:
+      numToKeep: 100
+      daysToKeep: 90
+    node: verify-jeepyb-config
     concurrent: true
-    node: '{node}'
-
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
     properties:
-      - inject:
-          properties-content: |
-            GERRIT_USER={scm-user}
-
+      - heavy-job:
+          weight: 1
     scm:
       - git:
           branches:
@@ -17,41 +23,25 @@
           remotes:
             - gerrit:
                 refspec: $GERRIT_REFSPEC
-                url: 'ssh://{scm-user}@review.fuel-infra.org:29418/{scm-repo}'
-                credentials-id: '{scm-credentials-id}'
+                url: 'https://infra-ci@review.fuel-infra.org:29418/fuel-infra/jeepyb-config'
+                credentials-id: '70105253-c857-4463-a927-f47307911e45'
           choosing-strategy: gerrit
-
-    wrappers:
-      - ssh-agent-credentials:
-          users:
-            - '{scm-credentials-id}'
-
     triggers:
       - gerrit:
           trigger-on:
             - patchset-created-event
           projects:
-            - project-compare-type: 'PLAIN'
-              project-pattern: '{scm-repo}'
+            - project-compare-type: PLAIN
+              project-pattern: fuel-infra/jeepyb-config
               branches:
-                - branch-compare-type: 'PLAIN'
-                  branch-pattern: 'master'
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
               file-paths:
                 - compare-type: 'PLAIN'
-                  pattern: '{files}'
-          silent: true
-          server-name: fuel-infra
-
-    builders:
-      - shell:
-          !include-raw-escape builders/verify-jeepyb-config.sh
-
-- project:
-    name: 'jeepyb-config'
-    files: 'projects.yaml'
-    node: 'verify-{name}'
-    scm-user: 'infra-ci'
-    scm-repo: 'fuel-infra/jeepyb-config'
-    scm-credentials-id: '70105253-c857-4463-a927-f47307911e45'
-    jobs:
-        - 'verify-{name}'
+                  pattern: 'projects.yaml'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 10
