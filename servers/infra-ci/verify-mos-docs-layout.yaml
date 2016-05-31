@@ -55,33 +55,8 @@
           timeout: 45
     publishers:
       - html-publisher:
-          name: 'MOS Planning Guide'
-          dir: 'publish-docs/mos-planning-guide'
+          name: 'MOS documentation'
+          dir: 'publish-docs'
           files: 'index.html'
           keep-all: 'true'
           allow-missing: 'true'
-      - html-publisher:
-          name: 'Operations Guide'
-          dir: 'publish-docs/operations'
-          files: 'index.html'
-          keep-all: 'true'
-          allow-missing: 'true'
-      - html-publisher:
-          name: 'QuickStart Guide'
-          dir: 'publish-docs/quickstart-guide'
-          files: 'index.html'
-          keep-all: 'true'
-          allow-missing: 'true'
-      - html-publisher:
-          name: 'Reference Architecture'
-          dir: 'publish-docs/reference-architecture'
-          files: 'index.html'
-          keep-all: 'true'
-          allow-missing: 'true'
-      - html-publisher:
-          name: 'RHEL'
-          dir: 'publish-docs/rhel'
-          files: 'index.html'
-          keep-all: 'true'
-          allow-missing: 'true'
-
