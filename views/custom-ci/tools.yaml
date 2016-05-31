@@ -1,0 +1,23 @@
+- view:
+    type: list
+    name: 'tools'
+    jobs:
+      - cleaner
+      - cleaner-on-labels
+      - docker-deploy
+      - maintain.starter
+      - maintain.worker
+      - new_prepare_env
+      - prepare_env
+      - run_on_node
+      - update-jenkins-jobs
+      - update-jenkins-views
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False
