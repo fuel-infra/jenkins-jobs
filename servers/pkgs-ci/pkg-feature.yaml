@@ -41,6 +41,10 @@
             BASE_DEB_REPO_PATH={mos-deb-repo-path}
             DEB_DIST_NAME={deb-dist-name}
 
+            GERRIT_HOST={gerrit-host}
+            GERRIT_PORT={gerrit-port}
+            GERRIT_USER={gerrit-user}
+
             ADDITIONAL_EXTRAREPO_DEB=http://{publish-repo-host}{deb-repo-path}/{project-version} {deb-dist-name} main restricted
             ADDITIONAL_EXTRAREPO_RPM=deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64
 
