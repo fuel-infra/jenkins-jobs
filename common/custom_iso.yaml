@@ -59,7 +59,7 @@
             ISO_ID={version}{mod}
             ISO_TYPE=custom
             UBUNTU_MIRROR_ID=latest
-            CENTOS_MIRROR_ID=latest
+            CENTOS_MIRROR_ID=centos-7.2.1511
             MOS_CENTOS_ROOT=/mos-repos/centos/mos{version}-centos7/
             MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
             MOS_UBUNTU_TARGET={version}.target.txt

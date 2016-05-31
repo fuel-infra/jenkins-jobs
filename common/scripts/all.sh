@@ -70,7 +70,7 @@ fi
 if [ "${UBUNTU_MIRROR_ID}" == 'latest' ]
 then
     # Get the latest mirror and set the mirror id
-    UBUNTU_MIRROR_URL=$(curl "${CLOSEST_MIRROR_URL}/pkgs/ubuntu-latest.htm")
+    UBUNTU_MIRROR_URL=$(curl -sSf "${CLOSEST_MIRROR_URL}/pkgs/ubuntu-latest.htm")
     UBUNTU_MIRROR_ID=$(expr "${UBUNTU_MIRROR_URL}" : '.*/\(ubuntu-.*\)')
 fi
 
@@ -96,14 +96,14 @@ fi
 
 # 4. Get Upstream CentOS mirror snapshot
 
-if [ "${CENTOS_MIRROR_ID}" == 'latest' ]
+if [ "${CENTOS_MIRROR_ID}" == 'centos-7.2.1511' ]
 then
     # Get the latest mirror and set the mirror id
-    CENTOS_MIRROR_URL=$(curl "${CLOSEST_MIRROR_URL}/pkgs/centos-latest.htm")
+    CENTOS_MIRROR_URL=$(curl -sSf "${CLOSEST_MIRROR_URL}/pkgs/centos-7.2.1511-latest.htm")
     CENTOS_MIRROR_ID=$(expr "${CENTOS_MIRROR_URL}" : '.*/\(centos-.*\)')
 fi
 
-MIRROR_CENTOS_ROOT="pkgs/${CENTOS_MIRROR_ID}"
+MIRROR_CENTOS_ROOT="pkgs/snapshots/${CENTOS_MIRROR_ID}"
 
 # make system uses MIRROR_CENTOS parameter directly
 
