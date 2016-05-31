@@ -27,6 +27,52 @@
           source "${VENV_PATH}/bin/activate"
           dos.py destroy "${ENV_NAME}"
 
+- builder:
+    name: inject-properties-file
+
+    builders:
+
+    - shell: |
+        #!/bin/bash
+        set -e
+        # Here we mimic EnvInject logger to have more natural output
+        # We add * inside [] to make mimic logs differ from natural ones
+        # We don't add "set -x" because this will break all the idea of natural output
+        # We don't check given parameters because JJB will fail on undefined
+
+        echo "[EnvInject*] - Going to inject variables from '{properties-file}'"
+        echo "[EnvInject*] - Going to inject as environment variables the content of '{properties-file}'"
+        cat {properties-file}
+
+        # it's common that file desn't have newline at the end, so echo w/ newline
+        echo
+
+        # EnvInject logs do have empty line at the very end, so we mimic this too
+        echo
+
+    - inject:
+        properties-file: '{properties-file}'
+
+- builder:
+    name: rename
+
+    builders:
+    - shell: |
+        #!/bin/bash
+        set -e
+        # Here we mimic common Jenkins logger to have more natural output
+        # We add * inside [] to make mimic logs differ from natural ones
+        # We don't add "set -x" because this will break all the idea of natural output
+        # We don't check given parameters because JJB will fail on undefined
+
+        echo "[Rename*] - Touching '{src}' because empty content is allowed"
+        touch {src}
+
+        echo "[Rename*] - Renaming file '{src}' to '{dst}'"
+        mv {src} {dst}
+        echo "[Rename*] - Renamed successfully."
+
+
 ########################################################################
 # Builder guessing nearest mirror
 ########################################################################

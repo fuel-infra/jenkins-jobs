@@ -41,10 +41,6 @@
             BASE_DEB_REPO_PATH={mos-deb-repo-path}
             DEB_DIST_NAME={deb-dist-name}
 
-            GERRIT_HOST={gerrit-host}
-            GERRIT_PORT={gerrit-port}
-            GERRIT_USER={gerrit-user}
-
             ADDITIONAL_EXTRAREPO_DEB=http://{publish-repo-host}{deb-repo-path}/{project-version} {deb-dist-name} main restricted
             ADDITIONAL_EXTRAREPO_RPM=deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64
 
@@ -78,7 +74,8 @@
 
       - guess-mirror
       - shell:
-          !include-raw-escape builders/pkg_build.sh
+          !include-raw-escape:
+            builders/pkg_build.sh
     publishers:
       - email-alert-on-merge
       - junit:
@@ -112,6 +109,7 @@
             IS_DOWNGRADE={is-downgrade}
 
             DIST={distro}
+            REPO_TYPE={pkg_type}
 
             SIGKEYID={pkg-sign-key}
 
@@ -149,35 +147,38 @@
           branch: 'stable/mitaka'
 
     builders:
+
+      # This is done for flexibility.
+      # We could trigger this job with gerrit parameters and get corresponding artifact.
+      # Or we could trigger this job and pass required fields as parameters, so artifact won't be needed
+      # 1. remove existing file
       - shell: rm -vf 'buildresult.params'
+      # 2. try to copy artifact
       - copyartifact:
           project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
           filter: 'buildresult.params'
           which-build: last-successful
           parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
           optional: true
+      # 3. touch it, so the file will exist in all cases
       - shell: touch 'buildresult.params'
+      # 4. inject file's content: artifact data or nothing
       - inject:
+          # Inject
+          # - useful:
+          #     BUILD_HOST
+          #     PKG_PATH
+          # - unuseful:
+          #     DIST
+          #     REPO_TYPE
+          #     GERRIT_CHANGE_STATUS
+          # - maybe useful:
+          #     EXTRAREPO
+          #     REQUEST_NUM
+          #     LP_BUG
+          #     IS_SECURITY
           properties-file: 'buildresult.params'
-      - shell: |
-          #!/bin/bash -xe
-
-          # Remove stale artifacts
-          rm -vf *.publish.setenvfile pkg-versions.*
-
-          # FIXME: use perestroika from openstack/fuel-mirror
-          # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
-          # and then copy perestroika directory to root ${{WORKSPACE}}
-
-          cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
-
-          if [ "${{GERRIT_CHANGE_STATUS}}" = "MERGED" ]; then
-              export ORIGIN=${{DEB_ORIGIN_RELEASE}}
-          else
-              export ORIGIN=${{DEB_ORIGIN_TEST}}
-          fi
-
-          /bin/bash -xe publisher.v5/publish-{pkg_type}-binaries.sh
+      - shell: !include-raw-escape: builders/pkg_publish.sh
     publishers:
       - pkg-version-report
       - archive:
@@ -194,10 +195,14 @@
       - gerrit
     properties:
       - inject:
+          # fixme: REPO_TYPE will be injected later
+          # fixme: DIST will be injected later as DEB_DISTRO or RPM_DISTRO
           properties-content: |
             DIST={distro}
             REPO_TYPE={pkg_type}
             IS_DOWNGRADE={is-downgrade}
+            ADDITIONAL_EXTRAREPO_DEB=
+            ADDITIONAL_EXTRAREPO_RPM=
     wrappers:
       - ssh-agent-credentials:
           users:
@@ -234,10 +239,45 @@
           optional: true
       - shell: touch 'buildresult.params' '{pkg_type}.publish.setenvfile'
       - inject:
-          # Injects EXTRAREPO
+          # Inject
+          # - useful:
+          #     EXTRAREPO
+          #     REPO_TYPE
+          #     DIST
+          # - unuseful:
+          #     BUILD_HOST
+          #     PKG_PATH
+          #     GERRIT_CHANGE_STATUS
+          #     REQUEST_NUM
+          #     LP_BUG
+          #     IS_SECURITY
           properties-file: 'buildresult.params'
       - inject:
           # Injects package lists with version and repository URL
+          # depending on pkg type it will be:
+          # rpm
+          # - useful:
+          #     RPM_VERSION
+          #     RPM_BINARIES
+          #     RPM_REPO_URL
+          #     RPM_VERSION
+          # - unuseful:
+          #     RPM_PUBLISH_SUCCEEDED
+          #     RPM_DISTRO
+          #     RPM_CHANGE_REVISION
+          #     LP_BUG
+          # deb
+          # - useful:
+          #     DEB_VERSION
+          #     DEB_BINARIES
+          #     DEB_REPO_URL
+          #     RPM_VERSION
+          # - unuseful:
+          #     DEB_PUBLISH_SUCCEEDED
+          #     DEB_DISTRO
+          #     DEB_PACKAGENAME
+          #     DEB_CHANGE_REVISION
+          #     LP_BUG
           properties-file: '{pkg_type}.publish.setenvfile'
       - shell: |
           #!/bin/bash -xe
@@ -256,9 +296,23 @@
           EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
           PACKAGELIST=$(echo "${{PACKAGELIST}}" | sed 's|,| |g')
 
+          # it's possible to add additional repos for systests
+          case ${{REPO_TYPE?}} in
+              deb)
+                  if [ ! -z "${{ADDITIONAL_EXTRAREPO_DEB}}" ] ; then
+                      export EXTRAREPO="${{EXTRAREPO}}|${{ADDITIONAL_EXTRAREPO_DEB}}"
+                  fi
+                  ;;
+              rpm)
+                  if [ ! -z "${{ADDITIONAL_EXTRAREPO_RPM}}" ] ; then
+                      export EXTRAREPO="${{EXTRAREPO}}|${{ADDITIONAL_EXTRAREPO_RPM}}"
+                  fi
+                  ;;
+          esac
+
           for script in version-test-{pkg_type} vm-test
           do
-            bash -x "${{WORKSPACE}}/${{script}}"
+              bash -x "${{WORKSPACE}}/${{script}}"
           done
 
     publishers:

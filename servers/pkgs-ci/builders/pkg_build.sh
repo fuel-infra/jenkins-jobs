@@ -101,7 +101,7 @@ export REMOTE_REPO_HOST=${MIRROR_HOST}
 : "${BASE_RPM_REPO_PATH?}"
 
 # Get latest snapshots
-SNAPSHOT_DEB=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_DEB_REPO_PATH}/${PROJECT_VERSION}.target.txt" | head -1)
+SNAPSHOT_DEB=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_DEB_REPO_PATH}/${PROJECT_VERSION}.target.txt" | head -1 || :)
 SNAPSHOT_RPM_OS=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/os.target.txt" | head -1 || :)
 SNAPSHOT_RPM_UPDATES=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/updates.target.txt" | head -1 || :)
 SNAPSHOT_RPM_PROPOSED=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/proposed.target.txt" | head -1 || :)
