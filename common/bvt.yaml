@@ -89,7 +89,7 @@
     publishers:
     - archive:
         allow-empty: true
-        artifacts: '**/nosetests.xml,logs/*'
+        artifacts: '**/nosetests.xml,logs/*,*.txt'
         latest-only: false
     - junit:
         keep-long-stdio: false

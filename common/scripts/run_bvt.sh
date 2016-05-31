@@ -69,6 +69,10 @@ ISO_NAME_REPORT=$(basename "${ISO_PATH}")
 ISO_NAME_REPORT="${ISO_NAME_REPORT//.iso/}"
 echo "BUILD=${ISO_NAME_REPORT}" > "${WORKSPACE}/iso_report.properties"
 
+# Create files which will be published as artifacts
+echo "MAGNET_LINK=${MAGNET_LINK}" > magnet_link.txt
+echo "UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID}" > ubuntu_mirror_id.txt
+
 sh -x "utils/jenkins/system_tests.sh" \
     -t test \
     -w "${WORKSPACE}" \
