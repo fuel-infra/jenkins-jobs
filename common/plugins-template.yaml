@@ -12,12 +12,12 @@
             TEST_GROUP={testgroup}
             CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
             CLASSIC_PROVISIONING=false
-            EXAMPLE_PLUGIN_URL=http://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example-1.0.0.fp
-            EXAMPLE_PLUGIN_V3_URL=http://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example_v3-3.0-3.0.0-1.noarch.rpm
-            EXAMPLE_PLUGIN_V4_URL=http://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example_v4_hotpluggable-4.0-4.0.0-1.noarch.rpm
-            SEPARATE_SERVICE_DB_PLUGIN_URL=http://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/detach-database-1.1-1.1.0-1.noarch.rpm
-            SEPARATE_SERVICE_RABBIT_PLUGIN_URL=http://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/detach-rabbitmq-1.0-1.0.1-1.noarch.rpm
-            SEPARATE_SERVICE_KEYSTONE_PLUGIN_URL=http://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/detach-keystone-1.0-1.0.2-1.noarch.rpm
+            EXAMPLE_PLUGIN_URL=https://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example-1.0.0.fp
+            EXAMPLE_PLUGIN_V3_URL=https://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example_v3-3.0-3.0.0-1.noarch.rpm
+            EXAMPLE_PLUGIN_V4_URL=https://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example_v4_hotpluggable-4.0-4.0.0-1.noarch.rpm
+            SEPARATE_SERVICE_DB_PLUGIN_URL=https://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/detach-database-1.1-1.1.0-1.noarch.rpm
+            SEPARATE_SERVICE_RABBIT_PLUGIN_URL=https://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/detach-rabbitmq-1.0-1.0.1-1.noarch.rpm
+            SEPARATE_SERVICE_KEYSTONE_PLUGIN_URL=https://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/detach-keystone-1.0-1.0.2-1.noarch.rpm
             SLAVE_NODE_MEMORY=3072
             MAKE_SNAPSHOT={make-snapshot}
       - shell:
