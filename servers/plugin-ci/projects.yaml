@@ -166,8 +166,8 @@
     plugin_name:
       - influxdb-grafana:
           plugin_repo: fuel-plugin-influxdb-grafana
-          plugin_owner: 'Owner Name'
-          plugin_test_group: 'smoke,influxdb_grafana'
+          plugin_owner: 'StackLight team'
+          plugin_test_group: 'deploy_influxdb_grafana'
           plugin_env_path_name: 'INFLUXDB_GRAFANA_PLUGIN_PATH'
 
     jobs:
