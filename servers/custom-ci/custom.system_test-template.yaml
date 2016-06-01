@@ -85,6 +85,7 @@
             Specify the name of a custom test group which
             is not present on the TEST_GROUP list. This will override
             the TEST_GROUP variable value.
+            <p>Multiple test groups must be separated by commas, e.g. <b>test_group1,test_group2</b>
       - choice:
           name: NETWORK_MODE
           choices:
