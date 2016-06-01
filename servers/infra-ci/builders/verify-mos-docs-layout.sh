@@ -9,7 +9,7 @@ source "${VENV}/bin/activate"
 
 pip install tox
 
-tox -e docs
+tox -e publishdocs
 
 deactivate
 
