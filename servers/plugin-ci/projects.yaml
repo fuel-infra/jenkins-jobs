@@ -117,11 +117,11 @@
       - 9.0:
           plugin_branch: '{fuel-branch-9_0}'
           test_framework_branch: '{fuel-branch-9_0}'
-          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/9.0-community.test_all/lastSuccessfulBuild/artifact/magnet_link.txt
+          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/9.0-community.main.ubuntu.bvt_2/lastSuccessfulBuild/artifact/magnet_link.txt
       - 10.0:
           plugin_branch: '{fuel-branch-10_0}'
           test_framework_branch: '{fuel-branch-10_0}'
-          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/10.0-community.test_all/lastSuccessfulBuild/artifact/magnet_link.txt
+          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/10.0-community.main.ubuntu.bvt_2/lastSuccessfulBuild/artifact/magnet_link.txt
 
     plugin_name:
       - detach-database:
@@ -161,7 +161,7 @@
     version:
       - 9.0:
           plugin_branch: master
-          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/9.0-community.test_all/lastSuccessfulBuild/artifact/magnet_link.txt
+          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/9.0-community.main.ubuntu.bvt_2/lastSuccessfulBuild/artifact/magnet_link.txt
 
     plugin_name:
       - influxdb-grafana:
