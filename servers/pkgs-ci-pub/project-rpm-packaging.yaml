@@ -3,7 +3,7 @@
 ################################################################################
 
 - job-template:
-    name: '{project-version}-{name}-build'
+    name: '{project-version}-rpm-packaging-build-{distro}'
     concurrent: True
     description: |
         This job renders RPM spec from project openstack/rpm-packaging using
@@ -240,7 +240,7 @@
           # Save result to use after package publishing
           echo ${{OVERALL_RESULT}} > job_result
       - trigger-builds:
-          - project: '{project-version}-fuel-pkg-publish-{distro}'
+          - project: '{project-version}-{name}-publish-{distro}'
             block: true
             current-parameters: false
             predefined-parameters: |
@@ -256,7 +256,7 @@
           label: '${{ENV,var="GERRIT_CHANGE_STATUS"}}'
           steps:
             - trigger-builds:
-                - project: '{project-version}-fuel-pkg-install-{distro}'
+                - project: '{project-version}-{name}-install-{distro}'
                   block: true
                   current-parameters: false
                   predefined-parameters: |
@@ -308,10 +308,19 @@
     repo-host: 'packages.fuel-infra.org'
     repo-base-path: '/home/jenkins/pubrepos'
     cr-path-prefix: 'review/'
+    pkg-sign-key: '1FA22B08'
+
+    # Parameters for install-test
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'origin/master'
 
     is_updates: false
 
-    build-node: 'new-builder'
+    build-node: 'rpm-builder'
+    publish-node: 'new-publisher'
+    install-node: 'rpm-install'
 
     jobs:
-      - '{project-version}-{name}-build'
+      - '{project-version}-rpm-packaging-build-{distro}'
+      - '{project-version}-{name}-publish-{distro}'
+      - '{project-version}-{name}-install-{distro}'
