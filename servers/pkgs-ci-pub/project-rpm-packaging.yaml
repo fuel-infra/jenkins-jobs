@@ -3,7 +3,7 @@
 ################################################################################
 
 - job-template:
-    name: '{project-version}-rpm-packaging-build'
+    name: '{project-version}-{name}-build'
     concurrent: True
     description: |
         This job renders RPM spec from project openstack/rpm-packaging using
@@ -300,4 +300,4 @@
     build-node: 'new-builder'
 
     jobs:
-      - '{project-version}-rpm-packaging-build'
+      - '{project-version}-{name}-build'

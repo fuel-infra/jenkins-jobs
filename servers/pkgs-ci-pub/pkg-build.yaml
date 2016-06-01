@@ -3,7 +3,7 @@
 ################################################################################
 
 - job-template:
-    name: '{project-version}-fuel-pkg-build-{distro}'
+    name: '{project-version}-{name}-build-{distro}'
     concurrent: True
     description: |
         This job builds a package and then publishes it by triggerring publisher job.<br>
