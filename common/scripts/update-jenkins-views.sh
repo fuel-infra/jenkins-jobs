@@ -41,6 +41,7 @@ source ".tox/${CI_NAME}/bin/activate"
 
 CONFIG_PATH="${WORKSPACE}/../tmp/${JOB_NAME}"
 
+umask 0077
 mkdir -p "${CONFIG_PATH}"
 cat > "${CONFIG_PATH}/jenkins_jobs.ini" << EOF
 [jenkins]
