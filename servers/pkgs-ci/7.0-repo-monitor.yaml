@@ -1,0 +1,85 @@
+- job:
+    name: '7.0-deb-repo-monitor'
+    project-type: freestyle
+    description: "Repo monitor for 7.0 ubuntu repository"
+    node: 'new-builder'
+    triggers:
+      - timed: "H 10 * * *"
+    builders:
+      - inject:
+          properties-content: |
+            REPO=7.0
+            TEMP_DIR=${WORKSPACE}/tmp
+            SRC_DIR=${WORKSPACE}/src
+            KNOWN_ISSUES_LIST=${WORKSPACE}/7.0/exceptions/deb/7.0_known_issues.txt
+            PACKAGES_REPO_HOST=perestroika-repo-tst.infra.mirantis.net/mos-repos
+            INCLUDE_REPOS=main proposed updates
+            GERRIT_HOST=review.fuel-infra.org
+            GERRIT_PORT=29418
+            GERRIT_USER=openstack-ci-jenkins
+            GERRIT_QUERY_FORMAT=TEXT
+      - shell: |
+          #!/bin/bash
+          set -ex
+          "${WORKSPACE}/7.0/deb-repo-monitor.sh"
+    publishers:
+      - archive:
+          allow-empty: 'false'
+          artifacts: '**/report.txt'
+    scm:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: 'fuel-infra/repo-monitor'
+          branch: 'master'
+          basedir: ''
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-unknown-1}'
+            - '{ssh-creds-unknown-2}'
+
+- job:
+    name: '7.0-rpm-repo-monitor'
+    project-type: freestyle
+    description: "Repo monitor job for 7.0 centos6 repository"
+    node: 'new-builder'
+    triggers:
+      - timed: "H 10 * * *"
+    builders:
+      - inject:
+          properties-content: |
+            DISTRO=centos6
+            REPO=mos7.0-centos6-fuel
+            TEMP_DIR=${WORKSPACE}/tmp
+            SRC_DIR=${WORKSPACE}/src
+            KNOWN_ISSUES_LIST=${WORKSPACE}/7.0/exceptions/rpm/mos7.0-centos6-fuel_known_issues.txt
+            PACKAGES_REPO_HOST=perestroika-repo-tst.infra.mirantis.net/mos-repos
+            INCLUDE_REPOS=os proposed updates
+            GERRIT_HOST=review.fuel-infra.org
+            GERRIT_PORT=29418
+            GERRIT_USER=openstack-ci-jenkins
+            GERRIT_QUERY_FORMAT=TEXT
+      - shell: |
+          #!/bin/bash
+          set -ex
+          "${WORKSPACE}/7.0/rpm-repo-monitor.sh"
+    publishers:
+      - archive:
+          allow-empty: 'false'
+          artifacts: '**/report.txt'
+    scm:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: 'fuel-infra/repo-monitor'
+          branch: 'master'
+          basedir: ''
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-unknown-1}'
+            - '{ssh-creds-unknown-2}'
+
