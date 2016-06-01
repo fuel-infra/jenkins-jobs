@@ -179,6 +179,11 @@
           plugin_owner: 'StackLight team'
           plugin_test_group: 'deploy_lma_collector'
           plugin_env_path_name: 'LMA_COLLECTOR_PLUGIN_PATH'
+      - lma-infrastructure-alerting:
+          plugin_repo: fuel-plugin-lma-infrastructure-alerting
+          plugin_owner: 'StackLight team'
+          plugin_test_group: 'deploy_lma_infrastructure_alerting'
+          plugin_env_path_name: 'LMA_INFRA_ALERTING_PLUGIN_PATH'
 
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build'
