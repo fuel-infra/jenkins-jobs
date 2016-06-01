@@ -169,6 +169,11 @@
           plugin_owner: 'StackLight team'
           plugin_test_group: 'deploy_influxdb_grafana'
           plugin_env_path_name: 'INFLUXDB_GRAFANA_PLUGIN_PATH'
+      - lma-collector:
+          plugin_repo: fuel-plugin-lma-collector
+          plugin_owner: 'StackLight team'
+          plugin_test_group: 'deploy_lma_collector'
+          plugin_env_path_name: 'LMA_COLLECTOR_PLUGIN_PATH'
 
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build'
