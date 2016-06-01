@@ -53,7 +53,7 @@ do
     # build image
     echo "Building a new image from the URL:"
     cd "${WORKSPACE}/${IMAGE_NAME}/${IMAGE_TAG}"
-    docker build "${MODE}" -t "${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}" .
+    docker build ${MODE} -t "${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}" .
     # add image to publish list
     VIMAGES="${VIMAGES} ${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}"
     OUTPUT+="${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}<br>"
