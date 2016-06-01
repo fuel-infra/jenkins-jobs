@@ -42,13 +42,13 @@
     systest-node: 'systest'
 
     jobs:
-      - '{project-version}-fuel-pkg-build-{distro}'
-      - '{project-version}-fuel-pkg-publish-{distro}'
-      - '{project-version}-fuel-pkg-install-{distro}'
-      - '{project-version}-fuel-pkg-repotest-{distro}'
+      - '{project-version}-{name}-build-{distro}'
+      - '{project-version}-{name}-publish-{distro}'
+      - '{project-version}-{name}-install-{distro}'
+      - '{project-version}-{name}-repotest-{distro}'
 
 - project:
-    name: 'pkg-fuel'
+    name: 'fuel-pkg'
     <<: *fuel_template
     project-version:
       - 'master':

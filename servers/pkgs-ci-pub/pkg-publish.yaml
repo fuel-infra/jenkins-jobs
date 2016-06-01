@@ -1,5 +1,5 @@
 - job-template:
-    name: '{project-version}-fuel-pkg-publish-{distro}'
+    name: '{project-version}-{name}-publish-{distro}'
     project-type: freestyle
     concurrent: false
 
@@ -36,7 +36,7 @@
 
     builders:
       - copyartifact:
-          project: '{project-version}-fuel-pkg-build-{distro}'
+          project: '{project-version}-{name}-build-{distro}'
           filter: 'buildresult.params'
           which-build: last-successful
           parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
