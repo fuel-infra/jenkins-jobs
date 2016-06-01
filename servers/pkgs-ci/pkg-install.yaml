@@ -21,7 +21,19 @@
           repo: '{install-scm-repo}'
           branch: '{install-scm-branch}'
           basedir: ''
+      - git:
+          url: 'https://review.fuel-infra.org/packaging/runtests'
+          basedir: 'runtests'
+          skip-tag: true
+          browser: gitweb
+          browser-url: 'https://review.fuel-infra.org/gitweb?p=packaging/runtests.git'
     builders:
+      - shell: |
+          #!/bin/bash
+
+          set -ex
+
+          git -C runtests checkout "${{GERRIT_BRANCH?}}" || rm -rf runtests
       - shell:
           !include-raw-escape builders/mos.install.cleanup.sh
       - copyartifact:
