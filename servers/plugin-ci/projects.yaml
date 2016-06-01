@@ -164,6 +164,11 @@
           iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/9.0-community.main.ubuntu.bvt_2/lastSuccessfulBuild/artifact/magnet_link.txt
 
     plugin_name:
+      - elasticsearch-kibana:
+          plugin_repo: fuel-plugin-elasticsearch-kibana
+          plugin_owner: 'StackLight team'
+          plugin_test_group: 'deploy_elasticsearch_kibana'
+          plugin_env_path_name: 'ELASTICSEARCH_KIBANA_PLUGIN_PATH'
       - influxdb-grafana:
           plugin_repo: fuel-plugin-influxdb-grafana
           plugin_owner: 'StackLight team'
