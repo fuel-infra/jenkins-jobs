@@ -15,7 +15,7 @@
           default: 'refs/heads/master'
       - string:
           name: DOCKER_IMAGE
-          default: 'nailgun_performance_tests'
+          default: 'python-fuelclient'
       - string:
           name: ENVVARS
           default: '{envvars}'
