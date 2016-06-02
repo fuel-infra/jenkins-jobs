@@ -1,7 +1,7 @@
 - job:
     name: 'jenkins-jobs.check_shell'
     description:
-      !include-raw descriptions/shellcheck.html
+      !include-raw: descriptions/shellcheck.html
     concurrent: true
     node: 'shellcheck'
     builders:
