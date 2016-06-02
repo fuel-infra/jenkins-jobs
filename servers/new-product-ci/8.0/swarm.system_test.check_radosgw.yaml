@@ -15,7 +15,7 @@
     - inject: # overrides
         properties-content: '{properties}'
     - shell:
-        !include-raw-escape '../../../common/scripts/run_system_test.sh'
+        !include-raw-escape: '../../../common/scripts/run_system_test.sh'
     concurrent: true
     description: '{description}'
     disabled: false

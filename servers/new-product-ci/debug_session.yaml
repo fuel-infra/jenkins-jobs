@@ -2,7 +2,7 @@
     name: 'debug_session_{weight}'
     builders:
       - shell:
-          !include-raw-escape './builders/debug_session.sh'
+          !include-raw-escape: './builders/debug_session.sh'
     concurrent: true
     description:
       !include-raw './descriptions/debug_session'

@@ -39,7 +39,7 @@
       - shell:
           !include-raw builders/get-magnet-link.sh
       - shell:
-          !include-raw-escape builders/test-ubuntu-proposed.sh
+          !include-raw-escape: builders/test-ubuntu-proposed.sh
       - multijob:
           name: Run_BVT_and_Smoke
           condition: COMPLETED

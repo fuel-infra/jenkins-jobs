@@ -33,7 +33,7 @@
              LAUNCHPAD_MILESTONE={version}
              HTML_REPORT={version}.swarm.runner.issues.html
       - shell:
-          !include-raw-escape builders/testrail_generate_failures_report.sh
+          !include-raw-escape: builders/testrail_generate_failures_report.sh
 
     publishers:
       - archive:
