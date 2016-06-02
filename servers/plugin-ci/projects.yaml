@@ -159,9 +159,9 @@
     plugin_prepare_env_builder: plugin-prepare-env-stacklight
 
     version:
-      - 9.0:
+      - 8.0:
           plugin_branch: master
-          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/9.0-community.main.ubuntu.bvt_2/lastSuccessfulBuild/artifact/magnet_link.txt
+          iso_magnet_link: release-8.0
 
     plugin_name:
       - elasticsearch-kibana:
