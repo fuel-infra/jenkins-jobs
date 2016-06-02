@@ -47,4 +47,4 @@
           silent: true
     builders:
       - shell:
-          !include-raw-escape builders/mos.ci-status.report.sh
+          !include-raw-escape: builders/mos.ci-status.report.sh

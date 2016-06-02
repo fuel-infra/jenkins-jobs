@@ -29,7 +29,7 @@
           scm-branch: '{scm-branch}'
     builders:
         - shell:
-            !include-raw-escape builders/publisher.sh
+            !include-raw-escape: builders/publisher.sh
     publishers:
       - archive:
            artifacts: 'rpm.publish.setenvfile,deb.publish.setenvfile'

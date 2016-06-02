@@ -72,7 +72,7 @@
           server-name: review.openstack.org
     builders:
       - shell:
-          !include-raw-escape builders/release.build.fuel.rpm.sh
+          !include-raw-escape: builders/release.build.fuel.rpm.sh
     publishers:
       - description-setter:
           regexp: '^Packages: .*$'

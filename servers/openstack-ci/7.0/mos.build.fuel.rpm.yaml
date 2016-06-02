@@ -106,7 +106,7 @@
           server-name: review.openstack.org
     builders:
       - shell:
-          !include-raw-escape builders/mos.build.fuel.rpm.sh
+          !include-raw-escape: builders/mos.build.fuel.rpm.sh
       - inject:
           properties-file: 'setenvfile'
       - conditional-step:

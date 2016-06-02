@@ -9,7 +9,7 @@
       - package-list-master
     builders:
       - shell:
-          !include-raw-escape builders/mos.autobuild.all.sh
+          !include-raw-escape: builders/mos.autobuild.all.sh
       - trigger-builds:
           - project: 'master.mos.build-deb'
             parameter-factories:
@@ -20,7 +20,7 @@
             block-thresholds:
               build-step-failure-threshold: never
       - shell:
-          !include-raw-escape builders/mos.autobuild.junit.sh
+          !include-raw-escape: builders/mos.autobuild.junit.sh
     publishers:
       - junit:
           results: overall.xml

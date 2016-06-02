@@ -42,27 +42,27 @@
           scm-branch: '{scm-ci-status-client-branch}'
     builders:
       - shell:
-          !include-raw-escape builders/ci.status.report.start.sh
+          !include-raw-escape: builders/ci.status.report.start.sh
       - shell:
-          !include-raw-escape builders/mos.reset.vote.sh
+          !include-raw-escape: builders/mos.reset.vote.sh
       - shell:
-          !include-raw-escape builders/mos.install.cleanup.sh
+          !include-raw-escape: builders/mos.install.cleanup.sh
       - shell:
-          !include-raw-escape builders/mos.install.deb.sh
+          !include-raw-escape: builders/mos.install.deb.sh
       - shell:
-          !include-raw-escape builders/mos.vote.sh
+          !include-raw-escape: builders/mos.vote.sh
     publishers:
       - post-tasks:
         - matches:
             - log-text: '/run/shm/'
               operator: AND
           script:
-            !include-raw-escape builders/mos.install.destroy.vm.sh
+            !include-raw-escape: builders/mos.install.destroy.vm.sh
         - matches:
             - log-text: 'Building'
               operator: AND
           script:
-            !include-raw-escape builders/ci.status.report.stop.sh
+            !include-raw-escape: builders/ci.status.report.stop.sh
       - archive:
           artifacts: '**/*.xml'
           allow-empty: true

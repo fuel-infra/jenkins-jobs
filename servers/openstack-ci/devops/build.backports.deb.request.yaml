@@ -63,9 +63,9 @@
           silent: true
     builders:
       - shell:
-          !include-raw-escape builders/reset.vote.sh
+          !include-raw-escape: builders/reset.vote.sh
       - shell:
-          !include-raw-escape builders/build.deb.sh
+          !include-raw-escape: builders/build.deb.sh
       - inject:
           properties-file: 'setenvfile'
       - conditional-step:
@@ -105,7 +105,7 @@
                   [ -f "deb.publish.setenvfile" ] && source deb.publish.setenvfile
                   [ "${{DEB_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
       - shell:
-          !include-raw-escape builders/vote.sh
+          !include-raw-escape: builders/vote.sh
       - trigger-builds:
           - project: 'devops.install-deb'
             current-parameters: true

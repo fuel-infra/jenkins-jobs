@@ -72,13 +72,13 @@
           files: '{rpm-dist-env}/rpm/**'
     builders:
       - shell:
-          !include-raw-escape builders/ci.status.report.start.sh
+          !include-raw-escape: builders/ci.status.report.start.sh
       - shell: |
           #!/bin/bash -ex
           # Remove junk files
           [ -f "corr.setenvfile" ] && rm -f corr.setenvfile || :
       - shell:
-          !include-raw-escape builders/mos.build.rpm.sh
+          !include-raw-escape: builders/mos.build.rpm.sh
       - inject:
           properties-file: 'setenvfile'
       - conditional-step:
@@ -116,7 +116,7 @@
                   [ -f "rpm.publish.setenvfile" ] && source rpm.publish.setenvfile
                   [ "${{RPM_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
       - shell:
-          !include-raw-escape builders/mos.vote.sh
+          !include-raw-escape: builders/mos.vote.sh
     publishers:
       - pkgname-as-desc
       - post-tasks:
@@ -124,7 +124,7 @@
             - log-text: Building
               operator: AND
            script:
-              !include-raw-escape builders/ci.status.report.stop.sh
+              !include-raw-escape: builders/ci.status.report.stop.sh
       - archive:
            artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
            allow-empty: true

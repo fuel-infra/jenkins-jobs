@@ -57,7 +57,7 @@
           server-name: review.openstack.org
     builders:
       - shell:
-          !include-raw-escape builders/release.build.fuel.deb.sh
+          !include-raw-escape: builders/release.build.fuel.deb.sh
     publishers:
       - description-setter:
           regexp: '^Packages: .*$'

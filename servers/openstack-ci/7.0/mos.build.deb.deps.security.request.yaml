@@ -63,15 +63,15 @@
           branch: '{deps-security-branch}'
     builders:
       - shell:
-          !include-raw-escape builders/ci.status.report.start.sh
+          !include-raw-escape: builders/ci.status.report.start.sh
       - shell: |
           #!/bin/bash -ex
           # Remove junk files
           [ -f "corr.setenvfile" ] && rm -f corr.setenvfile || :
       - shell:
-          !include-raw-escape builders/mos.reset.vote.sh
+          !include-raw-escape: builders/mos.reset.vote.sh
       - shell:
-          !include-raw-escape builders/mos.build.deb.sh
+          !include-raw-escape: builders/mos.build.deb.sh
       - inject:
           properties-file: 'setenvfile'
       - conditional-step:
@@ -113,7 +113,7 @@
                   [ -f "deb.publish.setenvfile" ] && source deb.publish.setenvfile
                   [ "${{DEB_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
       - shell:
-          !include-raw-escape builders/mos.vote.sh
+          !include-raw-escape: builders/mos.vote.sh
       - trigger-builds:
           - project: '7.0.mos-new.install-deb'
             current-parameters: true
@@ -141,7 +141,7 @@
             - log-text: Building
               operator: AND
            script:
-              !include-raw-escape builders/ci.status.report.stop.sh
+              !include-raw-escape: builders/ci.status.report.stop.sh
       - archive:
            artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
            allow-empty: true
