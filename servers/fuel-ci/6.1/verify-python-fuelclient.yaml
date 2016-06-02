@@ -2,7 +2,7 @@
     name: '6.1.{prefix}-python-fuelclient'
     builders:
       - shell:
-          !include-raw-escape builders/verify-python-fuelclient.sh
+          !include-raw-escape: builders/verify-python-fuelclient.sh
     description: |
       Test requests for python-fuelclient 6.1 branches
 

@@ -2,7 +2,7 @@
     name: '{prefix}-docker-python-fuelclient'
     builders:
       - shell:
-          !include-raw-escape builders/run_docker.sh
+          !include-raw-escape: builders/run_docker.sh
     description: |
       Test requests for python-fuelclient 'master' and 'stable/8.0' branch.<br><br>
       Uses Docker container with python2.7 venv<br>

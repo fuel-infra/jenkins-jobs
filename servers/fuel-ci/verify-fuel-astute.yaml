@@ -2,7 +2,7 @@
     name: '{prefix}-fuel-astute'
     builders:
       - shell:
-          !include-raw-escape './builders/verify-fuel-astute.sh'
+          !include-raw-escape: './builders/verify-fuel-astute.sh'
     concurrent: true
     description: 'Test requests on gerrit'
     node: verify-fuel-astute

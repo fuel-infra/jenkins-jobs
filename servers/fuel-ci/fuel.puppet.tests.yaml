@@ -2,7 +2,7 @@
     name: verify-puppet-modules.{job_type}
     builders:
       - shell:
-          !include-raw-escape builders/fuel_puppet_tests.sh
+          !include-raw-escape: builders/fuel_puppet_tests.sh
     concurrent: true
     node: verify-puppet-modules
     parameters:

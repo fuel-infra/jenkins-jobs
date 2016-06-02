@@ -2,7 +2,7 @@
     name: '8.0.{prefix}-fuel-web-ui'
     builders:
       - shell:
-          !include-raw-escape builders/verify-fuel-web-ui.sh
+          !include-raw-escape: builders/verify-fuel-web-ui.sh
     description: |
       Test requests for fuel-web UI (./run_tests.sh --webui) stable/8.0 branch
 

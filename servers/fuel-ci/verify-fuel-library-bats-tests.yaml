@@ -6,7 +6,7 @@
       <h3>Job currently running in non-voting mode</h3>
     builders:
       - shell:
-          !include-raw-escape './builders/verify-fuel-library-bats-tests.sh'
+          !include-raw-escape: './builders/verify-fuel-library-bats-tests.sh'
     properties:
       - heavy-job:
           weight: 1

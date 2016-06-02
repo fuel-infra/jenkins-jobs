@@ -47,9 +47,9 @@
 
     builders:
       - shell:
-          !include-raw-escape builders/update_venv.sh
+          !include-raw-escape: builders/update_venv.sh
       - shell:
-          !include-raw-escape builders/update-env.sh
+          !include-raw-escape: builders/update-env.sh
 
     publishers:
       - description-setter:

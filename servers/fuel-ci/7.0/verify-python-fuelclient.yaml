@@ -5,7 +5,7 @@
           properties-content: |
             BRANCH={branch}
       - shell:
-          !include-raw-escape builders/verify-python-fuelclient.sh
+          !include-raw-escape: builders/verify-python-fuelclient.sh
     description: |
       Test requests for python-fuelclient stable/{version-id} branch
 

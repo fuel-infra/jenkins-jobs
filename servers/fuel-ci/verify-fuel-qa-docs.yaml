@@ -2,7 +2,7 @@
     name: '{prefix}-fuel-qa-docs'
     builders:
       - shell:
-          !include-raw-escape './builders/verify-fuel-qa-docs.sh'
+          !include-raw-escape: './builders/verify-fuel-qa-docs.sh'
     description: 'Check that we dont add more warnings.'
     logrotate:
       numToKeep: 100
