@@ -62,9 +62,9 @@
     - inject: # Overrides
         properties-content: '{properties}'
     - shell:
-        !include-raw-escape 'scripts/run_bvt.sh'
+        !include-raw-escape: 'scripts/run_bvt.sh'
     - shell: # This step is executed only if previous one was successful
-        !include-raw-escape 'scripts/erase_env.sh'
+        !include-raw-escape: 'scripts/erase_env.sh'
 
     concurrent: true
     disabled: false

@@ -163,7 +163,7 @@
           properties-content: |
             $ADDITIONAL_VARIABLES
       - shell:
-          !include-raw-escape scripts/all.sh
+          !include-raw-escape: scripts/all.sh
       - '{publish_iso_builder}'
 
     publishers:
@@ -263,7 +263,7 @@
           description: Use ubuntu-<timestamp> or latest for latest mirror available.
     builders:
       - shell:
-          !include-raw-escape scripts/test_all.sh
+          !include-raw-escape: scripts/test_all.sh
       - multijob:
           name: '{multijob_phase_name}'
           condition: COMPLETED

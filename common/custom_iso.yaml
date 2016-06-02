@@ -68,7 +68,7 @@
           properties-content: |
             $MANUAL_PARAMETERS
       - shell:
-          !include-raw-escape scripts/all.sh
+          !include-raw-escape: scripts/all.sh
       - publish-product-iso
     description: '{description}'
     logrotate:

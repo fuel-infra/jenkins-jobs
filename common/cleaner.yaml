@@ -6,7 +6,7 @@
           filter: jobs.txt
           which-build: workspace-latest
       - shell:
-          !include-raw-escape './scripts/cleaner.py'
+          !include-raw-escape: './scripts/cleaner.py'
     description: |
       This job will iterate through a list of available environments for a specified<br>
       VENV location, using dos.py command. Check if environment is not the last one<br>
@@ -55,7 +55,7 @@
       - timed: '0 */5 * * *'
     builders:
       - shell:
-          !include-raw-escape './scripts/cleaner_jobs.py'
+          !include-raw-escape: './scripts/cleaner_jobs.py'
       - trigger-builds:
         - project: 'cleaner'
           parameter-factories:
@@ -63,7 +63,7 @@
               node-label: $LABEL
               name: 'NODE'
       - shell:
-          !include-raw-escape './scripts/cleaner_dups.py'
+          !include-raw-escape: './scripts/cleaner_dups.py'
     publishers:
       - archive:
           artifacts: '*.txt'

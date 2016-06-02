@@ -25,7 +25,7 @@
       - inject: # overrides
           properties-content: '{properties}'
       - shell:
-          !include-raw-escape 'scripts/run_plugin_example_system_test.sh'
+          !include-raw-escape: 'scripts/run_plugin_example_system_test.sh'
     disabled: false
     defaults: '{version-id}.{test-type}.{dist}.plugins.{testgroup}'
     logrotate:

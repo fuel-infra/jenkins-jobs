@@ -40,7 +40,7 @@
     - inject: # overrides
         properties-content: '{properties}'
     - shell:
-        !include-raw-escape 'scripts/run_upgrade_system_test.sh'
+        !include-raw-escape: 'scripts/run_upgrade_system_test.sh'
     concurrent: true
     description: '{description}'
     disabled: false

@@ -37,6 +37,6 @@
             SYNC_FALLBACK_BRANCH={fallback-branch}
             SYNC_GERRIT_TOPIC={gerrit-topic}
       - shell:
-          !include-raw-escape scripts/codesync.py
+          !include-raw-escape: scripts/codesync.py
     triggers:
         - timed: '{sync-schedule}'

@@ -9,7 +9,7 @@
             TABLE_COLUMNS={table_columns}
             BUILD_SELECTION_CRITERION={build_selection_criterion}
       - shell:
-          !include-raw-escape 'scripts/jobs_healthcheck.py'
+          !include-raw-escape: 'scripts/jobs_healthcheck.py'
     description: |
       Checks status of jobs from {jenkins_view} view and generates report.
     concurrent: true
