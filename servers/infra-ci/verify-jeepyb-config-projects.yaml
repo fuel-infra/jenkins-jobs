@@ -2,7 +2,7 @@
     name: verify-fuel-infra-jeepyb-config-projects-file
     builders:
       - shell:
-          !include-raw './builders/verify-fuel-infra-jeepyb-config-projects-file.py'
+          !include-raw: './builders/verify-fuel-infra-jeepyb-config-projects-file.py'
     description: 'This job makes syntax check for jeepyb config projects.yml'
     logrotate:
       numToKeep: 100

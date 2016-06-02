@@ -2,7 +2,7 @@
     name: 'gerrit-notifier'
     builders:
       - shell:
-          !include-raw builders/gerrit_notifier.sh
+          !include-raw: builders/gerrit_notifier.sh
     description: Job to notify about Gerrit events made on selected projects.
     node: gerrit-notifier
     concurrent: true
