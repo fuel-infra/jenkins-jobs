@@ -234,6 +234,13 @@
          weight: '20'
          node: 'huge-systest'
          timeout: '600'
+     - '{version-id}.{test-type}.{dist}.plugins.{testgroup}':
+         testgroup: 'thread_separate_haproxy'
+         properties: |
+           MULTIPLE_NETWORKS=true
+         weight: '20'
+         node: 'huge-systest'
+         timeout: '600'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'fuel_plugin_reboot'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
