@@ -9,8 +9,6 @@
           weight: 8
       - inject:
           properties-content: |
-            PRODUCT_JENKINS_URL={product_jenkins_url}
-            ISO_JOB_NAME={mos_version}.test_all
             OPENSTACK_RELEASE={openstack_release}
             OS_TYPE={os}
 
@@ -62,9 +60,6 @@
       - string:
           name: EXTRA_RPM_REPOS_PRIORITY
           default: '1'
-      - string:
-          name: PRODUCT_JENKINS_URL
-          default: '{product_jenkins_url}'
       - bool:
           name: REBUILD_ISO
           default: false
@@ -107,7 +102,12 @@
           # injects variable {pkg_type}_REPO_URL
           properties-file: '{pkg_type}.publish.setenvfile'
       - inject:
-          # injects variables for systest: UPDATE_FUEL and REBUILD_ISO
+          # injects variables for systest:
+          # usable:
+          # - UPDATE_FUEL
+          # - REBUILD_ISO
+          # unusable:
+          # - IS_FUEL
           properties-file: 'systest.params'
       - inject:
           # injects variable FUEL_QA_COMMIT
@@ -118,7 +118,16 @@
       - inject:
           # injects variable UBUNTU_MIRROR_ID
           properties-file: 'ubuntu_mirror_id.txt'
-      - shell: !include-raw-escape builders/system_test.sh
+      - guess-mirror
+      - inject:
+          # when started by zuul, then parameters defaults are not applied
+          # when started by jenkins inject will not override parameters
+          properties-content: |
+            EXTRA_RPM_REPOS_PRIORITY=1
+            EXTRA_DEB_REPOS_PRIORITY=1052
+      - shell:
+          !include-raw-escape:
+            'builders/system_test.sh'
     wrappers:
       - timeout:
           fail: true
