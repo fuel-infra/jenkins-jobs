@@ -13,9 +13,9 @@
           properties-content: |
             {properties}
       - shell:
-          !include-raw-escape ./builders/testrail-upload-cases.sh
+          !include-raw-escape: ./builders/testrail-upload-cases.sh
       - shell:
-          !include-raw-escape ./builders/testrail-report.sh
+          !include-raw-escape: ./builders/testrail-report.sh
     parameters:
       - string:
           name: TEST_JOB_NAME

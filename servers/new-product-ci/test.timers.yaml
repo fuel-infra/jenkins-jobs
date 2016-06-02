@@ -15,7 +15,7 @@
         - timed: '{trigger}'
     builders:
       - shell:
-          !include-raw-escape builders/test.timer.sh
+          !include-raw-escape: builders/test.timer.sh
     publishers:
       - archive:
           allow-empty: false
