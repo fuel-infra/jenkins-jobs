@@ -2,7 +2,7 @@
     name: '{prefix}-fuel-library-puppetfile'
     builders:
       - shell:
-          !include-raw-escape builders/verify-fuel-library-puppetfile.sh
+          !include-raw-escape: builders/verify-fuel-library-puppetfile.sh
     concurrent: true
     description: Runs ./utils/jenkins/fuel_validate_puppetfile.sh
     node: fuel-library-validate-puppetfile

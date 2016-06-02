@@ -94,11 +94,11 @@
           properties-content: '{properties}'
 
       - shell:
-          !include-raw-escape builders/prepare-fuel-library.sh
+          !include-raw-escape: builders/prepare-fuel-library.sh
       - shell:
-          !include-raw-escape builders/build-pkgs.sh
+          !include-raw-escape: builders/build-pkgs.sh
       - shell:
-          !include-raw-escape builders/test-pkgs.sh
+          !include-raw-escape: builders/test-pkgs.sh
 
     triggers:
       - timed: 'H 2 * * *'

@@ -2,7 +2,7 @@
     name: 'old.{prefix}-fuel-library-python'
     builders:
       - shell:
-          !include-raw-escape builders/old.verify-fuel-library-python.sh
+          !include-raw-escape: builders/old.verify-fuel-library-python.sh
     description: |
       Tests and linters for Python code in fuel-library
       for stable/6.1 and stable/7.0 branches

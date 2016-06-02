@@ -2,7 +2,7 @@
     name: '{prefix}-fuel-web-docs'
     builders:
       - shell:
-          !include-raw-escape './builders/verify-fuel-web-docs.sh'
+          !include-raw-escape: './builders/verify-fuel-web-docs.sh'
     concurrent: true
     description: 'Test requests on gerrit'
     logrotate:

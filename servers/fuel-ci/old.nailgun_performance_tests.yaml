@@ -35,7 +35,7 @@
     name: 'old.{prefix}-nailgun_performance_tests'
     builders:
       - shell:
-          !include-raw-escape builders/old.nailgun_performance_tests.sh
+          !include-raw-escape: builders/old.nailgun_performance_tests.sh
     description: |
       Verify nailgun performance tests for patches.
       Uses artifacts from "old.nailgun_performance_tests" and do not store it's own.

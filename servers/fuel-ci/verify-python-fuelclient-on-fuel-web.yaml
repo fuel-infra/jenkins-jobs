@@ -29,7 +29,7 @@
     name: '{prefix}-python-fuelclient-on-fuel-web'
     builders:
       - shell:
-          !include-raw-escape builders/verify-python-fuelclient-on-fuel-web.sh
+          !include-raw-escape: builders/verify-python-fuelclient-on-fuel-web.sh
     description: |
       Run tests for python-fuelclient on fuel-web change requests.
 

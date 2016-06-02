@@ -2,7 +2,7 @@
     name: '{prefix}-docker-fuel-astute'
     builders:
       - shell:
-          !include-raw-escape builders/run_docker.sh
+          !include-raw-escape: builders/run_docker.sh
     description: |
       Test requests on gerrit<br><br>
       Uses Docker container with python2.7 venv<br>

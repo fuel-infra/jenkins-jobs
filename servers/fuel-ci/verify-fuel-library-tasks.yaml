@@ -2,7 +2,7 @@
     name: '{prefix}-fuel-library-tasks'
     builders:
       - shell:
-          !include-raw-escape builders/verify-fuel-library-tasks.sh
+          !include-raw-escape: builders/verify-fuel-library-tasks.sh
     concurrent: true
     description: Runs task check for granular deployment
     node: verify-fuel-library-tasks

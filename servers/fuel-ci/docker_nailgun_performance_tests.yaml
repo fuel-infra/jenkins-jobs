@@ -2,7 +2,7 @@
     name: docker-nailgun_performance_tests
     builders:
       - shell:
-          !include-raw-escape builders/run_docker.sh
+          !include-raw-escape: builders/run_docker.sh
     description: |
       Nailgun performance tests.<br><br>
       Uses Docker container with python2.7 venv
@@ -55,7 +55,7 @@
     name: '{prefix}-docker-nailgun_performance_tests'
     builders:
       - shell:
-          !include-raw-escape builders/run_docker.sh
+          !include-raw-escape: builders/run_docker.sh
     description: |
       Verify nailgun performance tests for patches.
 

@@ -8,7 +8,7 @@
             MAKEDIR={makedir}
             REGEX={exclude_regex}
       - shell:
-          !include-raw-escape './builders/linkcheck.sh'
+          !include-raw-escape: './builders/linkcheck.sh'
     description: |
       Run 'make linkcheck' for documentation in {prefix} repository.
       Generates diff with previous run.

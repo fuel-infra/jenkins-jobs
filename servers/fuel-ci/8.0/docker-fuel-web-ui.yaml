@@ -2,7 +2,7 @@
     name: '8.0.{prefix}-docker-fuel-web-ui'
     builders:
       - shell:
-          !include-raw-escape builders/run_docker.sh
+          !include-raw-escape: builders/run_docker.sh
     description: |
       Test requests for fuel-web UI (./run_tests.sh --webui) stable/8.0 branch<br><br>
       Uses Docker container with python2.7 venv<br>

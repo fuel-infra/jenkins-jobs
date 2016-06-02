@@ -2,7 +2,7 @@
     name: '{prefix}-fuel-nailgun-agent'
     builders:
       - shell:
-          !include-raw-escape builders/verify-fuel-nailgun-agent.sh
+          !include-raw-escape: builders/verify-fuel-nailgun-agent.sh
     description: |
       Test requests for <a href=https://github.com/openstack/fuel-nailgun-agent>fuel-nailgun-agent</a>
 
