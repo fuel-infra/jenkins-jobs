@@ -1,0 +1,59 @@
+- view:
+    type: list
+    name: 'current'
+    description: |
+      <h2> Status</h2>
+      <h3> Deployment tests status</h3>
+      See <a href="https://ci.fuel-infra.org/view/deployment%20tests/">deployment tests</a> view
+      <h3>Stable branches status</h3>
+      <ul>
+      <li><font color="green">OK:</font> Current fuel-library <b>8.0</b> tests use <b>8.0-444</b>
+      ISO. Only Ubuntu deployment is tested. fuel-qa rev 2deb0117, fuel-devops-2.9.15.
+      </li>
+      <li><font color="green">OK:</font> Current fuel-library <b>7.0</b> tests use <b>7.0-263</b>
+      ISO. Only Ubuntu deployment is tested. fuel-qa rev c7c91b07 fuel-devops-2.9.11.
+      </li>
+      <li><font color="green">OK:</font>Current fuel-library <b>6.1</b> test environment uses iso
+      <b> 6.1-525</b>, fuel-devops 2.9.9, fuel-qa 96e093b94bd72.
+      </li>
+      <li><font color="green">OK:</font>Current fuel-library <b>6.0</b> tests updated to iso
+      <b>6.0-171</b>, fuel-main rev 057ee0ddbf8604.
+      </li>
+      <li><font color="green">OK:</font>Current fuel-library <b>5.1</b> tests updated to iso
+      <b>5.1.2-165</b>, fuel-main rev 92f854c41d5fee.
+      </li>
+      <li><font color="orange">WARNING:</font>Current fuel-library <b>5.0</b> tests updated to iso
+      <b>5.0.3-225</b>, fuel-main rev 725bf51eb1908e. Tests are unstable,
+      see <a href="https://bugs.launchpad.net/fuel/+bug/1443438">LP: #1443438</a>
+      </li>
+      <li><font color="red">ERROR:</font>Current fuel-library <b>4.1</b> tests are unsupported.
+      See <a href="https://bugs.launchpad.net/fuel/+bug/1411267">LP: #1411267</a>
+      </li>
+      </ul>
+      </ul>
+    regex: '.*\.fuel-library.*|.*verify-(fuel-.*|puppet-.*|python-.*|nailgun.*)|(master|mitaka).fuel-.*'
+    jobs:
+      - 6.1.fuellib_noop_tests
+      - 6.1.verify-python-fuelclient
+      - 7.0.fuellib_noop_tests
+      - 7.0.fuellib_review_pkgs_master_node
+      - 8.0.python-fuelclient.pkgs.ubuntu.review_fuel_client
+      - fuel.test_impact
+      - fuel_noop_fixtures_tests
+      - fuellib_noop_tests
+      - fuellib_review_syntax_check
+      - master.python-fuelclient.pkgs.ubuntu.review_fuel_client
+      - merged-fuel-specs
+      - nailgun_performance_tests
+      - old.fuellib_unit_tests
+      - test-requirements-deb
+      - test-requirements-rpm
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False

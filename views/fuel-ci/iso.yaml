@@ -1,0 +1,25 @@
+- view:
+    type: list
+    name: 'ISO'
+    description: |
+      <h2>Attention: webseeds support is required in torrent client to download community builds
+      </h2>
+      See <a href="http://en.wikipedia.org/wiki/Comparison_of_BitTorrent_clients#Features_II">
+      this table</a> to find out if your client supports webseeds
+      <h2>View: ISO</h2>
+      <style>
+      #frame { width: 100%; min-height: 200px; max-height: 600px; border: 1px solid black; }
+      </style>
+    regex: '(8.0|9.0|10.0)-community.*'
+    jobs:
+      - fuel_community_build_reports
+      - publish_fuel_community_iso
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: True

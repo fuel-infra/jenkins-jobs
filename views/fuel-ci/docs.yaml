@@ -1,0 +1,18 @@
+- view:
+    type: list
+    name: 'docs'
+    description: Jobs related to documentation
+    regex: 'verify-fuel-(docs|qa-docs|web-docs)'
+    jobs:
+      - fuel-docs-linkcheck
+      - fuel-web-linkcheck
+      - merged-fuel-specs
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False

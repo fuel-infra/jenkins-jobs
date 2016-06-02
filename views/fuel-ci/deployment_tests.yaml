@@ -1,0 +1,24 @@
+- view:
+    type: list
+    name: 'deployment tests'
+    description: |
+      <style>
+       #frame_check { width: 100%; min-height: 600px; max-height: 700px; border: none;}
+      </style>
+      <h2>Deployment tests healthcheck</h2>
+      Status of canary jobs (run on merged code) collected by
+      <a href="https://ci.fuel-infra.org/job/deployment_healthcheck/">deployment_healthcheck</a> job
+      <p>
+      <iframe id="frame_check"
+      src="https://ci.fuel-infra.org/job/deployment_healthcheck/lastCompletedBuild/artifact/status.html">
+      </iframe>
+    regex: '(?!(mitaka|master).puppet-openstack.fuel.noop|!?master.fuel-library.pkgs.ubuntu.review_in_fuel_library)(master|mitaka).*'
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False
