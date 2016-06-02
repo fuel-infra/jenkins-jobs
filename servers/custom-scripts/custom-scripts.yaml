@@ -2,7 +2,7 @@
     name: '{name}'
     builders:
       - shell:
-          !include-raw-escape builders/docker_run.sh
+          !include-raw-escape: builders/docker_run.sh
       - inject:
           properties-content: '{properties}'
     description: '{description}'
