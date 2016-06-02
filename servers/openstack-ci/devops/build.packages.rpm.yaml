@@ -64,7 +64,7 @@
           silent: true
     builders:
       - shell:
-          !include-raw-escape builders/build.rpm.sh
+          !include-raw-escape: builders/build.rpm.sh
       - inject:
           properties-file: 'setenvfile'
       - conditional-step:
@@ -102,7 +102,7 @@
              - inject:
                   properties-file: 'rpm.publish.setenvfile'
       - shell:
-          !include-raw-escape builders/vote.sh
+          !include-raw-escape: builders/vote.sh
     publishers:
       - pkgname-as-desc
       - archive:

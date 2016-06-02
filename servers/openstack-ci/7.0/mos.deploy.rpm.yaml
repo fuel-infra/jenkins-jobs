@@ -39,20 +39,20 @@
           scm-branch: '{scm-ci-status-client-branch}'
     builders:
       - shell:
-          !include-raw-escape builders/ci.status.report.start.sh
+          !include-raw-escape: builders/ci.status.report.start.sh
       - shell:
-          !include-raw-escape builders/mos.reset.vote.sh
+          !include-raw-escape: builders/mos.reset.vote.sh
       - shell:
-          !include-raw-escape builders/mos.deploy.sh
+          !include-raw-escape: builders/mos.deploy.sh
       - shell:
-          !include-raw-escape builders/mos.vote.sh
+          !include-raw-escape: builders/mos.vote.sh
     publishers:
       - post-tasks:
         - matches:
             - log-text: Building
               operator: AND
           script:
-            !include-raw-escape builders/ci.status.report.stop.sh
+            !include-raw-escape: builders/ci.status.report.stop.sh
       - trigger-parameterized-builds:
           - project: '7.0.mos-new.comment-abort'
             predefined-parameters: |

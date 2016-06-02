@@ -68,22 +68,22 @@
           silent: true
     builders:
       - shell:
-          !include-raw-escape builders/mos.remove.junk.files.sh
+          !include-raw-escape: builders/mos.remove.junk.files.sh
       - shell:
-          !include-raw-escape builders/ci.status.report.start.sh
+          !include-raw-escape: builders/ci.status.report.start.sh
       - shell:
-          !include-raw-escape builders/mos.reset.vote.sh
+          !include-raw-escape: builders/mos.reset.vote.sh
       - shell:
-          !include-raw-escape builders/mos.build.rpm.sh
+          !include-raw-escape: builders/mos.build.rpm.sh
       - shell:
-          !include-raw-escape builders/mos.vote.sh
+          !include-raw-escape: builders/mos.vote.sh
     publishers:
       - post-tasks:
         - matches:
             - log-text: Building
               operator: AND
           script:
-            !include-raw-escape builders/ci.status.report.stop.sh
+            !include-raw-escape: builders/ci.status.report.stop.sh
       - archive:
           artifacts: '**/buildlog.txt, **/buildresult.xml'
           allow-empty: true

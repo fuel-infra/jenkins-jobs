@@ -13,4 +13,4 @@
           timeout: 120
     builders:
       - shell:
-          !include-raw-escape builders/mos.comment.abort.sh
+          !include-raw-escape: builders/mos.comment.abort.sh

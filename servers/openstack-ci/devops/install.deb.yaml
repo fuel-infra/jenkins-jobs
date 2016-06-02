@@ -27,20 +27,20 @@
           scm-branch: '{install-scm-branch}'
     builders:
       - shell:
-          !include-raw-escape builders/reset.vote.sh
+          !include-raw-escape: builders/reset.vote.sh
       - shell:
-          !include-raw-escape builders/install.cleanup.sh
+          !include-raw-escape: builders/install.cleanup.sh
       - shell:
-          !include-raw-escape builders/install.deb.sh
+          !include-raw-escape: builders/install.deb.sh
       - shell:
-          !include-raw-escape builders/vote.sh
+          !include-raw-escape: builders/vote.sh
     publishers:
       - post-tasks:
         - matches:
             - log-text: '/run/shm/'
               operator: AND
           script:
-            !include-raw-escape builders/install.destroy.vm.sh
+            !include-raw-escape: builders/install.destroy.vm.sh
       - archive:
           artifacts: '**/*.xml'
           allow-empty: true

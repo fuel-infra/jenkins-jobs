@@ -52,7 +52,7 @@
           silent: true
     builders:
       - shell:
-          !include-raw-escape builders/abort.package.testing.sh
+          !include-raw-escape: builders/abort.package.testing.sh
     publishers:
        - email:
            recipients: atsamutali@mirantis.com

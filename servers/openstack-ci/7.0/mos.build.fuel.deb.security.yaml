@@ -93,7 +93,7 @@
           server-name: review.openstack.org
     builders:
       - shell:
-          !include-raw-escape builders/mos.build.fuel.deb.sh
+          !include-raw-escape: builders/mos.build.fuel.deb.sh
       - inject:
           properties-file: 'setenvfile'
       - conditional-step:

@@ -32,7 +32,7 @@
           scm-branch: '{scm-branch}'
     builders:
         - shell:
-            !include-raw-escape builders/mos.publisher.sh
+            !include-raw-escape: builders/mos.publisher.sh
     publishers:
       - archive:
            artifacts: 'rpm.publish.setenvfile,deb.publish.setenvfile'
