@@ -17,7 +17,7 @@
           scm-basedir: ''
     builders:
       - shell:
-          !include-raw-escape builders/install.cleanup.sh
+          !include-raw-escape: builders/install.cleanup.sh
       - copyartifact:
           project: '{project-version}-{name}-build-{distro}'
           filter: 'buildresult.params'
@@ -61,7 +61,7 @@
             - log-text: '/run/shm/'
               operator: AND
           script:
-            !include-raw-escape builders/install.destroy.vm.sh
+            !include-raw-escape: builders/install.destroy.vm.sh
       - junit:
           results: 'report.xml'
       - archive:
