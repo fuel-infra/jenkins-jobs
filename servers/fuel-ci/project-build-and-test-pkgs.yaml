@@ -15,7 +15,6 @@
           projectpackage: fuel-agent
           testgroup: review_fuel_agent_ironic_deploy
           timed: '30 */12 * * *'
-          non_voting: true # override https://bugs.launchpad.net/fuel/+bug/1576881
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
