@@ -81,7 +81,7 @@ case "${MAGNET_LINK}" in
         fi
     ;;
 
-    http*)
+    http*.txt)
         export $(curl -sSf "${MAGNET_LINK}")
     ;;
 esac
@@ -92,7 +92,7 @@ if [[ -z "${MAGNET_LINK}" ]]; then
 fi
 
 # Download ISO
-ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
+ISO_PATH=$(seedclient.py -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
 # Detect version of downloaded ISO, name examples:
 # - fuel-9.0-community-4161-2016-05-13_10-26-43.iso - new community builds
