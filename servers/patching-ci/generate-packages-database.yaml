@@ -22,6 +22,10 @@
            description: "Published reports URL"
            default: http://mirror.fuel-infra.org/mcv/mos/
        - string:
+           name: LATEST_DATABASE
+           description: "This file is need for generation report of MU. If latest MU report is wrong, choose another file"
+           default: "$DISTRO-latest.sqlite"
+       - string:
            name: MU_NUMBER
            description: "MU number (e.g. 1, 2)"
        - bool:

@@ -29,6 +29,9 @@ set -ex
 #                   : List of all repositories you can see here
 #                     https://mirantis.jira.com/wiki/display/PRD/Repository+structure+for+every+release
 #
+# LATEST_DATABASE   : Name of file on http://mirror.fuel-infra.org/mcv/mos/ that contain latest database
+#                     Default value ${DISTRO}-latest.sqlite, if latest MU report is wrong, choose another file
+#
 
 die () {
     echo "$@"
@@ -106,7 +109,7 @@ echo "RELEASE_VERSION=${RELEASE_VERSION}" >> "${WORKSPACE}/filename.properties"
 
 if [ "$IS_UPDATES" == "true" ] ; then
     python generate-databases-scripts/generate-db.py -s "${DISTRO}" -r "${RELEASE_VERSION}" \
-        -d "${URL_TO_DB}/${RELEASE_VERSION}/${DISTRO}-latest.sqlite" -n "${MU_NUMBER}"\
+        -d "${URL_TO_DB}/${RELEASE_VERSION}/${LATEST_DATABASE}" -n "${MU_NUMBER}"\
         -u "${URLS_TO_METADATA}" -o "${OUTPUT_FILE}"
 else
     python generate-databases-scripts/generate-db.py -s "${DISTRO}" -r "${RELEASE_VERSION}" \
