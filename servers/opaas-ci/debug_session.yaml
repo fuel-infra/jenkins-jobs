@@ -1,0 +1,42 @@
+- job-template:
+    name: 'debug_session_{weight}'
+    builders:
+      - shell: |
+            #!/bin/bash
+            set -ex
+            printenv | sort -u
+            sleep "${{DURATION}}h"
+    concurrent: true
+    description:
+      !include-raw: './descriptions/debug_session'
+    parameters:
+      - node:
+          name: NODE
+          allowed-multiselect: true
+      - string:
+          name: DURATION
+          default: '1'
+          description: |
+            Duration in hours. Note that build will be aborted in 3.5 hours anyway.
+    properties:
+      - authorization-allow-authorized
+      - heavy-job:
+          weight: '{weight}'
+    publishers:
+      - description-setter:
+          description: '$NODE - $DURATION h'
+          description-for-failed: '$NODE - $DURATION h'
+# TBD
+#      - email-ext:
+#          body: |
+#            '$DEFAULT_CONTENT
+#            Comment:
+#
+#            $COMMENT
+#
+#            See https://mirantis.jira.com/wiki/display/OPAAS/ci_cd++test+jobs for details.'
+#          recipients: ci+alert@mirantis.com
+    wrappers:
+      - timeout:
+          timeout: 210
+          write-description: true

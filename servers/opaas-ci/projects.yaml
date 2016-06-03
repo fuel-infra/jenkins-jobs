@@ -1,0 +1,16 @@
+- project:
+    name: 'cicd_pipe'
+    project-branch: 'master'
+    jobs:
+      - '{name}-{project-branch}-gerrit-check':
+          project-name: 'openstack/ci-cd-pipeline-app-murano'
+          node_label: 'os_env2 || os_env3'
+      - '{name}-custom-run':
+          node_label: 'os_mitaka'
+
+- project:
+    name: 'debug_session'
+    weight: 1
+    jobs:
+      - 'debug_session_{weight}':
+          weight: 1

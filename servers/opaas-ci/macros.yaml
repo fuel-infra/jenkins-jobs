@@ -1,0 +1,118 @@
+########################################################################
+# GIT sources and triggers
+########################################################################
+- scm:
+    name: review-openstack-org-https
+    scm:
+      - git:
+          basedir: '{project-basedir}'
+          branches:
+            - $GERRIT_BRANCH
+          choosing-strategy: gerrit
+          refspec: $GERRIT_REFSPEC
+          url: 'https://git.openstack.org/{project-name}'
+
+- scm:
+    name: review-openstack-org
+    scm:
+      - git:
+          basedir: '{project-basedir}'
+          branches:
+            - $GERRIT_BRANCH
+          choosing-strategy: gerrit
+          refspec: $GERRIT_REFSPEC
+          url: 'ssh://murano-ci-cd-bot@review.openstack.org:29418/{project-name}'
+          credentials-id: '{credentials-id}'
+
+- trigger:
+    name: review-openstack-org
+    triggers:
+      - gerrit:
+          silent: false
+          server-name: 'review.openstack.org'
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: '{project-name}'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{project-branch}'
+          trigger-on:
+            - patchset-created-event:
+                exclude-no-code-change: true
+            - comment-added-contains-event:
+                comment-contains-value: '{comment-contains-value-regexp}'
+          silent-start: false
+          start-message: "Build Started: $JOB_NAME.\nLogs will be avaible after finish"
+          override-votes: true
+          gerrit-build-started-verified-value: 0
+          skip-vote:
+            successful: false
+            failed: true
+            unstable: true
+            notbuilt: true
+          custom-url: '* $JOB_NAME http://ci-logs.fuel-infra.org/opaas-ci/logs/$LOG_PATH'
+########################################################################
+# Section: Publisher's
+########################################################################
+- publisher:
+    name: console-log
+    publishers:
+      - scp:
+          site: 'jenkins@ci-logs.fuel-infra.org:/var/www/share_logs/opaas-ci/'
+          files:
+            - target: 'logs/$LOG_PATH'
+              copy-console: true
+              copy-after-failure: true
+- publisher:
+    name: ugly-test-log
+    publishers:
+      - scp:
+          site: 'jenkins@ci-logs.fuel-infra.org:/var/www/share_logs/opaas-ci/'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: 'artifacts/runner.log'
+              keep-hierarchy: false
+              copy-after-failure: true
+- publisher:
+    name: test-results
+    publishers:
+      - scp:
+          site: 'jenkins@ci-logs.fuel-infra.org:/var/www/share_logs/opaas-ci/'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/*nose_results.html'
+              keep-hierarchy: false
+              copy-after-failure: true
+            - target: 'logs/$LOG_PATH'
+              source: '**/*testr_results.html.gz'
+              keep-hierarchy: false
+              copy-after-failure: true
+            - target: 'logs/$LOG_PATH'
+              source: '.testrepository/tmp*'
+              keep-hierarchy: false
+              copy-after-failure: true
+            - target: 'logs/$LOG_PATH'
+              source: '**/*testrepository.subunit.gz'
+              keep-hierarchy: false
+              copy-after-failure: true
+            - target: 'logs/$LOG_PATH/tox'
+              source: '.tox/*/log/*'
+              keep-hierarchy: false
+              copy-after-failure: true
+########################################################################
+# PROPERTY
+########################################################################
+- property:
+    name: authorization-allow-authorized
+    properties:
+      - authorization:
+          anonymous:
+            - job-read
+            - job-extended-read
+            - job-discover
+          authenticated:
+            - job-read
+            - job-extended-read
+            - job-discover
+            - job-build
+            - job-cancel
