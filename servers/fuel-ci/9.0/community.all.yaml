@@ -2,6 +2,7 @@
     name: 'Community 9.0 iso'
     version: '9.0'
     branch: 'stable/mitaka'
+    qa_branch: '{branch}'
     mod: '-community'
     bvt-mail: 'ci+alert@mirantis.com'
     jobs:
@@ -15,7 +16,6 @@
           dist: 'ubuntu'
           testgroup: 'bvt_2'
           env_suffix: ''
-          repobranch: 'origin/{branch}'
           email: '{bvt-mail}'
           trigger_projects:
           - project: fuel_community_build_reports
@@ -40,5 +40,4 @@
           dist: 'ubuntu'
           testgroup: 'uca_neutron_ha'
           env_suffix: ''
-          repobranch: 'origin/{branch}'
           email: '{bvt-mail}'

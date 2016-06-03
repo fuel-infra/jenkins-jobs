@@ -3,6 +3,7 @@
     version: '9.0'
     branch: 'mos/mitaka'
     upstream_branch: 'stable/mitaka'
+    qa_branch: '{upstream_branch}'
     mod: '-mos'
     timer: 'H */6 * * *'
     jobs:
@@ -27,11 +28,9 @@
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'bvt_2'
-          repobranch: '{upstream_branch}'
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'smoke_neutron'
-          repobranch: '{upstream_branch}'
       - '{version}{mod}.iso-report':
           repobranch: '{upstream_branch}'
 

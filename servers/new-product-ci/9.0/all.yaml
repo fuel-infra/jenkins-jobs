@@ -2,6 +2,7 @@
     name: 'Main 9.0 iso'
     version: '9.0'
     branch: 'stable/mitaka'
+    qa_branch: '{branch}'
     mod: ''
     bvt-mail: 'mos-qa@mirantis.com'
     jobs:
@@ -13,12 +14,10 @@
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'bvt_2'
-          repobranch: '{branch}'
           email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'smoke_neutron'
-          repobranch: '{branch}'
           email: '{bvt-mail}'
       - '{version}{mod}.iso-report':
           repobranch: '{branch}'

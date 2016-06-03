@@ -261,6 +261,10 @@
           name: UBUNTU_MIRROR_ID
           default: 'latest'
           description: Use ubuntu-<timestamp> or latest for latest mirror available.
+      - string:
+          name: FUEL_QA_BRANCH
+          default: '{qa_branch}'
+          description: The name of branch in bvt and smoke tests.
     builders:
       - shell:
           !include-raw-escape scripts/test_all.sh
