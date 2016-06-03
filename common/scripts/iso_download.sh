@@ -35,12 +35,31 @@ ENABLE_ISO_DOWNLOAD=${ENABLE_ISO_DOWNLOAD:-true}
 MAGNET_LINK_JENKINS_URL=${MAGNET_LINK_JENKINS_URL:-https://product-ci.infra.mirantis.net/}
 MAGNET_LINK_ISO_VERSION=${MAGNET_LINK_ISO_VERSION:-9.0}
 
-# Values with released ISO versions
-# It is used only when release-* parameter is used in MAGNET_LINK
-export MAGNET_LINK_ISO_8_0='magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
-
 # exit if ENABLE_ISO_DOWNLOAD not 'true'
 [[ "${ENABLE_ISO_DOWNLOAD}" == "true" ]] || exit
+
+# Check whether we want to download released ISO from known source
+if [[ "${MAGNET_LINK}" =~ release-* ]]; then
+    RELEASE_ISO_VERSION="${MAGNET_LINK##release-}"
+
+    case "${RELEASE_ISO_VERSION}" in
+        6.1)
+            MAGNET_LINK='http://seed.fuel-infra.org/fuelweb-release/MirantisOpenStack-6.1.iso.torrent'
+        ;;
+
+        7.0)
+            MAGNET_LINK='http://seed.fuel-infra.org/fuelweb-release/MirantisOpenStack-7.0.iso.torrent'
+        ;;
+
+        8.0)
+            MAGNET_LINK='http://seed.fuel-infra.org/fuelweb-release/MirantisOpenStack-8.0.iso.torrent'
+        ;;
+
+        *)
+            echo "Not defined ISO source for ${RELEASE_ISO_VERSION}"
+        ;;
+    esac
+fi
 
 # Check whether we want to download ISO in automatic way
 case "${MAGNET_LINK}" in
@@ -68,17 +87,6 @@ case "${MAGNET_LINK}" in
             ;;
         esac
         export $(curl -sSf "${MAGNET_LINK_ARTIFACT}")
-    ;;
-
-    release-*)
-        RELEASE_ISO_VERSION="${MAGNET_LINK##release-}"
-        MAGNET_LINK_VARIABLE="MAGNET_LINK_ISO_${RELEASE_ISO_VERSION/\./_}"
-        if [[ -n "${!MAGNET_LINK_VARIABLE}" ]]; then
-            MAGNET_LINK="${!MAGNET_LINK_VARIABLE}"
-        else
-            echo "Not defined ${MAGNET_LINK_VARIABLE} for released ${MAGNET_LINK_ISO_VERSION} ISO"
-            exit 1
-        fi
     ;;
 
     http*.txt)
