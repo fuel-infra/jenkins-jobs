@@ -140,9 +140,9 @@
          node: 'systest-rh'
          properties-file: /home/jenkins/.rhel_creds
          properties: |
-            EXTRA_COMP_IMAGE=rhel7_04022016.qcow2
+            EXTRA_COMP_IMAGE=rhel7_02062016.qcow2
             EXTRA_COMP_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
-            EXTRA_COMP_IMAGE_MD5=73f82a4d60fc1eb701b393bb6d684a60
+            EXTRA_COMP_IMAGE_MD5=ff0d5ba348ebb5641801cc531d57020d
             EXTRA_COMP_IMAGE_USER=root
             EXTRA_COMP_IMAGE_PASSWORD=r00tme
             CENTOS_DUMMY_DEPLOY=False

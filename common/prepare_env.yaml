@@ -73,8 +73,8 @@
           description: 'https://bugs.launchpad.net/fuel/+bug/1582157'
       - string:
           name: QA_RHEL_COMPUTE
-          default: 'magnet:?xt=urn:btih:d079dd9f4872a3a063a2324c4dced153f0a7aea4&dn=rhel7%5F04022016.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Frhel7%5F04022016.qcow2'
-          description: 'https://bugs.launchpad.net/fuel/+bug/1522446'
+          default: 'magnet:?xt=urn:btih:182c67257acc36947c3d4c7ae4dc6d7fd7a078ca&dn=rhel7%5F02062016.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Frhel7%5F02062016.qcow2'
+          description: 'https://bugs.launchpad.net/fuel/+bug/1587857'
       - string:
           name: QA_OL_COMPUTE
           default: 'magnet:?xt=urn:btih:d6334ca4a6c3989f8a234a10efda40b333cd03b3&dn=oracle-linux-20160523164500.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Foracle-linux-20160523164500.qcow2'
