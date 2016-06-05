@@ -75,7 +75,7 @@
 - project:
     name: dualcheck-docker-python-fuelclient
     branch-name: 'master'
-    volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
+    volumes: '$WORKSPACE:/opt/jenkins/python-fuelclient'
     envvars: '-e JENKINS_URL=$JENKINS_URL'
     jobs:
       - '{prefix}-docker-python-fuelclient':
