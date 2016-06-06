@@ -6,11 +6,6 @@
     name: ''
 
     src-branch:
-      - 'master':
-          dst-branch: 'newton'
-          upstream-branch: 'stable/newton'
-          downstream-branch: 'mos/newton'
-          fallback-branch: 'master'
       - 'mitaka':
           dst-branch: 'mitaka'
           upstream-branch: 'stable/mitaka'
