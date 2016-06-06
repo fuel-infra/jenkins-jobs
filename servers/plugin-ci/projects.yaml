@@ -186,5 +186,5 @@
           plugin_env_path_name: 'LMA_INFRA_ALERTING_PLUGIN_PATH'
 
     jobs:
-      - '{version}.fuel-plugin.{plugin_name}.build'
+      - '{version}.fuel-plugin.{plugin_name}.verify'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
