@@ -142,7 +142,7 @@ if [ "${UPDATE_FUEL}" = "true" ]; then
     if [ -z "${RPM_REPO_URL}" ]; then
         # RPM_REPO_PATH will come from publisher artifact when publisher publishes rpm
         # MIRROR_HOST should be set by guess mirror or manually
-        export UPDATE_FUEL_MIRROR=$(get_rpm_snapshot "${MIRROR_HOST}/${RPM_REPO_PATH}")/
+        export UPDATE_FUEL_MIRROR=$(get_rpm_snapshot "http://${MIRROR_HOST}/${RPM_REPO_PATH}")/
     else
         # when not canary builds
         export UPDATE_FUEL_MIRROR="${RPM_REPO_URL}/"
@@ -170,7 +170,7 @@ if [ -n "${DEB_REPO_URL}" ]; then
         # DEB_REPO_PATH should come from job config injections
         # DEB_DIST_NAME should come from job config injections
         # EXTRA_DEB_REPOS_PRIORITY should come from job config injections
-        _deb_repo="${MIRROR_HOST}/${DEB_REPO_PATH} ${DEB_DIST_NAME} main restricted"
+        _deb_repo="http://${MIRROR_HOST}/${DEB_REPO_PATH} ${DEB_DIST_NAME} main restricted"
         # shellcheck disable=SC2086
         # need to pass all components as separate args
         EXTRA_DEB_REPOS="deb $(get_deb_snapshot ${_deb_repo}),${EXTRA_DEB_REPOS_PRIORITY}"
