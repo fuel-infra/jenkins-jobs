@@ -14,6 +14,10 @@
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
 
+    # is-disabled serves for verbose disabling of something
+    # so it's falsy by default
+    is-disabled: ''
+
     ssh-creds-jenkins: '0772133d-e02e-4385-9304-e87e7f830b4e'
 
     # todo: rename to something verbose

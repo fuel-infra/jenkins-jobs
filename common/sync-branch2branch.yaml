@@ -21,6 +21,7 @@
 
 - job-template:
     name: 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
+    disabled: '{is-disabled}'
     fallback-branch: 'master'
     wrappers:
       - ssh-agent-credentials:
