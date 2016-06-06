@@ -77,4 +77,5 @@
     - 'oslotest'
 
     jobs:
-    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
+    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}':
+        is-disabled: 'true'
