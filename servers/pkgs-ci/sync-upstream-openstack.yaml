@@ -1,0 +1,44 @@
+- job-template:
+    name: 'sync-upstream-openstack'
+    disabled: ''
+    node: '{sync-node}'
+    description: |
+       <p>Syncronizes code from upstream OpenStack projects and puppet-manifests from GitHub.</p>
+       <p><b>Ownership:</b> Issues with this job are tracked by Fuel Build team.</p>
+       <p><b>Contacts:</b> #infra</p>
+    parameters:
+      - string:
+          name: MAX_PARALLEL
+          default: "25"
+          description: Number of parallel threads
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 40
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+          export LC_ALL="en_US.UTF-8"
+          bash -ex sync-openstack-upstream-code/mirror-all.sh
+    scm:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          repo: '{sync-scm-repo}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          basedir: '{sync-scm-basedir}'
+          branch: '{sync-scm-branch}'
+          wipe-workspace: false
+    triggers:
+      - timed: 'H/11 * * * *'
+    publishers:
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'ci+alert@mirantis.com, fuel-build@mirantis.com'
+          send-to-individuals: false
+      - junit:
+          keep-long-stdio: false
+          results: 'sync-openstack-upstream-code/results.xml'
+      - archive:
+          allow-empty: true
+          artifacts: 'sync-openstack-upstream-code/results.xml'
+          latest-only: false

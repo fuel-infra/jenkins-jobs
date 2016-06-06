@@ -370,3 +370,13 @@
             rpm-repo-name: 'mos-{mos_version}-centos7'
     jobs:
         - '{mos_version}.resync-repos-to-mirrors'
+
+- project:
+    <<: *common_template
+    name: 'sync-upstream-openstack'
+    sync-node: 'sync-upstream'
+    sync-scm-repo: 'infra/mirrors'
+    sync-scm-branch: 'master'
+    sync-scm-basedir: ''
+    jobs:
+        - 'sync-upstream-openstack'
