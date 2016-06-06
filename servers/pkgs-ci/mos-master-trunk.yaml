@@ -30,9 +30,10 @@
     build-node: 'new-builder'
     publish-node: 'new-publisher'
     install-node: 'install-node'
+    systest-node: 'systest'
 
     # Repository parameters for project
-    deb-dist-name: 'mos-{project-version}'
+    deb-dist-name: 'mos-master'
     deb-repo-path: '/trunk/mos-repos/ubuntu'
     rpm-repo-path: '/trunk/mos-repos/centos/mos-master-centos7'
 
@@ -42,6 +43,17 @@
     mos-deb-repo-path: '/mos-repos/ubuntu'
     mos-rpm-repo-path: '/mos-repos/centos/mos-master-centos7'
 
+    # added for systest:
+    mos_version: 'master'
+    main_ubuntu_release: 'trusty'
+    openstack_release: 'ubuntu'
+    rel-path-prefix: 'trunk/mos-repos/' # in case of testing per-project should be changed
+    rpm-dist-name: 'mos-master-centos7'
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
+    fuel-namespace: 'openstack'
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    main-rpm-dist-name: 'mos-master-centos7'
 
     distro:
     - centos7:
@@ -65,7 +77,9 @@
       name: 'mos'
     - '{project-version}-pkg-{project-name}-install-{os}-{distro}':
       name: 'mos'
-#    - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
+    # - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-systest-{os}-{distro}':
+      name: 'mos'
 
 
 - job-template:
@@ -140,6 +154,8 @@
         properties-content: |
           _REPO_PATH_FOR_USTABLE_DEB=/$CUSTOM_REPO_ID/mos-repos/ubuntu
           _REPO_PATH_FOR_USTABLE_RPM=/$CUSTOM_REPO_ID/mos-repos/centos/mos-master-centos7
+          _REPO_FOR_USTABLE_DEB=http://{publish-repo-host}/$CUSTOM_REPO_ID/mos-repos/ubuntu {deb-dist-name} main restricted
+          _REPO_FOR_USTABLE_RPM=testing,http://{publish-repo-host}/$CUSTOM_REPO_ID/mos-repos/centos/mos-master-centos7/os
           _ORIGINAL_DESTINATION_REPO_DEB=http://{publish-repo-host}/{deb-repo-path}/{project-version} {deb-dist-name} main restricted
           _ORIGINAL_DESTINATION_REPO_RPM=deps,http://{publish-repo-host}/{rpm-repo-path}/os/x86_64
           _MASTER_REPO_FOR_DEP_DEB=http://{publish-repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name} main restricted
@@ -254,7 +270,9 @@
     - multijob:
         name: 'Run tests'
         condition: SUCCESSFUL
+
         projects:
+
         - name: '{project-version}-pkg-{project-name}-install-{os}-{distro}'
           predefined-parameters: |
             GERRIT_HOST={gerrit-host}
@@ -266,9 +284,22 @@
             GERRIT_CHANGE_NUMBER=$GERRIT_CHANGE_NUMBER
             GERRIT_PATCHSET_NUMBER=$GERRIT_PATCHSET_NUMBER
             SOURCE_BRANCH={project-version}
-            ZUUL_COMMIT=$BUILD_TAG
-            ZUUL_UUID=$BUILD_TAG
             MIRROR_HOST={publish-repo-host}
+
+        - name: '{project-version}-pkg-{project-name}-systest-{os}-{distro}'
+          predefined-parameters: |
+            GERRIT_HOST={gerrit-host}
+            GERRIT_PORT={gerrit-port}
+            GERRIT_USER={gerrit-user}
+            GERRIT_PROJECT=$GERRIT_PROJECT
+            GERRIT_CHANGE_STATUS=REF_UPDATED
+            GERRIT_REFNAME={project-version}
+            GERRIT_CHANGE_NUMBER=$GERRIT_CHANGE_NUMBER
+            GERRIT_PATCHSET_NUMBER=$GERRIT_PATCHSET_NUMBER
+            SOURCE_BRANCH={project-version}
+            MIRROR_HOST={publish-repo-host}
+            GUESS_MIRROR=false
+            TEST_GROUP=
 
     # Step IV:
     #   if package(s) pass tests then publishing to master is required

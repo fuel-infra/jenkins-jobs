@@ -75,13 +75,13 @@
       - guess-mirror
       - shell:
           !include-raw-escape:
-            builders/pkg_build.sh
+            'builders/pkg_build.sh'
     publishers:
       - email-alert-on-merge
       - junit:
           results: 'buildresult.xml'
       - archive:
-          artifacts: 'buildresult.params, buildresult.xml, {pkg_type}.publish.setenvfile, tests.envfile, systest.params'
+          artifacts: 'buildresult.params, buildresult.xml, tests.envfile'
           allow-empty: True
       - post-tasks:
         - matches:
@@ -163,7 +163,7 @@
       # 3. touch it, so the file will exist in all cases
       - shell: touch 'buildresult.params'
       # 4. inject file's content: artifact data or nothing
-      - inject:
+      - inject-properties-file:
           # Inject
           # - useful:
           #     BUILD_HOST
@@ -178,11 +178,15 @@
           #     LP_BUG
           #     IS_SECURITY
           properties-file: 'buildresult.params'
-      - shell: !include-raw-escape: builders/pkg_publish.sh
+
+      - shell:
+          !include-raw-escape:
+            'builders/pkg_publish.sh'
+
     publishers:
       - pkg-version-report
       - archive:
-           artifacts: '*.publish.setenvfile, pkg-versions.*'
+           artifacts: '{pkg_type}.publish.setenvfile, tests.envfile'
            allow-empty: true
 
     node: '{publish-node}'
@@ -222,37 +226,52 @@
           repo: '{install-scm-repo}'
           branch: '{install-scm-branch}'
           basedir: ''
+
     builders:
+
       - shell:
-          !include-raw-escape builders/mos.install.cleanup.sh
+          !include-raw-escape:
+            'builders/mos.install.cleanup.sh'
+
+      # This is done for flexibility.
+      # We could trigger this job with gerrit parameters and get corresponding artifact.
+      # Or we could trigger this job and pass required fields as parameters, so artifact won't be needed
+      # 1. remove existing file
+      - shell: rm -vf 'buildresult.params'
+      # 2. try to copy artifact
       - copyartifact:
           project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
           filter: 'buildresult.params'
           which-build: last-successful
           parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
           optional: true
+      # 3. touch it, so the file will exist in all cases
+      - shell: touch 'buildresult.params'
+      # 4. inject file's content: artifact data or nothing
+      - inject-properties-file:
+          # Inject
+          # - useful:
+          #     BUILD_HOST
+          #     PKG_PATH
+          # - unuseful:
+          #     DIST
+          #     REPO_TYPE
+          #     GERRIT_CHANGE_STATUS
+          # - maybe useful:
+          #     EXTRAREPO
+          #     REQUEST_NUM
+          #     LP_BUG
+          #     IS_SECURITY
+          properties-file: 'buildresult.params'
+
       - copyartifact:
           project: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
           filter: '{pkg_type}.publish.setenvfile'
           which-build: last-successful
           parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
           optional: true
-      - shell: touch 'buildresult.params' '{pkg_type}.publish.setenvfile'
-      - inject:
-          # Inject
-          # - useful:
-          #     EXTRAREPO
-          #     REPO_TYPE
-          #     DIST
-          # - unuseful:
-          #     BUILD_HOST
-          #     PKG_PATH
-          #     GERRIT_CHANGE_STATUS
-          #     REQUEST_NUM
-          #     LP_BUG
-          #     IS_SECURITY
-          properties-file: 'buildresult.params'
-      - inject:
+      - shell: touch '{pkg_type}.publish.setenvfile'
+      - inject-properties-file:
           # Injects package lists with version and repository URL
           # depending on pkg type it will be:
           # rpm
@@ -279,6 +298,7 @@
           #     DEB_CHANGE_REVISION
           #     LP_BUG
           properties-file: '{pkg_type}.publish.setenvfile'
+
       - shell: |
           #!/bin/bash -xe
 
@@ -320,7 +340,8 @@
         - matches:
             - log-text: '/run/shm/'
           script:
-            !include-raw-escape builders/mos.install.destroy.vm.sh
+            !include-raw-escape:
+              'builders/mos.install.destroy.vm.sh'
       - junit:
           results: 'report.xml'
       - archive:
@@ -362,11 +383,31 @@
           parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
           optional: true
       - shell: touch 'buildresult.params' '{pkg_type}.publish.setenvfile'
-      - inject:
+      - inject-properties-file:
           # Injects EXTRAREPO
           properties-file: 'buildresult.params'
-      - inject:
+      - inject-properties-file:
           # Injects package lists with version and repository URL
+          # depending on pkg type it will be:
+          # rpm
+          #     RPM_VERSION
+          #     RPM_BINARIES
+          #     RPM_REPO_URL
+          #     RPM_VERSION
+          #     RPM_PUBLISH_SUCCEEDED
+          #     RPM_DISTRO
+          #     RPM_CHANGE_REVISION
+          #     LP_BUG
+          # deb
+          #     DEB_VERSION
+          #     DEB_BINARIES
+          #     DEB_REPO_URL
+          #     RPM_VERSION
+          #     DEB_PUBLISH_SUCCEEDED
+          #     DEB_DISTRO
+          #     DEB_PACKAGENAME
+          #     DEB_CHANGE_REVISION
+          #     LP_BUG
           properties-file: '{pkg_type}.publish.setenvfile'
       - shell: |
           #!/bin/bash -xe
@@ -379,6 +420,217 @@
           bash -x repo-test-{pkg_type}-docker
 
     node: '{install-node}'
+
+- job-template:
+    name: '{project-version}-pkg-{project-name}-systest-{os}-{distro}'
+    concurrent: true
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    properties:
+      - heavy-job:
+          weight: 8
+      - inject:
+          properties-content: |
+            OPENSTACK_RELEASE={openstack_release}
+            OS_TYPE={os}
+            ENV_PREFIX={mos_version}-pkg-systest-{os}-{distro}
+
+    parameters:
+      - string:
+          name: TEST_GROUP
+          default: 'bvt_2'
+      - bool:
+          name: NEUTRON_ENABLE
+          default: 'true'
+      - string:
+          name: MIRROR_UBUNTU
+          description: >-
+            <p>
+            If empty, it will be set automatically based on UBUNTU_MIRROR_ID value.
+            <p>
+            deb http://../ubuntu trusty main universe multiverse|deb
+            http://../ubuntu trusty-updates main universe multiverse|deb
+            http://../ubuntu trusty-security main universe multiverse|deb
+            http://../ubuntu trusty-proposed main universe multiverse
+      - string:
+          name: EXTRA_DEB_REPOS
+          # New lines will become spaces. So don't add newline near "|" because it possibly will break parsing inside scripts
+          default: >-
+            deb
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name} main restricted,1200|deb
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name}-security main restricted,1201|deb
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name}-proposed main restricted,1202|deb
+            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name}-updates  main restricted,1201
+          description: >-
+            <p>
+            Additional deb repos. Note, that empty repos will bring some errors into console output.
+            But this errors will not break the build.
+            <p>
+            deb http://... trusty main(,prio1)|deb http://... trusty main(,prio2)
+      - string:
+          name: EXTRA_DEB_REPOS_PRIORITY
+          default: '1052'
+      - string:
+          name: EXTRA_RPM_REPOS
+          default: 'release-repo,http://{repo-host}/{rel-path-prefix}/centos/{main-rpm-dist-name}/os/x86_64/,98'
+          description: 'reponame1,http://...(,prio1)|reponame2,http://...(,prio2)'
+      - string:
+          name: EXTRA_RPM_REPOS_PRIORITY
+          default: '1'
+      - bool:
+          name: DEFAULT_REBUILD_ISO
+          default: false
+      - bool:
+          name: DEFAULT_UPDATE_FUEL
+          default: true
+    scm:
+      - upstream:
+          branch: '{fuel-main-branch}'
+          repo: fuel-main
+          fuel-namespace: '{fuel-namespace}'
+      - upstream:
+          branch: '{fuel-qa-branch}'
+          repo: fuel-qa
+          fuel-namespace: '{fuel-namespace}'
+    triggers:
+      - zuul
+      - timed: "H */12 * * *"
+    builders:
+      - inject:
+          # Set defaults which could be reinjected
+          properties-content: |
+            REBUILD_ISO=$DEFAULT_REBUILD_ISO
+            UPDATE_FUEL=$DEFAULT_UPDATE_FUEL
+
+      - shell: |
+          #!/bin/bash
+          set -ex
+          # Clean logs from previous runs
+          rm -vf fuel-qa/logs/* *.publish.setenvfile
+      - shell: rm -vf 'buildresult.params' '{pkg_type}.publish.setenvfile'
+      - shell: /bin/bash -xec 'touch {pkg_type}.publish.setenvfile'
+
+      # This is done for flexibility.
+      # We could trigger this job with gerrit parameters and get corresponding artifact.
+      # Or we could trigger this job and pass required fields as parameters, so artifact won't be needed
+      # 1. remove existing file
+      - shell: rm -vf 'buildresult.params'
+      # 2. try to copy artifact
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          filter: 'buildresult.params'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      # 3. touch it, so the file will exist in all cases
+      - shell: touch 'buildresult.params'
+      # 4. inject file's content: artifact data or nothing
+      - inject-properties-file:
+          # Inject
+          # - useful:
+          #     BUILD_HOST
+          #     PKG_PATH
+          # - unuseful:
+          #     DIST
+          #     REPO_TYPE
+          #     GERRIT_CHANGE_STATUS
+          # - maybe useful:
+          #     EXTRAREPO
+          #     REQUEST_NUM
+          #     LP_BUG
+          #     IS_SECURITY
+          properties-file: 'buildresult.params'
+
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+          filter: '{pkg_type}.publish.setenvfile'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      - shell: touch '{pkg_type}.publish.setenvfile'
+      - inject-properties-file:
+          # Injects package lists with version and repository URL
+          # depending on pkg type it will be:
+          # rpm
+          # - useful:
+          #     RPM_VERSION
+          #     RPM_BINARIES
+          #     RPM_REPO_URL
+          #     RPM_VERSION
+          # - unuseful:
+          #     RPM_PUBLISH_SUCCEEDED
+          #     RPM_DISTRO
+          #     RPM_CHANGE_REVISION
+          #     LP_BUG
+          # deb
+          # - useful:
+          #     DEB_VERSION
+          #     DEB_BINARIES
+          #     DEB_REPO_URL
+          #     RPM_VERSION
+          # - unuseful:
+          #     DEB_PUBLISH_SUCCEEDED
+          #     DEB_DISTRO
+          #     DEB_PACKAGENAME
+          #     DEB_CHANGE_REVISION
+          #     LP_BUG
+          properties-file: '{pkg_type}.publish.setenvfile'
+
+      - copyartifact:
+          project: 'devops.{mos_version}.env'
+          filter: 'fuel_qa_commit.txt,magnet_link.txt,ubuntu_mirror_id.txt'
+          which-build: last-successful
+      - inject-properties-file:
+          # injects variable FUEL_QA_COMMIT
+          properties-file: 'fuel_qa_commit.txt'
+      - inject-properties-file:
+          # injects variable MAGNET_LINK
+          properties-file: 'magnet_link.txt'
+      - inject-properties-file:
+          # injects variable UBUNTU_MIRROR_ID
+          properties-file: 'ubuntu_mirror_id.txt'
+
+      - inject:
+          properties-content: |
+            GUESS_MIRROR={guess-mirror}
+            MIRROR_HOST={mirror_host}
+            UBUNTU_MIRROR_URL={ubuntu_mirror_url}
+            MIRROR_UBUNTU={mirror_ubuntu}
+      - guess-mirror
+
+      - inject:
+          # when started by zuul, then parameters defaults are not applied
+          # when started by jenkins inject will not override parameters
+          properties-content: |
+            EXTRA_RPM_REPOS_PRIORITY=1
+            EXTRA_DEB_REPOS_PRIORITY=1052
+      - shell:
+          !include-raw-escape:
+            'builders/system_test.sh'
+
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 210
+      - timestamps
+      - ansicolor
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml, logs/*, fuel-qa/logs/*'
+          latest-only: false
+      - logparser:
+          parse-rules: '/var/lib/jenkins/fuellib.parser'
+          unstable-on-warning: false
+          fail-on-error: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+
+    node: '{systest-node}'
+
 
 ################################################################################
 # Job group(s)

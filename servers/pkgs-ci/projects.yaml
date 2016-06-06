@@ -13,8 +13,6 @@
 
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
 
-    product_jenkins_url: 'https://product-ci.infra.mirantis.net/'
-
     base-path: 'base/'
     updates-path: 'updates/'
     security-path: 'security/'
