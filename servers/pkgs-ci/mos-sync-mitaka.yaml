@@ -1,4 +1,6 @@
-- common-sync-params: &common-sync-params
+- project:
+    name: 'mos-sync-mitaka'
+
     # Branches to sync (see also short names below)
     upstream-branch: 'stable/mitaka'
     downstream-branch: '9.0/mitaka'
@@ -18,179 +20,61 @@
     gerrit-creds: '{ssh-creds-openstack-ci-mirrorer-jenkins}'
     gerrit-topic: 'sync/stable/mitaka'
 
-    name: 'sync-{name}-{src-branch}-{dst-branch}'
+    # List of projects to sync
+    gerrit-project-name:
+    - 'nova'
+    - 'python-novaclient'
+    - 'neutron'
+    - 'python-neutronclient'
+    - 'neutron-lib'
+    - 'neutron-fwaas'
+    - 'neutron-lbaas'
+    - 'neutron-vpnaas'
+    - 'keystone'
+    - 'python-keystoneclient'
+    - 'keystonemiddleware'
+    - 'glance'
+    - 'python-glanceclient'
+    - 'glance_store'
+    - 'cinder'
+    - 'python-cinderclient'
+    - 'os-brick'
+    - 'heat'
+    - 'python-heatclient'
+    - 'horizon'
+    - 'django_openstack_auth'
+    - 'sahara'
+    - 'sahara-dashboard'
+    - 'python-saharaclient'
+    - 'murano'
+    - 'murano-dashboard'
+    - 'python-muranoclient'
+    - 'ceilometer'
+    - 'python-ceilometerclient'
+    - 'ceilometermiddleware'
+    - 'swift'
+    - 'python-swiftclient'
+    - 'ironic'
+    - 'python-ironicclient'
+    - 'oslo.cache'
+    - 'oslo.concurrency'
+    - 'oslo.config'
+    - 'oslo.context'
+    - 'oslo.db'
+    - 'oslo.i18n'
+    - 'oslo.log'
+    - 'oslo.messaging'
+    - 'oslo.middleware'
+    - 'oslo.policy'
+    - 'oslo.reports'
+    - 'oslo.rootwrap'
+    - 'oslo.serialization'
+    - 'oslo.service'
+    - 'oslo.utils'
+    - 'oslo.versionedobjects'
+    - 'oslo.vmware'
+    - 'oslosphinx'
+    - 'oslotest'
+
     jobs:
-        - 'sync-{name}-{src-branch}-{dst-branch}'
-
-
-- project:
-    name: 'nova'
-    <<: *common-sync-params
-- project:
-    name: 'python-novaclient'
-    <<: *common-sync-params
-
-- project:
-    name: 'neutron'
-    <<: *common-sync-params
-- project:
-    name: 'python-neutronclient'
-    <<: *common-sync-params
-- project:
-    name: 'neutron-lib'
-    <<: *common-sync-params
-- project:
-    name: 'neutron-fwaas'
-    <<: *common-sync-params
-- project:
-    name: 'neutron-lbaas'
-    <<: *common-sync-params
-- project:
-    name: 'neutron-vpnaas'
-    <<: *common-sync-params
-
-- project:
-    name: 'keystone'
-    <<: *common-sync-params
-- project:
-    name: 'python-keystoneclient'
-    <<: *common-sync-params
-- project:
-    name: 'keystonemiddleware'
-    <<: *common-sync-params
-
-- project:
-    name: 'glance'
-    <<: *common-sync-params
-- project:
-    name: 'python-glanceclient'
-    <<: *common-sync-params
-- project:
-    name: 'glance_store'
-    <<: *common-sync-params
-
-- project:
-    name: 'cinder'
-    <<: *common-sync-params
-- project:
-    name: 'python-cinderclient'
-    <<: *common-sync-params
-- project:
-    name: 'os-brick'
-    <<: *common-sync-params
-
-- project:
-    name: 'heat'
-    <<: *common-sync-params
-- project:
-    name: 'python-heatclient'
-    <<: *common-sync-params
-
-- project:
-    name: 'horizon'
-    <<: *common-sync-params
-- project:
-    name: 'django_openstack_auth'
-    <<: *common-sync-params
-
-- project:
-    name: 'sahara'
-    <<: *common-sync-params
-- project:
-    name: 'sahara-dashboard'
-    <<: *common-sync-params
-- project:
-    name: 'python-saharaclient'
-    <<: *common-sync-params
-
-- project:
-    name: 'murano'
-    <<: *common-sync-params
-- project:
-    name: 'murano-dashboard'
-    <<: *common-sync-params
-- project:
-    name: 'python-muranoclient'
-    <<: *common-sync-params
-
-- project:
-    name: 'ceilometer'
-    <<: *common-sync-params
-- project:
-    name: 'python-ceilometerclient'
-    <<: *common-sync-params
-- project:
-    name: 'ceilometermiddleware'
-    <<: *common-sync-params
-
-- project:
-    name: 'swift'
-    <<: *common-sync-params
-- project:
-    name: 'python-swiftclient'
-    <<: *common-sync-params
-
-- project:
-    name: 'ironic'
-    <<: *common-sync-params
-- project:
-    name: 'python-ironicclient'
-    <<: *common-sync-params
-
-- project:
-    name: 'oslo.cache'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.concurrency'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.config'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.context'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.db'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.i18n'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.log'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.messaging'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.middleware'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.policy'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.reports'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.rootwrap'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.serialization'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.service'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.utils'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.versionedobjects'
-    <<: *common-sync-params
-- project:
-    name: 'oslo.vmware'
-    <<: *common-sync-params
-- project:
-    name: 'oslosphinx'
-    <<: *common-sync-params
-- project:
-    name: 'oslotest'
-    <<: *common-sync-params
+    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'

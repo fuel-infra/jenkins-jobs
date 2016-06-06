@@ -2,7 +2,7 @@
 # Job syncronizes code from one branch to another via Gerrit CR
 #
 # Parameters:
-#   [*name*] - Project name will be prepended by 'openstack/'
+#   [*gerrit-project-name*] - Project name will be prepended by 'openstack/'
 #   [*gerrit-host*] - Gerrit host
 #   [*gerrit-port*] - Gerrit port (usually 29418)
 #   [*gerrit-topic*] - Topic for newly created CR
@@ -20,7 +20,7 @@
 #
 
 - job-template:
-    name: 'sync-{name}-{src-branch}-{dst-branch}'
+    name: 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
     fallback-branch: 'master'
     wrappers:
       - ssh-agent-credentials:
@@ -31,12 +31,13 @@
     builders:
       - inject:
           properties-content: |
-            SYNC_GERRIT_URI=ssh://{gerrit-user}@{gerrit-host}:{gerrit-port}/openstack/{name}
+            SYNC_GERRIT_URI=ssh://{gerrit-user}@{gerrit-host}:{gerrit-port}/openstack/{gerrit-project-name}
             SYNC_DOWNSTREAM_BRANCH={downstream-branch}
             SYNC_UPSTREAM_BRANCH={upstream-branch}
             SYNC_FALLBACK_BRANCH={fallback-branch}
             SYNC_GERRIT_TOPIC={gerrit-topic}
       - shell:
-          !include-raw-escape: scripts/codesync.py
+          !include-raw-escape:
+            'scripts/codesync.py'
     triggers:
         - timed: '{sync-schedule}'
