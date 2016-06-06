@@ -60,11 +60,13 @@
           basedir: '{project}'
           timeout: 20
           choosing-strategy: gerrit
+          wipe-workspace: false
       - git:
           url: 'https://git.openstack.org/openstack/fuel-mirror.git'
           branches:
             - '{projectbranch}'
           basedir: 'fuel-mirror'
+          wipe-workspace: false
 
     builders:
       - inject:
@@ -75,15 +77,16 @@
             PROJECT={project}
             PROJECT_PACKAGE={projectpackage}
       - inject:
-          # env variables
+          # test environment variables
           properties-content: |
-            VENV_PATH={venvpath}
-            SYSTEST_ROOT=/home/jenkins/workspace/systest/{version-id}
-            ISO_PATH=/home/jenkins/workspace/iso/fuel_{version-id}.iso
-            ENV_NAME=env_{version-id}_{testgroup}
+            FUEL_QA_REPO=https://git.openstack.org/openstack/fuel-qa.git
+            FUEL_QA_BRANCH={projectbranch}
+            SYSTEST_ROOT=$WORKSPACE/fuel-qa
             ENV_JOB=devops.{version-id}.env
+            VENV_PATH={venvpath}
+            ENV_PREFIX=env_{version-id}_{testgroup}
       - inject:
-          # deployment test variables
+          # deployment variables
           properties-content: |
             OPENSTACK_RELEASE={dist}
             TEST_GROUP={testgroup}
@@ -97,12 +100,18 @@
       - inject:
           # overrides
           properties-content: '{properties}'
-
       - shell:
+          # check and prepare testing environment
+          !include-raw-escape: builders/deployment-env.sh
+      - inject:
+          # load the parameter used in deployment test
+          properties-file: 'deployment.properties'
+      - shell:
+          # build package
           !include-raw-escape: builders/build-pkgs.sh
       - shell:
+          # run deployment test
           !include-raw-escape: builders/test-pkgs.sh
-
 
     publishers:
       - archive:
@@ -110,8 +119,8 @@
           artifacts: 'logs/$BUILD_NUMBER/*,packages/*'
           latest-only: false
       - description-setter:
-          regexp: "'Description string: (.*)'"
-          regexp-for-failed: "'Description string: (.*)'"
+          regexp: 'Description string: (iso:\s+.*\s+fuel-qa:\s+.*\s+fuel-devops:.*)'
+          regexp-for-failed: 'Description string: (iso:\s+.*\s+fuel-qa:\s+.*\s+fuel-devops:.*)'
 
     triggers:
       - gerrit:
@@ -134,7 +143,7 @@
             failed: '{obj:non_voting}'
             unstable: '{obj:non_voting}'
             notbuilt: '{obj:non_voting}'
-      # check for monitoring
+      # run by timer - needed for monitoring
       - timed: '{timed}'
 
     wrappers:
