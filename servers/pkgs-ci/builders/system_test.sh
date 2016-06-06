@@ -32,7 +32,7 @@ join () {
 
 ###################### Set required parameters ###############
 
-export VENV_PATH="{VENV_PATH:-${HOME}/venv-nailgun-tests-2.9}"
+export VENV_PATH="${VENV_PATH:-${HOME}/venv-nailgun-tests-2.9}"
 
 ENV_NAME="${ENV_PREFIX}.${BUILD_NUMBER}.${BUILD_ID}"
 ENV_NAME="${ENV_NAME:0:68}"
