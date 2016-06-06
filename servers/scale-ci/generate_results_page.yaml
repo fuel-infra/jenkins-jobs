@@ -46,6 +46,6 @@
                 - 'FETCH_HEAD'
     builders:
         - shell:
-             !include-raw-escape scripts/generate_page.sh
+             !include-raw-escape: scripts/generate_page.sh
     publishers:
         - email-ext-main-without-pre
