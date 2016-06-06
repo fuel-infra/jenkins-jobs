@@ -76,7 +76,19 @@ fi
 
 # Check if custom test group is specified
 if [[ ! -z "${CUSTOM_TEST_GROUP}" ]]; then
-  export TEST_GROUP="${CUSTOM_TEST_GROUP}"
+  # Remove leading spaces from CUSTOM_TEST_GROUP
+  TEST_GROUP="${CUSTOM_TEST_GROUP##"${CUSTOM_TEST_GROUP%%[![:space:]]*}"}"
+  # Remove trailing spaces from CUSTOM_TEST_GROUP
+  export TEST_GROUP="${TEST_GROUP%%"${TEST_GROUP##*[![:space:]]}"}"
+
+  # Stop script execution to avoid incorrect command line construction
+  # for running system tests if list of test groups contains space symbols
+  if [[ "${TEST_GROUP}" =~ [[:space:]] ]]
+  then
+    echo "List of custom test groups must not contain space symbols." \
+         "Please separate groups by commas" >&2
+    exit 1
+  fi
 fi
 
 rm -rf logs/*
