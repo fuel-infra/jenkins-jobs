@@ -1,8 +1,8 @@
 - project:
 
-    name: 'mos'
+    name: 'mos-xenial'
 
-    project-name: '{name}'
+    project-name: 'mos'
     project-version: 'master'
 
     deb-origin-release: 'Mirantis'
@@ -23,25 +23,26 @@
     # Install test repository
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'master'
+    perestroika-branch: 'master'
 
     # Job slave nodes
     build-node: 'new-builder'
     publish-node: 'new-publisher'
     install-node: 'install-node'
+    systest-node: 'systest'
 
     # FIXME: While project name is 'mos', we publish results to /test/
     # prefix. We need to remove it later, after initial testing.
 
     # Repository parameters for project
-    deb-dist-name: 'mos-{project-version}'
-    deb-repo-path: '/test/{name}-repos/xenial'
-    rpm-repo-path: '/test/{name}-repos/centos/mos-master-centos7'
+    deb-dist-name: 'mos-master'
+    deb-repo-path: '/test/mos-repos/xenial'
+    rpm-repo-path: '/test/mos-repos/centos/mos-master-centos7'
 
     # MOS repositories (build/test dependencies)
-    mos-deb-repo-path: '/test/{name}-repos/xenial'
-    mos-rpm-repo-path: '/test/{name}-repos/centos/mos-master-centos7'
+    mos-deb-repo-path: '/test/mos-repos/xenial'
+    mos-rpm-repo-path: '/test/mos-repos/centos/mos-master-centos7'
 
-    perestroika-branch: 'master'
 
     distro:
     - xenial:
@@ -63,3 +64,4 @@
     - '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-install-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
+
