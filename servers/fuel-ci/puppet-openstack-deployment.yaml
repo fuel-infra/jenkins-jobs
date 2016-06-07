@@ -72,11 +72,12 @@
       - inject:
           # env variables
           properties-content: |
+            FUEL_QA_REPO=https://git.openstack.org/openstack/fuel-qa.git
+            FUEL_QA_BRANCH={puppet-branch}
             VENV_PATH={venvpath}
-            SYSTEST_ROOT=/home/jenkins/workspace/systest/master
-            ISO_PATH=/home/jenkins/workspace/iso/fuel_{branch-id}.iso
-            ENV_NAME=env_{branch-id}_{testgroup}
-            ENV_JOB=devops.master.env
+            SYSTEST_ROOT=$WORKSPACE/fuel-qa
+            ENV_PREFIX=env_{branch-id}_{testgroup}
+            ENV_JOB=devops.{branch-id}.env
       - inject:
           # deployment test variables
           properties-content: |
@@ -92,12 +93,20 @@
       - inject:
           # overrides
           properties-content: '{properties}'
-
       - shell:
+          # check and prepare testing environment
+          !include-raw-escape: builders/deployment-env.sh
+      - inject:
+          # load the parameter used in deployment test
+          properties-file: 'deployment.properties'
+      - shell:
+          # prepare upstream_modules.tar.gz
           !include-raw-escape: builders/prepare-fuel-library.sh
       - shell:
+          # build package
           !include-raw-escape: builders/build-pkgs.sh
       - shell:
+          # run deployment test
           !include-raw-escape: builders/test-pkgs.sh
 
     triggers:
@@ -111,8 +120,8 @@
           artifacts: 'logs/$BUILD_NUMBER/*,packages/*'
           latest-only: false
       - description-setter:
-          regexp: "'Description string: (.*)'"
-          regexp-for-failed: "'Description string: (.*)'"
+          regexp: 'Description string: (iso:\s+.*\s+fuel-qa:\s+.*\s+fuel-devops:.*)'
+          regexp-for-failed: 'Description string: (iso:\s+.*\s+fuel-qa:\s+.*\s+fuel-devops:.*)'
 
     wrappers:
       - timeout:
