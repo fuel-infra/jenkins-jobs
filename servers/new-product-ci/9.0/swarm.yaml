@@ -250,13 +250,7 @@
             - name: '9.0.system_test.ubuntu.numa_cpu_pinning'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '9.0.system_test.ubuntu.idempotency'
-              current-parameters: true
-              kill-phase-on: NEVER
             - name: '9.0.system_test.ubuntu.support_dpdk'
-              current-parameters: true
-              kill-phase-on: NEVER
-            - name: '9.0.system_test.ubuntu.test_ensurability'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '9.0.system_test.ubuntu.custom_graph'
