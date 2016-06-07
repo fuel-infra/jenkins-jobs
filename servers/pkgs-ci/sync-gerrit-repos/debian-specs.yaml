@@ -1,0 +1,12 @@
+- project:
+    name: 'sync-debian-specs'
+
+    scm-branch: 'master'
+    scm-basedir: ''
+    sync-node: 'sync-deb-spec'
+    scm-repo: 'infra/mirrors'
+
+    jobs:
+    - 'sync_debian_specs'
+    - 'sync_debian_specs_force'
+

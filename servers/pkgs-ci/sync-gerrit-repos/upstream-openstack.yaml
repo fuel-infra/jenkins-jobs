@@ -1,0 +1,10 @@
+- project:
+    name: 'sync-upstream-openstack'
+
+    sync-node: 'sync-upstream'
+    sync-scm-repo: 'infra/mirrors'
+    sync-scm-branch: 'master'
+    sync-scm-basedir: ''
+
+    jobs:
+    - 'sync-upstream-openstack'
