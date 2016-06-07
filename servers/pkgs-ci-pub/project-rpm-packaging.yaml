@@ -87,6 +87,7 @@
           fi
           MOS_REPO=$(get_rpm_snapshot "http://${{MIRROR_HOST}}/mos-repos/centos/mos{mos-repo-name-sep}{mos-version}-{distro}/os/x86_64")
           RPMCI_REPO=$(get_rpm_snapshot "http://{repo-host}/{rpm-repo-path}/os/x86_64")
+          RPMTEST_REPO="http://{repo-host}/{cr-path-prefix}/RPM-${{GERRIT_CHANGE_NUMBER}}/{rpm-repo-path}/os/x86_64"
 
           OVERALL_RESULT=0
 
@@ -181,6 +182,7 @@
                 --no-keep-chroot \
                 --dist {distro} \
                 --build \
+                --repository "${{RPMTEST_REPO}},1" \
                 --repository "${{RPMCI_REPO}},90" \
                 --repository "${{MOS_REPO}},95" \
                 --source "$(pwd -P)" \
