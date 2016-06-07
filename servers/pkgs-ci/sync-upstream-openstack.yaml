@@ -6,6 +6,10 @@
        <p>Syncronizes code from upstream OpenStack projects and puppet-manifests from GitHub.</p>
        <p><b>Ownership:</b> Issues with this job are tracked by Fuel Build team.</p>
        <p><b>Contacts:</b> #infra</p>
+    properties:
+      - inject:
+          properties-content: |
+            MIRANTIS_USERNAME={username-openstack-ci-mirrorer-jenkins}
     parameters:
       - string:
           name: MAX_PARALLEL
@@ -15,6 +19,9 @@
       - timeout:
           fail: true
           timeout: 40
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-mirrorer-jenkins}'
     builders:
       - shell: |
           #!/bin/bash -xe
