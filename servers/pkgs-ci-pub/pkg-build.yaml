@@ -33,6 +33,14 @@
           #!/bin/bash
           set -ex
 
+          if [ "${{GERRIT_CHANGE_STATUS:-NEW}}" = "MERGED" ]; then
+              git -C "${{WORKSPACE}}/wrk-build/${{PACKAGENAME}}-src" checkout ${{GERRIT_BRANCH}}
+              git -C "${{WORKSPACE}}/wrk-build/${{PACKAGENAME}}-src" reset --hard ${{GERRIT_BRANCH}}
+          fi
+      - shell: |
+          #!/bin/bash
+          set -ex
+
           # FIXME: Remove private DNS settings
           cat /dev/null > ${{WORKSPACE}}/fuel-mirror/perestroika/docker-builder/config
 
