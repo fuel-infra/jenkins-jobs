@@ -28,12 +28,13 @@
           basedir: '{scm-basedir}'
 
     triggers:
-     - timed: '*/15 * * * *'
-     - zuul
+      - timed: '*/15 * * * *'
+      - zuul
 
     builders:
       - shell:
-          !include-raw-escape builders/zuul-maintainer.sh
+          !include-raw-escape:
+            '../builders/zuul-maintainer.sh'
 
 # uncomment when will be ready:
     publishers:
