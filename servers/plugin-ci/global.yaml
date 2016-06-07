@@ -8,7 +8,7 @@
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
 
-    # Global branch definitions, this variables should be used
+    # Global branch definitions, these variables should be used
     # in place of direct branch names
     fuel-branch-8_0: stable/8.0
     fuel-branch-9_0: stable/mitaka
