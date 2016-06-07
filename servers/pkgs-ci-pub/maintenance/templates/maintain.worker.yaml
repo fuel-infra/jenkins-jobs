@@ -23,7 +23,8 @@
           # Remove private DNS settings
           cat /dev/null > ${{WORKSPACE}}/fuel-mirror/perestroika/docker-builder/config
       - shell:
-          !include-raw-escape: builders/mos.maintain.sh
+          !include-raw-escape:
+            '../builders/mos.maintain.sh'
     publishers:
       - email:
           recipients: '{mailto}'

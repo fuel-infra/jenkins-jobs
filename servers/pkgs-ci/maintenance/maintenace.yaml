@@ -1,0 +1,11 @@
+- project:
+    # serves for maintenance of docker images and temp. build paths
+    # which are used by perestroika.
+    name: 'maintenace'
+    is-disabled: ''
+    maintain-node: 'new-builder'
+    mailto: 'fuel-build+ci-packaging@mirantis.com'
+
+    jobs:
+    - 'maintain.starter'
+    - 'maintain.worker'

@@ -50,7 +50,8 @@
         - timed: 'H/30 * * * *'
     builders:
         - shell:
-            !include-raw-escape builders/resync-repo-to-mirrors.sh
+            !include-raw-escape:
+              '../builders/resync-repo-to-mirrors.sh'
     publishers:
       - email:
           recipients: '{mailto}'
