@@ -238,6 +238,7 @@
          testgroup: 'thread_separate_haproxy'
          properties: |
            MULTIPLE_NETWORKS=true
+           USE_HAPROXY_TEMPLATE=true
          weight: '20'
          node: 'huge-systest'
          timeout: '600'
