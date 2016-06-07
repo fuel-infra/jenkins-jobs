@@ -336,16 +336,6 @@
     build-node: 'new-builder'
 
 - project:
-    name: 'sync'
-    jobs:
-      - 'sync_debian_specs'
-      - 'sync_debian_specs_force'
-    scm-repo: 'infra/mirrors'
-    scm-branch: 'master'
-    scm-basedir: ''
-    sync-node: 'sync-deb-spec'
-
-- project:
     name: 'devops.env'
     version-id:
       - 'master'
@@ -371,12 +361,3 @@
     jobs:
         - '{mos_version}.resync-repos-to-mirrors'
 
-- project:
-    <<: *common_template
-    name: 'sync-upstream-openstack'
-    sync-node: 'sync-upstream'
-    sync-scm-repo: 'infra/mirrors'
-    sync-scm-branch: 'master'
-    sync-scm-basedir: ''
-    jobs:
-        - 'sync-upstream-openstack'

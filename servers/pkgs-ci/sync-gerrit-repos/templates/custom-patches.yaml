@@ -1,0 +1,18 @@
+- job-template:
+    name: 'mos9.0-{gerrit-project-name}-custom-patches'
+    wrappers:
+    - ssh-agent-credentials:
+        users:
+        - '{gerrit-creds}'
+    - timeout:
+        timeout: 10
+    builders:
+    - inject:
+        properties-content: |
+          CUSTOM_PATCHES_GERRIT_URI=ssh://{gerrit-user}@{gerrit-host}:{gerrit-port}/openstack/{gerrit-project-name}
+          CUSTOM_PATCHES_OLD_BRANCH={old-branch}
+          CUSTOM_PATCHES_NEW_BRANCH={new-branch}
+          CUSTOM_PATCHES_TOPIC={gerrit-topic}
+    - shell:
+        !include-raw-escape:
+          '../builders/custompatches.py'

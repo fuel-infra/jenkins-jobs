@@ -39,6 +39,6 @@
             SYNC_GERRIT_TOPIC={gerrit-topic}
       - shell:
           !include-raw-escape:
-            'scripts/codesync.py'
+            '../builders/codesync.py'
     triggers:
         - timed: '{sync-schedule}'
