@@ -1,0 +1,12 @@
+- project:
+    name: pkgs-ci-cleaner
+    devops_25: false
+    devops_29: true
+    release_60: false
+    release_61: false
+    time_staging: '16'
+    time_systemtest: '16'
+    time_other: '16'
+    jobs:
+      - cleaner
+      - cleaner-on-labels

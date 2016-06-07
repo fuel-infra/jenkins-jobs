@@ -85,6 +85,19 @@
           properties-file: mirror.jenkins-injectfile
 
 ########################################################################
+# Builder guessing testgroup for system test
+########################################################################
+
+- builder:
+    name: guess-testgroup
+    builders:
+      - shell: !include-raw: scripts/guess-testgroup.sh
+      - shell: touch systest_testgroup.envfile
+      - inject-properties-file:
+          properties-file: systest_testgroup.envfile
+      - shell: rm -vf systest_testgroup.envfile
+
+########################################################################
 # Builder used to download ISO
 #
 # This builder require additional variables described in script header

@@ -46,6 +46,7 @@
       - '{project-version}-{name}-publish-{distro}'
       - '{project-version}-{name}-install-{distro}'
       - '{project-version}-{name}-repotest-{distro}'
+      - '{project-version}-{name}-systest-{distro}'
 
 - project:
     name: 'fuel-pkg'
