@@ -1,0 +1,43 @@
+- job:
+    name: 'verify-python-django-racks'
+    description: |
+      <p>Run tests for fuel-infra/packages/python-django-racks.</p>
+      <p><b>Owner:</b> Infra Apps team, <a href="https://miracloud.slack.com/messages/racks-app-dev/">#racks-app-dev</a> in Slack.<p>
+    concurrent: true
+    node: 'tox'
+    builders:
+      - shell:
+          !include-raw-escape: './builders/verify-python-django-racks.sh'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://infra-ci@review.fuel-infra.org:29418/fuel-infra/packages/python-django-racks'
+                credentials-id: '70105253-c857-4463-a927-f47307911e45'
+          choosing-strategy: gerrit
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'fuel-infra/packages/python-django-racks'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 30
