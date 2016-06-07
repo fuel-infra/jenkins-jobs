@@ -54,6 +54,15 @@
             CUSTOM_ENV=true
             BUILD_IMAGES=true
 
+      - fuel-nailgun-agent:
+          projectpackage: nailgun-agent
+          testgroup: review_nailgun_agent_one_node
+          timed: '25 */12 * * *'
+          non_voting: true # fixme: remove when approved by fuel-qa team
+          properties: |
+            KEEP_BEFORE=yes
+            CUSTOM_ENV=false
+
       - fuel-ostf:
           projectpackage: fuel-ostf
           testgroup: gate_ostf_update
@@ -133,6 +142,15 @@
           properties: |
             SYNC_DEPL_TASKS=true
             KEEP_BEFORE=yes
+
+      - fuel-nailgun-agent:
+          projectpackage: nailgun-agent
+          testgroup: review_nailgun_agent_one_node
+          timed: '25 */12 * * *'
+          non_voting: true # fixme: remove when approved by fuel-qa team
+          properties: |
+            KEEP_BEFORE=yes
+            CUSTOM_ENV=false
 
       - fuel-ostf:
           projectpackage: fuel-ostf
