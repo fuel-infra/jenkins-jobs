@@ -44,8 +44,8 @@
           send-to-individuals: false
       - junit:
           keep-long-stdio: false
-          results: 'sync-openstack-upstream-code/results.xml'
+          results: 'results.xml'
       - archive:
           allow-empty: true
-          artifacts: 'sync-openstack-upstream-code/results.xml'
+          artifacts: 'results.xml'
           latest-only: false
