@@ -169,6 +169,9 @@
             - name: '9.0.system_test.ubuntu.plugins.thread_2_separate_services'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '9.0.system_test.ubuntu.plugins.thread_separate_haproxy'
+              current-parameters: true
+              kill-phase-on: NEVER
             - name: '9.0.system_test.ubuntu.fuel_plugin_reboot'
               current-parameters: true
               kill-phase-on: NEVER
