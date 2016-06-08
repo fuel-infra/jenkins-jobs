@@ -1,6 +1,5 @@
 - job-template:
     name: 'sync-upstream-openstack'
-    disabled: ''
     node: '{sync-node}'
     description: |
        <p>Syncronizes code from upstream OpenStack projects and puppet-manifests from GitHub.</p>
@@ -28,13 +27,12 @@
           export LC_ALL="en_US.UTF-8"
           bash -ex sync-openstack-upstream-code/mirror-all.sh
     scm:
-      - fuel-infra:
+      - sync-upstream:
           username: '{username-openstack-ci-jenkins}'
           repo: '{sync-scm-repo}'
           credentials-id: '{ssh-creds-openstack-ci-jenkins}'
           basedir: '{sync-scm-basedir}'
           branch: '{sync-scm-branch}'
-          wipe-workspace: false
     triggers:
       - timed: 'H/11 * * * *'
     publishers:

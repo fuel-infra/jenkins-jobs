@@ -31,6 +31,20 @@
           browser-url: https://review.fuel-infra.org/gitweb?p={repo}.git
 
 - scm:
+    name: sync-upstream
+    scm:
+      - git:
+          url: 'ssh://{username}@review.fuel-infra.org:29418/{repo}.git'
+          basedir: '{basedir}'
+          credentials-id: '{credentials-id}'
+          skip-tag: True
+          branches:
+            - '{branch}'
+          browser: gitweb
+          browser-url: https://review.fuel-infra.org/gitweb?p={repo}.git
+          wipe-workspace: false
+
+- scm:
     name: upstream
     scm:
       - git:
