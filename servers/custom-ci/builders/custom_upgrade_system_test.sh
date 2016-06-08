@@ -82,6 +82,39 @@ export MAKE_SNAPSHOT
 export BASE_FUEL_PROPOSED_REPO_URL
 export UPGRADE_FUEL_PROPOSED_REPO_URL
 
+# to support Maintenance updates certain proposed repos should be set
+# ENABLE_PROPOSED flag should be 'true' by default (details in #1584686)
+ENABLE_PROPOSED="${ENABLE_PROPOSED:-true}"
+
+function set_MU_proposed_repos(){
+    # hard-coding URLs (along with long lines) is evil, so split them
+    # MIRROR_HOST is injected (comes from guess-mirror macros)
+    MIRROR_HOST="${MIRROR_HOST}"
+    PROPOSED_7="centos/mos7.0-centos6-fuel/proposed/x86_64/"
+    PROPOSED_8="centos/mos8.0-centos7-fuel/proposed/x86_64/"
+    REPO="mos-proposed,deb"
+    EXTRA_DEB_7="ubuntu/7.0 mos7.0-proposed main restricted"
+    EXTRA_DEB_8="ubuntu/8.0 mos8.0-proposed main restricted"
+        # form MU repo URLs both for base and upgrade releases
+        # there's no need to apply MOS updates beforehand, 'cause
+        # according to Fuel QA routine, they are always applied
+        if [[ "${ENABLE_PROPOSED}" == "true" ]]; then
+            case "{$1}" in
+                base)
+                    UPDATE_FUEL_MIRROR="${MIRROR_HOST}/${PROPOSED_7}"
+                    EXTRA_DEB_REPOS="${REPO} ${MIRROR_HOST}/${EXTRA_DEB_7}"
+                    ;;
+                upgrade)
+                    UPDATE_FUEL_MIRROR="${MIRROR_HOST}/${PROPOSED_8}"
+                    EXTRA_DEB_REPOS="${REPO} ${MIRROR_HOST}/${EXTRA_DEB_8}"
+            esac
+        fi
+
+        export UPDATE_FUEL_MIRROR
+        export EXTRA_DEB_REPOS
+        export UPDATE_MASTER="true"
+}
+
 # to avoid huge images uploading magnet links are used
 # (ISO_MAGNET_LINK variables come pre-deployed)
 BASE_ISO_PATH=$(seedclient-wrapper -d -m "${BASE_ISO_MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
@@ -190,6 +223,9 @@ function system_tests_wrapper(){
     esac
 
     export FUEL_PROPOSED_REPO_URL
+
+    info_message "Setting up maintenance updates repos for ${repo_branch}..."
+    set_MU_proposed_repos "${1}"
 
     info_message "Creating test environment for fuel-qa: ${repo_branch}..."
     pushd "${repo_dir}"
