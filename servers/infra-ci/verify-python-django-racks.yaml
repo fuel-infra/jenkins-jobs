@@ -7,7 +7,7 @@
     node: 'tox'
     builders:
       - shell:
-          !include-raw-escape: './builders/verify-python-django-racks.sh'
+          !include-raw: './builders/verify-python-django-racks.sh'
     properties:
       - heavy-job:
           weight: 1
