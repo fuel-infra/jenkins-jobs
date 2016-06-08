@@ -8,139 +8,157 @@
     make-snapshot: 'false'
 
 - job-template:
-    # General system test. Downloads ISO image via magnet link
-    # and runs system test with specified test group.
     #
-    # Uses predefined ``main-git`` macros for access to ``fuel-main/`` repository.
+    # This job use system test framework to execute test with
+    # specified test group.
+    #
+    # Uses predefined ``main-git`` macros for access to ``fuel-main/``
+    # repository.
     #
     # Variables required:
     #
-    # version-id
-    #     Versioned identificator of the Fuel ISO or tarball used in this job.
-    #     For example: ``6.1``, ``6.1-community``, ``6.0-icehouse``.
-    # id
-    #     Any string, name of the job. Use only [a-z_-] symbols.
-    # dist
-    #     OPENSTACK_RELEASE variable. 'centos' or 'ubuntu'.
-    # testgroup
-    #     Test group used as --group parameter in system_test.sh
+    # default_pool
+    #     Default network pool used in tests (POOL_DEFAULT)
     # description
     #     Job description
+    # dist
+    #     OPENSTACK_RELEASE variable. 'centos' or 'ubuntu'.
+    # make-snapshot
+    #     Enable final snapshot for succesfull tests
     # node
     #     Jenkins slave label
-    # timeout
-    #     Job timeout
+    # post-script
+    #     Aditional shell code which will be executed after system test
+    # pre-script
+    #     Additional shell code which will be executed before system test
+    # properties
+    #     List of strings "VAR=value"
+    #     These variables will be injected in job environment before the build
+    # properties-file
+    #     Path to file with additional properties stored on slave, variables
+    #     will be injected to job before test start.
     # reponame
     #     Name of the repository with system tests code
     # repobranch
     #     Branch of the repository
+    # test-type
+    #     Any string, name of the job. Use only [a-z_-] symbols.
+    # testgroup
+    #     Test group used as --group parameter in system_test.sh
+    # timeout
+    #     Job timeout
     # venvpath
     #     Path to virtual env with fuel-devops installed (VENV_PATH)
+    # venvpath
+    #     Path to virtualenv with installed and configured fuel-devops
+    #     framework
+    # version-id
+    #     Versioned identificator of the Fuel ISO or tarball used in this job.
+    #     For example: ``9.0``, ``9.0-mos``, ``6.0-icehouse``.
     # weight
     #     Job weight
-    # default_pool
-    #     Default network pool (POOL_DEFAULT)
-    # properties
-    #     List of strings "VAR=value".
-    #     These variables will be injected in job environment before the build
+    #
+
     name: '{version-id}.{test-type}.{dist}.{testgroup}'
-    defaults: '{version-id}.{test-type}.{dist}.{testgroup}'
-    block-downstream: false
-    block-upstream: false
-    builders:
-    - inject: # default env variables
-        properties-content: |
-          VENV_PATH={venvpath}
-          POOL_DEFAULT={default_pool}
-          OPENSTACK_RELEASE={dist}
-          TEST_GROUP={testgroup}
-          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-          TEST_ISO_JOB={version-id}.test_all
-          MAKE_SNAPSHOT={make-snapshot}
-    - inject: # overrides
-        properties-content: '{properties}'
-        properties-file: '{properties-file}'
-    - shell: |
-        #!/bin/bash
-        echo "=== [systest PRE-script] ==="
-        {pre-script}
-    - shell:
-        !include-raw-escape: 'scripts/run_system_test.sh'
-    - shell: |
-        #!/bin/bash
-        echo "=== [systest POST-script] ==="
-        {post-script}
     concurrent: true
+    defaults: '{version-id}.{test-type}.{dist}.{testgroup}'
     description: '{description}'
     disabled: false
-    logrotate:
-      artifactDaysToKeep: 14
-      artifactNumToKeep: -1
-      daysToKeep: 30
-      numToKeep: 50
     node: '{node}'
+    block-downstream: false
+    block-upstream: false
+
+    builders:
+      - inject: # default env variables
+          properties-content: |
+            VENV_PATH={venvpath}
+            POOL_DEFAULT={default_pool}
+            OPENSTACK_RELEASE={dist}
+            TEST_GROUP={testgroup}
+            CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+            TEST_ISO_JOB={version-id}.test_all
+            MAKE_SNAPSHOT={make-snapshot}
+      - inject: # overrides
+          properties-content: '{properties}'
+          properties-file: '{properties-file}'
+      - shell: |
+          #!/bin/bash
+          echo "=== [systest PRE-script] ==="
+          {pre-script}
+      - shell:
+          !include-raw-escape: 'scripts/run_system_test.sh'
+      - shell: |
+          #!/bin/bash
+          echo "=== [systest POST-script] ==="
+          {post-script}
+
+    logrotate:
+        artifactDaysToKeep: 14
+        artifactNumToKeep: -1
+        daysToKeep: 30
+        numToKeep: 50
 
     parameters:
-    - string:
-        name: MAGNET_LINK
-        description: "iso magnet link"
-    - string:
-        name: ENV_PREFIX
-        default: '{version-id}.{test-type}.{dist}.{testgroup}'
-        description: 'Environment prefix'
-    - string:
-        name: UPGRADE_TARBALL_MAGNET_LINK
-        default: $UPGRADE_TARBALL_MAGNET_LINK
-        description: 'Upgrade tarball magnet link'
-    - string:
-        name: UBUNTU_MIRROR_ID
-        default: $UBUNTU_MIRROR_ID
-        description: |
-          'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
-    - string:
-        name: CUSTOM_VERSION
-        default: $CUSTOM_VERSION
-        description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
-    - bool:
-        name: ENABLE_PROPOSED
-        default: $ENABLE_PROPOSED
-        description: 'If false only stable repositories are used'
+      - string:
+          name: MAGNET_LINK
+          description: "iso magnet link"
+      - string:
+          name: ENV_PREFIX
+          default: '{version-id}.{test-type}.{dist}.{testgroup}'
+          description: 'Environment prefix'
+      - string:
+          name: UPGRADE_TARBALL_MAGNET_LINK
+          default: $UPGRADE_TARBALL_MAGNET_LINK
+          description: 'Upgrade tarball magnet link'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: $UBUNTU_MIRROR_ID
+          description: |
+            'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+      - string:
+          name: CUSTOM_VERSION
+          default: $CUSTOM_VERSION
+          description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+      - bool:
+          name: ENABLE_PROPOSED
+          default: $ENABLE_PROPOSED
+          description: 'If false only stable repositories are used'
 
     properties:
-    - heavy-job:
-        weight: '{weight}'
+      - heavy-job:
+          weight: '{weight}'
 
     publishers:
-    - archive:
-        allow-empty: true
-        artifacts: '**/nosetests.xml,logs/*'
-        latest-only: false
-    - junit:
-        keep-long-stdio: false
-        results: '**/nosetests.xml'
-    - post-destroy-vms
-    - description-setter:
-        regexp: "'Description string: (.*)'"
-        regexp-for-failed: "'Description string: (.*)'"
-    - trigger-parameterized-builds:
-      - project: '{version-id}.{test-type}.test-reports'
-        condition: ALWAYS
-        property-file: links.txt
-        predefined-parameters: TEST_JOB_NAME=$JOB_NAME
-        triggerWithNoParameters: false
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml,logs/*'
+          latest-only: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+      - post-destroy-vms
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+          regexp-for-failed: "'Description string: (.*)'"
+      - trigger-parameterized-builds:
+        - project: '{version-id}.{test-type}.test-reports'
+          condition: ALWAYS
+          property-file: links.txt
+          predefined-parameters: TEST_JOB_NAME=$JOB_NAME
+          triggerWithNoParameters: false
 
     scm:
-    - main-git:
-        reponame: '{reponame}'
-        repobranch: '{repobranch}'
-        basedir: ''
+      - main-git:
+          reponame: '{reponame}'
+          repobranch: '{repobranch}'
+          basedir: ''
 
     wrappers:
-    - timeout:
-        fail: false
-        timeout: '{timeout}'
-        write-description: false
-    - inject-passwords:
-        global: true
-    - ansicolor:
-        colormap: xterm
+      - timeout:
+          fail: false
+          timeout: '{timeout}'
+          write-description: false
+      - inject-passwords:
+          global: true
+      - ansicolor:
+          colormap: xterm
