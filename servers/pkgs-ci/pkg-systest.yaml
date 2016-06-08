@@ -18,6 +18,8 @@
             DEB_DIST_NAME={deb-dist-name}
             DEB_REPO_PATH={rel-path-prefix}/ubuntu/{mos_version}
             RPM_REPO_PATH={rel-path-prefix}/centos/{rpm-dist-name}/os/x86_64/
+
+            MASTER_NODE_EXTRA_PACKAGES=e1000-kmod
     parameters:
       - string:
           name: TEST_GROUP
