@@ -89,6 +89,8 @@ export EXAMPLE_PLUGIN_V4_PATH="${PLUGINS}/fuel_plugin_example_v4_hotpluggable.no
 export SEPARATE_SERVICE_DB_PLUGIN_PATH="${PLUGINS}/detach-database-1.1-1.1.0-1.noarch.rpm"
 export SEPARATE_SERVICE_RABBIT_PLUGIN_PATH="${PLUGINS}/detach-rabbitmq-1.0-1.0.1-1.noarch.rpm"
 export SEPARATE_SERVICE_KEYSTONE_PLUGIN_PATH="${PLUGINS}/detach-keystone-1.0-1.0.2-1.noarch.rpm"
+export SEPARATE_SERVICE_HAPROXY_PLUGIN_PATH="${PLUGINS}/detach_haproxy-2.0-2.0.0-1.noarch.rpm"
+export SEPARATE_SERVICE_BALANCER_PLUGIN_PATH="${PLUGINS}/external_loadbalancer-2.0-2.0.0-1.noarch.rpm"
 
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
@@ -98,6 +100,8 @@ curl -s "${EXAMPLE_PLUGIN_V4_URL}" -o ${EXAMPLE_PLUGIN_V4_PATH}
 curl -s "${SEPARATE_SERVICE_DB_PLUGIN_URL}" -o ${SEPARATE_SERVICE_DB_PLUGIN_PATH}
 curl -s "${SEPARATE_SERVICE_RABBIT_PLUGIN_URL}" -o ${SEPARATE_SERVICE_RABBIT_PLUGIN_PATH}
 curl -s "${SEPARATE_SERVICE_KEYSTONE_PLUGIN_URL}" -o ${SEPARATE_SERVICE_KEYSTONE_PLUGIN_PATH}
+curl -s "${SEPARATE_SERVICE_HAPROXY_PLUGIN_URL}" -o ${SEPARATE_SERVICE_HAPROXY_PLUGIN_PATH}
+curl -s "${SEPARATE_SERVICE_BALANCER_PLUGIN_URL}" -o ${SEPARATE_SERVICE_BALANCER_PLUGIN_PATH}
 
 
 sh -x "utils/jenkins/system_tests.sh" -t test -w "${WORKSPACE}" -e "${ENV_NAME}" -o --group="${TEST_GROUP}" -i "${ISO_PATH}"
