@@ -101,6 +101,7 @@ if [ -d "${PROJECT_ROOT}/debian" ]; then
   dch -c "${SOURCE_PATH}/${PROJECT_PACKAGE}/debian/changelog" -D trusty -b --force-distribution -v "${DEB_PACKAGE_VERSION}-${RELEASE}" "${DEBMSG}"
   ## build deb
   "${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
+    --upstream-repo "${MIRROR_HOST}pkgs/ubuntu/" \
     --build-target trusty \
     --ext-repos "${MIRROR_HOST}mos-repos/ubuntu/${DEB_MIRROR_BASE_NAME} main restricted" \
     --source "${SOURCE_PATH}" \
