@@ -1,3 +1,4 @@
+---
 - job:
     name: 'custom.upgrade_system_test'
     concurrent: true
@@ -24,11 +25,16 @@
       - string:
           name: BASE_REPO_BRANCH
           default: 'stable/7.0'
+      - extended-choice:
+          name: ENABLE_PROPOSED
+          description: 'Check this box to enable maintenance updates'
+          type: 'checkbox'
+          default-value: "true"
       - string:
           name: BASE_ISO_MAGNET_LINK
           description: Magnet link to base ISO
           default:
-              !include-raw data/7.0-iso
+            !include-raw data/7.0-iso
       - string:
           name: BASE_FUEL_QA_COMMIT
           description: |
@@ -76,7 +82,7 @@
           name: UPGRADE_ISO_MAGNET_LINK
           description: Magnet link to upgrade ISO
           default:
-              !include-raw data/8.0-iso
+            !include-raw data/8.0-iso
       - string:
           name: UPGRADE_FUEL_QA_COMMIT
           description: |
@@ -108,16 +114,17 @@
               UPDATE_MASTER=true
 
     scm:
-     - main-git:
+      - main-git:
           reponame: $REPO_NAME
           repobranch: $BASE_REPO_BRANCH
           basedir: '$REPO_NAME-base'
-     - main-git:
+      - main-git:
           reponame: $REPO_NAME
           repobranch: $UPGRADE_REPO_BRANCH
           basedir: '$REPO_NAME-upgrade'
 
     builders:
+      - guess-mirror
       - inject:
           properties-content: |
             ADMIN_NODE_MEMORY=3072
@@ -130,7 +137,7 @@
       - inject:
           # export custom parameters
           properties-content: $ADDITIONAL_PARAMETERS
-        # download additional files
+      # download additional files
       - shell: |
           #!/bin/bash
 
