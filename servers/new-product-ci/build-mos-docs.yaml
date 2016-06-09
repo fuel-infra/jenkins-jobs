@@ -5,7 +5,7 @@
       - inject:
           properties-content: |
             DOCS_HOST=docs@docs.fuel-infra.org
-            DOCS_ROOT=/var/www/fuel-qa
+            DOCS_ROOT=/var/www/openstack/fuel
       - shell:
           !include-raw builders/build-mos-docs.sh
     description: |

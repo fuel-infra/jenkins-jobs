@@ -23,7 +23,7 @@
 #       :var DOCS_ROOT: path to documentation directory (deployed)
 #
 #   .. requirements::
-#       * valid configuration YAML file: build-fuel-qa-docs.yaml
+#       * valid configuration YAML file: build-mos-docs.yaml
 #
 #   .. seealso::
 #
