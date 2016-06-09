@@ -38,6 +38,8 @@
          timeout: '600'
      - '8.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'thread_3'
+         properties: |
+           SLAVE_NODE_MEMORY=4096
      - '8.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'thread_7'
          properties: |
