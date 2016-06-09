@@ -1,3 +1,10 @@
+- defaults:
+    name: 'cleaner'
+    lifetime_acceptance: '168'
+    lifetime_bvt: '24'
+    lifetime_swarm: '22'
+    lifetime_other: '16'
+
 - job-template:
     name: cleaner
     builders:
@@ -7,6 +14,7 @@
           which-build: workspace-latest
       - shell:
           !include-raw-escape: './scripts/cleaner.py'
+    defaults: 'cleaner'
     description: |
       This job will iterate through a list of available environments for a specified<br>
       VENV location, using dos.py command. Check if environment is not the last one<br>
@@ -31,14 +39,21 @@
             name: 'RELEASE_61'
             default: '{release_61}'
         - string:
-            name: STAGING
-            default: '{time_staging}'
+            name: LIFETIME_SWARM
+            description: 'Lifetime for SWARM systests'
+            default: '{lifetime_swarm}'
         - string:
-            name: SYSTEMTEST
-            default: '{time_systemtest}'
+            name: LIFETIME_BVT
+            description: 'Lifetime for BVT systests'
+            default: '{lifetime_bvt}'
         - string:
-            name: OTHER
-            default: '{time_other}'
+            name: LIFETIME_ACCEPTANCE
+            description: 'Lifetime for acceptance systests'
+            default: '{lifetime_acceptance}'
+        - string:
+            name: LIFETIME_OTHER
+            description: 'Lifetime for other systests'
+            default: '{lifetime_other}'
     wrappers:
       - timeout:
           fail: true

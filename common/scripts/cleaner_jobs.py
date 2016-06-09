@@ -1,9 +1,14 @@
 #!/usr/bin/env python
+#
+# This script is used to generate list of all systests jobs
+#
+
 
 import json
 import os
 import urllib
 
+# Get list of all jobs from jenkins master
 parameters_url = '%s/view/All/api/json?depth=1&pretty=true&&tree=jobs[name,lastBuild[number,duration,timestamp,result],actions[parameterDefinitions[name,defaultParameterValue[*]]]]' % os.environ['JENKINS_URL']
 json_parameters = json.loads(urllib.urlopen(parameters_url).read())
 
@@ -17,11 +22,14 @@ def get_env_prefixed(job):
                     return parameter['defaultParameterValue']['value']
     return False
 
+# Generate job list witch have ENV_PREFIX in parameters
 for job in json_parameters['jobs']:
     job_prefix = get_env_prefixed(job)
     if job_prefix:
+
         # get job name
         name = job['name']
+
         # get last build timestamp
         if job['lastBuild']:
             last_build = job['lastBuild']['timestamp']
