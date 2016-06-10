@@ -4,6 +4,9 @@
     concurrent: true
     reponame: '{reponame}'
 
+    logrotate:
+      numToKeep: 10
+
     builders:
       - shell: |
           #!/bin/bash
