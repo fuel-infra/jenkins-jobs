@@ -250,16 +250,22 @@
             parameter-factories:
               - factory: filebuild
                 file-pattern: 'artifacts/*-buildresult.params'
-          - project: '{project-version}-fuel-pkg-install-{distro}'
-            block: true
-            current-parameters: false
-            predefined-parameters: |
-                ZUUL_PROJECT=${{ZUUL_PROJECT}}
-                ZUUL_CHANGE=${{ZUUL_CHANGE}}
-                ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
-            parameter-factories:
-              - factory: filebuild
-                file-pattern: 'artifacts/*-buildresult.params'
+      - conditional-step:
+          condition-kind: regex-match
+          regex: '^NEW$'
+          label: '${{ENV,var="GERRIT_CHANGE_STATUS"}}'
+          steps:
+            - trigger-builds:
+                - project: '{project-version}-fuel-pkg-install-{distro}'
+                  block: true
+                  current-parameters: false
+                  predefined-parameters: |
+                      ZUUL_PROJECT=${{ZUUL_PROJECT}}
+                      ZUUL_CHANGE=${{ZUUL_CHANGE}}
+                      ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
+                  parameter-factories:
+                    - factory: filebuild
+                      file-pattern: 'artifacts/*-buildresult.params'
       - shell: |
           OVERALL_RESULT=$(cat job_result)
           exit ${{OVERALL_RESULT}}
