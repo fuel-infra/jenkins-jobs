@@ -58,6 +58,7 @@
          testgroup: 'bonding_ha'
          properties: |
            BONDING=true
+           SLAVE_NODE_MEMORY=4096
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'bonding_ha_one_controller'
          weight: '6'
