@@ -8,6 +8,7 @@
       - shell: |
           #!/bin/bash
           set -ex
+          set -o pipefail
 
           # Create and activate virtualenv
           VENV=$(mktemp --directory --tmpdir="${{WORKSPACE}}" zuul-XXXXXXXXXX)
