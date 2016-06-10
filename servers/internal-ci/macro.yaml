@@ -1,0 +1,63 @@
+########################################################################
+# GIT sources and triggers
+########################################################################
+
+#
+# Macro used to clone one repository
+#
+- scm:
+    name: review-fuel-infra-org
+    scm:
+      - git:
+          basedir: '{project-basedir}'
+          branches:
+            - '{project-branch}'
+          choosing-strategy: gerrit
+          refspec: '{project-refspec}'
+          url: 'ssh://internal-ci@review.fuel-infra.org:29418/{project-name}'
+          credentials-id: '4c9487bf-80f6-4f93-86b1-842b02cecdd2'
+
+#
+# Basic trigger macro with voting
+# Allow to retrigger on "recheck" comment
+#
+- trigger:
+    name: review-fuel-infra-org
+    triggers:
+      - gerrit:
+          server-name: 'review.fuel-infra.org'
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: '{project-name-pattern}'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{project-branch-pattern}'
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: 'recheck'
+
+#
+# Basic trigger macro without voting
+# Allow to retrigger on "recheck" comment
+#
+- trigger:
+    name: review-fuel-infra-org_no-vote
+    triggers:
+      - gerrit:
+          server-name: 'review.fuel-infra.org'
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: '{project-name-pattern}'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{project-branch-pattern}'
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: 'recheck'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true

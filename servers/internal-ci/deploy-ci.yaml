@@ -1,12 +1,15 @@
 - job:
     name: 'deploy-ci'
     node: 'ci-lab-controler'
+    concurrent: false
+
     builders:
       - shell:
-          !include-raw './builders/deploy-ci.sh'
+          !include-raw: './builders/deploy-ci.sh'
+
     description: |
       This job builds complete environment using all available roles to test it.
-    concurrent: false
+
     parameters:
       # specify ci-lab version to use
       - string:
@@ -57,32 +60,28 @@
           default: |
             puppetmaster
           description: 'roles to exclude (list)'
+
+    properties:
+      - authorization:
+          devops-eng:
+            - job-read
+            - job-extended-read
+            - job-discover
+            - job-build
+            - job-cancel
+
     scm:
-      - git:
-          branches:
-            - 'FETCH_HEAD'
-          remotes:
-            - gerrit:
-                refspec: $CI_LAB_REFSPEC
-                url: "ssh://internal-ci@review.fuel-infra.org:29418/fuel-infra/ci-lab"
-                credentials-id: '4c9487bf-80f6-4f93-86b1-842b02cecdd2'
+      - review-fuel-infra-org:
+            project-basedir: ''
+            project-name: fuel-infra/ci-lab
+            project-branch: master
+            project-refspec: $CI_LAB_REFSPEC
+
     triggers:
-      - gerrit:
-          trigger-on:
-            - patchset-created-event
-            - change-merged-event
-          projects:
-            - project-compare-type: PLAIN
-              project-pattern: fuel-infra/puppet-manifests
-              branches:
-                - branch-compare-type: ANT
-                  branch-pattern: '**'
-          custom-url: '* $JOB_NAME $BUILD_URL'
-          skip-vote:
-            successful: true
-            failed: true
-            unstable: true
-            notbuilt: true
+      - review-fuel-infra-org_no-vote:
+            project-name-pattern: fuel-infra/puppet-manifests
+            project-branch-pattern: '**'
+
     wrappers:
       - timeout:
           fail: true
