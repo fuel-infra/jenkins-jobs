@@ -99,6 +99,12 @@
           else
               # Test only changed specs
               CHANGED_FILES=$(git diff --name-only HEAD~1)
+
+              # Checkout branch HEAD if CR is merged
+              if [ "${{GERRIT_CHANGE_STATUS:-NEW}}" = "MERGED" ]; then
+                  git -C "${{WORKSPACE}}" checkout ${{GERRIT_BRANCH}}
+                  git -C "${{WORKSPACE}}" reset --hard ${{GERRIT_BRANCH}}
+              fi
           fi
 
           # Directory for artifacts (specs and others)
