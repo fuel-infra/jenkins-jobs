@@ -4,6 +4,8 @@
     jobs:
       - 'tox-verify-{name}':
               node: 'tox'
+      - 'zuul-verify-layout':
+              node: 'tox'
 
 - project:
     name: 'jenkins-jobs'

@@ -1,0 +1,70 @@
+- job-template:
+    name: 'zuul-verify-layout'
+    node: '{node}'
+    concurrent: true
+    reponame: '{reponame}'
+
+    builders:
+      - shell: |
+          #!/bin/bash
+          set -ex
+
+          # Create and activate virtualenv
+          VENV=$(mktemp --directory --tmpdir="${{WORKSPACE}}" zuul-XXXXXXXXXX)
+          virtualenv -p python2.7 "${{VENV}}"
+          source "${{VENV}}/bin/activate"
+
+          # Install zuul
+          pip install --upgrade pytz "${{WORKSPACE}}/zuul"
+
+          # Create directory for output files
+          mkdir "${{WORKSPACE}}/output"
+
+          # Create fake zuul.conf
+          cat > "${{WORKSPACE}}/zuul.conf" <<EOF
+          [zuul]
+          [gerrit]
+          server=localhost
+          user=user
+          EOF
+
+          # Run Zuul in test mode for each modified layout
+          for FILE in $(git diff --name-only HEAD~1); do
+              if [ "${{FILE##*/}}" = "layout.yaml" ]; then
+                  ZUUL_SERVER="${{FILE%/*}}"
+                  ZUUL_SERVER="${{ZUUL_SERVER##*/}}"
+                  zuul-server -t -c "${{WORKSPACE}}/zuul.conf" -l "${{WORKSPACE}}/${{FILE}}" |& tee ${{FILE}}
+              fi
+          done
+
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: refs/heads/master
+
+    scm:
+      - main:
+          reponame: '{reponame}'
+          repobranch: '$GERRIT_BRANCH'
+      - git:
+          url: 'https://git.openstack.org/openstack-infra/zuul.git'
+          basedir: 'zuul'
+          branches:
+            - 'master'
+          # FIXME: Report job status 'QUEUED' for queued jobs
+          #        Required to pass layout validation because Mirantis' layouts
+          #        has additional field containing pre-start message
+          #        Remove when merged: https://review.openstack.org/272967
+          refspec: 'refs/changes/67/272967/7'
+          skip-tag: true
+          browser: gitweb
+          browser-url: 'https://review.openstack.org/gitweb?p=openstack-infra/zuul.git'
+
+    triggers:
+      - main:
+          project-name: '{reponame}'
+
+    publishers:
+      - archive:
+          artifacts: 'output/**'
+          allow-empty: 'true'
