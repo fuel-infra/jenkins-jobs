@@ -51,7 +51,7 @@
           url: 'https://git.openstack.org/openstack-infra/zuul.git'
           basedir: 'zuul'
           branches:
-            - 'master'
+            - 'FETCH_HEAD'
           # FIXME: Report job status 'QUEUED' for queued jobs
           #        Required to pass layout validation because Mirantis' layouts
           #        has additional field containing pre-start message
