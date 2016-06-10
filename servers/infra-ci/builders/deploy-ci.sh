@@ -64,7 +64,7 @@ main () {
     echo "FORCE=1" \
     "BASE_DIR=${WORKSPACE}" \
     "TMP_DIR=${WORKSPACE}/virtualenv" \
-    "GERRIT_REFSPEC=${GERRIT_REFSPEC}" \
+    "GERRIT_REFSPEC=\"${GERRIT_REFSPEC}\"" \
     "DNS1=${DNS1}" \
     "DNS2=${DNS2}" \
     "OS_FLAVOR_NAME=${OS_FLAVOR_NAME}" \
