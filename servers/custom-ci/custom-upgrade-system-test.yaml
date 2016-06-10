@@ -25,11 +25,10 @@
       - string:
           name: BASE_REPO_BRANCH
           default: 'stable/7.0'
-      - extended-choice:
+      - bool:
           name: ENABLE_PROPOSED
           description: 'Check this box to enable maintenance updates'
-          type: 'checkbox'
-          default-value: "true"
+          default: "true"
       - string:
           name: BASE_ISO_MAGNET_LINK
           description: Magnet link to base ISO
