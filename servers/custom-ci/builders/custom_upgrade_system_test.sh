@@ -98,8 +98,8 @@ function set_MU_proposed_repos(){
         # form MU repo URLs both for base and upgrade releases
         # there's no need to apply MOS updates beforehand, 'cause
         # according to Fuel QA routine, they are always applied
-        if [[ "${ENABLE_PROPOSED}" == "true" ]]; then
-            case "{$1}" in
+        if [[ "${ENABLE_PROPOSED}" = true ]]; then
+            case "${1}" in
                 base)
                     UPDATE_FUEL_MIRROR="${MIRROR_HOST}/${PROPOSED_7}"
                     EXTRA_DEB_REPOS="${REPO} ${MIRROR_HOST}/${EXTRA_DEB_7}"
