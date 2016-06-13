@@ -1,0 +1,49 @@
+- job:
+    name: verify-mos-glossary
+    builders:
+      - shell:
+          !include-raw: './builders/verify-mos-glossary.sh'
+    description: Check patchsets in mos/glossary repository
+    logrotate:
+      daysToKeep: 30
+    node: docs
+    concurrent: 'false'
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 1
+
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://infra-ci@review.fuel-infra.org:29418/mos/mos-glossary'
+                credentials-id: '70105253-c857-4463-a927-f47307911e45'
+          choosing-strategy: gerrit
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'mos/glossary'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+
+
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: 'true'
+          write-description: 'true'
+          timeout: 45
