@@ -106,7 +106,7 @@ main () {
     # WORKAROUND (second pass Puppet run) https://bugs.launchpad.net/bugs/1578766
     cd "${WORKSPACE}"
     ./lab-vm exec puppet-master ls -1 /var/lib/hiera/roles/ 2>/dev/null | \
-      sed 's/.yaml//g' | sed 's/_/-/g' | egrep "${INCLUDE}" | while read role
+      sed 's/.yaml//g' | egrep "${INCLUDE}" | sed 's/_/-/g' | while read role
     do
       if [[ ! "${role}" =~ ${EXCLUDE} ]]; then
         xargs -n1 -P"${PARALLELISM}" -I '%' sh -c '
