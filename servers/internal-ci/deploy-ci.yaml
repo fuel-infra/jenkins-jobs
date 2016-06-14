@@ -54,12 +54,11 @@
       - string:
           name: INCLUDE
           default: '^.*$'
-          description: 'roles to test (regex)'
-      - text:
+          description: 'roles to test (egrep format)'
+      - string:
           name: EXCLUDE
-          default: |
-            puppetmaster
-          description: 'roles to exclude (list)'
+          default: 'puppetmaster'
+          description: 'roles to exclude (egrep format)'
 
     properties:
       - authorization:
@@ -86,3 +85,6 @@
       - timeout:
           fail: true
           timeout: 3600
+      - ansicolor:
+          colormap: css
+      - timestamps

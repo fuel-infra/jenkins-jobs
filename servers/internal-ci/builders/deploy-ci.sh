@@ -106,19 +106,17 @@ main () {
     # WORKAROUND (second pass Puppet run) https://bugs.launchpad.net/bugs/1578766
     cd "${WORKSPACE}"
     ./lab-vm exec puppet-master ls -1 /var/lib/hiera/roles/ 2>/dev/null | \
-      sed 's/.yaml//g' | egrep "${INCLUDE}" | sed 's/_/-/g' | while read role
-    do
-      if [[ ! "${role}" =~ ${EXCLUDE} ]]; then
-        xargs -n1 -P"${PARALLELISM}" -I '%' sh -c '
-          ./lab-vm create %
-          ./lab-vm exec % puppet agent --test
-          if [ $? -gt 2 ]; then
-          exit 255
-          fi
-          ./lab-vm remove %
-        '
-      fi
-    done
+      sed 's/.yaml//g' | egrep "${INCLUDE}" | egrep -v -w "${EXCLUDE}" | \
+      sed 's/_/-/g' | xargs -n1 -P"${PARALLELISM}" -I '%' bash -c "
+        ./lab-vm create % | (sed 's/^/%: /')
+        # stop tests when got exit code of 1, 4 or 6 on second puppet run
+        ./lab-vm exec % puppet agent --test | (sed 's/^/%: /')
+        if [[ '146' =~ \${?} ]]; then
+            exit 255
+        fi
+        ./lab-vm remove %
+      "
+    exit "${?}"
 }
 
 if [ "$0" == "${BASH_SOURCE}" ] ; then
