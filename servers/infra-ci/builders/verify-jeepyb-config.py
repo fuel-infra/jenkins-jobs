@@ -201,6 +201,7 @@ REPOSITORIES_WHITELIST = {
     'packages/centos7/libnetfilter_cthelper',
     'packages/centos7/libnetfilter_cttimeout',
     'packages/centos7/python-BeautifulSoup',
+    'packages/centos7/python-PyMySQL',
     'packages/centos7/python-WSGIProxy2',
     'packages/centos7/python-XStatic-bootswatch',
     'packages/centos7/python-XStatic-termjs',
