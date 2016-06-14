@@ -41,15 +41,12 @@
     install-node: 'install-node'
     systest-node: 'systest'
 
-- gerrit_params: &gerrit_params
-    name: ''
     gerrit-host: 'review.fuel-infra.org'
     gerrit-user: 'openstack-ci-jenkins'
     gerrit-port: '29418'
 
 - project:
     <<: *common_template
-    <<: *gerrit_params
     name: 'pkg-mos-master-centos'
     os: 'centos'
     openstack_release: 'ubuntu'
@@ -74,7 +71,6 @@
 
 - project:
     <<: *common_template
-    <<: *gerrit_params
     name: 'pkg-mos-8.0-centos'
     os: 'centos'
     mos_version: '8.0'
@@ -100,7 +96,6 @@
 
 - project:
     <<: *common_template
-    <<: *gerrit_params
     name: 'pkg-mos-9.0-centos'
     os: 'centos'
     mos_version: '9.0'
@@ -125,7 +120,6 @@
 
 - project:
     <<: *common_template
-    <<: *gerrit_params
     name: 'pkg-mos-master-ubuntu'
     os: 'ubuntu'
     mos_version: 'master'
@@ -150,7 +144,6 @@
 
 - project:
     <<: *common_template
-    <<: *gerrit_params
     name: 'pkg-mos-8.0-ubuntu'
     os: 'ubuntu'
     mos_version: '8.0'
@@ -176,7 +169,6 @@
 
 - project:
     <<: *common_template
-    <<: *gerrit_params
     name: 'pkg-mos-9.0-ubuntu'
     os: 'ubuntu'
     mos_version: '9.0'
@@ -200,7 +192,6 @@
       - '{mos_version}-pkg-massrebuild-{os}'
 
 - project:
-    <<: *gerrit_params
     <<: *common_template
     name: 'gate'
     mos_version:
