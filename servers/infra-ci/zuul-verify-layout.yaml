@@ -33,7 +33,7 @@
           EOF
 
           # Run Zuul in test mode for each modified layout
-          for FILE in $(git diff --name-only HEAD~1); do
+          for FILE in $(git diff --name-only --diff-filter=ACMR HEAD~1); do
               if [ "${{FILE##*/}}" = "layout.yaml" ]; then
                   ZUUL_SERVER="${{FILE%/*}}"
                   ZUUL_SERVER="${{ZUUL_SERVER##*/}}"
