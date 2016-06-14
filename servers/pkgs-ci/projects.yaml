@@ -137,7 +137,7 @@
     spec_path_prefix: '/trusty'
     openstack_release: 'ubuntu'
     deb-dist-name: mos-master
-    rpm-dist-name: mos-master-trusty
+    rpm-dist-name: mos-master-centos7
     jobs:
       - '{mos_version}-pkg-pipeline-{os}'
       - '{mos_version}-pkg-publish-{os}'
@@ -145,7 +145,6 @@
       - '{mos_version}-pkg-repotest-{os}'
       - '{mos_version}-pkg-systest-{os}':
           main-rpm-dist-name: 'mos-master-centos7'
-          rpm-dist-name: mos-master-centos7
       - '{mos_version}-pkg-massrebuild-starter-{os}'
       - '{mos_version}-pkg-massrebuild-{os}'
 
@@ -164,15 +163,14 @@
     is_updates: 'true'
     openstack_release: 'ubuntu'
     deb-dist-name: mos8.0
-    rpm-dist-name: mos8.0-trusty
+    rpm-dist-name: mos8.0-centos7-fuel
     jobs:
       - '{mos_version}-pkg-pipeline-{os}'
       - '{mos_version}-pkg-publish-{os}'
       - '{mos_version}-pkg-install-{os}'
       - '{mos_version}-pkg-repotest-{os}'
       - '{mos_version}-pkg-systest-{os}':
-          main-rpm-dist-name: 'mos8.0-centos7'
-          rpm-dist-name: mos8.0-centos7
+          main-rpm-dist-name: 'mos8.0-centos7-fuel'
       - '{mos_version}-pkg-massrebuild-starter-{os}'
       - '{mos_version}-pkg-massrebuild-{os}'
 
@@ -190,7 +188,7 @@
     spec_path_prefix: '/trusty'
     openstack_release: 'ubuntu'
     deb-dist-name: mos9.0
-    rpm-dist-name: mos9.0-trusty
+    rpm-dist-name: mos9.0-centos7
     jobs:
       - '{mos_version}-pkg-pipeline-{os}'
       - '{mos_version}-pkg-publish-{os}'
@@ -198,7 +196,6 @@
       - '{mos_version}-pkg-repotest-{os}'
       - '{mos_version}-pkg-systest-{os}':
           main-rpm-dist-name: 'mos9.0-centos7'
-          rpm-dist-name: mos9.0-centos7
       - '{mos_version}-pkg-massrebuild-starter-{os}'
       - '{mos_version}-pkg-massrebuild-{os}'
 
