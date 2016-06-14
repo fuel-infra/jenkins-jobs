@@ -112,14 +112,14 @@
           # Strip project name to get path only
           SRC_PROJECT_PATH=${{CH[0]%/*}}
           # Strip spec path prefix if any
-          SRC_PROJECT_PATH=${{SRC_PROJECT_PATH#{spec-path-prefix}}}
+          SRC_PROJECT_PATH=${{SRC_PROJECT_PATH#}}
           # Strip spec path suffix if any
-          SRC_PROJECT_PATH=${{SRC_PROJECT_PATH%{spec-path-suffix}}}
+          SRC_PROJECT_PATH=${{SRC_PROJECT_PATH%-build}}
           # Define spec project path using prefix and suffix
-          SPEC_PROJECT_PATH={spec-path-prefix}${{SRC_PROJECT_PATH}}{spec-path-suffix}
+          SPEC_PROJECT_PATH=${{SRC_PROJECT_PATH}}-build
 
           PACKAGENAME=${{CH[0]##*/}}
-          PACKAGENAME=${{PACKAGENAME%{spec-project-suffix}}}
+          PACKAGENAME=${{PACKAGENAME%-build}}
           SRC_PROJECT=${{SRC_PROJECT_PATH}}/${{PACKAGENAME}}
 
           SOURCE_REFSPEC=${{CH[2]}}
@@ -128,7 +128,7 @@
           # Required to use paired projects src+spec
           if [ "${{SRC_PROJECT_PATH}}" = "openstack" ]; then
               IS_OPENSTACK=true
-              SPEC_PROJECT=${{SPEC_PROJECT_PATH}}/{spec-project-prefix}${{PACKAGENAME}}{spec-project-suffix}
+              SPEC_PROJECT=${{SPEC_PROJECT_PATH}}/${{PACKAGENAME}}-build
               if [ "${{CH[0]}}" = "${{SRC_PROJECT}}" ]; then
                   GERRIT_CMD="gerrit query --current-patch-set topic:${{TOPIC}} branch:${{CH[1]}} project:${{SPEC_PROJECT}} NOT status:abandoned"
                   BOUND_INFO=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${{GERRIT_PORT}} ${{GERRIT_USER}}@${{GERRIT_HOST}} "${{GERRIT_CMD}}")

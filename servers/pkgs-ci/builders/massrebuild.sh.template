@@ -35,7 +35,7 @@ export REPO_REQUEST_PATH_PREFIX="{cr-path-prefix}"
 export REMOTE_REPO_HOST={repo-host}
 
 # Parameters for package specs
-export SPEC_PROJECT_SUFFIX={spec-project-suffix}
+export SPEC_PROJECT_SUFFIX=-build
 
 
 if [ "{mos_version}" = "master" ]

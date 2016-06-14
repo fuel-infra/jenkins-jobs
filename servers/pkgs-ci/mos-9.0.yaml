@@ -28,11 +28,6 @@
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'origin/master'
 
-    spec-path-prefix: ''
-    spec-path-suffix: '-build'
-    spec-project-prefix: ''
-    spec-project-suffix: '-build'
-
     # Enables paching workflow
     is_updates: 'false'
 

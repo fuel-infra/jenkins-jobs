@@ -38,7 +38,7 @@ export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
 export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
 
 # Parameters for package specs
-export SPEC_PROJECT_SUFFIX={spec-project-suffix}
+export SPEC_PROJECT_SUFFIX=-build
 
 # Set parameters specific to project(s)
 case ${{ZUUL_PROJECT}} in
