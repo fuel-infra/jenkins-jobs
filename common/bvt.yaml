@@ -81,6 +81,10 @@
       - string:
           name: UBUNTU_MIRROR_ID
           description: "snapshot of upstream ubuntu mirror"
+      - string:
+          name: FUEL_QA_COMMIT
+          default: '{qa_branch}'
+          description: "Commit-id or branch to checkout"
 
     properties:
     - heavy-job:
@@ -136,7 +140,7 @@
     scm:
     - main-git:
         reponame: '{reponame}'
-        repobranch: '{repobranch}'
+        repobranch: '$FUEL_QA_COMMIT'
         basedir: ''
 
     wrappers:
