@@ -1,0 +1,73 @@
+- project:
+
+    name: 'mos-master'
+
+    project-name: 'mos'
+    mos_version: master
+
+    master-mos-version: '9.0'
+    main_ubuntu_release: 'trusty'
+    openstack_release: 'ubuntu'
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
+    perestroika-branch: 'master'
+
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    repo-base-path: '/home/jenkins/pubrepos'
+
+    base-path: 'base/'
+    updates-path: 'updates/'
+    security-path: 'security/'
+
+    cr-path-prefix: 'review/'
+    rel-path-prefix: 'mos-repos/'
+
+    fuel-namespace: 'openstack'
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: 'openstack-ci-jenkins'
+
+    # Install test repository
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'origin/master'
+
+    spec-path-prefix: ''
+    spec-path-suffix: '-build'
+    spec-project-prefix: ''
+    spec-project-suffix: '-build'
+
+    # Enables paching workflow
+    is_updates: 'false'
+
+    # Job slave nodes
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+    install-node: 'install-node'
+    systest-node: 'systest'
+
+    # Repository parameters for project
+    deb-dist-name: mos-master
+    rpm-dist-name: mos-master-centos7
+
+    os:
+    - centos:
+        distro: 'centos7'
+        pkg_type: 'rpm'
+        spec_path_prefix: '/centos7'
+    - ubuntu:
+        distro: 'trusty'
+        pkg_type: 'deb'
+        spec_path_prefix: '/trusty'
+    jobs:
+    - '{mos_version}-pkg-pipeline-{os}'
+    - '{mos_version}-pkg-publish-{os}'
+    - '{mos_version}-pkg-install-{os}'
+    - '{mos_version}-pkg-repotest-{os}'
+    - '{mos_version}-pkg-systest-{os}':
+        main-rpm-dist-name: 'mos-master-centos7'
+    - '{mos_version}-pkg-massrebuild-starter-{os}'
+    - '{mos_version}-pkg-massrebuild-{os}'
+    - '{mos_version}-pkg-gate'
+
