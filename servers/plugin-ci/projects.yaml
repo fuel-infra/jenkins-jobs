@@ -82,6 +82,7 @@
     name: plugins-defaults
 
     # Redefine variables from global defaults
+    fuel-branch-8_0: '{fuel-branch-8_0}'
     fuel-branch-9_0: '{fuel-branch-9_0}'
     fuel-branch-10_0: '{fuel-branch-10_0}'
 
@@ -114,6 +115,10 @@
     name: plugins-standard
     defaults: plugins-defaults
     version:
+      - 8.0:
+          plugin_branch: '{fuel-branch-8_0}'
+          test_framework_branch: '{fuel-branch-8_0}'
+          iso_magnet_link: release-8.0
       - 9.0:
           plugin_branch: '{fuel-branch-9_0}'
           test_framework_branch: '{fuel-branch-9_0}'
@@ -132,7 +137,7 @@
 
       - detach-rabbitmq:
           plugin_repo: fuel-plugin-detach-rabbitmq
-          plugin_owner: 'Owner Name'
+          plugin_owner: 'Oslo Team'
           plugin_test_group: 'detach-rabbitmq-ci-group'
           plugin_env_path_name: 'SEPARATE_SERVICE_RABBIT_PLUGIN_PATH'
 
@@ -147,6 +152,14 @@
           plugin_owner: 'Murano Team'
           plugin_test_group: 'murano_plugin'
           plugin_env_path_name: 'MURANO_PLUGIN_PATH'
+
+    exclude:
+      - version: 8.0
+        plugin_name: detach-database
+      - version: 8.0
+        plugin_name: detach-keystone
+      - version: 8.0
+        plugin_name: detach-murano
 
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build'
