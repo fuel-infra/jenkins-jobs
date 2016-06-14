@@ -60,8 +60,8 @@ esac
 DEB_DIST_NAME={deb-dist-name}
 RPM_DIST_NAME={rpm-dist-name}
 
-BASE_DEB_REPO_PATH={rel-path-prefix}/ubuntu
-BASE_RPM_REPO_PATH={rel-path-prefix}/centos/${{RPM_DIST_NAME}}
+BASE_DEB_REPO_PATH={mos-deb-repo-path}
+BASE_RPM_REPO_PATH={mos-rpm-repo-path}
 
 # Repository pathes for publisher
 PUBLISH_DEB_REPO_PATH=${{BASE_DEB_REPO_PATH}}/{mos_version}

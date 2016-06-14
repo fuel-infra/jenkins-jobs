@@ -474,10 +474,10 @@
           # New lines will become spaces. So don't add newline near "|" because it possibly will break parsing inside scripts
           default: >-
             deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name} main restricted,1200|deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name}-security main restricted,1201|deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name}-proposed main restricted,1202|deb
-            http://{repo-host}/{rel-path-prefix}/ubuntu/{mos_version} {deb-dist-name}-updates  main restricted,1201
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name} main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-security main restricted,1201|deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-proposed main restricted,1202|deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-updates  main restricted,1201
           description: >-
             <p>
             Additional deb repos. Note, that empty repos will bring some errors into console output.
@@ -489,7 +489,7 @@
           default: '1052'
       - string:
           name: EXTRA_RPM_REPOS
-          default: 'release-repo,http://{repo-host}/{rel-path-prefix}/centos/{main-rpm-dist-name}/os/x86_64/,98'
+          default: 'release-repo,http://{repo-host}/{mos-rpm-repo-path}/os/x86_64/,98'
           description: 'reponame1,http://...(,prio1)|reponame2,http://...(,prio2)'
       - string:
           name: EXTRA_RPM_REPOS_PRIORITY

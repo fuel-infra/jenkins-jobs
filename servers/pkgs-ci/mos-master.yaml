@@ -20,7 +20,6 @@
     security-path: 'security/'
 
     cr-path-prefix: 'review/'
-    rel-path-prefix: 'mos-repos/'
 
     fuel-namespace: 'openstack'
 
@@ -51,6 +50,10 @@
     deb-dist-name: mos-master
     rpm-dist-name: mos-master-centos7
 
+    # MOS repositories (build/test dependencies)
+    mos-deb-repo-path: mos-repos/ubuntu
+    mos-rpm-repo-path: mos-repos/centos/mos-master-centos7
+
     os:
     - centos:
         distro: 'centos7'
@@ -65,7 +68,6 @@
     - '{mos_version}-pkg-publish-{os}'
     - '{mos_version}-pkg-install-{os}'
     - '{mos_version}-pkg-repotest-{os}'
-    - '{mos_version}-pkg-systest-{os}':
-        main-rpm-dist-name: 'mos-master-centos7'
+    - '{mos_version}-pkg-systest-{os}'
     - '{mos_version}-pkg-gate'
 
