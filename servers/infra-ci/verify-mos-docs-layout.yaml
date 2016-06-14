@@ -13,7 +13,7 @@
     logrotate:
       daysToKeep: 30
     node: docs
-    concurrent: 'false'
+    concurrent: false
     parameters:
       - string:
           name: GERRIT_REFSPEC
@@ -50,13 +50,13 @@
       - ansicolor:
           colormap: xterm
       - timeout:
-          fail: 'true'
-          write-description: 'true'
+          fail: true
+          write-description: true
           timeout: 45
     publishers:
       - html-publisher:
           name: 'MOS documentation'
           dir: 'publish-docs'
           files: 'index.html'
-          keep-all: 'true'
-          allow-missing: 'true'
+          keep-all: true
+          allow-missing: true
