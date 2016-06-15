@@ -89,7 +89,7 @@ ENABLE_PROPOSED="${ENABLE_PROPOSED:-true}"
 function set_MU_proposed_repos(){
     # hard-coding URLs (along with long lines) is evil, so split them
     # MIRROR_HOST is injected (comes from guess-mirror macros)
-    MIRROR_HOST="${MIRROR_HOST}"
+    MIRROR_HOST="http://${MIRROR_HOST}"
     PROPOSED_7="centos/mos7.0-centos6-fuel/proposed/x86_64/"
     PROPOSED_8="centos/mos8.0-centos7-fuel/proposed/x86_64/"
     REPO="mos-proposed,deb"
