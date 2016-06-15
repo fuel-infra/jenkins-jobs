@@ -12,7 +12,7 @@
     repo-base-path: '/home/jenkins/pubrepos'
 
     # Configure flows
-    is-downgrade: 'true'
+    is-downgrade: 'false'
     is-updates: 'false'
 
     # Gerrit parameters
@@ -31,17 +31,14 @@
     install-node: 'install-node'
     systest-node: 'systest'
 
-    # FIXME: While project name is 'mos', we publish results to /test/
-    # prefix. We need to remove it later, after initial testing.
-
     # Repository parameters for project
     deb-dist-name: 'mos-master'
-    deb-repo-path: '/test/mos-repos/xenial'
-    rpm-repo-path: '/test/mos-repos/centos/mos-master-centos7'
+    deb-repo-path: '/mos-repos/xenial'
+    rpm-repo-path: '/mos-repos/centos/mos-master-centos7'
 
     # MOS repositories (build/test dependencies)
-    mos-deb-repo-path: '/test/mos-repos/xenial'
-    mos-rpm-repo-path: '/test/mos-repos/centos/mos-master-centos7'
+    mos-deb-repo-path: '/mos-repos/xenial'
+    mos-rpm-repo-path: '/mos-repos/centos/mos-master-centos7'
 
 
     distro:
