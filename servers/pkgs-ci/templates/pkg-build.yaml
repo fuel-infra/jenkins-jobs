@@ -1,0 +1,92 @@
+- job-template:
+    name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+    concurrent: True
+    description: |
+        This job builds a package and then publishes it by triggerring publisher job.<br>
+        After publishing are triggered test jobs:
+        <ul>
+          <li> install test for just built packages
+          <li> system test using just built packages
+        </ul>
+
+    scm:
+      - perestroika:
+          branch: '{perestroika-branch}'
+    parameters:
+      - gerrit
+    properties:
+      - inject:
+          properties-content: |
+            PROJECT_NAME={project-name}
+            PROJECT_VERSION={project-version}
+
+            IS_UPDATES={is-updates}
+
+            DIST={distro}
+            PKG_TYPE={pkg_type}
+
+            REMOTE_REPO_HOST={publish-repo-host}
+            REPO_REQUEST_PATH_PREFIX=review/
+
+            SRC_PROJECT_PATH=openstack
+            SPEC_PROJECT_PATH=openstack-build
+            SPEC_PROJECT_SUFFIX=-build
+            SPEC_PREFIX_PATH={spec_prefix_path}
+
+            BASE_RPM_REPO_PATH={mos-rpm-repo-path}
+            BASE_DEB_REPO_PATH={mos-deb-repo-path}
+            DEB_DIST_NAME={deb-dist-name}
+
+            GERRIT_HOST={gerrit-host}
+            GERRIT_PORT={gerrit-port}
+            GERRIT_USER={gerrit-user}
+
+            ADDITIONAL_EXTRAREPO_DEB=http://{publish-repo-host}{deb-repo-path}/{project-version} {deb-dist-name} main restricted
+            ADDITIONAL_EXTRAREPO_RPM=deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64
+
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-fuel-osci-bot}'
+            - '{ssh-creds-pkgs-ci}'
+      - timeout:
+          timeout: 300
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+
+          # FIXME: use perestroika from openstack/fuel-mirror
+          # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
+          # and then copy perestroika directory to root ${{WORKSPACE}}
+          cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
+
+      - inject:
+          properties-content: |
+            GUESS_MIRROR={guess-mirror}
+            MIRROR_HOST={mirror_host}
+            UBUNTU_MIRROR_URL={ubuntu_mirror_url}
+            MIRROR_UBUNTU={mirror_ubuntu}
+
+      - guess-mirror
+      - shell:
+          !include-raw-escape:
+            '../builders/pkg_build.sh'
+    publishers:
+      - email-alert-on-merge
+      - junit:
+          results: 'buildresult.xml'
+      - archive:
+          artifacts: 'buildresult.params, buildresult.xml, tests.envfile'
+          allow-empty: True
+      - post-tasks:
+        - matches:
+            - log-text: 'Started'
+          run-if-job-successful: true
+          script: rm -rf *
+
+    node: '{build-node}'

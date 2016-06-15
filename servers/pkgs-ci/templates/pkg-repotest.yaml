@@ -1,0 +1,70 @@
+- job-template:
+    name: '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
+    project-type: freestyle
+    concurrent: true
+    parameters:
+      - gerrit
+    wrappers:
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+    scm:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: '{install-scm-repo}'
+          branch: '{install-scm-branch}'
+          basedir: ''
+    builders:
+      - shell: rm -vf 'buildresult.params' '{pkg_type}.publish.setenvfile'
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          filter: 'buildresult.params'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+          filter: '{pkg_type}.publish.setenvfile'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      - shell: touch 'buildresult.params' '{pkg_type}.publish.setenvfile'
+      - inject-properties-file:
+          # Injects EXTRAREPO
+          properties-file: 'buildresult.params'
+      - inject-properties-file:
+          # Injects package lists with version and repository URL
+          # depending on pkg type it will be:
+          # rpm
+          #     RPM_VERSION
+          #     RPM_BINARIES
+          #     RPM_REPO_URL
+          #     RPM_VERSION
+          #     RPM_PUBLISH_SUCCEEDED
+          #     RPM_DISTRO
+          #     RPM_CHANGE_REVISION
+          #     LP_BUG
+          # deb
+          #     DEB_VERSION
+          #     DEB_BINARIES
+          #     DEB_REPO_URL
+          #     RPM_VERSION
+          #     DEB_PUBLISH_SUCCEEDED
+          #     DEB_DISTRO
+          #     DEB_PACKAGENAME
+          #     DEB_CHANGE_REVISION
+          #     LP_BUG
+          properties-file: '{pkg_type}.publish.setenvfile'
+      - shell: |
+          #!/bin/bash -xe
+          export REPO_URL=${{DEB_REPO_URL:-${{RPM_REPO_URL}}}}
+
+          # Remove quotes, double and trailing slashes
+          REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+          EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+
+          bash -x repo-test-{pkg_type}-docker
+
+    node: '{install-node}'

@@ -38,7 +38,8 @@
           cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
       - guess-mirror
       - shell:
-          !include-raw builders/pkg_build.sh.template
+          !include-raw:
+            '../builders/pkg_build.sh.template'
       - trigger-builds:
           - project: '{mos_version}-pkg-publish-{os}'
             current-parameters: true

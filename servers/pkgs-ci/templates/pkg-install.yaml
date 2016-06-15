@@ -1,0 +1,170 @@
+- job-template:
+    name: '{project-version}-pkg-{project-name}-install-{os}-{distro}'
+    project-type: freestyle
+    concurrent: true
+    parameters:
+      - gerrit
+    properties:
+      - inject:
+          # fixme: REPO_TYPE will be injected later
+          # fixme: DIST will be injected later as DEB_DISTRO or RPM_DISTRO
+          properties-content: |
+            DIST={distro}
+            REPO_TYPE={pkg_type}
+            IS_DOWNGRADE={is-downgrade}
+            ADDITIONAL_EXTRAREPO_DEB=
+            ADDITIONAL_EXTRAREPO_RPM=
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-install-vm-trusty-root}'
+            - '{ssh-creds-install-vm-centos7-root}'
+      - pre-scm-buildstep:
+        - shell: 'rm -rf ${{WORKSPACE?}}/*'
+      - timestamps
+      - ansicolor
+    triggers:
+      - zuul
+
+    scm:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: '{install-scm-repo}'
+          branch: '{install-scm-branch}'
+          basedir: ''
+      - git:
+          url: 'https://review.fuel-infra.org/packaging/runtests'
+          basedir: 'runtests'
+          skip-tag: true
+          browser: gitweb
+          browser-url: 'https://review.fuel-infra.org/gitweb?p=packaging/runtests.git'
+
+    builders:
+
+      - shell: |
+          #!/bin/bash
+          set -ex
+          git -C runtests checkout "${{GERRIT_BRANCH?}}" || rm -rf runtests
+
+      - shell:
+          !include-raw-escape:
+            '../builders/mos.install.cleanup.sh'
+
+      # This is done for flexibility.
+      # We could trigger this job with gerrit parameters and get corresponding artifact.
+      # Or we could trigger this job and pass required fields as parameters, so artifact won't be needed
+      # 1. remove existing file
+      - shell: rm -vf 'buildresult.params'
+      # 2. try to copy artifact
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          filter: 'buildresult.params'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      # 3. touch it, so the file will exist in all cases
+      - shell: touch 'buildresult.params'
+      # 4. inject file's content: artifact data or nothing
+      - inject-properties-file:
+          # Inject
+          # - useful:
+          #     BUILD_HOST
+          #     PKG_PATH
+          # - unuseful:
+          #     DIST
+          #     REPO_TYPE
+          #     GERRIT_CHANGE_STATUS
+          # - maybe useful:
+          #     EXTRAREPO
+          #     REQUEST_NUM
+          #     LP_BUG
+          #     IS_SECURITY
+          properties-file: 'buildresult.params'
+
+      - copyartifact:
+          project: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+          filter: '{pkg_type}.publish.setenvfile'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+      - shell: touch '{pkg_type}.publish.setenvfile'
+      - inject-properties-file:
+          # Injects package lists with version and repository URL
+          # depending on pkg type it will be:
+          # rpm
+          # - useful:
+          #     RPM_VERSION
+          #     RPM_BINARIES
+          #     RPM_REPO_URL
+          #     RPM_VERSION
+          # - unuseful:
+          #     RPM_PUBLISH_SUCCEEDED
+          #     RPM_DISTRO
+          #     RPM_CHANGE_REVISION
+          #     LP_BUG
+          # deb
+          # - useful:
+          #     DEB_VERSION
+          #     DEB_BINARIES
+          #     DEB_REPO_URL
+          #     RPM_VERSION
+          # - unuseful:
+          #     DEB_PUBLISH_SUCCEEDED
+          #     DEB_DISTRO
+          #     DEB_PACKAGENAME
+          #     DEB_CHANGE_REVISION
+          #     LP_BUG
+          properties-file: '{pkg_type}.publish.setenvfile'
+
+      - shell: |
+          #!/bin/bash -xe
+
+          # Check parameters required by test script(s)
+          : "${{DIST?}}"
+          : "${{REPO_TYPE?}}"
+
+          # Prepare parameters for test
+          export PACKAGEVERSION=${{DEB_VERSION:-${{RPM_VERSION}}}}
+          export PACKAGELIST=${{DEB_BINARIES:-${{RPM_BINARIES}}}}
+          export REPO_URL=${{DEB_REPO_URL:-${{RPM_REPO_URL}}}}
+
+          # Remove quotes, double and trailing slashes
+          REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+          EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
+          PACKAGELIST=$(echo "${{PACKAGELIST}}" | sed 's|,| |g')
+
+          # it's possible to add additional repos for systests
+          case ${{REPO_TYPE?}} in
+              deb)
+                  if [ ! -z "${{ADDITIONAL_EXTRAREPO_DEB}}" ] ; then
+                      export EXTRAREPO="${{EXTRAREPO}}|${{ADDITIONAL_EXTRAREPO_DEB}}"
+                  fi
+                  ;;
+              rpm)
+                  if [ ! -z "${{ADDITIONAL_EXTRAREPO_RPM}}" ] ; then
+                      export EXTRAREPO="${{EXTRAREPO}}|${{ADDITIONAL_EXTRAREPO_RPM}}"
+                  fi
+                  ;;
+          esac
+
+          for script in version-test-{pkg_type} vm-test
+          do
+              bash -x "${{WORKSPACE}}/${{script}}"
+          done
+
+    publishers:
+      - post-tasks:
+        - matches:
+            - log-text: '/run/shm/'
+          script:
+            !include-raw-escape:
+              '../builders/mos.install.destroy.vm.sh'
+      - junit:
+          results: 'report.xml'
+      - archive:
+          artifacts: '**/*.xml, {pkg_type}.install.setenvfile'
+          allow-empty: true
+
+    node: '{install-node}'

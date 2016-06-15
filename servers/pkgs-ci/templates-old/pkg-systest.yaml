@@ -1,0 +1,152 @@
+- job-template:
+    name: '{mos_version}-pkg-systest-{os}'
+    concurrent: true
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+    properties:
+      - heavy-job:
+          weight: 8
+      - inject:
+          properties-content: |
+            OPENSTACK_RELEASE={openstack_release}
+            OS_TYPE={os}
+
+            ENV_PREFIX={mos_version}-pkg-systest-{os}-{distro}
+            UBUNTU_DIST={main_ubuntu_release}
+
+            DEB_DIST_NAME={deb-dist-name}
+            DEB_REPO_PATH={mos-deb-repo-path}/{mos_version}
+            RPM_REPO_PATH={mos-rpm-repo-path}/os/x86_64/
+
+            MASTER_NODE_EXTRA_PACKAGES=e1000-kmod
+    parameters:
+      - string:
+          name: TEST_GROUP
+          default: 'bvt_2'
+      - bool:
+          name: NEUTRON_ENABLE
+          default: 'true'
+      - string:
+          name: MIRROR_UBUNTU
+          description: >-
+            <p>
+            If empty, it will be set automatically based on UBUNTU_MIRROR_ID value.
+            <p>
+            deb http://../ubuntu trusty main universe multiverse|deb
+            http://../ubuntu trusty-updates main universe multiverse|deb
+            http://../ubuntu trusty-security main universe multiverse|deb
+            http://../ubuntu trusty-proposed main universe multiverse
+      - string:
+          name: EXTRA_DEB_REPOS
+          # New lines will become spaces. So don't add newline near "|" because it possibly will break parsing inside scripts
+          default: >-
+            deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name} main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-security main restricted,1201|deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-proposed main restricted,1202|deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-updates  main restricted,1201
+          description: >-
+            <p>
+            Additional deb repos. Note, that empty repos will bring some errors into console output.
+            But this errors will not break the build.
+            <p>
+            deb http://... trusty main(,prio1)|deb http://... trusty main(,prio2)
+      - string:
+          name: EXTRA_DEB_REPOS_PRIORITY
+          default: '1052'
+      - string:
+          name: EXTRA_RPM_REPOS
+          default: 'release-repo,http://{repo-host}/{mos-rpm-repo-path}/os/x86_64/,98'
+          description: 'reponame1,http://...(,prio1)|reponame2,http://...(,prio2)'
+      - string:
+          name: EXTRA_RPM_REPOS_PRIORITY
+          default: '1'
+      - bool:
+          name: REBUILD_ISO
+          default: false
+      - bool:
+          name: UPDATE_FUEL
+          default: true
+      - string:
+          name: ENV_PREFIX
+          default: '{mos_version}-pkg-systest-{os}-{distro}'
+    scm:
+      - upstream:
+          branch: '{fuel-main-branch}'
+          repo: fuel-main
+          fuel-namespace: '{fuel-namespace}'
+      - upstream:
+          branch: '{fuel-qa-branch}'
+          repo: fuel-qa
+          fuel-namespace: '{fuel-namespace}'
+    triggers:
+      - zuul
+      - timed: "H */12 * * *"
+    builders:
+      - shell: |
+          #!/bin/bash
+          set -ex
+          # Clean logs from previous runs
+          rm -vf fuel-qa/logs/* *.publish.setenvfile
+      - copyartifact:
+          project: '{mos_version}-pkg-pipeline-{os}'
+          filter: '{pkg_type}.publish.setenvfile,systest.params'
+          which-build: last-successful
+          parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
+          optional: true
+      - copyartifact:
+          project: 'devops.{mos_version}.env'
+          filter: 'fuel_qa_commit.txt,magnet_link.txt,ubuntu_mirror_id.txt'
+          which-build: last-successful
+      - shell: /bin/bash -xec 'touch {pkg_type}.publish.setenvfile systest.params'
+      - inject:
+          # injects variable {pkg_type}_REPO_URL
+          properties-file: '{pkg_type}.publish.setenvfile'
+      - inject:
+          # injects variables for systest:
+          # usable:
+          # - UPDATE_FUEL
+          # - REBUILD_ISO
+          # unusable:
+          # - IS_FUEL
+          properties-file: 'systest.params'
+      - inject:
+          # injects variable FUEL_QA_COMMIT
+          properties-file: 'fuel_qa_commit.txt'
+      - inject:
+          # injects variable MAGNET_LINK
+          properties-file: 'magnet_link.txt'
+      - inject:
+          # injects variable UBUNTU_MIRROR_ID
+          properties-file: 'ubuntu_mirror_id.txt'
+      - guess-mirror
+      - inject:
+          # when started by zuul, then parameters defaults are not applied
+          # when started by jenkins inject will not override parameters
+          properties-content: |
+            EXTRA_RPM_REPOS_PRIORITY=1
+            EXTRA_DEB_REPOS_PRIORITY=1052
+      - shell:
+          !include-raw-escape:
+            '../builders/system_test.sh'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 210
+      - timestamps
+      - ansicolor
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml, logs/*, fuel-qa/logs/*'
+          latest-only: false
+      - logparser:
+          parse-rules: '/var/lib/jenkins/fuellib.parser'
+          unstable-on-warning: false
+          fail-on-error: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+
+    node: '{systest-node}'
