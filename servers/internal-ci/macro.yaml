@@ -12,10 +12,10 @@
           basedir: '{project-basedir}'
           branches:
             - '{project-branch}'
-          choosing-strategy: gerrit
+          choosing-strategy: '{project-choosing-strategy}'
+          credentials-id: '4c9487bf-80f6-4f93-86b1-842b02cecdd2'
           refspec: '{project-refspec}'
           url: 'ssh://internal-ci@review.fuel-infra.org:29418/{project-name}'
-          credentials-id: '4c9487bf-80f6-4f93-86b1-842b02cecdd2'
 
 #
 # Basic trigger macro with voting

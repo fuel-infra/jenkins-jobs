@@ -72,8 +72,9 @@
     scm:
       - review-fuel-infra-org:
             project-basedir: ''
+            project-branch: FETCH_HEAD
+            project-choosing-strategy: default
             project-name: fuel-infra/ci-lab
-            project-branch: master
             project-refspec: $CI_LAB_REFSPEC
 
     triggers:
