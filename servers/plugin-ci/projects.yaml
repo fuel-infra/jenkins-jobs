@@ -142,6 +142,12 @@
           plugin_test_group: 'thread_keystone_separate_services'
           plugin_env_path_name: 'SEPARATE_SERVICE_KEYSTONE_PLUGIN_PATH'
 
+      - detach-murano:
+          plugin_repo: fuel-plugin-murano
+          plugin_owner: 'Murano Team'
+          plugin_test_group: 'murano_plugin'
+          plugin_env_path_name: 'MURANO_PLUGIN_PATH'
+
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
