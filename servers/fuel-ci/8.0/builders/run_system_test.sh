@@ -9,6 +9,9 @@ ISO_PATH=$(seedclient.py -d -m "${ISO_TORRENT}" -v --force-set-symlink -o "${WOR
 VERSION_STRING=$(readlink "${ISO_PATH}" | cut -d '-' -f 3-4)
 echo "Description string: ${TEST_GROUP} on ${VERSION_STRING}"
 
+# create artifacts
+echo "MAGNET_LINK=${ISO_TORRENT}" > magnet_link.txt
+
 sh -x "utils/jenkins/system_tests.sh" \
   -t test \
   -w "${WORKSPACE}" \

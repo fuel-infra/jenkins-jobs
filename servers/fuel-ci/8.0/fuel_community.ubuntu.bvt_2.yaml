@@ -48,7 +48,7 @@
     publishers:
       - archive:
           allow-empty: true
-          artifacts: 'logs/*'
+          artifacts: 'logs/*,*.txt'
           latest-only: false
       - junit:
           keep-long-stdio: false
