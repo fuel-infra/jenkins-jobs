@@ -108,10 +108,10 @@ main () {
     ./lab-vm exec puppet-master ls -1 /var/lib/hiera/roles/ 2>/dev/null | \
       sed 's/.yaml//g' | egrep "${INCLUDE}" | egrep -v -w "${EXCLUDE}" | \
       sed 's/_/-/g' | xargs -n1 -P"${PARALLELISM}" -I '%' bash -c "
-        ./lab-vm create % | (sed 's/^/%: /')
+        ./lab-vm create % 2>&1 | (sed 's/^/%: /')
         # stop tests when got exit code of 1, 4 or 6 on second puppet run
-        ./lab-vm exec % puppet agent --test | (sed 's/^/%: /')
-        if [[ '146' =~ \${?} ]]; then
+        ./lab-vm exec % puppet agent --test 2>&1 | (sed 's/^/%: /')
+        if [[ '146' =~ \${PIPESTATUS} ]]; then
             exit 255
         fi
         ./lab-vm remove %
