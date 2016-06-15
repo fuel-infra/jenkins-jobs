@@ -67,7 +67,5 @@
     - '{mos_version}-pkg-repotest-{os}'
     - '{mos_version}-pkg-systest-{os}':
         main-rpm-dist-name: 'mos-master-centos7'
-    - '{mos_version}-pkg-massrebuild-starter-{os}'
-    - '{mos_version}-pkg-massrebuild-{os}'
     - '{mos_version}-pkg-gate'
 
