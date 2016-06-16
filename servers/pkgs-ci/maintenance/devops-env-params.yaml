@@ -1,0 +1,10 @@
+- project:
+    name: 'devops.env.params'
+    jenkins_url: 'https://product-ci.infra.mirantis.net'
+    jobs:
+      - 'devops.{env-id}.env_params':
+          env-id: '9.0'
+          job-name: '9.0-mos.test_all'
+      - 'devops.{env-id}.env_params':
+          env-id: 'master'
+          job-name: '10.0.test_all'
