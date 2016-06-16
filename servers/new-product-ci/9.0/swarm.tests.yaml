@@ -41,7 +41,8 @@
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'thread_3'
          properties: |
-           SLAVE_NODE_MEMORY=4096
+           SLAVE_NODE_MEMORY=5632
+         node: 'huge-systest'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'thread_7'
          properties: |
