@@ -7,7 +7,7 @@
 # Delete procedure:
 #  - skip all protected jobs (env_*)
 #  - skip environments younger then global minimal lifetime
-#  - skip jobs not executed by jenkins
+#  - skip jobs not executed by jenkins until they pass max lifetime
 #  - skip jobs which looks like latest execution in jenkins, start/execution
 #    time less then 1 h (can be omited by protect_latest)
 #  - delete all job older then max lifetime
@@ -167,17 +167,29 @@ class Cleaner():
                 timestamp_now = datetime.datetime.now().replace(microsecond=0)
 
                 # when older then lifetime check if ready to erase
-                if (timestamp_now - timestamp_env_local) > \
-                        datetime.timedelta(hours=env_lifetime_hours):
-                    print '- older then required {}h ({})'.format(
+                time_diff = timestamp_now - timestamp_env_local
+                if time_diff > datetime.timedelta(hours=env_lifetime_hours):
+                    print '- {}h older then required {}h ({})'.format(
+                        (time_diff.days * 24 + time_diff.seconds/3600),
                         env_lifetime_hours,
                         timestamp_env_local,
                         )
                     env_prefix = self.get_prefix_by_env_name(env_name)
 
+                    # Delete all environments after max lifetime
+                    if time_diff > datetime.timedelta(hours=lifetime_max):
+                        print '- remove - max lifetime ({}h) passed'.format(
+                            lifetime_max
+                            )
+                        self.local_remove_env(dos_path, env_name)
+                        continue
+
                     # Skip environment without jenkins job
                     if not env_prefix:
-                        print '- job not started by jenkins!!'
+                        print '- cannot find related jenkins job' \
+                              ', wait for max lifetime ({}h)'.format(
+                                  lifetime_max
+                                  )
                         continue
 
                     # Get latests jenkins job execution for this prefix
@@ -191,9 +203,7 @@ class Cleaner():
                     print '- timestamp_env_latest = %s' % timestamp_env_latest
 
                     # Check minimal lifetime
-                    if (timestamp_now - timestamp_env_local) < \
-                            datetime.timedelta(hours=lifetime_minimal):
-                        time_diff = timestamp_now - timestamp_env_local
+                    if time_diff < datetime.timedelta(hours=lifetime_minimal):
                         print '- skip - this build is too young,' \
                               ' only {}s, {}s required'.format(
                                   time_diff.seconds,
@@ -208,21 +218,17 @@ class Cleaner():
                     # deleted it
                     time_diff_latest = \
                         timestamp_env_local - timestamp_env_latest
-                    time_diff_max = timestamp_now - timestamp_env_local
                     if not env_protect_latest or \
-                       time_diff_latest > datetime.timedelta(hours=1) or \
-                       time_diff_max > datetime.timedelta(hours=lifetime_max):
+                       time_diff_latest > datetime.timedelta(hours=1):
                         print '- remove - this build is safe to remove'
                         self.local_remove_env(dos_path, env_name)
                     else:
-                        time_diff = timestamp_env_local - timestamp_env_latest
                         print '- skip - this build is close to latest build,' \
                               ' only {}s, {}s required'.format(
-                                  time_diff.seconds,
+                                  time_diff_latest.seconds,
                                   lifetime_minimal * 3600
                               )
                 else:
-                    time_diff = timestamp_now - timestamp_env_local
                     print '- skip - need {}h to analyse,' \
                           ' only {}h old ({})'.format(
                               env_lifetime_hours,
