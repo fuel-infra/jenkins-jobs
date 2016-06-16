@@ -90,11 +90,11 @@ function set_MU_proposed_repos(){
     # hard-coding URLs (along with long lines) is evil, so split them
     # MIRROR_HOST is injected (comes from guess-mirror macros)
     MIRROR_HOST="http://${MIRROR_HOST}"
-    PROPOSED_7="centos/mos7.0-centos6-fuel/proposed/x86_64/"
-    PROPOSED_8="centos/mos8.0-centos7-fuel/proposed/x86_64/"
+    PROPOSED_7="mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64/"
+    PROPOSED_8="mos-repos/centos/mos8.0-centos7-fuel/proposed/x86_64/"
     REPO="mos-proposed,deb"
-    EXTRA_DEB_7="ubuntu/7.0 mos7.0-proposed main restricted"
-    EXTRA_DEB_8="ubuntu/8.0 mos8.0-proposed main restricted"
+    EXTRA_DEB_7="mos-repos/ubuntu/7.0 mos7.0-proposed main restricted"
+    EXTRA_DEB_8="mos-repos/ubuntu/8.0 mos8.0-proposed main restricted"
         # form MU repo URLs both for base and upgrade releases
         # there's no need to apply MOS updates beforehand, 'cause
         # according to Fuel QA routine, they are always applied
