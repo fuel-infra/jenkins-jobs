@@ -110,8 +110,7 @@ main () {
       sed 's/_/-/g' | xargs -n1 -P"${PARALLELISM}" -I '%' bash -c "
         ./lab-vm create % 2>&1 | (sed 's/^/%: /')
         # stop tests when got exit code of 1, 4 or 6 on second puppet run
-        ./lab-vm exec % puppet agent --server puppet-master.test.local \
-          --test 2>&1 | (sed 's/^/%: /')
+        ./lab-vm exec % puppet agent --test 2>&1 | (sed 's/^/%: /')
         if [[ '146' =~ \${PIPESTATUS} ]]; then
             exit 255
         fi
