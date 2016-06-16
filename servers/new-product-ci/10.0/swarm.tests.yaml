@@ -322,6 +322,7 @@
          properties: |
            MULTIPATH=True
            SLAVE_MULTIPATH_DISKS_COUNT=2
+           SLAVE_NODE_CPU=4
            DEVOPS_SETTINGS_TEMPLATE=$WORKSPACE/system_test/tests_templates/tests_configs/multipath_3_nodes.yaml
            NODES_COUNT=4
            NODE_VOLUME_SIZE=40
