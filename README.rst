@@ -105,6 +105,79 @@ Code Guidelines
 * Ownership is specified
 * Concurrent and throttle parameters are set properly
 
+YAML JJB configs
+----------------
+
+* Use sample yaml files from the samples directory for reference:
+
+  - Add description to the file and to all configuration entities i.e.
+    job definition, job group, job template, project.
+
+  - Keep the same order of the job parameters and configuration sections
+    (i.e. wrappers, builders, etc.)
+
+  - Separate JJB parameters (name, description, etc.) from project specific ones
+    (version-id, mos, etc.) using blank line.
+
+  - Place parameters that are parts of the name of job template or job group
+    at the beginning of the project specific parameters list.
+
+  - Insert a blank line after job parameters and between configuration sections
+    (wrappers, builders, etc.). Also in project and job group leave blank line
+    between their native parameters (e.g. name) and parameters that are provided
+    to job templates or job groups.
+
+* Style guide for work with list and dict (maps) data structures. These rules
+  are not for the native JJB job parameters.
+
+  - sort items in a way to be able to group them, if possible
+
+  - do not separate items by an empty line within the same logical group
+
+  - separate logical groups by an empty line
+
+  - sort logical groups by importance
+
+  - move all single disconnected and nongrouped items to the end of the data
+    structure and group them, if possible.
+
+  - if nested data structure consists of 2 or more groups then its data should
+    be separated by empty lines at the begin and at the end of the structure.
+    Parent item that holds mentioned data structure should be separated by
+    an empty line within its data structure as well.
+
+  - if in a result after applying these rules items become separated by 2 or
+    more empty lines, the separator must be cut to only 1 emply line.
+
+* Store job definitions, job templates, job groups and projects in separate
+  files.
+
+* Try to keep one job definition or job template per file.
+
+* Use job templates instead of simple job definition if several nearly identical
+  jobs are going to be created or a job needs custom (not JJB native) configuration
+  parameter from job defaults.
+
+* If job group is used pay double attention to the correctness of the template
+  names to realize. If the template with requested name does not exist JJB will skip
+  this fact without any errors. Thus necessary job configs will not be generated.
+
+* If there are several jobs created for different source branches from the same
+  template and some changes incompatible with older branches are coming to the
+  template, new template for those source branches has to be branched from the old one
+  and put to an appropriate directory, e.g.::
+
+    servers/fuel-ci/job-template.yaml to servers/fuel-ci/9.0/job-template.yaml
+
+    common/job-template.yaml to common/9.0/job-template.yaml
+
+  In this case branch name has to be hard-coded in the job-template name.
+
+  This rule works for job groups and projects as well.
+
+  Once template is branched make sure that new project uses correct template name,
+  i.e. with hard-coded branch name.
+
 Shell-scripts
 -------------
 

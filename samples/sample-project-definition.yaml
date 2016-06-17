@@ -1,0 +1,13 @@
+- project:
+    name: project.name
+
+    # Project specific parameters
+    prefix: name_prefix
+    description: |
+      job description
+
+    jobs:
+      - '{prefix}.job.template.{type}'
+          type: timed
+          node: NodeLabel
+
