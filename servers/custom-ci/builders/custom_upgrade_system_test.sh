@@ -89,7 +89,7 @@ ENABLE_PROPOSED="${ENABLE_PROPOSED:-true}"
 function set_MU_proposed_repos(){
     # hard-coding URLs (along with long lines) is evil, so split them
     # MIRROR_HOST is injected (comes from guess-mirror macros)
-    MIRROR_HOST="http://${MIRROR_HOST}"
+    MIRROR_HOST=${MIRROR_HOST}
     PROPOSED_7="mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64/"
     PROPOSED_8="mos-repos/centos/mos8.0-centos7-fuel/proposed/x86_64/"
     REPO="mos-proposed,deb"
@@ -101,12 +101,12 @@ function set_MU_proposed_repos(){
         if [[ "${ENABLE_PROPOSED}" = true ]]; then
             case "${1}" in
                 base)
-                    UPDATE_FUEL_MIRROR="${MIRROR_HOST}/${PROPOSED_7}"
-                    EXTRA_DEB_REPOS="${REPO} ${MIRROR_HOST}/${EXTRA_DEB_7}"
+                    UPDATE_FUEL_MIRROR="http://${MIRROR_HOST}/${PROPOSED_7}"
+                    EXTRA_DEB_REPOS="${REPO} http://${MIRROR_HOST}/${EXTRA_DEB_7}"
                     ;;
                 upgrade)
-                    UPDATE_FUEL_MIRROR="${MIRROR_HOST}/${PROPOSED_8}"
-                    EXTRA_DEB_REPOS="${REPO} ${MIRROR_HOST}/${EXTRA_DEB_8}"
+                    UPDATE_FUEL_MIRROR="http://${MIRROR_HOST}/${PROPOSED_8}"
+                    EXTRA_DEB_REPOS="${REPO} http://${MIRROR_HOST}/${EXTRA_DEB_8}"
             esac
         fi
 
