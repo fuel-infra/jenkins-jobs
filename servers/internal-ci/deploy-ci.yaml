@@ -40,7 +40,7 @@
           description: 'OpenStack flavor to use'
       - string:
           name: OS_IMAGE_NAME
-          default: 'ubuntu-trusty-cloud-image'
+          default: 'trusty-server-cloudimg-amd64-17-Jun-2016'
           description: 'OpenStack image to use'
       - string:
           name: OS_OPENRC_PATH
@@ -49,7 +49,7 @@
       # node selection parameters
       - string:
           name: PARALLELISM
-          default: '5'
+          default: '10'
           description: 'how many parallel tests to run'
       - string:
           name: INCLUDE
@@ -57,7 +57,7 @@
           description: 'roles to test (egrep format)'
       - string:
           name: EXCLUDE
-          default: 'puppetmaster'
+          default: 'puppetmaster|slave_custom_ci'
           description: 'roles to exclude (egrep format)'
 
     properties:

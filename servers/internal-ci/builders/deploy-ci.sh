@@ -105,9 +105,20 @@ main () {
     # check each role
     # WORKAROUND (second pass Puppet run) https://bugs.launchpad.net/bugs/1578766
     cd "${WORKSPACE}"
+
+    # get blacklist
+    ./lab-vm exec puppet-master cat /etc/puppet/blacklist.txt | \
+      grep -v '^$\|^\s*\#' > "${WORKSPACE}/blacklist.txt"
+
+    # get all available roles
     ./lab-vm exec puppet-master ls -1 /var/lib/hiera/roles/ 2>/dev/null | \
-      sed 's/.yaml//g' | egrep "${INCLUDE}" | egrep -v -w "${EXCLUDE}" | \
+      sed 's/.yaml//g' | egrep "${INCLUDE}" | egrep -v -w "${EXCLUDE}" \
+      > "${WORKSPACE}/selected.txt"
+
+    # iterate all the filtered roles
+    grep -v -w -f "${WORKSPACE}/blacklist.txt" "${WORKSPACE}/selected.txt" | \
       sed 's/_/-/g' | xargs -n1 -P"${PARALLELISM}" -I '%' bash -c "
+        # create new VM and perform first puppet run
         ./lab-vm create % 2>&1 | (sed 's/^/%: /')
         # stop tests when got exit code of 1, 4 or 6 on second puppet run
         ./lab-vm exec % puppet agent --test 2>&1 | (sed 's/^/%: /')
