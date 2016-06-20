@@ -1,0 +1,27 @@
+- builder:
+    name: inject-from-job(same-patchset)
+
+    builders:
+
+      # The logic below is done for flexibility.
+      # We could trigger job with gerrit parameters and get corresponding
+      # artifact or we could trigger this job and pass required fields as
+      # parameters, so artifact won't be needed (and won't be found too).
+
+      # 1. remove existing file
+      - shell: rm -vf '{artifact-name}'
+
+      # 2. try to copy artifact
+      - copyartifact:
+          project: '{job-name}'
+          filter: '{artifact-name}'
+          which-build: last-successful
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          optional: true
+
+      # 3. touch it, so the file will exist in all cases
+      - shell: touch '{artifact-name}'
+
+      # 4. inject file's content: artifact data or nothing
+      - inject-properties-file:
+          properties-file: '{artifact-name}'

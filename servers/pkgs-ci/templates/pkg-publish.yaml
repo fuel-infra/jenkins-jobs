@@ -5,6 +5,7 @@
     quiet-period: 60
     parameters:
       - gerrit
+
     properties:
       - inject:
           properties-content: |
@@ -41,50 +42,27 @@
             DEB_ORIGIN_TEST={deb-origin-test}
 
             PKG_JSON_REPORT=/home/jenkins/{project-version}-pkg-{project-name}-versions.json
+
     wrappers:
       - ssh-agent-credentials:
           users:
             - '{ssh-creds-jenkins}'
       - timestamps
       - ansicolor
+
     triggers:
       - zuul
+
     scm:
       - perestroika:
-          branch: 'stable/mitaka'
+          branch: '{perestroika-branch}'
 
     builders:
 
-      # This is done for flexibility.
-      # We could trigger this job with gerrit parameters and get corresponding artifact.
-      # Or we could trigger this job and pass required fields as parameters, so artifact won't be needed
-      # 1. remove existing file
-      - shell: rm -vf 'buildresult.params'
-      # 2. try to copy artifact
-      - copyartifact:
-          project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
-          filter: 'buildresult.params'
-          which-build: last-successful
-          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-          optional: true
-      # 3. touch it, so the file will exist in all cases
-      - shell: touch 'buildresult.params'
-      # 4. inject file's content: artifact data or nothing
-      - inject-properties-file:
-          # Inject
-          # - useful:
-          #     BUILD_HOST
-          #     PKG_PATH
-          # - unuseful:
-          #     DIST
-          #     REPO_TYPE
-          #     GERRIT_CHANGE_STATUS
-          # - maybe useful:
-          #     EXTRAREPO
-          #     REQUEST_NUM
-          #     LP_BUG
-          #     IS_SECURITY
-          properties-file: 'buildresult.params'
+      - inject-from-job(same-patchset):
+          # need BUILD_HOST PKG_PATH
+          job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          artifact-name: 'buildresult.params'
 
       - shell:
           !include-raw-escape:

@@ -188,23 +188,17 @@
               ADDITIONAL_EXTRAREPO_RPM=$_ORIGINAL_DESTINATION_REPO_RPM|$_MASTER_REPO_FOR_DEP_RPM
               ORIGIN={deb-origin-test}
 
-    - copyartifact:
-        project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
-        filter: 'buildresult.params'
-        which-build: last-successful
-        parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-        optional: true
+    - inject-from-job(same-patchset):
+        job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+        artifact-name: 'buildresult.params'
     - rename:
         src: 'buildresult.params'
         dst: 'buildresult-tmp.params'
         allow-empty: true
 
-    - copyartifact:
-        project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
-        filter: 'tests.envfile'
-        which-build: last-successful
-        parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-        optional: true
+    - inject-from-job(same-patchset):
+        job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+        artifact-name: 'buildresult.params'
     - rename:
         src: 'tests.envfile'
         dst: 'tests-tmp.envfile'
@@ -241,12 +235,9 @@
             ADDITIONAL_EXTRAREPO_DEB=$_ORIGINAL_DESTINATION_REPO_DEB|$_MASTER_REPO_FOR_DEP_DEB
             ADDITIONAL_EXTRAREPO_RPM=$_ORIGINAL_DESTINATION_REPO_RPM|$_MASTER_REPO_FOR_DEP_RPM
 
-    - copyartifact:
-        project: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
-        filter: '{pkg_type}.publish.setenvfile'
-        which-build: last-successful
-        parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-        optional: true
+    - inject-from-job(same-patchset):
+        job-name: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+        artifact-name: '{pkg_type}.publish.setenvfile'
     - rename:
         src: '{pkg_type}.publish.setenvfile'
         dst: '{pkg_type}.publish-tmp.setenvfile'

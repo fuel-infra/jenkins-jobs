@@ -1,0 +1,16 @@
+- builder:
+    name: inject-devops-env
+    builders:
+      - copyartifact:
+          project: 'devops.{version}.env'
+          filter: 'fuel_qa_commit.txt,magnet_link.txt,ubuntu_mirror_id.txt'
+          which-build: last-successful
+      - inject-properties-file:
+          # injects variable FUEL_QA_COMMIT
+          properties-file: 'fuel_qa_commit.txt'
+      - inject-properties-file:
+          # injects variable MAGNET_LINK
+          properties-file: 'magnet_link.txt'
+      - inject-properties-file:
+          # injects variable UBUNTU_MIRROR_ID
+          properties-file: 'ubuntu_mirror_id.txt'
