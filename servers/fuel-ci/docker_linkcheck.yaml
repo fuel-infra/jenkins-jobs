@@ -1,0 +1,91 @@
+- job-template:
+    name: '{prefix}-docker-linkcheck'
+    node: 'linkcheck'
+    builders:
+      - shell:
+          !include-raw-escape: builders/run_docker.sh
+    description: |
+      Run 'make linkcheck' for documentation in {prefix} repository.<br>
+      Generates diff with previous run.<br>
+
+      <p>
+      Owned by: Fuel DevOps Team<br/>
+      Job owner is not responsible for keeping builds green.<br/>
+      Maintenance contacts: #fuel-devops<br/>
+      </p>
+      Uses Docker container<br>
+      Job is running in non-voting mode by default
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: DOCKER_IMAGE
+          default: 'linkcheck'
+      - string:
+          name: ENVVARS
+          default: '{envvars}'
+          description: 'Environment variables'
+      - string:
+          name: VOLUMES
+          default: '{volumes}'
+          description: 'Volumes to mount into container separated with spaces'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: '{url}'
+          choosing-strategy: gerrit
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          timeout: 30
+    triggers:
+      - timed: 'H 1 * * *'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: '{project-pattern}'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    publishers:
+      - archive:
+          artifacts: 'build_*.txt'
+          allow-empty: 'true'
+          fingerprint: true
+
+- project:
+    name: 'multi-docker-linkcheck'
+    volumes: '$WORKSPACE:/opt/jenkins/{prefix}'
+    envvars: '-e REQUIREMENTS={requirements} -e MAKEDIR={makedir} -e REGEX={exclude_regex}'
+    jobs:
+      - '{prefix}-docker-linkcheck':
+          prefix: 'fuel-web'
+          url: 'https://review.openstack.org/openstack/fuel-web'
+          project-pattern: 'openstack/fuel-web'
+          requirements: 'nailgun/test-requirements.txt'
+          exclude_regex: 'working|redirected'
+          makedir: 'docs'
+      - '{prefix}-docker-linkcheck':
+          prefix: 'fuel-docs'
+          url: 'https://review.openstack.org/openstack/fuel-docs'
+          project-pattern: 'openstack/fuel-docs'
+          requirements: 'requirements.txt'
+          exclude_regex: 'ok|redirect'
+          makedir: '.'

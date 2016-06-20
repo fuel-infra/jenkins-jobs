@@ -1,0 +1,97 @@
+- job-template:
+    name: '{prefix}-docker-fuel-plugins'
+    builders:
+      - shell:
+          !include-raw-escape: builders/run_docker.sh
+    description: |
+      Build plugins for fuel-plugins project <a href=https://github.com/openstack/fuel-plugins>github.com/openstack/fuel-plugins</a><br><br>
+      Uses Docker container<br>
+      Job is currently running in non-voting mode
+    node: 'verify-fuel-plugins'
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: DOCKER_IMAGE
+          default: 'fuel-plugins'
+      - string:
+          name: ENVVARS
+          default: '{envvars}'
+          description: 'Environment variables'
+      - string:
+          name: VOLUMES
+          default: '{volumes}'
+          description: 'Volumes to mount into container separated with spaces'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          max-per-node: 1
+          option: project
+    publishers:
+      - 'email-{email-type}'
+      - archive:
+          allow-empty: true
+          artifacts: 'built_plugins/*.fp, built_plugins/*.rpm'
+          latest-only: false
+      - description-setter:
+          regexp: '(<a href=.*a>)'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: '{refspec}'
+                url: https://review.openstack.org/openstack/fuel-plugins.git
+          choosing-strategy: '{choosing-strategy}'
+    triggers:
+      - gerrit:
+          trigger-on: '{obj:trigger_on}'
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'openstack/fuel-plugins'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
+      - timed: '{timed}'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 10
+
+- project:
+    name: dualcheck-docker-fuel-plugins
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-plugins'
+    envvars: ''
+    jobs:
+      - '{prefix}-docker-fuel-plugins':
+          prefix: verify
+          trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+          timed: '0 11 * * *'
+      - '{prefix}-docker-fuel-plugins':
+          prefix: gate
+          trigger_on:
+            - change-merged-event
+          email-type: alert-on-merge
+          refspec: refs/heads/$GERRIT_BRANCH
+          choosing-strategy: default
+          timed: ''
