@@ -352,3 +352,5 @@
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'unlock_settings_tab'
          timeout: '1200'
+         # This test use ~400GB disk space
+         node: 'huge-systest'
