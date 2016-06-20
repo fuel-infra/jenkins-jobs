@@ -89,20 +89,6 @@ if [ -z "${TEST_GROUP}" ]; then
     fi
 fi
 
-# In case of RHEL tests we override systest group and set additional parameters
-# required for test execution
-if [[ ${OS_TYPE} == 'rhel' ]]; then
-    TEST_GROUP="rhel.basic"
-
-    export OPENSTACK_RELEASE=ubuntu
-    export RHEL_IMAGE=centos7_devops_04022016.qcow2
-    export RHEL_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
-    export RHEL_IMAGE_MD5=21415760de49e6b0dc5666420b1cbd47
-    export RHEL_IMAGE_USER=root
-    export RHEL_IMAGE_PASSWORD=r00tme
-    export CENTOS_DUMMY_DEPLOY=True
-fi
-
 ###################### Set Fuel update parameters ###############
 
 # Directive to update fuel's master node
