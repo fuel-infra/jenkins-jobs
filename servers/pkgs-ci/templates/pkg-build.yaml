@@ -12,8 +12,10 @@
     scm:
       - perestroika:
           branch: '{perestroika-branch}'
+
     parameters:
       - gerrit
+
     properties:
       - inject:
           properties-content: |
@@ -54,16 +56,13 @@
           timeout: 300
       - timestamps
       - ansicolor
+
     triggers:
       - zuul
-    builders:
-      - shell: |
-          #!/bin/bash -xe
 
-          # FIXME: use perestroika from openstack/fuel-mirror
-          # checkout fuel-mirror to ${{WORKSPACE}}/fuel-mirror
-          # and then copy perestroika directory to root ${{WORKSPACE}}
-          cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
+    builders:
+
+      - prepare-perestroika
 
       - inject:
           properties-content: |
@@ -71,11 +70,12 @@
             MIRROR_HOST={mirror_host}
             UBUNTU_MIRROR_URL={ubuntu_mirror_url}
             MIRROR_UBUNTU={mirror_ubuntu}
-
       - guess-mirror
+
       - shell:
           !include-raw-escape:
             '../builders/pkg_build.sh'
+
     publishers:
       - email-alert-on-merge
       - junit:

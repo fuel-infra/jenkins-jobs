@@ -2,8 +2,10 @@
     name: '{project-version}-pkg-{project-name}-install-{os}-{distro}'
     project-type: freestyle
     concurrent: true
+
     parameters:
       - gerrit
+
     properties:
       - inject:
           # fixme: REPO_TYPE will be injected later
@@ -14,6 +16,7 @@
             IS_DOWNGRADE={is-downgrade}
             ADDITIONAL_EXTRAREPO_DEB=
             ADDITIONAL_EXTRAREPO_RPM=
+
     wrappers:
       - ssh-agent-credentials:
           users:
@@ -24,6 +27,7 @@
         - shell: 'rm -rf ${{WORKSPACE?}}/*'
       - timestamps
       - ansicolor
+
     triggers:
       - zuul
 
@@ -52,74 +56,20 @@
           !include-raw-escape:
             '../builders/mos.install.cleanup.sh'
 
-      # This is done for flexibility.
-      # We could trigger this job with gerrit parameters and get corresponding artifact.
-      # Or we could trigger this job and pass required fields as parameters, so artifact won't be needed
-      # 1. remove existing file
-      - shell: rm -vf 'buildresult.params'
-      # 2. try to copy artifact
-      - copyartifact:
-          project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
-          filter: 'buildresult.params'
-          which-build: last-successful
-          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-          optional: true
-      # 3. touch it, so the file will exist in all cases
-      - shell: touch 'buildresult.params'
-      # 4. inject file's content: artifact data or nothing
-      - inject-properties-file:
-          # Inject
-          # - useful:
-          #     BUILD_HOST
-          #     PKG_PATH
-          # - unuseful:
-          #     DIST
-          #     REPO_TYPE
-          #     GERRIT_CHANGE_STATUS
-          # - maybe useful:
-          #     EXTRAREPO
-          #     REQUEST_NUM
-          #     LP_BUG
-          #     IS_SECURITY
-          properties-file: 'buildresult.params'
+      - inject-from-job(same-patchset):
+          # need BUILD_HOST PKG_PATH
+          job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          artifact-name: 'buildresult.params'
 
-      - copyartifact:
-          project: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
-          filter: '{pkg_type}.publish.setenvfile'
-          which-build: last-successful
-          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-          optional: true
-      - shell: touch '{pkg_type}.publish.setenvfile'
-      - inject-properties-file:
-          # Injects package lists with version and repository URL
-          # depending on pkg type it will be:
-          # rpm
-          # - useful:
-          #     RPM_VERSION
-          #     RPM_BINARIES
-          #     RPM_REPO_URL
-          #     RPM_VERSION
-          # - unuseful:
-          #     RPM_PUBLISH_SUCCEEDED
-          #     RPM_DISTRO
-          #     RPM_CHANGE_REVISION
-          #     LP_BUG
-          # deb
-          # - useful:
-          #     DEB_VERSION
-          #     DEB_BINARIES
-          #     DEB_REPO_URL
-          #     RPM_VERSION
-          # - unuseful:
-          #     DEB_PUBLISH_SUCCEEDED
-          #     DEB_DISTRO
-          #     DEB_PACKAGENAME
-          #     DEB_CHANGE_REVISION
-          #     LP_BUG
-          properties-file: '{pkg_type}.publish.setenvfile'
+      - inject-from-job(same-patchset):
+          # need {pkg_type}_VERSION {pkg_type}_BINARIES {pkg_type}_REPO_URL {pkg_type}_VERSION
+          job-name: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+          artifact-name: '{pkg_type}.publish.setenvfile'
 
       - shell: |
-          #!/bin/bash -xe
+          #!/bin/bash
+
+          set -ex
 
           # Check parameters required by test script(s)
           : "${{DIST?}}"
@@ -149,7 +99,7 @@
                   ;;
           esac
 
-          for script in version-test-{pkg_type} vm-test
+          for script in "version-test-${{REPO_TYPE?}}" "vm-test"
           do
               bash -x "${{WORKSPACE}}/${{script}}"
           done

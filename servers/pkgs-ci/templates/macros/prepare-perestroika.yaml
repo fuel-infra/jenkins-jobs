@@ -1,0 +1,11 @@
+# todo: use this macro instead hardcoded in scripts
+- builder:
+    name: prepare-perestroika
+    builders:
+    - shell: |
+        #!/bin/bash -xe
+
+        # FIXME: use perestroika from openstack/fuel-mirror
+        # checkout fuel-mirror to ${WORKSPACE}/fuel-mirror
+        # and then copy perestroika directory to root ${WORKSPACE}
+        cp -rv ${WORKSPACE}/fuel-mirror/perestroika/* ${WORKSPACE}

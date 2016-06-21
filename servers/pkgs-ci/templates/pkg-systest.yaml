@@ -4,6 +4,7 @@
     logrotate:
       artifactDaysToKeep: 90
       daysToKeep: 90
+
     properties:
       - heavy-job:
           weight: 8
@@ -14,6 +15,7 @@
             ENV_PREFIX={mos_version}-pkg-systest-{os}-{distro}
 
     parameters:
+
       - string:
           name: TEST_GROUP
           default: 'bvt_2'
@@ -61,6 +63,7 @@
       - bool:
           name: DEFAULT_UPDATE_FUEL
           default: true
+
     scm:
       - upstream:
           branch: '{fuel-main-branch}'
@@ -70,10 +73,13 @@
           branch: '{fuel-qa-branch}'
           repo: fuel-qa
           fuel-namespace: '{fuel-namespace}'
+
     triggers:
       - zuul
       - timed: "H */12 * * *"
+
     builders:
+
       - inject:
           # Set defaults which could be reinjected
           properties-content: |
@@ -84,89 +90,19 @@
           #!/bin/bash
           set -ex
           # Clean logs from previous runs
-          rm -vf fuel-qa/logs/* *.publish.setenvfile
-      - shell: rm -vf 'buildresult.params' '{pkg_type}.publish.setenvfile'
-      - shell: /bin/bash -xec 'touch {pkg_type}.publish.setenvfile'
+          rm -vf fuel-qa/logs/*
 
-      # This is done for flexibility.
-      # We could trigger this job with gerrit parameters and get corresponding artifact.
-      # Or we could trigger this job and pass required fields as parameters, so artifact won't be needed
-      # 1. remove existing file
-      - shell: rm -vf 'buildresult.params'
-      # 2. try to copy artifact
-      - copyartifact:
-          project: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
-          filter: 'buildresult.params'
-          which-build: last-successful
-          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-          optional: true
-      # 3. touch it, so the file will exist in all cases
-      - shell: touch 'buildresult.params'
-      # 4. inject file's content: artifact data or nothing
-      - inject-properties-file:
-          # Inject
-          # - useful:
-          #     BUILD_HOST
-          #     PKG_PATH
-          # - unuseful:
-          #     DIST
-          #     REPO_TYPE
-          #     GERRIT_CHANGE_STATUS
-          # - maybe useful:
-          #     EXTRAREPO
-          #     REQUEST_NUM
-          #     LP_BUG
-          #     IS_SECURITY
-          properties-file: 'buildresult.params'
+      - inject-from-job(same-patchset):
+          job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          artifact-name: 'buildresult.params'
 
-      - copyartifact:
-          project: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
-          filter: '{pkg_type}.publish.setenvfile'
-          which-build: last-successful
-          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-          optional: true
-      - shell: touch '{pkg_type}.publish.setenvfile'
-      - inject-properties-file:
-          # Injects package lists with version and repository URL
-          # depending on pkg type it will be:
-          # rpm
-          # - useful:
-          #     RPM_VERSION
-          #     RPM_BINARIES
-          #     RPM_REPO_URL
-          #     RPM_VERSION
-          # - unuseful:
-          #     RPM_PUBLISH_SUCCEEDED
-          #     RPM_DISTRO
-          #     RPM_CHANGE_REVISION
-          #     LP_BUG
-          # deb
-          # - useful:
-          #     DEB_VERSION
-          #     DEB_BINARIES
-          #     DEB_REPO_URL
-          #     RPM_VERSION
-          # - unuseful:
-          #     DEB_PUBLISH_SUCCEEDED
-          #     DEB_DISTRO
-          #     DEB_PACKAGENAME
-          #     DEB_CHANGE_REVISION
-          #     LP_BUG
-          properties-file: '{pkg_type}.publish.setenvfile'
+      - inject-from-job(same-patchset):
+          job-name: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+          artifact-name: '{pkg_type}.publish.setenvfile'
 
-      - copyartifact:
-          project: 'devops.{mos_version}.env'
-          filter: 'fuel_qa_commit.txt,magnet_link.txt,ubuntu_mirror_id.txt'
-          which-build: last-successful
-      - inject-properties-file:
-          # injects variable FUEL_QA_COMMIT
-          properties-file: 'fuel_qa_commit.txt'
-      - inject-properties-file:
-          # injects variable MAGNET_LINK
-          properties-file: 'magnet_link.txt'
-      - inject-properties-file:
-          # injects variable UBUNTU_MIRROR_ID
-          properties-file: 'ubuntu_mirror_id.txt'
+      - inject-devops-env:
+          # add FUEL_QA_COMMIT MAGNET_LINK UBUNTU_MIRROR_ID for tests
+          version: '{mos_version}'
 
       - inject:
           properties-content: |
