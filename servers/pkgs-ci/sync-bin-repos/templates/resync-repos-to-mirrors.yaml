@@ -4,10 +4,13 @@
     node: '{trsync-node}'
     logrotate:
         daysToKeep: 10
+
     properties:
+        - authorization: '{obj:authorization}'
         - inject:
             properties-content: |
               REPOCACHE_DIR=${{HOME}}/resync-repocache
+
     parameters:
         - string:
             name: SRCURI
@@ -47,7 +50,7 @@
           branch: '{trsync-scm-branch}'
           basedir: '{trsync-scm-basedir}'
     triggers:
-        - timed: 'H/30 * * * *'
+        - timed: '{schedule}'
     builders:
         - shell:
             !include-raw-escape:
