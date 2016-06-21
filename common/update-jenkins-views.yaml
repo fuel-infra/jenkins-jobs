@@ -61,3 +61,6 @@
       - timestamps
       - inject-passwords:
           global: true
+      - timeout:
+          fail: true
+          timeout: 30
