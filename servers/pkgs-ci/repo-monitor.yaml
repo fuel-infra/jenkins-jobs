@@ -25,7 +25,7 @@
     publishers:
       - archive:
           allow-empty: 'false'
-          artifacts: '**/report.txt'
+          artifacts: 'tmp/ubuntu/*-report.txt'
     scm:
       - fuel-infra:
           username: '{username-openstack-ci-jenkins}'
@@ -68,7 +68,7 @@
     publishers:
       - archive:
           allow-empty: 'false'
-          artifacts: '**/report.txt'
+          artifacts: 'tmp/centos/*-report.txt'
     scm:
       - fuel-infra:
           username: '{username-openstack-ci-jenkins}'
