@@ -31,5 +31,5 @@
           artifacts: 'output/**'
           allow-empty: 'true'
       - description-setter:
-          regexp: (^\[(?!blocked)[a-z]*\].*)
-          regexp-for-failed: (^\[blocked\].*)
+          regexp: (^<b>(JOBS|VIEWS):</b><br>\[(?!blocked)[a-z]*\].*)
+          regexp-for-failed: (^<b>(JOBS|VIEWS):</b><br>\[blocked\].*)
