@@ -12,7 +12,7 @@
     scm:
      - main-git:
           reponame: 'fuel-qa'
-          repobranch: 'origin/stable/mitaka'
+          repobranch: 'origin/master'
           basedir: ''
 
     triggers:
