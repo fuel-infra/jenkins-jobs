@@ -12,6 +12,7 @@
           variables: |
             MOS_CENTOS_ROOT=/mos-repos/centos/mos-master-centos7/
             MOS_UBUNTU_TARGET=9.0.target.txt
+            MIRROR_MOS_UBUNTU_SUITE=mos9.0
 
       - 'product-{version}{mod}.test_all':
           email: '{bvt-mail}'
