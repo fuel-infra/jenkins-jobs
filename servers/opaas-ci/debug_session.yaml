@@ -17,7 +17,7 @@
           name: DURATION
           default: '1'
           description: |
-            Duration in hours. Note that build will be aborted in 3.5 hours anyway.
+            Duration in hours. Note that build will be aborted in 4 hours anyway.
     properties:
       - authorization-allow-authorized
       - heavy-job:
@@ -38,5 +38,5 @@
 #          recipients: ci+alert@mirantis.com
     wrappers:
       - timeout:
-          timeout: 210
+          timeout: 240
           write-description: true

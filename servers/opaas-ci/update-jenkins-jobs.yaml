@@ -1,0 +1,6 @@
+- project:
+    name: opaas-ci.update-jenkins-jobs
+    ci-name: opaas-ci
+    jobs:
+      - update-jenkins-jobs:
+           node: opaas-slave

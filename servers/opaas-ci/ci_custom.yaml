@@ -3,7 +3,7 @@
     node: '{node_label}'
     properties:
       - heavy-job:
-          weight: 1
+          weight: '{weight}'
     parameters:
       - text:
           name: ADDITIONAL_PARAMETERS
@@ -17,11 +17,12 @@
             #
             OS_IMAGE={rc_os_image}
             # Remove ALL stack\env's from tenant?
-            OS_CLEANUP=true
+            OS_CLEANUP_BEFORE=true
+            OS_CLEANUP_AFTER=false
             # Remove ALL apps from tenant?
             APPS_CLEAN=false
-            # test, to be run
-            RUN_TEST=Docker/Kubernetes/tools/jenkins/ugly.py
+            # tests, to be run,via tox -e ${{RUN_TESTS}}
+            RUN_TEST=none
             #
             # Select murano_apps
             PACKAGES_LIST=KubernetesPod KubernetesEntitiesLibrary KubernetesCluster

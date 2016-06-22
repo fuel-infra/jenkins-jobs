@@ -42,7 +42,7 @@
             - comment-added-contains-event:
                 comment-contains-value: '{comment-contains-value-regexp}'
           silent-start: false
-          start-message: "Build Started: $JOB_NAME.\nLogs will be avaible after finish"
+          start-message: "Build Started. Logs will be avaible after finish"
           override-votes: true
           gerrit-build-started-verified-value: 0
           skip-vote:
@@ -64,14 +64,14 @@
               copy-console: true
               copy-after-failure: true
 - publisher:
-    name: ugly-test-log
+    name: opaas-log
     publishers:
       - scp:
           site: 'jenkins@ci-logs.fuel-infra.org:/var/www/share_logs/opaas-ci/'
           files:
             - target: 'logs/$LOG_PATH'
-              source: 'artifacts/runner.log'
-              keep-hierarchy: false
+              source: 'artifacts/**/*.log'
+              keep-hierarchy: true
               copy-after-failure: true
 - publisher:
     name: test-results
@@ -107,8 +107,6 @@
     properties:
       - authorization:
           anonymous:
-            - job-read
-            - job-extended-read
             - job-discover
           authenticated:
             - job-read

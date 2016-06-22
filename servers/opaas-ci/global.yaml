@@ -8,12 +8,10 @@
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
 
-    gerrit_trigger_on_recheck_regexp: '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*murano-ci: recheck'
-    log_server_url: "http://to_be_created.com/jobs_logs/"
+    gerrit_trigger_on_recheck_regexp: '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck'
     ssh-creds-slave-jenkins: 'fe477a96-f4ee-422d-96de-dd3929967fd4'
     ssh-creds-openstack-ci-jenkins: 'ad783ce0-8f8f-465d-b4d3-dbffd75444b1'
 
     packages_list: "Puppet SystemConfig OpenLDAP Gerrit Jenkins Zuul Nodepool CiCdEnvironment CiCdUtils"
-# openstack access configuration
+    # openstack access configuration and etc
     rc_os_image: 'ubuntu_14_murano-agent_upd'
-    rc_os_keyname: 'murano_ci_gerrit_key'

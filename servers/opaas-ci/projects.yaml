@@ -4,10 +4,11 @@
     jobs:
       - '{name}-{project-branch}-gerrit-check':
           project-name: 'openstack/ci-cd-pipeline-app-murano'
-          node_label: 'os_env2 || os_env3'
+          node_label: 'os_mitaka'
+          weight: 1
       - '{name}-custom-run':
           node_label: 'os_mitaka'
-
+          weight: 1
 - project:
     name: 'debug_session'
     weight: 1
