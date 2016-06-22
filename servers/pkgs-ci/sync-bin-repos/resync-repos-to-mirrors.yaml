@@ -8,12 +8,34 @@
     trsync-scm-basedir: 'trsync'
     mailto: 'fuel-build+ci-packaging@mirantis.com'
 
+    # doesn't run by timer if not set verbosely
+    schedule: ''
+
+    # default auth rules - ci only, add maintenance-mgmt after crsp GA
+    authorization:
+      ci:
+        - job-read
+        - job-build
+
     mos_version:
-      # fixme: remove this job after 9.0 GA
+
+      - '8.0':
+          rpm-repo-name: 'mos8.0-centos7-fuel'
+          authorization:
+            maintenance-mgmt:
+              - job-read
+              - job-build
+            ci:
+              - job-read
+              - job-build
+
       - '9.0':
           rpm-repo-name: 'mos9.0-centos7'
+          schedule: 'H/30 * * * *'
+
       - master:
           rpm-repo-name: 'mos-master-centos7'
+          schedule: 'H/30 * * * *'
 
     jobs:
       - '{mos_version}.resync-repos-to-mirrors'
