@@ -1,0 +1,56 @@
+- job-template:
+    name: '{name}-{project-branch}-gerrit-check'
+    node: '{node_label}'
+    properties:
+      - heavy-job:
+          weight: 1
+    concurrent: true
+    parameters:
+      - text:
+          name: ADDITIONAL_PARAMETERS
+          default: |
+            OS_IMAGE={rc_os_image}
+            OS_KEYNAME={rc_os_keyname}
+            UPLOAD_TO_OS=true
+            OS_CLEANUP=true
+            APPS_CLEAN=true
+            #
+            PACKAGES_LIST={packages_list}
+            GIT_REPO=openstack/ci-cd-pipeline-app-murano
+            #
+            APP_PREFIX=io.murano.opaas
+            APPS_ROOT=murano-apps/
+            RUN_TEST=tools/jenkins/ugly.py
+    scm:
+      - review-openstack-org:
+          skip-tag: true
+          wipe-workspace: false
+          project-basedir: ''
+          project-name: '{project-name}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+    triggers:
+      - review-openstack-org:
+          project-name: '{project-name}'
+          project-branch: '{project-branch}'
+          comment-contains-value-regexp: '{gerrit_trigger_on_recheck_regexp}'
+          log_server_url: '{log_server_url}'
+    wrappers:
+      - timeout:
+          timeout: 300
+      - ansicolor:
+            colormap: xterm
+      - timestamps
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-slave-jenkins}'
+    builders:
+      - inject:
+          properties-content: |
+            LOG_PATH=$GERRIT_CHANGE_NUMBER/$GERRIT_PATCHSET_NUMBER/$JOB_NAME/$BUILD_NUMBER
+      - inject:
+          properties-content: '$ADDITIONAL_PARAMETERS'
+      - shell:
+          !include-raw-escape: builders/apps_uploader.sh
+    publishers:
+      - console-log
+      - ugly-test-log

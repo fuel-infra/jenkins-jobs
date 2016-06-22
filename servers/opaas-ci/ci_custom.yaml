@@ -1,0 +1,65 @@
+- job-template:
+    name: '{name}-custom-run'
+    node: '{node_label}'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - text:
+          name: ADDITIONAL_PARAMETERS
+          default: |
+            OS_USERNAME=put_correct
+            OS_PASSWORD=put_correct
+            OS_TENANT_NAME=put_correct
+            OS_AUTH_URL=put_correct
+            OS_MURANO_URL=put_correct
+            OS_HEAT_URL=put_correct
+            #
+            OS_IMAGE={rc_os_image}
+            # Remove ALL stack\env's from tenant?
+            OS_CLEANUP=true
+            # Remove ALL apps from tenant?
+            APPS_CLEAN=false
+            # test, to be run
+            RUN_TEST=Docker/Kubernetes/tools/jenkins/ugly.py
+            #
+            # Select murano_apps
+            PACKAGES_LIST=KubernetesPod KubernetesEntitiesLibrary KubernetesCluster
+            # whole path to package: GIT_ROOT/APPS_ROOT/PACKAGES_LIST/package
+            APPS_ROOT=Docker/Kubernetes
+            # chose correct prefix!example for app "io.murano.apps.docker.kubernetes.KubernetesPod"
+            # this require for deleting OLD app from app-list
+            APP_PREFIX=io.murano.apps.docker.kubernetes.
+            # Upload packages to openstack?
+            UPLOAD_TO_OS=true
+            # Define commit list, if needed
+            COMMIT_LIST=none
+      - string:
+          name: GIT_REPO
+          default: openstack/murano-apps
+      - string:
+          name: GIT_BRANCH
+          default: master
+    scm:
+      - git:
+          basedir: ''
+          skip-tag: true
+          wipe-workspace: false
+          branches:
+            - $GIT_BRANCH
+          choosing-strategy: gerrit
+          url: https://review.openstack.org/$GIT_REPO
+    wrappers:
+      - timeout:
+          timeout: 300
+      - ansicolor:
+            colormap: xterm
+      - timestamps
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-slave-jenkins}'
+    builders:
+      - inject:
+          properties-content: '$ADDITIONAL_PARAMETERS'
+      - shell:
+          !include-raw-escape: builders/apps_uploader.sh
