@@ -110,14 +110,21 @@ main () {
     ./lab-vm exec puppet-master cat /etc/puppet/blacklist.txt | \
       grep -v '^$\|^\s*\#' > "${WORKSPACE}/blacklist.txt"
 
-    # get all available roles
+    # generate nodes and covered roles list
+    ./lab-vm exec puppet-master ls -1 /var/lib/hiera/nodes/ 2>/dev/null | \
+      sed 's/.test.local.yaml//g' | sed 's/-/_/g' | \
+      tee "${WORKSPACE}/selected.txt" | sed 's/[0-9]*//g' | sort -u \
+      > "${WORKSPACE}/covered.txt"
+
+    # generate roles (without roles already covered by nodes list)
     ./lab-vm exec puppet-master ls -1 /var/lib/hiera/roles/ 2>/dev/null | \
-      sed 's/.yaml//g' | egrep "${INCLUDE}" | egrep -v -w "${EXCLUDE}" \
-      > "${WORKSPACE}/selected.txt"
+      sed 's/.yaml//g' | grep -v -w -f "${WORKSPACE}/covered.txt" \
+      >> "${WORKSPACE}/selected.txt"
 
     # iterate all the filtered roles
     grep -v -w -f "${WORKSPACE}/blacklist.txt" "${WORKSPACE}/selected.txt" | \
-      sed 's/_/-/g' | xargs -n1 -P"${PARALLELISM}" -I '%' bash -c "
+      egrep "${INCLUDE}" | egrep -v -w "${EXCLUDE}" | sed 's/_/-/g' | \
+      xargs -n1 -P"${PARALLELISM}" -I '%' bash -c "
         # create new VM and perform first puppet run
         ./lab-vm create % 2>&1 | (sed 's/^/%: /')
         # stop tests when got exit code of 1, 4 or 6 on second puppet run

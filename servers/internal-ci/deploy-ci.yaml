@@ -57,7 +57,7 @@
           description: 'roles to test (egrep format)'
       - string:
           name: EXCLUDE
-          default: 'puppetmaster|slave_custom_ci'
+          default: 'puppetmaster|review|slave1|slave_custom_ci|slave_deploy|slave_packagingci|slave_perestroika_builder|slave_perestroika_publisher|slave_perestroika_repo|test_ci|zuul'
           description: 'roles to exclude (egrep format)'
 
     properties:
