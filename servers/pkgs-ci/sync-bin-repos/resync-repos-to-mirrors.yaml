@@ -20,7 +20,6 @@
     mos_version:
 
       - '8.0':
-          rpm-repo-name: 'mos8.0-centos7-fuel'
           authorization:
             maintenance-mgmt:
               - job-read
@@ -28,14 +27,28 @@
             ci:
               - job-read
               - job-build
+          srcpaths: |
+            mos-repos/centos/mos8.0-centos7-fuel/os
+            mos-repos/centos/mos8.0-centos7-fuel/proposed
+            mos-repos/centos/mos8.0-centos7-fuel/updates
+            mos-repos/centos/mos8.0-centos7-fuel/security
+            mos-repos/centos/mos8.0-centos7-fuel/holdback
+            mos-repos/ubuntu/8.0
 
       - '9.0':
-          rpm-repo-name: 'mos9.0-centos7'
-          schedule: 'H/30 * * * *'
+          schedule: 'H H/12 * * *'
+          srcpaths: |
+            mos-repos/centos/mos9.0-centos7/os
+            mos-repos/centos/mos9.0-centos7/proposed
+            mos-repos/centos/mos9.0-centos7/updates
+            mos-repos/centos/mos9.0-centos7/security
+            mos-repos/centos/mos9.0-centos7/holdback
+            mos-repos/ubuntu/9.0
 
       - master:
-          rpm-repo-name: 'mos-master-centos7'
-          schedule: 'H/30 * * * *'
+          schedule: 'H H/12 * * *'
+          srcpaths: |
+            mos-repos/xenial/master
 
     jobs:
       - '{mos_version}.resync-repos-to-mirrors'

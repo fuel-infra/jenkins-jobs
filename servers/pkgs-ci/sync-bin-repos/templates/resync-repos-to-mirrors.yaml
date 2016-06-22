@@ -19,13 +19,7 @@
                 URI of rsync root of source repositories
         - text:
             name: SRCPATHS
-            default: |
-                mos-repos/centos/{rpm-repo-name}/os
-                mos-repos/centos/{rpm-repo-name}/proposed
-                mos-repos/centos/{rpm-repo-name}/updates
-                mos-repos/centos/{rpm-repo-name}/security
-                mos-repos/centos/{rpm-repo-name}/holdback
-                mos-repos/ubuntu/{mos_version}
+            default: '{obj:srcpaths}'
             description: |
                 List of rsync root relative paths to the repositories
         - text:
@@ -42,6 +36,11 @@
                     rsync://osci-mirror-srt.srt.mirantis.net/mirror-sync
                     rsync://osci-mirror-kha.kha.mirantis.net/mirror-sync
                     rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 120
+
     scm:
       - fuel-infra:
           username: '{username-openstack-ci-jenkins}'
@@ -49,12 +48,15 @@
           repo: '{trsync-scm-repo}'
           branch: '{trsync-scm-branch}'
           basedir: '{trsync-scm-basedir}'
+
     triggers:
-        - timed: '{schedule}'
+      - timed: '{schedule}'
+
     builders:
-        - shell:
-            !include-raw-escape:
-              '../builders/resync-repo-to-mirrors.sh'
+      - shell:
+          !include-raw-escape:
+            '../builders/resync-repo-to-mirrors.sh'
+
     publishers:
       - email:
           recipients: '{mailto}'
