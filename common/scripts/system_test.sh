@@ -244,6 +244,7 @@ if [ "${UPDATE_FUEL}" = "true" ]; then
     UPDATE_FUEL_MIRROR="${UPDATE_FUEL_MIRROR}Packages/"
     # Given repo URL with appended 'Packages' can't be used for updates
     UPDATE_MASTER=false
+    CUSTOM_ENV=true
 else
     # Directive to update fuel's master node
     # set value depending on package type being tested
@@ -252,7 +253,7 @@ else
     fi
 fi
 
-export UPDATE_MASTER UPDATE_FUEL_MIRROR
+export UPDATE_MASTER UPDATE_FUEL_MIRROR CUSTOM_ENV
 
 ###################### Set test group ###############
 
