@@ -98,6 +98,15 @@
       - shell: rm -vf systest_testgroup.envfile
 
 ########################################################################
+# Builder for system test
+########################################################################
+
+- builder:
+    name: system-test
+    builders:
+      - shell: !include-raw: scripts/system_test.sh
+
+########################################################################
 # Builder used to download ISO
 #
 # This builder require additional variables described in script header

@@ -112,15 +112,17 @@
             MIRROR_UBUNTU={mirror_ubuntu}
       - guess-mirror
 
+      # For builds triggered by timer TEST_GROUP will be set from job parameters (bvt_2 by default).
+      # For zuul-triggered jobs TEST_GROUP will be set by the next macros.
+      - guess-testgroup
+
       - inject:
           # when started by zuul, then parameters defaults are not applied
           # when started by jenkins inject will not override parameters
           properties-content: |
             EXTRA_RPM_REPOS_PRIORITY=1
             EXTRA_DEB_REPOS_PRIORITY=1052
-      - shell:
-          !include-raw-escape:
-            '../builders/system_test.sh'
+      - system-test
 
     wrappers:
       - timeout:

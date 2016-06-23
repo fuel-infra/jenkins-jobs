@@ -175,9 +175,7 @@
           properties-content: |
             EXTRA_RPM_REPOS_PRIORITY=1
             EXTRA_DEB_REPOS_PRIORITY=1052
-      - shell:
-          !include-raw-escape:
-            'builders/system_test.sh'
+      - system-test
 
     wrappers:
       - timeout:
