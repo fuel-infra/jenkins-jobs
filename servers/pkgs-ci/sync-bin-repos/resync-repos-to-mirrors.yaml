@@ -36,7 +36,7 @@
             mos-repos/ubuntu/8.0
 
       - '9.0':
-          schedule: 'H H/12 * * *'
+          schedule: 'H * * * *'
           srcpaths: |
             mos-repos/centos/mos9.0-centos7/os
             mos-repos/centos/mos9.0-centos7/proposed
@@ -46,8 +46,14 @@
             mos-repos/ubuntu/9.0
 
       - master:
-          schedule: 'H H/12 * * *'
+          schedule: 'H * * * *'
           srcpaths: |
+            mos-repos/centos/mos-master-centos7/os
+            mos-repos/centos/mos-master-centos7/proposed
+            mos-repos/centos/mos-master-centos7/updates
+            mos-repos/centos/mos-master-centos7/security
+            mos-repos/centos/mos-master-centos7/holdback
+            mos-repos/ubuntu/master
             mos-repos/xenial/master
 
     jobs:

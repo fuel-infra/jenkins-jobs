@@ -5,41 +5,55 @@
     logrotate:
         daysToKeep: 10
 
+    description: |
+      <h3> Publish/synchronize internal repos to public mirrors <h3>
+      <p>
+        <b>Important note:</b> when starts at first time or at new server or
+        with additional repos in list then it possibly will fail on
+        timeout, because filling of repocache takes much time.
+        This will not brake destination mirrors.
+      <p>
+        If such issue happens, then manually disable timeout and restart
+        this job. It will fill repocache and next runs could be performed
+        normally
+      <p>
+        <ul>
+          <li> <b> Owner: </b> build-team </li>
+          <li> <b> Contacts: </b> #infra </li>
+        </ul>
+      </p>
+
     properties:
-        - authorization: '{obj:authorization}'
-        - inject:
-            properties-content: |
-              REPOCACHE_DIR=${{HOME}}/resync-repocache
+      - authorization: '{obj:authorization}'
 
     parameters:
-        - string:
-            name: SRCURI
-            default: 'rsync://{repo-host}/mirror'
-            description: |
-                URI of rsync root of source repositories
-        - text:
-            name: SRCPATHS
-            default: '{obj:srcpaths}'
-            description: |
-                List of rsync root relative paths to the repositories
-        - text:
-            name: HOSTS_TO_SYNC
-            default: |
-                rsync://seed-cz1.fuel-infra.org/mirror-sync
-                rsync://seed-us1.fuel-infra.org/mirror-sync
-            description: |
-                Host list sync to
-                Default:
-                    rsync://seed-cz1.fuel-infra.org/mirror-sync
-                    rsync://seed-us1.fuel-infra.org/mirror-sync
-                    rsync://osci-mirror-msk.msk.mirantis.net/mirror-sync
-                    rsync://osci-mirror-srt.srt.mirantis.net/mirror-sync
-                    rsync://osci-mirror-kha.kha.mirantis.net/mirror-sync
-                    rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync
+      - string:
+          name: SRCURI
+          default: 'rsync://{repo-host}/mirror'
+          description: |
+            URI of rsync root of source repositories
+      - text:
+          name: SRCPATHS
+          default: '{obj:srcpaths}'
+          description: |
+            List of rsync root relative paths to the repositories
+      - text:
+          name: HOSTS_TO_SYNC
+          default: |
+            rsync://seed-cz1.fuel-infra.org/mirror-sync
+            rsync://seed-us1.fuel-infra.org/mirror-sync
+          description: |
+            Host list sync to
+            Default:
+              rsync://seed-cz1.fuel-infra.org/mirror-sync
+              rsync://seed-us1.fuel-infra.org/mirror-sync
+              rsync://osci-mirror-msk.msk.mirantis.net/mirror-sync
+              rsync://osci-mirror-srt.srt.mirantis.net/mirror-sync
+              rsync://osci-mirror-kha.kha.mirantis.net/mirror-sync
+              rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync
     wrappers:
-      - timeout:
-          fail: true
-          timeout: 120
+      - build-timeout:
+          timeout: 50
 
     scm:
       - fuel-infra:
@@ -53,6 +67,10 @@
       - timed: '{schedule}'
 
     builders:
+
+      - inject:
+          properties-content: |
+            REPOCACHE_DIR=${{HOME}}/resync-repocache
       - shell:
           !include-raw-escape:
             '../builders/resync-repo-to-mirrors.sh'
