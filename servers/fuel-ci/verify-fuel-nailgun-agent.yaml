@@ -9,6 +9,9 @@
       Uses rvm with ruby1.8 and ruby1.9
     node: fuel-nailgun-agent
     concurrent: true
+
+    timer: ''
+
     parameters:
       - string:
           name: GERRIT_REFSPEC
@@ -32,6 +35,7 @@
                 refspec: '{refspec}'
                 url: https://review.openstack.org/openstack/fuel-nailgun-agent.git
           choosing-strategy: '{choosing-strategy}'
+
     triggers:
       - gerrit:
           trigger-on: '{obj:trigger_on}'
@@ -43,7 +47,7 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
-      - timed: '{timed}'
+      - timed: '{timer}'
 
 - project:
     name: dualcheck-fuel-nailgun-agent
@@ -57,7 +61,7 @@
           email-type: default
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
-          timed: '0 2 * * *'
+          timer: '0 2 * * *'
       - '{prefix}-fuel-nailgun-agent':
           prefix: gate
           trigger_on:
@@ -65,4 +69,3 @@
           email-type: alert-on-merge
           refspec: refs/heads/$GERRIT_BRANCH
           choosing-strategy: default
-          timed: ''

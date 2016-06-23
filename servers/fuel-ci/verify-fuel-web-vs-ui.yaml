@@ -5,6 +5,8 @@
     node: verify-fuel-ui
     concurrent: true
 
+    timer: ''
+
     properties:
       - heavy-job:
           weight: 1
@@ -53,7 +55,7 @@
               project-pattern: openstack/{proj_main}
               branches: '{obj:branches}'
           custom-url: '* $JOB_NAME $BUILD_URL'
-      - timed: '{timed}'
+      - timed: '{timer}'
 
     wrappers:
       - ansicolor:
@@ -81,15 +83,18 @@
     <<: *verify-fuel-web-vs-ui-base-job-template
 
     name: 'nightly-{proj_helper}-on-{proj_main}'
+
+    timer: ''
+
     triggers:
-      - timed: '{timed}'
+      - timed: '{timer}'
 
 
 - project: &dualcheck-fuel-ui-on-fuel-web
     name: dualcheck-fuel-ui-on-fuel-web
     email-type: default
     ui_test_group: 'test'
-    timed: '@midnight'
+    timer: '@midnight'
     branches:
       - branch-compare-type: PLAIN
         branch-pattern: 'master'

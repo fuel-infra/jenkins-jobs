@@ -8,6 +8,9 @@
       Uses Docker container<br>
       Job is currently running in non-voting mode
     node: 'bats_tests'
+
+    timer: ''
+
     parameters:
       - string:
           name: GERRIT_REFSPEC
@@ -35,8 +38,9 @@
           url: https://review.openstack.org/openstack/fuel-library.git
           refspec: '{refspec}'
           choosing-strategy: '{choosing-strategy}'
+
     triggers:
-      - timed: '{timed}'
+      - timed: '{timer}'
       - gerrit:
           trigger-on: '{obj:trigger_on}'
           server-name: defaultServer
@@ -70,7 +74,7 @@
           email-type: default
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
-          timed: '0 13 * * *'
+          timer: '0 13 * * *'
       - '{prefix}-docker-fuel-library-bats-tests':
           prefix: gate
           trigger_on:
@@ -78,4 +82,3 @@
           email-type: alert-on-merge
           refspec: refs/heads/$GERRIT_BRANCH
           choosing-strategy: default
-          timed: ''

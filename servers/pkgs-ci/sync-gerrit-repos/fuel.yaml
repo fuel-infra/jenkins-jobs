@@ -9,7 +9,7 @@
         fallback-branch: ''
 
     # Syncronization schedule
-    sync-schedule: 'H 3 * * *'  # every day at 3:00 am, spread evenly
+    timer: 'H 3 * * *'  # every day at 3:XX am, spread evenly
 
     # Gerrit parameters
     gerrit-host: 'review.fuel-infra.org'

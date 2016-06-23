@@ -8,9 +8,6 @@
     trsync-scm-basedir: 'trsync'
     mailto: 'fuel-build+ci-packaging@mirantis.com'
 
-    # doesn't run by timer if not set verbosely
-    schedule: ''
-
     # default auth rules - ci only, add maintenance-mgmt after crsp GA
     authorization:
       ci:
@@ -36,7 +33,7 @@
             mos-repos/ubuntu/8.0
 
       - '9.0':
-          schedule: 'H * * * *'
+          timer: 'H * * * *'
           srcpaths: |
             mos-repos/centos/mos9.0-centos7/os
             mos-repos/centos/mos9.0-centos7/proposed
@@ -46,7 +43,7 @@
             mos-repos/ubuntu/9.0
 
       - master:
-          schedule: 'H * * * *'
+          timer: 'H * * * *'
           srcpaths: |
             mos-repos/centos/mos-master-centos7/os
             mos-repos/centos/mos-master-centos7/proposed

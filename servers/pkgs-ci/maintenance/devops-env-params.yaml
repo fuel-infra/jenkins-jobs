@@ -8,3 +8,8 @@
       - 'devops.{env-id}.env_params':
           env-id: 'master'
           job-name: '10.0.test_all'
+          # schedule is much more frequent than scheduled building of new ISOs
+          # because we sometimes trigger building manually and don't want to
+          # keep in mind that after ~2 hours we need to retrigger this job too
+          # so .. let it be triggered reasonably often
+          timer: 'H/30 * * * *'

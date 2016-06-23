@@ -23,6 +23,8 @@
         </ul>
       </p>
 
+    timer: ''
+
     properties:
       - authorization: '{obj:authorization}'
 
@@ -69,7 +71,7 @@
           basedir: '{trsync-scm-basedir}'
 
     triggers:
-      - timed: '{schedule}'
+      - timed: '{timer}'
 
     builders:
 

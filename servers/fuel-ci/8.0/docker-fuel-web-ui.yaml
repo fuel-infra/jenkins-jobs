@@ -87,7 +87,7 @@
           email-type: default
           refspec: $GERRIT_REFSPEC
           choosing-strategy: gerrit
-          timed: '0 11 * * *'
+          timer: '0 11 * * *'
       - '8.0.{prefix}-docker-fuel-web-ui':
           prefix: gate
           trigger_on:
@@ -95,4 +95,3 @@
           email-type: alert-on-merge
           refspec: refs/heads/$GERRIT_BRANCH
           choosing-strategy: default
-          timed: ''
