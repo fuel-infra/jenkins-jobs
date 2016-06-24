@@ -1,7 +1,7 @@
 - job-group:
    name: '8.0-system_tests'
    version-id: '8.0'
-   test-type:  'system_test'
+   test-type: 'system_test'
    repobranch: 'origin/stable/8.0'
    reponame: 'fuel-qa'
    venvpath: '/home/jenkins/qa-venv-8.0'
@@ -153,8 +153,7 @@
      - '8.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'rh'
          node: 'systest-rh'
-         pre-script: |
-            source ~/.rhel_creds
+         properties-file: /home/jenkins/.rhel_creds
          properties: |
             RH_IMAGE=rhel7_04022016.qcow2
             RH_IMAGE_PATH=/home/jenkins/workspace/cloud-images/

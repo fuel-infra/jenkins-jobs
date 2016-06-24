@@ -34,6 +34,9 @@
     # properties
     #     List of strings "VAR=value".
     #     These variables will be injected in job environment before the build
+    # properties-file
+    #     Path to file with additional properties stored on slave, variables
+    #     will be injected to job before test start.
     name: '8.0.{test-type}.{dist}.{testgroup}'
     defaults: '8.0.system_tests'
     block-downstream: false
@@ -49,6 +52,7 @@
           DEPLOYMENT_TIMEOUT=10800
     - inject: # overrides
         properties-content: '{properties}'
+        properties-file: '{properties-file}'
     - shell: |
         #!/bin/bash
         echo "=== [systest PRE-script] ==="
