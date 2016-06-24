@@ -232,7 +232,16 @@ if [ -z "${RPM_REPO_URL}" ]; then
     UPDATE_FUEL_MIRROR=$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}")/
 else
     # when not canary builds
-    UPDATE_FUEL_MIRROR="${RPM_REPO_URL}/"
+    # Prepare list of repositories containig Fuel updates (rpm only)
+    FUEL_MIRRORS=""
+    for REPO in ${EXTRA_RPM_REPOS//|/ }; do
+        # Remove repo name
+        REPO=${REPO#*,}
+        # Remove repo priority
+        REPO=${REPO%,*}
+        FUEL_MIRRORS="${FUEL_MIRRORS:+${FUEL_MIRRORS} }${REPO}"
+    done
+    UPDATE_FUEL_MIRROR="${FUEL_MIRRORS}"
 fi
 
 # Clear stale package cache
