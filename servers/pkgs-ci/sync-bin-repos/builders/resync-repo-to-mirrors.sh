@@ -138,6 +138,7 @@ FAILED PATH: ${SYNCPATH}"
         # Detect changes of the repository and sync new
         # repository state to the hosts
         #
+        [ "$FORCE" == "true" ] && rm -f "${DSTPATH}.chksum"
         if ! diff -N -q "${TMP_DIR}.chksum" "${DSTPATH}.chksum" &>/dev/null ; then
             rm -rf "${DSTPATH}" "${DSTPATH}.chksum"
             mv "${TMP_DIR}" "${DSTPATH}"

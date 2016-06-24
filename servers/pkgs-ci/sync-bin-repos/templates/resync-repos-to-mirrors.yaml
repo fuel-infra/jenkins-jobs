@@ -37,6 +37,11 @@
           default: '{obj:srcpaths}'
           description: |
             List of rsync root relative paths to the repositories
+      - bool:
+          name: FORCE
+          default: false
+          description: |
+              Run sync even if there are no changes in the repositories
       - text:
           name: HOSTS_TO_SYNC
           default: |
