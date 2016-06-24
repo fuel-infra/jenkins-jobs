@@ -121,12 +121,22 @@ main () {
       sed 's/.yaml//g' | grep -v -w -f "${WORKSPACE}/covered.txt" \
       >> "${WORKSPACE}/selected.txt"
 
+    # generate a file with role to image name mapping
+    ./lab-vm exec puppet-master "grep -RPo '^#.*(?<=image:)[^\s]+' \
+      /var/lib/hiera/roles" | awk -F '/|image:|.yaml:#' '{print $6, $8}' \
+      > "${WORKSPACE}/mapping.txt"
+
     # iterate all the filtered roles
     grep -v -w -f "${WORKSPACE}/blacklist.txt" "${WORKSPACE}/selected.txt" | \
       egrep "${INCLUDE}" | egrep -v -w "${EXCLUDE}" | sed 's/_/-/g' | \
       xargs -n1 -P"${PARALLELISM}" -I '%' bash -c "
+        # generate role name
+        ROLE=\$(echo % | sed 's/-/_/g' | sed 's/[0-9]*//g')
+        # check if image name set in mapping file
+        IMAGE=\$(awk -v role=\${ROLE} '{if (\$1 == role) { print \$2 }}' \
+          ${WORKSPACE}/mapping.txt)
         # create new VM and perform first puppet run
-        ./lab-vm create % 2>&1 | (sed 's/^/%: /')
+        ./lab-vm create % \${IMAGE} 2>&1 | (sed 's/^/%: /')
         # stop tests when got exit code of 1, 4 or 6 on second puppet run
         ./lab-vm exec % puppet agent --test 2>&1 | (sed 's/^/%: /')
         if [[ '146' =~ \${PIPESTATUS} ]]; then
