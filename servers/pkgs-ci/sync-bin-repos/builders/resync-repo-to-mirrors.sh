@@ -91,6 +91,9 @@ TRSYNC_BIN=$(which trsync)
 [ -z "$HOSTS_TO_SYNC" ] && exit_with_error "Hosts to sync are not defined"
 
 [ -z  "$REPOCACHE_DIR" ] && REPOCACHE_DIR=${WRK_DIR}/data
+TIMESTAMP=$(date "+%Y-%m-%d-%H%M%S")
+SNAPSHOT_DIR=snapshots
+
 failedmessage=""
 for SRCPATH in $SRCPATHS; do
     SYNCPATH=${SRCPATH}
@@ -145,6 +148,8 @@ FAILED PATH: ${SYNCPATH}"
                     -d "${host}/${SYNCPATH%/*}" \
                     -s "${DSTPATH##*/}" \
                     --init-directory-structure \
+                    --snapshot-dir "$SNAPSHOT_DIR" \
+                    --timestamp "$TIMESTAMP" \
                     || failedhosts="${failedhosts} ${host}"
             done
         fi
