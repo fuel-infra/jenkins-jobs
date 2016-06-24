@@ -52,7 +52,7 @@ esac
 # OS-specific parameters by package type
 case "{pkg_type}" in
     rpm )
-        UPDATE_FUEL=true
+        UPDATE_MASTER=true
         ;;
 esac
 
@@ -162,6 +162,6 @@ test "${{UNSET_LP_BUG:-false}}" == "true" && sed -ri '/^LP_BUG=/ d' buildresult.
 
 cat >> systest.params <<EOF
 IS_FUEL=${{IS_FUEL:-false}}
-UPDATE_FUEL=${{UPDATE_FUEL:-false}}
+UPDATE_MASTER=${{UPDATE_MASTER:-false}}
 REBUILD_ISO=${{REBUILD_ISO:-false}}
 EOF
