@@ -40,7 +40,7 @@
           description: 'OpenStack flavor to use'
       - string:
           name: OS_IMAGE_NAME
-          default: 'trusty-server-cloudimg-amd64-17-Jun-2016'
+          default: 'ci-trusty-server-cloudimg-amd64'
           description: 'OpenStack image to use'
       - string:
           name: OS_OPENRC_PATH
