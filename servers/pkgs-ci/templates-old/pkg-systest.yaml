@@ -15,6 +15,8 @@
             ENV_PREFIX={mos_version}-pkg-systest-{os}-{distro}
             UBUNTU_DIST={main_ubuntu_release}
 
+            REMOTE_REPO_HOST={repo-host}
+
             DEB_DIST_NAME={deb-dist-name}
             DEB_REPO_PATH={mos-deb-repo-path}/{mos_version}
             RPM_REPO_PATH={mos-rpm-repo-path}/os/x86_64/
@@ -66,7 +68,7 @@
           name: REBUILD_ISO
           default: false
       - bool:
-          name: UPDATE_FUEL
+          name: UPDATE_MASTER
           default: true
       - string:
           name: ENV_PREFIX
@@ -121,7 +123,7 @@
       - inject:
           # injects variables for systest:
           # usable:
-          # - UPDATE_FUEL
+          # - UPDATE_MASTER
           # - REBUILD_ISO
           # unusable:
           # - IS_FUEL

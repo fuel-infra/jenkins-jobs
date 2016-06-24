@@ -61,7 +61,7 @@
           name: DEFAULT_REBUILD_ISO
           default: false
       - bool:
-          name: DEFAULT_UPDATE_FUEL
+          name: DEFAULT_UPDATE_MASTER
           default: true
 
     scm:
@@ -84,7 +84,7 @@
           # Set defaults which could be reinjected
           properties-content: |
             REBUILD_ISO=$DEFAULT_REBUILD_ISO
-            UPDATE_FUEL=$DEFAULT_UPDATE_FUEL
+            UPDATE_MASTER=$DEFAULT_UPDATE_MASTER
 
       - shell: |
           #!/bin/bash
