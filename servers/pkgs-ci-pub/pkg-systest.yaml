@@ -103,12 +103,12 @@
           # - useful:
           #     BUILD_HOST
           #     PKG_PATH
+          #     EXTRAREPO
+          #     REPO_TYPE
           # - unuseful:
           #     DIST
-          #     REPO_TYPE
           #     GERRIT_CHANGE_STATUS
           # - maybe useful:
-          #     EXTRAREPO
           #     REQUEST_NUM
           #     LP_BUG
           #     IS_SECURITY
