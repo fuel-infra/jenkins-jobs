@@ -1,0 +1,94 @@
+- job-template:
+    name: docker_fuel_noop_fixtures_tests
+    builders:
+      - shell:
+          !include-raw-escape: builders/run_docker.sh
+    concurrent: true
+    description: |
+      Runs ./utils/jenkins/fuellib_noop_tests.sh<br><br>
+      Uses Docker container<br>
+      Job is currently running in non-voting mode
+    node: 'fuel-library-unit-tests'
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: GERRIT_BRANCH
+          default: 'master'
+      - string:
+          name: DOCKER_IMAGE
+          default: 'fuel_noop_fixtures'
+      - string:
+          name: ENVVARS
+          default: '{envvars}'
+          description: 'Environment variables'
+      - string:
+          name: VOLUMES
+          default: '{volumes}'
+          description: 'Volumes to mount into container separated with spaces'
+    properties:
+      - heavy-job:
+          weight: 2
+      - throttle:
+          max-per-node: 1
+          option: project
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                url: https://review.openstack.org/openstack/fuel-library.git
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: '{refspec}'
+                url: https://review.openstack.org/openstack/fuel-noop-fixtures.git
+          choosing-strategy: '{choosing-strategy}'
+          basedir: tests/noop/fuel-noop-fixtures
+    triggers:
+      - timed: '{timed}'
+      - gerrit:
+          trigger-on: '{obj:trigger_on}'
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'openstack/fuel-noop-fixtures'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/mitaka'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 90
+          write-description: true
+    publishers:
+      - 'email-{email-type}'
+
+- project:
+    name: docker_fuel_noop_fixtures_tests
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
+    envvars: ''
+    jobs:
+      - 'docker_fuel_noop_fixtures_tests':
+          trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          email-type: default
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+          timed: 'H 2 * * *'
