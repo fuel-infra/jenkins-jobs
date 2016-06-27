@@ -90,7 +90,7 @@
           #!/bin/bash
           set -ex
           # Clean logs from previous runs
-          rm -vf fuel-qa/logs/* *.publish.setenvfile
+          rm -vf fuel-qa/logs/* buildresult.params *.publish.setenvfile
       - copyartifact:
           project: '{mos_version}-pkg-pipeline-{os}'
           filter: 'buildresult.params,{pkg_type}.publish.setenvfile,systest.params'
