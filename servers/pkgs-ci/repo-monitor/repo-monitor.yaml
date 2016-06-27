@@ -1,0 +1,31 @@
+- project:
+    name: 'repo-monitors'
+    ns-repo-monitor: ''
+    version-id:
+      - '7.0':
+          ns-repo-monitor: '7.0/'
+          rpm-dist-name: mos7.0-centos6-fuel
+          deb-include-repo: 'main proposed updates'
+          rpm-include-repo: 'os proposed updates'
+          rpm-distro: centos6
+      - '8.0':
+          rpm-dist-name: mos8.0-centos7-fuel
+          deb-include-repo: 'main proposed'
+          rpm-include-repo: 'os proposed'
+          rpm-distro: 'centos7'
+      - '9.0':
+          rpm-dist-name: mos9.0-centos7
+          deb-include-repo: 'main proposed'
+          rpm-include-repo: 'os proposed'
+          rpm-distro: 'centos7'
+      - 'master':
+          rpm-dist-name: mos-master-centos7
+          deb-include-repo: 'main proposed'
+          rpm-include-repo: 'os proposed'
+          rpm-distro: 'centos7'
+    scm-repo: 'fuel-infra/repo-monitor'
+    build-node: 'new-builder'
+    jobs:
+      - '{version-id}-deb-repo-monitor'
+      - '{version-id}-rpm-repo-monitor'
+

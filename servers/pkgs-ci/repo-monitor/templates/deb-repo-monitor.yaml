@@ -1,0 +1,41 @@
+- job-template:
+    name: '{version-id}-deb-repo-monitor'
+    project-type: freestyle
+    description: "Repo monitor for {version-id} ubuntu repository"
+    node: '{build-node}'
+    triggers:
+      - timed: "H 10 * * *"
+    builders:
+      - inject:
+          properties-content: |
+            REPO={version-id}
+            TEMP_DIR=${{WORKSPACE}}/tmp
+            SRC_DIR=${{WORKSPACE}}/src
+            KNOWN_ISSUES_LIST=${{WORKSPACE}}/{ns-repo-monitor}exceptions/deb/{version-id}_known_issues.txt
+            PACKAGES_REPO_HOST=perestroika-repo-tst.infra.mirantis.net/mos-repos
+            INCLUDE_REPOS={deb-include-repo}
+            GERRIT_HOST=review.fuel-infra.org
+            GERRIT_PORT=29418
+            GERRIT_USER={username-openstack-ci-jenkins}
+            GERRIT_QUERY_FORMAT=TEXT
+      - shell: |
+          #!/bin/bash
+          set -ex
+          "${{WORKSPACE}}/{ns-repo-monitor}deb-repo-monitor.sh"
+    publishers:
+      - archive:
+          allow-empty: 'false'
+          artifacts: 'tmp/ubuntu/*-report.txt'
+    scm:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: '{scm-repo}'
+          branch: 'master'
+          basedir: ''
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-fuel-osci-bot}'
+            - '{ssh-creds-pkgs-ci}'
