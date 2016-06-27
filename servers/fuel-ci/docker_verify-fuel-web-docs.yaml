@@ -1,0 +1,90 @@
+- job-template:
+    name: '{prefix}-docker-fuel-web-docs'
+    builders:
+      - shell:
+          !include-raw-escape: builders/run_docker.sh
+    concurrent: true
+    description: |
+      Test requests on gerrit<br><br>
+      Uses Docker container<br>
+      Job is currently running in non-voting mode
+    logrotate:
+      artifactDaysToKeep: 30
+      artifactNumToKeep: 100
+      daysToKeep: 30
+      numToKeep: 100
+    node: 'fuel-web'
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: DOCKER_IMAGE
+          default: 'fuel-web-docs'
+      - string:
+          name: ENVVARS
+          default: '{envvars}'
+          description: 'Environment variables'
+      - string:
+          name: VOLUMES
+          default: '{volumes}'
+          description: 'Volumes to mount into container separated with spaces'
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          enabled: true
+          max-per-node: 1
+          max-total: 0
+          option: project
+    publishers:
+      - html-publisher:
+          allow-missing: true
+          keep-all: true
+          dir: 'docs/_build/html'
+          files: 'index.html'
+          name: 'Fuel Development Docs build results'
+      - email-default
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          url: 'https://review.openstack.org/openstack/fuel-web'
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+    triggers:
+        - timed: '0 2 * * *'
+        - gerrit:
+            trigger-on:
+              - patchset-created-event
+              - comment-added-contains-event:
+                  comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+            server-name: defaultServer
+            projects:
+              - project-compare-type: PLAIN
+                project-pattern: 'openstack/fuel-web'
+                branches:
+                  - branch-compare-type: ANT
+                    branch-pattern: '**'
+            skip-vote:
+              successful: true
+              failed: true
+              unstable: true
+              notbuilt: true
+            custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 15
+          write-description: true
+      - ansicolor:
+          colormap: xterm
+
+- project:
+    name: dualcheck-docker-fuel-web-docs
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
+    envvars: ''
+    jobs:
+      - '{prefix}-docker-fuel-web-docs':
+          prefix: verify
+
