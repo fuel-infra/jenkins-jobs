@@ -91,6 +91,7 @@
 - builder:
     name: guess-testgroup
     builders:
+      - shell: rm -vf systest_testgroup.envfile
       - shell: !include-raw: scripts/guess-testgroup.sh
       - shell: touch systest_testgroup.envfile
       - inject-properties-file:
