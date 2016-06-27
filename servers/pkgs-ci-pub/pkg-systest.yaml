@@ -82,86 +82,17 @@
           rm -vf fuel-qa/logs/* fuel-qa/nosetests.xml
           # Pre-create JUnit results file to not fail because of JUnit publisher
           touch fuel-qa/nosetests.xml
-          # Remove parameter files from previous runs
-          rm -vf 'buildresult.params' '{pkg_type}.publish.setenvfile' 'magnet_link.txt'
 
-      # This is done for flexibility.
-      # We could trigger this job with gerrit parameters and get corresponding artifact.
-      # Or we could trigger this job and pass required fields as parameters, so artifact won't be needed
-      # 1. try to copy artifact
-      - copyartifact:
-          project: '{project-version}-{name}-build-{distro}'
-          filter: 'buildresult.params'
-          which-build: last-successful
-          parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
-          optional: true
-      # 2. touch it, so the file will exist in all cases
-      - shell: touch 'buildresult.params'
-      # 3. inject file's content: artifact data or nothing
-      - inject-properties-file:
-          # Inject
-          # - useful:
-          #     BUILD_HOST
-          #     PKG_PATH
-          #     EXTRAREPO
-          #     REPO_TYPE
-          # - unuseful:
-          #     DIST
-          #     GERRIT_CHANGE_STATUS
-          # - maybe useful:
-          #     REQUEST_NUM
-          #     LP_BUG
-          #     IS_SECURITY
-          properties-file: 'buildresult.params'
+      - inject-from-job(same-patchset):
+          job-name: '{project-version}-{name}-build-{distro}'
+          artifact-name: 'buildresult.params'
 
-      - copyartifact:
-          project: '{project-version}-{name}-publish-{distro}'
-          filter: '{pkg_type}.publish.setenvfile'
-          which-build: last-successful
-          parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
-          optional: true
-      - shell: touch '{pkg_type}.publish.setenvfile'
-      - inject-properties-file:
-          # Injects package lists with version and repository URL
-          # depending on pkg type it will be:
-          # rpm
-          # - useful:
-          #     RPM_VERSION
-          #     RPM_BINARIES
-          #     RPM_REPO_URL
-          #     RPM_VERSION
-          # - unuseful:
-          #     RPM_PUBLISH_SUCCEEDED
-          #     RPM_DISTRO
-          #     RPM_CHANGE_REVISION
-          #     LP_BUG
-          # deb
-          # - useful:
-          #     DEB_VERSION
-          #     DEB_BINARIES
-          #     DEB_REPO_URL
-          #     RPM_VERSION
-          # - unuseful:
-          #     DEB_PUBLISH_SUCCEEDED
-          #     DEB_DISTRO
-          #     DEB_PACKAGENAME
-          #     DEB_CHANGE_REVISION
-          #     LP_BUG
-          properties-file: '{pkg_type}.publish.setenvfile'
+      - inject-from-job(same-patchset):
+          job-name: '{project-version}-{name}-publish-{distro}'
+          artifact-name: '{pkg_type}.publish.setenvfile'
 
-      - copyartifact:
-          project: 'devops.{project-version}.env'
-          filter: 'fuel_qa_commit.txt,magnet_link.txt,ubuntu_mirror_id.txt'
-          which-build: last-successful
-      - inject:
-          # injects variable FUEL_QA_COMMIT
-          properties-file: 'fuel_qa_commit.txt'
-      - inject:
-          # injects variable MAGNET_LINK
-          properties-file: 'magnet_link.txt'
-      - inject:
-          # injects variable UBUNTU_MIRROR_ID
-          properties-file: 'ubuntu_mirror_id.txt'
+      - inject-devops-env:
+          version: '{project-version}'
 
       - guess-mirror
 

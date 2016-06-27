@@ -35,21 +35,17 @@
       - perestroika
 
     builders:
-      - copyartifact:
-          project: '{project-version}-{name}-build-{distro}'
-          filter: 'buildresult.params'
-          which-build: last-successful
-          parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
-          optional: true
-      - shell: touch 'buildresult.params'
-      - inject:
-          properties-file: 'buildresult.params'
+
+      - inject-from-job(same-patchset):
+          job-name: '{project-version}-{name}-build-{distro}'
+          artifact-name: 'buildresult.params'
+
       - shell: |
           #!/bin/bash
           set -ex
 
           # Remove stale artifacts
-          rm -vf *.publish.setenvfile buildresult.params pkg-versions.*
+          rm -vf pkg-versions.*
 
           # FIXME: Remove private DNS settings
           cat /dev/null > ${{WORKSPACE}}/fuel-mirror/perestroika/docker-builder/config
