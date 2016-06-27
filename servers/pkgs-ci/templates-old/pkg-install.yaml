@@ -37,17 +37,15 @@
       - shell:
           !include-raw-escape:
             '../builders/mos.install.cleanup.sh'
-      - copyartifact:
-          project: '{mos_version}-pkg-pipeline-{os}'
-          filter: 'buildresult.params, {pkg_type}.publish.setenvfile, tests.envfile'
-          which-build: last-successful
-          parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
-      - inject:
-          properties-file: 'buildresult.params'
-      - inject:
-          properties-file: '{pkg_type}.publish.setenvfile'
-      - inject:
-          properties-file: 'tests.envfile'
+      - inject-from-job(same-patchset):
+          job-name: '{mos_version}-pkg-pipeline-{os}'
+          artifact-name: 'buildresult.params'
+      - inject-from-job(same-patchset):
+          job-name: '{mos_version}-pkg-pipeline-{os}'
+          artifact-name: 'tests.envfile'
+      - inject-from-job(same-patchset):
+          job-name: '{mos_version}-pkg-publish-{os}'
+          artifact-name: '{pkg_type}.publish.setenvfile'
       - shell: |
           #!/bin/bash
           set -x

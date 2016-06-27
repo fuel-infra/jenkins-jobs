@@ -90,53 +90,18 @@
           #!/bin/bash
           set -ex
           # Clean logs from previous runs
-          rm -vf fuel-qa/logs/* buildresult.params *.publish.setenvfile
-      - copyartifact:
-          project: '{mos_version}-pkg-pipeline-{os}'
-          filter: 'buildresult.params,{pkg_type}.publish.setenvfile,systest.params'
-          which-build: last-successful
-          parameter-filters: ZUUL_CHANGE=${{ZUUL_CHANGE}},ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
-          optional: true
-      - copyartifact:
-          project: 'devops.{mos_version}.env'
-          filter: 'fuel_qa_commit.txt,magnet_link.txt,ubuntu_mirror_id.txt'
-          which-build: last-successful
-      - shell: /bin/bash -xec 'touch buildresult.params {pkg_type}.publish.setenvfile systest.params'
-      - inject-properties-file:
-          # Inject
-          # - useful:
-          #     BUILD_HOST
-          #     PKG_PATH
-          #     EXTRAREPO
-          #     REPO_TYPE
-          # - unuseful:
-          #     DIST
-          #     GERRIT_CHANGE_STATUS
-          # - maybe useful:
-          #     REQUEST_NUM
-          #     LP_BUG
-          #     IS_SECURITY
-          properties-file: 'buildresult.params'
-      - inject:
-          # injects variable {pkg_type}_REPO_URL
-          properties-file: '{pkg_type}.publish.setenvfile'
-      - inject:
-          # injects variables for systest:
-          # usable:
-          # - UPDATE_MASTER
-          # - REBUILD_ISO
-          # unusable:
-          # - IS_FUEL
-          properties-file: 'systest.params'
-      - inject:
-          # injects variable FUEL_QA_COMMIT
-          properties-file: 'fuel_qa_commit.txt'
-      - inject:
-          # injects variable MAGNET_LINK
-          properties-file: 'magnet_link.txt'
-      - inject:
-          # injects variable UBUNTU_MIRROR_ID
-          properties-file: 'ubuntu_mirror_id.txt'
+          rm -vf fuel-qa/logs/*
+      - inject-from-job(same-patchset):
+          job-name: '{mos_version}-pkg-pipeline-{os}'
+          artifact-name: 'buildresult.params'
+      - inject-from-job(same-patchset):
+          job-name: '{mos_version}-pkg-pipeline-{os}'
+          artifact-name: 'systest.params'
+      - inject-from-job(same-patchset):
+          job-name: '{mos_version}-pkg-publish-{os}'
+          artifact-name: '{pkg_type}.publish.setenvfile'
+      - inject-devops-env:
+          version: '{mos_version}'
       - guess-mirror
       - guess-testgroup
       - inject:
