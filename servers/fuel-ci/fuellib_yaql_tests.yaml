@@ -1,0 +1,58 @@
+- job:
+    name: fuellib_yaql_tests
+    builders:
+      - shell:
+          !include-raw builders/fuellib_yaql_tests.sh
+    concurrent: true
+    description: Runs ./utils/jenkins/fuel_yaql_tests.sh
+    node: fuel-library-unit-tests
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    properties:
+      - heavy-job:
+          weight: 2
+      - throttle:
+          max-per-node: 1
+          option: project
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/openstack/fuel-library.git
+          choosing-strategy: gerrit
+    triggers:
+      - timed: 'H 2 * * *'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-library
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/mitaka'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 90
+          write-description: true
+    publishers:
+      - email-default
