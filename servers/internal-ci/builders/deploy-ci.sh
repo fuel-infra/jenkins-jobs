@@ -181,7 +181,7 @@ main () {
     if [[ -n "${RETURN}" ]]; then
         exit "${RETURN}"
     else
-        exit
+        exit 0
     fi
 }
 
