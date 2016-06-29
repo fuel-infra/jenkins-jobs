@@ -1,0 +1,4 @@
+- project:
+    name: infra-ci.puppet_update
+    jobs:
+      - puppet_update

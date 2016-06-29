@@ -1,0 +1,4 @@
+- project:
+    name: jenkins-product-ci.puppet_update
+    jobs:
+      - puppet_update
