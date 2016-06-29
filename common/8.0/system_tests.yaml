@@ -107,6 +107,9 @@
     - bool:
         name: ENABLE_UPDATES
         default: $ENABLE_UPDATES
+    - bool:
+        name: ENABLE_UPDATE_CENTOS
+        default: $ENABLE_UPDATE_CENTOS
     - string:
         name: DEB_LATEST
         default: $DEB_LATEST

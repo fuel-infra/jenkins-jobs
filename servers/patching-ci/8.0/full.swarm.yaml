@@ -36,6 +36,9 @@
       - bool:
           name: ENABLE_UPDATES
           default: true
+      - bool:
+          name: ENABLE_UPDATE_CENTOS
+          default: true
       - string:
           name: CUSTOM_VERSION
           default: ''
