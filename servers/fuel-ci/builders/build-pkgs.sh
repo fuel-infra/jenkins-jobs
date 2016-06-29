@@ -33,6 +33,14 @@ esac
 ## we MUST use external DNS
 echo "DNSPARAM=\"--dns 8.8.8.8\"" > "${WORKSPACE}"/fuel-mirror/perestroika/docker-builder/config
 
+# workaround for sbuild, related bug: https://bugs.launchpad.net/fuel/+bug/1572517
+SBUILD_LOCK_FILE="/var/cache/docker-builder/sbuild/trusty-amd64/run/lock/sbuild"
+
+if [ -f "${SBUILD_LOCK_FILE}" ]; then
+  sudo rm "${SBUILD_LOCK_FILE}"
+  echo "WARNING: workaround for unlocking sbuild chroot session has been applied"
+fi
+
 # where we store sources, this dir will be mounted to docker env
 SOURCE_PATH="${WORKSPACE}/sources/"
 # where we store packages, that should be uploaded by test
