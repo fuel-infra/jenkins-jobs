@@ -70,6 +70,7 @@
             mos-security,http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos8.0-centos7-fuel/security/x86_64/
             mos-updates,http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos8.0-centos7-fuel/updates/x86_64/
             mos-proposed,http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos8.0-centos7-fuel/proposed/x86_64/
+            pkg-updates,http://pkg-updates.fuel-infra.org/centos7/
           description: |
             Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
             Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
