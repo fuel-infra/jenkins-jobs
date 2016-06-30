@@ -29,7 +29,7 @@
     install-scm-branch: 'origin/master'
 
     # Enables paching workflow
-    is_updates: 'false'
+    is_updates: 'true'
 
     # Job slave nodes
     build-node: 'new-builder'
