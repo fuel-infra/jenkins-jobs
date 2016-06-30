@@ -33,7 +33,13 @@
             mos-repos/ubuntu/8.0
 
       - '9.0':
-          timer: 'H * * * *'
+          authorization:
+            maintenance-mgmt:
+              - job-read
+              - job-build
+            ci:
+              - job-read
+              - job-build
           srcpaths: |
             mos-repos/centos/mos9.0-centos7/os
             mos-repos/centos/mos9.0-centos7/proposed
