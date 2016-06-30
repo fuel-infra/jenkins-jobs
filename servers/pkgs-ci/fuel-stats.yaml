@@ -1,0 +1,90 @@
+- job-template:
+    name: '{source_project_name}.upload-new-sources'
+    description: |
+       This job is making update of '<b>{source_project_name}</b>' packages code from
+       <a href="https://{upstream_gerrit}/#/admin/projects/openstack/{source_project_name}">upstream project</a><br>
+       Outcome of this Jenkins job will be created patchset for each changed package of a project<br>
+       <br>
+       <b>NOTE:</b> Created patchsets are <b>must</b> be reviwed and may be found
+       <a href="{packaging_gerrit_patchsets_url}">by this search link</a> and should be reviewed<br>
+       <br>
+       <b>Ownership:</b> Issues with this job are tracked by CI team.<br>
+       <b>Contacts:</b> #infra
+    node: '{source_project_name}'
+    concurrent: false
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+    scm:
+      - git:
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/openstack/{source_project_name}.git
+          basedir: '{source_project_name}-src'
+          wipe-workspace: true
+      - git:
+          url: '{packaging_gerrit_git_url}/{source_project_name}-analytics.git'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          basedir: '{source_project_name}-analytics'
+          wipe-workspace: true
+      - git:
+          url: '{packaging_gerrit_git_url}/{source_project_name}-collector.git'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          basedir: '{source_project_name}-collector'
+          wipe-workspace: true
+      - git:
+          url: '{packaging_gerrit_git_url}/{source_project_name}-migration.git'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          basedir: '{source_project_name}-migration'
+          wipe-workspace: true
+      - git:
+          url: '{packaging_gerrit_git_url}/{source_project_name}-static.git'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          basedir: '{source_project_name}-static'
+          wipe-workspace: true
+    builders:
+      - inject:
+          properties-content: |
+            PROJECT={source_project_name}
+            GERRIT_HOST={packaging_gerrit}
+            GERRIT_PORT={gerrit_port}
+            GERRIT_USER={username-openstack-ci-jenkins}
+            GERRIT_USER_MAIL={packaging_gerrit_user_email}
+      - shell: !include-raw-escape builders/fuel-stats-prepare-package-sources.sh
+    triggers:
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/{source_project_name}/**'
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: 'master'
+          silent: true
+          server-name: {upstream_gerrit}
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+    publishers:
+      - description-setter:
+          regexp: 'Description string: ({source_project_name} revision:\s+.*)'
+      - archive:
+          allow-empty: true
+          artifacts: '*.log'
+
+- project:
+    name: fuel-stats-upload-new-sources
+    jobs:
+      - '{source_project_name}.upload-new-sources':
+          source_project_name: 'fuel-stats'
+          gerrit_port: '29418'
+          upstream_gerrit: 'review.openstack.org'
+          packaging_gerrit: 'review.fuel-infra.org'
+          packaging_gerrit_user_email: 'oscirobot+openstack-ci-jenkins@mirantis.com'
+          packaging_space: 'fuel-infra/packages'
+          packaging_gerrit_git_url: 'ssh://{username-openstack-ci-jenkins}@{packaging_gerrit}:{gerrit_port}/{packaging_space}'
+          packaging_gerrit_patchsets_url: 'https://{packaging_gerrit}/#/q/project:%255E{packaging_space}/{source_project_name}.%252B+status:open+owner:%22{username-openstack-ci-jenkins}%22'
