@@ -58,7 +58,6 @@
           projectpackage: nailgun-agent
           testgroup: review_nailgun_agent_one_node
           timed: '25 */12 * * *'
-          non_voting: true # fixme: remove when approved by fuel-qa team
           properties: |
             KEEP_BEFORE=yes
             CUSTOM_ENV=false
@@ -147,7 +146,6 @@
           projectpackage: nailgun-agent
           testgroup: review_nailgun_agent_one_node
           timed: '25 */12 * * *'
-          non_voting: true # fixme: remove when approved by fuel-qa team
           properties: |
             KEEP_BEFORE=yes
             CUSTOM_ENV=false
