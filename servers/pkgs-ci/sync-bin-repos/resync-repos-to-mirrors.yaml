@@ -4,7 +4,7 @@
 
     trsync-node: 'mirror-sync'
     trsync-scm-repo: 'infra/trsync'
-    trsync-scm-branch: 'master'
+    trsync-scm-branch: 'v0.9'
     trsync-scm-basedir: 'trsync'
     mailto: 'fuel-build+ci-packaging@mirantis.com'
 
