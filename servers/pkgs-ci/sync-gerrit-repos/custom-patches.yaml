@@ -21,20 +21,15 @@
     - glance_store
     - heat
     - horizon
-    - horizon-vendor-theme
     - ironic
-    - ironic-lib
     - keystone
     - keystoneauth
     - keystonemiddleware
     - murano
-    - murano-api
-    - murano-apps
     - murano-dashboard
     - neutron
     - neutron-fwaas
     - neutron-lbaas
-    - neutron-lib
     - neutron-vpnaas
     - nova
     - os-brick
@@ -72,7 +67,6 @@
     - python-swiftclient
     - sahara
     - sahara-dashboard
-    - sahara-image-elements
     - swift
 
     jobs:
