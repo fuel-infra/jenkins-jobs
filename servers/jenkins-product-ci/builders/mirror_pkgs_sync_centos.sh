@@ -153,12 +153,12 @@ for MIRROR in ${SYNC_LOCATIONS}; do
   # prepare htm file in temporary directory
   # synchronzie mirror without symlink and htm file
   # and add symbolic link and htm synchronization to queue
-  echo "http://${HOST}/${URL}/${LINK}" > "${TMPSYNC_DIR}/${MIRROR_NAME}-latest.htm"
   ${RSYNC} -v "${RSYNC_REMOTE_OPTS[@]}" \
     --exclude "${MIRROR_NAME}-*.tmp/***" \
     --include "${MIRROR_NAME}-*/***" \
     --exclude "*" \
     "${LOCAL_STORAGE}/${SNAPSHOTS_DIR}"/ "${MIRROR}/${SNAPSHOTS_DIR}"/ \
+        && echo 'echo http://'"${HOST}"/"${URL}"/"${LINK}"' > '"${TMPSYNC_DIR}"/"${MIRROR_NAME}"'-latest.htm' >> "${TMP_SYNC}" \
         && echo "${RSYNC}" -alv "${TMPSYNC_DIR}"/ "${MIRROR}"/ >> "${TMP_SYNC}" \
         || STATUS=${?}
 done
