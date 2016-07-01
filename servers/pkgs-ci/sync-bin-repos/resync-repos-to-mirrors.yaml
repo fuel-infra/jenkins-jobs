@@ -49,7 +49,7 @@
             mos-repos/ubuntu/9.0
 
       - master:
-          timer: 'H * * * *'
+          timer: '*/20 * * * *'
           srcpaths: |
             mos-repos/centos/mos-master-centos7/os
             mos-repos/centos/mos-master-centos7/proposed
