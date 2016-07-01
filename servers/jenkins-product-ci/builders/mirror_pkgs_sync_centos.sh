@@ -9,7 +9,9 @@ RSYNC='/usr/bin/rsync'
 
 
 function resolve_symlink() {
-    local URL="$(echo ${1} | sed -r 's[/+$[[')"
+    local URL=$(echo "${1}" | sed -r 's[/+$[[')
+    # disable because echo strips output
+    # shellcheck disable=SC2005
     echo "$(${RSYNC} -l "${URL}" | awk '/^.+$/ {print $NF}' | sed -r 's[/+$[[')"
 }
 
@@ -37,9 +39,8 @@ echo "${MIRROR_DIR}" | grep -q '%symlink_target%' \
     || SYMLINK_TARGET=""
 
 echo "${UPDATED_SYMLINKS}" | grep -q '%symlink_target%' \
-    && SYMLINK_TARGET="${SYMLINK_TARGET:-$(resolve_symlink ${SOURCE_URL})}" \
-    && UPDATED_SYMLINKS="$(echo ${UPDATED_SYMLINKS} | \
-                           sed -e 's[%symlink_target%['${SYMLINK_TARGET}'[g')"
+    && SYMLINK_TARGET=${SYMLINK_TARGET:-$(resolve_symlink "${SOURCE_URL}")} \
+    && UPDATED_SYMLINKS="${UPDATED_SYMLINKS//%symlink_target%/"${SYMLINK_TARGET}"}"
 
 echo "${MIRROR_DIR}" | grep -qE '%timestamp%$' \
     || MIRROR_DIR+="%timestamp%"
@@ -48,9 +49,9 @@ echo "${MIRROR_DIR}" | grep -qE '%timestamp%$' \
 MIRROR_NAME="$(echo ${MIRROR_DIR} \
                 | sed -e 's[%timestamp%[[g' \
                       -e 's[%symlink_target%[-'${SYMLINK_TARGET}'[g')"
-MIRROR_SNAPSHOT="$(echo ${MIRROR_DIR} \
-                    | sed -e 's[%timestamp%[-'${TIMESTAMP}'[g' \
-                          -e 's[%symlink_target%[-'${SYMLINK_TARGET}'[g')"
+MIRROR_SNAPSHOT=$(echo "${MIRROR_DIR}" \
+                    | sed -e 's[%timestamp%[-'"${TIMESTAMP}"'[g' \
+                          -e 's[%symlink_target%[-'"${SYMLINK_TARGET}"'[g')
 MIRROR_LATEST="${MIRROR_NAME}-latest"
 
 # get rsync destination and link-dest parameters
@@ -135,9 +136,11 @@ TMP_SYNC=$(mktemp -p "${TMP_PREFIX:-.}")
 TMPSYNC_DIR=$(mktemp -d -p "${TMP_PREFIX:-.}")
 # prepare symbolic link in temporary directory
 for L in ${MIRROR_LATEST} ${UPDATED_SYMLINKS}; do
-  LINK_PATH="$(dirname ${L})"
-  LINK_NAME="$(basename ${L})"
-  PATH_TO_ROOT="$(echo "${LINK_PATH}" | sed -e 's|[^/\.]\+|..|g')"
+  LINK_PATH=$(dirname "${L}")
+  LINK_NAME=$(basename "${L}")
+  # Disabe because Regex used
+  # shellcheck disable=SC2001
+  PATH_TO_ROOT=$(echo "${LINK_PATH}" | sed -e 's|[^/\.]\+|..|g')
   mkdir -p "${TMPSYNC_DIR}/${LINK_PATH}"
   ln -sf "${PATH_TO_ROOT}/${LINK}" "${TMPSYNC_DIR}/${LINK_PATH}/${LINK_NAME}"
 done
