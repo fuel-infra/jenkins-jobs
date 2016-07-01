@@ -1,0 +1,25 @@
+- project:
+    name: 'MOS Docs'
+
+    jobs:
+      - '{version-id}.build-mos-docs':
+          version-id: master
+          branch: master
+          timer: 'H * * * *'
+      - '{version-id}.build-mos-docs':
+          version-id: 9.0
+          branch: stable/9.0
+          timer: 'H * * * *'
+      - '{version-id}.build-mos-docs':
+          version-id: 8.0
+          branch: stable/8.0
+          timer: 'H 17 * * *'
+      - '{version-id}.build-mos-docs':
+          version-id: 7.0
+          branch: stable/7.0
+          timer: 'H 16 * * *'
+      - '{version-id}.build-mos-docs':
+          version-id: 6.1
+          branch: stable/6.1
+          timer: 'H 15 * * *'
+
