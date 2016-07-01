@@ -1,56 +1,39 @@
 ---
-- job:
-    name: build-mos-docs
-    builders:
-      - inject:
-          properties-content: |
-            DOCS_HOST=docs@docs.fuel-infra.org
-            DOCS_ROOT=/var/www/openstack/fuel
-      - shell:
-          !include-raw builders/build-mos-docs.sh
+- job-template:
+    name: '{version-id}.build-mos-docs'
     description: |
-      Build mos/mos-docs for all branches and publish them to <a
-      href="http://docs.mirantis.com">docs.mirantis.com</a>
-      <p>Work In Progress
-      <p>Contacts: ci-team at #infra
-    logrotate:
-      artifactDaysToKeep: 30
-      daysToKeep: 100
-    node: docs
+
+      Build documentation from mos/mos-docs for branch {branch} and
+      publish it to <a
+      href="https://docs.mirantis.com/openstack/fuel/fuel-{version-id}/">
+      https://docs.mirantis.com/openstack/fuel/fuel-{version-id}/</a>
+
+      <p>Contacts: ci-team at #infra in Slack
     concurrent: false
-    parameters:
-      - string:
-          name: GERRIT_BRANCH
-          default: 'master'
-      - string:
-          name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+    node: docs
+    logrotate:
+      daysToKeep: 100
+      artifactDaysToKeep: 30
+
     properties:
       - heavy-job:
           weight: 1
+
+    parameters:
+      - string:
+          name: GERRIT_BRANCH
+          default: '{branch}'
+
     scm:
       - git:
           branches:
             - $GERRIT_BRANCH
-          remotes:
-            - gerrit:
-                refspec: $GERRIT_REFSPEC
-                url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/mos/mos-docs'
-          choosing-strategy: gerrit
+          url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/mos/mos-docs'
           clean: true
+
     triggers:
-      - gerrit:
-          trigger-on:
-            - change-merged-event
-          projects:
-            - project-compare-type: PLAIN
-              project-pattern: 'mos/mos-docs'
-              branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-                - branch-compare-type: ANT
-                  branch-pattern: 'stable/**'
-          silent: true
+      - timed: '{timer}'
+
     wrappers:
       - ssh-agent-credentials:
           users:
@@ -62,6 +45,15 @@
           fail: true
           write-description: true
           timeout: 45
+
+    builders:
+      - inject:
+          properties-content: |
+            DOCS_HOST=docs@docs.fuel-infra.org
+            DOCS_ROOT=/var/www/openstack/fuel
+      - shell:
+          !include-raw-escape: builders/build-mos-docs.sh
+
     publishers:
       - html-publisher:
           name: 'MOS Docs build results'

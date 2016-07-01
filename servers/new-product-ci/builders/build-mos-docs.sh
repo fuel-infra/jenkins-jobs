@@ -6,8 +6,9 @@
 #
 #   .. module:: build-mos-docs.sh
 #       :platform: Unix
-#       :synopsys: this script creates OpenStack documentation for all active
-#                  active branches and publishes it to dosc.mirantis.com
+#       :synopsys: this script creates OpenStack documentation for a branch
+#                  in mos/mos-docs repository and publishes it to
+#                  docs.mirantis.com
 #   .. versionadded:: MOS-8.0
 #   .. versionchanged:: MOS-9.0
 #   .. author:: Lesya Novaselskaya <onovaselskaya@mirantis.com>
@@ -15,12 +16,10 @@
 #
 #   .. envvar::
 #       :var WORKSPACE: build starter location, defaults to ``.``
-#       :var VENV: build specific virtual environment path (deployed)
-#       :var BRANCH_ID: Fuel QA build branch (deployed)
 #       :var GERRIT_BRANCH: Fuel QA internal branch
 #       :var DOCS_HOST: credentials used for publishing, default to
-#                       ``docs@docs.fuel-infra.org`` (deployed)
-#       :var DOCS_ROOT: path to documentation directory (deployed)
+#                       ``docs@docs.fuel-infra.org``
+#       :var DOCS_ROOT: path to documentation directory (on a target node)
 #
 #   .. requirements::
 #       * valid configuration YAML file: build-mos-docs.yaml
