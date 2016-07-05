@@ -1,0 +1,28 @@
+- project:
+    name: 'murano-plugin'
+
+    src-branch:
+    - 'master':
+        dst-branch: 'plugin'
+        upstream-branch: 'master'
+        downstream-branch: '9.0/plugin'
+        fallback-branch: ''
+
+    # Syncronization schedule
+    timer: 'H 4 * * *'  # every day at 4:XX am, spread evenly
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: '{username-openstack-ci-mirrorer-jenkins}'
+    gerrit-creds: '{ssh-creds-openstack-ci-mirrorer-jenkins}'
+    gerrit-topic: 'sync/{src-branch}/{dst-branch}'
+
+    # List of projects to sync
+    gerrit-project-name:
+    - 'murano'
+    - 'murano-dashboard'
+    - 'python-muranoclient'
+
+    jobs:
+    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
