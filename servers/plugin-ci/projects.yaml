@@ -107,6 +107,9 @@
     # Default macro used to build VENV for test framework
     plugin_prepare_env_builder: plugin-prepare-env
 
+    # Additional ENV variables for injecting
+    plugin_custom_variables: ''
+
 
 #
 # Plugins tested with fuel-qa framework
@@ -153,6 +156,8 @@
           plugin_owner: 'Murano Team'
           plugin_test_group: 'murano_plugin'
           plugin_env_path_name: 'MURANO_PLUGIN_PATH'
+          plugin_custom_variables: 'MURANO_PACKAGE_URL=http://mirror.fuel-infra.org/murano-plugin-repos/ubuntu/9.0/pool/main/m/murano/'
+
 
     exclude:
       - version: 8.0
