@@ -46,6 +46,11 @@
       - shell:
           !include-raw-escape: './builders/mirror_pull_push.sh'
 
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '60262544-8924-4718-aa4e-7e629cc2f5d3'
+
 - project:
     name: mirror_openstack_sync
     jobs:
