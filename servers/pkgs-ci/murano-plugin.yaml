@@ -1,6 +1,6 @@
 - project:
 
-    name: 'murano-plugin'
+    name: 'murano-plugin-build'
 
     project-name: 'murano-plugin'
     project-version: '9.0'
