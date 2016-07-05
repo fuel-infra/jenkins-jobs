@@ -11,6 +11,10 @@
       This job builds complete environment using all available roles to test it.
 
     parameters:
+      # initialize environment
+      - bool:
+          name: INITIALIZE
+          default: false
       # specify ci-lab version to use
       - string:
           name: CI_LAB_REFSPEC
@@ -46,6 +50,9 @@
           name: OS_OPENRC_PATH
           default: '/home/jenkins/.deployment_ci'
           description: 'OpenStack credentials file'
+      - string:
+          name: PREFIX
+          default: 'deploy-testing'
       # node selection parameters
       - string:
           name: PARALLELISM
@@ -59,6 +66,10 @@
           name: EXCLUDE
           default: 'puppetmaster|review|slave1|slave_custom_ci|slave_deploy|slave_packagingci|slave_perestroika_builder|slave_perestroika_publisher|slave_perestroika_repo|test_ci|zuul'
           description: 'roles to exclude (egrep format)'
+      - string:
+          name: IGNORED
+          default: 'Could not find a serial number for|Could not retrieve catalog|getaddrinfo: Name or service not known'
+          description: 'errors to exclude from summary (egrep format)'
 
     properties:
       - authorization:

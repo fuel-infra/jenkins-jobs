@@ -72,20 +72,22 @@ main () {
     "DNS2=${DNS2}" \
     "OS_FLAVOR_NAME=${OS_FLAVOR_NAME}" \
     "OS_IMAGE_NAME=${OS_IMAGE_NAME}" \
-    "OS_OPENRC_PATH=${OS_OPENRC_PATH}" > "${WORKSPACE}/config_local"
+    "OS_OPENRC_PATH=${OS_OPENRC_PATH}" \
+    "GLOBAL_PREFIX=${PREFIX}" > "${WORKSPACE}/config_local"
 
-    # prepare environment
+    # prepare environment and delete all VMs
     cd "${WORKSPACE}"
     ./tools/prepare_env.sh
-
-    # refresh openstack environment
-    cd "${WORKSPACE}"
-    # delete all the VMs
     ./tools/openstack_clean_all_vms.sh
-    # wait for all VMs to be stopped
-    sleep 30
-    ./tools/openstack_clean_config.sh || true
-    ./tools/openstack_prepare.sh
+
+    # re-initialize openstack environment
+    if [[ "${INITIALIZE}" == 'true' ]]; then
+        cd "${WORKSPACE}"
+        # remove configuration if available
+        ./tools/openstack_clean_config.sh || true
+        # apply new configuration
+        ./tools/openstack_prepare.sh
+    fi
 
     # prepare hiera data
     cd "${WORKSPACE}/hiera"
@@ -164,10 +166,12 @@ main () {
 
     # prepare and display deployment summary
     printf '\n\n========== FIRST RUN ERRORS =========\n\n'
-    grep 'Error:' "${WORKSPACE}/first_run.txt" | sort -s -k 1,1
+    grep 'Error:' "${WORKSPACE}/first_run.txt" | egrep -v "${IGNORED}" | \
+      sort -s -k 1,1
 
     printf '\n\n========== SECOND RUN ERRORS =========\n\n'
-    grep 'Error:' "${WORKSPACE}/second_run.txt" | sort -s -k 1,1
+    grep 'Error:' "${WORKSPACE}/second_run.txt" | egrep -v "${IGNORED}" | \
+      sort -s -k 1,1
 
     printf '\n\n========== SUMMARY =========\n\n'
     sort "${WORKSPACE}/summary.txt" -s -k 1,1
