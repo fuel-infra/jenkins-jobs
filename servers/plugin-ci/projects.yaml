@@ -149,6 +149,7 @@
 
       - detach-murano:
           plugin_repo: fuel-plugin-murano
+          plugin_branch: master
           plugin_owner: 'Murano Team'
           plugin_test_group: 'murano_plugin'
           plugin_env_path_name: 'MURANO_PLUGIN_PATH'
