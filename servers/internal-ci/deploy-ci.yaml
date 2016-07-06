@@ -68,7 +68,7 @@
           description: 'roles to exclude (egrep format)'
       - string:
           name: IGNORED
-          default: 'Could not find a serial number for|Could not retrieve catalog|getaddrinfo: Name or service not known'
+          default: 'Could not find a serial number for|getaddrinfo: Name or service not known'
           description: 'errors to exclude from summary (egrep format)'
 
     properties:
