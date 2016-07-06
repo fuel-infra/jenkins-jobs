@@ -124,7 +124,13 @@
             {fuelmain_defaults}
             # Already overridden parameters
             {overridden_parameters}
-
+          description: |
+            <b>Note</b>: you can specify more than one value for <b>*_GERRIT_COMMIT</b> variables.<br>
+            In this case, values must be mentioned without quotes and separated by space, example:<br>
+            <b>
+            FUELLIB_GERRIT_COMMIT=refs/changes/26/336726/2 refs/changes/47/336947/2<br>
+            NAILGUN_GERRIT_COMMIT=refs/changes/75/329375/1 refs/changes/67/319867/3 refs/changes/00/309500/3
+            </b>
     scm:
       - git:
           url: '$FUELMAIN_REPO'
