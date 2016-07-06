@@ -1,0 +1,13 @@
+- view:
+    type: list
+    name: 'custom_patches'
+    regex: '.*custom-patches'
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False

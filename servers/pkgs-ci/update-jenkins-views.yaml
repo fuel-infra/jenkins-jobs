@@ -1,0 +1,5 @@
+- project:
+    name: pkgs-ci.update-jenkins-views
+    ci-name: pkgs-ci
+    jobs:
+      - update-jenkins-views

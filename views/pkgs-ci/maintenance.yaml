@@ -1,0 +1,21 @@
+- view:
+    type: list
+    name: 'Maintenance'
+    regex: '^maintain\..+|zuul-.+|sync_.+|update-jenkins-.*|devops\..+\.env'
+    jobs:
+      - cleaner
+      - cleaner-on-labels
+      - maintain.starter
+      - maintain.worker
+      - prepare_env
+      - run_on_node
+      - zuul-maintainer
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False
