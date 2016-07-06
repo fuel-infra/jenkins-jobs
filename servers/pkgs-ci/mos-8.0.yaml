@@ -45,21 +45,36 @@
     mos-deb-repo-path: mos-repos/ubuntu
     mos-rpm-repo-path: mos-repos/centos/mos8.0-centos7-fuel
 
-    os:
-    - centos:
-        distro: 'centos7'
-        pkg_type: 'rpm'
-        spec_path_prefix: '/centos7'
-    - ubuntu:
-        distro: 'trusty'
-        pkg_type: 'deb'
-        spec_path_prefix: '/trusty'
-
     jobs:
-    - '{mos_version}-pkg-pipeline-{os}'
-    - '{mos_version}-pkg-publish-{os}'
-    - '{mos_version}-pkg-install-{os}'
-    - '{mos_version}-pkg-repotest-{os}'
-    - '{mos_version}-pkg-systest-{os}'
-    - '{mos_version}-pkg-gate'
+      - '8.0-pkg-centos-jobs'
+      - '8.0-pkg-ubuntu-jobs'
 
+- job-group:
+    name: '8.0-pkg-centos-jobs'
+    os: 'centos'
+    distro: 'centos7'
+    pkg_type: 'rpm'
+    spec_path_prefix: '/{distro}'
+    timer: 'H */12 * * *'
+    openstack_release: 'ubuntu'
+    jobs:
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
+      - '{mos_version}-pkg-systest-{os}'
+
+- job-group:
+    name: '8.0-pkg-ubuntu-jobs'
+    os: 'ubuntu'
+    distro: 'trusty'
+    pkg_type: 'deb'
+    spec_path_prefix: '/{distro}'
+    timer: 'H */12 * * *'
+    openstack_release: 'ubuntu'
+    jobs:
+      - '{mos_version}-pkg-pipeline-{os}'
+      - '{mos_version}-pkg-publish-{os}'
+      - '{mos_version}-pkg-install-{os}'
+      - '{mos_version}-pkg-repotest-{os}'
+      - '{mos_version}-pkg-systest-{os}'
