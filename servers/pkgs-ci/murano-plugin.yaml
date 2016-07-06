@@ -65,4 +65,3 @@
     - '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-install-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
-    - '{project-version}-pkg-{project-name}-systest-{os}-{distro}'
