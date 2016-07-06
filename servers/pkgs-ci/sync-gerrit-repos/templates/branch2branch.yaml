@@ -2,7 +2,8 @@
 # Job syncronizes code from one branch to another via Gerrit CR
 #
 # Parameters:
-#   [*gerrit-project-name*] - Project name will be prepended by 'openstack/'
+#   [*gerrit-project-name*] - Project name will be prepended by 'gerrit-project-namespace'
+#   [*gerrit-project-namespace*] - Namespace to prepend project name
 #   [*gerrit-host*] - Gerrit host
 #   [*gerrit-port*] - Gerrit port (usually 29418)
 #   [*gerrit-topic*] - Topic for newly created CR
@@ -22,6 +23,7 @@
 - job-template:
     name: 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
     disabled: '{is-disabled}'
+    gerrit-project-namespace: 'openstack'
     fallback-branch: 'master'
     timer: ''
 
@@ -34,7 +36,7 @@
     builders:
       - inject:
           properties-content: |
-            SYNC_GERRIT_URI=ssh://{gerrit-user}@{gerrit-host}:{gerrit-port}/openstack/{gerrit-project-name}
+            SYNC_GERRIT_URI=ssh://{gerrit-user}@{gerrit-host}:{gerrit-port}/{gerrit-project-namespace}/{gerrit-project-name}
             SYNC_DOWNSTREAM_BRANCH={downstream-branch}
             SYNC_UPSTREAM_BRANCH={upstream-branch}
             SYNC_FALLBACK_BRANCH={fallback-branch}
