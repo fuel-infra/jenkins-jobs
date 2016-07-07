@@ -27,12 +27,14 @@
 
             DEB_REPO_PATH={deb-repo-path}/{project-version}
             DEB_DIST_NAME={deb-dist-name}
+            DEB_HOTFIX_DIST_NAME={deb-dist-name}-hotfix
             DEB_PROPOSED_DIST_NAME={deb-dist-name}-proposed
             DEB_UPDATES_DIST_NAME={deb-dist-name}-updates
             DEB_SECURITY_DIST_NAME={deb-dist-name}-security
             DEB_HOLDBACK_DIST_NAME={deb-dist-name}-holdback
 
             RPM_OS_REPO_PATH={rpm-repo-path}/os
+            RPM_HOTFIX_REPO_PATH={rpm-repo-path}/hotfix
             RPM_UPDATES_REPO_PATH={rpm-repo-path}/updates
             RPM_PROPOSED_REPO_PATH={rpm-repo-path}/proposed
             RPM_SECURITY_REPO_PATH={rpm-repo-path}/security
