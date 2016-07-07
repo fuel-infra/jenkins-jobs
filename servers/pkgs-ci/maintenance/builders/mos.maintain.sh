@@ -16,6 +16,14 @@ main () {
     # Aborted containers cleanup
     docker ps -a | grep -F -e "Exited" -e "Dead" | cut -d ' ' -f 1 | xargs -I% docker rm %
 
+    # Clean up all build related containers
+    # FIXME: There is no way to properly detect lifetime of the container, so
+    #        remove all build containers
+    docker ps -a \
+        | egrep " (mock|s)build:latest" \
+        | cut -d ' ' -f 1 \
+        | xargs -I% docker rm -f %
+
     # Unpublished packages cleanup
     rm -rf "${HOME}/built_packages/*"
 
