@@ -34,6 +34,13 @@
           REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
           EXTRAREPO=$(echo "${{EXTRAREPO}}" | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')
 
+          # Remove duplicates
+          OLDIFS=${{IFS}}
+          IFS='|'
+          EXTRAREPOS=( ${{EXTRAREPO}} )
+          IFS=${{OLDIFS}}
+          EXTRAREPO=$(printf "%s\n" "${{EXTRAREPOS[@]}}" | sort -u | tr '\n' '|' | sed -r 's/\|$//')
+
           script_log='repo-test-{pkg_type}-docker.log'
           rm -f "${{script_log}}"
           bash -x repo-test-{pkg_type}-docker |& tee "${{script_log}}"
