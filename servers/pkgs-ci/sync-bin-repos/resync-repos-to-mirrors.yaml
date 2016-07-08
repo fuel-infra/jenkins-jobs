@@ -30,6 +30,7 @@
             mos-repos/centos/mos8.0-centos7-fuel/updates
             mos-repos/centos/mos8.0-centos7-fuel/security
             mos-repos/centos/mos8.0-centos7-fuel/holdback
+            mos-repos/centos/mos8.0-centos7-fuel/hotfix
             mos-repos/ubuntu/8.0
 
       - '9.0':
@@ -46,6 +47,7 @@
             mos-repos/centos/mos9.0-centos7/updates
             mos-repos/centos/mos9.0-centos7/security
             mos-repos/centos/mos9.0-centos7/holdback
+            mos-repos/centos/mos9.0-centos7/hotfix
             mos-repos/ubuntu/9.0
 
       - master:
@@ -56,6 +58,7 @@
             mos-repos/centos/mos-master-centos7/updates
             mos-repos/centos/mos-master-centos7/security
             mos-repos/centos/mos-master-centos7/holdback
+            mos-repos/centos/mos-master-centos7/hotfix
             mos-repos/ubuntu/master
             mos-repos/xenial/master
 
