@@ -11,25 +11,28 @@
       This job builds complete environment using all available roles to test it.
 
     parameters:
-      # initialize environment
-      - bool:
-          name: INITIALIZE
-          default: false
-      # specify ci-lab version to use
-      - string:
-          name: CI_LAB_REFSPEC
-          default: 'refs/heads/master'
-          description: 'ci-lab refspec to use with tests'
-      # specify change on Gerrit
+      # main options
       - string:
           name: GERRIT_REFSPEC
           default: ''
           description: 'Gerrit refspec to test'
       - string:
-          name: GERRIT_EVENT_TYPE
-          default: ''
-          description: 'Gerrit event type'
-      # specify ci-lab settings
+          name: CI_LAB_REFSPEC
+          default: 'refs/heads/master'
+          description: 'ci-lab refspec to use with tests'
+      - string:
+          name: PREFIX
+          default: 'deploy-testing'
+          description: 'prefix used for all OpenStack components'
+      - bool:
+          name: KEEP
+          default: false
+          description: 'keep VMs after tests'
+      # OpenStack settings
+      - bool:
+          name: INITIALIZE
+          default: false
+          description: 'Initialize OpenStack settings'
       - string:
           name: DNS1
           default: '8.8.8.8'
@@ -50,10 +53,7 @@
           name: OS_OPENRC_PATH
           default: '/home/jenkins/.deployment_ci'
           description: 'OpenStack credentials file'
-      - string:
-          name: PREFIX
-          default: 'deploy-testing'
-      # node selection parameters
+      # general settings
       - string:
           name: PARALLELISM
           default: '10'
