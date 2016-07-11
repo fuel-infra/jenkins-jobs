@@ -1,6 +1,9 @@
 - job:
     name: 'fuel_community.centos.bvt_1'
     builders:
+      - inject: # default env variables
+          properties-content: |
+            UPDATE_REQUIREMENTS='yes'
       - shell: |
           #!/bin/bash
           set -ex

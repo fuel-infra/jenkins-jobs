@@ -1,6 +1,9 @@
 - job:
     name: '6.1.custom.centos.bvt_1'
     builders:
+      - inject: # default env variables
+          properties-content: |
+            UPDATE_REQUIREMENTS='yes'
       - shell:
           !include-raw: builders/run_system_test.sh
     concurrent: true

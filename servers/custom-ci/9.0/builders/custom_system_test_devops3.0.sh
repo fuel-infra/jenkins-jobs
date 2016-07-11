@@ -85,12 +85,13 @@ export VENV_PATH="/home/jenkins/venv-nailgun-tests-2.9"
 # Checking gerrit commits for fuel-devops
 if [[ ${FUEL_DEVOPS_COMMIT} != "none" ]] ; then
   export VENV_PATH="${WORKSPACE}/devops-venv"
-  virtualenv ${VENV_PATH}
-  . ${VENV_PATH}/bin/activate
+  virtualenv "${VENV_PATH}"
+  . "${VENV_PATH}/bin/activate"
+  pip install -r ./fuelweb_test/requirements-devops-source.txt --upgrade
   pip install -r ./fuelweb_test/requirements.txt --upgrade
   git clone https://github.com/openstack/fuel-devops.git
   cd ./fuel-devops
-  git checkout ${FUEL_DEVOPS_COMMIT}
+  git checkout "${FUEL_DEVOPS_COMMIT}"
   if [[ "${fuel_devops_gerrit_commit}" != "none" ]] ; then
     for devops_commit in ${fuel_devops_gerrit_commit} ; do
       git fetch https://review.openstack.org/openstack/fuel-devops "${devops_commit}" && git cherry-pick FETCH_HEAD
@@ -98,13 +99,13 @@ if [[ ${FUEL_DEVOPS_COMMIT} != "none" ]] ; then
   fi
   pip uninstall -y fuel-devops
   pip install ./ --upgrade
-  cd ${WORKSPACE}
+  cd "${WORKSPACE}"
   export DEVOPS_DB_NAME=${VENV_PATH}/fuel_devops.sqlite3
   export DEVOPS_DB_ENGINE="django.db.backends.sqlite3"
-  echo "export DEVOPS_DB_ENGINE='django.db.backends.sqlite3'" >> ${VENV_PATH}/bin/activate
-  echo "export DEVOPS_DB_NAME=\${VIRTUAL_ENV}/fuel_devops.sqlite3" >> ${VENV_PATH}/bin/activate
+  echo "export DEVOPS_DB_ENGINE='django.db.backends.sqlite3'" >> "${VENV_PATH}/bin/activate"
+  echo "export DEVOPS_DB_NAME=\${VIRTUAL_ENV}/fuel_devops.sqlite3" >> "${VENV_PATH}/bin/activate"
 # Ability to unset custom variables to avoid confusion with variables in case of manual check of job results.
-  sed -i "s/\(unset VIRTUAL_ENV\)/\1 DEVOPS_DB_ENGINE DEVOPS_DB_NAME/" ${VENV_PATH}/bin/activate
+  sed -i "s/\(unset VIRTUAL_ENV\)/\1 DEVOPS_DB_ENGINE DEVOPS_DB_NAME/" "${VENV_PATH}/bin/activate"
   django-admin.py syncdb --settings=devops.settings
   django-admin.py migrate devops --settings=devops.settings
 fi
@@ -128,8 +129,8 @@ ENV_NAME=${ENV_PREFIX}.${BUILD_NUMBER}.${BUILD_ID}
 export ENV_NAME=${ENV_NAME:0:68}
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
-export PATH_TO_CERT=${WORKSPACE}"/"${ENV_NAME}".crt"
-export PATH_TO_PEM=${WORKSPACE}"/"${ENV_NAME}".pem"
+export PATH_TO_CERT="${WORKSPACE}/${ENV_NAME}.crt"
+export PATH_TO_PEM="${WORKSPACE}/${ENV_NAME}.pem"
 
 export OPENSTACK_RELEASE="${OPENSTACK_RELEASE}"
 
@@ -151,7 +152,7 @@ set -e
 
 #Removing old env
 if [[ ${FUEL_DEVOPS_COMMIT} != "none" ]] ; then
-  dos.py erase $ENV_NAME
+  dos.py erase "${ENV_NAME}"
 fi
 
 exit ${test_exit_code}

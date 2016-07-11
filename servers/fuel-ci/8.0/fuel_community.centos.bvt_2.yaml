@@ -7,6 +7,7 @@
             OPENSTACK_RELEASE=CentOS
             VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
             ENV_NAME=fuel_community.centos.bvt_1_system_test
+            UPDATE_REQUIREMENTS='yes'
       - shell: |
           #!/bin/bash
           set -ex

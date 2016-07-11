@@ -88,6 +88,7 @@ if [[ "${FUEL_DEVOPS_COMMIT}" != "none" ]] ; then
   rm -rf "${VENV_PATH}"  # Cleanup, if conflict presents
   virtualenv "${VENV_PATH}"
   . "${VENV_PATH}"/bin/activate
+  pip install -r ./fuelweb_test/requirements-devops-source.txt --upgrade
   pip install -r ./fuelweb_test/requirements.txt --upgrade
   git clone https://github.com/openstack/fuel-devops.git
   cd ./fuel-devops
