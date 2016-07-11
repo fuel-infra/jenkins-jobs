@@ -33,6 +33,8 @@
     parameters:
       - string:
           name: MAGNET_LINK
+          default:
+            !include-raw: '../data/9.0-iso'
           description: 'ISO magnet link'
       - string:
           name: UPGRADE_TARBALL_MAGNET_LINK
@@ -48,8 +50,20 @@
           description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
       - bool:
           name: ENABLE_PROPOSED
-          default: false
-          description: 'If false only stable repositories are used'
+          default: true
+      - bool:
+          name: ENABLE_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_SECURITY
+          default: true
+      - string:
+          name: DEB_LATEST
+          default: 'latest'
+      - string:
+          name: RPM_LATEST
+          default: 'latest'
+
     publishers:
       - description-setter:
           regexp: "'Description string: (.*)'"
@@ -61,7 +75,8 @@
           timeout: 1200
     builders:
       - shell: # Get description from MAGNET_LINK variable
-          !include-raw builders/get_version_from_magnet.sh
+          !include-raw:
+            'builders/get_version_from_magnet.sh'
       - multijob:
           name: 'Run system tests'
           condition: COMPLETED

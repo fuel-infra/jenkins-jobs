@@ -15,118 +15,118 @@
      ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
    weight: '7'
    jobs:
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'setup' # test job, not included in runner
          weight: '6'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'jumbo_frames'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'thread_1'
          weight: '6'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ceph_ha_one_controller'
          weight: '6'
          properties: |
            KVM_USE=true
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'one_controller_actions'
          weight: '6'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'multirole'
          weight: '6'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'thread_3'
          properties: |
            SLAVE_NODE_MEMORY=5632
          node: 'huge-systest'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'thread_7'
          properties: |
            MULTIPLE_NETWORKS=true
            FUEL_STATS_ENABLED=true
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'thread_usb'
          properties: |
            ADMIN_BOOT_DEVICE=usb
            SHOW_FUELMENU=true
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'thread_non_func_1'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'bonding_ha'
          properties: |
            BONDING=true
            SLAVE_NODE_MEMORY=4096
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'bonding_ha_one_controller'
          weight: '6'
          properties: |
            BONDING=true
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'cluster_actions'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'cluster_actions_ha'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'controller_replacement'
          timeout: '540'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'cic_maintenance_mode'
          properties: |
            SLAVE_NODE_MEMORY=5120
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'offloading'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'filling_root'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_neutron'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_tun'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_tun_scale'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_public'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive_vlan'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive_vxlan'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'command_line'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'logrotate'
          properties: |
            NEUTRON_ENABLE=true
            ADMIN_NODE_MEMORY=3072
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_destructive_ceph_neutron'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'huge_ha_neutron'
          weight: '20'
          properties: |
@@ -135,11 +135,11 @@
            SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
          timeout: '600'
          node: 'huge-systest'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'repeatable_image_based'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'known_issues'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'rh'
          node: 'systest-rh'
          properties-file: /home/jenkins/.rhel_creds
@@ -151,7 +151,7 @@
             EXTRA_COMP_IMAGE_PASSWORD=r00tme
             CENTOS_DUMMY_DEPLOY=False
             PERESTROIKA_REPO=http://nailgun.test.domain.local:8080/mos-centos/x86_64/
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ol'
          properties: |
             EXTRA_COMP_IMAGE=oracle-linux-20160523164500.qcow2
@@ -160,7 +160,7 @@
             EXTRA_COMP_IMAGE_USER=root
             EXTRA_COMP_IMAGE_PASSWORD=r00tme
             PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos9.0-centos7/os/x86_64/
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'services_ha'
          weight: '11'
          node: 'services-systest'
@@ -175,7 +175,7 @@
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
          timeout: '1200'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'services_ha.ceilometer'
          weight: '11'
          node: 'services-systest'
@@ -190,7 +190,7 @@
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
          timeout: '1200'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'services_ha_one_controller'
          weight: '11'
          node: 'services-systest'
@@ -205,30 +205,30 @@
            EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
            EXTERNAL_MONGO_REPL_SET=ceilometer
          timeout: '1200'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'custom_hostname'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'fuel_master_migrate'
          properties: |
            SLAVE_NODE_MEMORY=6144
            SLAVE_NODE_CPU=4
          weight: 11
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'repetitive_restart'
          properties: |
            PATCHING_RUN_RALLY=true
          timeout: '960'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ready_node_reinstallation'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'error_node_reinstallation'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'bvt_ubuntu_bootstrap'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'full_cluster_reinstallation'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'partition_preservation'
-     - '{version-id}.{test-type}.{dist}.plugins.{testgroup}':
+     - '9.0.{test-type}.{dist}.plugins.{testgroup}':
          testgroup:
            - 'thread_2_separate_services'
            - 'fuel_plugin_example'
@@ -236,7 +236,7 @@
          weight: '20'
          node: 'huge-systest'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.plugins.{testgroup}':
+     - '9.0.{test-type}.{dist}.plugins.{testgroup}':
          testgroup: 'thread_separate_haproxy'
          properties: |
            MULTIPLE_NETWORKS=true
@@ -244,48 +244,48 @@
          weight: '20'
          node: 'huge-systest'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'fuel_plugin_reboot'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'fuel_plugin_vip_reservation'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'network_templates'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'reduced_footprint'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ironic_deploy_swift'
          properties: |
            SLAVE_NODE_MEMORY=4096
            IRONIC_ENABLED=true
            IRONIC_NODES_COUNT=1
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ironic_deploy_ceph'
          properties: |
            SLAVE_NODE_MEMORY=4096
            IRONIC_ENABLED=true
            IRONIC_NODES_COUNT=1
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'services_reconfiguration_thread_1'
          properties: |
            DISABLE_SSL=true
            SLAVE_NODE_CPU=2
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'services_reconfiguration_thread_2'
          properties: |
            DISABLE_SSL=true
            SLAVE_NODE_CPU=2
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'cgroup_ha'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'multiracks_2'
          properties: |
            MULTIPLE_NETWORKS=true
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'deploy_from_uca'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'numa_cpu_pinning'
          properties: |
            KVM_USE=true
@@ -293,18 +293,18 @@
            DRIVER_ENABLE_ACPI=true
            NUMA_NODES=2
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'support_dpdk'
          properties: |
            KVM_USE=true
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'custom_graph'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'support_dpdk_bond'
          properties: |
            KVM_USE=true
            BONDING=true
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'system_test.deploy_centos_master'
          pre-script: |
            wget -r --no-parent -A 'fuel-release*.noarch.rpm' -nd --directory-prefix=$WORKSPACE/ -e robots=off http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/os/x86_64/Packages/ && mv "$WORKSPACE"/fuel-release*.noarch.rpm "$WORKSPACE/fuel-release.noarch.rpm"
@@ -313,7 +313,7 @@
            EXTRA_DEB_REPOS=mos,deb http://mirror.fuel-infra.org/mos-repos/ubuntu/9.0/ mos9.0 main restricted
            SLAVE_NODE_MEMORY=4096
            FUEL_RELEASE_PATH=$WORKSPACE/fuel-release.noarch.rpm
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'deploy_multipath'
          properties: |
            MULTIPATH=True
@@ -324,7 +324,7 @@
            NODE_VOLUME_SIZE=40
          node: 'huge-systest'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'support_hugepages'
          properties: |
             KVM_USE=True
@@ -336,16 +336,16 @@
             ENV_SLAVE_PASSWORD=r00tme
          timeout: '600'
          node: 'systest-hugepages'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'test_ibp'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'smoke_test_configdb'
          properties: |
            PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64/
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'unlock_settings_tab_states'
          timeout: '600'
-     - '{version-id}.{test-type}.{dist}.{testgroup}':
+     - '9.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'unlock_settings_tab'
          timeout: '1200'
          # This test use ~400GB disk space
