@@ -39,8 +39,8 @@
 
     # Repository parameters for project
     deb-dist-name: 'mos9.0'
-    deb-repo-path: '/murano-plugin-repos/ubuntu'
-    rpm-repo-path: '/murano-plugin-repos/centos/mos9.0-centos7'
+    deb-repo-path: '/extras/murano-plugin-repos/ubuntu'
+    rpm-repo-path: '/extras/murano-plugin-repos/centos/mos9.0-centos7'
 
     # MOS repositories (build/test dependencies)
     repo-host: '{publish-repo-host}'

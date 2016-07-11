@@ -33,8 +33,8 @@
 
     # Repository parameters for project
     deb-dist-name: 'mos9.0'
-    deb-repo-path: '/feature-nfv-repos/ubuntu'
-    rpm-repo-path: '/feature-nfv-repos/centos/mos9.0-centos7'
+    deb-repo-path: '/extras/feature-nfv-repos/ubuntu'
+    rpm-repo-path: '/extras/feature-nfv-repos/centos/mos9.0-centos7'
 
     # MOS repositories (build/test dependencies)
     mos-deb-repo-path: '/mos-repos/ubuntu'
