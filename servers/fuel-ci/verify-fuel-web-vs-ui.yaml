@@ -66,6 +66,10 @@
           timeout: 45
 
     builders:
+      - shell: |
+          #!/bin/bash
+          set -ex
+          rm -rvf artifacts
       - inject:
           properties-content: |
             UI_TEST_GROUP={ui_test_group}
