@@ -8,7 +8,6 @@
     name: 10.0.swarm-helpers
     jobs:
       - '10.0.swarm.runner'
-      - '10.0.swarm.timers'
       - '{version}.{test-type}.test-reports':
           version: '10.0'
           repobranch: 'origin/master'
