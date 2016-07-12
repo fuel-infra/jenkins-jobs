@@ -23,6 +23,7 @@
     - 'murano'
     - 'murano-dashboard'
     - 'python-muranoclient'
+    - 'osc-lib'
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
