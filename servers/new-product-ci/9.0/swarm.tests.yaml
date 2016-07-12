@@ -230,8 +230,6 @@
          testgroup: 'partition_preservation'
      - '{version-id}.{test-type}.{dist}.plugins.{testgroup}':
          testgroup:
-           - 'thread_db_separate_services'
-           - 'thread_keystone_separate_services'
            - 'thread_2_separate_services'
            - 'fuel_plugin_example'
            - 'install_plugin_after_cluster_create'
