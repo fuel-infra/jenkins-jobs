@@ -36,7 +36,13 @@ function update_devops () {
     else
         local REQUIREMENTS_URL="https://raw.githubusercontent.com/openstack/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt"
         if ! curl -fsS "${REQUIREMENTS_URL}" > "${WORKSPACE}/venv-requirements.txt"; then
-            echo "Problem with downloading requirements"
+            echo "Problem with downloading '${REPO_NAME}' requirements"
+            exit 1
+        fi
+
+        local REQUIREMENTS_DEVOPS_URL="https://raw.githubusercontent.com/openstack/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements-devops-source.txt"
+        if ! curl -fsS "${REQUIREMENTS_DEVOPS_URL}" > "${WORKSPACE}/venv-requirements-devops-source.txt"; then
+            echo "Problem with downloading 'fuel-devops' requirements"
             exit 1
         fi
     fi
@@ -44,6 +50,7 @@ function update_devops () {
     # Upgrade pip inside virtualenv
     pip install pip --upgrade
 
+    pip install -r "${WORKSPACE}/venv-requirements-devops-source.txt" --upgrade
     pip install -r "${WORKSPACE}/venv-requirements.txt" --upgrade
     echo "=============================="
     pip freeze

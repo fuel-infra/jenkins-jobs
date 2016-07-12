@@ -1,6 +1,9 @@
 - job:
     name: '6.1.custom.ubuntu.bvt_2'
     builders:
+      - inject: # default env variables
+          properties-content: |
+            UPDATE_REQUIREMENTS='yes'
       - shell:
           !include-raw: builders/run_system_test.sh
     concurrent: true

@@ -37,8 +37,13 @@ function update_devops () {
         echo "Install with custom requirements"
         echo "${VENV_REQUIREMENTS}" >"${WORKSPACE}/venv-requirements.txt"
     else
+        if ! curl -fsS "https://raw.githubusercontent.com/openstack/${REPO}/${BRANCH}/fuelweb_test/requirements-devops-source.txt" > "${WORKSPACE}/venv-requirements-devops-source.txt"; then
+            echo "Problem with downloading 'fuel-devops' requirements for ${REPO}/${BRANCH}"
+            exit 1
+        fi
+
         if ! curl -fsS "https://raw.githubusercontent.com/openstack/${REPO}/${BRANCH}/fuelweb_test/requirements.txt" > "${WORKSPACE}/venv-requirements.txt"; then
-            echo "Problem with downloading requirements"
+            echo "Problem with downloading requirements for ${REPO}/${BRANCH}"
             exit 1
         fi
     fi
@@ -46,6 +51,7 @@ function update_devops () {
     # Upgrade pip inside virtualenv
     pip install pip --upgrade
 
+    pip install -r "${WORKSPACE}/venv-requirements-devops-source.txt" --upgrade
     pip install -r "${WORKSPACE}/venv-requirements.txt" --upgrade
     echo "=============================="
     pip freeze

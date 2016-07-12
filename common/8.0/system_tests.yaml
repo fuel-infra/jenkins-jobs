@@ -50,6 +50,7 @@
           TEST_GROUP={testgroup}
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
           DEPLOYMENT_TIMEOUT=10800
+          UPDATE_REQUIREMENTS='yes'
     - inject: # overrides
         properties-content: '{properties}'
         properties-file: '{properties-file}'

@@ -40,4 +40,5 @@ pip install pip --upgrade
 pip install setuptools --upgrade
 
 # Install fuel-qa requirements
+pip install -r fuelweb_test/requirements-devops-source.txt
 pip install -r fuelweb_test/requirements.txt
