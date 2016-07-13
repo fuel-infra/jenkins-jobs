@@ -62,5 +62,10 @@
             mos-repos/ubuntu/master
             mos-repos/xenial/master
 
+      - extras:
+          timer: 'H/20 * * * *'
+          srcpaths: |
+            extras
+
     jobs:
       - '{mos_version}.resync-repos-to-mirrors'
