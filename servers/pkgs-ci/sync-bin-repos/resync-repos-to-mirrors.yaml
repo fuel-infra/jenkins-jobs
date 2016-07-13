@@ -65,7 +65,8 @@
       - extras:
           timer: 'H/20 * * * *'
           srcpaths: |
-            extras
+            extras/feature-nfv-repos/ubuntu/9.0
+            extras/murano-plugin-repos/ubuntu/9.0
 
     jobs:
       - '{mos_version}.resync-repos-to-mirrors'
