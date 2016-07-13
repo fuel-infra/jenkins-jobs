@@ -55,6 +55,10 @@ if [[ "${MAGNET_LINK}" =~ release-* ]]; then
             MAGNET_LINK='http://seed.fuel-infra.org/fuelweb-release/MirantisOpenStack-8.0.iso.torrent'
         ;;
 
+        9.0)
+            MAGNET_LINK='http://seed.fuel-infra.org/fuelweb-release/MirantisOpenStack-9.0.iso.torrent'
+        ;;
+
         *)
             echo "Not defined ISO source for ${RELEASE_ISO_VERSION}"
         ;;
