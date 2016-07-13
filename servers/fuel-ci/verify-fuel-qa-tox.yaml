@@ -1,0 +1,77 @@
+- job-template:
+    name: '{prefix}-fuel-qa-tox'
+    description: 'Checking up patchset by tox utility'
+    logrotate:
+      numToKeep: 100
+      daysToKeep: 90
+    node: fuel-qa-tox
+    concurrent: true
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+          description: specify fuel-qa refspec to check by manual run
+      - string:
+          name: GERRIT_BRANCH
+          default: master
+          description: specify fuel-qa branch to check by manual run
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/openstack/fuel-qa.git
+          choosing-strategy: gerrit
+    builders:
+      - shell: |
+          #!/bin/bash
+          set -ex
+          tox -v
+    triggers:
+      - timed: '{timed}'
+      - gerrit:
+          trigger-on: '{obj:trigger_on}'
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-qa
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          # remove 'skip-vote' section when voting mode will be approved by fuel-qa team
+          skip-vote:
+            successful: '{obj:non_voting}'
+            failed: '{obj:non_voting}'
+            unstable: '{obj:non_voting}'
+            notbuilt: '{obj:non_voting}'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+      - ssh-agent-credentials:
+          users:
+            - 'e0991f76-20e6-4617-9f6d-cf85600789fe'
+    publishers:
+      - email-default
+
+- project:
+    name: fuel-qa-tox
+    jobs:
+      - '{prefix}-fuel-qa-tox':
+          prefix: verify
+          trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          timed: 'H 2 * * *'
+          # remove 'non_voting' section when voting mode will be approved by fuel-qa team
+          non_voting: true
