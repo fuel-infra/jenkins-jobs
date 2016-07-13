@@ -67,7 +67,7 @@
         default: '{dist}'
         description: Base distribution
     - string:
-        name: TEST_GROUP
+        name: BASE_TEST_GROUP
         default: '{testgroup}'
     - string:
         name: UPGRADE_TEST_GROUP
