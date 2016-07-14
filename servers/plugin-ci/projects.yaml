@@ -150,14 +150,6 @@
           plugin_test_group: 'thread_keystone_separate_services'
           plugin_env_path_name: 'SEPARATE_SERVICE_KEYSTONE_PLUGIN_PATH'
 
-      - detach-murano:
-          plugin_repo: fuel-plugin-murano
-          plugin_branch: master
-          plugin_owner: 'Murano Team'
-          plugin_test_group: 'murano_plugin'
-          plugin_env_path_name: 'MURANO_PLUGIN_PATH'
-          plugin_custom_variables: 'MURANO_PACKAGE_URL=http://mirror.fuel-infra.org/extras/murano-plugin-repos/ubuntu/9.0/pool/main/m/murano/'
-
 
     exclude:
       - version: 8.0
@@ -182,7 +174,7 @@
 
     # Override test framework
     test_framework_url: 'https://github.com/openstack/stacklight-integration-tests'
-    plugin_prepare_env_builder: plugin-prepare-env-stacklight
+    plugin_prepare_env_builder: plugin-prepare-env-fuel-qa-plugins
 
     version:
       - 8.0:
@@ -214,3 +206,30 @@
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.verify'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
+
+
+- project:
+    name: murano-plugin
+    defaults: plugins-defaults
+
+    test_framework_url: 'https://github.com/openstack/fuel-plugin-murano-tests'
+    plugin_prepare_env_builder: plugin-prepare-env-fuel-qa-plugins
+
+    version:
+      - 9.0:
+          plugin_branch: master
+          iso_magnet_link: release-9.0
+
+    plugin_name:
+      - detach-murano:
+          plugin_repo: fuel-plugin-murano
+          plugin_owner: 'Murano Team'
+          plugin_test_group: 'deploy_murano_bvt'
+          plugin_env_path_name: 'MURANO_PLUGIN_PATH'
+          plugin_custom_variables: 'MURANO_PACKAGE_URL=http://mirror.fuel-infra.org/extras/murano-plugin-repos/ubuntu/9.0/pool/main/m/murano/'
+
+    jobs:
+      - '{version}.fuel-plugin.{plugin_name}.build'
+      - '{version}.fuel-plugin.{plugin_name}.deploy-test'
+
+
