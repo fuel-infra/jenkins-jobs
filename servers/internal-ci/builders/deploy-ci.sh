@@ -150,7 +150,9 @@ main () {
         # save exit code
         STATUS=\${PIPESTATUS}
         # remove VM as it's no longer required
-        ./lab-vm remove %
+        if [[ ${KEEP} != 'true' ]]; then
+          ./lab-vm remove %
+        fi
         # check if status code is 1, 4 or 6
         if [[ '146' =~ \${STATUS} ]]; then
             printf '${RED}Failure at %: second run deployment failed!${NC}\n' | \
@@ -177,7 +179,9 @@ main () {
     sort "${WORKSPACE}/summary.txt" -s -k 1,1
 
     # delete the rest of VMs
-    ./tools/openstack_clean_all_vms.sh
+    if [[ "${KEEP}" != 'true' ]]; then
+      ./tools/openstack_clean_all_vms.sh
+    fi
 
     # return exit code '1' if failure was registered
     if grep -q 'Failure' "${WORKSPACE}/summary.txt"; then
