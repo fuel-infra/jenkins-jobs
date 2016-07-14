@@ -34,6 +34,10 @@
       - shell: |
           #!/bin/bash
           set -ex
+          VENV=${{WORKSPACE}}_VENV
+          virtualenv ${{VENV}}
+          source ${{VENV}}/bin/activate
+          pip install -r sync-git-repos/sync-git-repos-requirements.txt
           sync-git-repos/sync-git-repos -m sync-git-repos/debian-fuel-infra.yaml ${{PROJECT:+ -p $PROJECT}}
     publishers:
       - email-ext:
