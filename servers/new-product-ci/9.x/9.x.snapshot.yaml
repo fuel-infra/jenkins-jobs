@@ -1,0 +1,83 @@
+- job-template:
+    name: '{version-id}.snapshot'
+    description: |
+      Freeze all dependencies for systest into artifact and run initial verification.
+
+    project-type: multijob
+
+    timer: ''
+    magnet-link:
+      !include-raw-escape: '../data/9.0-iso'
+
+    triggers:
+    - timed: '{timer}'
+
+    wrrappers:
+    - timeout:
+        timeout: 300
+
+    scm:
+    - main-git:
+        reponame: 'fuel-qa'
+        repobranch: 'stable/mitaka'
+        basedir: 'fuel-qa'
+
+    builders:
+
+    - inject:
+        # Magnet-link is required because it's part of snapshots.params
+        properties-content: |
+          MAGNET_LINK={magnet-link}
+
+    # Calculate all snapshot data and Inject it as env variables (just for case),
+    # so they will be available for using as parameters for test below a
+    - shell:
+        !include-raw-escape:
+          'builders/freeze_deps_for_systest.sh'
+    - inject-properties-file:
+        properties-file: 'snapshots.params'
+
+    - multijob:
+        name: 'Run tests'
+        condition: COMPLETED
+        projects:
+        - name: '9.x.main.ubuntu.bvt_2'
+          kill-phase-on: NEVER
+          property-file: snapshots.params
+          predefined-parameters: |
+            ENABLE_MOS_UBUNTU_PROPOSED=true
+            ENABLE_MOS_UBUNTU_UPDATES=true
+            ENABLE_MOS_UBUNTU_SECURITY=true
+            ENABLE_MOS_UBUNTU_HOLDBACK=true
+
+            ENABLE_MOS_CENTOS_OS=true
+            ENABLE_MOS_CENTOS_PROPOSED=true
+            ENABLE_MOS_CENTOS_UPDATES=true
+            ENABLE_MOS_CENTOS_SECURITY=true
+            ENABLE_MOS_CENTOS_HOLDBACK=true
+        - name: '9.x.main.ubuntu.smoke_neutron'
+          kill-phase-on: NEVER
+          property-file: snapshots.params
+          predefined-parameters: |
+            ENABLE_MOS_UBUNTU_PROPOSED=true
+            ENABLE_MOS_UBUNTU_UPDATES=true
+            ENABLE_MOS_UBUNTU_SECURITY=true
+            ENABLE_MOS_UBUNTU_HOLDBACK=true
+
+            ENABLE_MOS_CENTOS_OS=true
+            ENABLE_MOS_CENTOS_PROPOSED=true
+            ENABLE_MOS_CENTOS_UPDATES=true
+            ENABLE_MOS_CENTOS_SECURITY=true
+            ENABLE_MOS_CENTOS_HOLDBACK=true
+
+    publishers:
+
+    - archive:
+        artifacts: 'snapshots.params'
+        allow-empty: false
+    - archive:
+        artifacts: 'snapshots.sh'
+        allow-empty: false
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
