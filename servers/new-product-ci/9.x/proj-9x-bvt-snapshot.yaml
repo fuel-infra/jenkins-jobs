@@ -1,0 +1,12 @@
+- project:
+    name: proj-9x-bvt-snapshot
+    version-id: '9.x'
+    jobs:
+    - '{version-id}.snapshot':
+        timer: '0 */6 * * *'
+    - 9.x.main.{dist}.{testgroup}:
+        dist: ubuntu
+        testgroup: bvt_2
+    - 9.x.main.{dist}.{testgroup}:
+        dist: ubuntu
+        testgroup: smoke_neutron
