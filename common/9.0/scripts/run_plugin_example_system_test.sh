@@ -19,18 +19,19 @@ LOCATION=${LOCATION_FACT:-bud}
 UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
 
 case "${LOCATION}" in
-    srt)
-        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/"
-        ;;
-    msk)
-        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/"
-        ;;
-    kha)
-        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/"
-        ;;
-    poz)
-        MIRROR_HOST="http://osci-mirror-poz.poz.mirantis.net/"
-        ;;
+    # fixme: uncomment after mirror will be in-sync
+    # srt)
+    #     MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/"
+    #     ;;
+    # msk)
+    #     MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/"
+    #     ;;
+    # kha)
+    #     MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/"
+    #     ;;
+    # poz)
+    #     MIRROR_HOST="http://osci-mirror-poz.poz.mirantis.net/"
+    #     ;;
     bud)
         MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/"
         ;;
@@ -41,7 +42,9 @@ case "${LOCATION}" in
         MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/"
         ;;
     *)
-        MIRROR_HOST="http://mirror.fuel-infra.org/"
+        # fixme: after mirror will be in-sync
+        # MIRROR_HOST="http://mirror.fuel-infra.org/"
+        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/"
 esac
 
 ###################### Get MIRROR_UBUNTU ###############
