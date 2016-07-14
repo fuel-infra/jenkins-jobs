@@ -78,7 +78,6 @@
             CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
             TEST_ISO_JOB={version-id}.test_all
             MAKE_SNAPSHOT={make-snapshot}
-            UPDATE_REQUIREMENTS='yes'
       - inject: # overrides
           properties-content: '{properties}'
           properties-file: '{properties-file}'

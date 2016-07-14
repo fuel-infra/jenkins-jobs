@@ -39,7 +39,6 @@ VENV="${WORKSPACE}_VENV"
 virtualenv "${VENV}"
 source "${VENV}/bin/activate" || exit 1
 
-pip install -r "${WORKSPACE}/fuelweb_test/requirements-devops-source.txt"
 pip install -r "${WORKSPACE}/fuelweb_test/requirements.txt"
 pip install -r "${WORKSPACE}/doc/requirements.txt"
 

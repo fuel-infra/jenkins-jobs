@@ -1,9 +1,6 @@
 - job:
     name: 'fuel_community.ubuntu.bvt_2'
     builders:
-      - inject: # default env variables
-          properties-content: |
-            UPDATE_REQUIREMENTS='yes'
       - shell: |
           #!/bin/bash
           set -ex

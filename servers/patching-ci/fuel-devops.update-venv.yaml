@@ -18,9 +18,6 @@
           ignore-offline-nodes: true
           allowed-multiselect: true
       - string:
-          name: REQS_DEVOPS_PATH
-          default: 'https://raw.githubusercontent.com/openstack/fuel-qa/master/fuelweb_test/requirements-devops-source.txt'
-      - string:
           name: REQS_PATH
           default: 'https://raw.githubusercontent.com/openstack/fuel-qa/master/fuelweb_test/requirements.txt'
       - string:
