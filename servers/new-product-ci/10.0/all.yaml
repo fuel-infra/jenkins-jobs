@@ -13,7 +13,7 @@
             BUILD_PACKAGES=0
             MOS_CENTOS_ROOT=/mos-repos/centos/mos-master-centos7/
             MOS_UBUNTU_TARGET=master.target.txt
-            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
+            MOS_UBUNTU_ROOT=/mos-repos/xenial/
             MIRROR_MOS_UBUNTU_SUITE=mos-master
 
       - 'product-{version}{mod}.test_all':
