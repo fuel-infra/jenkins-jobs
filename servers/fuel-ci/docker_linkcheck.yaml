@@ -73,7 +73,7 @@
 - project:
     name: 'multi-docker-linkcheck'
     volumes: '$WORKSPACE:/opt/jenkins/{prefix}'
-    envvars: '-e REQUIREMENTS={requirements} -e MAKEDIR={makedir} -e REGEX={exclude_regex}'
+    envvars: '-e PREFIX={prefix} -e REQUIREMENTS={requirements} -e MAKEDIR={makedir} -e REGEX={exclude_regex}'
     jobs:
       - '{prefix}-docker-linkcheck':
           prefix: 'fuel-web'
