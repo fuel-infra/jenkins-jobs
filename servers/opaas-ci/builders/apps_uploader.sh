@@ -6,7 +6,7 @@
 #   .. author:: Alexey Zvyagintsev <azvyagintsev@mirantis.com>
 #
 #   .. Require: apt-get install python-dev python-virtualenv python-pip
-#               zip build-essential libssl-dev libffi-dev
+#               python-tox zip build-essential libssl-dev libffi-dev
 
 set -ex
 # FIXME remove this line after https://bugs.launchpad.net/mos/+bug/1594853
@@ -43,14 +43,25 @@ GIT_REPO="${GIT_REPO:-openstack/ci-cd-pipeline-app-murano}"
 # List of murano app catalogs, to be archived and uploaded into OS
 #PACKAGES_LIST="Puppet SystemConfig OpenLDAP Gerrit Jenkins"
 
+
+# import default packages_list, if exist
+if [ -f "${WORKSPACE}/tools/default_packages_list.sh" ]; then
+    if [ -z "${DEFAULT_PACKAGES_LIST}" ]; then
+        source "${WORKSPACE}/tools/default_packages_list.sh"
+        if [ -z "${PACKAGES_LIST}" ]; then
+            echo "Packages list has been imported from default_packages_list.sh file"
+            PACKAGES_LIST="${DEFAULT_PACKAGES_LIST}"
+        fi
+    fi
+fi
+
 function prepare_venv() {
     echo 'LOG: Creating python venv for murano-client'
     mkdir -p "${VENV_PATH}"
     virtualenv --system-site-packages  "${VENV_PATH}"
     source "${VENV_PATH}/bin/activate"
-    #FIXME install from requirments.txt ?
-    pip install pytz debtcollector
-    pip install git+https://github.com/openstack/python-muranoclient.git python-heatclient --upgrade
+    pip install -r test-requirements.txt
+    deactivate
 }
 
 function build_packages() {
@@ -75,10 +86,10 @@ find "${ARTIFACTS_DIR}" -type f -exec rm -f {} \;
 
 # Checking gerrit commits for GIT_REPO
 if [[ ("${COMMIT_LIST}" != "none") ]] ; then
-  for commit in ${COMMIT_LIST} ; do
-    git fetch https://review.openstack.org/"${GIT_REPO}" "${commit}"
-    git cherry-pick FETCH_HEAD
-  done
+    for commit in ${COMMIT_LIST} ; do
+        git fetch https://review.openstack.org/"${GIT_REPO}" "${commit}"
+        git cherry-pick FETCH_HEAD
+    done
 fi
 
 if [[ ! -z "${PACKAGES_LIST}" ]] ; then
@@ -97,7 +108,7 @@ if [[ "${UPLOAD_TO_OS}" == true ]] ; then
         echo  'LOG: Removing ALL apps from tenant...'
         pkg_ids=($(murano package-list --owned |grep -v 'ID\|--' |awk '{print $2}'))
         for id in "${pkg_ids[@]}"; do
-          murano package-delete "${id}" || true
+            murano package-delete "${id}" || true
         done
     fi
     # to have ability upload one package independently we need to remove it
@@ -107,9 +118,9 @@ if [[ "${UPLOAD_TO_OS}" == true ]] ; then
         art_name="${ARTIFACTS_DIR}/${APP_PREFIX}${pkg}.zip"
         pkg_id=$(murano package-list --owned |awk "/$pkg/ {print \$2}")
         if [[ -n "${pkg_id}" ]] ; then
-        # FIXME remove 'true', after --owned flag will be fixed
-        # https://bugs.launchpad.net/mos/+bug/1593279
-        murano package-delete "${pkg_id}" || true
+            # FIXME remove 'true', after --owned flag will be fixed
+            # https://bugs.launchpad.net/mos/+bug/1593279
+            murano package-delete "${pkg_id}" || true
         fi
     done
     # via client and then upload it without updating its dependencies
@@ -121,16 +132,12 @@ if [[ "${UPLOAD_TO_OS}" == true ]] ; then
     done
     echo "LOG: importing done, final package list:"
     murano package-list --owned
+    deactivate
 fi
 
-if [[ "${RUN_TEST}" != none ]] ; then
+if [[ "${RUN_TEST}" != "none" ]] ; then
     echo "LOG: trying run openstack deployment..."
-    if [[ ("${VENV_CLEAN}" == true) || (! -f "${VENV_PATH}/bin/activate") ]]; then
-        prepare_venv
-    fi
-    # TBD Here should be test_run call
-    source "${VENV_PATH}/bin/activate"
-    ./"${RUN_TEST}"
-
+    tox -v -e "${RUN_TEST}"
 fi
+
 echo FINISHED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" >> "${ARTIFACTS_DIR}/ci_status_params.txt"
