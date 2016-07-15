@@ -88,7 +88,8 @@ if [[ "${FUEL_DEVOPS_COMMIT}" != "none" ]] ; then
   rm -rf "${VENV_PATH}"  # Cleanup, if conflict presents
   virtualenv "${VENV_PATH}"
   . "${VENV_PATH}"/bin/activate
-  pip install -r ./fuelweb_test/requirements.txt --upgrade
+
+  # Install fuel-devops
   git clone https://github.com/openstack/fuel-devops.git
   cd ./fuel-devops
   git checkout "${FUEL_DEVOPS_COMMIT}"
@@ -97,8 +98,11 @@ if [[ "${FUEL_DEVOPS_COMMIT}" != "none" ]] ; then
       git fetch https://review.openstack.org/openstack/fuel-devops "${devops_commit}" && git cherry-pick FETCH_HEAD
     done
   fi
-  pip uninstall -y fuel-devops
   pip install ./ --upgrade
+
+  # Install fuel-qa requirements
+  pip install -r ./fuelweb_test/requirements.txt --upgrade
+
   cd "${WORKSPACE}"
   export DEVOPS_DB_NAME="${VENV_PATH}/fuel_devops.sqlite3"
   export DEVOPS_DB_ENGINE="django.db.backends.sqlite3"
