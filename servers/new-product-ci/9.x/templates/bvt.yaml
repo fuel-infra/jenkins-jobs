@@ -1,6 +1,6 @@
 - job-template:
     name: '9.x.main.{dist}.{testgroup}'
-    description: 'Run Build Verification Tests'
+    description: 'Run Build Verification Test {testgroup}'
 
     email: 'ci+bvt@mirantis.com'
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
@@ -56,7 +56,7 @@
 
     - shell:
         !include-raw-escape:
-          'builders/wrapped_system_tests.sh'
+          '../builders/wrapped_system_tests.sh'
 
     publishers:
 
@@ -74,40 +74,43 @@
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
 
-# fixme: add later
+    - email-ext: # Failure email
 
-#    - email-ext: # Failure email
-#        body: |
-#          Verification test {testgroup} failed on {version}{mod} ISO
-#
-#          $BUILD_URL
-#
-#          $BUILD_LOG
-#
-#          $BUILD_URL
-#
-#        aborted: true
-#        failure: true
-#        still-failing: true
-#        fixed: false
-#        send-to:
-#          - recipients
-#          - requester
-#        recipients: '{email}'
-#        subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
-#    - email-ext: # Fixed email
-#        body: |
-#          Test passed. Thanks, everyone.
-#
-#          $BUILD_URL
-#
-#        failure: false
-#        fixed: true
-#        send-to:
-#          - recipients
-#          - requester
-#        recipients: '{email}'
-#        subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+        aborted:        true
+        failure:        true
+        still-failing:  true
+
+        fixed:          false
+
+        send-to:
+          - recipients
+          - requester
+        recipients: '{email}'
+        subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+        body: |
+          Verification test {testgroup} failed on $CUSTOM_VERSION
+
+          $BUILD_URL
+
+          $BUILD_LOG
+
+    - email-ext: # Fixed email
+
+        aborted:        false
+        failure:        false
+        still-failing:  false
+
+        fixed:          true
+
+        send-to:
+          - recipients
+          - requester
+        recipients: '{email}'
+        subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+        body: |
+          Verification test {testgroup} passed on $CUSTOM_VERSION
+
+          $BUILD_URL
 
     - trigger-parameterized-builds:
         '{obj:trigger_projects}'

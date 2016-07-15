@@ -7,7 +7,7 @@
 
     timer: ''
     magnet-link:
-      !include-raw-escape: '../data/9.0-iso'
+      !include-raw-escape: '../../data/9.0-iso'
 
     triggers:
     - timed: '{timer}'
@@ -33,7 +33,7 @@
     # so they will be available for using as parameters for test below a
     - shell:
         !include-raw-escape:
-          'builders/freeze_deps_for_systest.sh'
+          '../builders/freeze_deps_for_systest.sh'
     - inject-properties-file:
         properties-file: 'snapshots.params'
 

@@ -5,11 +5,13 @@
 
     - string:
         name: CUSTOM_VERSION
-        description: "iso magnet link"
+        description: |
+          Custom version for test rails reporting.
+          Normally should be inserted from snapshot job
 
     - string:
         name: MAGNET_LINK
-        description: "iso magnet link"
+        description: "Which ISO to use in tests"
 
     - string:
         name: FUEL_QA_COMMIT
