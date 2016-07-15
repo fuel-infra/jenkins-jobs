@@ -12,4 +12,8 @@
           # because we sometimes trigger building manually and don't want to
           # keep in mind that after ~2 hours we need to retrigger this job too
           # so .. let it be triggered reasonably often
-          timer: 'H/30 * * * *'
+          #################
+          # FIXME(aevseev): Temporary disable periodic run to use ISO not passed BVT2
+          # See: https://bugs.launchpad.net/fuel/+bug/1603138
+          #################
+          timer: ''
