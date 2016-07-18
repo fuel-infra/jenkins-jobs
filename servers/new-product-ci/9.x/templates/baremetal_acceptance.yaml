@@ -1,0 +1,67 @@
+- job-template:
+    name: '{version-id}.baremetal.{dist}.{testgroup}'
+    description: 'Run Baremetal Acceptance Test {testgroup}'
+    node: 'runner'
+    concurrent: false
+
+    version: '9.x'
+    venvpath: '/home/jenkins/qa-venv-master-3.0'
+    env_suffix: $BUILD_ID
+    properties: ''
+    properties-file: ''
+    timeout: '360'
+    weight: '1'
+    disabled: false
+
+    parameters:
+    - 9x-systest-params
+    - string: # added for cleaner which searches for job parameter
+        name: ENV_PREFIX
+        default: 'fuel.baremetal.{downstream_environment}'
+    - string:
+        name: TEST_GROUP
+        default: '{testgroup}'
+        description: 'Test group to run'
+    - string:
+        name: fuel_qa_gerrit_commit
+        default: 'none'
+        description: 'Refspecs for commits in fuel-qa gerrit separated with spaces. For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
+        properties:
+
+    scm:
+    - main-git:
+        reponame: 'fuel-qa'
+        repobranch: '$FUEL_QA_COMMIT'
+        basedir: ''
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm
+    - inject-passwords:
+        global: true
+
+    builders:
+    - trigger-builds:
+      - project: 'fuel.baremetal.{downstream_environment}'
+        current-parameters: True
+        predefined-parameters: '{properties}'
+        block: true
+        block-thresholds:
+          build-step-failure-threshold: never
+    - copyartifact:
+        project: 'fuel.baremetal.{downstream_environment}'
+        filter: 'nosetests.xml'
+        which-build: permalink
+        permalink: last
+
+    publishers:
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+      - trigger-parameterized-builds:
+        - project: '{version}.baremetal.reporter'
+          predefined-parameters: TEST_JOB_NAME=$JOB_NAME
