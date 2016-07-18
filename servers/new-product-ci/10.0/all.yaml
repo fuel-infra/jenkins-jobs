@@ -15,6 +15,8 @@
             MOS_UBUNTU_TARGET=master.target.txt
             MOS_UBUNTU_ROOT=/mos-repos/xenial/
             MIRROR_MOS_UBUNTU_SUITE=mos-master
+            UBUNTU_RELEASE=xenial
+            UBUNTU_KERNEL_FLAVOR=lts-xenial
 
       - 'product-{version}{mod}.test_all':
           email: '{bvt-mail}'
