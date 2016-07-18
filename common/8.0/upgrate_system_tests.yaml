@@ -99,6 +99,7 @@
         properties-content: |
           VENV_PATH={venvpath}
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          UPDATE_REQUIREMENTS=yes
     - guess-mirror
     - inject:
         properties-content: '{properties}'
