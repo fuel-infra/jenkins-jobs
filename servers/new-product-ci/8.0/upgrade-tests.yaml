@@ -4,7 +4,7 @@
     dist: 'ubuntu'
     version-id: '8.0'
     node: 'systest'
-    timeout: '480'
+    timeout: '960'
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     properties: |
       KEYSTONE_PASSWORD=newpass
@@ -53,7 +53,7 @@
           'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
     - bool:
         name: ENABLE_PROPOSED
-        default: false
+        default: true
     - bool:
         name: ENABLE_SECURITY
         default: true
