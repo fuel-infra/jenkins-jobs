@@ -1,0 +1,23 @@
+- publisher:
+    name: bvt-fixed-email
+
+    publishers:
+    - email-ext:
+
+        aborted:        false
+        failure:        false
+        still-failing:  false
+
+        fixed:          true
+
+        # ---- email contents ----
+        send-to:
+          - recipients
+          - requester
+        recipients: '{email_recipients}'
+        subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+        body: |
+          Verification test $TEST_GROUP passed on $CUSTOM_VERSION
+
+          $BUILD_URL
+        # ---- email contents ----
