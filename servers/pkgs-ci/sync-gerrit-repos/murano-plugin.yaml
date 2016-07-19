@@ -24,6 +24,7 @@
     - 'murano-dashboard'
     - 'python-muranoclient'
     - 'osc-lib'
+    - 'app-catalog-ui'
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
