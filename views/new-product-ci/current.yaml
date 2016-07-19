@@ -6,17 +6,13 @@
         - 10.0-mitaka.main.ubuntu.bvt_2
         - 10.0-mitaka.main.ubuntu.smoke_neutron
         - 10.0-mitaka.test_all
-        - 9.0-mos.all
-        - 9.0-mos.main.ubuntu.bvt_2
-        - 9.0-mos.main.ubuntu.smoke_neutron
-        - 9.0-mos.test_all
-        - 9.0.main.ubuntu.bvt_2
-        - 9.0.main.ubuntu.smoke_neutron
-        - 9.0.test_all
+        - 9.x.snapshot
+        - 9.x.main.ubuntu.bvt_2
+        - 9.x.main.ubuntu.smoke_neutron
         - 9.0.swarm.runner
         - 9.0.swarm.statistic
-        - 9.0.swarm.timer.proposed
         - 9.0.swarm.timer.stable
+        - 9.0.swarm.timer.proposed
       columns:
         - status
         - weather
