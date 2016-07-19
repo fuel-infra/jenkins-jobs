@@ -31,7 +31,7 @@
           # FIXME(aevseev): Use upstream Ubuntu mirrors until there is no
           # mirrored xenial on Mirantis' mirrors
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ trusty main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ trusty-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ trusty-security main universe multiverse
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'smoke_neutron'
