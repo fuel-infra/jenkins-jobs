@@ -9,29 +9,58 @@ set -o xtrace
 ############################
 
 get_deb_snapshot() {
-    # Debian repos may have format "URL DISTRO COMPONENT1 [COMPONENTN]"
-    # Remove quotes and assign values to variables
-    local deb_repo
-    deb_repo=$(tr -d \" <<< "${@}")
-    read -r repo_url dist_name components <<< "${deb_repo}"
+    # Remove quotes from input argument(s)
+    local INPUT
+    INPUT=( $(tr -d \" <<< "${@}") )
+    # Ubuntu repos may have format "[deb] URL DISTRO COMPONENT1 [COMPONENTN][,PRIORITY]"
+    local deb_prefix=''
+    if [ "${INPUT[0]}" = "deb" ]; then
+        deb_prefix='deb '
+        unset INPUT[0]
+    fi
+    # Assign values to variables.
+    # The last variable - 'components' - will also contain priority if any, but
+    # it does not matter here, it will be returned as is
+    read -r repo_url dist_name components <<< "${INPUT[@]}"
     # Remove trailing slash
     repo_url=${repo_url%/}
-    local snapshot
-    snapshot=$(curl -fLsS "${repo_url}.target.txt" | head -1)
-    echo "${repo_url%/*}/${snapshot}${dist_name:+ ${dist_name}}${components:+ ${components}}"
+    # Cut version
+    repo_version=${repo_url##*/}
+    repo_url=${repo_url%/*}
+    # Get snapshot
+    local snapshot=$(curl -fLsS "${repo_url}/snapshots/${repo_version}-latest.target.txt" | head -1)
+    echo "${deb_prefix}${repo_url}/snapshots/${snapshot} ${dist_name} ${components}"
 }
 
 get_rpm_snapshot() {
-    # Remove quotes
-    local repo_url
-    repo_url=$(tr -d \" <<< "${1}")
+    # Remove quotes from input argument
+    local INPUT
+    INPUT=$(tr -d \" <<< "${1}")
+    # Centos repos may have format "[NAME,]URL[,PRIORITY]"
+    read -r repo_name repo_url priority <<< "${INPUT//,/ }"
+    if [ -z "${repo_url}" ]; then
+        # Repo does not have extra parameters
+        repo_url=${repo_name}
+        unset repo_name
+    elif [ -z "${priority}" ]; then
+        # Two parameters... Do we have repo name or priority?
+        if [[ "${repo_url}" =~ ^[0-9]+$ ]]; then
+            # repo_url contain only numbers - it is priority
+            priority=${repo_url}
+            repo_url=${repo_name}
+            unset repo_name
+        fi
+    fi
     # Remove trailing slash
-    repo_url=${repo_url%/}
+    repo_url="${repo_url%/}"
     # Remove architecture
+    repo_url="${repo_url%/*}"
+    # Cut component
+    repo_component="${repo_url##*/}"
     repo_url=${repo_url%/*}
-    local snapshot
-    snapshot=$(curl -fLsS "${repo_url}.target.txt" | head -1)
-    echo "${repo_url%/*}/${snapshot}/x86_64"
+    # Get snapshot
+    local snapshot="$(curl -fLsS "${repo_url}/snapshots/${repo_component}-latest.target.txt" | head -1)"
+    echo "${repo_name:+${repo_name},}${repo_url}/snapshots/${snapshot}/x86_64${priority:+,${priority}}"
 }
 
 # Perestroika uses a lot of Gerrit parameters, so in case of using Zuul, you can
@@ -101,22 +130,22 @@ export REMOTE_REPO_HOST=${MIRROR_HOST}
 : "${BASE_RPM_REPO_PATH?}"
 
 # Get latest snapshots
-SNAPSHOT_DEB=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_DEB_REPO_PATH}/${PROJECT_VERSION}.target.txt" | head -1 || :)
-SNAPSHOT_RPM_OS=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/os.target.txt" | head -1 || :)
-SNAPSHOT_RPM_HOTFIX=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/hotfix.target.txt" | head -1 || :)
-SNAPSHOT_RPM_UPDATES=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/updates.target.txt" | head -1 || :)
-SNAPSHOT_RPM_PROPOSED=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/proposed.target.txt" | head -1 || :)
-SNAPSHOT_RPM_SECURITY=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/security.target.txt" | head -1 || :)
-SNAPSHOT_RPM_HOLDBACK=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/holdback.target.txt" | head -1 || :)
+SNAPSHOT_DEB=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_DEB_REPO_PATH}/snapshots/${PROJECT_VERSION}-latest.target.txt" | head -1)
+SNAPSHOT_RPM_OS=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/os-latest.target.txt" | head -1)
+SNAPSHOT_RPM_HOTFIX=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/hotfix-latest.target.txt" | head -1)
+SNAPSHOT_RPM_UPDATES=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/updates-latest.target.txt" | head -1)
+SNAPSHOT_RPM_PROPOSED=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/proposed-latest.target.txt" | head -1)
+SNAPSHOT_RPM_SECURITY=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/security-latest.target.txt" | head -1)
+SNAPSHOT_RPM_HOLDBACK=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/holdback-latest.target.txt" | head -1)
 
 # Repository pathes for builder (for build dependencies)
-DEB_REPO_PATH=${BASE_DEB_REPO_PATH}/${SNAPSHOT_DEB}
-RPM_OS_REPO_PATH=${BASE_RPM_REPO_PATH}/${SNAPSHOT_RPM_OS:-os}
-RPM_HOTFIX_REPO_PATH=${BASE_RPM_REPO_PATH}/${SNAPSHOT_RPM_HOTFIX:-hotfix}
-RPM_UPDATES_REPO_PATH=${BASE_RPM_REPO_PATH}/${SNAPSHOT_RPM_UPDATES:-updates}
-RPM_PROPOSED_REPO_PATH=${BASE_RPM_REPO_PATH}/${SNAPSHOT_RPM_PROPOSED:-proposed}
-RPM_SECURITY_REPO_PATH=${BASE_RPM_REPO_PATH}/${SNAPSHOT_RPM_SECURITY:-security}
-RPM_HOLDBACK_REPO_PATH=${BASE_RPM_REPO_PATH}/${SNAPSHOT_RPM_HOLDBACK:-holdback}
+DEB_REPO_PATH=${BASE_DEB_REPO_PATH}/snapshots/${SNAPSHOT_DEB}
+RPM_OS_REPO_PATH=${BASE_RPM_REPO_PATH}/snapshots/${SNAPSHOT_RPM_OS}
+RPM_HOTFIX_REPO_PATH=${BASE_RPM_REPO_PATH}/snapshots/${SNAPSHOT_RPM_HOTFIX}
+RPM_UPDATES_REPO_PATH=${BASE_RPM_REPO_PATH}/snapshots/${SNAPSHOT_RPM_UPDATES}
+RPM_PROPOSED_REPO_PATH=${BASE_RPM_REPO_PATH}/snapshots/${SNAPSHOT_RPM_PROPOSED}
+RPM_SECURITY_REPO_PATH=${BASE_RPM_REPO_PATH}/snapshots/${SNAPSHOT_RPM_SECURITY}
+RPM_HOLDBACK_REPO_PATH=${BASE_RPM_REPO_PATH}/snapshots/${SNAPSHOT_RPM_HOLDBACK}
 
 # DEB-specific parameters
 export DEB_DIST_NAME DEB_REPO_PATH
