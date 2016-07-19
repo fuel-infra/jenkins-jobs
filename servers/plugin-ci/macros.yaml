@@ -61,7 +61,7 @@
       - shell:
           !include-raw './builders/prepare-venv.sh'
 
-# Builder for stacklight and murano frameworks
+# Builder for the StackLight and Murano frameworks
 - builder:
     name: plugin-prepare-env-fuel-qa-plugins
     builders:
