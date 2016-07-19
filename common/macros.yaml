@@ -73,7 +73,7 @@
         echo "[Rename*] - Renamed successfully."
 
 - builder:
-    name: inject-from-job(same-patchset)
+    name: inject-from-job
 
     builders:
 
@@ -89,9 +89,9 @@
       - copyartifact:
           project: '{job-name}'
           filter: '{artifact-name}'
-          which-build: last-successful
-          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-          optional: true
+          which-build: '{which-build}'
+          parameter-filters: '{parameter-filters}'
+          optional: '{obj:optional}'
 
       # 3. touch it, so the file will exist in all cases
       - shell: touch '{artifact-name}'
@@ -99,6 +99,28 @@
       # 4. inject file's content: artifact data or nothing
       - inject-properties-file:
           properties-file: '{artifact-name}'
+
+- builder:
+    name: inject-from-job(same-patchset)
+
+    builders:
+      - inject-from-job:
+          job-name: '{job-name}'
+          artifact-name: '{artifact-name}'
+          parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          which-build: last-successful
+          optional: true
+
+- builder:
+    name: inject-from-job()
+    builders:
+      - inject-from-job:
+          job-name: '{job-name}'
+          artifact-name: '{artifact-name}'
+          parameter-filters: ''
+          which-build: '{which-build}'
+          optional: false
+
 
 - builder:
     name: inject-devops-env

@@ -1,5 +1,5 @@
 - project:
-    name: proj-9x-bvt-snapshot
+    name: 9.x.snapshot
     version-id: '9.x'
     jobs:
     - '{version-id}.snapshot':

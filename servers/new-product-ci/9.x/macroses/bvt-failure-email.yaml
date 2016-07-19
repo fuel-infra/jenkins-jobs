@@ -1,0 +1,25 @@
+- publisher:
+    name: bvt-failure-email
+
+    publishers:
+    - email-ext:
+
+        aborted:        true
+        failure:        true
+        still-failing:  true
+
+        fixed:          false
+
+        # ---- email contents ----
+        send-to:
+          - recipients
+          - requester
+        recipients: '{email_recipients}'
+        subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+        body: |
+          Verification test $TEST_GROUP failed on $CUSTOM_VERSION
+
+          $BUILD_URL
+
+          $BUILD_LOG
+        # ---- email contents ----

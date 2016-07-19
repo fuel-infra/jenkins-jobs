@@ -1,0 +1,15 @@
+- project:
+    name: 9.x.system_test.test-reports
+    version: '9.x'
+    report-version: '9.1'
+    repobranch: 'origin/stable/mitaka'
+
+    jobs:
+    - '9.x.bvt.test-reports'
+    - '{version}.{test-type}.test-reports':
+        test-type:  'system_test'
+        properties: |
+          TESTS_RUNNER=9.x.swarm.runner
+          TESTRAIL_TEST_SUITE=[{report-version}] Swarm
+          TESTRAIL_MILESTONE={report-version}
+          LAUNCHPAD_MILESTONE={report-version}
