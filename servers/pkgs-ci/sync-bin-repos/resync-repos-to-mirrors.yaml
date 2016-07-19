@@ -32,8 +32,10 @@
             mos-repos/centos/mos8.0-centos7-fuel/holdback
             mos-repos/centos/mos8.0-centos7-fuel/hotfix
             mos-repos/ubuntu/8.0
+          update-head: false
 
       - '9.0':
+          timer: 'H/20 * * * *'
           authorization:
             maintenance-mgmt:
               - job-read
@@ -49,6 +51,7 @@
             mos-repos/centos/mos9.0-centos7/holdback
             mos-repos/centos/mos9.0-centos7/hotfix
             mos-repos/ubuntu/9.0
+          update-head: false
 
       - master:
           timer: '*/20 * * * *'
@@ -61,12 +64,14 @@
             mos-repos/centos/mos-master-centos7/hotfix
             mos-repos/ubuntu/master
             mos-repos/xenial/master
+          update-head: true
 
       - extras:
           timer: 'H/20 * * * *'
           srcpaths: |
             extras/feature-nfv-repos/ubuntu/9.0
             extras/murano-plugin-repos/ubuntu/9.0
+          update-head: true
 
     jobs:
       - '{mos_version}.resync-repos-to-mirrors'

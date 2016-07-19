@@ -144,10 +144,17 @@ FAILED PATH: ${SYNCPATH}"
             mv "${TMP_DIR}" "${DSTPATH}"
             mv "${TMP_DIR}.chksum" "${DSTPATH}.chksum"
             failedhosts=""
+            if [ "$UPDATE_HEAD_SYMLINK" = "true" ] ; then
+                local UPDATE_HEAD_PARAM="-s ${DSTPATH##*/}"
+            else
+                unset UPDATE_HEAD_PARAM
+            fi
+            # Double quoting breaks bash quoting at UPDATE_HEAD_PARAM
+            # shellcheck disable=SC2086
             for host in $HOSTS_TO_SYNC ; do
                 ${TRSYNC_BIN} push "${DSTPATH}" "${SYNCPATH##*/}" \
                     -d "${host}/${SYNCPATH%/*}" \
-                    -s "${DSTPATH##*/}" \
+                    $UPDATE_HEAD_PARAM \
                     --init-directory-structure \
                     --snapshot-dir "$SNAPSHOT_DIR" \
                     --timestamp "$TIMESTAMP" \

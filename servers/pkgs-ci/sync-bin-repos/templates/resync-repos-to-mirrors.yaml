@@ -44,6 +44,11 @@
           default: false
           description: |
               Run sync even if there are no changes in the repositories
+      - bool:
+          name: UPDATE_HEAD_SYMLINK
+          default: '{update-head}'
+          description: |
+              Point head symlink to new snapshot
       - text:
           name: HOSTS_TO_SYNC
           default: |
