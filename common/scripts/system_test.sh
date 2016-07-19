@@ -19,8 +19,12 @@ get_deb_snapshot() {
     read -r repo_url dist_name components <<< "${INPUT[@]}"
     # Remove trailing slash
     repo_url=${repo_url%/}
-    local snapshot=$(curl -fLsS "${repo_url}.target.txt" | head -1)
-    echo "${deb_prefix}${repo_url%/*}/${snapshot} ${dist_name} ${components}"
+    # Cut version
+    repo_version=${repo_url##*/}
+    repo_url=${repo_url%/*}
+    # Get snapshot
+    local snapshot=$(curl -fLsS "${repo_url}/snapshots/${repo_version}-latest.target.txt" | head -1)
+    echo "${deb_prefix}${repo_url}/snapshots/${snapshot} ${dist_name} ${components}"
 }
 
 get_rpm_snapshot() {
@@ -46,8 +50,12 @@ get_rpm_snapshot() {
     repo_url="${repo_url%/}"
     # Remove architecture
     repo_url="${repo_url%/*}"
-    local snapshot="$(curl -fLsS "${repo_url}.target.txt" | head -1)"
-    echo "${repo_name:+${repo_name},}${repo_url%/*}/${snapshot}/x86_64${priority:+,${priority}}"
+    # Cut component
+    repo_component="${repo_url##*/}"
+    repo_url=${repo_url%/*}
+    # Get snapshot
+    local snapshot="$(curl -fLsS "${repo_url}/snapshots/${repo_component}-latest.target.txt" | head -1)"
+    echo "${repo_name:+${repo_name},}${repo_url}/snapshots/${snapshot}/x86_64${priority:+,${priority}}"
 }
 
 join () {
