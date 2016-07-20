@@ -28,10 +28,10 @@ main () {
     rm -rf "${HOME}/built_packages/*"
 
     # Create images
-    local _images
-    _images="$(docker images | grep -F -e "build" | cut -d ' ' -f 1)"
     for image in mockbuild sbuild ; do
-        [ "$(echo "${_images}" | grep -Fc -e "${image}")" -eq 0 ] && docker build -t "${image}" "${_dpath}/${image}/"
+        if ! docker inspect "${image}:latest" > /dev/null 2>&1; then
+            docker build -t "${image}" "${_dpath}/${image}/"
+        fi
     done
 
     # Create or update chroots
