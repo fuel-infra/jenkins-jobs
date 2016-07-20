@@ -114,9 +114,6 @@ export IS_UPDATES={is_updates}
 # Build package
 ############################
 
-# Use parameters set by Zuul instead of guessing ones
-test "${{SKIP_DEF_PARAMS:-true}}" = true && sed -ri '/set_default_params/ d' build-${{IS_FUEL:+fuel-}}{pkg_type}.sh || :
-
 # Save time of build start
 BUILD_START_AT=$(date -u +%s)
 
