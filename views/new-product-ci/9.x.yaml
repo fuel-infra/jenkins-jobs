@@ -1,12 +1,9 @@
 - view:
       type: list
-      name: 'Current'
+      name: '9.x'
       jobs:
-        - 10.0-mitaka.all
-        - 10.0-mitaka.main.ubuntu.bvt_2
-        - 10.0-mitaka.main.ubuntu.smoke_neutron
-        - 10.0-mitaka.test_all
         - 9.x.snapshot
+        - 9.x.bvt.test-reports
         - 9.x.main.ubuntu.bvt_2
         - 9.x.main.ubuntu.smoke_neutron
         - 9.x.swarm.runner
