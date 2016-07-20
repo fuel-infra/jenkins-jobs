@@ -37,8 +37,10 @@ export GERRIT_HOST=${{GERRIT_HOST:-{gerrit-host}}}
 export GERRIT_PORT=${{GERRIT_PORT:-{gerrit-port}}}
 export GERRIT_USER=${{GERRIT_USER:-{gerrit-user}}}
 
-export SRC_PROJECT_PATH="${{GERRIT_PROJECT%/*}}"
-export SPEC_PROJECT_PATH=openstack-build
+SRC_PROJECT_PATH="${{GERRIT_PROJECT%/*}}"
+SRC_PROJECT_PATH="${{GERRIT_PROJECT%-build}}"
+SPEC_PROJECT_PATH=openstack-build
+export SRC_PROJECT_PATH SPEC_PROJECT_PATH
 
 # Parameters for package specs
 export SPEC_PROJECT_SUFFIX=-build
