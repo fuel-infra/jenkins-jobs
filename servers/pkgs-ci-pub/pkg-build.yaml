@@ -27,6 +27,12 @@
     triggers:
       - zuul
 
+    properties:
+      - inject:
+          properties-content: |
+            SRC_PROJECT_PATH=openstack
+            SPEC_PROJECT_PATH=openstack-build
+
     builders:
       - guess-mirror
       - shell: |
