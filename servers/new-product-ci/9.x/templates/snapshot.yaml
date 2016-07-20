@@ -4,6 +4,7 @@
       Freeze all dependencies for systest into artifact and run initial verification.
 
     project-type: multijob
+    node: runner
 
     timer: ''
     magnet-link:
