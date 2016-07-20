@@ -9,7 +9,7 @@
     timeout: '180'
     trigger_projects: ''
     weight: '7'
-    node: 'bvt'
+    node: '{node}'
     concurrent: true
     disabled: false
     dist: ubuntu
