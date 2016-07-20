@@ -51,6 +51,15 @@
             - master
           url: 'https://github.com/openstack/fuel-qa'
 
+- scm:
+    name: fuel-plugin-repository
+    scm:
+      - git:
+          basedir: '{project-basedir}'
+          branches:
+            - '{project-branch}'
+          url: 'https://github.com/openstack/fuel-plugin-{project-name}'
+
 ########################################################################
 # Builders used to prepare environment
 ########################################################################

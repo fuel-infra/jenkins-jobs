@@ -165,14 +165,14 @@
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
 
 #
-# Plugins tested with stacklight test framework
+# Plugins tested with the StackLight test framework
 #
 
 - project:
     name: plugins-stacklight
     defaults: plugins-defaults
 
-    # Override test framework
+    # Override the test framework
     test_framework_url: 'https://github.com/openstack/stacklight-integration-tests'
     plugin_prepare_env_builder: plugin-prepare-env-fuel-qa-plugins
 
@@ -211,7 +211,6 @@
       - '{version}.fuel-plugin.{plugin_name}.verify'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
 
-
 - project:
     name: murano-plugin
     defaults: plugins-defaults
@@ -236,4 +235,39 @@
       - '{version}.fuel-plugin.{plugin_name}.build'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
 
+- project:
+    name: stacklight-runner
+    defaults: plugins-defaults
 
+    version:
+      - 8.0:
+          trigger: '0 22 * * *'
+          detached_plugin_branch: '{fuel-branch-8_0}'
+      - 9.0:
+          trigger: '0 4 * * *'
+          detached_plugin_branch: '{fuel-branch-9_0}'
+
+    plugin_branch:
+      - master:
+          plugin_owner: 'StackLight team'
+
+    jobs:
+      - '{version}.stacklight.{plugin_branch}.runner'
+
+- project:
+    name: stacklight-tests
+    defaults: plugins-defaults
+
+    version:
+      - 8.0:
+          iso_magnet_link: release-8.0
+          fuel_qa_branch: '{fuel-branch-8_0}'
+      - 9.0:
+          iso_magnet_link: https://ci.fuel-infra.org/view/ISO/job/9.0-community.main.ubuntu.bvt_2/lastSuccessfulBuild/artifact/magnet_link.txt
+          fuel_qa_branch: '{fuel-branch-9_0}'
+
+    plugin_branch:
+      - master
+
+    jobs:
+      - '{version}.stacklight.{plugin_branch}.tests'

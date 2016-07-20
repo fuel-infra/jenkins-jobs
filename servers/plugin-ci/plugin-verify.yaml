@@ -53,4 +53,3 @@
       - review-openstack-org:
           project-branch-pattern: '{plugin_branch}'
           project-name-pattern: 'openstack/{plugin_repo}'
-

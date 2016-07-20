@@ -49,7 +49,7 @@ export MAKE_SNAPSHOT=false
 # Define directory used to store plugins
 PLUGINS=plugins_data
 
-# Create plugin directory
+# Create the directory that will contain the plugin packages
 mkdir -p "${PLUGINS}"
 
 # Set variable with built plugin file path
