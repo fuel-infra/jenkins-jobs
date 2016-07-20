@@ -181,7 +181,7 @@
           plugin_branch: master
           iso_magnet_link: https://ci.fuel-infra.org/job/9.0-community.main.ubuntu.bvt_2/lastSuccessfulBuild/artifact/magnet_link.txt
 
-      - 0.10:
+      - "0.10":
           plugin_branch: stable/0.10
           iso_magnet_link: https://ci.fuel-infra.org/job/9.0-community.main.ubuntu.bvt_2/lastSuccessfulBuild/artifact/magnet_link.txt
 
