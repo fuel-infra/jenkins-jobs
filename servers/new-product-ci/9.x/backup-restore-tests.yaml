@@ -1,0 +1,86 @@
+- project:
+    name: 9.x-backup-restore
+
+    dist: 'ubuntu'
+    version-id: '9.x'
+    node: 'systest'
+    timeout: '960'
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    properties: |
+      KEYSTONE_PASSWORD=newpass
+      SLAVE_NODE_MEMORY=3072
+      UPDATE_MASTER=true
+      UPGRADE_FUEL_FROM=9.1
+      UPGRADE_FUEL_TO=9.1
+    weight: '8'
+    description: |
+      This is product-ci upgrade system test chain (9.x -> 9.x).
+
+    jobs:
+      - '{version-id}.backup-restore.{upgrade_testgroup}':
+          testgroup: 'upgrade_smoke_backup'
+          upgrade_testgroup: 'upgrade_smoke_tests'
+      - '{version-id}.backup-restore.{upgrade_testgroup}':
+          testgroup: 'upgrade_ceph_ha_backup'
+          upgrade_testgroup: 'upgrade_ceph_ha_tests'
+      - '{version-id}.backup-restore.{upgrade_testgroup}':
+          testgroup: 'upgrade_detach_plugin_backup'
+          upgrade_testgroup: 'upgrade_detach_plugin_tests'
+
+
+- job:
+    name: '9.x.backup-restore.runner'
+    project-type: multijob
+    description: 'Run all upgrades tests'
+    concurrent: false
+    node: 'runner'
+
+    properties:
+    - heavy-job:
+        weight: 1
+
+    parameters:
+    - string:
+        name: UBUNTU_MIRROR_ID
+        default: 'ubuntu-latest'
+        description: |
+          'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+    - bool:
+        name: ENABLE_PROPOSED
+        default: true
+    - bool:
+        name: ENABLE_SECURITY
+        default: true
+    - bool:
+        name: ENABLE_UPDATES
+        default: true
+    - string:
+        name: CUSTOM_VERSION
+        default: ''
+        description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+
+    wrappers:
+    - timeout:
+        fail: true
+        timeout: 1200
+
+    builders:
+    - multijob:
+        name: 'Run upgrade tests'
+        condition: COMPLETED
+        projects:
+          - name: '9.x.backup-restore.upgrade_smoke_tests'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '9.x.backup-restore.upgrade_ceph_ha_tests'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '9.x.backup-restore.upgrade_detach_plugin_tests'
+            current-parameters: true
+            kill-phase-on: NEVER
+
+    publishers:
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+    - email-default:
+        mail-to: 'ci+alert@mirantis.com'
