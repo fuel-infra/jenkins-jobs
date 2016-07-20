@@ -10,8 +10,8 @@
       KEYSTONE_PASSWORD=newpass
       SLAVE_NODE_MEMORY=3072
       UPDATE_MASTER=true
-      UPGRADE_FUEL_FROM='7.0'
-      UPGRADE_FUEL_TO='8.0'
+      UPGRADE_FUEL_FROM=7.0
+      UPGRADE_FUEL_TO=8.0
     weight: '8'
     description: |
       This is product-ci upgrade system test chain (7.0 -> 8.0).
