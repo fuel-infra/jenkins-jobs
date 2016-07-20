@@ -182,7 +182,7 @@ function apply_gerrit_commits(){
     if [[ "${gerrit_commit}" != "none" ]] ; then
         info_message "Applying fuel-qa gerrit commits from '${repo_branch}'..."
         for commit in ${gerrit_commit} ; do
-            git fetch "${REPO_NAME}" "${commit}" && git cherry-pick FETCH_HEAD
+            git fetch "https://git.openstack.org/openstack/${REPO_NAME}" "${commit}" && git cherry-pick FETCH_HEAD
             if [ $? -ne -0 ] ; then
                 error_message "Failed to apply '${commit}'."
                 exit 1
