@@ -55,6 +55,9 @@ export REPO_REQUEST_PATH_PREFIX="{cr-path-prefix}"
 # Publish host parameters
 export REMOTE_REPO_HOST={repo-host}
 
+export SRC_PROJECT_PATH="${{GERRIT_PROJECT%/*}}"
+export SPEC_PROJECT_PATH=openstack-build
+
 # Parameters for package specs
 export SPEC_PROJECT_SUFFIX={spec-project-suffix}
 
