@@ -1,5 +1,5 @@
 - project:
-    name: 9.x.system_test.test-reports
+    name: 9.x.acceptance.test-reports
     version: '9.x'
     report-version: '9.1'
     repobranch: 'origin/stable/mitaka'
@@ -7,9 +7,9 @@
     jobs:
     - '9.x.bvt.test-reports'
     - '{version}.{test-type}.test-reports':
-        test-type:  'system_test'
+        test-type:  'acceptance'
         properties: |
           TESTS_RUNNER=9.x.swarm.runner
-          TESTRAIL_TEST_SUITE=[{report-version}] Swarm
+          TESTRAIL_TEST_SUITE=[{report-version}][Fuel] Auto Release Acceptance
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}

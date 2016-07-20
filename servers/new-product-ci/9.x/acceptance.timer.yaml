@@ -1,0 +1,48 @@
+- job:
+    name: '9.x.acceptance.timer'
+    description: |
+      Trigger 9.x.acceptance.runner with latest stable snapshot.
+
+    node: 'runner'
+
+    properties:
+    - heavy-job:
+        weight: 1
+
+    parameters:
+    - string:
+        name: SNAPSHOT_JOB
+        default: '9.x.snapshot'
+        description: 'Job from which we get latest stable snapshot'
+
+    triggers:
+    - timed: '' # todo!
+
+    builders:
+
+    - inject-from-job():
+        job-name: $SNAPSHOT_JOB
+        which-build: last-successful
+        artifact-name: snapshots.params  # -> 9x-systest-params
+    - shell: |
+        echo "Description string: $CUSTOM_VERSION"
+
+    publishers:
+
+    - archive:
+        allow-empty: false
+        artifacts: snapshots.params
+        latest-only: false
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+
+    - email-default:
+        mail-to: 'ci+alert@mirantis.com'
+
+    - trigger-parameterized-builds:
+        - project: 9.x.acceptance.runner
+          condition: UNSTABLE_OR_BETTER
+          property-file: snapshots.params
+
+

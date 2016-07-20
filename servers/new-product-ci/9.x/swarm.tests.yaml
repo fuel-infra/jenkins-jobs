@@ -1,5 +1,5 @@
 - project:
-    name: '9.x-system_tests'
+    name: '9.x swarm tests'
     test-type: 'system_test'
     repobranch: 'origin/stable/mitaka'
     reponame: 'fuel-qa'
