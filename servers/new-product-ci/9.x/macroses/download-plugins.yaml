@@ -19,6 +19,6 @@
           SEPARATE_SERVICE_BALANCER_PLUGIN_PATH=${PLUGINS}/external_loadbalancer-2.0-2.0.0-1.noarch.rpm
 
     - shell:
-        !include-raw-escape: '../builders/download_plugins.sh'
+        !include-raw: '../builders/download_plugins.sh'
 
 
