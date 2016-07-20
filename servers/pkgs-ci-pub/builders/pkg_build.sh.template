@@ -112,9 +112,6 @@ esac
 # Build package
 ############################
 
-# Use parameters set by Zuul instead of guessing ones
-test "${{SKIP_DEF_PARAMS:-true}}" = true && sed -ri '/set_default_params/ d' build-${{IS_FUEL:+fuel-}}{pkg_type}.sh || :
-
 # Don't use perestroika to get Fuel sources
 sed -ri '/fetch_upstream/ d' build-fuel-{pkg_type}.sh
 
