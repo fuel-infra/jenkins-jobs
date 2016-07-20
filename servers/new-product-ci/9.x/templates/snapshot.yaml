@@ -69,13 +69,6 @@
             ENABLE_MOS_CENTOS_UPDATES=true
             ENABLE_MOS_CENTOS_SECURITY=true
             ENABLE_MOS_CENTOS_HOLDBACK=true
-    - multijob:
-        name: 'Report TestRail'
-        condition: COMPLETED
-        projects:
-        - name: '9.x.bvt.test-reports'
-          kill-phase-on: NEVER
-          predefined-parameters: TEST_JOB_NAME=$JOB_NAME
 
     publishers:
 
@@ -88,3 +81,10 @@
 
     - description-setter:
         regexp: "'Description string: (.*)'"
+
+    - trigger-parameterized-builds:
+        - project: '9.x.bvt.test-reports'
+          condition: ALWAYS
+          predefined-parameters: |
+            TEST_JOB_NAME=$JOB_NAME
+            CUSTOM_VERSION=snapshot #$BUILD_NUMBER
