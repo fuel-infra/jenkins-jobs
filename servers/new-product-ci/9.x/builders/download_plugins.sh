@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-: "${URL_PREFIX?}"
+: "${PLUGINS_URL?}"
 : "${PLUGINS?}"
 
 rm -rvf  "${PLUGINS}"
@@ -17,5 +17,5 @@ for _p in EXAMPLE_PLUGIN_PATH                   \
           SEPARATE_SERVICE_BALANCER_PLUGIN_PATH ; do
     _plugin_path="${!_p}"
     _plugin_name="${_plugin_path##*\/}"
-    curl -s "${URL_PREFIX}${_plugin_name}" -o "${_plugin_path}"
+    curl -s "${PLUGINS_URL}${_plugin_name}" -o "${_plugin_path}"
 done
