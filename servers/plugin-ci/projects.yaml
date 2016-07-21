@@ -206,6 +206,11 @@
           plugin_owner: 'StackLight team'
           plugin_test_group: 'deploy_lma_infrastructure_alerting'
           plugin_env_path_name: 'LMA_INFRA_ALERTING_PLUGIN_PATH'
+      - ceilometer-redis:
+          plugin_repo: fuel-plugin-ceilometer-redis
+          plugin_owner: 'Ceilometer team'
+          plugin_test_group: 'deploy_ceilometer_redis'
+          plugin_env_path_name: 'CEILOMETER_REDIS_PLUGIN_PATH'
 
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.verify'
