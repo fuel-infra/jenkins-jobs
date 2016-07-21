@@ -48,19 +48,19 @@
           project-branch: '{plugin_branch}'
       - fuel-plugin-repository:
           project-basedir: 'plugins'
-          project-name: 'fuel-plugin-lma-infrastructure-alerting'
+          project-name: 'lma-infrastructure-alerting'
           project-branch: '{plugin_branch}'
       - fuel-plugin-repository:
           project-basedir: 'plugins'
-          project-name: 'fuel-plugin-lma-collector'
+          project-name: 'lma-collector'
           project-branch: '{plugin_branch}'
       - fuel-plugin-repository:
           project-basedir: 'plugins'
-          project-name: 'fuel-plugin-detach-database'
+          project-name: 'detach-database'
           project-branch: '{detached_plugin_branch}'
       - fuel-plugin-repository:
           project-basedir: 'plugins'
-          project-name: 'fuel-plugin-detach-rabbitmq'
+          project-name: 'detach-rabbitmq'
           project-branch: '{detached_plugin_branch}'
 
     wrappers:
