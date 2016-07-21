@@ -1,17 +1,15 @@
 - job-template:
     name: '9.x.{test-type}.{dist}.{testgroup}'
     description: 'Run Swarm Test {testgroup}'
+    node: '{node}'
+    concurrent: true
 
     email: 'ci+bvt@mirantis.com'
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     env_suffix: $BUILD_ID
-    properties: ''
     timeout: '180'
     trigger_projects: ''
     weight: '7'
-    node: '{node}'
-    concurrent: true
-    disabled: false
     dist: ubuntu
     test-type: system_test
 
@@ -41,6 +39,8 @@
         write-description: false
     - ansicolor:
         colormap: xterm
+    - inject-passwords:
+        global: true
 
     builders:
 
