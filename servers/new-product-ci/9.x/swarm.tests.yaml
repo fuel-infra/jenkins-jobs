@@ -285,8 +285,6 @@
         properties: |
           MULTIPLE_NETWORKS=true
     - '9.x.{test-type}.{dist}.{testgroup}':
-        testgroup: 'deploy_from_uca'
-    - '9.x.{test-type}.{dist}.{testgroup}':
         testgroup: 'numa_cpu_pinning'
         properties: |
           KVM_USE=true

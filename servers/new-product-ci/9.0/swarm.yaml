@@ -253,9 +253,6 @@
             - name: '9.0.system_test.ubuntu.multiracks_2'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '9.0.system_test.ubuntu.deploy_from_uca'
-              current-parameters: true
-              kill-phase-on: NEVER
             - name: '9.0.system_test.ubuntu.numa_cpu_pinning'
               current-parameters: true
               kill-phase-on: NEVER
