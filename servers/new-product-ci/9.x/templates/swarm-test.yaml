@@ -7,11 +7,17 @@
     email: 'ci+bvt@mirantis.com'
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     env_suffix: $BUILD_ID
+    properties: ''
+    properties-file: ''
     timeout: '180'
-    trigger_projects: ''
     weight: '7'
     dist: ubuntu
     test-type: system_test
+    pre-script: |
+        echo "-SKIP-"
+    post-script: |
+        echo "-SKIP-"
+    make-snapshot: 'false'
 
     logrotate:
       artifactDaysToKeep: -1
@@ -50,18 +56,29 @@
     - inject: # Defaults
         properties-content: |
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          POOL_DEFAULT={default_pool}
+          ENV_PREFIX=$JOB_NAME
           ENV_SUFFIX={env_suffix}
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
           VENV_PATH={venvpath}
+          MAKE_SNAPSHOT={make-snapshot}
           KEEP_ENV=true
 
     - inject: # Overrides
         properties-content: '{properties}'
-
+        properties-file: '{properties-file}'
+    - shell: |
+        #!/bin/bash
+        echo "=== [systest PRE-script] ==="
+        {pre-script}
     - shell:
         !include-raw-escape:
           '../builders/wrapped_system_tests.sh'
+    - shell: |
+        #!/bin/bash
+        echo "=== [systest POST-script] ==="
+        {post-script}
 
     publishers:
 
@@ -78,11 +95,6 @@
     - description-setter:
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
-
-# todo: add correct mailing or remove  commented
-#    - bvt-failure-email
-#
-#    - bvt-fixed-email
 
     - trigger-parameterized-builds:
         - project: '9.x.{test-type}.test-reports'
