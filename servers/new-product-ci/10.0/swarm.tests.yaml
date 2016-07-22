@@ -230,9 +230,13 @@
          testgroup: 'partition_preservation'
      - '{version-id}.{test-type}.{dist}.plugins.{testgroup}':
          testgroup:
-           - 'thread_2_separate_services'
            - 'fuel_plugin_example'
            - 'install_plugin_after_cluster_create'
+         properties: |
+           NODES_COUNT=8
+     - '{version-id}.{test-type}.{dist}.plugins.{testgroup}':
+         testgroup:
+           - 'thread_2_separate_services'
          weight: '20'
          node: 'huge-systest'
          timeout: '600'
