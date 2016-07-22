@@ -22,6 +22,10 @@
           name: REGISTRY_URLS
           default: 'registry01-bud.fuel-infra.org registry01-scc.fuel-infra.org'
           description: 'docker registry hosts (space separated)'
+      - bool:
+          name: DATE_TAG
+          default: true
+          description: 'set additional date tag for images to build'
       - string:
           name: IMAGE
           default: ''

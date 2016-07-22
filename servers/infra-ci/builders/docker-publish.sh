@@ -2,6 +2,9 @@
 
 set -ex
 
+# get image tag first
+DATE=$(date +"%Y-%m-%d-%H-%M-%S")
+
 # if ${IMAGE} parameter is not set - use copied artifacts
 if [ -z "${IMAGE}" ]
 then
@@ -17,5 +20,10 @@ do
   do
     docker tag -f "${IMAGE}" "${URL}/${IMAGE}"
     docker push "${URL}/${IMAGE}"
+    # upload additional date tagged image
+    if [[ "${DATE_TAG}" == 'true' ]]; then
+      docker tag -f "${IMAGE}" "${URL}/${IMAGE}-${DATE}"
+      docker push "${URL}/${IMAGE}-${DATE}"
+    fi
   done
 done
