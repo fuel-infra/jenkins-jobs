@@ -2,13 +2,10 @@
 # with new docs layout.
 
 - job:
-    name: verify-mos-docs-layout
-    builders:
-      - shell:
-          !include-raw: './builders/verify-mos-docs-layout.sh'
+    name: master.verify-mos-docs
     description: |
-      Check patchsets in mos/mos-docs repository to feature/layout branch
-      <p>Work In Progress
+      Check patchsets in mos/mos-docs repository to master branch
+
       <p>Contacts: ci-team at #infra
     logrotate:
       daysToKeep: 30
@@ -42,9 +39,8 @@
               project-pattern: 'mos/mos-docs'
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'feature/layout'
+                  branch-pattern: 'master'
           custom-url: '* $JOB_NAME $BUILD_URL'
-
 
     wrappers:
       - ansicolor:
@@ -53,6 +49,11 @@
           fail: true
           write-description: true
           timeout: 45
+
+    builders:
+      - shell:
+          !include-raw: './builders/master.verify-mos-docs.sh'
+
     publishers:
       - html-publisher:
           name: 'MOS documentation'

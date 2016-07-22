@@ -40,7 +40,7 @@
               branches:
                 - branch-compare-type: REG_EXP
                   # Any branch except 'feature/layout'
-                  branch-pattern: '^(?!feature\/layout)(.*)$'
+                  branch-pattern: 'stable/.*'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 

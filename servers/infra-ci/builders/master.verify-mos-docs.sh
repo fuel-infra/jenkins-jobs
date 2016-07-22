@@ -12,4 +12,3 @@ pip install tox
 tox -e publishdocs
 
 deactivate
-
