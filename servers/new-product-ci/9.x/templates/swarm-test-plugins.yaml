@@ -22,7 +22,10 @@
       numToKeep: 50
 
     parameters:
-      - 9x-systest-params
+    - 9x-systest-params
+    - string: # added for cleaner which searches for job parameter
+        name: ENV_PREFIX
+        default: '9.x.{test-type}.{dist}.plugins.{testgroup}'
 
     properties:
     - heavy-job:
@@ -47,7 +50,6 @@
     - inject: # Defaults
         properties-content: |
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-          ENV_PREFIX=$JOB_NAME
           ENV_SUFFIX={env_suffix}
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
