@@ -145,7 +145,7 @@ FAILED PATH: ${SYNCPATH}"
             mv "${TMP_DIR}.chksum" "${DSTPATH}.chksum"
             failedhosts=""
             if [ "$UPDATE_HEAD_SYMLINK" = "true" ] ; then
-                local UPDATE_HEAD_PARAM="-s ${DSTPATH##*/}"
+                UPDATE_HEAD_PARAM="-s ${DSTPATH##*/}"
             else
                 unset UPDATE_HEAD_PARAM
             fi
