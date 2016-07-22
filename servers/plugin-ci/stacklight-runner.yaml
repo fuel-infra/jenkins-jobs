@@ -39,27 +39,27 @@
       - fuel-plugins:
           project-refspec: refs/heads/master
       - fuel-plugin-repository:
-          project-basedir: 'plugins'
+          project-basedir: 'plugins/fuel-plugin-elasticsearch-kibana'
           project-name: 'elasticsearch-kibana'
           project-branch: '{plugin_branch}'
       - fuel-plugin-repository:
-          project-basedir: 'plugins'
+          project-basedir: 'plugins/fuel-plugin-influxdb-grafana'
           project-name: 'influxdb-grafana'
           project-branch: '{plugin_branch}'
       - fuel-plugin-repository:
-          project-basedir: 'plugins'
+          project-basedir: 'plugins/fuel-plugin-lma-infrastructure-alerting'
           project-name: 'lma-infrastructure-alerting'
           project-branch: '{plugin_branch}'
       - fuel-plugin-repository:
-          project-basedir: 'plugins'
+          project-basedir: 'plugins/fuel-plugin-lma-collector'
           project-name: 'lma-collector'
           project-branch: '{plugin_branch}'
       - fuel-plugin-repository:
-          project-basedir: 'plugins'
+          project-basedir: 'plugins/fuel-plugin-detach-database'
           project-name: 'detach-database'
           project-branch: '{detached_plugin_branch}'
       - fuel-plugin-repository:
-          project-basedir: 'plugins'
+          project-basedir: 'plugins/fuel-plugin-detach-rabbitmq'
           project-name: 'detach-rabbitmq'
           project-branch: '{detached_plugin_branch}'
 
