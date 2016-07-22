@@ -9,3 +9,6 @@ ignore_cache=True
 keep_descriptions=False
 recursive=True
 include_path=.:scripts
+
+[__future__]
+param_order_from_yaml=true
