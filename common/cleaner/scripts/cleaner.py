@@ -18,7 +18,6 @@ import os
 import re
 import subprocess
 
-
 _boolean_states = {'1': True, 'yes': True, 'true': True, 'on': True,
                    '0': False, 'no': False, 'false': False, 'off': False}
 
@@ -26,6 +25,7 @@ _boolean_states = {'1': True, 'yes': True, 'true': True, 'on': True,
 def get_var_as_bool(name, default):
     value = os.environ.get(name, '')
     return _boolean_states.get(value.lower(), default)
+
 
 #
 # Definition for known systests, this dictionary should contain all known
@@ -97,7 +97,7 @@ class Cleaner():
                     continue
 
                 last_ts = \
-                    datetime.datetime.fromtimestamp(float(last_ts_txt)/1000)
+                    datetime.datetime.fromtimestamp(float(last_ts_txt) / 1000)
                 self.prefixes[env_prefix] = {
                     'job_name': job_name,
                     'latest_timestamp': last_ts.replace(microsecond=0),
@@ -117,9 +117,9 @@ class Cleaner():
     def start(self):
         # cleaner itself
         for devops_path in self.devops:
-            print(70*'=')
+            print(70 * '=')
             print 'Changing environment to: ({})'.format(devops_path)
-            print(70*'=')
+            print(70 * '=')
 
             # get list of local environments
             dos_path = "%s/bin/dos.py" % devops_path
@@ -131,7 +131,7 @@ class Cleaner():
 
             local_environments = subprocess.check_output(
                 [dos_path, 'list', '--timestamp']
-                ).split('\n')[:-1]
+            ).split('\n')[:-1]
             # workaround if header added
             if local_environments and local_environments[0].startswith('NAME'):
                 local_environments = local_environments[2:]
@@ -147,7 +147,7 @@ class Cleaner():
                     timestamp_env_local = datetime.datetime.strptime(
                         timestamp_env_local_text.split('.')[0],
                         '%Y-%m-%d_%H:%M:%S'
-                        ).replace(microsecond=0)
+                    ).replace(microsecond=0)
                 except:
                     print 'WARNING: problem with analyse env: {}'.format(env)
                     continue
@@ -170,17 +170,17 @@ class Cleaner():
                 time_diff = timestamp_now - timestamp_env_local
                 if time_diff > datetime.timedelta(hours=env_lifetime_hours):
                     print '- {}h older then required {}h ({})'.format(
-                        (time_diff.days * 24 + time_diff.seconds/3600),
+                        (time_diff.days * 24 + time_diff.seconds / 3600),
                         env_lifetime_hours,
                         timestamp_env_local,
-                        )
+                    )
                     env_prefix = self.get_prefix_by_env_name(env_name)
 
                     # Delete all environments after max lifetime
                     if time_diff > datetime.timedelta(hours=lifetime_max):
                         print '- remove - max lifetime ({}h) passed'.format(
                             lifetime_max
-                            )
+                        )
                         self.local_remove_env(dos_path, env_name)
                         continue
 
@@ -188,8 +188,8 @@ class Cleaner():
                     if not env_prefix:
                         print '- cannot find related jenkins job' \
                               ', wait for max lifetime ({}h)'.format(
-                                  lifetime_max
-                                  )
+                            lifetime_max
+                        )
                         continue
 
                     # Get latests jenkins job execution for this prefix
@@ -197,7 +197,7 @@ class Cleaner():
                         self.prefixes[env_prefix]['latest_timestamp']
                     print '- jenkins job = {}'.format(
                         self.prefixes[env_prefix]['job_name']
-                        )
+                    )
 
                     print '- timestamp_env_local = %s' % timestamp_env_local
                     print '- timestamp_env_latest = %s' % timestamp_env_latest
@@ -206,9 +206,9 @@ class Cleaner():
                     if time_diff < datetime.timedelta(hours=lifetime_minimal):
                         print '- skip - this build is too young,' \
                               ' only {}s, {}s required'.format(
-                                  time_diff.seconds,
-                                  lifetime_minimal * 3600
-                              )
+                            time_diff.seconds,
+                            lifetime_minimal * 3600
+                        )
                         continue
 
                     # Check latest job protection, if is set we will not delete
@@ -219,22 +219,22 @@ class Cleaner():
                     time_diff_latest = \
                         timestamp_env_local - timestamp_env_latest
                     if not env_protect_latest or \
-                       time_diff_latest > datetime.timedelta(hours=1):
+                                    time_diff_latest > datetime.timedelta(hours=1):
                         print '- remove - this build is safe to remove'
                         self.local_remove_env(dos_path, env_name)
                     else:
                         print '- skip - this build is close to latest build,' \
                               ' only {}s, {}s required'.format(
-                                  time_diff_latest.seconds,
-                                  lifetime_minimal * 3600
-                              )
+                            time_diff_latest.seconds,
+                            lifetime_minimal * 3600
+                        )
                 else:
                     print '- skip - need {}h to analyse,' \
                           ' only {}h old ({})'.format(
-                              env_lifetime_hours,
-                              int(time_diff.total_seconds() / 3600),
-                              timestamp_env_local
-                          )
+                        env_lifetime_hours,
+                        int(time_diff.total_seconds() / 3600),
+                        timestamp_env_local
+                    )
 
     def get_job_lifetime(self, env_prefix):
         """
@@ -259,6 +259,7 @@ class Cleaner():
     def local_remove_env(self, dos_path, env_name):
         print 'Removing: {}'.format(env_name)
         subprocess.check_output([dos_path, 'erase', env_name])
+
 
 if __name__ == "__main__":
     cleaner = Cleaner()

@@ -7,6 +7,54 @@
 
 - job-template:
     name: cleaner
+    description: |
+      This job will iterate through a list of available environments for a specified<br>
+      VENV location, using dos.py command. Check if environment is not the last one<br>
+      used for specific build and is old enought to be removed.<br><br>
+      VENV parameter - environment where dos.py is executed<br>
+      Minimal times parameters (in hours, for different job types): STAGING, SYSTEM_TEST, OTHER.
+
+    concurrent: true
+    defaults: 'cleaner'
+
+    parameters:
+      - node:
+          name: NODE
+          allowed-multiselect: true
+      - bool:
+          name: 'DEVOPS_2_9'
+          default: '{devops_29}'
+      - bool:
+          name: 'DEVOPS_2_5'
+          default: '{devops_25}'
+      - bool:
+          name: 'RELEASE_60'
+          default: '{release_60}'
+      - bool:
+          name: 'RELEASE_61'
+          default: '{release_61}'
+      - string:
+          name: LIFETIME_SWARM
+          description: 'Lifetime for SWARM systests'
+          default: '{lifetime_swarm}'
+      - string:
+          name: LIFETIME_BVT
+          description: 'Lifetime for BVT systests'
+          default: '{lifetime_bvt}'
+      - string:
+          name: LIFETIME_ACCEPTANCE
+          description: 'Lifetime for acceptance systests'
+          default: '{lifetime_acceptance}'
+      - string:
+          name: LIFETIME_OTHER
+          description: 'Lifetime for other systests'
+          default: '{lifetime_other}'
+
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 5
+
     builders:
       - copyartifact:
           project: 'cleaner-on-labels'
@@ -14,63 +62,29 @@
           which-build: workspace-latest
       - shell:
           !include-raw-escape: './scripts/cleaner.py'
-    defaults: 'cleaner'
-    description: |
-      This job will iterate through a list of available environments for a specified<br>
-      VENV location, using dos.py command. Check if environment is not the last one<br>
-      used for specific build and is old enought to be removed.<br><br>
-      VENV parameter - environment where dos.py is executed<br>
-      Minimal times parameters (in hours, for different job types): STAGING, SYSTEM_TEST, OTHER.
-    concurrent: true
-    parameters:
-        - node:
-            name: NODE
-            allowed-multiselect: true
-        - bool:
-            name: 'DEVOPS_2_9'
-            default: '{devops_29}'
-        - bool:
-            name: 'DEVOPS_2_5'
-            default: '{devops_25}'
-        - bool:
-            name: 'RELEASE_60'
-            default: '{release_60}'
-        - bool:
-            name: 'RELEASE_61'
-            default: '{release_61}'
-        - string:
-            name: LIFETIME_SWARM
-            description: 'Lifetime for SWARM systests'
-            default: '{lifetime_swarm}'
-        - string:
-            name: LIFETIME_BVT
-            description: 'Lifetime for BVT systests'
-            default: '{lifetime_bvt}'
-        - string:
-            name: LIFETIME_ACCEPTANCE
-            description: 'Lifetime for acceptance systests'
-            default: '{lifetime_acceptance}'
-        - string:
-            name: LIFETIME_OTHER
-            description: 'Lifetime for other systests'
-            default: '{lifetime_other}'
-    wrappers:
-      - timeout:
-          fail: true
-          timeout: 5
+
 
 - job-template:
     name: 'cleaner-on-labels'
+    description: |
+      Collects list of env prefixes which should be analyzed in cleaner job
+      and triggers such job
+
     node: 'runner'
+
     parameters:
       - string:
           name: 'LABEL'
           default: 'cleanable'
+
     triggers:
       - timed: '0 */5 * * *'
+
     builders:
+
       - shell:
           !include-raw-escape: './scripts/cleaner_jobs.py'
+
       - trigger-builds:
         - project: 'cleaner'
           parameter-factories:
@@ -79,6 +93,7 @@
               name: 'NODE'
       - shell:
           !include-raw-escape: './scripts/cleaner_dups.py'
+
     publishers:
       - archive:
           artifacts: '*.txt'
