@@ -233,6 +233,7 @@
         testgroup:
           - 'fuel_plugin_example'
           - 'install_plugin_after_cluster_create'
+        timeout: '600'
         properties: |
           NODES_COUNT=8
     - '9.x.{test-type}.{dist}.plugins.{testgroup}':
