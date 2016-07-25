@@ -65,6 +65,9 @@
         default: ''
         description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
 
+    triggers:
+    - timed: 'H 1 * * 2,4,7'
+
     wrappers:
     - timeout:
         fail: true
@@ -94,4 +97,4 @@
     - description-setter:
         regexp: "'Description string: (.*)'"
     - email-default:
-        mail-to: 'devops+alert@mirantis.com'
+        mail-to: 'ci+alert@mirantis.com'
