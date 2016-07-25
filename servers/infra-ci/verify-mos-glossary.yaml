@@ -1,20 +1,19 @@
 - job:
     name: verify-mos-glossary
-    builders:
-      - shell:
-          !include-raw: './builders/verify-mos-glossary.sh'
     description: Check patchsets in mos/glossary repository
+    concurrent: true
+    node: docs
     logrotate:
       daysToKeep: 30
-    node: docs
-    concurrent: false
+
+    properties:
+      - heavy-job:
+          weight: 1
+
     parameters:
       - string:
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
-    properties:
-      - heavy-job:
-          weight: 1
 
     scm:
       - git:
@@ -39,7 +38,6 @@
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
-
     wrappers:
       - ansicolor:
           colormap: xterm
@@ -47,3 +45,16 @@
           fail: true
           write-description: true
           timeout: 45
+
+    builders:
+      - shell:
+          !include-raw: './builders/verify-mos-glossary.sh'
+
+    publishers:
+      - html-publisher:
+          name: 'mos-glossary build results'
+          dir: 'doc/build/html'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+          wrapper-name: 'htmlpublisher-wrapper.html'
