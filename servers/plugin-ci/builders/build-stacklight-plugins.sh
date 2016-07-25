@@ -48,7 +48,7 @@ function build_plugin {
 }
 
 function get_fullpath {
-    ls "${WORKSPACE}/${PLUGINS_DIR}/$1/"*.rpm
+    ls "${PLUGINS_DIR}/$1/"*.rpm
 }
 
 ENV_FILE=stacklight-build.jenkins-injectfile
