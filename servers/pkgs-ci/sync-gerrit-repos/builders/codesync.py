@@ -58,7 +58,8 @@ def _get_commit_id(repo, ref='HEAD'):
     ).splitlines()[0].split()[1]
 
 
-def _get_merge_commit_message(repo, downstream_branch, upstream_branch):
+def _get_merge_commit_message(repo, downstream_branch, upstream_branch,
+                              change_id_seed):
     downstream = _get_commit_id(repo, downstream_branch)
     upstream = _get_commit_id(repo, upstream_branch)
 
@@ -72,7 +73,7 @@ def _get_merge_commit_message(repo, downstream_branch, upstream_branch):
     )
 
     hashsum = hashlib.sha1()
-    hashsum.update(downstream)
+    hashsum.update(downstream + change_id_seed)
     changeid = 'I' + hashsum.hexdigest()
 
     template = ('Merge the tip of %(upstream)s into %(downstream)s'
@@ -85,7 +86,7 @@ def _get_merge_commit_message(repo, downstream_branch, upstream_branch):
                        'commits': commits}
 
 
-def _merge_tip(repo, downstream_branch, upstream_branch):
+def _merge_tip(repo, downstream_branch, upstream_branch, change_id_seed):
     LOG.info('Trying to merge the tip of %s into %s...',
              upstream_branch, downstream_branch)
 
@@ -109,7 +110,8 @@ def _merge_tip(repo, downstream_branch, upstream_branch):
     )
     try:
         head_path = os.path.join(repo, '.git', 'HEAD')
-        m = _get_merge_commit_message(repo, downstream_branch, upstream_branch)
+        m = _get_merge_commit_message(repo, downstream_branch, upstream_branch,
+                                      change_id_seed)
 
         state_before_merge = open(head_path, 'rt').read().strip()
         subprocess.check_call(
@@ -201,7 +203,7 @@ def _branch_exists(repo, branch):
 
 
 def sync_project(gerrit_uri, downstream_branch, upstream_branch, topic=None,
-                 dry_run=False, fallback_branch=None):
+                 dry_run=False, fallback_branch=None, change_id_seed=''):
     '''Merge the tip of the tracked upstream branch and upload it for review.
 
     Tries to clone (fetch, if path already exists) the git repo and do a
@@ -219,6 +221,8 @@ def sync_project(gerrit_uri, downstream_branch, upstream_branch, topic=None,
     :param topic: a Gerrit topic to be used
     :param dry_run: don't actually upload commits to Gerrit, just try to merge
                     the branch locally
+    :param change_id_seed: customize Gerrit Change ID by appending some custom
+                           string to current downstream head SHA-1
 
     :returns merge commit id
 
@@ -232,7 +236,8 @@ def sync_project(gerrit_uri, downstream_branch, upstream_branch, topic=None,
                 upstream_branch, fallback_branch)
             upstream_branch = fallback_branch
 
-        commit = _merge_tip(repo, downstream_branch, upstream_branch)
+        commit = _merge_tip(repo, downstream_branch, upstream_branch,
+                            change_id_seed)
 
         if dry_run:
             LOG.info('Dry run, do not attempt to upload the merge commit')
@@ -298,6 +303,14 @@ def main():
         action='store_true'
     )
 
+    parser.add_argument(
+        '--change-id-seed',
+        help=('customize Gerrit Change ID by appending some custom string '
+              'to current downstream head SHA-1 '
+              '(defaults to $JOB_NAME)'),
+        default=os.getenv('JOB_NAME', '')
+    )
+
     try:
         args = parser.parse_args()
         if (not args.gerrit_uri or
@@ -311,7 +324,8 @@ def main():
                               upstream_branch=args.upstream_branch,
                               fallback_branch=args.fallback_branch,
                               topic=args.topic,
-                              dry_run=args.dry_run)
+                              dry_run=args.dry_run,
+                              change_id_seed=args.change_id_seed)
         print(commit)
     except FailedToMerge:
         # special case - expected error - automatic merge is not possible
