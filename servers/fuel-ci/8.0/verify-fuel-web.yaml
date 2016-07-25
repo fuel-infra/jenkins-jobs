@@ -13,7 +13,7 @@
     parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/stable/8.0'
       - string:
           name: TEST_WORKERS
           default: "4"
