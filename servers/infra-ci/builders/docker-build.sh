@@ -2,18 +2,23 @@
 
 set -ex
 
+FILTER="."
+
 if [ "${REBUILD}" == "true" ]; then
   MODE="--no-cache"
   echo "[ INFO ] Rebuild is called, setting --no-cache mode"
 fi
 
-OUTPUT="[urls]"
-
-# prepare image list
+if [ "${ACTION}" == "verify-fuel-ci" ]; then
+  FILTER="fuel-ci-tests"
+fi
 
 IMAGES=$(git diff --name-only HEAD~1 \
+  | egrep "${FILTER}" \
   | awk -F "/" -vORS=" " \
   '/^[^\.]+\/[^\.]/ {if (!seen[$1$2]++) {print $1":"$2}}')
+
+OUTPUT="[urls]"
 
 # build all images
 for IMAGE in ${IMAGES}
@@ -44,16 +49,34 @@ do
     PREFIX="${FORCE_PREFIX}"
   fi
 
-  echo "Cleaning a previous image first:"
+  echo "[ STATUS ] Cleaning a previous image first:"
   docker rmi "${IMAGE_NAME}:${IMAGE_TAG}" 2>/dev/null || /bin/true
 
   # check if directory still exists
   if [[ -f "${WORKSPACE}/${IMAGE_NAME}/${IMAGE_TAG}/Dockerfile" ]]
   then
     # build image
-    echo "Building a new image from the URL:"
+    echo "[ STATUS ] Building a new image from the URL:"
     cd "${WORKSPACE}/${IMAGE_NAME}/${IMAGE_TAG}"
     docker build ${MODE} -t "${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}" .
+    if [ "${ACTION}" == "verify-fuel-ci" ]; then
+      # Container ID path
+      CONTAINER_ID="${WORKSPACE}/container.id"
+      # Path to runner script inside Docker image
+      SCRIPT_PATH="/opt/jenkins/runner.sh"
+
+      # run default tests
+      echo "[ STATUS ] Fuel CI image verification started."
+      docker run --cidfile="${CONTAINER_ID}" \
+                 -t "${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}" \
+                 /bin/bash -exc "${SCRIPT_PATH} verify_image"
+      exitcode=$?
+      # stop container
+      docker stop "$(cat "${CONTAINER_ID}")"
+      exit ${exitcode}
+    else
+      echo "[ STATUS ] Non Fuel CI image, verification skipped."
+    fi
     # add image to publish list
     VIMAGES="${VIMAGES} ${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}"
     OUTPUT+="${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}<br>"

@@ -12,6 +12,11 @@
           filter: 'publish_env.sh'
           which-build: 'upstream-build'
           optional: true
+      - copyartifact:
+          project: 'docker-build-verify-fuel-ci'
+          filter: 'publish_env.sh'
+          which-build: 'upstream-build'
+          optional: true
       - shell:
           !include-raw: './builders/docker-publish.sh'
     description: |

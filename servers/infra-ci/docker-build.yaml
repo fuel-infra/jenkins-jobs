@@ -7,7 +7,8 @@
       - trigger-builds:
         - project: 'docker-publish'
     description: |
-     This job will use docker builder host and build image from the given git url.
+     This job will use docker builder host, build image from the given git url and
+     verify image.
       Job 'docker-publish' is triggered after this one to publish image to registries.
     concurrent: false
     parameters:
@@ -20,6 +21,9 @@
       - string:
           name: FORCE_PREFIX
           default: '{force_prefix}'
+      - string:
+          name: ACTION
+          default: '{action}'
       - string:
           name: REBUILD
           default: '{rebuild}'
@@ -37,6 +41,12 @@
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
+              file-paths:
+                  - compare-type: ANT
+                    pattern: '{file_path}'
+              forbidden-file-paths:
+                  - compare-type: ANT
+                    pattern: '{skip_path}'
           custom-url: '* $JOB_NAME $BUILD_URL'
     wrappers:
       - ansicolor:
@@ -61,18 +71,32 @@
           action: 'patchset'
           force_prefix: 'jenkins'
           rebuild: 'false'
+          skip_path: 'fuel-ci-tests/**'
+          file_path: ''
           trigger_on:
             - patchset-created-event
       - 'docker-build-{action}':
           action: 'patchset-rebuild'
           force_prefix: 'jenkins'
           rebuild: 'true'
+          skip_path: 'fuel-ci-tests/**'
+          file_path: ''
           trigger_on:
             - comment-added-contains-event:
                 comment-contains-value: '{gerrit_trigger_on_rebuild_regexp}'
       - 'docker-build-{action}':
+         action: 'verify-fuel-ci'
+         force_prefix: 'jenkins'
+         rebuild: 'false'
+         skip_path: ''
+         file_path: 'fuel-ci-tests/**'
+         trigger_on:
+           - patchset-created-event
+      - 'docker-build-{action}':
           action: 'merge'
           force_prefix: ''
           rebuild: 'false'
+          skip_path: ''
+          file_path: ''
           trigger_on:
             - change-merged-event
