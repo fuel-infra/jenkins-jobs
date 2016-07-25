@@ -114,10 +114,10 @@ def _merge_tip(repo, downstream_branch, upstream_branch, change_id_seed):
                                       change_id_seed)
 
         state_before_merge = open(head_path, 'rt').read().strip()
-        subprocess.check_call(
+        subprocess.check_output(
             ['git', 'merge', '--no-ff', '-m', m, upstream_branch],
             cwd=repo,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            stderr=subprocess.PIPE
         )
         state_after_merge = open(head_path, 'rt').read().strip()
 
@@ -126,7 +126,8 @@ def _merge_tip(repo, downstream_branch, upstream_branch, change_id_seed):
         if state_before_merge == state_after_merge:
             LOG.info('Branch is already up-to-date. Do nothing.')
             return None
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError, e:
+        LOG.error(e.output)
         raise FailedToMerge
     else:
         LOG.info('Commit message:\n\n%s\n\n', m)
