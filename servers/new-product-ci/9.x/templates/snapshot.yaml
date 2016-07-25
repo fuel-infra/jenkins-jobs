@@ -30,13 +30,7 @@
         properties-content: |
           MAGNET_LINK={magnet-link}
 
-    # Calculate all snapshot data and Inject it as env variables (just for case),
-    # so they will be available for using as parameters for test below a
-    - shell:
-        !include-raw-escape:
-          '../builders/freeze_deps_for_systest.sh'
-    - inject-properties-file:
-        properties-file: 'snapshots.params'
+    - 9x-make-snapshots
 
     - multijob:
         name: 'Run tests'
