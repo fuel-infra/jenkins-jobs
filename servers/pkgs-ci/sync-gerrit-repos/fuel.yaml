@@ -1,5 +1,6 @@
 - project:
     name: 'fuel-sync'
+    sync-node: 'sync-fuel-branch'
 
     src-branch:
     - 'mitaka':

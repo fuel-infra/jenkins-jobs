@@ -1,5 +1,6 @@
 - project:
     name: 'murano-plugin-sync'
+    sync-node: 'sync-murano-branch'
 
     src-branch:
     - 'master':

@@ -26,7 +26,6 @@
     gerrit-project-namespace: 'openstack'
     fallback-branch: 'master'
     timer: ''
-
     wrappers:
       - ssh-agent-credentials:
           users:
@@ -44,6 +43,6 @@
       - shell:
           !include-raw-escape:
             '../builders/codesync.py'
-
     triggers:
         - timed: '{timer}'
+    node: '{sync-node}'
