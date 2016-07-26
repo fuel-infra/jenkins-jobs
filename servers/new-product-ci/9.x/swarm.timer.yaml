@@ -44,5 +44,16 @@
         - project: 9.x.swarm.runner
           condition: UNSTABLE_OR_BETTER
           property-file: snapshots.params
+          predefined-parameters: |
+            ENABLE_MOS_UBUNTU_PROPOSED=true
+            ENABLE_MOS_UBUNTU_UPDATES=true
+            ENABLE_MOS_UBUNTU_SECURITY=true
+            ENABLE_MOS_UBUNTU_HOLDBACK=true
+
+            ENABLE_MOS_CENTOS_OS=true
+            ENABLE_MOS_CENTOS_PROPOSED=true
+            ENABLE_MOS_CENTOS_UPDATES=true
+            ENABLE_MOS_CENTOS_SECURITY=true
+            ENABLE_MOS_CENTOS_HOLDBACK=true
 
 
