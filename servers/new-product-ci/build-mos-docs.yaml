@@ -57,7 +57,7 @@
     publishers:
       - html-publisher:
           name: 'MOS Docs build results'
-          dir: '_build/html'
+          dir: '{results-dir}'
           files: 'index.html'
           keep-all: true
           allow-missing: true

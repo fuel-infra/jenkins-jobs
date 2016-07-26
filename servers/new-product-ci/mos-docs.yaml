@@ -1,10 +1,12 @@
 - project:
     name: 'MOS Docs'
+    results-dir: '_build/html'
 
     jobs:
       - '{version-id}.build-mos-docs':
           version-id: master
           branch: master
+          results-dir: 'publish-docs'
           timer: 'H * * * *'
       - '{version-id}.build-mos-docs':
           version-id: 9.0

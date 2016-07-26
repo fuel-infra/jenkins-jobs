@@ -37,9 +37,13 @@ VENV="${WORKSPACE}_VENV"
 virtualenv "${VENV}"
 source "${VENV}/bin/activate" || exit 1
 
-pip install -r requirements.txt
-
-make clean html pdf
+if [ "${GERRIT_BRANCH}" = "master" ]; then
+  pip install tox
+  tox -e publishdocs
+else
+  pip install -r requirements.txt
+  make clean html pdf
+fi
 
 deactivate
 
@@ -52,6 +56,9 @@ BRANCH_ID="${GERRIT_BRANCH##*/}"
 
 DOCS_PATH="${DOCS_HOST}:${DOCS_ROOT}/fuel-${BRANCH_ID}"
 
-rsync -rv --delete --exclude pdf/ _build/html/ "${DOCS_PATH}"
-rsync -rv _build/pdf/ "${DOCS_PATH}/pdf/"
-
+if [ "${GERRIT_BRANCH}" = "master" ]; then
+  rsync -rv publish-docs/ "${DOCS_PATH}"
+else
+  rsync -rv --delete --exclude pdf/ _build/html/ "${DOCS_PATH}"
+  rsync -rv _build/pdf/ "${DOCS_PATH}/pdf/"
+fi
