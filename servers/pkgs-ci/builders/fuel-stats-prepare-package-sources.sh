@@ -89,13 +89,13 @@ abandon_old_patchsets () {
 }
 
 push_packages_to_repositories () {
-  COMMIT_MSG="Update '${PKG_NAME}' package up to ${CURRENT_SRC_COMMIT} revision"
+  COMMIT_MSG=$(git -C "${SRC_DIR}" log -1 --pretty=%B)
   git -C "${PKG_FOLDER}" add --all
   scp -p -P "${GERRIT_PORT}" "${GERRIT_USER}@${GERRIT_HOST}":hooks/commit-msg "${PKG_FOLDER}/.git/hooks/"
   git -C "${PKG_FOLDER}" commit -m "${COMMIT_MSG}" || true
   git -C "${PKG_FOLDER}" push origin HEAD:refs/for/master > "${WORKSPACE}/${PKG_NAME}.log" || true
   if [[ ! -s "${WORKSPACE}/${PKG_NAME}.log" ]]
-    # leave some comment for artifact
+    # leave a comment for package without change
     then
       echo "No change for package ${PKG_NAME}" > "${WORKSPACE}/${PKG_NAME}.log"
   fi
@@ -123,8 +123,12 @@ for PKG in "${PKG_NAMES[@]}"
         echo "ERROR: Couldn't find 'specs' folder in ${PKG_NAME} package repository"
         exit 1
     fi
+    echo "STEP#0: Remove previous version of sources in ${PKG_NAME} package"
     remove_old_package_files
+    echo "STEP#1: Sources update for package ${PKG_NAME}"
     update_package_sources
+    echo "STEP#2: Abandon previous patchsets for package ${PKG_NAME}"
     abandon_old_patchsets
+    echo "STEP#3: Push new version of ${PKG_NAME} package"
     push_packages_to_repositories
   done

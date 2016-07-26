@@ -6,7 +6,7 @@
        Outcome of this Jenkins job will be created patchset for each changed package of a project<br>
        <br>
        <b>NOTE:</b> Created patchsets are <b>must</b> be reviwed and may be found
-       <a href="{packaging_gerrit_patchsets_url}">by this search link</a> and should be reviewed<br>
+       <a href="{packaging_gerrit_patchsets_url}">by this search link</a><br>
        <br>
        <b>Ownership:</b> Issues with this job are tracked by CI team.<br>
        <b>Contacts:</b> #infra
