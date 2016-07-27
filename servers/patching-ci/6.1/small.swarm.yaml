@@ -34,6 +34,14 @@
       - bool:
           name: ENABLE_UPDATES
           default: true
+      - string:
+          name: CUSTOM_VERSION
+          default: 'MU'
+          description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+      - string:
+          name: FUEL_QA_COMMIT
+          default: 'origin/stable/6.1'
+          description: 'stable git-sha for 6.1: 49885aef4590cd0e748d33ed2c4753648017ba44'
     publishers:
       - description-setter:
           regexp: "'Description string: (.*)'"
