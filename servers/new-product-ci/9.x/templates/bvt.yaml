@@ -56,9 +56,7 @@
     - inject: # Overrides
         properties-content: '{properties}'
 
-    - shell:
-        !include-raw-escape:
-          '../builders/wrapped_system_tests.sh'
+    - 9x-run-sys-test
 
     publishers:
 

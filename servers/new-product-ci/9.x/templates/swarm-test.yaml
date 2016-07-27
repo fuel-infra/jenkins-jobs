@@ -72,9 +72,7 @@
         #!/bin/bash
         echo "=== [systest PRE-script] ==="
         {pre-script}
-    - shell:
-        !include-raw-escape:
-          '../builders/wrapped_system_tests.sh'
+    - 9x-run-sys-test
     - shell: |
         #!/bin/bash
         echo "=== [systest POST-script] ==="
