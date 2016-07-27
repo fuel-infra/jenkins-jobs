@@ -2,7 +2,7 @@
    name: '6.1-system_tests'
    version-id: '6.1'
    test-type:  'system_test'
-   repobranch: 'origin/stable/6.1'
+   repobranch: '$FUEL_QA_COMMIT'
    reponame: 'fuel-qa'
    venvpath: '/home/jenkins/qa-venv-6.1'
    default_pool: '10.109.0.0/16:24'
