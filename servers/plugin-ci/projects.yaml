@@ -163,6 +163,7 @@
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
+      - '{version}.fuel-plugin.{plugin_name}.build.publish'
 
 #
 # Plugins tested with the StackLight test framework
@@ -210,6 +211,7 @@
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.verify'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
+      - '{version}.fuel-plugin.{plugin_name}.build.publish'
 
 - project:
     name: murano-plugin
@@ -234,6 +236,7 @@
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
+      - '{version}.fuel-plugin.{plugin_name}.build.publish'
 
 - project:
     name: stacklight-runner
