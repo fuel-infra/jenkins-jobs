@@ -48,7 +48,7 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
 
     case "${UBUNTU_MIRROR_ID}" in
         latest)
-            UBUNTU_MIRROR_URL="$(curl "http://${MIRROR_HOST}ubuntu-latest.htm")"
+            UBUNTU_MIRROR_URL="$(curl "http://${MIRROR_HOST}/pkgs/ubuntu-latest.htm")"
             ;;
         *)
             UBUNTU_MIRROR_URL="http://${MIRROR_HOST}/pkgs/${UBUNTU_MIRROR_ID}/"
