@@ -1,20 +1,7 @@
 - view:
       type: list
       name: '8.0'
-      jobs:
-        - 8.0-reporting.send_reports
-        - 8.0.all
-        - 8.0.all-Testrail
-        - 8.0.nessus_security_scan
-        - 8.0.swarm.runner
-        - 8.0.swarm.statistic
-        - 8.0.swarm.timer.proposed
-        - 8.0.swarm.timer.stable
-        - 8.0.system_test.test-reports
-        - 8.0.test_all
-        - 8.0.testrail_reports
-        - 8.0.ubuntu.bvt_2
-        - 8.0.ubuntu.smoke_neutron
+      regex: '8.0.*'
       columns:
         - status
         - weather
