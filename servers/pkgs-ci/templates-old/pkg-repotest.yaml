@@ -39,6 +39,11 @@
           IFS='|'
           EXTRAREPOS=( ${{EXTRAREPO}} )
           IFS=${{OLDIFS}}
+
+          for repo_num in ${{!EXTRAREPOS[@]}}; do
+              grep -F "${{REPO_URL}}" <<< "${{EXTRAREPOS[${{repo_num}}]}}" && unset EXTRAREPOS[${{repo_num}}]
+          done
+
           EXTRAREPO=$(printf "%s\n" "${{EXTRAREPOS[@]}}" | sort -u | tr '\n' '|' | sed -r 's/\|$//')
 
           script_log='repo-test-{pkg_type}-docker.log'
