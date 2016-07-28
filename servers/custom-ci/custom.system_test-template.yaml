@@ -29,6 +29,8 @@
           choices:
             - Ubuntu
             - CentOS
+            - 'Ubuntu 16.04'
+            - 'Ubuntu+UCA 16.04'
       - choice:
           name: TEST_GROUP
           description: |
