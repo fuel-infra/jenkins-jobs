@@ -213,6 +213,7 @@
         properties: |
           SLAVE_NODE_MEMORY=6144
           SLAVE_NODE_CPU=4
+          NODES_COUNT=3
         weight: 11
     - '9.x.{test-type}.{dist}.{testgroup}':
         testgroup: 'repetitive_restart'
