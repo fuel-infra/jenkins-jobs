@@ -1,7 +1,7 @@
 - view:
     type: list
     name: 'upgrades'
-    regex: '8.0.upgrades.*'
+    regex: '.*\.(upgrades|backup-restore).*'
     columns:
       - status
       - weather
