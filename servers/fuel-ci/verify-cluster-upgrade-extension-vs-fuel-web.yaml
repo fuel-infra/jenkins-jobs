@@ -56,11 +56,6 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/mitaka'
           custom-url: '* $JOB_NAME $BUILD_URL'
-          skip-vote:
-            successful: true
-            failed: true
-            unstable: true
-            notbuilt: true
       - timed: '{timer}'
 
     wrappers:
