@@ -45,7 +45,6 @@
       - git:
           basedir: ''
           skip-tag: true
-          wipe-workspace: false
           branches:
             - $GIT_BRANCH
           choosing-strategy: gerrit
@@ -56,9 +55,7 @@
       - ansicolor:
             colormap: xterm
       - timestamps
-      - ssh-agent-credentials:
-          users:
-            - '{ssh-creds-slave-jenkins}'
+      - ssh-creds-slave-jenkins
     builders:
       - inject:
           properties-content: '$ADDITIONAL_PARAMETERS'

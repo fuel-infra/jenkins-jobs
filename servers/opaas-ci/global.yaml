@@ -9,7 +9,6 @@
       artifactNumToKeep: -1
 
     gerrit_trigger_on_recheck_regexp: '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck'
-    ssh-creds-slave-jenkins: 'fe477a96-f4ee-422d-96de-dd3929967fd4'
     ssh-creds-openstack-ci-jenkins: 'ad783ce0-8f8f-465d-b4d3-dbffd75444b1'
 
     packages_list: "Puppet SystemConfig OpenLDAP Gerrit Jenkins Zuul Nodepool CiCdEnvironment CiCdUtils"

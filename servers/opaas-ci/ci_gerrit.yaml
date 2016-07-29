@@ -11,9 +11,8 @@
           default: |
             OS_IMAGE={rc_os_image}
             UPLOAD_TO_OS=true
-            OS_CLEANUP_BEFORE=true
-            OS_CLEANUP_AFTER=false
             APPS_CLEAN=true
+            OS_CLEANUP_BEFORE=true
             #
             GIT_REPO=openstack/ci-cd-pipeline-app-murano
             #
@@ -23,7 +22,6 @@
     scm:
       - review-openstack-org:
           skip-tag: true
-          wipe-workspace: false
           project-basedir: ''
           project-name: '{project-name}'
           credentials-id: '{ssh-creds-openstack-ci-jenkins}'
@@ -32,25 +30,58 @@
           project-name: '{project-name}'
           project-branch: '{project-branch}'
           comment-contains-value-regexp: '{gerrit_trigger_on_recheck_regexp}'
+          failed_vote: true
     wrappers:
       - timeout:
           timeout: 300
       - ansicolor:
             colormap: xterm
       - timestamps
-      - ssh-agent-credentials:
-          users:
-            - '{ssh-creds-slave-jenkins}'
+      - ssh-creds-slave-jenkins
     builders:
-      - inject:
-          properties-content: |
-            LOG_PATH=$GERRIT_CHANGE_NUMBER/$GERRIT_PATCHSET_NUMBER/$JOB_NAME/$BUILD_NUMBER
+      - inject_log_path
       - inject:
           properties-content: '$ADDITIONAL_PARAMETERS'
       - shell:
-          !include-raw-escape: builders/shell_check.sh
-      - shell:
           !include-raw-escape: builders/apps_uploader.sh
+    publishers:
+      - console-log
+      - opaas-log
+
+- job-template:
+    name: '{name}-{project-branch}-gerrit-linters'
+    node: '{node_label}'
+    properties:
+      - heavy-job:
+          weight: '{weight}'
+    concurrent: true
+    scm:
+      - review-openstack-org:
+          skip-tag: true
+          project-basedir: ''
+          project-name: '{project-name}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+    triggers:
+      - review-openstack-org:
+          project-name: '{project-name}'
+          project-branch: '{project-branch}'
+          comment-contains-value-regexp: '{gerrit_trigger_on_recheck_regexp}'
+          failed_vote: false
+    wrappers:
+      - timeout:
+          timeout: 30
+      - ansicolor:
+            colormap: xterm
+      - timestamps
+      - ssh-creds-slave-jenkins
+    builders:
+      - inject_log_path
+      - shell: |
+          #!/bin/bash
+          printenv |sort -u
+          # remove export, after #LP1607791 fix
+          export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:${{PATH}}
+          tox -v -e linters
     publishers:
       - console-log
       - opaas-log
