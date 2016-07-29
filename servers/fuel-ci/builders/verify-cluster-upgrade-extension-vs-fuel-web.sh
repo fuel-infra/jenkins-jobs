@@ -30,7 +30,9 @@ pip install -r "${EXTENSION}/test-requirements.txt"
 
 cd "$EXTENSION"
 
-export NAILGUN_CONFIG="${EXTENSION}/nailgun-test-settings.yaml"
+export NAILGUN_CONFIG="${EXTENSION}/jenkins-test-settings.yaml"
+sed s/openstack_citest/nailgun/g "${EXTENSION}/nailgun-test-settings.yaml" > "$NAILGUN_CONFIG"
+
 py.test -v
 
 deactivate
