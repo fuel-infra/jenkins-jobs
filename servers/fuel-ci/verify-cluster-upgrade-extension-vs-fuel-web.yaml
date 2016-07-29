@@ -1,0 +1,88 @@
+- job-template:
+    name: '{prefix}-cluster-upgrade-extension-vs-fuel-web'
+    description: |
+      Run tests for nailgun cluster upgrade extension on fuel-web change requests.
+    node: fuel-web-master
+    concurrent: true
+    timer: ''
+
+    properties:
+      - heavy-job:
+          weight: 1
+      - throttle:
+          categories:
+            - one-nailgun-db-per-node
+          max-per-node: 1
+          option: category
+
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: TEST_NAILGUN_DB
+          default: nailgun
+
+    scm:
+      - git:
+         basedir: fuel-web
+         remotes:
+           - gerrit:
+               refspec: $GERRIT_REFSPEC
+               url: https://review.openstack.org/openstack/fuel-web.git
+         choosing-strategy: gerrit
+         branches:
+           - $GERRIT_BRANCH
+
+      - git:
+         basedir: fuel-nailgun-extension-cluster-upgrade
+         url: https://github.com/openstack/fuel-nailgun-extension-cluster-upgrade.git
+         branches:
+           - $GERRIT_BRANCH
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: openstack/fuel-web
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/mitaka'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+      - timed: '{timer}'
+
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+
+    builders:
+      - shell:
+          !include-raw-escape: builders/verify-cluster-upgrade-extension-vs-fuel-web.sh
+
+    publishers:
+      - 'email-{email-type}'
+
+
+- project:
+    name: dualcheck-nailgun-cluster-upgrade-extension-on-fuel-web
+    jobs:
+      - '{prefix}-cluster-upgrade-extension-vs-fuel-web':
+          prefix: verify
+          email-type: default
+          timer: '0 13 * * *'
