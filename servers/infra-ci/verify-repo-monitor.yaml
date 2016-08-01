@@ -1,0 +1,57 @@
+- job-template:
+    name: 'verify-repo-monitor-{tox-test}'
+    description: 'Run tests for fuel-infra/repo-monitor'
+    concurrent: true
+    node: 'tox'
+
+    properties:
+      - heavy-job:
+          weight: 1
+
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://infra-ci@review.fuel-infra.org:29418/{reponame}'
+                credentials-id: '70105253-c857-4463-a927-f47307911e45'
+          choosing-strategy: gerrit
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: '{reponame}'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+          skip-vote:
+            successful: true
+            failed: true
+            unstable: true
+            notbuilt: true
+
+    builders:
+      - shell: 'cd python && tox -v -e {tox-test}'
+
+
+- project:
+    name: 'repo-monitor'
+
+    reponame: 'fuel-infra/repo-monitor'
+    tox-test:
+      - 'flake8'
+      - 'py27'
+      # FIXME: add 'py34' when fixed
+    jobs:
+      - 'verify-repo-monitor-{tox-test}'
