@@ -8,7 +8,7 @@
     project-type: multijob
 
     triggers:
-      - timed: '{trigger}'
+      - timed: '{timer}'
 
     description: |
       Job used to build and validate the StackLight plugins<ul>
