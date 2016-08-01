@@ -10,6 +10,11 @@
           description: "Build: 9.0 iso"
           email: '{bvt-mail}'
           timer: '0 2-23/6 * * *'
+          variables: |
+            MOS_UBUNTU_TARGET=9.0-latest.target.txt
+            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/snapshots/
+            EXTRA_RPM_REPOS=proposed,http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/proposed-latest/x86_64/
+            FUELMAIN_GERRIT_COMMIT=refs/changes/49/347249/6
       - 'community-{version}{mod}.test_all':
           email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
