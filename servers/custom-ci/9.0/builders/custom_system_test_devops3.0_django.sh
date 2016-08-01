@@ -99,6 +99,7 @@ if [[ "${FUEL_DEVOPS_COMMIT}" != "none" ]] ; then
     done
   fi
   pip install ./ --upgrade
+  cd ..
 
   # Install fuel-qa requirements
   pip install -r ./fuelweb_test/requirements.txt --upgrade
