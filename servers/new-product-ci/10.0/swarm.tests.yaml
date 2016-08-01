@@ -11,8 +11,6 @@
    timeout: '480'
    properties: |
      SLAVE_NODE_MEMORY=3072
-     FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
-     ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
    weight: '7'
    jobs:
      - '{version-id}.{test-type}.{dist}.{testgroup}':
