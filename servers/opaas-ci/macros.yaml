@@ -16,6 +16,7 @@
     name: review-openstack-org
     scm:
       - git:
+          wipe-workspace: true
           basedir: '{project-basedir}'
           branches:
             - $GERRIT_BRANCH
@@ -47,7 +48,7 @@
           gerrit-build-started-verified-value: 0
           skip-vote:
             successful: false
-            failed: true
+            failed: '{failed_vote}'
             unstable: true
             notbuilt: true
           custom-url: '* $JOB_NAME http://ci-logs.fuel-infra.org/opaas-ci/logs/$LOG_PATH'
@@ -114,3 +115,24 @@
             - job-discover
             - job-build
             - job-cancel
+
+########################################################################
+# WRAPPERS
+########################################################################
+- wrapper:
+    name: ssh-creds-slave-jenkins
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - 'fe477a96-f4ee-422d-96de-dd3929967fd4'
+
+########################################################################
+# BUILDERS
+########################################################################
+- builder:
+    name: inject_log_path
+    builders:
+      - inject:
+          properties-content: |
+              LOG_PATH=$GERRIT_CHANGE_NUMBER/$GERRIT_PATCHSET_NUMBER/$JOB_NAME/$BUILD_NUMBER
+

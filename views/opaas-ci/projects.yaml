@@ -4,6 +4,7 @@
     jobs:
       - cicd_pipe-custom-run
       - cicd_pipe-master-gerrit-check
+      - cicd_pipe-master-gerrit-linters
     columns:
       - status
       - weather
