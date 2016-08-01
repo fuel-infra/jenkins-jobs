@@ -107,6 +107,12 @@
     # Default macro used to build VENV for test framework
     plugin_prepare_env_builder: plugin-prepare-env
 
+    # Default macro used to deploy ENV and test plugin
+    plugin_deploy_test_builder: plugin-deploy-test-default
+
+    # Default publishers used after deploy test
+    plugin_deploy_test_publisher: plugin-deploy-test-publisher-default
+
     # Additional ENV variables for injecting
     plugin_custom_variables: ''
 
@@ -300,3 +306,47 @@
 
     jobs:
       - '{version}.stacklight.{plugin_branch}.tests'
+
+- project:
+    name: ldap
+    defaults: plugins-defaults
+
+    version:
+      - 9.x:
+          plugin_branch: master
+          test_framework_branch: '{fuel-branch-9_0}'
+          iso_magnet_link: release-9.0
+          test_properties: |
+            REPORT_FILE=report.xml
+            ENV_NAME=$ENV_PREFIX.$BUILD_NUMBER.$BUILD_ID
+            ENABLE_MOS_UBUNTU_PROPOSED=true
+            ENABLE_MOS_UBUNTU_UPDATES=true
+            ENABLE_MOS_UBUNTU_SECURITY=true
+            ENABLE_MOS_UBUNTU_HOLDBACK=true
+            ENABLE_MOS_CENTOS_OS=true
+            ENABLE_MOS_CENTOS_PROPOSED=true
+            ENABLE_MOS_CENTOS_UPDATES=true
+            ENABLE_MOS_CENTOS_SECURITY=true
+            ENABLE_MOS_CENTOS_HOLDBACK=true
+            PLUGIN_CONFIG=mld_proxy
+            REPO_SNAPSHOTS_URL=https://product-ci.infra.mirantis.net/job/9.x.snapshot/lastSuccessfulBuild/artifact/snapshots.params
+            CUSTOM_FRAMEWORK_REPO=https://github.com/Mirantis/mos-ci-deployment-scripts.git
+            CUSTOM_FRAMEWORK_BRANCH=stable/9.0
+            CUSTOM_TESTS_REPO=https://github.com/Mirantis/mos-integration-tests.git
+            SNAPSHOT_NAME=ready_ha_$PLUGIN_CONFIG
+
+    plugin_name: ldap
+    plugin_repo: fuel-plugin-ldap
+    plugin_owner: 'MOS Puppet Team'
+    plugin_test_group: 'deploy_env'
+    plugin_env_path_name: 'LDAP_PLUGIN_PATH'
+    plugin_deploy_test_builder: plugin-deploy-test-ldap
+    plugin_deploy_test_publisher: plugin-deploy-test-publisher-ldap
+
+    jobs:
+      - '{version}.fuel-plugin.{plugin_name}.build'
+      - '{version}.fuel-plugin.{plugin_name}.deploy-test'
+      - '{version}.fuel-plugin.{plugin_name}.build.publish'
+      - '{version}.fuel-plugin.{plugin_name}.build-timer':
+          timer: 'H 2 * * *'
+

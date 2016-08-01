@@ -77,3 +77,50 @@
       - shell: |
             #!/bin/bash
             ./utils/fuel-qa-builder/prepare_env.sh
+
+########################################################################
+# Builders used to deploy and test the plugin
+########################################################################
+# Standard builder for fuel-qa
+- builder:
+    name: plugin-deploy-test-default
+    builders:
+      - shell:
+          !include-raw './builders/plugin-deploy-test.sh'
+# Builder for the ldap plugin
+- builder:
+    name: plugin-deploy-test-ldap
+    builders:
+      - shell:
+          !include-raw './builders/plugin-ldap-deploy-test.sh'
+
+########################################################################
+# Publishers used for deploy test jobs
+########################################################################
+# Standard publisher for fuel-qa
+- publisher:
+    name: plugin-deploy-test-publisher-default
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml,logs/*'
+          latest-only: false
+      - post-destroy-vms
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+          regexp-for-failed: "'Description string: (.*)'"
+
+# Publisher for the ldap plugin
+- publisher:
+    name: plugin-deploy-test-publisher-ldap
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'custom_tests/report.xml, custom_tests/*.log, *.log'
+          latest-only: false
+      - post-destroy-vms
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+          regexp-for-failed: "'Description string: (.*)'"
+      - junit:
+          results: 'custom_tests/report.xml'
