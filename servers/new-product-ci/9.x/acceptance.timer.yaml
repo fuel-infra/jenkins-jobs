@@ -16,7 +16,7 @@
         description: 'Job from which we get latest stable snapshot'
 
     triggers:
-    - timed: '' # todo!
+    - timed: '0 21 * * 4'
 
     builders:
 
