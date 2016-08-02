@@ -28,7 +28,7 @@
           dist: 'ubuntu'
           testgroup: 'bvt_2'
           email: '{bvt-mail}'
-          # FIXME(aevseev): Use upstream Ubuntu mirrors until there is no
+          # FIXME: Use upstream Ubuntu mirrors until there is no
           # mirrored xenial on Mirantis' mirrors
           properties: |
             MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
@@ -36,6 +36,11 @@
           dist: 'ubuntu'
           testgroup: 'smoke_neutron'
           email: '{bvt-mail}'
+          # FIXME: Use upstream Ubuntu mirrors until there is no
+          # mirrored xenial on Mirantis' mirrors
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+
       - '{version}{mod}.iso-report':
           repobranch: '{branch}'
 
