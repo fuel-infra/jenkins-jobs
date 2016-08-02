@@ -25,7 +25,7 @@
     parameters:
       - string:
           name: REGISTRY_URLS
-          default: 'registry01-bud.fuel-infra.org registry01-scc.fuel-infra.org'
+          default: 'registry02-bud.fuel-infra.org registry03-scc.fuel-infra.org'
           description: 'docker registry hosts (space separated)'
       - bool:
           name: DATE_TAG
