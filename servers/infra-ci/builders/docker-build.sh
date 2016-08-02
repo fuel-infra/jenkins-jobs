@@ -73,7 +73,7 @@ do
       exitcode=$?
       # stop container
       docker stop "$(cat "${CONTAINER_ID}")"
-      exit ${exitcode}
+      echo "[ STATUS ] Docker exit code was ${exitcode}"
     else
       echo "[ STATUS ] Non Fuel CI image, verification skipped."
     fi
