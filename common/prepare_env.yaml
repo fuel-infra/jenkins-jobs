@@ -1,14 +1,13 @@
 - job:
-    builders:
-      - shell:
-          !include-raw 'scripts/prepare_env.sh'
-    concurrent: true
+    name: prepare_env
+
     description: |
       Creates a python virtual environment for system tests. Stores additional images.<br><br>
       For 6.1 and above environments choose 2.9.x DevOps version from fuel-qa repository and old, 2.5.x from fuel-main for prior to 6.1.
+    concurrent: true
     logrotate:
       daysToKeep: 14
-    name: prepare_env
+
     parameters:
       - bool:
           name: 'update_devops_2_9_x'
@@ -30,6 +29,7 @@
           name: VENV_REQUIREMENTS
           default: ''
           description: 'Use custom requirements for venv'
+
       - string:
           name: CLOUD_FEDORA
           default: 'magnet:?xt=urn:btih:edf7287187fe35e94aaa6cf973c04fbc6700433f&dn=cloud-fedora.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fsrv07-srt.srt.mirantis.net%2Fcloud-images%2Fcloud-fedora.qcow2&ws=http%3A%2F%2Fsrv08-srt.srt.mirantis.net%2Fcloud-images%2Fcloud-fedora.qcow2&ws=http%3A%2F%2Fsrv11-msk.msk.mirantis.net%2Fcloud-images%2Fcloud-fedora.qcow2'
@@ -95,10 +95,16 @@
           name: INSTALL_PACKAGES_UBUNTU_14_04
           default: 'magnet:?xt=urn:btih:c6014d5cd0d1bf9e7bd83b0e1a3a2e0161de68f2&dn=ubuntu-14.04-amd64-20151213015813.qcow2&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2Fubuntu-14.04-amd64-20151213015813.qcow2'
           description: 'https://bugs.launchpad.net/fuel/+bug/1524807'
+
+    wrappers:
+      - timeout:
+          timeout: 60
+
+    builders:
+      - shell:
+          !include-raw: 'scripts/prepare_env.sh'
+
     publishers:
       - email:
           notify-every-unstable-build: false
           recipients: 'ci+alert@mirantis.com'
-    wrappers:
-      - timeout:
-          timeout: 60
