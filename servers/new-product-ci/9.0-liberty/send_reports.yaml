@@ -22,9 +22,3 @@
         - project: '{version-id}.all-Testrail'
           condition: UNSTABLE_OR_BETTER
           trigger-with-no-params: true
-
-- project:
-    name: '9.0-liberty-reporting'
-    jobs:
-      - '{version-id}.send_reports':
-          version-id: '9.0-liberty'
