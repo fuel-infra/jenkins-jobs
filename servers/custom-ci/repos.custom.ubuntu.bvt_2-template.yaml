@@ -1,0 +1,99 @@
+- job-template:
+    name: '{mos}.repos.custom.{dist}.{testgroup}'
+    description:
+      !include-raw-escape: descriptions/repos.custom.ubuntu.bvt_2
+    concurrent: true
+    node: devopsv3-node
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+
+    properties:
+      - authorization-allow-authorized
+      - heavy-job:
+          weight: 8
+
+    parameters:
+
+      - string:
+          name: FUEL_RELEASE_URL
+          default: '{fuel-release-url}'
+          description: Direct URL to fuel-release rpm package to install
+      - string:
+          name: FUEL_RELEASE_PATH
+          default: $WORKSPACE/fuel-release.noarch.rpm
+          description: Path on local filesystem to store fuel-release rpm package
+
+      - file:
+          name: rpm_repos.yaml
+          description: YAML file with RPM repos configuration
+      - file:
+          name: deb_repos.yaml
+          description: YAML file with DEB repos configuration
+
+      - string:
+          name: TEST_GROUP
+          default: '{testgroup}'
+      - string:
+          name: OPENSTACK_RELEASE
+          default: 'Ubuntu'
+      - string:
+          name: NEUTRON_ENABLE
+          default: 'true'
+
+      - string:
+          name: CENTOS_CLOUD_IMAGE_PATH
+          default: /srv/downloads/qa-centos-cloud-2016-05-05.qcow2
+          description: Path to centos image on local filesystem
+      - string:
+          name: fuel_qa_gerrit_commit
+          default: 'none'
+      - string:
+          name: ENV_PREFIX
+          default: '{mos}.repos.custom.ubuntu.bvt_2'
+          description: Define env prefix name. This parameter should not be changed
+
+    scm:
+      - main-git:
+          reponame: fuel-qa
+          repobranch: '{fuel-qa-repobranch}'
+          basedir: ''
+
+    wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 210
+
+    builders:
+      - inject:
+          properties-content: |
+            VENV_PATH={venv-path}
+            RPM_REPOS_YAML=$WORKSPACE/rpm_repos.yaml
+            DEB_REPOS_YAML=$WORKSPACE/deb_repos.yaml
+            SLAVE_NODE_CPU=2
+            SLAVE_NODE_MEMORY=3072
+            DEVOPS_SETTINGS_TEMPLATE=centos_master.yaml
+      - shell:
+          !include-raw-escape: builders/run_repos_system_test.sh
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml,logs/*,*.yaml'
+          latest-only: false
+      - logparser:
+          parse-rules: '/var/lib/jenkins/fuellib.parser'
+          unstable-on-warning: false
+          fail-on-error: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+      - post-destroy-vms
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'
+          failure: true
+          success: true
+          send-to:
+            - requester
