@@ -34,7 +34,7 @@ esac
 echo "DNSPARAM=\"--dns 8.8.8.8\"" > "${WORKSPACE}"/fuel-mirror/perestroika/docker-builder/config
 
 # workaround for sbuild, related bug: https://bugs.launchpad.net/fuel/+bug/1572517
-SBUILD_LOCK_FILE="/var/cache/docker-builder/sbuild/trusty-amd64/run/lock/sbuild"
+SBUILD_LOCK_FILE="/var/cache/docker-builder/sbuild/${UBUNTU_DIST}-amd64/run/lock/sbuild"
 
 if [ -f "${SBUILD_LOCK_FILE}" ]; then
   sudo rm "${SBUILD_LOCK_FILE}"
@@ -94,11 +94,14 @@ cp -v "${PROJECT_ROOT}/specs/${PROJECT_PACKAGE}.spec" "${SOURCE_PATH}"
 # update spec with proper version
 sed -i "s|Release:.*$|Release: ${RELEASE}|" "${SOURCE_PATH}/${PROJECT_PACKAGE}.spec"
 ## build rpm
-"${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
-  --build-target centos7 \
-  --ext-repos "mos,${MIRROR_HOST}mos-repos/centos/${RPM_MIRROR_BASE_NAME}/os/x86_64/" \
+"${WORKSPACE}"/fuel-mirror/perestroika/build \
+  --verbose \
+  --no-keep-chroot \
+  --dist centos7 \
+  --build \
   --source "${SOURCE_PATH}" \
-  --output-dir "${RPM_RESULT_DIR}"
+  --output "${RPM_RESULT_DIR}" \
+  --repository "${MIRROR_HOST}mos-repos/centos/${RPM_MIRROR_BASE_NAME}/os/x86_64/"
 
 # for deb
 if [ -d "${PROJECT_ROOT}/debian" ]; then
@@ -106,14 +109,16 @@ if [ -d "${PROJECT_ROOT}/debian" ]; then
   cp -v "${SOURCE_PATH}/${PROJECT_PACKAGE}-${RPM_PACKAGE_VERSION}.tar.gz" "${SOURCE_PATH}/${PROJECT_PACKAGE}_${DEB_PACKAGE_VERSION}.orig.tar.gz"
   mkdir -p "${SOURCE_PATH}/${PROJECT_PACKAGE}"
   cp -rv "${PROJECT_ROOT}/debian" "${SOURCE_PATH}/${PROJECT_PACKAGE}"
-  dch -c "${SOURCE_PATH}/${PROJECT_PACKAGE}/debian/changelog" -D trusty -b --force-distribution -v "${DEB_PACKAGE_VERSION}-${RELEASE}" "${DEBMSG}"
+  dch -c "${SOURCE_PATH}/${PROJECT_PACKAGE}/debian/changelog" -D "${UBUNTU_DIST}" -b --force-distribution -v "${DEB_PACKAGE_VERSION}-${RELEASE}" "${DEBMSG}"
   ## build deb
-  "${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
-    --upstream-repo "${MIRROR_HOST}pkgs/ubuntu/" \
-    --build-target trusty \
-    --ext-repos "${MIRROR_HOST}mos-repos/ubuntu/${DEB_MIRROR_BASE_NAME} main restricted" \
-    --source "${SOURCE_PATH}" \
-    --output-dir "${DEB_RESULT_DIR}"
+  "${WORKSPACE}"/fuel-mirror/perestroika/build \
+  --verbose \
+  --no-keep-chroot \
+  --dist "${UBUNTU_DIST}" \
+  --build \
+  --source "${SOURCE_PATH}" \
+  --output "${DEB_RESULT_DIR}" \
+  --repository "${MIRROR_HOST}mos-repos/${DEB_MIRROR_BASE_NAME} main restricted"
 fi
 
 popd &>/dev/null
