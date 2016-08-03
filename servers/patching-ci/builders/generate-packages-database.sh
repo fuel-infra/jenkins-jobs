@@ -71,21 +71,37 @@ for URL in $URLS ; do
     IFS="$OLDIFS"
     case "${DISTRO}" in
        centos)
-          SNAPSHOT=$(curl -sSf "${URL}/${CENTOS_TARGET_FILE}" | head -1)
-          wget "${URL}/${SNAPSHOT}/x86_64/repodata/repomd.xml" \
-          -O "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml"
-          CENTOS_REPO_FILENAME=$(\
-              grep "primary\.sqlite" "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml" |
-              grep location | cut -d '"' -f2 \
-          )
-          REPO_SUFFIX="x86_64/${CENTOS_REPO_FILENAME}"
+          if [ "${RELEASE_VERSION}" == "6.1" ] ; then
+              SNAPSHOT=''
+              wget "${URL}/mos6.1/updates/repodata/repomd.xml" \
+              -O "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml"
+              CENTOS_REPO_FILENAME=$(\
+                  grep "primary\.xml\.gz" "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml" |
+                  grep location | cut -d '"' -f2 \
+              )
+              REPO_SUFFIX="mos6.1/updates/${CENTOS_REPO_FILENAME}"
+          else
+              SNAPSHOT=$(curl -sSf "${URL}/${CENTOS_TARGET_FILE}" | head -1)
+              wget "${URL}/${SNAPSHOT}/x86_64/repodata/repomd.xml" \
+              -O "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml"
+              CENTOS_REPO_FILENAME=$(\
+                  grep "primary\.sqlite" "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml" |
+                  grep location | cut -d '"' -f2 \
+              )
+              REPO_SUFFIX="x86_64/${CENTOS_REPO_FILENAME}"
+          fi
           BASE_URL="${URL}"
           ;;
        ubuntu)
-          SNAPSHOT=$(curl -sSf "${URL}-${UBUNTU_TARGET_FILE}" | head -1)
+          if [ "${RELEASE_VERSION}" == "6.1" ] ; then
+              SNAPSHOT=''
+          else
+              SNAPSHOT=$(curl -sSf "${URL}-${UBUNTU_TARGET_FILE}" | head -1)
+          fi
           REPO_SUFFIX="${UBUNTU_REPO_SUFFIX}"
           # Remove $RELEASE_VERSION from URL for Ubuntu repository
           BASE_URL="${URL%$RELEASE_VERSION*}"
+
           ;;
        *)
           die "Distribution is not defined"
