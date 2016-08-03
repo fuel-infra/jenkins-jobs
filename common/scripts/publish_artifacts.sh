@@ -25,7 +25,7 @@ process_artifacts() {
             local MAGNET_LINK=$(seedclient.py -v -u \
                                   -f "${LOCAL_STORAGE}/${ARTIFACT}"\
                                   --tracker-url="${TRACKER_URL}"\
-                                  --http-root="${HTTP_ROOT}" || true)
+                                  --http-root="${HTTP_ROOT}")
             local STORAGES=($(echo "${HTTP_ROOT}" | tr ',' '\n'))
             local HTTP_LINK="${STORAGES[0]}/${ARTIFACT}"
             local HTTP_TORRENT="${HTTP_LINK}.torrent"
@@ -35,7 +35,7 @@ process_artifacts() {
                 -f "${ARTIFACT}"\
                 --tracker-url="${TRACKER_URL}"\
                 --http-root="${HTTP_ROOT}"\
-                --seed-host="${SEED_HOST}" || true
+                --seed-host="${SEED_HOST}"
             local HTTP_TORRENT="${FRONT_URL}/${ARTIFACT}.torrent"
             local MAGNET_LINK="${HTTP_TORRENT}"
             ;;
