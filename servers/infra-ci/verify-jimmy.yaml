@@ -1,5 +1,5 @@
 - job-template:
-    name: 'verify-jim-{tox-test}'
+    name: 'verify-{name}-{tox-test}'
     description: 'Run tests for fuel-infra/jim'
     node: 'tox'
     concurrent: true
@@ -46,4 +46,13 @@
       - 'flake8'
       - 'unittests'
     jobs:
-      - 'verify-jim-{tox-test}'
+      - 'verify-{name}-{tox-test}'
+
+- project:
+    name: 'jimmy'
+    reponame: 'fuel-infra/jimmy'
+    tox-test:
+      - 'flake8'
+      - 'unittests'
+    jobs:
+      - 'verify-{name}-{tox-test}'
