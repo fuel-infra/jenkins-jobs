@@ -5,23 +5,6 @@
     name: '{version}.fuel-plugin.{plugin_name}.deploy-test'
     node: '{node_label}'
 
-    builders:
-      - guess-mirror
-      - iso-download
-      - inject:
-          # Define default variables used for systest
-          properties-content: |
-            VENV_PATH=$WORKSPACE/venv_test
-            OPENSTACK_RELEASE=ubuntu
-            POOL_DEFAULT=10.109.0.0/16:24
-            CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-      - inject:
-          # additional variables
-          properties-content: '{test_properties}'
-      - '{plugin_prepare_env_builder}'
-      - shell:
-          !include-raw-escape: ./builders/plugin-deploy-test.sh
-
     description: |
       Job used to test fuel-plugin <b>{plugin_name}</b><ul>
       <li><b>Plugin repository:</b>
@@ -39,6 +22,13 @@
       <li><b>Test framework branch:</b> {test_framework_branch}</il>
       <li><b>Test group:</b> {plugin_test_group}</il>
       </ul>
+
+    properties:
+      - throttle:
+          max-per-node: 1
+          option: project
+      - heavy-job:
+          weight: 6
 
     parameters:
       - string:
@@ -67,24 +57,6 @@
           default: $PLUGIN_FILE_PATH
           description: 'Local path to plugin file inside build job'
 
-    properties:
-      - throttle:
-          max-per-node: 1
-          option: project
-      - heavy-job:
-          weight: 6
-
-
-    publishers:
-      - archive:
-          allow-empty: true
-          artifacts: '**/nosetests.xml,logs/*'
-          latest-only: false
-      - post-destroy-vms
-      - description-setter:
-          regexp: "'Description string: (.*)'"
-          regexp-for-failed: "'Description string: (.*)'"
-
     scm:
       - git:
           basedir: ''
@@ -99,3 +71,32 @@
           fail: false
           timeout: 360
           write-description: false
+
+    builders:
+      - guess-mirror
+      - iso-download
+      - inject:
+          # Define default variables used for systest
+          properties-content: |
+            VENV_PATH=$WORKSPACE/venv_test
+            OPENSTACK_RELEASE=ubuntu
+            POOL_DEFAULT=10.109.0.0/16:24
+            CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+      - inject:
+          # additional variables
+          properties-content: '{test_properties}'
+      - '{plugin_prepare_env_builder}'
+      - shell:
+          !include-raw-escape: ./builders/plugin-deploy-test.sh
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml,logs/*'
+          latest-only: false
+      - post-destroy-vms
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+          regexp-for-failed: "'Description string: (.*)'"
+
+
