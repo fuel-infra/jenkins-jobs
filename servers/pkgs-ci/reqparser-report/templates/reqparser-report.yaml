@@ -1,0 +1,50 @@
+- job-template:
+    name: 'reqparser-{distro}-report'
+
+    description: |
+      <h3> Job for generating report between differences in requirements version for packages </h3>
+      <p>
+        <b>Owner:</b> #mos-packaging at Slack"
+      </p>
+    node: '{build-node}'
+
+    scm:
+    - fuel-infra:
+        basedir: ''
+        branch: 'master'
+        credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+        repo: 'tools/packaging'
+        username: '{username-openstack-ci-jenkins}'
+
+    wrappers:
+    - ssh-agent-credentials:
+        users:
+        - '{ssh-creds-openstack-ci-jenkins}'
+    - timeout:
+        fail: true
+        timeout: 5
+
+    triggers:
+    - timed: '{timer}'
+
+    builders:
+    - inject:
+        properties-content: |
+          GERRIT_USER={username-openstack-ci-jenkins}
+          CI=1
+          DISTRO={distro}
+    - shell: |
+        #!/bin/bash
+        set -ex
+        pushd reqparser
+          bash generate_report.sh -c req -d $DISTRO
+          tar -czvf $DISTRO_results.tar.gz result
+        popd
+
+    publishers:
+    - archive:
+        allow-empty: 'false'
+        artifacts: '{distro}_results.tar.gz'
+    - email:
+        recipients: 'mivanov+reqparser@mirantis.com'
+
