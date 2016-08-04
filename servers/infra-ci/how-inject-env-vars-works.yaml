@@ -1,0 +1,128 @@
+- job:
+    name: how-inject-env-vars-works
+    description:
+      <p> This job is here for explanation of Jenkins internal logic related to
+          injecting Environment Variables and processing Job Parameters.
+      </p>
+      Just run build
+
+    parameters:
+      - string:
+          name: INPUT_1
+          default: '<GIVEN-IN-BUILD-PARAMETER>'
+
+    properties:
+      - inject:
+          properties-content: |
+            INPUT_1=<OVERWRITTEN-IN-PROPERTIES-INJECT>
+
+    builders:
+
+      - shell: |
+          #!/bin/bash
+          echo '                                                                   '
+          echo ' In pre-build step we tried to overwrite INPUT_1 which came from   '
+          echo ' build parameters like this:                                       '
+          echo '                                                                   '
+          echo '   properties-content: |                                           '
+          echo '     INPUT_1=<OVERWRITTEN-IN-PROPERTIES-INJECT>                    '
+          echo '                                                                   '
+          echo ' As you have seen in log above new value was successfully injected.'
+          echo ' And here is what we have in bash:                                 '
+          echo '                                                                   '
+          echo "     INPUT_1      ${INPUT_1}                                       "
+          echo '                                                                   '
+          echo ' Lets try another inject..                                         '
+          echo '                                                                   '
+
+      - inject:
+          properties-content: |
+            INPUT_1=<OVERWRITTEN-IN-BUILD-INJECT-1>
+            CONCAT_1=$INPUT_1+<CONCAT-1>
+
+      - shell: |
+          #!/bin/bash
+          echo '                                                                   '
+          echo ' In previous step we tried to overwrite INPUT_1 which came from    '
+          echo ' build parameters one more time like this:                         '
+          echo '                                                                   '
+          echo '   properties-content: |                                           '
+          echo '     INPUT_1=<OVERWRITTEN-IN-BUILD-INJECT-1>                       '
+          echo '     CONCAT_1=$INPUT_1+<CONCAT-1>                                  '
+          echo '                                                                   '
+          echo ' As you have seen in log above new value was successfully injected.'
+          echo ' And here is what we have in bash:                                 '
+          echo '                                                                   '
+          echo "     INPUT_1      ${INPUT_1}                                       "
+          echo "     CONCAT_1     ${CONCAT_1}                                      "
+          echo '                                                                   '
+          echo ' Lets try this one more time..                                     '
+          echo '                                                                   '
+
+      - inject:
+          properties-content: |
+            INPUT_1=<OVERWRITTEN-IN-BUILD-INJECT-2>
+            CONCAT_1=$INPUT_1+<CONCAT-2>
+            CONCAT_2=$CONCAT_1+<CONCAT-2>
+
+      - shell: |
+          #!/bin/bash
+          echo '                                                                   '
+          echo ' In previous step we tried to overwrite INPUT_1 which came from    '
+          echo ' build parameters one more time like this:                         '
+          echo '                                                                   '
+          echo '   properties-content: |                                           '
+          echo '     INPUT_1=<OVERWRITTEN-IN-BUILD-INJECT-2>                       '
+          echo '     CONCAT_1=$INPUT_1+<CONCAT-2>                                  '
+          echo '     CONCAT_2=$CONCAT_1+<CONCAT-2>                                 '
+          echo '                                                                   '
+          echo ' We also tried to concatenate INPUT_1 with some other string.      '
+          echo ' We also tried to concatenate CONCAT_1 one more time.              '
+          echo ' build parameters one more time.                                   '
+          echo '                                                                   '
+          echo ' As you have seen in log above new value was successfully injected.'
+          echo ' And here is what we have in bash:                                 '
+          echo '                                                                   '
+          echo "     INPUT_1      ${INPUT_1}                                       "
+          echo "     CONCAT_1     ${CONCAT_1}                                      "
+          echo "     CONCAT_2     ${CONCAT_2}                                      "
+          echo '                                                                   '
+          echo ' Things may become even more unexpected when using injecting of    '
+          echo ' parameters content.                                               '
+
+          echo 'INJ_1=$INPUT_1'                  > tmp.envvars
+          echo 'INJ_2=<INJECTED-FROM_FILE-1>'    >> tmp.envvars
+          echo 'INPUT_1=<INJECTED-FROM-FILE-2>'  >> tmp.envvars
+
+          echo ' We prepared file with 3 lines:                                    '
+
+          set -x
+          cat tmp.envvars | wc -l
+
+      - inject:
+          properties-file: tmp.envvars
+
+      - shell: |
+          #!/bin/bash
+          echo '                                                                   '
+          echo ' In previous step we injected something from "tmp.envvavrs" file.  '
+          echo ' Actually it look like this:                                       '
+          echo '                                                                   '
+
+          cat tmp.envvars
+
+          echo '                                                                   '
+          echo ' As you have seen in log above new value was successfully injected.'
+          echo ' And here is what we have in bash:                                 '
+          echo '                                                                   '
+          echo "     INPUT_1      ${INPUT_1}                                       "
+          echo "     INJ_1        ${INJ_1}                                         "
+          echo "     INJ_2        ${INJ_2}                                         "
+          echo "     CONCAT_1     ${CONCAT_1}                                      "
+          echo "     CONCAT_2     ${CONCAT_2}                                      "
+          echo '                                                                   '
+          echo ' Next you could try to build this job using run_on_node job.       '
+          echo ' - Choose appropriate node and pass params like this:              '
+          echo '     INPUT_1=RUN-ON-NODE-1                                         '
+          echo '     CONCAT_1=RUN-ON-NODE-2                                        '
+          echo '                                                                   '
