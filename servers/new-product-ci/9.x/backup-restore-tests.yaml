@@ -3,6 +3,13 @@
 
     dist: 'ubuntu'
     version-id: '9.x'
+    job-type: 'backup-restore'
+    base-branch: 'stable/mitaka'
+    upgrade-branch: 'stable/mitaka'
+    base-magnet-link: 'magnet:?xt=urn:btih:bfec808dd71ff42c5613a3527733d9012bb1fabc&dn=MirantisOpenStack-9.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-9.0.iso'
+    upgrade-magnet-link: 'magnet:?xt=urn:btih:bfec808dd71ff42c5613a3527733d9012bb1fabc&dn=MirantisOpenStack-9.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-9.0.iso'
+    base-proposed: 'http://packages.fuel-infra.org/repositories/centos/mitaka-centos7/os/x86_64/'
+    upgrade-proposed: 'http://packages.fuel-infra.org/repositories/centos/mitaka-centos7/os/x86_64/'
     node: 'systest'
     timeout: '960'
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
@@ -17,13 +24,13 @@
       This is product-ci upgrade system test chain (9.x -> 9.x).
 
     jobs:
-      - '{version-id}.backup-restore.{upgrade_testgroup}':
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'upgrade_smoke_backup'
           upgrade_testgroup: 'upgrade_smoke_tests'
-      - '{version-id}.backup-restore.{upgrade_testgroup}':
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'upgrade_ceph_ha_backup'
           upgrade_testgroup: 'upgrade_ceph_ha_tests'
-      - '{version-id}.backup-restore.{upgrade_testgroup}':
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'upgrade_detach_plugin_backup'
           upgrade_testgroup: 'upgrade_detach_plugin_tests'
 
@@ -45,15 +52,6 @@
         default: 'ubuntu-latest'
         description: |
           'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
-    - bool:
-        name: ENABLE_PROPOSED
-        default: true
-    - bool:
-        name: ENABLE_SECURITY
-        default: true
-    - bool:
-        name: ENABLE_UPDATES
-        default: true
     - string:
         name: CUSTOM_VERSION
         default: ''
@@ -69,13 +67,13 @@
         name: 'Run upgrade tests'
         condition: COMPLETED
         projects:
-          - name: '9.x.backup-restore.upgrade_smoke_tests'
+          - name: '9.x.backup-restore.ubuntu.upgrade_smoke_tests'
             current-parameters: true
             kill-phase-on: NEVER
-          - name: '9.x.backup-restore.upgrade_ceph_ha_tests'
+          - name: '9.x.backup-restore.ubuntu.upgrade_ceph_ha_tests'
             current-parameters: true
             kill-phase-on: NEVER
-          - name: '9.x.backup-restore.upgrade_detach_plugin_tests'
+          - name: '9.x.backup-restore.ubuntu.upgrade_detach_plugin_tests'
             current-parameters: true
             kill-phase-on: NEVER
 

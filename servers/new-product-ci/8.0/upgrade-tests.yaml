@@ -3,6 +3,13 @@
 
     dist: 'ubuntu'
     version-id: '8.0'
+    job-type: 'upgrades'
+    base-branch: 'stable/7.0'
+    upgrade-branch: 'stable/8.0'
+    base-magnet-link: 'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-mnv.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
+    upgrade-magnet-link: 'magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
+    base-proposed: 'http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64'
+    upgrade-proposed: 'http://packages.fuel-infra.org/repositories/centos/liberty-centos7/proposed/x86_64'
     node: 'systest'
     timeout: '960'
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
@@ -17,16 +24,16 @@
       This is product-ci upgrade system test chain (7.0 -> 8.0).
 
     jobs:
-      - '8.0.upgrades.{dist}.{upgrade_testgroup}':
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'upgrade_smoke_backup'
           upgrade_testgroup: 'upgrade_smoke_tests'
-      - '8.0.upgrades.{dist}.{upgrade_testgroup}':
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'upgrade_ceph_ha_backup'
           upgrade_testgroup: 'upgrade_ceph_ha_tests'
-      - '8.0.upgrades.{dist}.{upgrade_testgroup}':
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'upgrade_detach_plugin_backup'
           upgrade_testgroup: 'upgrade_detach_plugin_tests'
-      - '8.0.upgrades.{dist}.{upgrade_testgroup}':
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'upgrade_ceph_ha_backup'
           upgrade_testgroup: 'upgrade_cloud_no_live_migration'
 
@@ -51,15 +58,6 @@
         default: 'ubuntu-latest'
         description: |
           'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
-    - bool:
-        name: ENABLE_PROPOSED
-        default: true
-    - bool:
-        name: ENABLE_SECURITY
-        default: true
-    - bool:
-        name: ENABLE_UPDATES
-        default: true
     - string:
         name: CUSTOM_VERSION
         default: ''
@@ -74,8 +72,6 @@
         timeout: 1200
 
     builders:
-    - shell: # Get description from MAGNET_LINK variable
-        !include-raw: builders/get_version_from_magnet.sh
     - multijob:
         name: 'Run upgrade tests'
         condition: COMPLETED

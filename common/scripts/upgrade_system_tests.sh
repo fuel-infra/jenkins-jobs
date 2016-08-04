@@ -14,12 +14,13 @@
 #
 #
 #
-#   At the moment tests are executed for Fuel 7.0 to 8.0 upgrade, but
-#   in bright future it will be possible to test any old build  versus
-#   any new one (Jira epic to grasp the whole view: #PROD-4465).
-#   Script sets build environment, executes ${base_repo}  test groups,
-#   then (keeping the same environment) runs ${upgrade_repo} ones. All
-#   of them originate from Fuel QA testing framework.
+#   At the moment tests are executed for Fuel 7.0 to 8.0, 8.0 to 9.x,
+#   upgrade and backup-restore 9.x to 9.x but in bright future it will
+#   be possible to test any old build  versus any new one (Jira epic
+#   to grasp the whole view: #PROD-4465). Script sets build environment,
+#   executes ${base_repo}  test groups, then (keeping the same environment)
+#   runs ${upgrade_repo} ones. All of them originate from Fuel QA testing
+#   framework.
 #
 #   .. envvar::
 #       :var WORKSPACE: build starting location (defaults to '.')
@@ -91,29 +92,58 @@ function set_MU_proposed_repos(){
     # hard-coding URLs (along with long lines) is evil, so split them
     # MIRROR_HOST is injected (comes from guess-mirror macros)
     MIRROR_HOST=${MIRROR_HOST}
-    PROPOSED_7="mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64/"
-    PROPOSED_8="mos-repos/centos/mos8.0-centos7-fuel/proposed/x86_64/"
     REPO="mos-proposed,deb"
-    EXTRA_DEB_7="mos-repos/ubuntu/7.0 mos7.0-proposed main restricted"
-    EXTRA_DEB_8="mos-repos/ubuntu/8.0 mos8.0-proposed main restricted"
-        # form MU repo URLs both for base and upgrade releases
-        # there's no need to apply MOS updates beforehand, 'cause
-        # according to Fuel QA routine, they are always applied
-        if [[ "${ENABLE_PROPOSED}" = true ]]; then
-            case "${1}" in
-                base)
-                    UPDATE_FUEL_MIRROR="http://${MIRROR_HOST}/${PROPOSED_7}"
-                    EXTRA_DEB_REPOS="${REPO} http://${MIRROR_HOST}/${EXTRA_DEB_7}"
-                    ;;
-                upgrade)
-                    UPDATE_FUEL_MIRROR="http://${MIRROR_HOST}/${PROPOSED_8}"
-                    EXTRA_DEB_REPOS="${REPO} http://${MIRROR_HOST}/${EXTRA_DEB_8}"
-            esac
-        fi
 
-        export UPDATE_FUEL_MIRROR
-        export EXTRA_DEB_REPOS
-        export UPDATE_MASTER="true"
+    if [[ "${ENABLE_PROPOSED}" != true ]]; then
+        unset UPDATE_FUEL_MIRROR
+        unset EXTRA_DEB_REPOS
+        return
+    fi
+
+    if [[ "${UPGRADE_FUEL_FROM}" = "9.1" || "${UPGRADE_FUEL_TO}" = "9.1" ]]; then
+      curl -s https://product-ci.infra.mirantis.net/view/9.x/job/9.x.snapshot/lastSuccessfulBuild/artifact/snapshots.sh > "${WORKSPACE}/vars.sh"
+      source "${WORKSPACE}/vars.sh"
+    fi
+
+    FUEL_PROPOSED_7="mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64/"
+    FUEL_PROPOSED_8="mos-repos/centos/mos8.0-centos7-fuel/proposed/x86_64/"
+    FUEL_PROPOSED_9="mos-repos/centos/mos9.0-centos7/snapshots/${MOS_CENTOS_PROPOSED_MIRROR_ID}/x86_64"
+
+    MOS_EXTRA_DEB_7="mos-repos/ubuntu/7.0 mos7.0-proposed main restricted"
+    MOS_EXTRA_DEB_8="mos-repos/ubuntu/8.0 mos8.0-proposed main restricted"
+    MOS_EXTRA_DEB_9="mos-repos/ubuntu/snapshots/${MOS_UBUNTU_MIRROR_ID} mos9.0-proposed main restricted"
+
+    # form MU repo URLs both for base and upgrade releases
+    # there's no need to apply MOS updates beforehand, 'cause
+    # according to Fuel QA routine, they are always applied
+    case "${1}" in
+        base)
+            if [[ "${UPGRADE_FUEL_FROM}" = "7.0" ]]; then
+              UPDATE_FUEL_MIRROR="http://${MIRROR_HOST}/${FUEL_PROPOSED_7}"
+              EXTRA_DEB_REPOS="${REPO} http://${MIRROR_HOST}/${MOS_EXTRA_DEB_7}"
+            elif [[ "${UPGRADE_FUEL_FROM}" = "8.0" ]]; then
+              UPDATE_FUEL_MIRROR="http://${MIRROR_HOST}/${FUEL_PROPOSED_8}"
+              EXTRA_DEB_REPOS="${REPO} http://${MIRROR_HOST}/${MOS_EXTRA_DEB_8}"
+            elif [[ "${UPGRADE_FUEL_FROM}" = "9.1" ]]; then
+              UPDATE_FUEL_MIRROR="http://${MIRROR_HOST}/${FUEL_PROPOSED_9}"
+              EXTRA_DEB_REPOS="${REPO} http://${MIRROR_HOST}/${MOS_EXTRA_DEB_9}"
+            fi
+            ;;
+        upgrade)
+            if [[ "${UPGRADE_FUEL_TO}" = "7.0" ]]; then
+              UPDATE_FUEL_MIRROR="http://${MIRROR_HOST}/${FUEL_PROPOSED_7}"
+              EXTRA_DEB_REPOS="${REPO} http://${MIRROR_HOST}/${MOS_EXTRA_DEB_7}"
+            elif [[ "${UPGRADE_FUEL_TO}" = "8.0" ]]; then
+              UPDATE_FUEL_MIRROR="http://${MIRROR_HOST}/${FUEL_PROPOSED_8}"
+              EXTRA_DEB_REPOS="${REPO} http://${MIRROR_HOST}/${MOS_EXTRA_DEB_8}"
+            elif [[ "${UPGRADE_FUEL_TO}" = "9.1" ]]; then
+              UPDATE_FUEL_MIRROR="http://${MIRROR_HOST}/${FUEL_PROPOSED_9}"
+              EXTRA_DEB_REPOS="${REPO} http://${MIRROR_HOST}/${MOS_EXTRA_DEB_9}"
+            fi
+    esac
+    export UPDATE_FUEL_MIRROR
+    export EXTRA_DEB_REPOS
+    export UPDATE_MASTER="true"
 }
 
 # to avoid huge images uploading magnet links are used
@@ -178,7 +208,7 @@ function system_tests_wrapper(){
             iso_path="${BASE_ISO_PATH}"
             repo_dir="${BASE_REPO_DIR}"
             repo_branch="${BASE_REPO_BRANCH}"
-            keep_build_env="-K"
+            unset keep_build_env
             FUEL_PROPOSED_REPO_URL="${BASE_FUEL_PROPOSED_REPO_URL}"
             ;;
         upgrade)
