@@ -9,24 +9,58 @@ set -o xtrace
 ############################
 
 get_deb_snapshot() {{
-    # Debian repos may have format "URL DISTRO COMPONENT1 [COMPONENTN]"
-    # Remove quotes and assign values to variables
-    read repo_url dist_name components <<< $(tr -d \" <<< "${{@}}")
+    # Remove quotes from input argument(s)
+    local INPUT
+    INPUT=( $(tr -d \" <<< "${{@}}") )
+    # Ubuntu repos may have format "[deb] URL DISTRO COMPONENT1 [COMPONENTN][,PRIORITY]"
+    local deb_prefix=''
+    if [ "${{INPUT[0]}}" = "deb" ]; then
+        deb_prefix='deb '
+        unset INPUT[0]
+    fi
+    # Assign values to variables.
+    # The last variable - 'components' - will also contain priority if any, but
+    # it does not matter here, it will be returned as is
+    read -r repo_url dist_name components <<< "${{INPUT[@]}}"
     # Remove trailing slash
     repo_url=${{repo_url%/}}
-    local snapshot=$(curl -fLsS "${{repo_url}}.target.txt" | head -1)
-    echo "${{repo_url%/*}}/${{snapshot}}${{dist_name:+ ${{dist_name}}}}${{components:+ ${{components}}}}"
+    # Cut version
+    repo_version=${{repo_url##*/}}
+    repo_url=${{repo_url%/*}}
+    # Get snapshot
+    local snapshot=$(curl -fLsS "${{repo_url}}/snapshots/${{repo_version}}-latest.target.txt" | head -1)
+    echo "${{deb_prefix}}${{repo_url}}/snapshots/${{snapshot}} ${{dist_name}} ${{components}}"
 }}
 
 get_rpm_snapshot() {{
-    # Remove quotes
-    local repo_url=$(tr -d \" <<< "${{1}}")
+    # Remove quotes from input argument
+    local INPUT
+    INPUT=$(tr -d \" <<< "${{1}}")
+    # Centos repos may have format "[NAME,]URL[,PRIORITY]"
+    read -r repo_name repo_url priority <<< "${{INPUT//,/ }}"
+    if [ -z "${{repo_url}}" ]; then
+        # Repo does not have extra parameters
+        repo_url=${{repo_name}}
+        unset repo_name
+    elif [ -z "${{priority}}" ]; then
+        # Two parameters... Do we have repo name or priority?
+        if [[ "${{repo_url}}" =~ ^[0-9]+$ ]]; then
+            # repo_url contain only numbers - it is priority
+            priority=${{repo_url}}
+            repo_url=${{repo_name}}
+            unset repo_name
+        fi
+    fi
     # Remove trailing slash
-    repo_url=${{repo_url%/}}
+    repo_url="${{repo_url%/}}"
     # Remove architecture
+    repo_url="${{repo_url%/*}}"
+    # Cut component
+    repo_component="${{repo_url##*/}}"
     repo_url=${{repo_url%/*}}
-    local snapshot=$(curl -fLsS "${{repo_url}}.target.txt" | head -1)
-    echo "${{repo_url%/*}}/${{snapshot}}/x86_64"
+    # Get snapshot
+    local snapshot="$(curl -fLsS "${{repo_url}}/snapshots/${{repo_component}}-latest.target.txt" | head -1)"
+    echo "${{repo_name:+${{repo_name}},}}${{repo_url}}/snapshots/${{snapshot}}/x86_64${{priority:+,${{priority}}}}"
 }}
 
 join() {{
@@ -106,12 +140,17 @@ fi
 # Extra repos containing build dependecies
 case ${{PKG_TYPE}} in
     deb)
-        export EXTRAREPO=$(get_deb_snapshot http://${{MIRROR_HOST}}/{mos-deb-repo-path} {mos-deb-dist-name} main restricted)
+        EXTRAREPO="$(get_deb_snapshot http://${{MIRROR_HOST}}/{mos-deb-repo-path} {mos-deb-dist-name} main restricted)"
+        EXTRAREPO="${{EXTRAREPO}}|$(get_deb_snapshot http://${{MIRROR_HOST}}/{mos-deb-repo-path} {mos-deb-dist-name}-updates main restricted)"
+        EXTRAREPO="${{EXTRAREPO}}|$(get_deb_snapshot http://${{MIRROR_HOST}}/{mos-deb-repo-path} {mos-deb-dist-name}-proposed main restricted)"
         ;;
     rpm)
-        export EXTRAREPO="deps,$(get_rpm_snapshot http://${{MIRROR_HOST}}/{mos-rpm-repo-path}/os/x86_64)"
+        EXTRAREPO="mos-base,$(get_rpm_snapshot http://${{MIRROR_HOST}}/{mos-rpm-repo-path}/os/x86_64)"
+        EXTRAREPO="${{EXTRAREPO}}|mos-updates,$(get_rpm_snapshot http://${{MIRROR_HOST}}/{mos-rpm-repo-path}/updates/x86_64)"
+        EXTRAREPO="${{EXTRAREPO}}|mos-proposed,$(get_rpm_snapshot http://${{MIRROR_HOST}}/{mos-rpm-repo-path}/proposed/x86_64)"
         ;;
 esac
+export EXTRAREPO
 
 ############################
 # Build package
