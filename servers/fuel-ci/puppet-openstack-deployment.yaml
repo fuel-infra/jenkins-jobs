@@ -4,6 +4,8 @@
     # testgroup
     #     Test group used as --group parameter in system_test.sh
     #     (ex, smoke_neutron)
+    # ubuntu_dist
+    #     'trusty' or 'xenial'
     # mos
     #     MOS version
     # projectpackage
@@ -81,6 +83,7 @@
       - inject:
           # deployment test variables
           properties-content: |
+            UBUNTU_DIST={ubuntu_dist}
             OPENSTACK_RELEASE={dist}
             TEST_GROUP={testgroup}
             UPDATE_FUEL=true
@@ -137,6 +140,7 @@
 
 - project:
     name: 'Mitaka fuel-library puppet-openstack deployment tests'
+    ubuntu_dist: 'trusty'
     projectpackage: 'fuel-library9.0'
     deb-mirror-base-name: '9.0 mos9.0'
     rpm-mirror-base-name: 'mos9.0-centos7'
@@ -166,6 +170,7 @@
 
 - project:
     name: 'Master fuel-library puppet-openstack deployment tests'
+    ubuntu_dist: 'xenial'
     projectpackage: 'fuel-library10.0'
     deb-mirror-base-name: 'master mos-master'
     rpm-mirror-base-name: 'mos-master-centos7'

@@ -4,6 +4,8 @@
     # version-id
     #     Versioned identificator of the job.
     #     For example: ``8.0``, ``8.0-kilo``, ``master``.
+    # ubuntu_dist
+    #     'trusty' or 'xenial'
     # dist
     #     OPENSTACK_RELEASE variable (ex, 'Ubuntu').
     # testgroup
@@ -88,6 +90,7 @@
       - inject:
           # deployment variables
           properties-content: |
+            UBUNTU_DIST={ubuntu_dist}
             OPENSTACK_RELEASE={dist}
             TEST_GROUP={testgroup}
             UPDATE_FUEL=true
