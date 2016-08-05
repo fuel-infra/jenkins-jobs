@@ -19,21 +19,22 @@ mkdir -p "${ARTS_DIR}"
 if [ "${ISO_TYPE}" = "custom" ]; then
   export DEPS_DIR="${BUILD_DIR}/deps"
   rm -rf "${DEPS_DIR}"
-
-  # Checking gerrit commits for fuel-main
-  if [ "${FUELMAIN_COMMIT}" != "master" ] ; then
-      git checkout "${FUELMAIN_COMMIT}"
-  fi
-
-  # Checking gerrit commits for fuel-main
-  if [ "${FUELMAIN_GERRIT_COMMIT}" != "none" ] ; then
-    for commit in ${FUELMAIN_GERRIT_COMMIT} ; do
-      # shellcheck disable=SC2015
-      git fetch https://review.openstack.org/openstack/fuel-main "${commit}" && \
-          git cherry-pick FETCH_HEAD || false
-    done
-  fi
 fi
+
+# Checking gerrit commits for fuel-main
+if [ "${FUELMAIN_COMMIT}" != "master" ] ; then
+  git checkout "${FUELMAIN_COMMIT}"
+fi
+
+# Checking gerrit commits for fuel-main
+if [ "${FUELMAIN_GERRIT_COMMIT}" != "none" ] ; then
+  for commit in ${FUELMAIN_GERRIT_COMMIT} ; do
+    # shellcheck disable=SC2015
+    git fetch https://review.openstack.org/openstack/fuel-main "${commit}" && \
+        git cherry-pick FETCH_HEAD || false
+  done
+fi
+
 ############
 
 ############### Get MIRROR URLs ###############
