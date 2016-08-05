@@ -190,6 +190,7 @@
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
 
       - '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
           dist: ubuntu
@@ -197,3 +198,4 @@
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
