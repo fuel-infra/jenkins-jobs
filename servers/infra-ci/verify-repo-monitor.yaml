@@ -35,11 +35,6 @@
                 - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
-          skip-vote:
-            successful: true
-            failed: true
-            unstable: true
-            notbuilt: true
 
     builders:
       - shell: 'cd python && tox -v -e {tox-test}'
