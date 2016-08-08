@@ -13,6 +13,6 @@
     fuel-branch-8_0: stable/8.0
     fuel-branch-9_0: stable/mitaka
     fuel-branch-10_0: master
-
     username-plugin-publisher: 'plugin_publisher'
     ssh-creds-plugin-publisher: '33beb79-328d-48ed-9419-4ae8f8c8ee84'
+    timer: ''
