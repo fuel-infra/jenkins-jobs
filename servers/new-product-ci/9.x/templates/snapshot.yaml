@@ -21,7 +21,7 @@
     - main-git:
         reponame: 'fuel-qa'
         repobranch: 'stable/mitaka'
-        basedir: 'fuel-qa'
+        basedir: ''
 
     builders:
 
@@ -31,6 +31,10 @@
           MAGNET_LINK={magnet-link}
 
     - 9x-make-snapshots
+    - inject-properties-file:
+        properties-file: 'snapshots.params'
+    - write-description:
+        description-string: $CUSTOM_VERSION
 
     - multijob:
         name: 'Run tests'
