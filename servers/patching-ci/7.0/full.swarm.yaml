@@ -43,6 +43,9 @@
           name: CUSTOM_VERSION
           default: 'MU'
           description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+      - string:
+          name: FUEL_QA_COMMIT
+          default: 'origin/stable-mu/7.0'
     publishers:
       - description-setter:
           regexp: "'Description string: (.*)'"
