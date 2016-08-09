@@ -31,11 +31,18 @@
           testgroup: 'upgrade_ceph_ha_backup'
           upgrade_testgroup: 'upgrade_ceph_ha_tests'
       - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
-          testgroup: 'upgrade_detach_plugin_backup'
-          upgrade_testgroup: 'upgrade_detach_plugin_tests'
-      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'upgrade_ceph_ha_backup'
           upgrade_testgroup: 'upgrade_cloud_no_live_migration'
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
+          testgroup: 'upgrade_plugin_backup'
+          upgrade_testgroup: 'upgrade_plugin_tests'
+          properties: |
+            EXAMPLE_V3_PLUGIN_REMOTE_URL=https://product-ci.infra.mirantis.net/view/All/job/9.0.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example_v3-3.0-3.0.0-1.noarch.rpm
+            KEYSTONE_PASSWORD=newpass
+            SLAVE_NODE_MEMORY=3072
+            UPDATE_MASTER=true
+            UPGRADE_FUEL_FROM=7.0
+            UPGRADE_FUEL_TO=8.0
 
 
 - job:
@@ -82,7 +89,7 @@
           - name: '8.0.upgrades.ubuntu.upgrade_ceph_ha_tests'
             current-parameters: true
             kill-phase-on: NEVER
-          - name: '8.0.upgrades.ubuntu.upgrade_detach_plugin_tests'
+          - name: '8.0.upgrades.ubuntu.upgrade_plugin_tests'
             current-parameters: true
             kill-phase-on: NEVER
           - name: '8.0.upgrades.ubuntu.upgrade_cloud_no_live_migration'
