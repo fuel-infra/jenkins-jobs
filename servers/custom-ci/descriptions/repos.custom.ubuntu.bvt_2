@@ -1,0 +1,37 @@
+<h3>Build verification test for Ubuntu without using Fuel ISO</h3>
+<p>
+Test will run using the URL to the fuel-release package and repositories configuration
+provided by the user in a form of YAML files both for RPM and DEB repositories.
+Without these files job will be failed.
+</p>
+<h4>Configuration how-to</h4>
+<pre style="font-size: 12px">
+FUEL_RELEASE_URL - URL to the fuel-release package. It can contain wildcards in the name
+of the file supported by wget, e.g.:
+  http://mirror.fuel-infra.org/mos-repos/centos/mos-master-centos7/os/x86_64/Packages/fuel-release-*.noarch.rpm
+
+FUEL_RELEASE_PATH - path where downloaded fuel-release package is put to.
+
+rpm_repos.yaml, deb_repos.yaml - YAML configuration files for both RPM and DEB repositories
+respectively.
+
+fuel_qa_gerrit_commit - list of fuel-qa gerrit patches to cherry-pick separated by space.
+</pre>
+<h4>Test description</h4>
+<pre style="font-size: 10px">
+
+    Deploy ceph HA with RadosGW for objects
+
+    Scenario:
+
+            Create cluster with Neutron
+            Add 3 nodes with controller role
+            Add 3 nodes with compute and ceph-osd role
+            Deploy the cluster
+            Check ceph status
+            Run OSTF tests
+            Check the radosqw daemon is started
+
+    Duration 90m Snapshot ceph_rados_gw
+</pre>
+

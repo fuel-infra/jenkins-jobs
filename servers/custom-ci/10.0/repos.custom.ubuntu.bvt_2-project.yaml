@@ -1,0 +1,12 @@
+- project:
+    name: '10.0 repos custom bvt2'
+
+    mos: 10.0
+    dist: ubuntu
+    testgroup: bvt_2
+    fuel-qa-repobranch: master
+    fuel-release-url: http://mirror.fuel-infra.org/mos-repos/centos/mos-master-centos7/os/x86_64/Packages/fuel-release-*.noarch.rpm
+    venv-path: /home/jenkins/qa-venv-master-3.0
+
+    jobs:
+    - '{mos}.repos.custom.{dist}.{testgroup}'
