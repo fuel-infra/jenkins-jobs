@@ -2,10 +2,10 @@
       type: list
       name: 'Current'
       jobs:
-        - 10.0-mitaka.all
-        - 10.0-mitaka.main.ubuntu.bvt_2
-        - 10.0-mitaka.main.ubuntu.smoke_neutron
-        - 10.0-mitaka.test_all
+        - 10.0.all
+        - 10.0.main.ubuntu.bvt_2
+        - 10.0.main.ubuntu.smoke_neutron
+        - 10.0.test_all
         - 9.x.snapshot
         - 9.x.main.ubuntu.bvt_2
         - 9.x.main.ubuntu.smoke_neutron
