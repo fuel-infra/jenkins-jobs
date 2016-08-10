@@ -261,7 +261,8 @@
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build-timer':
           timer: 'H 4 * * *'
-      - '{version}.fuel-plugin.{plugin_name}.deploy-test'
+      - '{version}.fuel-plugin.{plugin_name}.deploy-test':
+          timeout: 720
 
 - project:
     name: stacklight-runner
