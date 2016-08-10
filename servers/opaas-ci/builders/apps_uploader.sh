@@ -9,11 +9,10 @@
 #               python-tox zip build-essential libssl-dev libffi-dev
 
 set -ex
-# FIXME remove this line after https://bugs.launchpad.net/mos/+bug/1594853
-export MURANO_REPO_URL='http://bug-1594853.com/'
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 WORKSPACE="${WORKSPACE:-${DIR}}"
+DEFAULT_MURANO_REPO_URL="${MURANO_REPO_URL:-http://storage.apps.openstack.org/}"
 #
 VENV_PATH_DEFAULT="${WORKSPACE}/../murano_test_venv/"
 VENV_PATH="${VENV_PATH:-${VENV_PATH_DEFAULT}}"
@@ -30,9 +29,6 @@ APP_PREFIX="${APP_PREFIX:-io.test_upload.}"
 APPS_ROOT="${APPS_ROOT:-/murano-apps/}"
 APPS_DIR="${WORKSPACE}/${APPS_ROOT}/"
 #
-# test, to be run
-RUN_TEST="${RUN_TEST:-none}"
-#
 # Upload app's to OpenStack?
 UPLOAD_TO_OS="${UPLOAD_TO_OS:-false}"
 #
@@ -42,6 +38,11 @@ COMMIT_LIST="${COMMIT_LIST:-none}"
 GIT_REPO="${GIT_REPO:-openstack/ci-cd-pipeline-app-murano}"
 # List of murano app catalogs, to be archived and uploaded into OS
 #PACKAGES_LIST="Puppet SystemConfig OpenLDAP Gerrit Jenkins"
+
+# List of additional packages which will be imported from
+# default murano catalog 'http://apps.openstack.org/'
+#ADDITIONAL_PACKAGES="com.example.docker.DockerTomcat"
+
 
 
 # import default packages_list, if exist
@@ -102,6 +103,7 @@ if [[ "${UPLOAD_TO_OS}" == true ]] ; then
     fi
     source "${VENV_PATH}/bin/activate"
     echo "LOG: murano version: $(murano --version)"
+
     # Some app's have external dependency's
     # - so we should have ability to clean-up them also
     if [[ "${APPS_CLEAN}" == true ]]; then
@@ -125,19 +127,26 @@ if [[ "${UPLOAD_TO_OS}" == true ]] ; then
     done
     # via client and then upload it without updating its dependencies
     echo "LOG: importing new packages..."
+    # We need to be sure, that we load package's only from local files,
+    # w\o any upstream dep's. So,use dirty hack to disable dep's resolving on fly
+    export MURANO_REPO_URL='http://example.com/'
     for pkg_long in ${PACKAGES_LIST}; do
         pkg=$(basename "${pkg_long}")
         art_name="${ARTIFACTS_DIR}/${APP_PREFIX}${pkg}.zip"
-        murano package-import "${art_name}" --exists-action s
+        murano package-import "${art_name}" --exists-action u
     done
+    # Switch-back do default repo:
+    export MURANO_REPO_URL="${DEFAULT_MURANO_REPO_URL}"
+    # upload additional packages if needed
+    if [ -n "${ADDITIONAL_PACKAGES}" ]; then
+        echo "LOG: importing additional packages..."
+        for pkg_fqdn in ${ADDITIONAL_PACKAGES}; do
+            murano package-import "${pkg_fqdn}" --exists-action u
+        done
+    fi
     echo "LOG: importing done, final package list:"
     murano package-list --owned
     deactivate
-fi
-
-if [[ "${RUN_TEST}" != "none" ]] ; then
-    echo "LOG: trying run openstack deployment..."
-    tox -v -e "${RUN_TEST}"
 fi
 
 echo FINISHED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" >> "${ARTIFACTS_DIR}/ci_status_params.txt"

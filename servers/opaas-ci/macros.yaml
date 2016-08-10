@@ -17,13 +17,41 @@
     scm:
       - git:
           wipe-workspace: true
-          basedir: '{project-basedir}'
+          skip-tag: true
+          basedir: ''
           branches:
             - $GERRIT_BRANCH
           choosing-strategy: gerrit
           refspec: $GERRIT_REFSPEC
           url: 'ssh://murano-ci-cd-bot@review.openstack.org:29418/{project-name}'
+#          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
           credentials-id: '{credentials-id}'
+
+- trigger:
+    name: review-openstack-org_on_comment
+    triggers:
+      - gerrit:
+          silent: false
+          server-name: 'review.openstack.org'
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: '{project-name}'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{project-branch}'
+          trigger-on:
+            - comment-added-contains-event:
+                comment-contains-value: '{comment-contains-value-regexp}'
+          silent-start: false
+          start-message: "Build Started. Logs will be avaible after finish"
+          override-votes: true
+          gerrit-build-started-verified-value: 0
+          skip-vote:
+            successful: false
+            failed: '{failed_vote}'
+            unstable: true
+            notbuilt: true
+          custom-url: '* $JOB_NAME http://ci-logs.fuel-infra.org/opaas-ci/logs/$LOG_PATH'
 
 - trigger:
     name: review-openstack-org

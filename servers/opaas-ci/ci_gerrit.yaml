@@ -18,17 +18,15 @@
             #
             APP_PREFIX=io.murano.opaas
             APPS_ROOT=murano-apps/
-            RUN_TEST=deploy_cicd_apps
     scm:
       - review-openstack-org:
-          skip-tag: true
-          project-basedir: ''
-          project-name: '{project-name}'
+          project-name: 'openstack/ci-cd-pipeline-app-murano'
+          project-branch: 'master'
           credentials-id: '{ssh-creds-openstack-ci-jenkins}'
     triggers:
       - review-openstack-org:
-          project-name: '{project-name}'
-          project-branch: '{project-branch}'
+          project-name: 'openstack/ci-cd-pipeline-app-murano'
+          project-branch: 'master'
           comment-contains-value-regexp: '{gerrit_trigger_on_recheck_regexp}'
           failed_vote: true
     wrappers:
@@ -44,6 +42,11 @@
           properties-content: '$ADDITIONAL_PARAMETERS'
       - shell:
           !include-raw-escape: builders/apps_uploader.sh
+      - shell: |
+          #!/bin/bash -xe
+          # remove export, after #LP1607791 fix
+          export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:${{PATH}}
+          tox -v -e deploy_cicd_apps
     publishers:
       - console-log
       - opaas-log
@@ -57,16 +60,15 @@
     concurrent: true
     scm:
       - review-openstack-org:
-          skip-tag: true
-          project-basedir: ''
-          project-name: '{project-name}'
+          project-name: 'openstack/ci-cd-pipeline-app-murano'
+          project-branch: 'master'
           credentials-id: '{ssh-creds-openstack-ci-jenkins}'
     triggers:
       - review-openstack-org:
-          project-name: '{project-name}'
-          project-branch: '{project-branch}'
+          project-name: 'openstack/ci-cd-pipeline-app-murano'
+          project-branch: 'master'
           comment-contains-value-regexp: '{gerrit_trigger_on_recheck_regexp}'
-          failed_vote: false
+          failed_vote: true
     wrappers:
       - timeout:
           timeout: 30
@@ -78,10 +80,67 @@
       - inject_log_path
       - shell: |
           #!/bin/bash
-          printenv |sort -u
           # remove export, after #LP1607791 fix
           export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:${{PATH}}
           tox -v -e linters
     publishers:
       - console-log
       - opaas-log
+
+- job-template:
+    name: '{name}-{project-branch}-gerrit-advanced-check'
+    node: '{node_label}'
+    properties:
+      - heavy-job:
+          weight: '{weight}'
+    concurrent: false
+    parameters:
+      - text:
+          name: ADDITIONAL_PARAMETERS
+          default: |
+            OS_IMAGE={rc_os_image}
+            OS_DOCKER_IMAGE={rc_os_docker_image}
+            UPLOAD_TO_OS=true
+            APPS_CLEAN=true
+            OS_CLEANUP_BEFORE=true
+            OS_CLEANUP_AFTER=true
+            #
+            GIT_REPO=openstack/ci-cd-pipeline-app-murano
+            #
+            APP_PREFIX=io.murano.opaas
+            APPS_ROOT=murano-apps/
+            #
+            ADDITIONAL_PACKAGES=com.example.docker.DockerTomcat
+    scm:
+      - review-openstack-org:
+          project-name: 'openstack/ci-cd-pipeline-app-murano'
+          project-branch: 'master'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+    triggers:
+      - review-openstack-org_on_comment:
+          project-name: 'openstack/ci-cd-pipeline-app-murano'
+          project-branch: 'master'
+          comment-contains-value-regexp: '{gerrit_trigger_advanced_check_regexp}'
+          failed_vote: true
+    wrappers:
+      - timeout:
+          timeout: 300
+      - ansicolor:
+            colormap: xterm
+      - timestamps
+      - ssh-creds-slave-jenkins
+    builders:
+      - inject_log_path
+      - inject:
+          properties-content: '$ADDITIONAL_PARAMETERS'
+      - shell:
+          !include-raw-escape: builders/apps_uploader.sh
+      - shell: |
+          #!/bin/bash -xe
+          # remove export, after #LP1607791 fix
+          export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:${{PATH}}
+          tox -v -e run_cicd_flow
+    publishers:
+      - console-log
+      - opaas-log
+

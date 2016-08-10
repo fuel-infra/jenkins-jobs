@@ -9,6 +9,9 @@
       - '{name}-custom-run':
           node_label: 'os_mitaka'
           weight: 2
+      - '{name}-{project-branch}-gerrit-advanced-check':
+          node_label: 'os_mitaka'
+          weight: 2
       - '{name}-{project-branch}-gerrit-linters':
           node_label: 'os_mitaka'
           weight: 1

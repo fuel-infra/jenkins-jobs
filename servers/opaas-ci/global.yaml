@@ -7,10 +7,13 @@
       numToKeep: -1
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
-
-    gerrit_trigger_on_recheck_regexp: '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck'
+    project-name: 'openstack/ci-cd-pipeline-app-murano'
+    project-branch: 'master'
+    gerrit_trigger_on_recheck_regexp: '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck$'
+    gerrit_trigger_advanced_check_regexp: '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck_advanced_check'
     ssh-creds-openstack-ci-jenkins: 'ad783ce0-8f8f-465d-b4d3-dbffd75444b1'
 
     packages_list: "Puppet SystemConfig OpenLDAP Gerrit Jenkins Zuul Nodepool CiCdEnvironment CiCdUtils"
     # openstack access configuration and etc
     rc_os_image: 'ubuntu_14_murano-agent_upd'
+    rc_os_docker_image: 'ubuntu_14_murano-agent_docker'

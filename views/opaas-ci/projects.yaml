@@ -5,6 +5,7 @@
       - cicd_pipe-custom-run
       - cicd_pipe-master-gerrit-check
       - cicd_pipe-master-gerrit-linters
+      - cicd_pipe-master-gerrit-advanced-check
     columns:
       - status
       - weather
