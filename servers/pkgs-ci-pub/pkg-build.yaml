@@ -13,6 +13,31 @@
           <li> system test using just built packages
         </ul>
 
+    properties:
+      - inject:
+          properties-content: |
+            PROJECT_NAME={project-name}
+            PROJECT_VERSION={project-version}
+
+            IS_UPDATES={is_updates}
+
+            DIST={distro}
+            PKG_TYPE={pkg_type}
+
+            REMOTE_REPO_HOST={repo-host}
+            REPO_REQUEST_PATH_PREFIX={cr-path-prefix}
+
+            SRC_PROJECT_PATH=openstack
+            SPEC_PROJECT_PATH=openstack-build
+            SPEC_PROJECT_SUFFIX=-build
+            SPEC_PREFIX_PATH={spec_path_prefix}
+
+            RPM_REPO_PATH={rpm-repo-path}/os/x86_64/
+            DEB_REPO_PATH={deb-repo-path}
+            DEB_DIST_NAME={deb-dist-name}
+
+            UBUNTU_DIST={ubuntu_distro}
+
     scm:
       - perestroika
       - openstack-gerrit:

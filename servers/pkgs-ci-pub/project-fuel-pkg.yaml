@@ -2,8 +2,8 @@
 # Project definitions
 #
 
-- fuel_template: &fuel_template
-    name: ''
+- project:
+    name: 'fuel-pkg'
 
     project-name: 'openstack'
 
@@ -41,18 +41,10 @@
     install-node: 'install-node'
     systest-node: 'systest'
 
-    jobs:
-      - '{project-version}-{name}-build-{distro}'
-      - '{project-version}-{name}-publish-{distro}'
-      - '{project-version}-{name}-install-{distro}'
-      - '{project-version}-{name}-repotest-{distro}'
-      - '{project-version}-{name}-systest-{distro}'
-
-- project:
-    name: 'fuel-pkg'
-    <<: *fuel_template
     project-version:
       - 'master':
+          centos_distro: 'centos7'
+          ubuntu_distro: 'xenial'
           # Enables patching workflow
           is_updates: 'false'
           # Build requirements
@@ -60,6 +52,8 @@
           mos-deb-repo-path: '/mos-repos/ubuntu/master'
           mos-rpm-repo-path: '/mos-repos/centos/mos-master-centos7'
       - 'mitaka':
+          centos_distro: 'centos7'
+          ubuntu_distro: 'trusty'
           # Enables patching workflow
           is_updates: 'false'
           # Build requirements
@@ -67,20 +61,43 @@
           mos-deb-repo-path: '/mos-repos/ubuntu/9.0'
           mos-rpm-repo-path: '/mos-repos/centos/mos9.0-centos7'
       - 'liberty':
+          centos_distro: 'centos7'
+          ubuntu_distro: 'trusty'
           # Enables patching workflow
           is_updates: 'true'
           # Build requirements
           mos-deb-dist-name: 'mos8.0'
           mos-deb-repo-path: '/mos-repos/ubuntu/8.0'
           mos-rpm-repo-path: '/mos-repos/centos/mos8.0-centos7-fuel'
-    distro:
-      - centos7:
-          os: centos
-          openstack_release: 'ubuntu'
-          pkg_type: 'rpm'
-          spec_path_prefix: '/rpm'
-      - trusty:
-          os: ubuntu
-          openstack_release: 'ubuntu'
-          pkg_type: 'deb'
-          spec_path_prefix: '/trusty'
+
+    jobs:
+      - '{project-version}-{name}-centos'
+      - '{project-version}-{name}-ubuntu'
+
+- job-group:
+    name: '{project-version}-{name}-centos'
+    os: 'centos'
+    distro: '{centos_distro}'
+    openstack_release: 'ubuntu'
+    pkg_type: 'rpm'
+    spec_path_prefix: '/{distro}'
+    jobs:
+      - '{project-version}-{name}-build-{distro}'
+      - '{project-version}-{name}-publish-{distro}'
+      - '{project-version}-{name}-install-{distro}'
+      - '{project-version}-{name}-repotest-{distro}'
+      - '{project-version}-{name}-systest-{distro}'
+
+- job-group:
+    name: '{project-version}-{name}-ubuntu'
+    os: 'ubuntu'
+    distro: '{ubuntu_distro}'
+    openstack_release: 'ubuntu'
+    pkg_type: 'deb'
+    spec_path_prefix: '/{distro}'
+    jobs:
+      - '{project-version}-{name}-build-{distro}'
+      - '{project-version}-{name}-publish-{distro}'
+      - '{project-version}-{name}-install-{distro}'
+      - '{project-version}-{name}-repotest-{distro}'
+      - '{project-version}-{name}-systest-{distro}'
