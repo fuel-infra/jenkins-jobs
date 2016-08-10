@@ -34,12 +34,28 @@ function update_devops () {
         echo "Install with custom requirements"
         echo "${VENV_REQUIREMENTS}" >"${WORKSPACE}/venv-requirements.txt"
     else
-        local REQUIREMENTS_URL="https://raw.githubusercontent.com/openstack/${REPO_NAME}/${BRANCH}/fuelweb_test/requirements.txt"
-        if ! curl -fsS "${REQUIREMENTS_URL}" > "${WORKSPACE}/venv-requirements.txt"; then
+        # NOTE: there are some limitations on fuel-qa repo and they promise that they will never duplicate
+        #       requirements in these files. If this happens, then pip will error on duplicated lines.
+
+        local SOURCES_BASE_URL="https://raw.githubusercontent.com/openstack/${REPO_NAME}/${BRANCH}"
+
+        # fetching requirements for fuel-qa with devops version
+        local DEVOPS_REQUIREMENTS_URL="${SOURCES_BASE_URL}/fuelweb_test/requirements-devops-source.txt"
+        if ! curl -fsS "${DEVOPS_REQUIREMENTS_URL}" > "${WORKSPACE}/venv-requirements.txt"; then
+            echo "Problem with downloading devops requirements"
+            exit 1
+        fi
+
+        # fetching requirements for fuel-qa itself
+        local REQUIREMENTS_URL="${SOURCES_BASE_URL}/fuelweb_test/requirements.txt"
+        if ! curl -fsS "${REQUIREMENTS_URL}" >> "${WORKSPACE}/venv-requirements.txt"; then
             echo "Problem with downloading requirements"
             exit 1
         fi
     fi
+
+    # Upgrade setuptools before pip
+    pip install setuptools --upgrade
 
     # Upgrade pip inside virtualenv
     pip install pip --upgrade
