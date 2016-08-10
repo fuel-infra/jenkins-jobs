@@ -37,6 +37,8 @@
             DEB_DIST_NAME={deb-dist-name}
 
             UBUNTU_DIST={ubuntu_distro}
+            # FIXME: Use upstream Ubuntu mirror
+            MIRROR_UBUNTU=deb http://archive.ubuntu.com/ubuntu {ubuntu_distro} main universe multiverse|deb http://archive.ubuntu.com/ubuntu {ubuntu_distro}-updates main universe multiverse|deb http://archive.ubuntu.com/ubuntu {ubuntu_distro}-security main universe multiverse
 
     scm:
       - perestroika
