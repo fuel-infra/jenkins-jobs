@@ -16,6 +16,8 @@
             # Required if REBUILD_ISO is true
             MIRROR_MOS_UBUNTU_ROOT={mos-deb-repo-path}
             MIRROR_MOS_UBUNTU_SUITE={mos-deb-dist-name}
+            # Required by guess-mirror
+            UBUNTU_DIST={ubuntu_distro}
     parameters:
       - string:
           name: EXTRA_DEB_REPOS
