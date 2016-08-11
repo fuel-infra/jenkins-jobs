@@ -18,10 +18,6 @@
     deb-origin-release: 'OpenStack'
     deb-origin-test: 'testing'
 
-    deb-dist-name: '{project-version}-{distro}'
-    deb-repo-path: '/repositories/ubuntu/{project-version}-{distro}'
-    rpm-repo-path: '/repositories/centos/{project-version}-{distro}'
-
     repo-base-path: '/home/jenkins/pubrepos'
 
     pkg-sign-key: '1FA22B08'
@@ -80,7 +76,10 @@
     distro: '{centos_distro}'
     openstack_release: 'ubuntu'
     pkg_type: 'rpm'
-    spec_path_prefix: '/{distro}'
+    spec_path_prefix: '/{centos_distro}'
+    deb-dist-name: '{project-version}-{ubuntu_distro}'
+    deb-repo-path: '/repositories/ubuntu/{project-version}-{ubuntu_distro}'
+    rpm-repo-path: '/repositories/centos/{project-version}-{centos_distro}'
     jobs:
       - '{project-version}-{name}-build-{distro}'
       - '{project-version}-{name}-publish-{distro}'
@@ -94,7 +93,10 @@
     distro: '{ubuntu_distro}'
     openstack_release: 'ubuntu'
     pkg_type: 'deb'
-    spec_path_prefix: '/{distro}'
+    spec_path_prefix: '/{ubuntu_distro}'
+    deb-dist-name: '{project-version}-{ubuntu_distro}'
+    deb-repo-path: '/repositories/ubuntu/{project-version}-{ubuntu_distro}'
+    rpm-repo-path: '/repositories/centos/{project-version}-{centos_distro}'
     jobs:
       - '{project-version}-{name}-build-{distro}'
       - '{project-version}-{name}-publish-{distro}'
