@@ -30,30 +30,23 @@
     # weight
     #     Job weight
     name: '7.0.{test-type}.{dist}.{upgrade_testgroup}'
+    description: '{description}'
+
     block-downstream: false
     block-upstream: false
-    builders:
-    - inject: # default env variables
-        properties-content: |
-          VENV_PATH={venvpath}
-          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-    - inject: # overrides to job-group properties
-        properties-content: '{job-group-properties}'
-    - inject: # overrides to job properties
-        properties-content: '{properties}'
-    - shell:
-        !include-raw-escape: 'scripts/run_upgrade_system_test.sh'
-    - shell:
-        !include-raw-escape: '../scripts/erase_env.sh'
     concurrent: true
-    description: '{description}'
     disabled: false
+    node: '{node}'
+
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
       daysToKeep: 30
       numToKeep: 50
-    node: '{node}'
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
 
     parameters:
     - string:
@@ -77,9 +70,37 @@
         name: ENV_PREFIX
         default: '7.0.{test-type}.{dist}.{upgrade_testgroup}'
 
-    properties:
-    - heavy-job:
-        weight: '{weight}'
+    scm:
+    - main-git:
+        reponame: '{base_reponame}'
+        repobranch: '{base_repobranch}'
+        basedir: 'BASE'
+    - main-git:
+        reponame: '{upgrade_reponame}'
+        repobranch: '{upgrade_repobranch}'
+        basedir: 'UPGRADE'
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: true
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+    - inject: # default env variables
+        properties-content: |
+          VENV_PATH={venvpath}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+    - inject: # overrides to job-group properties
+        properties-content: '{job-group-properties}'
+    - inject: # overrides to job properties
+        properties-content: '{properties}'
+    - shell:
+        !include-raw-escape: 'scripts/run_upgrade_system_test.sh'
+    - shell:
+        !include-raw-escape: '../scripts/erase_env.sh'
 
     publishers:
     - archive:
@@ -100,20 +121,3 @@
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
 
-    scm:
-    - main-git:
-        reponame: '{base_reponame}'
-        repobranch: '{base_repobranch}'
-        basedir: 'BASE'
-    - main-git:
-        reponame: '{upgrade_reponame}'
-        repobranch: '{upgrade_repobranch}'
-        basedir: 'UPGRADE'
-
-    wrappers:
-    - timeout:
-        fail: false
-        timeout: '{timeout}'
-        write-description: true
-    - ansicolor:
-        colormap: xterm

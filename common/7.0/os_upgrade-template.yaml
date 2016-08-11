@@ -1,43 +1,20 @@
 - job-template:
     name: '7.0.{test-type}.{dist}.os_upgrade'
-    builders:
-      - inject: # default env variables
-          properties-content: |
-            VENV_PATH={venvpath}
-            CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-            CLASSIC_PROVISIONING=false
-            SLAVE_NODE_MEMORY=3072
-            OCTANE_PATH=fuel-octane
-            NODE_VOLUME_SIZE=100
-      - shell:
-          !include-raw-escape: 'scripts/run_upgrade_system_test.sh'
-      - shell:
-          !include-raw-escape: '../scripts/erase_env.sh'
+    description: '7.0 swarm test group'
+
+    concurrent: true
     disabled: false
+    node: '{node}'
+
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
       daysToKeep: 30
       numToKeep: 50
-    node: '{node}'
-    concurrent: true
-    description: '7.0 swarm test group'
+
     properties:
-      - heavy-job:
-          weight: '{weight}'
-    scm:
-       - main-git:
-           reponame: '{base_reponame}'
-           repobranch: '{base_repobranch}'
-           basedir: 'BASE'
-       - main-git:
-           reponame: '{upgrade_reponame}'
-           repobranch: '{upgrade_repobranch}'
-           basedir: 'UPGRADE'
-       - main-git:
-           reponame: 'fuel-octane'
-           repobranch: 'master'
-           basedir: 'fuel-octane'
+    - heavy-job:
+        weight: '{weight}'
 
     parameters:
     - string:
@@ -62,6 +39,43 @@
         name: UPGRADE_TEST_GROUP
         default: '{upgrade_testgroup}'
 
+    scm:
+    - main-git:
+        reponame: '{base_reponame}'
+        repobranch: '{base_repobranch}'
+        basedir: 'BASE'
+    - main-git:
+        reponame: '{upgrade_reponame}'
+        repobranch: '{upgrade_repobranch}'
+        basedir: 'UPGRADE'
+    - main-git:
+        reponame: 'fuel-octane'
+        repobranch: 'master'
+        basedir: 'fuel-octane'
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - inject-passwords:
+        global: true
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+    - inject: # default env variables
+        properties-content: |
+          VENV_PATH={venvpath}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          CLASSIC_PROVISIONING=false
+          SLAVE_NODE_MEMORY=3072
+          OCTANE_PATH=fuel-octane
+          NODE_VOLUME_SIZE=100
+    - shell:
+        !include-raw-escape: 'scripts/run_upgrade_system_test.sh'
+    - shell:
+        !include-raw-escape: '../scripts/erase_env.sh'
 
     publishers:
     - archive:
@@ -81,12 +95,3 @@
         property-file: links.txt
         predefined-parameters: TEST_JOB_NAME=$JOB_NAME
         triggerWithNoParameters: false
-    wrappers:
-    - timeout:
-        fail: false
-        timeout: '{timeout}'
-        write-description: false
-    - inject-passwords:
-        global: true
-    - ansicolor:
-        colormap: xterm
