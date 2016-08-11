@@ -2,19 +2,25 @@
     name: '{project-version}-{name}-install-{distro}'
     project-type: freestyle
     concurrent: true
+
+    node: '{install-node}'
+
     wrappers:
       - install-vm-creds
       - pre-scm-buildstep:
         - shell: 'rm -rf *'
       - timestamps
       - ansicolor
+
     triggers:
       - zuul
+
     scm:
       - fuel-infra:
           scm-repo: '{install-scm-repo}'
           scm-branch: '{install-scm-branch}'
           scm-basedir: ''
+
     builders:
       - shell:
           !include-raw-escape: builders/install.cleanup.sh
@@ -60,4 +66,3 @@
           artifacts: '**/*.xml, {pkg_type}.install.setenvfile'
           allow-empty: true
 
-    node: '{install-node}'

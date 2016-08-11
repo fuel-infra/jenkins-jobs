@@ -2,16 +2,22 @@
     name: '{project-version}-{name}-repotest-{distro}'
     project-type: freestyle
     concurrent: true
-    wrappers:
-      - timestamps
-      - ansicolor
+
+    node: '{install-node}'
+
     triggers:
       - zuul
+
     scm:
       - fuel-infra:
           scm-repo: '{install-scm-repo}'
           scm-branch: '{install-scm-branch}'
           scm-basedir: ''
+
+    wrappers:
+      - timestamps
+      - ansicolor
+
     builders:
 
       - inject-from-job(same-patchset):
@@ -45,4 +51,3 @@
 
           bash -x repo-test-{pkg_type}-docker
 
-    node: '{install-node}'

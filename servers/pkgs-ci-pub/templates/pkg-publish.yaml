@@ -3,6 +3,8 @@
     project-type: freestyle
     concurrent: false
 
+    node: '{publish-node}'
+
     properties:
       - inject:
           properties-content: |
@@ -64,4 +66,4 @@
            artifacts: '*.publish.setenvfile, pkg-versions.*'
            allow-empty: true
 
-    node: '{publish-node}'
+

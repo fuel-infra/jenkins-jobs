@@ -1,9 +1,13 @@
 - job-template:
     name: '{project-version}-{name}-systest-{distro}'
     concurrent: true
+
+    node: '{systest-node}'
+
     logrotate:
       artifactDaysToKeep: 90
       daysToKeep: 90
+
     properties:
       - heavy-job:
           weight: 8
@@ -54,6 +58,7 @@
       - bool:
           name: DEFAULT_UPDATE_MASTER
           default: true
+
     scm:
       - git:
           url: 'https://git.openstack.org/openstack/fuel-main.git'
@@ -71,8 +76,17 @@
           skip-tag: true
           browser: gitweb
           browser-url: 'https://review.openstack.org/gitweb?p=openstack/fuel-qa.git'
+
     triggers:
       - zuul
+
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 210
+      - timestamps
+      - ansicolor
+
     builders:
       - inject:
           # Set defaults which could be reinjected
@@ -113,13 +127,6 @@
             EXTRA_DEB_REPOS_PRIORITY=1052
       - system-test
 
-    wrappers:
-      - timeout:
-          fail: true
-          timeout: 210
-      - timestamps
-      - ansicolor
-
     publishers:
       - archive:
           allow-empty: true
@@ -133,4 +140,3 @@
           keep-long-stdio: false
           results: '**/nosetests.xml'
 
-    node: '{systest-node}'
