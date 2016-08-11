@@ -55,45 +55,25 @@
     # weight
     #     Job weight
     #
-
     name: '9.0.{test-type}.{dist}.{testgroup}'
+    description: '{description}'
+
     concurrent: true
     defaults: '9.0.{test-type}.{dist}.{testgroup}'
-    description: '{description}'
     disabled: false
-    node: '{node}'
     block-downstream: false
     block-upstream: false
-
-    builders:
-      - inject: # default env variables
-          properties-content: |
-            VENV_PATH={venvpath}
-            POOL_DEFAULT={default_pool}
-            OPENSTACK_RELEASE={dist}
-            TEST_GROUP={testgroup}
-            CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-            TEST_ISO_JOB=9.0.test_all
-            MAKE_SNAPSHOT={make-snapshot}
-      - inject: # overrides
-          properties-content: '{properties}'
-          properties-file: '{properties-file}'
-      - shell: |
-          #!/bin/bash
-          echo "=== [systest PRE-script] ==="
-          {pre-script}
-      - shell:
-          !include-raw-escape: 'scripts/run_system_test.sh'
-      - shell: |
-          #!/bin/bash
-          echo "=== [systest POST-script] ==="
-          {post-script}
+    node: '{node}'
 
     logrotate:
         artifactDaysToKeep: 14
         artifactNumToKeep: -1
         daysToKeep: 30
         numToKeep: 50
+
+    properties:
+      - heavy-job:
+          weight: '{weight}'
 
     parameters:
       - string:
@@ -134,41 +114,61 @@
           name: RPM_LATEST
           default: $RPM_LATEST
 
-    properties:
-      - heavy-job:
-          weight: '{weight}'
-
-    publishers:
-      - archive:
-          allow-empty: true
-          artifacts: '**/nosetests.xml,logs/*'
-          latest-only: false
-      - junit:
-          keep-long-stdio: false
-          results: '**/nosetests.xml'
-      - post-destroy-vms
-      - description-setter:
-          regexp: "'Description string: (.*)'"
-          regexp-for-failed: "'Description string: (.*)'"
-      - trigger-parameterized-builds:
-        - project: '9.0.{test-type}.test-reports'
-          condition: ALWAYS
-          property-file: links.txt
-          predefined-parameters: TEST_JOB_NAME=$JOB_NAME
-          triggerWithNoParameters: false
-
     scm:
-      - main-git:
-          reponame: '{reponame}'
-          repobranch: '{repobranch}'
-          basedir: ''
+    - main-git:
+        reponame: '{reponame}'
+        repobranch: '{repobranch}'
+        basedir: ''
 
     wrappers:
-      - timeout:
-          fail: false
-          timeout: '{timeout}'
-          write-description: false
-      - inject-passwords:
-          global: true
-      - ansicolor:
-          colormap: xterm
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - inject-passwords:
+        global: true
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+    - inject: # default env variables
+        properties-content: |
+          VENV_PATH={venvpath}
+          POOL_DEFAULT={default_pool}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          TEST_ISO_JOB=9.0.test_all
+          MAKE_SNAPSHOT={make-snapshot}
+    - inject: # overrides
+        properties-content: '{properties}'
+        properties-file: '{properties-file}'
+    - shell: |
+        #!/bin/bash
+        echo "=== [systest PRE-script] ==="
+        {pre-script}
+    - shell:
+        !include-raw-escape: 'scripts/run_system_test.sh'
+    - shell: |
+        #!/bin/bash
+        echo "=== [systest POST-script] ==="
+        {post-script}
+
+    publishers:
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+    - post-destroy-vms
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+    - trigger-parameterized-builds:
+      - project: '9.0.{test-type}.test-reports'
+        condition: ALWAYS
+        property-file: links.txt
+        predefined-parameters: TEST_JOB_NAME=$JOB_NAME
+        triggerWithNoParameters: false
