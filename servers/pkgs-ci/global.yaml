@@ -41,4 +41,7 @@
     ubuntu_mirror_url: ''
     mirror_ubuntu: ''
 
+    # stuff related to pre-build / post-build magic
+    pre-build-script: ''
+
 

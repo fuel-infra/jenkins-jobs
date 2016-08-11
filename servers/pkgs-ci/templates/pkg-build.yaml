@@ -16,7 +16,26 @@
     parameters:
       - gerrit
 
-    properties:
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-fuel-osci-bot}'
+            - '{ssh-creds-pkgs-ci}'
+      - timeout:
+          timeout: 300
+      - timestamps
+      - ansicolor
+
+    triggers:
+      - zuul
+
+    builders:
+
+      - extended-bash:
+          headers: ''
+          script: '{pre-build-script}'
+
       - inject:
           properties-content: |
             PROJECT_NAME={project-name}
@@ -45,22 +64,6 @@
 
             ADDITIONAL_EXTRAREPO_DEB=http://{publish-repo-host}{deb-repo-path}/{project-version} {deb-dist-name} main restricted
             ADDITIONAL_EXTRAREPO_RPM=deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64
-
-    wrappers:
-      - ssh-agent-credentials:
-          users:
-            - '{ssh-creds-openstack-ci-jenkins}'
-            - '{ssh-creds-fuel-osci-bot}'
-            - '{ssh-creds-pkgs-ci}'
-      - timeout:
-          timeout: 300
-      - timestamps
-      - ansicolor
-
-    triggers:
-      - zuul
-
-    builders:
 
       - prepare-perestroika
 
