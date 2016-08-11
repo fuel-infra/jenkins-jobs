@@ -1,28 +1,33 @@
+# FIXME: make template here and projects in each CI
 - job:
     name: docker-deploy
-    builders:
-      - shell:
-          !include-raw './scripts/docker-deploy.sh'
     description: |
       This job will deploy specific image from registry to selected node.
+
     concurrent: true
+
     parameters:
-        - string:
-            name: REGISTRY_URL
-            default: 'registry.fuel-infra.org'
-            description: 'source registry'
-        - dynamic-choice:
-            name: IMAGE
-            description: 'image from registry'
-            script: |
-              String output = 'http://registry.fuel-infra.org:5002/?name=infra/.*&tag=.*&format=select'.toURL().text
-              List images = output.split()
-              return images
-        - node:
-            description: 'destination node'
-            name: NODE
-            allowed-multiselect: true
+    - string:
+        name: REGISTRY_URL
+        default: 'registry.fuel-infra.org'
+        description: 'source registry'
+    - dynamic-choice:
+        name: IMAGE
+        description: 'image from registry'
+        script: |
+          String output = 'http://registry.fuel-infra.org:5002/?name=infra/.*&tag=.*&format=select'.toURL().text
+          List images = output.split()
+          return images
+    - node:
+        description: 'destination node'
+        name: NODE
+        allowed-multiselect: true
+
+    builders:
+      - shell:
+          !include-raw: './scripts/docker-deploy.sh'
+
     wrappers:
-      - timeout:
-          fail: true
-          timeout: 10
+    - timeout:
+        fail: true
+        timeout: 10

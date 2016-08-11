@@ -1,34 +1,39 @@
+# FIXME: make as template
 - job:
     name: 'run_on_node'
-    concurrent: true
     description: |
       This is a helper job to execute selected job on specified node
+
+    concurrent: true
+
     parameters:
-      - node:
-          name: NODE_NAME
-          description: |
-            Specify where this job and tested job should be ran on.
-          allowed-multiselect: true
-      - dynamic-choice:
-          name: JOB_NAME
-          description: |
-            Jobs name which should be tested on a slave.
-          script: |
-            def jobs = jenkins.model.Jenkins.instance.items.displayName
-      - text:
-          name: JOB_PARAMETERS
-          description: |
-            Parameters passed to the job in form key=value.
+    - node:
+        name: NODE_NAME
+        description: |
+          Specify where this job and tested job should be ran on.
+        allowed-multiselect: true
+    - dynamic-choice:
+        name: JOB_NAME
+        description: |
+          Jobs name which should be tested on a slave.
+        script: |
+          def jobs = jenkins.model.Jenkins.instance.items.displayName
+    - text:
+        name: JOB_PARAMETERS
+        description: |
+          Parameters passed to the job in form key=value.
+
     builders:
-      - shell: |
-          #!/bin/bash
-          set -ex
-          echo "${JOB_PARAMETERS}" > params.prop
-      - trigger-builds:
-        - project: $JOB_NAME
-          same-node: true
-          block: false
-          property-file: params.prop
+    - shell: |
+        #!/bin/bash
+        set -ex
+        echo "${JOB_PARAMETERS}" > params.prop
+    - trigger-builds:
+      - project: $JOB_NAME
+        same-node: true
+        block: false
+        property-file: params.prop
+
     publishers:
-      - description-setter:
-          description: '$NODE_NAME: $JOB_NAME'
+    - description-setter:
+        description: '$NODE_NAME: $JOB_NAME'

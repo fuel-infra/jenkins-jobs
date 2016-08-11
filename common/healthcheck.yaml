@@ -1,38 +1,44 @@
 - job-template:
     name: '{prefix}_healthcheck'
-    node: 'runner'
-    builders:
-      - inject:
-          properties-content: |
-            JENKINS_VIEW={jenkins_view}
-            TABLE_HEADERS={table_headers}
-            TABLE_COLUMNS={table_columns}
-            BUILD_SELECTION_CRITERION={build_selection_criterion}
-      - shell:
-          !include-raw-escape: 'scripts/jobs_healthcheck.py'
     description: |
       Checks status of jobs from {jenkins_view} view and generates report.
+
     concurrent: true
+    node: 'runner'
+
     logrotate:
       daysToKeep: 3
       numToKeep: -1
       artifactDaysToKeep: 3
       artifactNumToKeep: -1
-    wrappers:
-      - timeout:
-          fail: true
-          timeout: 5
+
     triggers:
-      - timed: '{timer}'
+    - timed: '{timer}'
+
+    wrappers:
+    - timeout:
+        fail: true
+        timeout: 5
+
+    builders:
+    - inject:
+        properties-content: |
+          JENKINS_VIEW={jenkins_view}
+          TABLE_HEADERS={table_headers}
+          TABLE_COLUMNS={table_columns}
+          BUILD_SELECTION_CRITERION={build_selection_criterion}
+    - shell:
+        !include-raw-escape: 'scripts/jobs_healthcheck.py'
+
     publishers:
-      - archive:
-          artifacts: '*.html'
-          allow-empty: true
-          fingerprint: true
-      - html-publisher:
-          name: 'Jobs report'
-          dir: '.'
-          files: 'status.html'
-          keep-all: true
-          allow-missing: true
-          wrapper-name: 'htmlpublisher-wrapper.html'
+    - archive:
+        artifacts: '*.html'
+        allow-empty: true
+        fingerprint: true
+    - html-publisher:
+        name: 'Jobs report'
+        dir: '.'
+        files: 'status.html'
+        keep-all: true
+        allow-missing: true
+        wrapper-name: 'htmlpublisher-wrapper.html'
