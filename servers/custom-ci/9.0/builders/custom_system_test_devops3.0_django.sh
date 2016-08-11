@@ -104,6 +104,10 @@ if [[ "${FUEL_DEVOPS_COMMIT}" != "none" ]] ; then
   # Install fuel-qa requirements
   pip install -r ./fuelweb_test/requirements.txt --upgrade
 
+  echo "=============================="
+  pip freeze
+  echo "=============================="
+
   cd "${WORKSPACE}"
   export DEVOPS_DB_NAME="${VENV_PATH}/fuel_devops.sqlite3"
   export DEVOPS_DB_ENGINE="django.db.backends.sqlite3"
