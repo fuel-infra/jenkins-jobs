@@ -244,9 +244,8 @@
             block: true
             current-parameters: false
             predefined-parameters: |
-                ZUUL_PROJECT=${{ZUUL_PROJECT}}
-                ZUUL_CHANGE=${{ZUUL_CHANGE}}
-                ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
+                GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}}
+                GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
             parameter-factories:
               - factory: filebuild
                 file-pattern: 'artifacts/*-buildresult.params'
@@ -260,9 +259,8 @@
                   block: true
                   current-parameters: false
                   predefined-parameters: |
-                      ZUUL_PROJECT=${{ZUUL_PROJECT}}
-                      ZUUL_CHANGE=${{ZUUL_CHANGE}}
-                      ZUUL_PATCHSET=${{ZUUL_PATCHSET}}
+                      GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}}
+                      GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
                   parameter-factories:
                     - factory: filebuild
                       file-pattern: 'artifacts/*-buildresult.params'
