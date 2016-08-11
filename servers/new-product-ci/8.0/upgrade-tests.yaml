@@ -40,8 +40,9 @@
 
 - job:
     name: '8.0.upgrades.runner'
-    project-type: multijob
     description: 'Run all upgrades tests'
+
+    project-type: multijob
     concurrent: false
     node: 'runner'
 
