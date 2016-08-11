@@ -1,4 +1,3 @@
-
 - job-template:
     # General system test. Downloads ISO image via magnet link
     # and runs system test with specified test group.
@@ -36,33 +35,23 @@
     #     List of strings "VAR=value".
     #     These variables will be injected in job environment before the build
     name: '7.0.{test-type}.{dist}.{testgroup}'
+    description: '{description}'
+
     block-downstream: false
     block-upstream: false
-    builders:
-    - inject: # default env variables
-        properties-content: |
-          VENV_PATH={venvpath}
-          POOL_DEFAULT={default_pool}
-          OPENSTACK_RELEASE={dist}
-          TEST_GROUP={testgroup}
-          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-    - inject: # overrides to job-group properties
-        properties-content: '{job-group-properties}'
-    - inject: # overrides to job properties
-        properties-content: '{properties}'
-    - shell:
-        !include-raw-escape: 'scripts/run_system_test.sh'
-    - shell:
-        !include-raw-escape: '../scripts/erase_env.sh'
     concurrent: true
-    description: '{description}'
     disabled: false
+    node: '{node}'
+
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
       daysToKeep: 30
       numToKeep: 50
-    node: '{node}'
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
 
     parameters:
     - string:
@@ -105,9 +94,38 @@
         name: RPM_LATEST
         default: $RPM_LATEST
 
-    properties:
-    - heavy-job:
-        weight: '{weight}'
+    scm:
+    - main-git:
+        reponame: '{reponame}'
+        repobranch: '{repobranch}'
+        basedir: ''
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - inject-passwords:
+        global: true
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+    - inject: # default env variables
+        properties-content: |
+          VENV_PATH={venvpath}
+          POOL_DEFAULT={default_pool}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+    - inject: # overrides to job-group properties
+        properties-content: '{job-group-properties}'
+    - inject: # overrides to job properties
+        properties-content: '{properties}'
+    - shell:
+        !include-raw-escape: 'scripts/run_system_test.sh'
+    - shell:
+        !include-raw-escape: '../scripts/erase_env.sh'
 
     publishers:
     - archive:
@@ -126,19 +144,3 @@
     - description-setter:
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
-
-    scm:
-    - main-git:
-        reponame: '{reponame}'
-        repobranch: '{repobranch}'
-        basedir: ''
-
-    wrappers:
-    - timeout:
-        fail: false
-        timeout: '{timeout}'
-        write-description: false
-    - inject-passwords:
-        global: true
-    - ansicolor:
-        colormap: xterm
