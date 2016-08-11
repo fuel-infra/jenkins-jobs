@@ -69,7 +69,7 @@
     wrappers:
       - timeout:
           fail: false
-          timeout: 360
+          timeout: '{timeout}'
           write-description: false
 
     builders:

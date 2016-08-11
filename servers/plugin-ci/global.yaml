@@ -16,3 +16,5 @@
     username-plugin-publisher: 'plugin_publisher'
     ssh-creds-plugin-publisher: '33beb79-328d-48ed-9419-4ae8f8c8ee84'
     timer: ''
+    # plugin-deploy-test default timeout
+    timeout: 360
