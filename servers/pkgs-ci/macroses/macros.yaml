@@ -80,5 +80,5 @@
           recipients: 'ci+publishing-alert@mirantis.com, fuel-build+publishing-alert@mirantis.com'
           subject: '[Packaging-ci][$PROJECT_NAME] Package build/publish on merge failed - # $BUILD_NUMBER'
           presend-script:
-            !include-raw 'email_ext_groovy.inc'
+            !include-raw: 'email_ext_groovy.inc'
           failure: true
