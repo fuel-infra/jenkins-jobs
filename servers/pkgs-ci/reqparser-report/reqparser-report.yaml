@@ -1,0 +1,13 @@
+- project:
+    name: 'reqparser-report'
+
+    timer: 'H 22 * * *'
+    build-node: 'new-builder'
+
+    distro:
+    - ubuntu
+    - centos
+
+    jobs:
+    - 'reqparser-{distro}-report'
+
