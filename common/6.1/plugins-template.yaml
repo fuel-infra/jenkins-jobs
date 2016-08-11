@@ -1,33 +1,22 @@
 - job-template:
     name: '6.1.{test-type}.{dist}.plugins.{testgroup}'
+    description: '{description}'
+
+    concurrent: true
+    disabled: false
     block-downstream: false
     block-upstream: false
-    builders:
-    - guess-mirror
-    - inject:
-          properties-content: |
-            VENV_PATH={venvpath}
-            OPENSTACK_RELEASE={dist}
-            TEST_GROUP={testgroup}
-            CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-            CLASSIC_PROVISIONING=false
-            EXAMPLE_PLUGIN_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example-1.0.0.fp
-            SLAVE_NODE_MEMORY=3072
-    - inject: # overrides
-        properties-content: '{properties}'
-    - shell:
-        !include-raw-escape: 'scripts/run_plugin_example_system_test.sh'
-    - shell:
-        !include-raw-escape: '../scripts/erase_env.sh'
-    concurrent: true
-    description: '{description}'
-    disabled: false
+    node: '{node}'
+
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
       daysToKeep: 30
       numToKeep: 50
-    node: '{node}'
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
 
     parameters:
     - string:
@@ -37,22 +26,6 @@
         name: ENV_PREFIX
         default: '6.1.{test-type}.{dist}.{testgroup}'
         description: 'Environment prefix'
-
-    properties:
-    - heavy-job:
-        weight: '{weight}'
-
-    publishers:
-    - archive:
-        allow-empty: true
-        artifacts: '**/nosetests.xml,logs/*'
-        latest-only: false
-    - junit:
-        keep-long-stdio: false
-        results: '**/nosetests.xml'
-    - description-setter:
-        regexp: "'Description string: (.*)'"
-        regexp-for-failed: "'Description string: (.*)'"
 
     scm:
     - main-git:
@@ -69,3 +42,33 @@
         global: true
     - ansicolor:
         colormap: xterm
+
+    builders:
+    - guess-mirror
+    - inject:
+        properties-content: |
+          VENV_PATH={venvpath}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          CLASSIC_PROVISIONING=false
+          EXAMPLE_PLUGIN_URL=http://jenkins-product.srt.mirantis.net:8080/job/build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/fuel_plugin_example-1.0.0.fp
+          SLAVE_NODE_MEMORY=3072
+    - inject: # overrides
+        properties-content: '{properties}'
+    - shell:
+        !include-raw-escape: 'scripts/run_plugin_example_system_test.sh'
+    - shell:
+        !include-raw-escape: '../scripts/erase_env.sh'
+
+    publishers:
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
