@@ -1,12 +1,8 @@
 - builder:
     name: 9x-make-snapshots
     builders:
-    # Calculate all snapshot data and Inject it as env variables (just for case),
-    # so they will be available for using as parameters for test below a
-
+    # Calculate all snapshot data
     # creates snapshots.params and snapshots.sh
     - shell:
         !include-raw:
           '../builders/freeze_deps_for_systest.sh'
-    - inject-properties-file:
-        properties-file: 'snapshots.params'

@@ -1,0 +1,7 @@
+- builder:
+    name: write-description
+    builders:
+    - shell: |
+        #!/bin/bash
+        set -ex
+        echo "Description string: {description-string}"

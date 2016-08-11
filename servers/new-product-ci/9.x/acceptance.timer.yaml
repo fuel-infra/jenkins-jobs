@@ -24,8 +24,8 @@
         job-name: $SNAPSHOT_JOB
         which-build: last-successful
         artifact-name: snapshots.params  # -> 9x-systest-params
-    - shell: |
-        echo "Description string: $CUSTOM_VERSION"
+    - write-description:
+        description-string: $CUSTOM_VERSION
 
     publishers:
 

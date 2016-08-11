@@ -20,8 +20,8 @@
 
     builders:
 
-    - shell: |
-        echo "\'Description string: $CUSTOM_VERSION\'"
+    - write-description:
+        description-string: $CUSTOM_VERSION
 
     - multijob:
         name: 'Run system tests'

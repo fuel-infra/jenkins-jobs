@@ -1,0 +1,13 @@
+- builder:
+    name: apply-fuel-qa-patches
+    builders:
+    - shell: |
+        #!/bin/bash
+        set -ex
+        git checkout $FUEL_QA_COMMIT
+        # Checking gerrit commits for fuel-mirror
+        if [ "$FUEL_QA_PATCH_LIST" != "none" ] ; then
+          for commit in $FUEL_QA_PATCH_LIST ; do
+            git fetch https://review.openstack.org/openstack/fuel-qa $commit && git cherry-pick FETCH_HEAD
+          done
+        fi

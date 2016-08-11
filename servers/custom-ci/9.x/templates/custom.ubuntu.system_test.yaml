@@ -1,0 +1,271 @@
+- job-template:
+    name: '9.x.custom.{dist}.system_test'
+    description: |
+      <h3> Run Custom System Test </h3>
+      <p>
+        Test will run with repos constructed from snapshots.params file, which contain ids of all standard
+        repos and tools used in test. This file is generated locally or imported from Product CI depending
+        on provided settings. When required, you could additionally provide some overrides for that snapshot
+        params.
+      </p>
+      <p>
+        ENABLE_REPOS section serves for enabling repos constructed from snapshots.params file, by default
+        we included the same defaults as we used for {testgroup} on Product CI.
+      </p>
+      <p>
+        PARAMETERS_FOR_TEST serves for configuring test itself.
+      </p>
+      <h4> Configuration how-tos. </h4>
+      <pre>
+        SNAPSHOT_ID is identifier for base snapshots.params file.
+        There are 3 kind of options to get it.
+
+        empty parameter       Generate NEW local custom snapshots.params with all latest repos snapshots.
+                              This option means that you will use LATEST untested repos.
+
+        number                Use particular "snapshot #<number>" from Product CI.
+                              This option should be used for bug fixing or testing your changes with
+                              some old snapshots.params file.
+                              Go to https://product-ci.infra.mirantis.net/job/9.x.snapshot/
+                              and choose build number which you want to use. for example, "33".
+                              Go to https://product-ci.infra.mirantis.net/job/9.x.swarm.runner/ and choose
+                              one of the threads and look for number in build description if you want to
+                              your packages vs one of successful or failed Swarm run.
+
+        lastSuccessfulBuild   Use latest GREEN (passed BVT) snapshots.params
+                              from https://product-ci.infra.mirantis.net/job/9.x.snapshot/
+
+
+        MIRROR_ID_OVERRIDES is option for override some variables from snapshots.params file.
+        for example, you could use lastSuccessfulBuild but replace FUEL_QA_COMMIT to somr other..
+        For full examples of variables look at contents of snapshots.params file.
+
+        Here is a list of what could be set int his field for overriding:
+
+          CUSTOM_VERSION
+          MAGNET_LINK
+          FUEL_QA_COMMIT
+          UBUNTU_MIRROR_ID
+          CENTOS_MIRROR_ID
+          MOS_UBUNTU_MIRROR_ID
+          MOS_CENTOS_OS_MIRROR_ID
+          MOS_CENTOS_PROPOSED_MIRROR_ID
+          MOS_CENTOS_UPDATES_MIRROR_ID
+          MOS_CENTOS_HOLDBACK_MIRROR_ID
+          MOS_CENTOS_HOTFIX_MIRROR_ID
+          MOS_CENTOS_SECURITY_MIRROR_ID
+
+        ENABLE_REPOS contains flags for enabling different repos for tests. for example, you could want to
+        disable proposed and enable hotfix repos. Thic could be done here.
+        By default we provided same content as used on Product CI.
+
+
+        EXTRA_REPOS is the list of repos which will be included additionally.
+        Here you should place your review repos or some other repos which you want add.
+        notation:
+
+        EXTRA_DEB_REPOS       pipe-separated ("|") list of repos in format like this:
+        mos-proposed,deb http://mirror.seed-cz1.fuel-infra.org/mos-repos/ubuntu/snapshots/9.0-2016-07-25-172321 mos9.0-proposed main restricted
+        - will be used as additional repo in cluster
+
+        EXTRA_RPM_REPOS       pipe-separated ("|") list of repos in format like this:
+        mos-os,http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/os-2016-06-23-135731/x86_64
+        - will be used as additional repo in cluster
+
+        UPDATE_FUEL_MIRROR    space-separated list of repos in format like this:
+        http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/os-2016-06-23-135731/x86_64
+        - will be used as additional repo for master node upgrade
+
+
+        PARAMETERS_FOR_TEST serves for setting up your test to run. by default it's {testgroup}. for other
+        test groups and settings for them look at fuel-qa documentation.
+
+
+        NOTE: This test will generate launch.params with all parameters provided.
+              You could use this file for sharing your {testgroup} setup with other developers.
+      </pre>
+
+    email: ''
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    env_suffix: $BUILD_ID
+    timeout: '180'
+    trigger_projects: ''
+    weight: '7'
+    node: 'custom_test'
+    concurrent: true
+    disabled: false
+    dist: ubuntu
+    magnet-link:
+      !include-raw-escape: '../../data/9.0-iso'
+
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+
+    parameters:
+    - string:
+        name: SNAPSHOT_ID
+        default: ''
+        description: Use number or lastSuccessfulBuild or keep empty for new custom snapshot
+    - string:
+        name: FUEL_QA_PATCH_LIST
+        default: 'none'
+        description: list of fuel-qa patches to apply
+
+    - text:
+        name: MIRROR_ID_OVERRIDES
+        default: ''
+
+    - text:
+        name: ENABLE_REPOS
+        default: |
+          ENABLE_MOS_UBUNTU_PROPOSED=true
+          ENABLE_MOS_UBUNTU_UPDATES=true
+          ENABLE_MOS_UBUNTU_SECURITY=true
+          ENABLE_MOS_UBUNTU_HOLDBACK=true
+          ENABLE_MOS_UBUNTU_HOTFIX=false
+
+          ENABLE_MOS_CENTOS_OS=true
+          ENABLE_MOS_CENTOS_PROPOSED=true
+          ENABLE_MOS_CENTOS_UPDATES=true
+          ENABLE_MOS_CENTOS_SECURITY=true
+          ENABLE_MOS_CENTOS_HOLDBACK=true
+          ENABLE_MOS_CENTOS_HOTFIX=false
+    - text:
+        name: EXTRA_REPOS
+        default: |
+          EXTRA_DEB_REPOS=
+          EXTRA_RPM_REPOS=
+          UPDATE_FUEL_MIRROR=
+
+    - text:
+        name: PARAMETERS_FOR_TEST
+        default: |
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          ENV_SUFFIX={env_suffix}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          VENV_PATH={venvpath}
+
+    - string: # added for cleaner which searches for job parameter
+        name: ENV_PREFIX
+        default: '9.x.custom.{dist}.{testgroup}'
+
+    properties:
+    - authorization-allow-authorized
+    - heavy-job:
+        weight: '{weight}'
+
+    scm:
+    - main-git:
+        reponame: 'fuel-qa'
+        repobranch: 'stable/mitaka'
+        basedir: ''
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+
+    # Section for constructing very custom snapshots.params file
+    # ----------
+
+    # 1. inject latest snapshot (default values)
+    - inject:
+        properties-content: |
+          CUSTOM_VERSION=custom snapshot #$BUILD_ID
+    - inject:
+        # Magnet-link is required because it's part of snapshots.params
+        properties-content: |
+          MAGNET_LINK={magnet-link}
+    - 9x-make-snapshots
+    # replace with some other snapshot (if provided)
+    - shell: |
+        #!/bin/bash
+        set -ex
+        if [ -n "${{SNAPSHOT_ID}}" ] ; then
+            __job_url="https://product-ci.infra.mirantis.net/job/9.x.snapshot"
+            curl "${{__job_url}}/${{SNAPSHOT_ID}}/artifact/snapshots.params" -o snapshots.params
+        fi
+        touch snapshots.params
+
+    # inject property file
+    - inject-properties-file:
+        properties-file: snapshots.params
+    # override with overrides
+    - inject:
+        properties-content: $MIRROR_ID_OVERRIDES
+    - inject:
+        properties-content: $ENABLE_REPOS
+    - inject:
+        properties-content: $EXTRA_REPOS
+    - inject:
+        properties-content: $PARAMETERS_FOR_TEST
+    - write-description:
+        description-string: $CUSTOM_VERSION
+    - shell: |
+        #!/bin/bash
+        set -ex
+        IFS=""  # otherwise output from below will be inline
+        cat > launch.params <<EOF
+        # BASE SNAPSHOT
+        $(cat snapshots.params)
+
+        # OVERRIDES
+        $MIRROR_ID_OVERRIDES
+
+        # ENABLE FLAGS
+        $ENABLE_REPOS
+
+        # EXTRA REPOS
+        $EXTRA_REPOS
+
+        # ENV PREFIX
+        ENV_PREFIX=$ENV_PREFIX
+
+        # TEST SETTINGS
+        $PARAMETERS_FOR_TEST
+        EOF
+
+    - apply-fuel-qa-patches
+
+    - 9x-run-sys-test
+
+    publishers:
+
+    - archive:
+        allow-empty: false
+        artifacts: 'snapshots.params'
+        latest-only: true
+    - archive:
+        allow-empty: false
+        artifacts: 'launch.params'
+        latest-only: true
+
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*,*.txt'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+
+    - post-destroy-vms # Destroy envs if left undestroyed
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+
+    # todo: adopt std bvt emails
+    - bvt-failure-email:
+        email_recipients: '{email}'
+
+    - bvt-fixed-email:
+        email_recipients: '{email}'

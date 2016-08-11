@@ -1,0 +1,11 @@
+- project:
+    name: 9.x.custom-tests
+    version-id: '9.x'
+
+    jobs:
+    - 9.x.custom.{dist}.{testgroup}:
+        dist: ubuntu
+        testgroup: bvt_2
+    - 9.x.custom.{dist}.system_test:
+        dist: ubuntu
+        testgroup: smoke_neutron

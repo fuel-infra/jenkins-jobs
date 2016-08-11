@@ -24,7 +24,8 @@ function store() {
 # Create and store ID of this snapshot file, which will be used as PK for snapshot set
 
 # id for testrail to report test results
-__snapshot_id="snapshot #${BUILD_NUMBER?}"
+__snapshot_id_default="snapshot #${BUILD_NUMBER?}"
+__snapshot_id="${CUSTOM_VERSION:-$__snapshot_id_default}"
 store "CUSTOM_VERSION" "${__snapshot_id}"
 
 
@@ -36,8 +37,7 @@ store "MAGNET_LINK" "${MAGNET_LINK?}"
 
 # Store FUEL_QA_COMMIT
 
-store "FUEL_QA_COMMIT" "$(git -C ./fuel-qa rev-parse HEAD)"
-
+store "FUEL_QA_COMMIT" "$(git -C . rev-parse HEAD)"
 
 
 # Store snapshot for copy of Ubuntu deb repo
@@ -92,8 +92,3 @@ for _dn in  "os"        \
     store "MOS_CENTOS_$(to_uppercase "${_dn}")_MIRROR_ID" "${__dt_snapshot}"
 done
 
-
-
-# Write down description of build
-
-echo "Description string: Snapshot ID: ${__snapshot_id}"
