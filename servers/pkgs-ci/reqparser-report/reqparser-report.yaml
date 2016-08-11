@@ -2,7 +2,7 @@
     name: 'reqparser-report'
 
     timer: 'H 22 * * *'
-    build-node: 'new-builder'
+    build-node: 'reqparser'
 
     distro:
     - ubuntu

@@ -24,7 +24,7 @@
           rpm-include-repo: 'os proposed'
           rpm-distro: 'centos7'
     scm-repo: 'fuel-infra/repo-monitor'
-    build-node: 'new-builder'
+    build-node: 'repo-monitor'
     jobs:
       - '{version-id}-deb-repo-monitor'
       - '{version-id}-rpm-repo-monitor'
