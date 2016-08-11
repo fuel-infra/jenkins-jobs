@@ -112,7 +112,7 @@
     publishers:
     - archive:
         allow-empty: true
-        artifacts: '**/nosetests.xml,*/logs/*'
+        artifacts: '**/nosetests.xml,*/logs/*,logs/*'
         latest-only: false
     - post-destroy-vms
     - junit:
