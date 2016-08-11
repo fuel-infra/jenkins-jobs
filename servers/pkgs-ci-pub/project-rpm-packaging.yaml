@@ -98,7 +98,7 @@
               CHANGED_FILES=$(find . -name "*.spec" -o -name "*.spec.j2")
           else
               # Test only changed specs
-              CHANGED_FILES=$(git diff --name-only HEAD~1)
+              CHANGED_FILES=$(git diff --name-only --diff-filter=ACMT HEAD~1)
 
               # Checkout branch HEAD if CR is merged
               if [ "${{GERRIT_CHANGE_STATUS:-NEW}}" = "MERGED" ]; then
