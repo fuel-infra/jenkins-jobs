@@ -48,6 +48,45 @@
     name: '{version}{mod}.main.{dist}.{testgroup}'
     defaults: '{version}{mod}.main.{dist}.{testgroup}'
 
+    concurrent: true
+    disabled: false
+
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
+
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          description: "iso magnet link"
+      - string:
+          name: UBUNTU_MIRROR_ID
+          description: "snapshot of upstream ubuntu mirror"
+      - string:
+          name: FUEL_QA_COMMIT
+          default: '{qa_branch}'
+          description: "Commit-id or branch to checkout"
+
+    scm:
+    - main-git:
+        reponame: '{reponame}'
+        repobranch: '$FUEL_QA_COMMIT'
+        basedir: ''
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm
+
     builders:
     - inject: # Defaults
         properties-content: |
@@ -65,30 +104,6 @@
         !include-raw-escape: 'scripts/run_bvt.sh'
     - shell: # This step is executed only if previous one was successful
         !include-raw-escape: 'scripts/erase_env.sh'
-
-    concurrent: true
-    disabled: false
-    logrotate:
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
-      daysToKeep: 30
-      numToKeep: 50
-
-    parameters:
-      - string:
-          name: MAGNET_LINK
-          description: "iso magnet link"
-      - string:
-          name: UBUNTU_MIRROR_ID
-          description: "snapshot of upstream ubuntu mirror"
-      - string:
-          name: FUEL_QA_COMMIT
-          default: '{qa_branch}'
-          description: "Commit-id or branch to checkout"
-
-    properties:
-    - heavy-job:
-        weight: '{weight}'
 
     publishers:
     - archive:
@@ -136,17 +151,3 @@
         subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
     - trigger-parameterized-builds:
         '{obj:trigger_projects}'
-
-    scm:
-    - main-git:
-        reponame: '{reponame}'
-        repobranch: '$FUEL_QA_COMMIT'
-        basedir: ''
-
-    wrappers:
-    - timeout:
-        fail: false
-        timeout: '{timeout}'
-        write-description: false
-    - ansicolor:
-        colormap: xterm

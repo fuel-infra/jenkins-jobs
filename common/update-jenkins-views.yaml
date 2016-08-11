@@ -3,64 +3,71 @@
     description: |
       <p>Update jenkins views configuration on fuel-infra/jenkins-jobs merge or manually</p>
       <p>Requires python-tox package and user credentials stored as JJB_USER and JJB_PASS using Jenkins Global Passwords feature</p>
+
     concurrent: false
     node: 'jjb_update'
-    builders:
-      - inject:
-          properties-content: 'CI_NAME={ci-name}'
-      - shell:
-          !include-raw-escape: scripts/update-jenkins-views.sh
+
     parameters:
-      - string:
-          name: VIEWS_LIST
-          description: 'Space separated list of view YAMLs to update. Will update all views if empty'
-    publishers:
-      - post-tasks:
-        - matches:
-          - log-text: '.'
-          escalate-status: true
-          script: !include-raw-escape: scripts/update-jenkins-cleanup.sh
-      - email-ext:
-          body: $DEFAULT_CONTENT
-          aborted: true
-          failure: true
-          still-failing: true
-          fixed: true
-          send-to:
-            - recipients
-            - requester
-          recipients: ci+alert@mirantis.com
-          subject: '[Jenkins] {ci-name} $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
-      - naginator:
-          max-failed-builds: 3
-          fixed-delay: 10
-          regular-expression: 'authentication failed \[401\]'
+    - string:
+        name: VIEWS_LIST
+        description: 'Space separated list of view YAMLs to update. Will update all views if empty'
+
     scm:
-      - git:
-          branches:
-            - master
-          remotes:
-            - gerrit:
-                url: 'https://review.fuel-infra.org/fuel-infra/jenkins-jobs.git'
-          choosing-strategy: default
+    - git:
+        branches:
+        - master
+        remotes:
+        - gerrit:
+            url: 'https://review.fuel-infra.org/fuel-infra/jenkins-jobs.git'
+        choosing-strategy: default
+
     triggers:
-      - timed: 'H * * * *'
-      - gerrit:
-          trigger-on:
-            - change-merged-event
-          projects:
-            - project-compare-type: PLAIN
-              project-pattern: 'fuel-infra/jenkins-jobs'
-              branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-              file-paths:
-                - compare-type: ANT
-                  pattern: 'views/{ci-name}/**'
+    - timed: 'H * * * *'
+    - gerrit:
+        trigger-on:
+        - change-merged-event
+        projects:
+        - project-compare-type: PLAIN
+          project-pattern: 'fuel-infra/jenkins-jobs'
+          branches:
+          - branch-compare-type: PLAIN
+            branch-pattern: 'master'
+          file-paths:
+          - compare-type: ANT
+            pattern: 'views/{ci-name}/**'
     wrappers:
-      - timestamps
-      - inject-passwords:
-          global: true
-      - timeout:
-          fail: true
-          timeout: 30
+    - timestamps
+    - inject-passwords:
+        global: true
+    - timeout:
+        fail: true
+        timeout: 30
+
+    builders:
+    - inject:
+        properties-content: 'CI_NAME={ci-name}'
+    - shell:
+        !include-raw-escape: scripts/update-jenkins-views.sh
+
+    publishers:
+    - post-tasks:
+      - matches:
+        - log-text: '.'
+        escalate-status: true
+        script: !include-raw-escape: scripts/update-jenkins-cleanup.sh
+    - email-ext:
+        body: $DEFAULT_CONTENT
+        aborted: true
+        failure: true
+        still-failing: true
+        fixed: true
+        send-to:
+          - recipients
+          - requester
+        recipients: ci+alert@mirantis.com
+        subject: '[Jenkins] {ci-name} $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
+    - naginator:
+        max-failed-builds: 3
+        fixed-delay: 10
+        regular-expression: 'authentication failed \[401\]'
+

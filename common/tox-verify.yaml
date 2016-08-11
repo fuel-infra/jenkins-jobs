@@ -1,26 +1,28 @@
 - job-template:
     name: 'tox-verify-{name}'
-    node: '{node}'
+
     concurrent: true
     reponame: '{reponame}'
-
-    builders:
-      - shell: 'tox -v'
+    node: '{node}'
 
     parameters:
-      - string:
-          name: GERRIT_REFSPEC
-          default: refs/heads/master
+    - string:
+        name: GERRIT_REFSPEC
+        default: refs/heads/master
+
     scm:
-      - main:
-          reponame: '{reponame}'
-          repobranch: '$GERRIT_BRANCH'
+    - main:
+        reponame: '{reponame}'
+        repobranch: '$GERRIT_BRANCH'
 
     triggers:
-      - main:
-          project-name: '{reponame}'
+    - main:
+        project-name: '{reponame}'
+
+    builders:
+    - shell: 'tox -v'
 
     publishers:
-      - archive:
-          artifacts: 'output/**'
-          allow-empty: 'true'
+    - archive:
+        artifacts: 'output/**'
+        allow-empty: 'true'

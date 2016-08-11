@@ -26,8 +26,10 @@
     #     Default parameteres required for the job
     name: '{version-id}.{job-type}.{dist}.{upgrade_testgroup}'
     description: '{description}'
+
     concurrent: true
     node: '{node}'
+
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1

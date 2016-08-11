@@ -1,18 +1,19 @@
 - job-template:
     # FIXME: mirror_update logic should be implemented on JJB level
     name: 'mirror-local-{name}'
-    node: '{node}'
+
     concurrent: false
+    node: '{node}'
 
     scm:
-      - main:
-          reponame: 'infra/mirrors'
-          repobranch: 'origin/master'
+    - main:
+        reponame: 'infra/mirrors'
+        repobranch: 'origin/master'
 
     builders:
-      - shell: 'bash -x mirror_update.sh {name}'
+    - shell: 'bash -x mirror_update.sh {name}'
 
 
     publishers:
-      - description-setter:
-          regexp: "^Synced.*a href.*"
+    - description-setter:
+        regexp: "^Synced.*a href.*"

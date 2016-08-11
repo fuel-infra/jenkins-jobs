@@ -49,110 +49,118 @@
     overridden_parameters: ''
     variables: ''
 
+
 - job-template:
     name: '{version}.custom.iso'
-    defaults: '{version}.custom.iso'
-    builders:
-      - inject: # fuel-main parameters overridden by default
-          properties-content: |
-            ARTS_DIR=${{WORKSPACE}}/artifacts
-            ISO_ID={version}{mod}
-            ISO_TYPE=custom
-            UBUNTU_MIRROR_ID=latest
-            CENTOS_MIRROR_ID=centos-7.2.1511
-            MOS_CENTOS_ROOT=/mos-repos/centos/mos{version}-centos7/
-            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
-            MOS_UBUNTU_TARGET={version}.target.txt
-            {overridden_parameters}
-      - inject: # Manual overrides
-          properties-content: |
-            $MANUAL_PARAMETERS
-      - shell:
-          !include-raw-escape: scripts/all.sh
-      - publish-product-iso
     description: '{description}'
+    defaults: '{version}.custom.iso'
+
     logrotate:
       artifactDaysToKeep: 90
       daysToKeep: 90
+
     properties:
-      - authorization-allow-authorized
-      - build-timestamp
-      - heavy-job:
-          weight: 1
-      - throttle:
-          categories:
-            - iso_builds
-          max-per-node: 1
-          option: category
+    - authorization-allow-authorized
+    - build-timestamp
+    - heavy-job:
+        weight: 1
+    - throttle:
+        categories:
+          - iso_builds
+        max-per-node: 1
+        option: category
+
     parameters:
-      - string:
-          name: CLOSEST_MIRROR_URL
-          default: ''
-          description: Mirror baseurl. For example http://perestroika-repo-tst.infra.mirantis.net
-            Otherwise it is calculated depending on the worker location.
-      - string:
-          name: make_args
-          default: ''
-          description: Additional make arguments
-      - string:
-          name: FUELMAIN_REPO
-          default: 'https://git.openstack.org/openstack/fuel-main.git'
-      - string:
-          name: FUELMAIN_COMMIT
-          default: '{default_commit}'
-      - string:
-          name: FUELMAIN_GERRIT_COMMIT
-          default: 'none'
-          description: Refspecs for commits in fuel-main gerrit separated with spaces.
-            For example, refs/changes/10/55310/1 refs/changes/10/55310/2
-      - choice:
-          name: USE_MIRROR
-          choices:
-            - none
-          description: 'take closest mirror'
-      - string:
-          name: EXTRA_RPM_REPOS
-          default: ''
-          description: |
-            Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
-            Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
-            Example: <b> foo,http://my.cool.repo/rpm   bar,ftp://repo.foo </b>
-      - text:
-          name: MANUAL_PARAMETERS
-          default: |
-            # Fuel-Main defaults
-            {fuelmain_defaults}
-            # Already overridden parameters
-            {overridden_parameters}
-          description: |
-            <b>Note</b>: you can specify more than one value for <b>*_GERRIT_COMMIT</b> variables.<br>
-            In this case, values must be mentioned without quotes and separated by space, example:<br>
-            <b>
-            FUELLIB_GERRIT_COMMIT=refs/changes/26/336726/2 refs/changes/47/336947/2<br>
-            NAILGUN_GERRIT_COMMIT=refs/changes/75/329375/1 refs/changes/67/319867/3 refs/changes/00/309500/3
-            </b>
+    - string:
+        name: CLOSEST_MIRROR_URL
+        default: ''
+        description: Mirror baseurl. For example http://perestroika-repo-tst.infra.mirantis.net
+          Otherwise it is calculated depending on the worker location.
+    - string:
+        name: make_args
+        default: ''
+        description: Additional make arguments
+    - string:
+        name: FUELMAIN_REPO
+        default: 'https://git.openstack.org/openstack/fuel-main.git'
+    - string:
+        name: FUELMAIN_COMMIT
+        default: '{default_commit}'
+    - string:
+        name: FUELMAIN_GERRIT_COMMIT
+        default: 'none'
+        description: Refspecs for commits in fuel-main gerrit separated with spaces.
+          For example, refs/changes/10/55310/1 refs/changes/10/55310/2
+    - choice:
+        name: USE_MIRROR
+        choices:
+          - none
+        description: 'take closest mirror'
+    - string:
+        name: EXTRA_RPM_REPOS
+        default: ''
+        description: |
+          Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
+          Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
+          Example: <b> foo,http://my.cool.repo/rpm   bar,ftp://repo.foo </b>
+    - text:
+        name: MANUAL_PARAMETERS
+        default: |
+          # Fuel-Main defaults
+          {fuelmain_defaults}
+          # Already overridden parameters
+          {overridden_parameters}
+        description: |
+          <b>Note</b>: you can specify more than one value for <b>*_GERRIT_COMMIT</b> variables.<br>
+          In this case, values must be mentioned without quotes and separated by space, example:<br>
+          <b>
+          FUELLIB_GERRIT_COMMIT=refs/changes/26/336726/2 refs/changes/47/336947/2<br>
+          NAILGUN_GERRIT_COMMIT=refs/changes/75/329375/1 refs/changes/67/319867/3 refs/changes/00/309500/3
+          </b>
+
     scm:
-      - git:
-          url: '$FUELMAIN_REPO'
-          branches:
-            - '{branch}'
+    - git:
+        url: '$FUELMAIN_REPO'
+        branches:
+        - '{branch}'
+
     wrappers:
-      - timeout:
-          timeout: 120
-          fail: true
-      - ansicolor:
-          colormap: xterm
+    - timeout:
+        timeout: 120
+        fail: true
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+    - inject: # fuel-main parameters overridden by default
+        properties-content: |
+          ARTS_DIR=${{WORKSPACE}}/artifacts
+          ISO_ID={version}{mod}
+          ISO_TYPE=custom
+          UBUNTU_MIRROR_ID=latest
+          CENTOS_MIRROR_ID=centos-7.2.1511
+          MOS_CENTOS_ROOT=/mos-repos/centos/mos{version}-centos7/
+          MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
+          MOS_UBUNTU_TARGET={version}.target.txt
+          {overridden_parameters}
+    - inject: # Manual overrides
+        properties-content: |
+          $MANUAL_PARAMETERS
+    - shell:
+        !include-raw-escape: scripts/all.sh
+    - publish-product-iso
+
     publishers:
-      - archive:
-          allow-empty: true
-          artifacts: artifacts/*txt, artifacts/*changelog
-          latest-only: false
-      - description-setter:
-          regexp: (<a href=.*a>\s*<a href=.*a>\s*<br>magnet.*<br>)
-          set-for-matrix: false
-      - email-ext:
-          default-subject: '$DEFAULT_SUBJECT'
-          failure: true
-          success: true
-          send-to:
-            - requester
+    - archive:
+        allow-empty: true
+        artifacts: artifacts/*txt, artifacts/*changelog
+        latest-only: false
+    - description-setter:
+        regexp: (<a href=.*a>\s*<a href=.*a>\s*<br>magnet.*<br>)
+        set-for-matrix: false
+    - email-ext:
+        default-subject: '$DEFAULT_SUBJECT'
+        failure: true
+        success: true
+        send-to:
+          - requester
