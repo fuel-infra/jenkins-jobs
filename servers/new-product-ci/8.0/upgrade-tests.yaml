@@ -1,13 +1,15 @@
 - project:
     name: 8.0-upgrades
+    description: |
+      This is product-ci upgrade system test chain (7.0 -> 8.0).
 
     dist: 'ubuntu'
     version-id: '8.0'
     job-type: 'upgrades'
     base-branch: 'stable/7.0'
     upgrade-branch: 'stable/8.0'
-    base-magnet-link: 'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-mnv.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
-    upgrade-magnet-link: 'magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
+    base-magnet-link: !include-raw-escape: ../data/7.0-iso
+    upgrade-magnet-link: !include-raw-escape: ../data/8.0-iso
     base-proposed: 'http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64'
     upgrade-proposed: 'http://packages.fuel-infra.org/repositories/centos/liberty-centos7/proposed/x86_64'
     node: 'systest'
@@ -20,8 +22,6 @@
       UPGRADE_FUEL_FROM=7.0
       UPGRADE_FUEL_TO=8.0
     weight: '8'
-    description: |
-      This is product-ci upgrade system test chain (7.0 -> 8.0).
 
     jobs:
       - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
