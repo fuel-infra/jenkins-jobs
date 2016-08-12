@@ -102,11 +102,11 @@
           # Pre-create JUnit results file to not fail because of JUnit publisher
           touch fuel-qa/nosetests.xml
 
-      - inject-from-job(same-patchset):
+      - inject-from-job(same-change):
           job-name: '{project-version}-{name}-build-{distro}'
           artifact-name: 'buildresult.params'
 
-      - inject-from-job(same-patchset):
+      - inject-from-job(same-change):
           job-name: '{project-version}-{name}-publish-{distro}'
           artifact-name: '{pkg_type}.publish.setenvfile'
 

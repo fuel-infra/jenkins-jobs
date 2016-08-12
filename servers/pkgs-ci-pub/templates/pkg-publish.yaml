@@ -38,7 +38,7 @@
 
     builders:
 
-      - inject-from-job(same-patchset):
+      - inject-from-job(same-change):
           job-name: '{project-version}-{name}-build-{distro}'
           artifact-name: 'buildresult.params'
 

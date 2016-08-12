@@ -94,13 +94,13 @@
           set -ex
           # Clean logs from previous runs
           rm -vf fuel-qa/logs/*
-      - inject-from-job(same-patchset):
+      - inject-from-job(same-change):
           job-name: '{mos_version}-pkg-pipeline-{os}'
           artifact-name: 'buildresult.params'
-      - inject-from-job(same-patchset):
+      - inject-from-job(same-change):
           job-name: '{mos_version}-pkg-pipeline-{os}'
           artifact-name: 'systest.params'
-      - inject-from-job(same-patchset):
+      - inject-from-job(same-change):
           job-name: '{mos_version}-pkg-publish-{os}'
           artifact-name: '{pkg_type}.publish.setenvfile'
       - inject-devops-env:

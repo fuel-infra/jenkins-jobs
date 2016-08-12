@@ -188,7 +188,7 @@
               ADDITIONAL_EXTRAREPO_RPM=$_ORIGINAL_DESTINATION_REPO_RPM|$_MASTER_REPO_FOR_DEP_RPM
               ORIGIN={deb-origin-test}
 
-    - inject-from-job(same-patchset):
+    - inject-from-job(same-change):
         job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
         artifact-name: 'buildresult.params'
     - rename:
@@ -196,7 +196,7 @@
         dst: 'buildresult-tmp.params'
         allow-empty: true
 
-    - inject-from-job(same-patchset):
+    - inject-from-job(same-change):
         job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
         artifact-name: 'buildresult.params'
     - rename:
@@ -235,7 +235,7 @@
             ADDITIONAL_EXTRAREPO_DEB=$_ORIGINAL_DESTINATION_REPO_DEB|$_MASTER_REPO_FOR_DEP_DEB
             ADDITIONAL_EXTRAREPO_RPM=$_ORIGINAL_DESTINATION_REPO_RPM|$_MASTER_REPO_FOR_DEP_RPM
 
-    - inject-from-job(same-patchset):
+    - inject-from-job(same-change):
         job-name: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
         artifact-name: '{pkg_type}.publish.setenvfile'
     - rename:
