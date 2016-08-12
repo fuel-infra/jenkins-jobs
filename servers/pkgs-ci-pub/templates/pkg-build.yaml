@@ -13,6 +13,8 @@
           <li> system test using just built packages
         </ul>
 
+    node: '{build-node}'
+
     properties:
       - inject:
           properties-content: |
@@ -76,7 +78,7 @@
           # and then copy perestroika directory to root ${{WORKSPACE}}
           cp -rv ${{WORKSPACE}}/fuel-mirror/perestroika/* ${{WORKSPACE}}
       - shell:
-          !include-raw builders/pkg_build.sh.template
+          !include-raw: builders/pkg_build.sh.template
 
     publishers:
       - 'email-alert-on-merge'
@@ -91,7 +93,6 @@
           run-if-job-successful: true
           script: rm -rf *
 
-    node: '{build-node}'
 
 ################################################################################
 # Job Groups
