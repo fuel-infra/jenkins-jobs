@@ -1,4 +1,16 @@
 - builder:
+    # Helper macros to concatenate 2 text blocks which could come from
+    # different sources (from files by !include-raw-escape and typed inline)
+    # This macros is needed to build macros from below with included list
+    # of core includes.
+    #
+    name: __combine_shell
+    builders:
+    - shell: |
+        {head}
+        {tail}
+
+- builder:
     name: extended-bash
     #
     # Very cool wrapper for bash scripts that exposes some core functionality and
@@ -36,15 +48,21 @@
     #       importedFunction arg1 arg2
 
     builders:
+
+    # create file with list of future injections or clean it if exists
     - shell: echo > inject-with-bash.envfile
-    - shell: |
-        #!/bin/bash
-        # core functionality
-        inject () {{
-          echo "$1=$2" >> inject-with-bash.envfile
-        }}
-        {headers}
-        {script}
+
+    - __combine_shell:
+        # includes all core functionality
+        head:
+          !include-raw-escape:
+            - 'includes/jenkins.lib.sh'
+        # entry points for additional imports and raw script
+        tail: |
+          {headers}
+          {script}
+
+    # inject file and remove it
     - inject-properties-file:
         properties-file: 'inject-with-bash.envfile'
     - shell: rm -vf inject-with-bash.envfile
