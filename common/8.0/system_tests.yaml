@@ -38,42 +38,24 @@
     #     Path to file with additional properties stored on slave, variables
     #     will be injected to job before test start.
     name: '8.0.{test-type}.{dist}.{testgroup}'
+    description: '{description}'
+
     defaults: '8.0.system_tests'
     block-downstream: false
     block-upstream: false
-    builders:
-    - inject: # default env variables
-        properties-content: |
-          VENV_PATH={venvpath}
-          POOL_DEFAULT={default_pool}
-          OPENSTACK_RELEASE={dist}
-          TEST_GROUP={testgroup}
-          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-          DEPLOYMENT_TIMEOUT=10800
-    - inject: # overrides
-        properties-content: '{properties}'
-        properties-file: '{properties-file}'
-    - shell: |
-        #!/bin/bash
-        echo "=== [systest PRE-script] ==="
-        {pre-script}
-    - shell:
-        !include-raw-escape: 'scripts/run_system_test.sh'
-    - shell: |
-        #!/bin/bash
-        echo "=== [systest POST-script] ==="
-        {post-script}
-    - shell:
-        !include-raw-escape: '../scripts/erase_env.sh'
     concurrent: true
-    description: '{description}'
     disabled: false
+    node: '{node}'
+
     logrotate:
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
       daysToKeep: 30
       numToKeep: 50
-    node: '{node}'
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
 
     parameters:
     - string:
@@ -117,9 +99,46 @@
         name: RPM_LATEST
         default: $RPM_LATEST
 
-    properties:
-    - heavy-job:
-        weight: '{weight}'
+    scm:
+    - main-git:
+        reponame: '{reponame}'
+        repobranch: '{repobranch}'
+        basedir: ''
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - inject-passwords:
+        global: true
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+    - inject: # default env variables
+        properties-content: |
+          VENV_PATH={venvpath}
+          POOL_DEFAULT={default_pool}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          DEPLOYMENT_TIMEOUT=10800
+    - inject: # overrides
+        properties-content: '{properties}'
+        properties-file: '{properties-file}'
+    - shell: |
+        #!/bin/bash
+        echo "=== [systest PRE-script] ==="
+        {pre-script}
+    - shell:
+        !include-raw-escape: 'scripts/run_system_test.sh'
+    - shell: |
+        #!/bin/bash
+        echo "=== [systest POST-script] ==="
+        {post-script}
+    - shell:
+        !include-raw-escape: '../scripts/erase_env.sh'
 
     publishers:
     - archive:
@@ -139,19 +158,3 @@
         property-file: links.txt
         predefined-parameters: TEST_JOB_NAME=$JOB_NAME
         triggerWithNoParameters: false
-
-    scm:
-    - main-git:
-        reponame: '{reponame}'
-        repobranch: '{repobranch}'
-        basedir: ''
-
-    wrappers:
-    - timeout:
-        fail: false
-        timeout: '{timeout}'
-        write-description: false
-    - inject-passwords:
-        global: true
-    - ansicolor:
-        colormap: xterm
