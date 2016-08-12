@@ -6,43 +6,45 @@
               frameborder='0'
               src='https://product-ci.infra.mirantis.net/job/10.0.swarm.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'>
       </iframe>
-    builders:
-      - inject:
-           properties-content: |
-             TEST_RUNNER_JOB_NAME=10.0.swarm.runner
-             TESTRAIL_MILESTONE=10.0
-             LAUNCHPAD_MILESTONE=10.0
-             HANDLE_BLOCKED=true
-             PUBLISH=true
-             OUTPUT_FILE=bugs_link_stat
-             CREATE_HTML=true
-      - shell:
-          !include-raw builders/testrail_generate_statistics.sh
+
     node: testrail
 
-    triggers:
-      - timed: '30 20 * * *'
-
     scm:
-     - main-git:
-          reponame: 'fuel-qa'
-          repobranch: 'origin/master'
-          basedir: ''
+    - main-git:
+        reponame: 'fuel-qa'
+        repobranch: 'origin/master'
+        basedir: ''
+
+    triggers:
+    - timed: '30 20 * * *'
 
     wrappers:
-     - inject-passwords:
-          global: true
-          mask-password-params: true
+    - inject-passwords:
+        global: true
+        mask-password-params: true
+
+    builders:
+    - inject:
+        properties-content: |
+          TEST_RUNNER_JOB_NAME=10.0.swarm.runner
+          TESTRAIL_MILESTONE=10.0
+          LAUNCHPAD_MILESTONE=10.0
+          HANDLE_BLOCKED=true
+          PUBLISH=true
+          OUTPUT_FILE=bugs_link_stat
+          CREATE_HTML=true
+    - shell:
+        !include-raw builders/testrail_generate_statistics.sh
 
     publishers:
-      - archive:
-          allow-empty: true
-          artifacts: bugs_link_stat.html
-          latest-only: false
+    - archive:
+        allow-empty: true
+        artifacts: bugs_link_stat.html
+        latest-only: false
 
-      - email:
-          recipients: ci+swarm@mirantis.com
+    - email:
+        recipients: ci+swarm@mirantis.com
 
-      - description-setter:
-          regexp: '^.*Found TestPlan (.*)'
-          description: 'Bugs stats for \1'
+    - description-setter:
+        regexp: '^.*Found TestPlan (.*)'
+        description: 'Bugs stats for \1'
