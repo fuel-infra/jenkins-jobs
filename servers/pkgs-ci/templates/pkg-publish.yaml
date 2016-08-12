@@ -6,7 +6,27 @@
     parameters:
       - gerrit
 
-    properties:
+
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-jenkins}'
+      - timestamps
+      - ansicolor
+
+    triggers:
+      - zuul
+
+    scm:
+      - perestroika:
+          branch: '{perestroika-branch}'
+
+    builders:
+
+      - extended-bash:
+          headers: ''
+          script: '{pre-build-script}'
+
       - inject:
           properties-content: |
             PROJECT_NAME={project-name}
@@ -45,27 +65,10 @@
 
             PKG_JSON_REPORT=/home/jenkins/{project-version}-pkg-{project-name}-versions.json
 
-    wrappers:
-      - ssh-agent-credentials:
-          users:
-            - '{ssh-creds-jenkins}'
-      - timestamps
-      - ansicolor
-
-    triggers:
-      - zuul
-
-    scm:
-      - perestroika:
-          branch: '{perestroika-branch}'
-
-    builders:
-
       - inject-from-job(same-change):
           # need BUILD_HOST PKG_PATH
           job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
           artifact-name: 'buildresult.params'
-
       - shell:
           !include-raw-escape:
             '../builders/pkg_publish.sh'

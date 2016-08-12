@@ -8,11 +8,6 @@
     properties:
       - heavy-job:
           weight: 8
-      - inject:
-          properties-content: |
-            OPENSTACK_RELEASE={openstack_release}
-            OS_TYPE={os}
-            ENV_PREFIX={mos_version}-pkg-systest-{os}-{distro}
 
     parameters:
 
@@ -79,6 +74,16 @@
       - timed: "H */12 * * *"
 
     builders:
+
+      - extended-bash:
+          headers: ''
+          script: '{pre-build-script}'
+
+      - inject:
+          properties-content: |
+            OPENSTACK_RELEASE={openstack_release}
+            OS_TYPE={os}
+            ENV_PREFIX={mos_version}-pkg-systest-{os}-{distro}
 
       - inject:
           # Set defaults which could be reinjected

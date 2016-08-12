@@ -23,6 +23,10 @@
 
     builders:
 
+      - extended-bash:
+          headers: ''
+          script: '{pre-build-script}'
+
       - inject-from-job(same-change):
           # need EXTRAREPO
           job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'

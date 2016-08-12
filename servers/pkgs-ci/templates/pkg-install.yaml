@@ -47,6 +47,10 @@
 
     builders:
 
+      - extended-bash:
+          headers: ''
+          script: '{pre-build-script}'
+
       - shell: |
           #!/bin/bash
           set -ex

@@ -60,16 +60,17 @@
         spec_prefix_path: '/{distro}'
         openstack_release: ubuntu
 
+    pre-build-script: |
+      set -ex
+      inject IS_PLUGIN true
+      if echo "$GERRIT_BRANCH" | grep -q '[.0-9]*/release/[.0-9]*' ; then
+        # perform such conversion:
+        # 9.0/release/0.0.1 -> release/0.0.1/
+        inject BIN_REPO_SUBPATH "${{GERRIT_BRANCH#*/}}/"
+      fi
+
     jobs:
-    - '{project-version}-pkg-{project-name}-build-{os}-{distro}':
-        pre-build-script: |
-          set -ex
-          inject IS_PLUGIN true
-          if echo "$GERRIT_BRANCH" | grep -q '[.0-9]*/release/[.0-9]*' ; then
-            # perform such conversion:
-            # 9.0/release/0.0.1 -> release/0.0.1/
-            inject BIN_REPO_SUBPATH "${{GERRIT_BRANCH#*/}}/"
-          fi
+    - '{project-version}-pkg-{project-name}-build-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-install-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
