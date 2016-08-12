@@ -91,7 +91,7 @@
 
     builders:
       - shell:
-          !include-raw builders/build_late_artifacts.sh
+          !include-raw: builders/build_late_artifacts.sh
       - trigger-builds:
           - project: '8.0-pkg-publish-centos'
             current-parameters: false
