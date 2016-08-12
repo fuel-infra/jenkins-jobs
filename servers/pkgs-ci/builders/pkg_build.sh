@@ -72,10 +72,9 @@ get_rpm_snapshot() {
 
 # Required parameters
 : "${GERRIT_PROJECT?}"
-: "${GERRIT_CHANGE_NUMBER?}"
-
 if [ -n "${GERRIT_REFSPEC}" ]; then
     # CR-specific
+    : "${GERRIT_CHANGE_NUMBER?}"
     : "${GERRIT_BRANCH?}"
 else
     # ref-updated
