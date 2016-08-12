@@ -57,6 +57,11 @@
 
           EXTRAREPO=$(printf "%s\n" "${{EXTRAREPOS[@]}}" | sort -u | tr '\n' '|' | sed -r 's/\|$//')
 
-          bash -x repo-test-${{REPO_TYPE}}-docker
+          # workaround for first packages targeted to not yet created repo
+          if curl -sf "$(echo $REPO_URL | cut -d ' ' -f 1)" &>/dev/null ; then
+              bash -x repo-test-${{REPO_TYPE}}-docker
+          else
+              echo "Repo test skipped"
+          fi
 
     node: '{install-node}'
