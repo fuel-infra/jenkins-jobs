@@ -56,12 +56,12 @@
           !include-raw-escape:
             '../builders/mos.install.cleanup.sh'
 
-      - inject-from-job(same-patchset):
+      - inject-from-job(same-change):
           # need BUILD_HOST PKG_PATH
           job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
           artifact-name: 'buildresult.params'
 
-      - inject-from-job(same-patchset):
+      - inject-from-job(same-change):
           # need {pkg_type}_VERSION {pkg_type}_BINARIES {pkg_type}_REPO_URL {pkg_type}_VERSION
           job-name: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
           artifact-name: '{pkg_type}.publish.setenvfile'

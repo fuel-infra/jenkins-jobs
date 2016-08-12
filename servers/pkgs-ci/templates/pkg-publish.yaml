@@ -61,7 +61,7 @@
 
     builders:
 
-      - inject-from-job(same-patchset):
+      - inject-from-job(same-change):
           # need BUILD_HOST PKG_PATH
           job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
           artifact-name: 'buildresult.params'

@@ -101,13 +101,21 @@
           properties-file: '{artifact-name}'
 
 - builder:
-    name: inject-from-job(same-patchset)
+    name: inject-from-job(same-change)
 
     builders:
+      # In case of ref-updated there is no CR-specific parameters, so lets use two
+      # sets of parameters for both cases
       - inject-from-job:
           job-name: '{job-name}'
           artifact-name: '{artifact-name}'
           parameter-filters: GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}},GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          which-build: last-successful
+          optional: true
+      - inject-from-job:
+          job-name: '{job-name}'
+          artifact-name: '{artifact-name}'
+          parameter-filters: GERRIT_OLDREV=${{GERRIT_OLDREV}},GERRIT_NEWREV=${{GERRIT_NEWREV}}
           which-build: last-successful
           optional: true
 
