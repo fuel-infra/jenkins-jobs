@@ -161,6 +161,23 @@
     - string: # added for cleaner which searches for job parameter
         name: ENV_PREFIX
         default: '9.x.custom.{dist}.system_test'
+    - bool:
+        name: KEEP_ENV
+        description: 'Save environment if it need'
+    - string:
+        name: FUEL_QA_COMMIT
+        default: 'stable/mitaka'
+    - string: # added for ability override test framewor url
+        name: TEST_FRAMEWORK_URL
+        default: https://github.com/openstack/fuel-qa.git
+        description: |
+              Test framework url. As alternative can use the following urls:
+              https://github.com/openstack/stacklight-integration-tests.git
+              https://github.com/openstack/fuel-plugin-murano-tests.git
+    - string: # added for ability override test framework branch
+        name: TEST_FRAMEWORK_BRANCH
+        default: 'stable/mitaka'
+        description: 'Default value for quel-qa, for custom framework need change e.g. "master"'
 
     properties:
     - authorization-allow-authorized
@@ -168,10 +185,11 @@
         weight: '{weight}'
 
     scm:
-    - main-git:
-        reponame: 'fuel-qa'
-        repobranch: 'stable/mitaka'
-        basedir: ''
+      - git:
+          url: '$TEST_FRAMEWORK_URL'
+          branches:
+             - '$TEST_FRAMEWORK_BRANCH'
+          basedir: ''
 
     wrappers:
     - timeout:
@@ -243,6 +261,26 @@
         # TEST SETTINGS
         $PARAMETERS_FOR_TEST
         EOF
+
+    - extended-bash:
+          headers: ''
+          script: |
+             #!/bin/bash
+             set -ex
+             # Fuel-plugin-murano-tests and stacklight-integration-tests are wrappers around fuel-qa
+             # which run fuel-qa after customs prepare environment
+             # Redefine path to venv if use non standart test framework
+             if [ "$TEST_FRAMEWORK_URL" != "https://github.com/openstack/fuel-qa.git" ] ; then
+                 VENV_PATH="${{WORKSPACE}}/venv_test"
+                 inject VENV_PATH ${{VENV_PATH}}
+                 export VENV_PATH=${{VENV_PATH}}
+                 # The variable FUELQA_GITREF used prepare env script in stacklight-integration-tests
+                 export FUELQA_GITREF="${{FUEL_QA_COMMIT}}"
+                 # Run prepare environment script from test framework repository
+                 if [ -f ./utils/fuel-qa-builder/prepare_env.sh ] ; then
+                    ./utils/fuel-qa-builder/prepare_env.sh
+                 fi
+             fi
 
     - apply-fuel-qa-patches
 
