@@ -190,7 +190,11 @@ Shell-scripts
   whenever possible. In case this rule can not be used, leave a
   comment in the script.
 
-* Use ``source`` command instead of ``dot``
+* Readability matters. Add comments for all specific actions.
+
+* We mostly follow Google's guidelines: https://google.github.io/styleguide/shell.xml
+
+* Use ``source`` command instead of ``.``
 
 * Use ``$(command)`` instead of backticks
 
@@ -200,8 +204,21 @@ Shell-scripts
 
 * Try to limit line length to 100 symbols whenever possible.
 
+* Shellcheck is a law. If your changes don't pass shellcheck, you must fix problems.
+
+* There are some old scripts appeared before shellcheck, if you encoutered shellcheck errors
+  while editing these files and you are able to fix this errors, please fix them in the same patch.
+  If there are few errors you could fix them in the same patch.
+  If there are lots of them, feel free to create another patch we'll accept it with gladness.
+  When you are not able to fix this errors, please contact maintainers for help.
+
+* ``# shellcheck disable=XXXX`` is a very exceptional case.
+
 * Try to avoid ``cmd1 && cmd2 || cmd3``,
   see https://github.com/koalaman/shellcheck/wiki/SC2015 for details
+
+* Consider to look at https://github.com/koalaman/shellcheck/wiki/
+  there are lot's of good howto's
 
 include-raw vs include-raw-escape
 ---------------------------------
