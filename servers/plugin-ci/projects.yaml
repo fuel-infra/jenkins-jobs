@@ -227,7 +227,7 @@
       - 9.0_murano-plugin_r1:
           plugin_branch: master
           iso_magnet_link: release-9.0
-          plugin_custom_variables: 'MURANO_PACKAGES_URLS=http://perestroika-repo-tst.infra.mirantis.net/extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0/pool/main/'
+          plugin_custom_variables: 'MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0/pool/main/'
 
     plugin_name:
       - detach-murano:
@@ -257,7 +257,7 @@
       - 9.0_murano-plugin_r1:
           plugin_branch: master
           iso_magnet_link: release-9.0
-          plugin_custom_variables: 'MURANO_PACKAGES_URLS=http://perestroika-repo-tst.infra.mirantis.net/extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0/pool/main/'
+          plugin_custom_variables: 'MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0/pool/main/'
 
     plugin_name:
       - detach-murano-timer:
