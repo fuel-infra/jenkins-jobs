@@ -46,50 +46,26 @@ export FUELUPGRADE_GERRIT_COMMIT="${fuelupgrade_gerrit_commit}"
 ######## Get node location to choose closer mirror ###############
 # We are building everything with USE_MIRROR=none
 
-# Let's try use closest perestroika mirror location
-LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
-LOCATION=${LOCATION_FACT:-msk}
-
-case "${LOCATION}" in
-    srt)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
-        ;;
-    msk)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
-        ;;
-    hrk)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
-        ;;
-    poz|bud|bud-ext|cz)
-        LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
-        ;;
-    scc)
-        LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
-        ;;
-    *)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
-esac
-
 # define closest stable ubuntu mirror snapshot
-LATEST_TARGET_UBUNTU=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/8.0.target.txt" | head -1)
+LATEST_TARGET_UBUNTU=$(curl -sSf "http://${MIRROR_HOST}/mos-repos/ubuntu/8.0.target.txt" | head -1)
 
 # we need to have ability to define UBUNTU MOS mirror by user
 if [[ "${make_args}" != *"MIRROR_MOS_UBUNTU="* ]]; then
     # MIRROR_MOS_UBUNTU= is not defined in make_args
     # since in fuel-main MIRROR_MOS_UBUNTU?=perestroika-repo-tst.infra.mirantis.net, we need to remove http://
-    export MIRROR_MOS_UBUNTU="${LATEST_MIRROR_ID_URL#http://}"
+    export MIRROR_MOS_UBUNTU="${MIRROR_HOST}"
     export MIRROR_UBUNTU="${MIRROR_MOS_UBUNTU}"
     export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET_UBUNTU}"
 fi
 
 # define closest stable centos mirror snapshot
 # http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/$(PRODUCT_NAME)$(PRODUCT_VERSION)-centos7-fuel/os/x86_64
-LATEST_TARGET_CENTOS=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos8.0-centos7-fuel/os.target.txt" | head -1)
+LATEST_TARGET_CENTOS=$(curl -sSf "http://${MIRROR_HOST}/mos-repos/centos/mos8.0-centos7-fuel/os.target.txt" | head -1)
 
 # we need to have ability to define MIRROR_FUEL by user
 if [[ "${make_args}" != *"MIRROR_FUEL="* ]]; then
     # MIRROR_FUEL= is not defined in make_args
-    export MIRROR_FUEL="${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos8.0-centos7-fuel/${LATEST_TARGET_CENTOS}/x86_64"
+    export MIRROR_FUEL="http://${MIRROR_HOST}/mos-repos/centos/mos8.0-centos7-fuel/${LATEST_TARGET_CENTOS}/x86_64"
 fi
 
 echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU}${MIRROR_MOS_UBUNTU_ROOT} and ${MIRROR_FUEL}"
@@ -98,34 +74,34 @@ process_artifacts() {
     local ARTIFACT="$1"
     test -f "$ARTIFACT" || return 1
 
-    local HOSTNAME=`hostname -f`
+    local HOSTNAME=$(hostname -f)
     local LOCAL_STORAGE="$2"
     local TRACKER_URL="$3"
     local HTTP_ROOT="$4"
 
     echo "MD5SUM is:"
-    md5sum $ARTIFACT
+    md5sum "$ARTIFACT"
 
     echo "SHA1SUM is:"
-    sha1sum $ARTIFACT
+    sha1sum "$ARTIFACT"
 
-    mkdir -p $LOCAL_STORAGE
-    mv $ARTIFACT $LOCAL_STORAGE
+    mkdir -p "$LOCAL_STORAGE"
+    mv "$ARTIFACT" "$LOCAL_STORAGE"
 
     # seedclient.py comes from python-seed devops package
-    local MAGNET_LINK=`seedclient.py -v -u -f "$LOCAL_STORAGE"/"$ARTIFACT" --tracker-url="${TRACKER_URL}" --http-root="${HTTP_ROOT}" || true`
+    local MAGNET_LINK=$(seedclient.py -v -u -f "$LOCAL_STORAGE"/"$ARTIFACT" --tracker-url="${TRACKER_URL}" --http-root="${HTTP_ROOT}" || true)
     local STORAGES=($(echo "${HTTP_ROOT}" | tr ',' '\n'))
     local HTTP_LINK="${STORAGES}/${ARTIFACT}"
     local HTTP_TORRENT="${HTTP_LINK}.torrent"
 
-    cat > $ARTIFACT.data.txt <<EOF
+    cat > "$ARTIFACT.data.txt" <<EOF
 ARTIFACT=$ARTIFACT
 HTTP_LINK=$HTTP_LINK
 HTTP_TORRENT=$HTTP_TORRENT
 MAGNET_LINK=$MAGNET_LINK
 EOF
 
-    cat >$ARTIFACT.data.html <<EOF
+    cat > "$ARTIFACT.data.html" <<EOF
 <h1>$ARTIFACT</h1>
 <a href=\"$HTTP_LINK\">HTTP link</a><br>
 <a href=\"$HTTP_TORRENT\">Torrent file</a><br>
@@ -139,7 +115,7 @@ EOF
 echo "STEP 0. Clean before start"
 make deep_clean
 
-rm -rf /var/tmp/yum-${USER}-*
+rm -rf "/var/tmp/yum-${USER}-*"
 
 #########################################
 
@@ -148,6 +124,8 @@ echo "ENV VARIABLES START"
 printenv
 echo "ENV VARIABLES END"
 
+# should be splitted
+# shellcheck disable=SC2086
 make $make_args iso version-yaml
 
 #########################################
@@ -155,15 +133,15 @@ make $make_args iso version-yaml
 echo "STEP 2. Publish everything"
 
 export LOCAL_STORAGE='/var/www/fuelweb-iso'
-export HTTP_ROOT="http://`hostname -f`/fuelweb-iso"
+export HTTP_ROOT="http://$(hostname -f)/fuelweb-iso"
 export TRACKER_URL='http://tracker01-bud.infra.mirantis.net:8080/announce,http://tracker01-scc.infra.mirantis.net:8080/announce,http://tracker01-msk.infra.mirantis.net:8080/announce'
 
 cd "${ARTS_DIR}"
 for artifact in $(ls fuel-*)
 do
-  begin=`date +%s`
-  process_artifacts $artifact $LOCAL_STORAGE $TRACKER_URL $HTTP_ROOT
-  echo "Time taken: $((`date +%s` - $begin))"
+  begin=$(date +%s)
+  process_artifacts "$artifact" "$LOCAL_STORAGE" "$TRACKER_URL" "$HTTP_ROOT"
+  echo "Time taken: $(($(date +%s) - $begin))"
 done
 
 cd "${WORKSPACE}"

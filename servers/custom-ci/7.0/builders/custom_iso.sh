@@ -43,45 +43,11 @@ export FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}"
 # facter location to get closer mirror, if user provide the exact mirror we
 # use it
 if [ "${USE_MIRROR}" != "none" ]; then
-
-  if [ "${USE_MIRROR}" == "auto" ]; then
-    LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
-    LOCATION=${LOCATION_FACT:-msk}
-  else
-    LOCATION="${USE_MIRROR}"
-  fi
-
-  case "${LOCATION}" in
-      srt)
-          USE_MIRROR=srt
-          LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
-          ;;
-      msk)
-          USE_MIRROR=msk
-          LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
-          ;;
-      hrk)
-          USE_MIRROR=hrk
-          LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
-          ;;
-      poz|bud|bud-ext|cz)
-          USE_MIRROR=cz
-          LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
-          ;;
-      mnv|scc)
-          USE_MIRROR=usa
-          LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
-          ;;
-      *)
-          USE_MIRROR=msk
-          LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
-  esac
-
-  LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | head -1)
+  LATEST_TARGET=$(curl -sSf "http://${MIRROR_HOST}/mos-repos/ubuntu/7.0.target.txt" | head -1)
   export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
 fi
 
-echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
+echo "Using mirror: ${MIRROR_HOST} with ${MIRROR_MOS_UBUNTU_ROOT}"
 
 #########################################
 
@@ -95,6 +61,8 @@ echo "ENV VARIABLES START"
 printenv
 echo "ENV VARIABLES END"
 
+# should be separated
+# shellcheck disable=SC2086
 make $make_args iso version-yaml
 
 #########################################

@@ -1,14 +1,10 @@
 #!/bin/bash
 
 set -ex
-## needed variables:
-# MIRROR_ARTIFACT - aka PERESTROIKA mirror, example:
-# ${JENKINS_URL}job/${ENV_JOB}/lastSuccessfulBuild/artifact/mirror_ubuntu_data.txt
-export MIRROR_UBUNTU=$(curl -sSf "${MIRROR_ARTIFACT}")
 
 # Checking gerrit commits for fuel-qa
 if [[ "${FUEL_QA_GERRIT_COMMIT}" != "none" ]] ; then
-  cd ${SYSTEST_ROOT}
+  cd "${SYSTEST_ROOT}"
   for commit in ${FUEL_QA_GERRIT_COMMIT} ; do
     git fetch https://review.openstack.org/openstack/fuel-qa "${commit}" && git cherry-pick FETCH_HEAD
   done
@@ -23,7 +19,7 @@ if [[ ! -z "${CUSTOM_TEST_GROUP}" ]]; then
 fi
 
 #test params
-VERSION_STRING=$(readlink ${ISO_PATH} | cut -d '-' -f 2-3)
+VERSION_STRING=$(readlink "${ISO_PATH}" | cut -d '-' -f 2-3)
 echo "Description string: ${VERSION_STRING}"
 
 sh -x "${SYSTEM_TESTS}" \

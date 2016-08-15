@@ -23,6 +23,11 @@
           echo "${PLUGINS}" > "${WORKSPACE}/${PLUGINS_URLS_FILE}"
           wget --no-verbose --input-file="${WORKSPACE}/${PLUGINS_URLS_FILE}" --directory-prefix="${PLUGINS_DIR}"
 
+      - extended-bash:
+          headers: ''
+          script: |
+            inject UBUNTU_MIRROR_ARTIFACT "https://product-ci.infra.mirantis.net/job/9.0.test_all/lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt"
+      - guess-mirror
       - shell:
           !include-raw: './builders/custom_system_test_devops3.0.sh'
     parameters:

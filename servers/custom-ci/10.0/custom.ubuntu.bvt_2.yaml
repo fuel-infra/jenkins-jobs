@@ -5,6 +5,11 @@
           properties-content: |
             SLAVE_NODE_CPU=2
             SLAVE_NODE_MEMORY=3072
+      - extended-bash:
+          headers: ''
+          script: |
+            inject UBUNTU_MIRROR_ARTIFACT "https://product-ci.infra.mirantis.net/job/10.0.test_all/lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt"
+      - guess-mirror
       - shell:
           !include-raw: builders/run_system_test.sh
     concurrent: true

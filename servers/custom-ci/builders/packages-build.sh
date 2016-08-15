@@ -2,29 +2,6 @@
 
 set -ex
 
-LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
-LOCATION=${LOCATION_FACT:-bud}
-
-case "${LOCATION}" in
-    srt)
-        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/"
-        ;;
-    msk)
-        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/"
-        ;;
-    kha)
-        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/"
-        ;;
-    poz|bud|bud-ext|budext|undef)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/"
-        ;;
-    mnv|scc|sccext)
-        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/"
-        ;;
-    *)
-        MIRROR_HOST="http://mirror.fuel-infra.org/"
-esac
-
 if [ ! -z "${CUSTOM_PROJECT_PACKAGE}" ]; then
   PROJECT_PACKAGE="${CUSTOM_PROJECT_PACKAGE}"
 fi
@@ -88,7 +65,7 @@ sed -i "s|Release:.*$|Release: ${RELEASE}|" "${SOURCE_PATH}/${PROJECT_PACKAGE}.s
 ## build rpm
 "${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
   --build-target centos7 \
-  --ext-repos "mos,${MIRROR_HOST}mos-repos/centos/${RPM_MIRROR_BASE_NAME}/os/x86_64/" \
+  --ext-repos "mos,http://${MIRROR_HOST}/mos-repos/centos/${RPM_MIRROR_BASE_NAME}/os/x86_64/" \
   --source "${SOURCE_PATH}" \
   --output-dir "${RPM_RESULT_DIR}"
 
@@ -105,9 +82,9 @@ if [ -d "${PROJECT_ROOT}/debian" ]; then
     -v "${DEB_PACKAGE_VERSION}-${RELEASE}" "${DEBMSG}"
   ## build deb
   "${WORKSPACE}"/fuel-mirror/perestroika/build-package.sh \
-    --upstream-repo "${MIRROR_HOST}pkgs/ubuntu/" \
+    --upstream-repo "http://${MIRROR_HOST}/pkgs/ubuntu/" \
     --build-target trusty \
-    --ext-repos "${MIRROR_HOST}mos-repos/ubuntu/${DEB_MIRROR_BASE_NAME} main restricted" \
+    --ext-repos "http://${MIRROR_HOST}/mos-repos/ubuntu/${DEB_MIRROR_BASE_NAME} main restricted" \
     --source "${SOURCE_PATH}" \
     --output-dir "${DEB_RESULT_DIR}"
 fi

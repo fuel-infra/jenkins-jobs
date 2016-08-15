@@ -1,6 +1,7 @@
 - job:
     name: '7.0.custom.iso'
     builders:
+      - guess-mirror
       - shell:
           !include-raw: builders/custom_iso.sh
     concurrent: true
