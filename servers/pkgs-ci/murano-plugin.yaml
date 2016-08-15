@@ -13,7 +13,7 @@
     repo-base-path: '/home/jenkins/pubrepos'
 
     # Configure flows
-    is-downgrade: 'true'
+    is-downgrade: 'false'
     is-updates: 'false'
 
     # Gerrit parameters
