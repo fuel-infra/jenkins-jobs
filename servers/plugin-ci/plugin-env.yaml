@@ -1,0 +1,41 @@
+#
+# Template used to set snapshot enviorment
+#
+- job-template:
+    name: '{version}.{plugin_name}.env'
+    node: '{node_label}'
+    description: |
+      Job used to set snapshot enviorment for <b>{plugin_name}</b><ul>
+      <li><b>Plugin repository:</b>
+        <a href="https://github.com/openstack/{plugin_repo}">
+          https://github.com/openstack/{plugin_repo}
+        </a>
+      </ul>
+
+    parameters:
+      - text:
+          name: SNAPSHOTS_PARAMS
+          default: |
+            MAGNET_LINK={magnet_link}
+            FUEL_QA_BRANCH={fuel_qa_branch}
+            FUEL_QA_COMMIT=latest
+            UBUNTU_MIRROR_ID=ubuntu-latest
+            CENTOS_MIRROR_ID=centos-latest
+            MOS_UBUNTU_MIRROR_ID=latest
+            MOS_CENTOS_OS_MIRROR_ID=latest
+            MOS_CENTOS_PROPOSED_MIRROR_ID=latest
+            MOS_CENTOS_UPDATES_MIRROR_ID=latest
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=latest
+            MOS_CENTOS_HOTFIX_MIRROR_ID=latest
+            MOS_CENTOS_SECURITY_MIRROR_ID=latest
+
+    builders:
+    - guess-mirror
+    - inject:
+        properties-content: $SNAPSHOTS_PARAMS
+    - shell:
+        !include-raw-escape: ./builders/plugin-env.sh
+
+    publishers:
+    - archive:
+          artifacts: 'snapshots.params'
