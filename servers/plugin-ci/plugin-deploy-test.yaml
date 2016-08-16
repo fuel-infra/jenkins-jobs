@@ -86,17 +86,9 @@
           # additional variables
           properties-content: '{test_properties}'
       - '{plugin_prepare_env_builder}'
-      - shell:
-          !include-raw-escape: ./builders/plugin-deploy-test.sh
+      - '{plugin_deploy_test_builder}'
 
     publishers:
-      - archive:
-          allow-empty: true
-          artifacts: '**/nosetests.xml,logs/*'
-          latest-only: false
-      - post-destroy-vms
-      - description-setter:
-          regexp: "'Description string: (.*)'"
-          regexp-for-failed: "'Description string: (.*)'"
+      - '{plugin_deploy_test_publisher}'
 
 
