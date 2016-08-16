@@ -284,7 +284,7 @@
 
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build-timer':
-          timer: 'H 4 * * *'
+          timer: 'H 0 * * *'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test':
           timeout: 720
 
