@@ -53,6 +53,12 @@
             mos-repos/ubuntu/9.0
           update-head: false
 
+      - '10.0':
+          timer: '' # manual trigger by request
+          srcpaths: |
+            mos-repos/ubuntu/10.0
+          update-head: true
+
       - master:
           timer: '*/20 * * * *'
           srcpaths: |
