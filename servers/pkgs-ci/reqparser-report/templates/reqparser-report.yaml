@@ -4,7 +4,7 @@
     description: |
       <h3> Job for generating report between differences in requirements version for packages </h3>
       <p>
-        <b>Owner:</b> #mos-packaging at Slack"
+        <b>Owner:</b> #mos-packaging at Slack
       </p>
     node: '{build-node}'
 
@@ -22,7 +22,7 @@
         - '{ssh-creds-openstack-ci-jenkins}'
     - timeout:
         fail: true
-        timeout: 5
+        timeout: 30
 
     triggers:
     - timed: '{timer}'
