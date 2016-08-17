@@ -9,7 +9,8 @@ set -ex
 #               : E.g "rsync://osci-mirror-srt.srt.mirantis.net/mirror"
 #
 # SRCPATHS      : List of rsync root relative path to the repositories
-#               : E.g "mos-repos/ubuntu/7.0 mos-repos/ubuntu/8.0"
+#               : E.g "mos-repos/ubuntu/7.0 mos-repos/ubuntu/8.0 \
+#               :      extras/murano-plugin-repos/release/*/ubuntu/9.0"
 #
 # HOSTS_TO_SYNC : host list sync to
 #               : E.g. "rsync://seed-cz1.fuel-infra.org/mirror-sync \
@@ -94,8 +95,28 @@ TRSYNC_BIN=$(which trsync)
 TIMESTAMP=$(date "+%Y-%m-%d-%H%M%S")
 SNAPSHOT_DIR=snapshots
 
-failedmessage=""
+# Expand wildcards in SRCPATHS
 for SRCPATH in $SRCPATHS; do
+    rsync_params='-r'
+    # Built-in search-replace is not applicable here
+    # shellcheck disable=SC2001
+    grep_pattern=$(echo "$SRCPATH" | sed 's|*|[^/]*|g; s|^/||')
+    IFS='/' read -ra FOLDERS <<< "${SRCPATH%/}"
+    unset dirs
+    for folder in "${FOLDERS[@]}"; do
+        dirs="$dirs/$folder"
+        rsync_params="$rsync_params --include '$dirs'"
+    done
+    rsync_params="$rsync_params --exclude '*'"
+    paths=$(bash -c "rsync $rsync_params $SRCURI")
+    paths=$(echo "$paths" | grep -Eo "$grep_pattern")
+    for path in $paths; do
+        EXPANDED_SRCPATHS="$EXPANDED_SRCPATHS $path"
+    done
+done
+
+failedmessage=""
+for SRCPATH in $EXPANDED_SRCPATHS; do
     SYNCPATH=${SRCPATH}
 
     DSTPATH=${REPOCACHE_DIR}/${SRCPATH}

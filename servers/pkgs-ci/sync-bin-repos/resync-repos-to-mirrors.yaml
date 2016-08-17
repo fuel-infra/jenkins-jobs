@@ -77,7 +77,7 @@
           srcpaths: |
             extras/feature-nfv-repos/ubuntu/9.0
             extras/murano-plugin-repos/ubuntu/9.0
-            extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0
+            extras/murano-plugin-repos/release/*/ubuntu/9.0
           update-head: true
 
     jobs:
