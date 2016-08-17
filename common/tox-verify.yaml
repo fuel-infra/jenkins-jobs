@@ -2,6 +2,8 @@
     name: 'tox-verify-{name}'
 
     concurrent: true
+    logrotate:
+      daystokeep: 7
     reponame: '{reponame}'
     node: '{node}'
 
