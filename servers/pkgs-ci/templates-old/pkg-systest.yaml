@@ -15,7 +15,7 @@
             OPENSTACK_RELEASE={openstack_release}
             OS_TYPE={os}
 
-            ENV_PREFIX={mos_version}-pkg-systest-{os}-{distro}
+            ENV_PREFIX={mos_version}-pkg-systest-{os}
             UBUNTU_DIST={main_ubuntu_release}
 
             REMOTE_REPO_HOST={repo-host}
@@ -75,7 +75,7 @@
           default: true
       - string:
           name: ENV_PREFIX
-          default: '{mos_version}-pkg-systest-{os}-{distro}'
+          default: '{mos_version}-pkg-systest-{os}'
     scm:
       - upstream:
           branch: '{fuel-main-branch}'
