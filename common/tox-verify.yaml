@@ -3,7 +3,7 @@
 
     concurrent: true
     logrotate:
-      daystokeep: 7
+      daysToKeep: 7
     reponame: '{reponame}'
     node: '{node}'
 
