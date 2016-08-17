@@ -105,12 +105,12 @@ function set_MU_proposed_repos(){
       source "${WORKSPACE}/vars.sh"
     fi
 
-    FUEL_PROPOSED_7="mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64/"
-    FUEL_PROPOSED_8="mos-repos/centos/mos8.0-centos7-fuel/proposed/x86_64/"
+    FUEL_PROPOSED_7="mos-repos/centos/mos7.0-centos6-fuel/snapshots/proposed-latest/x86_64/"
+    FUEL_PROPOSED_8="mos-repos/centos/mos8.0-centos7-fuel/snapshots/proposed-latest/x86_64/"
     FUEL_PROPOSED_9="mos-repos/centos/mos9.0-centos7/snapshots/${MOS_CENTOS_PROPOSED_MIRROR_ID}/x86_64"
 
-    MOS_EXTRA_DEB_7="mos-repos/ubuntu/7.0 mos7.0-proposed main restricted"
-    MOS_EXTRA_DEB_8="mos-repos/ubuntu/8.0 mos8.0-proposed main restricted"
+    MOS_EXTRA_DEB_7="mos-repos/ubuntu/snapshots/7.0-latest mos7.0-proposed main restricted"
+    MOS_EXTRA_DEB_8="mos-repos/ubuntu/snapshots/8.0-latest mos8.0-proposed main restricted"
     MOS_EXTRA_DEB_9="mos-repos/ubuntu/snapshots/${MOS_UBUNTU_MIRROR_ID} mos9.0-proposed main restricted"
 
     # form MU repo URLs both for base and upgrade releases
