@@ -5,6 +5,8 @@
        <p>Syncronizes code from upstream OpenStack projects and puppet-manifests from GitHub.</p>
        <p><b>Ownership:</b> Issues with this job are tracked by Fuel Build team.</p>
        <p><b>Contacts:</b> #infra</p>
+    logrotate:
+      daysToKeep: 2
     properties:
       - inject:
           properties-content: |
