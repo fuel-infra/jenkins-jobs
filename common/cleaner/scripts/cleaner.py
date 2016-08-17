@@ -37,36 +37,44 @@ def get_var_as_bool(name, default):
 #                     to latest jenkins job execution, such env are deleted
 #                     after lifetime_max
 #
-tests_list = {
+tests_list = [
+
+    # Custom tests run on custom CI should be kept for a day.
+    # Could be kept for more time by request and disconnecting slave
+    ('custom', {
+        'env_regexp': '.*\.custom\..*',
+        'lifetime': int(os.environ.get('LIFETIME_CUSTOM', 24*3)),
+        'protect_latest': False,
+    }),
 
     # SWARM tests, executed every day,
     # should be deleted before next swarm run
-    'swarm': {
+    ('swarm', {
         'env_regexp': '.*system_test.*',
         'lifetime': int(os.environ.get('LIFETIME_SWARM', 22)),
         'protect_latest': False,
-    },
+    }),
 
     # BVT tests executed on every iso build, executed few times per day
     # those tests are very important and when failed are investigated asap
     # by developers, can be deleted after 24h
-    'bvt': {
+    ('bvt', {
         'env_regexp': '.*main.*',
         'lifetime': int(os.environ.get('LIFETIME_BVT', 24)),
         'protect_latest': True,
-    },
+    }),
 
     # Acceptance tests executed every week
     # should be investigated by QA team before next run
     # cannot be deleted before next acceptance test, need to store
     # at least 7 days
-    'acceptance': {
+    ('acceptance', {
         'env_regexp': '.*acceptance.*',
         'lifetime': int(os.environ.get('LIFETIME_ACCEPTANCE', 168)),
         'protect_latest': False,
-    },
+    }),
 
-}
+]
 
 # Default lifetime for not specified tests
 lifetime_other = int(os.environ.get('LIFETIME_OTHER', 16))
@@ -160,8 +168,9 @@ class Cleaner():
                     continue
 
                 # Get lifetime for this type of env
-                (env_lifetime_hours, env_protect_latest) = \
+                (env_type, env_lifetime_hours, env_protect_latest) = \
                     self.get_job_lifetime(env_name)
+                print '- env type is {0}'.format(env_type)
 
                 # get local slave time
                 timestamp_now = datetime.datetime.now().replace(microsecond=0)
@@ -240,10 +249,11 @@ class Cleaner():
         """
         Select lifetime, based on job prefix
         """
-        for param_name, param in tests_list.items():
+        for param_name, param in tests_list:
             if re.match(param['env_regexp'], env_prefix):
-                return (param['lifetime'], param['protect_latest'])
-        return (lifetime_other, False)
+                return param_name, param['lifetime'], param['protect_latest']
+        else:
+            return 'other', lifetime_other, False
 
     def get_prefix_by_env_name(self, env_name):
         """ get server job by local (probably suffixed) name """

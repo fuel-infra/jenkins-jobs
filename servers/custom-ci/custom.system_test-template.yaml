@@ -153,7 +153,7 @@
           properties-content: |
             VENV_PATH={venvpath}
             TEST_ISO_JOB_URL={test_iso_job_url}
-            ENV_PREFIX={mos}.custom_system_test
+            ENV_PREFIX={mos}.custom.system_test
       - inject:
           properties-content: $ADDITIONAL_PARAMETERS
       - shell:

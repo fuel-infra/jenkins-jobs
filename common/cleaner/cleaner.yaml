@@ -4,6 +4,7 @@
     lifetime_bvt: '24'
     lifetime_swarm: '22'
     lifetime_other: '16'
+    lifetime_custom: '72'
 
 - job-template:
     name: cleaner
@@ -45,6 +46,10 @@
           name: LIFETIME_ACCEPTANCE
           description: 'Lifetime for acceptance systests'
           default: '{lifetime_acceptance}'
+      - string:
+          name: LIFETIME_CUSTOM
+          description: 'Lifetime for custom systests'
+          default: '{lifetime_custom}'
       - string:
           name: LIFETIME_OTHER
           description: 'Lifetime for other systests'
