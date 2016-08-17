@@ -126,7 +126,7 @@
           default: '{iso_magnet_link}'
       - string:
           name: ENV_PREFIX
-          default: '{version}.stacklight.{plugin_branch}.deploy'
+          default: '{version}.stacklight.{plugin_branch}.{test_group}'
           description: 'Environment prefix used for systest'
       - string:
           name: FUELQA_GITREF
