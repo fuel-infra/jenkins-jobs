@@ -151,7 +151,7 @@
 
     - string: # added for cleaner which searches for job parameter
         name: ENV_PREFIX
-        default: '9.x.custom.{dist}.{testgroup}'
+        default: '9.x.custom.{dist}.system_test'
 
     properties:
     - authorization-allow-authorized
