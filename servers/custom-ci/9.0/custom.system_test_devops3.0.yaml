@@ -140,7 +140,7 @@
           default: 'false'
       - string:
           name: ENV_PREFIX
-          default: 9.0.custom_system_test_3_0
+          default: 9.0.custom.system_test_devops3.0
           description: Define env prefix name. This parameter should not be changed
       - string:
           name: FUEL_DEVOPS_COMMIT
