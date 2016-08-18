@@ -40,7 +40,9 @@
             UPDATE_MASTER=true
             UPGRADE_FUEL_FROM=8.0
             UPGRADE_FUEL_TO=9.1
-
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
+          testgroup: 'upgrade_ceph_ha_backup'
+          upgrade_testgroup: 'cluster_upgrade_extension'
 
 - job:
     name: '9.x.upgrades.runner'
@@ -81,6 +83,9 @@
             current-parameters: true
             kill-phase-on: NEVER
           - name: '9.x.upgrades.ubuntu.upgrade_plugin_tests'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '9.x.upgrades.ubuntu.cluster_upgrade_extension'
             current-parameters: true
             kill-phase-on: NEVER
 

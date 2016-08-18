@@ -43,6 +43,9 @@
             UPDATE_MASTER=true
             UPGRADE_FUEL_FROM=7.0
             UPGRADE_FUEL_TO=8.0
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
+          testgroup: 'upgrade_ceph_ha_backup'
+          upgrade_testgroup: 'cluster_upgrade_extension'
 
 
 - job:
@@ -94,6 +97,9 @@
             current-parameters: true
             kill-phase-on: NEVER
           - name: '8.0.upgrades.ubuntu.upgrade_cloud_no_live_migration'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '8.0.upgrades.ubuntu.cluster_upgrade_extension'
             current-parameters: true
             kill-phase-on: NEVER
 
