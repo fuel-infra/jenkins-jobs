@@ -9,10 +9,9 @@
       - shell:
           !include-raw builders/build-fuel-qa-docs.sh
     description: |
-      Build fuel-qa-docs for all branches and publish them to <a
-      href="http://docs.mirantis.com">docs.mirantis.com</a>
-      <p>Work In Progress
-      <p>Contacts: #fuel-devops #fuel-qa
+      Build fuel-qa/docs for master branch and publishes to <a
+      href="https://docs.fuel-infra.org/fuel-qa/">http://docs.fuel-infra.org/fuel-qa/</a>
+      <p>Contacts: #infra #fuel-qa
     logrotate:
       artifactDaysToKeep: 30
       daysToKeep: 100
