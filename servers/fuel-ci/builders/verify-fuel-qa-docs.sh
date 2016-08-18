@@ -4,7 +4,10 @@ set -ex
 
 VENV=${VENV:=${WORKSPACE}_VENV} # To be able to test on local env
 
-virtualenv ${VENV}
+if [ ! -d "${VENV}" ]; then
+  virtualenv ${VENV}
+fi
+
 source ${VENV}/bin/activate || exit 1
 
 pip install -r ${WORKSPACE}/fuelweb_test/requirements.txt
