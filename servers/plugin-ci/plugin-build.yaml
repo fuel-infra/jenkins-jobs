@@ -50,6 +50,7 @@
           name: Test plugin
           condition: SUCCESSFUL
           projects:
+            - name: '{version}.fuel-plugin.{plugin_name}.publish'
             - name: '{version}.fuel-plugin.{plugin_name}.deploy-test'
               kill-phase-on: FAILURE
               node-parameters: true
@@ -59,5 +60,3 @@
     publishers:
       - archive:
           artifacts: 'plugin/*.rpm,plugin/*.fp'
-
-

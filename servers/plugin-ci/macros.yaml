@@ -60,6 +60,17 @@
             - '{project-branch}'
           url: 'https://github.com/openstack/fuel-plugin-{project-name}'
 
+- scm:
+    name: review-fuel-infra
+    scm:
+      - git:
+          basedir: '{project-basedir}'
+          branches:
+            - $GERRIT_BRANCH
+          choosing-strategy: gerrit
+          refspec: $GERRIT_REFSPEC
+          url: 'https://review.fuel-infra.org/{project-name}'
+
 ########################################################################
 # Builders used to prepare environment
 ########################################################################
