@@ -1,2 +1,27 @@
 Build custom ISO image from commits or gerrit refspecs.
+<p>
+<font color="red">
+By default 9.0.custom.iso uses MOS 9.0 released repositories.
+</font>
+<p>
+To enable <b>proposed</b> repositories specify following parameters:
+<pre>
+
+ In FUELMAIN_GERRIT_COMMIT set:
+
+    refs/changes/49/347249/6 refs/changes/25/352425/2
+
+ In EXTRA_RPM_REPOS set:
+
+    proposed,http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/proposed-latest/x86_64/
+
+ In MANUAL_PARAMETERS append:
+
+    MOS_UBUNTU_TARGET=9.0-latest.target.txt
+    MOS_UBUNTU_ROOT=/mos-repos/ubuntu/snapshots/
+    EXTRA_RPM_BUILDDEP_REPO=http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/proposed-latest/x86_64/
+</pre>
+<p>
+See <a href="https://mirantis.jira.com/wiki/display/PRD/MOS+9.x+CI">MOS 9.x CI</a> wiki page for details.
+
 
