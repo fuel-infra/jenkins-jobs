@@ -36,11 +36,15 @@ set -ex
 echo "Description string: ${GIT_BRANCH}"
 
 VENV="${WORKSPACE}_VENV"
-virtualenv "${VENV}"
-source "${VENV}/bin/activate" || exit 1
 
-pip install -r "${WORKSPACE}/fuelweb_test/requirements.txt"
-pip install -r "${WORKSPACE}/doc/requirements.txt"
+if [ ! -d "${VENV}" ]; then
+  virtualenv "${VENV}"
+fi
+
+source ${VENV}/bin/activate || exit 1
+
+pip install -r ${WORKSPACE}/fuelweb_test/requirements.txt
+pip install -r ${WORKSPACE}/doc/requirements.txt
 
 (cd doc/ && make clean-doc doc-html)
 
