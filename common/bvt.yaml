@@ -63,6 +63,10 @@
 
     parameters:
       - string:
+          name: ENV_PREFIX
+          default: '{version}{mod}.main.{dist}.{testgroup}'
+          description: "iso magnet link"
+      - string:
           name: MAGNET_LINK
           description: "iso magnet link"
       - string:
@@ -92,7 +96,6 @@
         properties-content: |
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
           ENABLE_PROPOSED=false
-          ENV_PREFIX={version}{mod}.main.{dist}.{testgroup}
           ENV_SUFFIX={env_suffix}
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
