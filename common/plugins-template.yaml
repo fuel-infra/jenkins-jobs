@@ -27,7 +27,7 @@
         description: "iso magnet link"
     - string:
         name: ENV_PREFIX
-        default: '{version-id}.{test-type}.{dist}.{testgroup}'
+        default: '{version-id}.{test-type}.{dist}.plugins.{testgroup}'
         description: 'Environment prefix'
 
     scm:
