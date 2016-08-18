@@ -287,6 +287,8 @@
           timer: 'H 0 * * *'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test':
           timeout: 720
+      - '{version}.fuel-plugin.{plugin_name}.tempest-run':
+          timeout: 360
 
 - project:
     name: stacklight-runner
