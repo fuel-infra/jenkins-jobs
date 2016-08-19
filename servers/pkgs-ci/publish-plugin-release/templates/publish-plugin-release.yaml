@@ -1,0 +1,66 @@
+- job-template:
+    name: 'publish-plugin-release'
+    description: |
+       This job downloads file from URL parameter or gets manually uploaded
+       file, and publishes it into the repository specified by MOS_VERSION
+       parameter.
+       <br><br>
+       Remote hosts to publish is:<br>
+       <li>
+       <ul>perestroika-repo-tst.infra.mirantis.net</ul>
+       <ul>mirror.fuel-infra.org</ul>
+       </li>
+       <br>
+       <b>Ownership:</b> Issues with this job are tracked by CI team.<br>
+       <b>Contacts:</b> #infra
+    node: '{publish-node}'
+    concurrent: false
+    parameters:
+      - string:
+          name: MOS_VERSION
+          default: '9.0'
+
+      - file:
+          name: plugin.rpm
+          description: RPM file to publish
+
+      - string:
+          name: URL
+          description: |
+            URL to remote RPM file
+
+      - bool:
+          name: RESYNC_ONLY
+          default: false
+          description: |
+            Do not publish any files, just resync currrent repository
+            state to the remote hosts.
+    scm:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: '{trsync-scm-repo}'
+          branch: '{trsync-scm-branch}'
+          basedir: '{trsync-scm-basedir}'
+    builders:
+      - extended-bash:
+          headers: ''
+          script: |
+            set -ex
+            inject SYNC_PATH "{rpm-repo-path}"
+            inject REPO_ROOT "{repo-base-path}"
+            inject HOSTS_TO_SYNC "{publish-repo-host}"
+            inject TRSYNC_DIR "{trsync-scm-basedir}"
+      - shell:
+          !include-raw-escape:
+            '../builders/publish-plugin-release.sh'
+    publishers:
+      - post-tasks:
+        - matches:
+            - log-text: 'Started'
+          script: |
+            rm -f "${{WORKSPACE}}/*"
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: false
