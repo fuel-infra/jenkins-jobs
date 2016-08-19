@@ -8,6 +8,15 @@
       </p>
     node: '{build-node}'
 
+    properties:
+    - authorization:
+        mos-da-eng:
+          - job-read
+          - job-build
+        ci:
+          - job-read
+          - job-build
+
     scm:
     - fuel-infra:
         basedir: ''
