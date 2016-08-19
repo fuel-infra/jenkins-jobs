@@ -5,8 +5,8 @@
     project-name: 'mos'
     mos_version: master
 
-    master-mos-version: '9.0'
-    main_ubuntu_release: 'trusty'
+    master-mos-version: '10.0'
+    main_ubuntu_release: 'xenial'
     openstack_release: 'ubuntu'
     fuel-main-branch: 'master'
     fuel-qa-branch: 'master'
@@ -42,7 +42,7 @@
     rpm-dist-name: mos-master-centos7
 
     # MOS repositories (build/test dependencies)
-    mos-deb-repo-path: mos-repos/ubuntu
+    mos-deb-repo-path: mos-repos/xenial
     mos-rpm-repo-path: mos-repos/centos/mos-master-centos7
 
     jobs:
@@ -67,7 +67,7 @@
 - job-group:
     name: 'master-pkg-ubuntu-jobs'
     os: 'ubuntu'
-    distro: 'trusty'
+    distro: 'xenial'
     pkg_type: 'deb'
     spec_path_prefix: '/{distro}'
     timer: ''
