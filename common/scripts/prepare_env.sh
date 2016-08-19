@@ -108,6 +108,12 @@ if [[ ${update_devops_2_9_x} == "true" ]]; then
     ACT=1
 fi
 
+# Upgrades Venv - used for data-driven upgrade tests for 7.0+ releases
+if [[ ${update_devops_upgrades} == "true" ]]; then
+    update_devops "-upgrades" "fuel-qa" "stable/7.0"
+    ACT=1
+fi
+
 if [[ ${download_images} == "true" ]]; then
     download_images
     ACT=1

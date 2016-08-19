@@ -2,6 +2,7 @@
     name: pkgs-ci-cleaner
     devops_25: false
     devops_29: true
+    devops_upgrades: false
     release_60: false
     release_61: false
     time_staging: '16'

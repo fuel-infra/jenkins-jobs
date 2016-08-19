@@ -14,7 +14,7 @@
     upgrade-proposed: 'http://packages.fuel-infra.org/repositories/centos/liberty-centos7/proposed/x86_64'
     node: 'systest'
     timeout: '960'
-    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    venvpath: '/home/jenkins/venv-nailgun-tests-upgrades'
     properties: |
       KEYSTONE_PASSWORD=newpass
       SLAVE_NODE_MEMORY=3072

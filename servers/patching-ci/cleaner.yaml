@@ -2,6 +2,7 @@
     name: patching-ci-cleaner
     devops_25: false
     devops_29: false
+    devops_upgrades: false
     release_60: false
     release_61: true
     lifetime_bvt: '24'

@@ -17,6 +17,9 @@
         name: 'update_devops_2_5_x'
         default: false
     - bool:
+        name: 'update_devops_upgrades'
+        default: false
+    - bool:
         name: 'download_images'
         default: false
     - bool:

@@ -74,6 +74,15 @@ tests_list = [
         'protect_latest': False,
     }),
 
+    # Upgrade tests, executed every day or less (based on upgrade scenario)
+    # should be investigated by QA team but most useful jobs runs every day
+    # so cleanup should be performed before next test execution
+    ('upgrade', {
+        'env_regexp': '.*(?:upgrades|backup-restore).*',
+        'lifetime': int(os.environ.get('LIFETIME_UPGRADE', 22)),
+        'protect_latest': False,
+    }),
+
 ]
 
 # Default lifetime for not specified tests
@@ -117,6 +126,9 @@ class Cleaner():
             self.devops.append('/home/jenkins/venv-nailgun-tests-2.9')
         if get_var_as_bool('DEVOPS_2_5', False):
             self.devops.append('/home/jenkins/venv-nailgun-tests')
+        # upgrade tests are using separate venv
+        if get_var_as_bool('DEVOPS_UPGRADES', False):
+            self.devops.append('/home/jenkins/venv-nailgun-tests-upgrades')
         if get_var_as_bool('RELEASE_60', False):
             self.devops.append('/home/jenkins/qa-venv-6.0')
         if get_var_as_bool('RELEASE_61', False):
