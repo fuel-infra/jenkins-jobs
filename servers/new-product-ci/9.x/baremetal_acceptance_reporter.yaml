@@ -1,0 +1,46 @@
+- job:
+    name: '9.x.baremetal.reporter'
+    concurrent: false
+    node: 'testrail'
+
+    scm:
+      - git:
+          branches:
+            - '$FUEL_QA_COMMIT'
+          url: 'https://github.com/openstack/fuel-qa.git'
+
+    properties:
+      - heavy-job:
+          weight: 1
+
+    parameters:
+      - string:
+          name: TEST_JOB_NAME
+          description: 'Name of Jenkins job with tests results'
+          default: 'none'
+      - string:
+          name: FUEL_QA_COMMIT
+          description: 'Fuel-qa branch'
+          default: 'origin/stable/mitaka'
+
+    builders:
+      - inject:
+          properties-content: |
+            VENV_PATH=/home/jenkins/fuel-devops-3/
+            TESTS_RUNNER_JOB=9.x.baremetal.runner
+            TESTRAIL_TEST_SUITE=[WIP] Automated Baremetal Acceptance
+
+      - shell:
+          !include-raw: ../builders/testrail-upload-cases.sh
+      - shell:
+          !include-raw: ../builders/testrail-report.sh
+
+    publishers:
+      - description-setter:
+          regexp: '^.*Report URL:\s*(.*)'
+          description: '<a href="\1">TestRail Report URL</a>'
+
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
