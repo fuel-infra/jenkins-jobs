@@ -289,6 +289,7 @@
           timeout: 720
       - '{version}.fuel-plugin.{plugin_name}.tempest-run':
           timeout: 360
+          plugin_test_group: 'deploy_murano_plugin'
 
 - project:
     name: stacklight-runner
