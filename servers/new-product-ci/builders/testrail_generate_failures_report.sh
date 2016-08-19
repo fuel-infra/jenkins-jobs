@@ -56,7 +56,7 @@ export PYTHONPATH="$(pwd):$PYTHONPATH"
 # Initialize variables
 export TESTRAIL_FAILURE_REPORTER="fuelweb_test/testrail/generate_failure_group_statistics.py"
 
-python "${TESTRAIL_FAILURE_REPORTER}" -f html -o "${HTML_REPORT}"
+python "${TESTRAIL_FAILURE_REPORTER}" -f html -o "${HTML_REPORT}" -j "${TEST_RUNNER_JOB_NAME}"
 
 echo "description string: <iframe frameborder='0' scrolling='yes'" \
     "style='display:block; width:100%; height:150vh;'" \
