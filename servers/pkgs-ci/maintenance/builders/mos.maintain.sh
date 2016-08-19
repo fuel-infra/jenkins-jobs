@@ -14,15 +14,25 @@ main () {
     [ -d "${WRKDIR}/docker-builder" ] && local _dpath="${WRKDIR}/docker-builder" || exit 1
 
     # Aborted containers cleanup
-    docker ps -a | grep -F -e "Exited" -e "Dead" | cut -d ' ' -f 1 | xargs -I% docker rm %
+    docker ps -a -q -f status=exited | xargs -I% docker rm -f %
+    docker ps -a -q -f status=dead   | xargs -I% docker rm -f %
 
-    # Clean up all build related containers
-    # FIXME: There is no way to properly detect lifetime of the container, so
-    #        remove all build containers
-    docker ps -a \
-        | egrep " (mock|s)build:latest" \
-        | cut -d ' ' -f 1 \
-        | xargs -I% docker rm -f %
+    # Clean up all build related containers older than ${MAX_AGE} hours
+    MAX_AGE=12
+    START_BEFORE=$(date -u -d "${MAX_AGE} hours ago" +%s)
+
+    # ID, image name and start timestamp of all running containers
+    RUNNING_CONTAINERS=$(docker ps -a -q -f status=running | xargs docker inspect --format='{{.Id}} {{.Config.Image}} {{.State.StartedAt}}')
+    # Filter container list to include only build-related containers
+    BUILD_CONTAINERS=$(echo "${RUNNING_CONTAINERS}" | awk '$2 ~ /^(docker-builder-(mock|sbuild)|(mock|s)build):latest/ {print $1, $3}')
+
+    # Remove too long running containers
+    while read -r ID START; do
+        START_AT=$(date -u -d "${START}" +%s)
+        if [ "${START_AT}" -le "${START_BEFORE}" ]; then
+            docker rm -f "${ID}"
+        fi
+    done <<< "${BUILD_CONTAINERS}"
 
     # Unpublished packages cleanup
     rm -rf "${HOME}/built_packages/*"
