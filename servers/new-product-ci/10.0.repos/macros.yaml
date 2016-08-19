@@ -1,0 +1,98 @@
+- parameter:
+    name: 10.0.repos.systest-params
+
+    parameters:
+
+    - string:
+        name: CUSTOM_VERSION
+        description: |
+          Custom version for test rails reporting.
+          Normally should be inserted from snapshot job
+
+    - string:
+        name: FUEL_QA_COMMIT
+        description: "fuel-qa commit"
+    - string:
+        name: CENTOS_CLOUD_IMAGE_PATH
+        default: /srv/downloads/qa-centos-cloud-2016-05-05.qcow2
+        description: Path to centos image on local filesystem
+
+    # section for mos rpm repos
+    - string:
+        name: MOS_CENTOS_VERSION
+    - string:
+        name: MOS_CENTOS_OS_MIRROR_ID
+    - string:
+        name: MOS_CENTOS_PROPOSED_MIRROR_ID
+    - string:
+        name: MOS_CENTOS_UPDATES_MIRROR_ID
+    - string:
+        name: MOS_CENTOS_SECURITY_MIRROR_ID
+    - string:
+        name: MOS_CENTOS_HOLDBACK_MIRROR_ID
+    - string:
+        name: MOS_CENTOS_HOTFIX_MIRROR_ID
+    # flags affect master node and cluster w/ centos servers
+    - bool:
+        name: ENABLE_MOS_CENTOS_OS
+        default: false
+    - bool:
+        name: ENABLE_MOS_CENTOS_PROPOSED
+        default: false
+    - bool:
+        name: ENABLE_MOS_CENTOS_UPDATES
+        default: false
+    - bool:
+        name: ENABLE_MOS_CENTOS_SECURITY
+        default: false
+    - bool:
+        name: ENABLE_MOS_CENTOS_HOLDBACK
+        default: false
+    - bool:
+        name: ENABLE_MOS_CENTOS_HOTFIX
+        default: false
+
+    # section for mos deb repos
+    - string:
+        name: MOS_UBUNTU_VERSION
+    - string:
+        name: MOS_UBUNTU_MIRROR_ID
+    # flags affect master node and cluster w/ ubuntu servers
+    - bool:
+        name: ENABLE_MOS_UBUNTU_PROPOSED
+        default: false
+    - bool:
+        name: ENABLE_MOS_UBUNTU_UPDATES
+        default: false
+    - bool:
+        name: ENABLE_MOS_UBUNTU_SECURITY
+        default: false
+    - bool:
+        name: ENABLE_MOS_UBUNTU_HOLDBACK
+        default: false
+    - bool:
+        name: ENABLE_MOS_UBUNTU_HOTFIX
+        default: false
+
+
+    - string:
+        name: UBUNTU_MIRROR_ID
+    - bool:
+        name: ENABLE_PROPOSED
+        default: false
+    - string:
+        name: CENTOS_MIRROR_ID
+
+- builder:
+    name: 10.0.repos.make-snapshots
+    builders:
+    # Calculate all snapshot data
+    # creates snapshots.params and snapshots.sh
+    - shell:
+        !include-raw: './scripts/generate_repos_snapshot.sh'
+
+- builder:
+    name: 10.0.repos.run-sys-test
+    builders:
+    - shell:
+        !include-raw: './scripts/run_repos_systest.sh'

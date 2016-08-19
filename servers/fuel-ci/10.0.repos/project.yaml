@@ -1,0 +1,11 @@
+- project:
+    name: 10.0.repos
+    jobs:
+    - 10.0.repos.snapshot:
+        timer: '0 */6 * * *'
+    - 10.0.repos.main.{dist}.{testgroup}:
+        dist: ubuntu
+        testgroup: bvt_2
+    - 10.0.repos.main.{dist}.{testgroup}:
+        dist: ubuntu
+        testgroup: smoke_neutron
