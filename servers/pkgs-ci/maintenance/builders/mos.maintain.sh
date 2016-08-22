@@ -27,12 +27,14 @@ main () {
     BUILD_CONTAINERS=$(echo "${RUNNING_CONTAINERS}" | awk '$2 ~ /^(docker-builder-(mock|sbuild)|(mock|s)build):latest/ {print $1, $3}')
 
     # Remove too long running containers
-    while read -r ID START; do
-        START_AT=$(date -u -d "${START}" +%s)
-        if [ "${START_AT}" -le "${START_BEFORE}" ]; then
-            docker rm -f "${ID}"
-        fi
-    done <<< "${BUILD_CONTAINERS}"
+    if [ -n "${BUILD_CONTAINERS}" ]; then
+        while read -r ID START; do
+            START_AT=$(date -u -d "${START}" +%s)
+            if [ "${START_AT}" -le "${START_BEFORE}" ]; then
+                docker rm -f "${ID}"
+            fi
+        done <<< "${BUILD_CONTAINERS}"
+    fi
 
     # Unpublished packages cleanup
     rm -rf "${HOME}/built_packages/*"
