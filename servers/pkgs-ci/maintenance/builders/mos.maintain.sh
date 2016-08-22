@@ -22,7 +22,7 @@ main () {
     START_BEFORE=$(date -u -d "${MAX_AGE} hours ago" +%s)
 
     # ID, image name and start timestamp of all running containers
-    RUNNING_CONTAINERS=$(docker ps -a -q -f status=running | xargs docker inspect --format='{{.Id}} {{.Config.Image}} {{.State.StartedAt}}')
+    RUNNING_CONTAINERS=$(docker ps -a -q -f status=running | xargs docker inspect --format='{{.Id}} {{.Config.Image}} {{.State.StartedAt}}' || :)
     # Filter container list to include only build-related containers
     BUILD_CONTAINERS=$(echo "${RUNNING_CONTAINERS}" | awk '$2 ~ /^(docker-builder-(mock|sbuild)|(mock|s)build):latest/ {print $1, $3}')
 
