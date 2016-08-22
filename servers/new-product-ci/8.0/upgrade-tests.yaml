@@ -46,6 +46,9 @@
       - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'upgrade_ceph_ha_backup'
           upgrade_testgroup: 'cluster_upgrade_extension'
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
+          testgroup: 'upgrade_net_tmpl_backup'
+          upgrade_testgroup: 'upgrade_net_tmpl_tests'
 
 
 - job:
@@ -100,6 +103,9 @@
             current-parameters: true
             kill-phase-on: NEVER
           - name: '8.0.upgrades.ubuntu.cluster_upgrade_extension'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '8.0.upgrades.ubuntu.upgrade_net_tmpl_tests'
             current-parameters: true
             kill-phase-on: NEVER
 
