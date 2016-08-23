@@ -46,8 +46,8 @@
         #!/bin/bash
         set -ex
         pushd reqparser
-          bash generate_report.sh -c req -d $DISTRO
-          tar -czvf $DISTRO_results.tar.gz result
+          bash generate_report.sh -c req -d "${{DISTRO}}"
+          tar -czvf "${{DISTRO}}_results.tar.gz" result
         popd
 
     publishers:
