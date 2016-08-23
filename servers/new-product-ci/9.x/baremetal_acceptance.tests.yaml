@@ -4,8 +4,8 @@
     repobranch: 'origin/stable/mitaka'
     reponame: 'fuel-qa'
     venvpath: '/home/jenkins/fuel-devops-3'
+    timeout: 2040
     description: '9.x baremetal acceptance test group'
-    timeout: '480'
     dist: 'ubuntu'
     weight: '1'
     version-id: '9.x'
