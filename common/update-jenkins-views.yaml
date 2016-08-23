@@ -69,5 +69,5 @@
     - naginator:
         max-failed-builds: 3
         fixed-delay: 10
-        regular-expression: 'authentication failed \[401\]'
+        regular-expression: 'authentication failed \[\d\d\d\]'
 
