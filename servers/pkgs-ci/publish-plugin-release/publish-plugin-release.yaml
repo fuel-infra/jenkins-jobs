@@ -1,0 +1,25 @@
+- project:
+    name: 'publish-plugin-release'
+
+    # Hosts for package publishing
+    publish-repo-host: >
+      rsync://perestroika-repo-tst.infra.mirantis.net/mirror-sync
+      rsync://seed-cz1.fuel-infra.org/mirror-sync
+      rsync://seed-us1.fuel-infra.org/mirror-sync
+    repo-base-path: '/home/jenkins/pubrepos'
+
+    # Job slave nodes
+    publish-node: 'new-publisher'
+
+    rpm-repo-path: '/mos-plugins/centos/${{MOS_VERSION}}'
+
+    # TRsync params
+    trsync-node: 'mirror-sync'
+    trsync-scm-repo: 'infra/trsync'
+    trsync-scm-branch: 'v0.10'
+    trsync-scm-basedir: 'trsync'
+
+    mailto: 'ci+publishing-alert@mirantis.com'
+
+    jobs:
+      - 'publish-plugin-release'
