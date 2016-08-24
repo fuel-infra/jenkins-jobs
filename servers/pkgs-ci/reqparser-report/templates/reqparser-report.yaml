@@ -53,7 +53,7 @@
     publishers:
     - archive:
         allow-empty: 'false'
-        artifacts: '{distro}_results.tar.gz'
+        artifacts: 'reqparser/{distro}_results.tar.gz'
     - email:
         recipients: 'mivanov+reqparser@mirantis.com'
 
