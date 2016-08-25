@@ -111,7 +111,11 @@
           mkdir artifacts
 
           # Get global requirements
-          curl -fLsS -o artifacts/global-requirements.txt https://raw.githubusercontent.com/openstack/requirements/${{GERRIT_BRANCH}}/global-requirements.txt
+          if [ -f global-requirements.txt ]; then
+              cp global-requirements.txt artifacts/
+          else
+              curl -fLsS -o artifacts/global-requirements.txt https://raw.githubusercontent.com/openstack/requirements/${{GERRIT_BRANCH}}/global-requirements.txt
+          fi
 
           # Prepare renderspec
           virtualenv -p python2.7 rpm-packaging-venv
