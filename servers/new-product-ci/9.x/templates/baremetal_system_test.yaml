@@ -4,7 +4,7 @@
     node: 'baremetal'
     concurrent: false
 
-    email: 'apanchenko@mirantis.com'
+    email: 'mos-qa@mirantis.com'
     venvpath: '/home/jenkins/qa-venv-master-3.0'
     properties: ''
     properties-file: ''

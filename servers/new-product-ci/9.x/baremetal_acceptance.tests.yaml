@@ -46,6 +46,12 @@
          testgroup: 'ha_neutron_haproxy_termination'
          downstream_environment: 'alpha'
      - '{version-id}.baremetal.{dist}.{testgroup}':
+         testgroup: 'tun_ceph_all'
+         downstream_environment: 'alpha'
+     - '{version-id}.baremetal.{dist}.{testgroup}':
+         testgroup: 'cinder_ceph_for_images_ephemeral_rados'
+         downstream_environment: 'alpha'
+     - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'ceph_volumes_ephemeral'
          downstream_environment: 'alpha'
      - '{version-id}.baremetal.{dist}.{testgroup}':
@@ -80,4 +86,13 @@
          downstream_environment: 'beta'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'huge_separate_rabbitmq_db'
+         downstream_environment: 'beta'
+     - '{version-id}.baremetal.{dist}.{testgroup}':
+         testgroup: 'hard_reset_primary_controller'
+         downstream_environment: 'beta'
+     - '{version-id}.baremetal.{dist}.{testgroup}':
+         testgroup: 'safe_reboot_primary_controller_ceph'
+         downstream_environment: 'beta'
+     - '{version-id}.baremetal.{dist}.{testgroup}':
+         testgroup: 'shutdown_cinder_cluster'
          downstream_environment: 'beta'
