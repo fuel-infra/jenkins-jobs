@@ -57,9 +57,9 @@ def product_ci(label=None, names=None):
     print "\n".join(env.hosts)
 
 @task
-def old_stable_ci(label=None, names=None):
+def custom_ci(label=None, names=None):
 
-    J = Jenkins('https://old-stable-ci.infra.mirantis.net')
+    J = Jenkins('https://custom-ci.infra.mirantis.net')
     env.hosts = J.list_nodes(label, names)
     print "\n".join(env.hosts)
 
@@ -99,6 +99,22 @@ def packaging_ci(label=None, names=None):
 def patching_ci(label=None, names=None):
 
     J = Jenkins('https://patching-ci.infra.mirantis.net')
+    env.hosts = J.list_nodes(label, names)
+
+    print "\n".join(env.hosts)
+
+@task
+def jenkins_sandbox_ci(label=None, names=None):
+
+    J = Jenkins('https://jenkins-sandbox.infra.mirantis.net')
+    env.hosts = J.list_nodes(label, names)
+
+    print "\n".join(env.hosts)
+
+@task
+def internal_ci(label=None, names=None):
+
+    J = Jenkins('https://internal-ci.infra.mirantis.net')
     env.hosts = J.list_nodes(label, names)
 
     print "\n".join(env.hosts)
@@ -157,6 +173,9 @@ def virsh(command="list"):
 
 @task
 def ml2_check():
+    """Check for bridge-nf-call-iptables parameter
+
+    """
     data = run("cat /proc/sys/net/bridge/bridge-nf-call-iptables")
     result_entry = (
         "bridge-nf-call-iptables",
@@ -166,6 +185,9 @@ def ml2_check():
 
 @task
 def hw_check():
+    """Print CPU and Memory data
+
+    """
     cpu = run("nproc").strip()
     memory = run('grep "^MemTotal:" /proc/meminfo').split()[-2]
     result_entry = (
@@ -201,7 +223,7 @@ def dos_clean_29(string):
 
 @task
 def set_symlink_to_iso(iso_filename, symlink='fuel_master.iso'):
-    """Set ISO symlink
+    """Set ISO symlink (Deprecated)
 
     fab fuel_ci:iso-263-upload set_symlink_to_iso:fuel-7.0-263-2015-09-02_03-12-20.iso
 
