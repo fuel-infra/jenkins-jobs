@@ -192,7 +192,7 @@
                 --repository "${{RPMCI_REPO}},90" \
                 --repository "${{MOS_REPO}},95" \
                 --source "$(pwd -P)" \
-                --output "${{tmpdir}}"
+                --output "${{tmpdir}}" || :
               test -f "${{tmpdir}}/exitstatus" && BUILD_STATUS=$(cat "${{tmpdir}}/exitstatus") || BUILD_STATUS=1
 
               # Move rendered spec to artifacts directory
