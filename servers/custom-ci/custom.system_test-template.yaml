@@ -131,6 +131,10 @@
       - string:
           name: MAKE_SNAPSHOT
           default: 'false'
+      - string:
+          name: ENV_PREFIX
+          default: '{mos}.custom.system_test'
+          description: Define env prefix name. This parameter should not be changed
       - text:
           name: ADDITIONAL_PARAMETERS
           description: |
@@ -153,7 +157,6 @@
           properties-content: |
             VENV_PATH={venvpath}
             TEST_ISO_JOB_URL={test_iso_job_url}
-            ENV_PREFIX={mos}.custom.system_test
       - inject:
           properties-content: $ADDITIONAL_PARAMETERS
       - shell:
