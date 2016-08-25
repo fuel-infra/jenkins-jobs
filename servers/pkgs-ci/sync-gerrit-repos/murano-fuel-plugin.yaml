@@ -1,12 +1,17 @@
 - project:
-    name: 'murano-plugin-sync'
+    name: 'fuel-plugin-murano-sync'
     sync-node: 'sync-murano-branch'
 
     src-branch:
-    - 'master':
+    - '9.0-plugin':
         dst-branch: 'plugin'
-        upstream-branch: 'master'
+        upstream-branch: '9.0/plugin'
         downstream-branch: '9.0/plugin'
+        fallback-branch: ''
+    - 'release-0.0.1':
+        dst-branch: 'release-0.0.1'
+        upstream-branch: '9.0/release/0.0.1'
+        downstream-branch: '9.0/release/0.0.1'
         fallback-branch: ''
 
     # Syncronization schedule
@@ -21,11 +26,7 @@
 
     # List of projects to sync
     gerrit-project-name:
-    - 'murano'
-    - 'murano-dashboard'
-    - 'python-muranoclient'
-    - 'osc-lib'
-    - 'app-catalog-ui'
+    - 'fuel-plugin-murano'
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
