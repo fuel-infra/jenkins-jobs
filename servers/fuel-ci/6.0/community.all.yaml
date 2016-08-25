@@ -85,5 +85,5 @@
       - ansicolor:
           colormap: xterm
       - timeout:
-          timeout: 120
+          timeout: 150
           fail: true
