@@ -131,7 +131,7 @@
       - inject:
           # env variables
           properties-content: |
-            VENV_PATH=$HOME/venv-nailgun-tests-2.9
+            VENV_PATH=$HOME/venv-nailgun-tests-upgrades
             ENV_PREFIX=custom.upgrade_system_test
       - inject:
           # export custom parameters

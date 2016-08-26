@@ -2,6 +2,7 @@
     name: old-stable-ci-cleaner
     devops_25: true
     devops_29: true
+    devops_upgrades: false
     release_60: false
     release_61: false
     lifetime_bvt: '24'

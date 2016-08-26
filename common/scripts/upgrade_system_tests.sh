@@ -233,6 +233,13 @@ function system_tests_wrapper(){
     # thus force -w to point to ${workspace} instead of ${WORKSPACE}
     workspace="${WORKSPACE}/${repo_dir}"
 
+    # upgrade tests are spread across branches so some times we can get
+    # errors by old/new packages. re-applying requirements.txt in dedicated venv
+    # allows to handle(avoid) this errors
+    source "${VENV_PATH}/bin/activate"
+        pip install --upgrade -r "${workspace}/fuelweb_test/requirements.txt"
+    deactivate
+
     # keep_build_env is used to  keep build environemnt for further
     # reuse (otherwise it is wiped/created for new product release)
     # utils is system tests starter (of fuel-qa origin)
