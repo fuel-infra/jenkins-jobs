@@ -96,9 +96,7 @@
         #!/bin/bash
         echo "=== [systest PRE-script] ==="
         {pre-script}
-    - shell:
-        !include-raw-escape:
-          '../builders/baremetal_system_test.sh'
+    - 9x-run-baremetal-sys-test
     - shell: |
         #!/bin/bash
         echo "=== [systest POST-script] ==="
