@@ -6,6 +6,7 @@
         echo "-SKIP-"
     properties-file: ''
     make-snapshot: 'false'
+    properties: ''
 
 - job-template:
     #
@@ -67,6 +68,7 @@
     block-downstream: false
     block-upstream: false
     node: '{node}'
+    jg-properties: ''
 
     logrotate:
         artifactDaysToKeep: 14
@@ -131,6 +133,8 @@
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
           TEST_ISO_JOB={version-id}.test_all
           MAKE_SNAPSHOT={make-snapshot}
+    - inject: # job-group level overrides
+        properties-content: '{jg-properties}'
     - inject: # overrides
         properties-content: '{properties}'
         properties-file: '{properties-file}'
