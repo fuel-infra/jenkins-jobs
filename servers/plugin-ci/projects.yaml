@@ -116,6 +116,10 @@
     # Additional ENV variables for injecting
     plugin_custom_variables: ''
 
+    # Override default plugin release version, with current date
+    # timestamp
+    plugin_release_timestamp: false
+
 #
 # Plugins tested with fuel-qa framework
 #
@@ -239,11 +243,15 @@
       - 9.0:
           plugin_branch: master
           iso_magnet_link: release-9.0
-          plugin_custom_variables: 'MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/ubuntu/9.0/pool/main/'
+          plugin_release_timestamp: true
+          plugin_custom_variables: |
+            MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/ubuntu/9.0/pool/main/
       - 9.0_murano-plugin_r1:
           plugin_branch: master
           iso_magnet_link: release-9.0
-          plugin_custom_variables: 'MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0/pool/main/'
+          plugin_release_timestamp: true
+          plugin_custom_variables: |
+            MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0/pool/main/
 
     plugin_name:
       - detach-murano:
@@ -269,11 +277,15 @@
       - 9.0:
           plugin_branch: master
           iso_magnet_link: release-9.0
-          plugin_custom_variables: 'MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/ubuntu/9.0/pool/main/'
+          plugin_release_timestamp: true
+          plugin_custom_variables: |
+            MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/ubuntu/9.0/pool/main/
       - 9.0_murano-plugin_r1:
           plugin_branch: master
           iso_magnet_link: release-9.0
-          plugin_custom_variables: 'MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0/pool/main/'
+          plugin_release_timestamp: true
+          plugin_custom_variables: |
+            MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0/pool/main/
 
     plugin_name:
       - detach-murano-timer:

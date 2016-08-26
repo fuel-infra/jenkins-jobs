@@ -40,9 +40,14 @@
           # Define directory with plugin
           properties-content: |
             PLUGIN_DIR={plugin_dir}
+            PLUGIN_RELEASE_TIMESTAMP={plugin_release_timestamp}
       - inject:
           # inject custom variables
           properties-content: '{plugin_custom_variables}'
+      - shell:
+          !include-raw-escape: ./builders/prepare-plugin-release-override.sh
+      - shell:
+          !include-raw-escape: ./builders/plugin-release-override.py
       - shell:
           !include-raw-escape: ./builders/plugin-build.sh
       - multijob:
