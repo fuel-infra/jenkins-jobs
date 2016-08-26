@@ -99,3 +99,18 @@
           - name: '9.x.baremetal.ubuntu.huge_separate_rabbitmq_db'
             current-parameters: true
             kill-phase-on: NEVER
+          - name: '9.x.baremetal.ubuntu.shutdown_cinder_cluster'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '9.x.baremetal.ubuntu.safe_reboot_primary_controller_ceph'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '9.x.baremetal.ubuntu.hard_reset_primary_controller'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '9.x.baremetal.ubuntu.cinder_ceph_for_images_ephemeral_rados'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '9.x.baremetal.ubuntu.tun_ceph_all'
+            current-parameters: true
+            kill-phase-on: NEVER
