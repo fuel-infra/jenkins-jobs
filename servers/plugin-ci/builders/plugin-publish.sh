@@ -23,23 +23,37 @@
 #
 
 set -ex
+PLUGIN_SERVER=${PLUGIN_SERVER:-packages.fuel-infra.org}
+REMOTE_PLUGIN_DIR=${REMOTE_PLUGIN_DIR:-/var/www/mirror/plugins}
+TRSYNC_DIR=${TRSYNC_DIR:-trsync}
 
-PLUGIN_FILE=$(basename "$(ls "${PLUGIN_DIR}"/*.rpm)")
-REPO_DIR="${PLUGIN_DIR}/${PLUGIN_FILE}/rpm/"
+# trsync install
+VENV_PATH=$TRSYNC_DIR/.venv
+virtualenv "$VENV_PATH"
+
+source "$VENV_PATH/bin/activate"
+pip install -r "$TRSYNC_DIR/requirements.txt"
+pushd "${TRSYNC_DIR}" &>/dev/null
+    python setup.py build
+    python setup.py install
+popd &>/dev/null
 
 case "${GERRIT_EVENT_TYPE}" in
     patchset-created)
-        TARGET_DIR="/plugins/review/CR-${PATCHSET_NUMBER}"
+        REPO_DIR="review/CR-${PATCHSET_NUMBER}"
         ;;
     change-merged-event)
-        TARGET_DIR="/plugins/${PLUGIN_NAME}/${PLUGIN_BRANCH}"
+        REPO_DIR="${PLUGIN_NAME}/${PLUGIN_BRANCH}"
         ;;
 esac
 
-mkdir "${REPO_DIR}"
+mkdir -p "${REPO_DIR}"
+# export from properties file
+export ${PLUGIN_FILE}
+cp "${PLUGIN_FILE}" "${REPO_DIR}"
 createrepo "${REPO_DIR}"
 
-# Variables should be expanded on client side
-# shellcheck disable=SC2029
-ssh "${PLUGIN_USER}@${PLUGIN_SERVER}" mkdir -p "${TARGET_DIR}" && \
-scp -r "${REPO_DIR}" "${PLUGIN_USER}@${PLUGIN_SERVER}:${TARGET_DIR}"
+trsync push "${REPO_DIR}" \
+            -d "${PLUGIN_SERVER}/${REPO_DIR}" \
+            -s "${REPO_DIR}" \
+            --init-directory-structure 

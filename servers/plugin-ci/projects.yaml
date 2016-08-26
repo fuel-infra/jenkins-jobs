@@ -168,7 +168,7 @@
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
-      - '{version}.fuel-plugin.{plugin_name}.build.publish'
+      - '{version}.fuel-plugin.{plugin_name}.publish'
 
 #
 # Plugins tested with the StackLight test framework
@@ -226,7 +226,7 @@
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.verify'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
-      - '{version}.fuel-plugin.{plugin_name}.build.publish'
+      - '{version}.fuel-plugin.{plugin_name}.publish'
 
 - project:
     name: murano-plugin
@@ -255,7 +255,7 @@
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build':
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
-      - '{version}.fuel-plugin.{plugin_name}.build.publish'
+      - '{version}.fuel-plugin.{plugin_name}.publish'
 
 
 - project:
@@ -367,7 +367,7 @@
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.build'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
-      - '{version}.fuel-plugin.{plugin_name}.build.publish'
+      - '{version}.fuel-plugin.{plugin_name}.publish'
       - '{version}.fuel-plugin.{plugin_name}.build-timer':
           timer: 'H 2 * * *'
 
