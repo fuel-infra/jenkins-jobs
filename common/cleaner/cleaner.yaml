@@ -1,5 +1,10 @@
 - defaults:
     name: 'cleaner'
+    devops_29: true
+    devops_25: false
+    devops_upgrades: false
+    release_60: false
+    release_61: false
     lifetime_acceptance: '168'
     lifetime_bvt: '24'
     lifetime_swarm: '22'
@@ -25,6 +30,7 @@
           allowed-multiselect: true
       - bool:
           name: 'DEVOPS_2_9'
+          default: '{devops_29}'
       - bool:
           name: 'DEVOPS_2_5'
           default: '{devops_25}'
