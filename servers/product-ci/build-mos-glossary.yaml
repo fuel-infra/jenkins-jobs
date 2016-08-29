@@ -3,12 +3,12 @@
     name: master.build-mos-glossary
     description: |
 
-      Build glossary from mos/glossary for branch {branch} and
+      Build glossary from mos/glossary for branch master and
       publish it to <a
-      href="https://docs.mirantis.com/openstack/fuel/fuel-{version-id}/glossary">
-      https://docs.mirantis.com/openstack/fuel/fuel-{version-id}/glossary</a>
+      href="https://docs.mirantis.com/openstack/fuel/fuel-master/glossary">
+      https://docs.mirantis.com/openstack/fuel/fuel-master/glossary</a>
 
-      <p>Contacts: ci-team at #infra in Slack
+      <p>Contacts: ci-team at #infra in Slack</p>
     concurrent: false
     node: docs
     logrotate:
@@ -22,7 +22,7 @@
     parameters:
       - string:
           name: GERRIT_BRANCH
-          default: '{branch}'
+          default: 'master'
 
     scm:
       - git:
@@ -32,7 +32,7 @@
           clean: true
 
     triggers:
-      - timed: '{timer}'
+      - timed: 'H * * * *'
 
     wrappers:
       - ssh-agent-credentials:
@@ -53,12 +53,12 @@
             DOCS_HOST=docs.fuel-infra.org
             DOCS_ROOT=/var/www/openstack/fuel/
       - shell:
-          !include-raw-escape: builders/build-mos-glossary.sh
+          !include-raw: builders/build-mos-glossary.sh
 
     publishers:
       - html-publisher:
           name: 'MOS glossary build results'
-          dir: '{results-dir}'
+          dir: 'doc/build/html'
           files: 'index.html'
           keep-all: true
           allow-missing: true
