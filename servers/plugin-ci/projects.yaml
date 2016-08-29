@@ -223,6 +223,12 @@
           plugin_test_group: 'deploy_ceilometer_redis'
           plugin_env_path_name: 'CEILOMETER_REDIS_PLUGIN_PATH'
 
+    exclude:
+      - version: "0.10"
+        plugin_name: kafka
+      - version: "0.10"
+        plugin_name: ceilometer-redis
+
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.verify'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test'
