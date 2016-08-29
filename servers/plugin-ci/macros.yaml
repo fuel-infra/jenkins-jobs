@@ -127,7 +127,7 @@
     publishers:
       - archive:
           allow-empty: true
-          artifacts: 'custom_tests/report.xml, custom_tests/*.log, *.log'
+          artifacts: 'custom_tests/report.xml, custom_tests/*.log, *.log, snapshots.params'
           latest-only: false
       - post-destroy-vms
       - description-setter:
