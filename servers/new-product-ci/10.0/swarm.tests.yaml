@@ -11,7 +11,7 @@
    timeout: '480'
    # FIXME: MIRROR_UBUNTU should be constructed with data from mirror_id.txt
    # but we are waiting for patches related to new mirrors, so we hardcode canonical mirrors for now.
-   properties: |
+   jg-properties: |
      MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
      SLAVE_NODE_MEMORY=3072
    weight: '7'

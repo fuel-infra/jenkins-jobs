@@ -9,6 +9,7 @@
     disabled: false
     concurrent: true
     defaults: '{version-id}.{test-type}.{dist}.plugins.{testgroup}'
+    jg-properties: ''
     node: 'systest'
 
     logrotate:
@@ -64,6 +65,8 @@
           SEPARATE_SERVICE_BALANCER_PLUGIN_URL=https://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/external_loadbalancer-2.0-2.0.0-1.noarch.rpm
           SLAVE_NODE_MEMORY=3072
           MAKE_SNAPSHOT={make-snapshot}
+    - inject: # job-group level overrides
+        properties-content: '{jg-properties}'
     - inject: # overrides
         properties-content: '{properties}'
     - shell:
