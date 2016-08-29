@@ -17,7 +17,7 @@
     - 9x-systest-params
     - string: # added for cleaner which searches for job parameter
         name: ENV_PREFIX
-        default: 'fuel.baremetal.{downstream_environment}'
+        default: 'fuel.baremetal.{downstream_environment}.{testgroup}'
     - string:
         name: TEST_GROUP
         default: '{testgroup}'
