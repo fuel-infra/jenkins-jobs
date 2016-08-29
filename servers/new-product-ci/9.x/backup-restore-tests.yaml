@@ -40,6 +40,9 @@
             UPDATE_MASTER=true
             UPGRADE_FUEL_FROM=9.1
             UPGRADE_FUEL_TO=9.1
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
+          testgroup: 'upgrade_net_tmpl_backup'
+          upgrade_testgroup: 'replace_controller_net_tmpl'
 
 
 - job:
@@ -84,6 +87,9 @@
             current-parameters: true
             kill-phase-on: NEVER
           - name: '9.x.backup-restore.ubuntu.upgrade_plugin_tests'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '9.x.backup-restore.ubuntu.replace_controller_net_tmpl'
             current-parameters: true
             kill-phase-on: NEVER
 
