@@ -58,6 +58,12 @@
             BASE_DEB_REPO_PATH={mos-deb-repo-path}
             DEB_DIST_NAME={deb-dist-name}
 
+            DEB_REQUEST_REPO_PATH={deb-repo-path}/{project-version}
+            RPM_REQUEST_OS_REPO_PATH={rpm-repo-path}/os
+            RPM_REQUEST_HOTFIX_REPO_PATH={rpm-repo-path}/hotfix
+            RPM_REQUEST_SECURITY_REPO_PATH={rpm-repo-path}/security
+            RPM_REQUEST_PROPOSED_REPO_PATH={rpm-repo-path}/proposed
+
             GERRIT_HOST={gerrit-host}
             GERRIT_PORT={gerrit-port}
             GERRIT_USER={gerrit-user}

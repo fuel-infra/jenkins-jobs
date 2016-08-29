@@ -68,6 +68,13 @@ RPM_DIST_NAME={rpm-dist-name}
 BASE_DEB_REPO_PATH={mos-deb-repo-path}
 BASE_RPM_REPO_PATH={mos-rpm-repo-path}
 
+# Per-CR repository pathes
+export DEB_REQUEST_REPO_PATH={mos-deb-repo-path}/{mos_version}
+export RPM_REQUEST_OS_REPO_PATH={mos-rpm-repo-path}/os
+export RPM_REQUEST_HOTFIX_REPO_PATH={mos-rpm-repo-path}/hotfix
+export RPM_REQUEST_SECURITY_REPO_PATH={mos-rpm-repo-path}/security
+export RPM_REQUEST_PROPOSED_REPO_PATH={mos-rpm-repo-path}/proposed
+
 # Repository pathes for publisher
 PUBLISH_DEB_REPO_PATH=${{BASE_DEB_REPO_PATH}}/{mos_version}
 PUBLISH_RPM_OS_REPO_PATH=${{BASE_RPM_REPO_PATH}}/os
