@@ -217,6 +217,11 @@
           plugin_owner: 'StackLight team'
           plugin_test_group: 'deploy_kafka'
           plugin_env_path_name: 'KAFKA_PLUGIN_PATH'
+      - openstack-telemetry:
+          plugin_repo: fuel-plugin-openstack-telemetry
+          plugin_owner: 'Ceilometer/StackLight team'
+          plugin_test_group: 'deploy_openstack_telemetry'
+          plugin_env_path_name: 'OPENSTACK_TELEMETRY_PLUGIN_PATH'
       - ceilometer-redis:
           plugin_repo: fuel-plugin-ceilometer-redis
           plugin_owner: 'Ceilometer team'
@@ -228,6 +233,8 @@
         plugin_name: kafka
       - version: "0.10"
         plugin_name: ceilometer-redis
+      - version: "0.10"
+        plugin_name: openstack-telemetry
 
     jobs:
       - '{version}.fuel-plugin.{plugin_name}.verify'
