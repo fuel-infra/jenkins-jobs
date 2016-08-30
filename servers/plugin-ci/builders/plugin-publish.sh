@@ -8,23 +8,23 @@
 #       :synopsis: Script used to publish newly builded plugins
 #   .. vesionadded:: MOS-10.0
 #   .. vesionchanged:: MOS-10.0
-#   .. author:: Alexey Golubev <agolubev@mirantis.com>
+#   .. author:: Dmitry Kaigarodtsev <dkaiharodsev@mirantis.com>
 #
 #
-#   This script is used to publish a builded plugin to a specified directory
-#   on the server
+#   This script is used to publish a builded plugin to the mirror
+#   by using 'trsync' tool
 #
 #
 #   .. envvar::
-#       :var  PLUGIN_DIR: plugins directory
-#       :var  PLUGIN_SERVER: publisher server
-#       :var  PLUGIN_BRANCH: plugin branch
-#       :var  PLUGIN_USER: user on publisher server
+#       :var  MIRROR_SERVER: destination host
+#       :var  REMOTE_RSYNC_SHARE: rsync share name
+#       :var  TRSYNC_DIR: folder with 'trsync'
+#       :var  PLUGIN_FILE_PATH: path of builded plugin
 #
 
 set -ex
-PLUGIN_SERVER=${PLUGIN_SERVER:-packages.fuel-infra.org}
-REMOTE_PLUGIN_DIR=${REMOTE_PLUGIN_DIR:-/var/www/mirror/plugins}
+MIRROR_SERVER=${MIRROR_SERVER:-packages.fuel-infra.org}
+REMOTE_RSYNC_SHARE=${REMOTE_RSYNC_SHARE:-mirror-sync/plugins}
 TRSYNC_DIR=${TRSYNC_DIR:-trsync}
 
 # trsync install
@@ -40,7 +40,7 @@ popd &>/dev/null
 
 case "${GERRIT_EVENT_TYPE}" in
     patchset-created)
-        REPO_DIR="review/CR-${PATCHSET_NUMBER}"
+        REPO_DIR="review/CR-${PATCHSET_NUMBER}/${PLUGIN_NAME}/${PLUGIN_BRANCH}"
         ;;
     change-merged-event)
         REPO_DIR="${PLUGIN_NAME}/${PLUGIN_BRANCH}"
@@ -48,12 +48,10 @@ case "${GERRIT_EVENT_TYPE}" in
 esac
 
 mkdir -p "${REPO_DIR}"
-# export from properties file
-export ${PLUGIN_FILE}
-cp "${PLUGIN_FILE}" "${REPO_DIR}"
+cp "${PLUGIN_FILE_PATH}" "${REPO_DIR}"
 createrepo "${REPO_DIR}"
 
 trsync push "${REPO_DIR}" \
-            -d "${PLUGIN_SERVER}/${REPO_DIR}" \
+            -d "rsync://${MIRROR_SERVER}/${REMOTE_RSYNC_SHARE}" \
             -s "${REPO_DIR}" \
-            --init-directory-structure 
+            --init-directory-structure

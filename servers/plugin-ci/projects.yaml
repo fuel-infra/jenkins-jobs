@@ -102,7 +102,7 @@
     test_properties: ''
 
     # Default directory inside git repository with plugin code
-    plugin_dir: ''
+    plugin_dir: 'plugin'
 
     # Default macro used to build VENV for test framework
     plugin_prepare_env_builder: plugin-prepare-env
