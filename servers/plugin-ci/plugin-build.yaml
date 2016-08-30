@@ -40,7 +40,7 @@
       - inject:
           # Define directory with plugin
           properties-content: |
-            PLUGIN_DIR=plugin/{plugin_dir}
+            PLUGIN_DIR={plugin_dir}
       - inject:
           # inject custom variables
           properties-content: '{plugin_custom_variables}'
