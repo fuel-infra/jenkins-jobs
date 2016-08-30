@@ -24,6 +24,8 @@ do
     if [[ "${DATE_TAG}" == 'true' ]]; then
       docker tag -f "${IMAGE}" "${URL}/${IMAGE}-${DATE}"
       docker push "${URL}/${IMAGE}-${DATE}"
+      docker rmi "${URL}/${IMAGE}-${DATE}"
     fi
+    docker rmi "${URL}/${IMAGE}"
   done
 done
