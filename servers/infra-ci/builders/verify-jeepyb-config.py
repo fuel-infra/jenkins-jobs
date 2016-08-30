@@ -194,6 +194,7 @@ REPOSITORIES_WHITELIST = {
     'packages/centos6/wxGTK',
     'packages/centos7/Cython',
     'packages/centos7/Django',
+    'packages/centos7/GitPython',
     'packages/centos7/MySQL-wsrep',
     'packages/centos7/PyYAML',
     'packages/centos7/Xaw3d',
