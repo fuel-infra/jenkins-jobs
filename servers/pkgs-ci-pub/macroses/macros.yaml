@@ -52,7 +52,7 @@
     name: openstack-gerrit
     scm:
       - git:
-          url: 'https://review.openstack.org/${{GERRIT_PROJECT}}.git'
+          url: 'git://git.openstack.org/${{GERRIT_PROJECT}}.git'
           basedir: '{scm-basedir}'
           branches:
             - 'FETCH_HEAD'
@@ -76,7 +76,7 @@
     name: perestroika
     scm:
       - git:
-          url: 'https://git.openstack.org/openstack/fuel-mirror.git'
+          url: 'git://git.openstack.org/openstack/fuel-mirror.git'
           branches:
             - master
           basedir: 'fuel-mirror'
