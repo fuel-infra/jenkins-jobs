@@ -26,7 +26,7 @@ case "${LOCATION}" in
         MIRROR_HOST="osci-mirror-kha.kha.mirantis.net"
         LOCATION="hrk"
         ;;
-    poz|bud|bud-ext|undef)
+    poz|bud|budext|undef)
         MIRROR_HOST="mirror.seed-cz1.fuel-infra.org"
         LOCATION="cz"
         ;;
