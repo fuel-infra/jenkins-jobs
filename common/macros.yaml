@@ -242,6 +242,86 @@
               if [ -n "${PKG_JSON_REPORT}" -a "${PKG_JSON_REPORT}" != "pkg-versions.json" ]; then
                   cp -f ${PKG_JSON_REPORT} pkg-versions.json
               fi
+########################################################################
+# Zuul parameters
+########################################################################
+
+- parameter:
+    name: zuul
+    parameters:
+      # Zuul specific parameters are added via zuul trigger
+      # but this list could be uncommented for debug purposes
+      # - string:
+      #     name: ZUUL_COMMIT
+      # - string:
+      #     name: ZUUL_CHANGES
+      # - string:
+      #     name: ZUUL_PROJECT
+      # - string:
+      #     name: ZUUL_CHANGE_IDS
+      # - string:
+      #     name: ZUUL_UUID
+      # - string:
+      #     name: ZUUL_PATCHSET
+      # - string:
+      #     name: ZUUL_BRANCH
+      # - string:
+      #     name: ZUUL_URL
+      # - string:
+      #     name: ZUUL_CHANGE
+      # - string:
+      #     name: ZUUL_PIPELINE
+      # - string:
+      #     name: ZUUL_REF
+
+      # Our Customizations
+      # ------------------
+
+      # zuul at pkgs-ci: function params_gerrit
+      - string:
+          name: CUSTOM_REPO_ID
+      # zuul at pkgs-ci: function params_mos
+      - string:
+          name: IS_OPENSTACK
+      - string:
+          name: MOS_PROJECT
+      - string:
+          name: MOS_VERSION
+      - string:
+          name: OPENSTACK_CODENAME
+      - string:
+          name: IS_HOTFIX
+      - string:
+          name: IS_UPDATES
+      - string:
+          name: PLUGIN_VERSION
+      - string:
+          name: IS_PLUGIN
+      - string:
+          name: IS_DOWNGRADE
+      - string:
+          name: IS_SECURITY
+      # zuul at pkgs-ci: function pkg_build
+      - string:
+          name: SRC_PROJECT
+      - string:
+          name: SOURCE_BRANCH
+      - string:
+          name: SOURCE_REFSPEC
+      - string:
+          name: SPEC_PROJECT
+      - string:
+          name: SPEC_BRANCH
+      - string:
+          name: SPEC_REFSPEC
+      - string:
+          name: DIST
+      - string:
+          name: REQUEST_NUM
+      - string:
+          name: LAST_STAGE
+      - string:
+          name: DEB_BUILD_OPTIONS
 
 ########################################################################
 # Gerrit parameters
