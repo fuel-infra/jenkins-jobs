@@ -26,6 +26,7 @@
     - 'python-muranoclient'
     - 'osc-lib'
     - 'app-catalog-ui'
+    - 'horizon-vendor-theme'
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
