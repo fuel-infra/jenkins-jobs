@@ -239,7 +239,7 @@
           NODES_COUNT=8
     - '9.x.{test-type}.{dist}.plugins.{testgroup}':
         testgroup:
-          - 'thread_2_separate_services'
+          - 'detach-rabbitmq-ci-group'
         weight: '20'
         node: 'huge-systest'
         timeout: '600'
