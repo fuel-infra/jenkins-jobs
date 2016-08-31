@@ -1,0 +1,143 @@
+- job-template:
+    # Upgrade chain for N+2 upgrade, mostly 7.0->9.x upgrade
+    #
+    # Variables required:
+    #
+    # venvpath
+    #     Path to virtual environment with all required packages installed
+    # version-id
+    #     Target fuel/MOS version
+    # source-version-id
+    #     Source fuel/MOS version
+    # dist
+    #     Base OS type, "ubuntu" is only supported
+    # common-properties
+    #     Additional environment variables that should be the same for all upgrade jobs,
+    #     required for not overwriting 'properties' var
+    # properties
+    #     Job-related environment variables
+    # repo-name
+    #     Name of repository which contains tests - fuel-qa obviosly
+    # base-testgroup
+    #     Test group which contains initial deployment and backup part of upgrade
+    # upgrade-testgroup
+    #     Test group which contains restore part of upgrade and post-upgrade checks
+    #
+    # All variables below is used with 3 variants for base, intermediate and upgrade step
+    #
+    # base-branch|intermediate-branch|upgrade-branch
+    #     {repo-name}'s branch with tests
+    # base-iso-magnet|intermediate-iso-magnet|upgrade-iso-magnet
+    #     Magnet link to Fuel ISO
+    # base-octane-location|intermediate-octane-location|upgrade-octane-location
+    #     URL to repository with latest octane package
+
+    id: common/upgrade_chain_2_system_tests
+    name: '{version-id}.{job-type}.{source-version-id}.{dist}.{upgrade-testgroup}'
+
+    description: '{description}'
+
+    concurrent: true
+    node: '{node}'
+
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
+
+    parameters:
+    - upgrade-chain-2-systest-params
+
+    scm:
+    - main-git:
+        reponame: {repo-name}
+        repobranch: {base-branch}
+        basedir: '{repo-name}-base'
+    - main-git:
+        reponame: {repo-name}
+        repobranch: {intermediate-branch}
+        basedir: '{repo-name}-intermediate'
+    - main-git:
+        reponame: {repo-name}
+        repobranch: {upgrade-branch}
+        basedir: '{repo-name}-upgrade'
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: true
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+    - inject:
+        properties-content: |
+          VENV_PATH={venvpath}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          UPDATE_REQUIREMENTS=yes
+    - guess-mirror
+    - inject:
+        properties-content: '{common-properties}'
+    - inject:
+        properties-content: '{properties}'
+
+    - upgrade_systest_step:
+        shell_variables: |
+          inject TEST_GROUP                 "{base-testgroup}"
+          inject ISO_MAGNET                 "$BASE_ISO_MAGNET"
+          inject OCTANE_REPO_LOCATION       "$BASE_OCTANE_LOCATION"
+          inject REPO_DIR                   "{repo-name}-base"
+          inject CURRENT_FUEL_VERSION       "{base-fuel-version}"
+
+    - upgrade_systest_step:
+        shell_variables: |
+          inject TEST_GROUP                 "upgrade_custom_backup"
+          inject UPGRADE_CUSTOM_STEP_NAME   "step_1"
+          inject ISO_MAGNET                 "$BASE_ISO_MAGNET"
+          inject OCTANE_REPO_LOCATION       "$BASE_OCTANE_LOCATION"
+          inject REPO_DIR                   "{repo-name}-base"
+          inject CURRENT_FUEL_VERSION       "{base-fuel-version}"
+    - upgrade_systest_step:
+        shell_variables: |
+          inject TEST_GROUP                 "upgrade_custom_restore"
+          inject UPGRADE_CUSTOM_STEP_NAME   "step_2"
+          inject ISO_MAGNET                 "$INTERMEDIATE_ISO_MAGNET"
+          inject OCTANE_REPO_LOCATION       "$INTERMEDIATE_OCTANE_LOCATION"
+          inject REPO_DIR                   "{repo-name}-intermediate"
+          inject CURRENT_FUEL_VERSION       "{intermediate-fuel-version}"
+    - upgrade_systest_step:
+        shell_variables: |
+          inject TEST_GROUP                 "upgrade_custom_backup"
+          inject UPGRADE_CUSTOM_STEP_NAME   "step_3"
+          inject ISO_MAGNET                 "$INTERMEDIATE_ISO_MAGNET"
+          inject OCTANE_REPO_LOCATION       "$INTERMEDIATE_OCTANE_LOCATION"
+          inject REPO_DIR                   "{repo-name}-intermediate"
+          inject CURRENT_FUEL_VERSION       "{intermediate-fuel-version}"
+    - upgrade_systest_step:
+        shell_variables: |
+          inject TEST_GROUP                 "{upgrade-testgroup}"
+          inject CURRENT_FUEL_VERSION       "{upgrade-fuel-version}"
+          inject ISO_MAGNET                 "$UPGRADE_ISO_MAGNET"
+          inject OCTANE_REPO_LOCATION       "$UPGRADE_OCTANE_LOCATION"
+          inject REPO_DIR                   "{repo-name}-upgrade"
+
+
+    publishers:
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,*/logs/*,logs/*'
+        latest-only: false
+    - post-destroy-vms
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+
