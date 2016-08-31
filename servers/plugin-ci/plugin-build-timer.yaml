@@ -27,7 +27,7 @@
 
     scm:
       - review-openstack-org:
-          project-basedir: 'plugin'
+          project-basedir: '{plugin_dir}'
           project-name: 'openstack/{plugin_repo}'
       - fuel-plugins:
           project-refspec: '{fuel_plugins_refspec}'
@@ -39,7 +39,7 @@
       - inject:
           # Define directory with plugin
           properties-content: |
-            PLUGIN_DIR=plugin/{plugin_dir}
+            PLUGIN_DIR={plugin_dir}
       - inject:
           # inject custom variables
           properties-content: '{plugin_custom_variables}'
@@ -63,5 +63,3 @@
     publishers:
       - archive:
           artifacts: 'plugin/*.rpm,plugin/*.fp'
-
-
