@@ -45,11 +45,11 @@
 
 set -ex
 
-export BUILD_DIR="$(readlink -e "${WORKSPACE}/../tmp/${JOB_NAME}/build")"
-export LOCAL_MIRROR="$(readlink -e "${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror")"
+export BUILD_DIR="$(readlink -m "${WORKSPACE}/../tmp/${JOB_NAME}/build")"
+export LOCAL_MIRROR="$(readlink -m "${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror")"
 export ARTS_DIR="${WORKSPACE}/artifacts"
 export DEPS_DIR="${BUILD_DIR}/deps"
-export DESTINATION_DIR="$(readlink -e "${WORKSPACE}/../tmp/${JOB_NAME}/late-artifacts")"
+export DESTINATION_DIR="$(readlink -m "${WORKSPACE}/../tmp/${JOB_NAME}/late-artifacts")"
 
 main () {
     #   .. function:: main
