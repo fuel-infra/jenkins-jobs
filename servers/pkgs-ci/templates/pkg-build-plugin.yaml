@@ -57,40 +57,42 @@
           headers: ''
           script: '{pre-build-script}'
 
-      - inject:
-          properties-content: |
-            PROJECT_NAME={project-name}
-            PROJECT_VERSION={project-version}
+      # made as sep. step because prev. injects will take effect only after build step
+      - extended-bash:
+          headers: ''
+          script: |
+            inject PROJECT_NAME         "{project-name}"
+            inject PROJECT_VERSION      "{project-version}"
 
-            IS_UPDATES={is-updates}
+            inject IS_UPDATES           "{is-updates}"
 
-            DIST={distro}
-            PKG_TYPE={pkg_type}
+            inject DIST                 "{distro}"
+            inject PKG_TYPE             "{pkg_type}"
 
-            REMOTE_REPO_HOST={publish-repo-host}
-            REPO_REQUEST_PATH_PREFIX=review/
+            inject REMOTE_REPO_HOST     "{publish-repo-host}"
+            inject REPO_REQUEST_PATH_PREFIX       "review/"
 
-            SRC_PROJECT_PATH=openstack
-            SPEC_PROJECT_PATH=openstack-build
-            SPEC_PROJECT_SUFFIX=-build
-            SPEC_PREFIX_PATH={spec_prefix_path}
+            inject SRC_PROJECT_PATH     "openstack"
+            inject SPEC_PROJECT_PATH    "openstack-build"
+            inject SPEC_PROJECT_SUFFIX  "-build"
+            inject SPEC_PREFIX_PATH     "{spec_prefix_path}"
 
-            BASE_RPM_REPO_PATH={mos-rpm-repo-path}
-            BASE_DEB_REPO_PATH={mos-deb-repo-path}
-            DEB_DIST_NAME={deb-dist-name}
+            inject BASE_RPM_REPO_PATH   "{mos-rpm-repo-path}"
+            inject BASE_DEB_REPO_PATH   "{mos-deb-repo-path}"
+            inject DEB_DIST_NAME        "{deb-dist-name}"
 
-            DEB_REQUEST_REPO_PATH={deb-repo-path}/{project-version}
-            RPM_REQUEST_OS_REPO_PATH={rpm-repo-path}/os
-            RPM_REQUEST_HOTFIX_REPO_PATH={rpm-repo-path}/hotfix
-            RPM_REQUEST_SECURITY_REPO_PATH={rpm-repo-path}/security
-            RPM_REQUEST_PROPOSED_REPO_PATH={rpm-repo-path}/proposed
+            inject DEB_REQUEST_REPO_PATH          "{deb-repo-path}/{project-version}"
+            inject RPM_REQUEST_OS_REPO_PATH       "{rpm-repo-path}/os"
+            inject RPM_REQUEST_HOTFIX_REPO_PATH   "{rpm-repo-path}/hotfix"
+            inject RPM_REQUEST_SECURITY_REPO_PATH "{rpm-repo-path}/security"
+            inject RPM_REQUEST_PROPOSED_REPO_PATH "{rpm-repo-path}/proposed"
 
-            GERRIT_HOST={gerrit-host}
-            GERRIT_PORT={gerrit-port}
-            GERRIT_USER={gerrit-user}
+            inject GERRIT_HOST          "{gerrit-host}"
+            inject GERRIT_PORT          "{gerrit-port}"
+            inject GERRIT_USER          "{gerrit-user}"
 
-            ADDITIONAL_EXTRAREPO_DEB=http://{publish-repo-host}{deb-repo-path}/{project-version} {deb-dist-name} main restricted
-            ADDITIONAL_EXTRAREPO_RPM=deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64
+            inject ADDITIONAL_EXTRAREPO_DEB   "http://{publish-repo-host}{deb-repo-path}/{project-version} {deb-dist-name} main restricted"
+            inject ADDITIONAL_EXTRAREPO_RPM   "deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64"
 
       - guess-mirror
 
