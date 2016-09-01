@@ -1,0 +1,83 @@
+- job-template:
+    name: '{project-version}-pkg-{project-name}-publish-fuel-plugin-{os}-{distro}'
+    project-type: freestyle
+    concurrent: false
+    quiet-period: 60
+
+    parameters:
+      - gerrit
+      - zuul
+
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-jenkins}'
+      - timestamps
+      - ansicolor
+
+    triggers:
+      - zuul
+
+    scm:
+      - perestroika:
+          branch: '{perestroika-branch}'
+
+    builders:
+
+      - extended-bash:
+          headers: ''
+          script: '{pre-build-script}'
+
+      - inject:
+          properties-content: |
+            PROJECT_NAME={project-name}
+            PROJECT_VERSION={project-version}
+
+            IS_UPDATES={is-updates}
+
+            IS_DOWNGRADE={is-downgrade}
+
+            DIST={distro}
+            REPO_TYPE={pkg_type}
+
+            SIGKEYID={pkg-sign-key}
+
+            REMOTE_REPO_HOST={publish-repo-host}
+            REPO_REQUEST_PATH_PREFIX=review/
+            REPO_BASE_PATH={repo-base-path}
+
+            DEB_REPO_PATH={deb-repo-path}/{project-version}
+            DEB_DIST_NAME={deb-dist-name}
+            DEB_HOTFIX_DIST_NAME={deb-dist-name}-hotfix
+            DEB_PROPOSED_DIST_NAME={deb-dist-name}-proposed
+            DEB_UPDATES_DIST_NAME={deb-dist-name}-updates
+            DEB_SECURITY_DIST_NAME={deb-dist-name}-security
+            DEB_HOLDBACK_DIST_NAME={deb-dist-name}-holdback
+
+            RPM_OS_REPO_PATH={rpm-repo-path}/os
+            RPM_HOTFIX_REPO_PATH={rpm-repo-path}/hotfix
+            RPM_UPDATES_REPO_PATH={rpm-repo-path}/updates
+            RPM_PROPOSED_REPO_PATH={rpm-repo-path}/proposed
+            RPM_SECURITY_REPO_PATH={rpm-repo-path}/security
+            RPM_HOLDBACK_REPO_PATH={rpm-repo-path}/holdback
+
+            DEB_ORIGIN_RELEASE={deb-origin-release}
+            DEB_ORIGIN_TEST={deb-origin-test}
+
+            PKG_JSON_REPORT=/home/jenkins/{project-version}-pkg-{project-name}-versions.json
+
+      - inject-from-job(same-change):  # ref-updated isn't supported yet, will fail on branch creation
+          # need BUILD_HOST PKG_PATH
+          job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          artifact-name: 'buildresult.params'
+
+      - shell: |
+          exit 0
+
+    publishers:
+      - pkg-version-report
+      - archive:
+           artifacts: '{pkg_type}.publish.setenvfile, tests.envfile'
+           allow-empty: true
+
+    node: '{publish-node}'

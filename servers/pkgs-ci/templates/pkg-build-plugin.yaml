@@ -1,0 +1,116 @@
+- job-template:
+    name: '{project-version}-pkg-{project-name}-build-fuel-plugin-{os}-{distro}'
+    concurrent: True
+    description: |
+        This job builds a package and then publishes it by triggerring publisher job.<br>
+        After publishing are triggered test jobs:
+        <ul>
+          <li> install test for just built packages
+          <li> system test using just built packages
+        </ul>
+
+    scm:
+
+      - git:
+          basedir: 'plugin'
+          branches:
+            - $GERRIT_BRANCH
+          choosing-strategy: gerrit
+          # refspec: $GERRIT_REFSPEC
+          url: 'https://review.fuel-infra.org/openstack/fuel-plugin-murano'
+
+      - git:
+          basedir: 'puppet-murano'
+          branches:
+            - $GERRIT_BRANCH
+          choosing-strategy: gerrit
+          # refspec: $GERRIT_REFSPEC
+          url: 'https://review.fuel-infra.org/openstack/puppet-murano'
+
+      - git:
+          basedir: 'fuel-plugins'
+          branches:
+            - master
+          url: 'https://github.com/openstack/fuel-plugins'
+
+    parameters:
+      - gerrit
+      - zuul
+
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-fuel-osci-bot}'
+            - '{ssh-creds-pkgs-ci}'
+      - timeout:
+          timeout: 300
+      - timestamps
+      - ansicolor
+
+    triggers:
+      - zuul
+
+    builders:
+
+      - extended-bash:
+          headers: ''
+          script: '{pre-build-script}'
+
+      - inject:
+          properties-content: |
+            PROJECT_NAME={project-name}
+            PROJECT_VERSION={project-version}
+
+            IS_UPDATES={is-updates}
+
+            DIST={distro}
+            PKG_TYPE={pkg_type}
+
+            REMOTE_REPO_HOST={publish-repo-host}
+            REPO_REQUEST_PATH_PREFIX=review/
+
+            SRC_PROJECT_PATH=openstack
+            SPEC_PROJECT_PATH=openstack-build
+            SPEC_PROJECT_SUFFIX=-build
+            SPEC_PREFIX_PATH={spec_prefix_path}
+
+            BASE_RPM_REPO_PATH={mos-rpm-repo-path}
+            BASE_DEB_REPO_PATH={mos-deb-repo-path}
+            DEB_DIST_NAME={deb-dist-name}
+
+            DEB_REQUEST_REPO_PATH={deb-repo-path}/{project-version}
+            RPM_REQUEST_OS_REPO_PATH={rpm-repo-path}/os
+            RPM_REQUEST_HOTFIX_REPO_PATH={rpm-repo-path}/hotfix
+            RPM_REQUEST_SECURITY_REPO_PATH={rpm-repo-path}/security
+            RPM_REQUEST_PROPOSED_REPO_PATH={rpm-repo-path}/proposed
+
+            GERRIT_HOST={gerrit-host}
+            GERRIT_PORT={gerrit-port}
+            GERRIT_USER={gerrit-user}
+
+            ADDITIONAL_EXTRAREPO_DEB=http://{publish-repo-host}{deb-repo-path}/{project-version} {deb-dist-name} main restricted
+            ADDITIONAL_EXTRAREPO_RPM=deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64
+
+      - guess-mirror
+
+      - shell: |
+          exit 0
+
+
+    publishers:
+      - email-alert-on-merge
+      - junit:
+          results: 'buildresult.xml'
+
+      - archive:
+          artifacts: 'buildresult.params, buildresult.xml, tests.envfile'
+          allow-empty: True
+
+      - post-tasks:
+        - matches:
+            - log-text: 'Started'
+          run-if-job-successful: true
+          script: rm -rf *
+
+    node: '{build-node}'
