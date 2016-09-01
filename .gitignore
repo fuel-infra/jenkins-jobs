@@ -8,3 +8,5 @@ utils/jobsdump/yaml
 .tox
 /.project
 tests/python/.cache/
+.idea
+.venv

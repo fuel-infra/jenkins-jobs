@@ -1,0 +1,82 @@
+- job-template:
+    name: '10.0.repos.main.{dist}.{testgroup}'
+    description: 'Run Build Verification Test {testgroup}'
+
+    email: 'ci+bvt@mirantis.com'
+    env_suffix: $BUILD_ID
+    properties: ''
+    timeout: '180'
+    weight: '7'
+    node: 'bvt-devopsv3'
+    concurrent: true
+    disabled: false
+
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+
+    parameters:
+    - 10.0.repos.systest-params
+    - string: # added for cleaner which searches for job parameter
+        name: ENV_PREFIX
+        default: '10.0.repos.main.{dist}.{testgroup}'
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
+
+    scm:
+    - main-git:
+        reponame: 'fuel-qa'
+        repobranch: '$FUEL_QA_COMMIT'
+        basedir: ''
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+
+    - inject: # Defaults
+        properties-content: |
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          ENV_SUFFIX={env_suffix}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          VENV_PATH=/home/jenkins/qa-venv-master-3.0
+          SLAVE_NODE_CPU=2
+          SLAVE_NODE_MEMORY=3072
+          DEVOPS_SETTINGS_TEMPLATE=centos_master.yaml
+
+    - inject: # Overrides
+        properties-content: '{properties}'
+
+    - 10.0.repos.run-sys-test
+
+    publishers:
+
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*,*.txt'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+
+    - post-destroy-vms # Destroy envs if left undestroyed
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+
+    - bvt-failure-email:
+        email_recipients: '{email}'
+
+    - bvt-fixed-email:
+        email_recipients: '{email}'

@@ -1,0 +1,86 @@
+- job-template:
+    name: '10.0{mod}.repos.snapshot'
+    description: |
+      Freeze all dependencies for systest into artifact and run initial verification.
+
+    project-type: multijob
+    node: runner
+
+    timer: ''
+
+    triggers:
+    - timed: '{timer}'
+
+    wrrappers:
+    - timeout:
+        timeout: 300
+
+    scm:
+    - main-git:
+        reponame: 'fuel-qa'
+        repobranch: 'master'
+        basedir: ''
+
+    builders:
+
+    - 10.0.repos.make-snapshots
+    - inject-properties-file:
+        properties-file: 'snapshots.params'
+    - write-description:
+        description-string: $CUSTOM_VERSION
+
+    - multijob:
+        name: 'Run tests'
+        condition: COMPLETED
+        projects:
+        - name: 10.0{mod}.repos.main.ubuntu.bvt_2
+          kill-phase-on: NEVER
+          property-file: snapshots.params
+          predefined-parameters: |
+            ENABLE_MOS_UBUNTU_PROPOSED=true
+            ENABLE_MOS_UBUNTU_UPDATES=true
+            ENABLE_MOS_UBUNTU_SECURITY=true
+            ENABLE_MOS_UBUNTU_HOLDBACK=true
+            ENABLE_MOS_UBUNTU_HOTFIX=true
+
+            ENABLE_MOS_CENTOS_OS=true
+            ENABLE_MOS_CENTOS_PROPOSED=true
+            ENABLE_MOS_CENTOS_UPDATES=true
+            ENABLE_MOS_CENTOS_SECURITY=true
+            ENABLE_MOS_CENTOS_HOLDBACK=true
+            ENABLE_MOS_CENTOS_HOTFIX=true
+        - name: 10.0{mod}.repos.main.ubuntu.smoke_neutron
+          kill-phase-on: NEVER
+          property-file: snapshots.params
+          predefined-parameters: |
+            ENABLE_MOS_UBUNTU_PROPOSED=true
+            ENABLE_MOS_UBUNTU_UPDATES=true
+            ENABLE_MOS_UBUNTU_SECURITY=true
+            ENABLE_MOS_UBUNTU_HOLDBACK=true
+            ENABLE_MOS_UBUNTU_HOTFIX=true
+
+            ENABLE_MOS_CENTOS_OS=true
+            ENABLE_MOS_CENTOS_PROPOSED=true
+            ENABLE_MOS_CENTOS_UPDATES=true
+            ENABLE_MOS_CENTOS_SECURITY=true
+            ENABLE_MOS_CENTOS_HOLDBACK=true
+            ENABLE_MOS_CENTOS_HOTFIX=true
+
+    publishers:
+
+    - archive:
+        artifacts: 'snapshots.params'
+        allow-empty: false
+    - archive:
+        artifacts: 'snapshots.sh'
+        allow-empty: false
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+
+    - trigger-parameterized-builds:
+        - project: '10.0{mod}.repos.bvt.test-reports'
+          condition: ALWAYS
+          predefined-parameters: |
+            TEST_JOB_NAME=$JOB_NAME
+            CUSTOM_VERSION=snapshot #$BUILD_NUMBER
