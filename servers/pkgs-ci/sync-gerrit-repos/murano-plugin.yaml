@@ -33,6 +33,7 @@
         upstream-branch: 'stable/mitaka'
         downstream-branch: '9.0/plugin'
         fallback-branch: ''
+    - 'fuel-plugin-murano'
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
