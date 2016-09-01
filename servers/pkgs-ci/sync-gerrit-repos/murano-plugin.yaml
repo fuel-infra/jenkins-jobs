@@ -27,6 +27,12 @@
     - 'osc-lib'
     - 'app-catalog-ui'
     - 'horizon-vendor-theme'
+    - 'puppet-murano':
+        src-branch: 'mitaka'
+        dst-branch: 'plugin'
+        upstream-branch: 'stable/mitaka'
+        downstream-branch: '9.0/plugin'
+        fallback-branch: ''
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
