@@ -11,40 +11,37 @@
 
     scm:
 
-      - git:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: openstack/fuel-plugin-murano
+          branch: $GERRIT_BRANCH
           basedir: 'plugin'
-          branches:
-            - $GERRIT_BRANCH
-          choosing-strategy: gerrit
-          # refspec: $GERRIT_REFSPEC
-          url: 'https://review.fuel-infra.org/openstack/fuel-plugin-murano'
-
-      - git:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: openstack/puppet-murano
+          branch: $GERRIT_BRANCH
           basedir: 'puppet-murano'
-          branches:
-            - $GERRIT_BRANCH
-          choosing-strategy: gerrit
-          # refspec: $GERRIT_REFSPEC
-          url: 'https://review.fuel-infra.org/openstack/puppet-murano'
 
-      - git:
-          basedir: 'fuel-plugins'
-          branches:
-            - master
-          url: 'https://github.com/openstack/fuel-plugins'
+      - upstream:
+          branch: 'master'
+          repo: fuel-plugins
+          fuel-namespace: 'openstack'
 
     parameters:
       - gerrit
       - zuul
 
     wrappers:
-      - ssh-agent-credentials:
-          users:
-            - '{ssh-creds-openstack-ci-jenkins}'
-            - '{ssh-creds-fuel-osci-bot}'
-            - '{ssh-creds-pkgs-ci}'
+      # fixme: looks like redundant, we could remove this if everything will work
+      # - ssh-agent-credentials:
+      #     users:
+      #       - '{ssh-creds-openstack-ci-jenkins}'
+      #       - '{ssh-creds-fuel-osci-bot}'
+      #       - '{ssh-creds-pkgs-ci}'
       - timeout:
-          timeout: 300
+          timeout: 300 # need more precise timeout
       - timestamps
       - ansicolor
 
@@ -102,8 +99,9 @@
 
     publishers:
       - email-alert-on-merge
-      - junit:
-          results: 'buildresult.xml'
+      # currently we don't have any junit.
+      # - junit:
+      #     results: 'buildresult.xml'
 
       - archive:
           artifacts: 'buildresult.params, buildresult.xml, tests.envfile'
