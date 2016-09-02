@@ -58,6 +58,8 @@
         # perform such conversion:
         # 9.0/release/0.0.1 -> release/0.0.1/
         inject BIN_REPO_SUBPATH "${{GERRIT_BRANCH#*/}}/"
+      else
+        inject BIN_REPO_SUBPATH ''
       fi
 
     jobs:
