@@ -28,43 +28,45 @@
           headers: ''
           script: '{pre-build-script}'
 
-      - inject:
-          properties-content: |
-            PROJECT_NAME={project-name}
-            PROJECT_VERSION={project-version}
+      # made as sep. step because prev. injects will take effect only after build step
+      - extended-bash:
+          headers: ''
+          script: |
+            inject PROJECT_NAME     "{project-name}"
+            inject PROJECT_VERSION  "{project-version}"
 
-            IS_UPDATES={is-updates}
+            inject IS_UPDATES       "{is-updates}"
 
-            IS_DOWNGRADE={is-downgrade}
+            inject IS_DOWNGRADE     "{is-downgrade}"
 
-            DIST={distro}
-            REPO_TYPE={pkg_type}
+            inject DIST             "{distro}"
+            inject REPO_TYPE        "{pkg_type}"
 
-            SIGKEYID={pkg-sign-key}
+            inject SIGKEYID         "{pkg-sign-key}"
 
-            REMOTE_REPO_HOST={publish-repo-host}
-            REPO_REQUEST_PATH_PREFIX=review/
-            REPO_BASE_PATH={repo-base-path}
+            inject REMOTE_REPO_HOST         "{publish-repo-host}"
+            inject REPO_REQUEST_PATH_PREFIX "review/"
+            inject REPO_BASE_PATH           "{repo-base-path}"
 
-            DEB_REPO_PATH={deb-repo-path}/{project-version}
-            DEB_DIST_NAME={deb-dist-name}
-            DEB_HOTFIX_DIST_NAME={deb-dist-name}-hotfix
-            DEB_PROPOSED_DIST_NAME={deb-dist-name}-proposed
-            DEB_UPDATES_DIST_NAME={deb-dist-name}-updates
-            DEB_SECURITY_DIST_NAME={deb-dist-name}-security
-            DEB_HOLDBACK_DIST_NAME={deb-dist-name}-holdback
+            inject DEB_REPO_PATH            "{deb-repo-path}/{project-version}"
+            inject DEB_DIST_NAME            "{deb-dist-name}"
+            inject DEB_HOTFIX_DIST_NAME     "{deb-dist-name}-hotfix"
+            inject DEB_PROPOSED_DIST_NAME   "{deb-dist-name}-proposed"
+            inject DEB_UPDATES_DIST_NAME    "{deb-dist-name}-updates"
+            inject DEB_SECURITY_DIST_NAME   "{deb-dist-name}-security"
+            inject DEB_HOLDBACK_DIST_NAME   "{deb-dist-name}-holdback"
 
-            RPM_OS_REPO_PATH={rpm-repo-path}/os
-            RPM_HOTFIX_REPO_PATH={rpm-repo-path}/hotfix
-            RPM_UPDATES_REPO_PATH={rpm-repo-path}/updates
-            RPM_PROPOSED_REPO_PATH={rpm-repo-path}/proposed
-            RPM_SECURITY_REPO_PATH={rpm-repo-path}/security
-            RPM_HOLDBACK_REPO_PATH={rpm-repo-path}/holdback
+            inject RPM_OS_REPO_PATH         "{rpm-repo-path}/os"
+            inject RPM_HOTFIX_REPO_PATH     "{rpm-repo-path}/hotfix"
+            inject RPM_UPDATES_REPO_PATH    "{rpm-repo-path}/updates"
+            inject RPM_PROPOSED_REPO_PATH   "{rpm-repo-path}/proposed"
+            inject RPM_SECURITY_REPO_PATH   "{rpm-repo-path}/security"
+            inject RPM_HOLDBACK_REPO_PATH   "{rpm-repo-path}/holdback"
 
-            DEB_ORIGIN_RELEASE={deb-origin-release}
-            DEB_ORIGIN_TEST={deb-origin-test}
+            inject DEB_ORIGIN_RELEASE       "{deb-origin-release}"
+            inject DEB_ORIGIN_TEST          "{deb-origin-test}"
 
-            PKG_JSON_REPORT=/home/jenkins/{project-version}-pkg-{project-name}-versions.json
+            inject PKG_JSON_REPORT          "/home/jenkins/{project-version}-pkg-{project-name}-versions.json"
 
       - inject-from-job(same-change):  # ref-updated isn't supported yet, will fail on branch creation
           # need BUILD_HOST PKG_PATH
