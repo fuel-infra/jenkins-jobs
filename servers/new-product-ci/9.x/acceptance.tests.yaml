@@ -95,6 +95,7 @@
     - '9.x.{test-type}.{dist}.{testgroup}':
         testgroup: 'ssl'
         properties: |
+          DISABLE_SSL=true
           FORCE_HTTPS_MASTER_NODE=true
     - '9.x.{test-type}.{dist}.{testgroup}':
         testgroup: 'network_outage'
