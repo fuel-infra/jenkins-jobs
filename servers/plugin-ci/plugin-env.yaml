@@ -17,6 +17,7 @@
           name: SNAPSHOTS_PARAMS
           default: |
             MAGNET_LINK={magnet_link}
+            CUSTOM_VERSION=latest
             FUEL_QA_BRANCH={fuel_qa_branch}
             FUEL_QA_COMMIT=latest
             UBUNTU_MIRROR_ID=ubuntu-latest
