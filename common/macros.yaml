@@ -68,8 +68,12 @@
         echo "[Rename*] - Touching '{src}' because empty content is allowed"
         touch {src}
 
+        dst_dir=$(dirname '{dst}')
+        echo "[Rename*] - Touching ${{dst_dir}}"
+        mkdir -pv ${{dst_dir}}
+
         echo "[Rename*] - Renaming file '{src}' to '{dst}'"
-        mv {src} {dst}
+        mv -v {src} {dst}
         echo "[Rename*] - Renamed successfully."
 
 - builder:
@@ -163,6 +167,12 @@
       - shell:
           !include-raw: scripts/plugin-release-override.py
 
+- builder:
+    name: gerrit-refspec-checkout
+    builders:
+      - shell:
+          !include-raw: scripts/gerrit-refspec-checkout.sh
+
 ########################################################################
 # Builder guessing nearest mirror
 ########################################################################
@@ -173,6 +183,25 @@
       - shell: !include-raw scripts/guess-mirror.sh
       - inject:
           properties-file: mirror.jenkins-injectfile
+
+- builder:
+    name: convert-artifact-params
+    # This macros need to convert artifact from '{src}'
+    # to usable in pkgs-ci 'buildresult.params'
+    builders:
+      - shell: |
+          #!/bin/bash
+          source '{src}'
+          PKG_DIR=${{HOME}}/built_packages
+          PKG_PATH=$(mktemp -d ${{PKG_DIR}}/build-XXXXXXXX)
+
+          cp -v ${{PLUGIN_FILE_PATH}} ${{PKG_PATH}}
+
+          echo "BUILD_HOST=$(hostname)" >> buildresult.params
+          echo "PKG_PATH=${{PKG_PATH}}" >> buildresult.params
+          echo "GERRIT_CHANGE_STATUS=${{GERRIT_CHANGE_STATUS}}" >> buildresult.params
+          echo "REQUEST_NUM=${{REQUEST_NUM}}" >> buildresult.params
+          echo -e "IS_SECURITY=false\nREPO_TYPE=rpm\nDIST=centos7" >> buildresult.params
 
 ########################################################################
 # Builder guessing testgroup for system test

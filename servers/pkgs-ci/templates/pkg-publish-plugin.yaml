@@ -70,11 +70,12 @@
 
       - inject-from-job(same-change):  # ref-updated isn't supported yet, will fail on branch creation
           # need BUILD_HOST PKG_PATH
-          job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          job-name: '{project-version}-pkg-{project-name}-build-fuel-plugin-{os}-{distro}'
           artifact-name: 'buildresult.params'
 
-      - shell: |
-          exit 0
+      - shell:
+          !include-raw-escape:
+            '../builders/pkg_publish.sh'
 
     publishers:
       - pkg-version-report
