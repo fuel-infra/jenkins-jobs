@@ -17,6 +17,9 @@
        - string:
            name: URLS
            description: "Repository URL (See links on https://mirantis.jira.com/wiki/display/PRD/Repository+structure+for+every+release)"
+       - bool:
+           name: DIRECT_LINK
+           description: "Use this option to specify a direct link to snapshot"
        - string:
            name: URL_TO_DB
            description: "Published reports URL"

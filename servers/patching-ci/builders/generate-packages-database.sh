@@ -81,7 +81,11 @@ for URL in $URLS ; do
               )
               REPO_SUFFIX="mos6.1/updates/${CENTOS_REPO_FILENAME}"
           else
-              SNAPSHOT=$(curl -sSf "${URL}/${CENTOS_TARGET_FILE}" | sed '1p; d')
+              if [ "${DIRECT_LINK}" != "true" ] ; then
+                  SNAPSHOT=$(curl -sSf "${URL}/${CENTOS_TARGET_FILE}" | sed '1p; d')
+              else
+                  SNAPSHOT=''
+              fi
               wget "${URL}/${SNAPSHOT}/x86_64/repodata/repomd.xml" \
               -O "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml"
               CENTOS_REPO_FILENAME=$(\
@@ -93,15 +97,15 @@ for URL in $URLS ; do
           BASE_URL="${URL}"
           ;;
        ubuntu)
-          if [ "${RELEASE_VERSION}" == "6.1" ] ; then
+          if [ "${RELEASE_VERSION}" == "6.1" -o "${DIRECT_LINK}" == "true" ] ; then
               SNAPSHOT=''
+              BASE_URL="${URL}"
           else
               SNAPSHOT=$(curl -sSf "${URL}-${UBUNTU_TARGET_FILE}" | sed '1p; d')
+              # Remove $RELEASE_VERSION from URL for Ubuntu repository
+              BASE_URL="${URL%$RELEASE_VERSION*}"
           fi
           REPO_SUFFIX="${UBUNTU_REPO_SUFFIX}"
-          # Remove $RELEASE_VERSION from URL for Ubuntu repository
-          BASE_URL="${URL%$RELEASE_VERSION*}"
-
           ;;
        *)
           die "Distribution is not defined"
