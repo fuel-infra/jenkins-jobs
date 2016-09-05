@@ -23,15 +23,15 @@
           remotes:
             - gerrit:
                 refspec: $GERRIT_REFSPEC
-                url: 'https://review.fuel-infra.org/fuel-infra/puppet-manifests'
+                url: 'https://review.fuel-infra.org/$GERRIT_PROJECT'
           choosing-strategy: gerrit
     triggers:
       - gerrit:
           trigger-on:
             - patchset-created-event
           projects:
-            - project-compare-type: PLAIN
-              project-pattern: fuel-infra/puppet-manifests
+            - project-compare-type: ANT
+              project-pattern: fuel-infra/puppet-*
               branches:
                 - branch-compare-type: ANT
                   branch-pattern: '**'
