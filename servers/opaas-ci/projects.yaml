@@ -3,20 +3,64 @@
     project-branch: 'master'
     project-name: 'openstack/ci-cd-pipeline-app-murano'
     jobs:
-      - '{name}-{project-branch}-gerrit-check':
+      - '{name}-{project-branch}-gerrit{postfix}':
+          postfix: '-check'
           node_label: 'os_mitaka'
           weight: 2
-      - '{name}-custom-run':
+          vote: true
+          recheck-trigger: '{gerrit_trigger_on_recheck_regexp}'
+          tox_test: deploy_cicd_apps
+          additional_parameters: |
+            OS_IMAGE=ubuntu_14_murano-agent_upd
+            UPLOAD_TO_OS=true
+            APPS_CLEAN=true
+            OS_CLEANUP_BEFORE=true
+            APPS_ROOT=murano-apps/
+      - '{name}-{project-branch}-gerrit{postfix}':
+          postfix: '-advanced-check'
           node_label: 'os_mitaka'
           weight: 2
-      - '{name}-{project-branch}-gerrit-advanced-check':
-          node_label: 'os_mitaka'
-          weight: 2
-      - '{name}-{project-branch}-gerrit-linters':
+          vote: true
+          recheck-trigger: '{gerrit_trigger_advanced_check_regexp}'
+          tox_test: 'run_cicd_flow'
+          additional_parameters: |
+            OS_IMAGE=ubuntu_14_murano-agent_upd
+            OS_DOCKER_IMAGE=ubuntu_14_murano-agent_docker
+            UPLOAD_TO_OS=true
+            APPS_CLEAN=true
+            OS_CLEANUP_BEFORE=true
+            OS_CLEANUP_AFTER=true
+            APPS_ROOT=murano-apps/
+            ADDITIONAL_PACKAGES=com.example.docker.DockerTomcat
+      - '{name}-{project-branch}-gerrit{postfix}':
+          postfix: '-linters'
+          recheck-trigger: '{gerrit_trigger_on_recheck_regexp}'
+          tox_test: 'linters'
           node_label: 'os_mitaka'
           weight: 1
+
 - project:
-    name: 'debug_session'
+    name: 'k8s'
+    project-branch: 'master'
+    project-name: 'openstack/k8s-docker-suite-app-murano'
     jobs:
-      - 'debug_session_{weight}':
-          weight: 3
+      - '{name}-{project-branch}-gerrit{postfix}':
+          postfix: '-check'
+          node_label: 'os_mitaka'
+          weight: 2
+          recheck-trigger: '{gerrit_trigger_on_recheck_regexp}'
+          tox_test: 'deploy_scale_k8s'
+          # FIXME remove PACKAGES_LIST after it will be implemented in upstream
+          additional_parameters: |
+            OS_KUBERNETES_IMAGE=ubuntu_14_murano-agent_upd
+            UPLOAD_TO_OS=true
+            APPS_CLEAN=true
+            OS_CLEANUP_BEFORE=true
+            APPS_ROOT=/
+            PACKAGES_LIST=Kubernetes/KubernetesCluster Kubernetes/KubernetesCluster Kubernetes/KubernetesPod DockerInterfacesLibrary DockerStandaloneHost Applications/Crate Applications/DockerApp Applications/Elasticsearch Applications/GlassFish Applications/Grafana Applications/GuestBook Applications/HTTPdServer Applications/HTTPdSite Applications/InfluxDB Applications/JBoss Applications/Jenkins Applications/MariaDB Applications/MongoDB Applications/MySQL Applications/Nginx Applications/NginxSite Applications/Orion Applications/PostgreSQL Applications/Redis Applications/Tomcat
+      - '{name}-{project-branch}-gerrit{postfix}':
+          postfix: '-linters'
+          recheck-trigger: '{gerrit_trigger_on_recheck_regexp}'
+          tox_test: 'linters'
+          node_label: 'os_mitaka'
+          weight: 1

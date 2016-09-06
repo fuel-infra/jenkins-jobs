@@ -21,9 +21,8 @@ export ARTIFACTS_DIR="${WORKSPACE}/artifacts/"
 # Remove old VENV?
 VENV_CLEAN="${VENV_CLEAN:-false}"
 #
-# Prefix require for deleting OLD app from app-list
-# example for app "io.murano.apps.docker.kubernetes.KubernetesPod"
-APP_PREFIX="${APP_PREFIX:-io.test_upload.}"
+# Remove ALL apps before upload new?
+APPS_CLEAN="${APPS_CLEAN:-false}"
 #
 # whole path to package will be: GIT_ROOT/APPS_ROOT/PACKAGES_LIST/package
 APPS_ROOT="${APPS_ROOT:-/murano-apps/}"
@@ -67,10 +66,10 @@ function prepare_venv() {
 
 function build_packages() {
    for pkg_long in ${PACKAGES_LIST}; do
-       local pkg=$(basename "${pkg_long}")
-       art_name="${ARTIFACTS_DIR}/${APP_PREFIX}${pkg}.zip"
+       art_name=$(awk '/FullName:/ {print $2}' "${APPS_DIR}/${pkg_long}/package/manifest.yaml")
+       art_file_p="${ARTIFACTS_DIR}/${art_name}.zip"
        pushd "${APPS_DIR}/${pkg_long}/package"
-       zip -r "${art_name}" ./*
+           zip -r "${art_file_p}" ./*
        popd
    done
 }
@@ -83,7 +82,7 @@ echo STARTED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" > "${ARTIFACTS_DIR}/ci_statu
 # remove arts from previous run
 echo  'LOG: printenv:'
 printenv | grep -v "OS_USERNAME\|OS_PASSWORD"
-find "${ARTIFACTS_DIR}" -type f -exec rm -f {} \;
+find "${ARTIFACTS_DIR}" -type f -exec rm -fv {} \;
 
 # Checking gerrit commits for GIT_REPO
 if [[ ("${COMMIT_LIST}" != "none") ]] ; then
@@ -113,28 +112,32 @@ if [[ "${UPLOAD_TO_OS}" == true ]] ; then
             murano package-delete "${id}" || true
         done
     fi
+
     # to have ability upload one package independently we need to remove it
-    echo "LOG: removing old packages..."
-    for pkg_long in ${PACKAGES_LIST}; do
-        pkg=$(basename "${pkg_long}")
-        art_name="${ARTIFACTS_DIR}/${APP_PREFIX}${pkg}.zip"
-        pkg_id=$(murano package-list --owned |awk "/$pkg/ {print \$2}")
-        if [[ -n "${pkg_id}" ]] ; then
-            # FIXME remove 'true', after --owned flag will be fixed
-            # https://bugs.launchpad.net/mos/+bug/1593279
-            murano package-delete "${pkg_id}" || true
-        fi
-    done
-    # via client and then upload it without updating its dependencies
+    # We don't need do delete old packages, if APPS_CLEAN already did it.
+    if [[ "${APPS_CLEAN}" != "true" ]]; then
+        echo "LOG: removing old packages..."
+        for pkg_long in ${PACKAGES_LIST}; do
+            art_name=$(awk '/FullName:/ {print $2}' "${APPS_DIR}/${pkg_long}/package/manifest.yaml")
+            art_file_p="${ARTIFACTS_DIR}/${art_name}.zip"
+            pkg_id=$(murano package-list --owned |awk "/$art_name/ {print \$2}")
+            if [[ -n "${pkg_id}" ]] ; then
+                # FIXME remove 'true', after --owned flag will be fixed
+                # https://bugs.launchpad.net/mos/+bug/1593279
+                murano package-delete "${pkg_id}" || true
+            fi
+        done
+    fi
+
+    # via client and then upload it
     echo "LOG: importing new packages..."
     # We need to be sure, that we load package's only from local files,
     # w\o any upstream dep's. So,use dirty hack to disable dep's resolving on fly
     export MURANO_REPO_URL='http://example.com/'
-    for pkg_long in ${PACKAGES_LIST}; do
-        pkg=$(basename "${pkg_long}")
-        art_name="${ARTIFACTS_DIR}/${APP_PREFIX}${pkg}.zip"
-        murano package-import "${art_name}" --exists-action u
-    done
+    echo "LOG: importing all packages from ${ARTIFACTS_DIR}"
+    pushd "${ARTIFACTS_DIR}"
+       murano package-import ./*.zip --exists-action u
+    popd
     # Switch-back do default repo:
     export MURANO_REPO_URL="${DEFAULT_MURANO_REPO_URL}"
     # upload additional packages if needed
