@@ -26,6 +26,7 @@ set -ex
 MIRROR_SERVER=${MIRROR_SERVER:-packages.fuel-infra.org}
 REMOTE_RSYNC_SHARE=${REMOTE_RSYNC_SHARE:-mirror-sync/plugins}
 TRSYNC_DIR=${TRSYNC_DIR:-trsync}
+MIRROR_WEB_PATH=${MIRROR_WEB_PATH:-plugins}
 
 # trsync install
 VENV_PATH=$TRSYNC_DIR/.venv
@@ -40,7 +41,7 @@ popd &>/dev/null
 
 case "${GERRIT_EVENT_TYPE}" in
     patchset-created)
-        REPO_DIR="review/CR-${PATCHSET_NUMBER}/${PLUGIN_NAME}/${PLUGIN_BRANCH}"
+        REPO_DIR="review/CR-${GERRIT_CHANGE_NUMBER}"
         ;;
     change-merged-event)
         REPO_DIR="${PLUGIN_NAME}/${PLUGIN_BRANCH}"
@@ -55,3 +56,9 @@ trsync push "${REPO_DIR}" \
             -d "rsync://${MIRROR_SERVER}/${REMOTE_RSYNC_SHARE}" \
             -s "${REPO_DIR}" \
             --init-directory-structure
+
+PLUGIN_URL="http://${MIRROR_SERVER}/${MIRROR_WEB_PATH}/${REPO_DIR}/${PLUGIN_FILE}"
+
+cat << EOF >plugin-publish.envfile
+PLUGIN_URL=${PLUGIN_URL}
+EOF

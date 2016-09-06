@@ -81,8 +81,8 @@ mkdir -p "${PLUGINS}"
 # it is required by system test
 export ${PLUGIN_ENV_PATH_NAME}="${PLUGINS}/${PLUGIN_FILE}"
 
-# Copy plugin from build job
-cp "${PLUGIN_FILE_PATH}" "${!PLUGIN_ENV_PATH_NAME}"
+# Download plugin file from mirror
+wget "${PLUGIN_URL}" -P "${!PLUGIN_ENV_PATH_NAME}"
 
 # Enable virtualenv
 source "${VENV_PATH}/bin/activate"
