@@ -1,6 +1,7 @@
 - project:
     name: 'mos-sync-mitaka'
     sync-node: 'sync-mos-branch'
+    is-disabled: true
 
     # Branches to sync (see also short names below)
     upstream-branch: 'stable/mitaka'
