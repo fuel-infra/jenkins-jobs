@@ -1,5 +1,7 @@
 - job:
     name: '9.0-kilo.all'
+    disabled: true
+    
     builders:
       - shell:
           !include-raw builders/all.sh
