@@ -220,6 +220,9 @@
         - name: '9.x.system_test.ubuntu.test_ibp'
           current-parameters: true
           kill-phase-on: NEVER
+        - name: '9.x.system_test.ubuntu.test_bdd'
+          current-parameters: true
+          kill-phase-on: NEVER
         - name: '9.x.system_test.ubuntu.support_hugepages'
           current-parameters: true
           kill-phase-on: NEVER

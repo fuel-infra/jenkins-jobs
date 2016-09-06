@@ -346,6 +346,8 @@
      - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'test_ibp'
      - '{version-id}.{test-type}.{dist}.{testgroup}':
+         testgroup: 'test_bdd'
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
          testgroup: 'smoke_test_configdb'
          properties: |
            PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64/
