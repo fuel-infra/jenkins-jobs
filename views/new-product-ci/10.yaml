@@ -6,6 +6,9 @@
         - 10.0.main.ubuntu.bvt_2
         - 10.0.main.ubuntu.smoke_neutron
         - 10.0.test_all
+        - 10.0.repos.snapshot
+        - 10.0.repos.main.ubuntu.bvt_2
+        - 10.0.repos.main.ubuntu.smoke_neutron
       columns:
         - status
         - weather
