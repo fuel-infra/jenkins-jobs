@@ -264,7 +264,7 @@
           iso_magnet_link: release-9.0
           plugin_release_timestamp: true
           plugin_custom_variables: |
-            MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0/pool/main/
+            MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/1.0.0/ubuntu/9.0/pool/main/
 
     plugin_name:
       - detach-murano:
@@ -298,7 +298,7 @@
           iso_magnet_link: release-9.0
           plugin_release_timestamp: true
           plugin_custom_variables: |
-            MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/0.0.1/ubuntu/9.0/pool/main/
+            MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/1.0.0/ubuntu/9.0/pool/main/
 
     plugin_name:
       - detach-murano-timer:
