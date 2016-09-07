@@ -6,7 +6,7 @@
     release_60: false
     release_61: true
     lifetime_bvt: '24'
-    lifetime_swarm: '24'
+    lifetime_swarm: '72'
     lifetime_other: '24'
     jobs:
       - cleaner
