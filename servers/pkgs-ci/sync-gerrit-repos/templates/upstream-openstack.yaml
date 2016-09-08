@@ -11,6 +11,7 @@
       - inject:
           properties-content: |
             MIRANTIS_USERNAME={username-openstack-ci-mirrorer-jenkins}
+            GERRIT_HOST=review.fuel-infra.org
     parameters:
       - string:
           name: MAX_PARALLEL
