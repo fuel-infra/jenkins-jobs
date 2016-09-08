@@ -32,10 +32,10 @@ set -ex
 
 # We should create venv, even if we don't wan't to change release version
 echo "INFO: Preparing env for script which will be used for release override"
-if [ -d ./plugin-release-override-venv ] ; then
-  rm -rf "./plugin-release-override-venv"
+if [ -d ./venv_release ] ; then
+  rm -rvf "./venv_release"
 fi
-virtualenv ./plugin-release-override-venv
-source ./plugin-release-override-venv/bin/activate
+virtualenv ./venv_release
+source ./venv_release/bin/activate
   pip install pyyaml
 deactivate
