@@ -161,11 +161,6 @@
           properties-content: $ADDITIONAL_PARAMETERS
       - shell:
           !include-raw-escape: builders/custom_system_test_plugins.sh
-      - extended-bash:
-          headers: ''
-          script: |
-            inject UBUNTU_MIRROR_ARTIFACT "{test_iso_job_url}/lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt"
-      - guess-mirror
       - shell:
           !include-raw-escape: builders/custom_system_test.sh
 

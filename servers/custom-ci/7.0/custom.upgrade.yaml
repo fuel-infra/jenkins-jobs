@@ -1,7 +1,6 @@
 - job:
     name: '7.0.custom.upgrade'
     builders:
-      - guess-mirror
       - shell:
           !include-raw: builders/custom_upgrade.sh
     concurrent: true

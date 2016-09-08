@@ -174,7 +174,6 @@
           !include-raw-escape: builders/pull_iso.sh
       - inject:
           properties-file: 'iso_path.txt'
-      - guess-mirror
       - shell:
           !include-raw-escape: builders/packages-build.sh
       - shell:

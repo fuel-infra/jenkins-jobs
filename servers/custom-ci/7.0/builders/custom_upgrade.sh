@@ -43,11 +43,45 @@ export FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}"
 # facter location to get closer mirror, if user provide the exact mirror we
 # use it
 if [ "${USE_MIRROR}" != "none" ]; then
-  LATEST_TARGET=$(curl -sSf "http://${MIRROR_HOST}/mos-repos/ubuntu/7.0.target.txt" | head -1)
+
+  if [ "${USE_MIRROR}" == "auto" ]; then
+    LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+    LOCATION=${LOCATION_FACT:-msk}
+  else
+    LOCATION="${USE_MIRROR}"
+  fi
+
+  case "${LOCATION}" in
+      srt)
+          USE_MIRROR=srt
+          LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
+          ;;
+      msk)
+          USE_MIRROR=msk
+          LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+          ;;
+      hrk)
+          USE_MIRROR=hrk
+          LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
+          ;;
+      poz|bud|bud-ext|cz)
+          USE_MIRROR=cz
+          LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
+          ;;
+      mnv|scc)
+          USE_MIRROR=usa
+          LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
+          ;;
+      *)
+          USE_MIRROR=msk
+          LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+  esac
+
+  LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | head -1)
   export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
 fi
 
-echo "Using mirror: ${MIRROR_HOST} with ${MIRROR_MOS_UBUNTU_ROOT}"
+echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
 
 #########################################
 
@@ -57,8 +91,6 @@ make deep_clean
 #########################################
 
 echo "STEP 1. Make everything"
-# should be separated
-# shellcheck disable=SC2086
 make ${make_args} iso upgrade-lrzip version-yaml openstack-yaml
 
 #########################################
@@ -73,12 +105,12 @@ done
 
 cd "${WORKSPACE}"
 
-echo FUELMAIN_GERRIT_COMMIT="${fuelmain_gerrit_commit}" > "${ARTS_DIR}/gerrit_commits.txt"
-echo NAILGUN_GERRIT_COMMIT="${nailgun_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
-echo ASTUTE_GERRIT_COMMIT="${astute_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
-echo OSTF_GERRIT_COMMIT="${ostf_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
-echo FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
-echo PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
+echo FUELMAIN_GERRIT_COMMIT="${fuelmain_gerrit_commit}" > ${ARTS_DIR}/gerrit_commits.txt
+echo NAILGUN_GERRIT_COMMIT="${nailgun_gerrit_commit}" >> ${ARTS_DIR}/gerrit_commits.txt
+echo ASTUTE_GERRIT_COMMIT="${astute_gerrit_commit}" >> ${ARTS_DIR}/gerrit_commits.txt
+echo OSTF_GERRIT_COMMIT="${ostf_gerrit_commit}" >> ${ARTS_DIR}/gerrit_commits.txt
+echo FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}" >> ${ARTS_DIR}/gerrit_commits.txt
+echo PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}" >> ${ARTS_DIR}/gerrit_commits.txt
 echo FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 echo FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
 
