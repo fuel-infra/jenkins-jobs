@@ -1,4 +1,4 @@
-#!./plugin-release-override-venv/bin/python
+#!./venv_release/bin/python
 
 """
   ============================================
