@@ -135,3 +135,20 @@
           regexp-for-failed: "'Description string: (.*)'"
       - junit:
           results: 'custom_tests/report.xml'
+########################################################################
+# Properties for job
+########################################################################
+- property:
+    name: authorization-allow-authorized
+    properties:
+      - authorization:
+          anonymous:
+            - job-read
+            - job-extended-read
+            - job-discover
+          authenticated:
+            - job-read
+            - job-extended-read
+            - job-discover
+            - job-build
+            - job-cancel
