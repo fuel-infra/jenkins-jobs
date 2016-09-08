@@ -1,0 +1,32 @@
+- project:
+    name: '9.x plugin ldap deploy tests'
+    test-type: 'ldap_deploy_test'
+    repobranch: 'origin/stable/mitaka'
+    reponame: 'fuel-qa'
+    custom_framework_url: 'https://github.com/Mirantis/mos-ci-deployment-scripts.git'
+    custom_framework_branch: 'stable/9.0'
+    custom_tests_url: 'https://github.com/Mirantis/mos-integration-tests.git'
+    custom_tests_branch: 'master'
+    make-snapshot: 'False'
+    venvpath: '$WORKSPACE/venv_test'
+    plugins_path: 'plugins_data'
+    default_pool: '10.109.0.0/16:24'
+    description: '9.1 ldap deploy test group'
+    node: 'systest'
+    timeout: '480'
+    dist: ubuntu
+    weight: '7'
+    jobs:
+    - '9.x.{test-type}.{dist}.plugin-ldap.{testgroup}':
+        testgroup:
+          - 'mld_proxy'
+          - 'mld_no_proxy'
+        properties: |
+          VENV_PATH={venvpath}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          MAKE_SNAPSHOT={make-snapshot}
+          PLUGIN_CONFIG={testgroup}
+          ENV_PREFIX=9.x.{test-type}.{dist}.plugin-ldap.{testgroup}
+          PLUGINS_PATH={plugins_path}

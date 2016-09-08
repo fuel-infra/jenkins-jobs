@@ -1,0 +1,87 @@
+- job-template:
+    name: '9.x.{test-type}.{dist}.plugin-ldap.{testgroup}'
+    description: '9.x {test-type} test group'
+
+    disabled: false
+    concurrent: true
+    jg-properties: ''
+    node: 'systest'
+
+    logrotate:
+      artifactDaysToKeep: 14
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+
+    properties:
+      - heavy-job:
+          weight: 8
+
+    parameters:
+    - 9x-systest-params
+    - string:
+        name: PLUGIN_BRANCH
+        default: 'master'
+    - string:
+        name: LDAP_PLUGIN_URL
+        default: ''
+        description: 'URL of ldap plugin package'
+
+    scm:
+    - main-git:
+        reponame: '{reponame}'
+        repobranch: '{repobranch}'
+        basedir: ''
+    - git:
+        basedir: 'custom_framework'
+        branches:
+          - '{custom_framework_branch}'
+        url: '{custom_framework_url}'
+    - git:
+        basedir: 'custom_tests'
+        branches:
+          - '{custom_tests_branch}'
+        url: '{custom_tests_url}'
+    - git:
+        basedir: '{plugins_path}'
+        branches:
+          - $PLUGIN_BRANCH
+        url: 'https://git.openstack.org/openstack/fuel-plugin-ldap'
+        clean:
+          before: true
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - inject-passwords:
+        global: true
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+    - inject: # overrides
+        properties-content: '{properties}'
+    - guess-mirror
+    - iso-download
+    - shell:
+        !include-raw-escape: '../builders/run_plugin_ldap_deploy_test.sh'
+
+    publishers:
+    - archive:
+        allow-empty: true
+        artifacts: 'custom_tests/report.xml, custom_tests/*.log, *.log'
+        latest-only: false
+    - post-destroy-vms
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+    - junit:
+        results: 'custom_tests/report.xml'
+    - trigger-parameterized-builds:
+      - project: '9.x.{test-type}.test-reports'
+        condition: ALWAYS
+        property-file: links.txt
+        predefined-parameters: TEST_JOB_NAME=$JOB_NAME
+        triggerWithNoParameters: false

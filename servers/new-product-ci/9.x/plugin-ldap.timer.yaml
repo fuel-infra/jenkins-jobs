@@ -1,0 +1,77 @@
+- job:
+    name: '9.x.plugin-ldap.timer'
+    description: |
+      Trigger plugin ldap runner with latest stable snapshot.
+
+    node: 'runner'
+
+    properties:
+    - heavy-job:
+        weight: 1
+
+    parameters:
+    - string:
+        name: SNAPSHOT_JOB
+        default: '9.x.snapshot'
+        description: 'Job from which we get latest stable snapshot'
+    - string:
+        name: PLUGINS_URL
+        default: 'http://packages.fuel-infra.org/plugins'
+        description: 'Repo to download plugin from'
+    - string:
+        name: LDAP_PLUGIN_SNAPSHOT_PATH
+        default: ''
+        description: 'Plugin snapshot id to use'
+    - string:
+        name: PLUGIN_BRANCH
+        default: 'master'
+        description: 'Plugin branch to use'
+
+    triggers:
+    - timed: '0 1 * * 1-7'
+
+    builders:
+
+    - inject-from-job():
+        job-name: $SNAPSHOT_JOB
+        which-build: last-successful
+        artifact-name: snapshots.params
+    - shell: |
+        echo "Description string: $CUSTOM_VERSION"
+    - shell:
+        !include-raw ./builders/get_plugin_ldap_snapshot.sh
+    - inject:
+        properties-file: snapshots.params
+
+    publishers:
+
+    - archive:
+        allow-empty: false
+        artifacts: 'snapshots.params'
+        latest-only: false
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+
+    - email-default:
+        mail-to: 'ci+alert@mirantis.com'
+
+    - trigger-parameterized-builds:
+        - project: 9.x.plugin-ldap.runner
+          condition: UNSTABLE_OR_BETTER
+          property-file: snapshots.params
+          predefined-parameters: |
+            ENABLE_MOS_UBUNTU_PROPOSED=true
+            ENABLE_MOS_UBUNTU_UPDATES=true
+            ENABLE_MOS_UBUNTU_SECURITY=true
+            ENABLE_MOS_UBUNTU_HOLDBACK=true
+
+            ENABLE_MOS_CENTOS_OS=true
+            ENABLE_MOS_CENTOS_PROPOSED=true
+            ENABLE_MOS_CENTOS_UPDATES=true
+            ENABLE_MOS_CENTOS_SECURITY=true
+            ENABLE_MOS_CENTOS_HOLDBACK=true
+
+            PLUGIN_BRANCH=$PLUGIN_BRANCH
+
+
