@@ -147,6 +147,22 @@
           # injects variable UBUNTU_MIRROR_ID
           properties-file: 'ubuntu_mirror_id.txt'
 
+- builder:
+    name: build-plugin
+
+    builders:
+      - shell:
+          !include-raw: scripts/build_plugin.sh
+
+- builder:
+    name: plugin-release-override
+    # Please read help-info in prepare-plugin-release-override.s
+    builders:
+      - shell:
+          !include-raw: scripts/prepare-plugin-release-override.sh
+      - shell:
+          !include-raw: scripts/plugin-release-override.py
+
 ########################################################################
 # Builder guessing nearest mirror
 ########################################################################
