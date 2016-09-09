@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-#   :mod: `plugin-build.sh` -- Build fuel plugin
+#   :mod: `build_plugin.sh` -- Build fuel plugin
 #   ============================================
 #
-#   .. module:: plugin-build.sh
+#   .. module:: build_plugin.sh
 #       :platform: Unix
 #       :synopsis: Script used to build single fuel plugin
 #   .. vesionadded:: MOS-9.0
@@ -26,7 +26,7 @@
 #
 #
 #   .. affects::
-#       :file plugin-build.envfile: file with variables used by deployment job
+#       :file build_plugin.envfile: file with variables used by deployment job
 #
 
 # Source system variables with correct rubby settings,
@@ -51,7 +51,7 @@ fpb --debug --build  "${PLUGIN_DIR}"
 PLUGIN_FILE=$(basename "$(ls "${PLUGIN_DIR}"/*.rpm)")
 
 # Store variables for deployment test
-cat << EOF >plugin-build.envfile
+cat << EOF >build_plugin.envfile
 PLUGIN_FILE=${PLUGIN_FILE}
 PLUGIN_FILE_PATH=${WORKSPACE}/${PLUGIN_DIR}/${PLUGIN_FILE}
 EOF
