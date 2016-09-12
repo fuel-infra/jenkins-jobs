@@ -44,6 +44,16 @@
       - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
           testgroup: 'upgrade_net_tmpl_backup'
           upgrade_testgroup: 'replace_controller_net_tmpl'
+      - '{version-id}.{job-type}.{dist}.{upgrade_testgroup}':
+          testgroup: 'upgrade_multirack_backup'
+          upgrade_testgroup: 'upgrade_multirack_test'
+          properties: |
+            MULTIPLE_NETWORKS=true
+            KEYSTONE_PASSWORD=newpass
+            SLAVE_NODE_MEMORY=3072
+            UPDATE_MASTER=true
+            UPGRADE_FUEL_FROM=9.1
+            UPGRADE_FUEL_TO=9.1
 
 
 - job:
@@ -91,6 +101,9 @@
             current-parameters: true
             kill-phase-on: NEVER
           - name: '9.x.backup-restore.ubuntu.replace_controller_net_tmpl'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '9.x.backup-restore.ubuntu.upgrade_multirack_test'
             current-parameters: true
             kill-phase-on: NEVER
 
