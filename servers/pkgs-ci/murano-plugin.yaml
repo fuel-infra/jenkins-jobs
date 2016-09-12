@@ -100,4 +100,6 @@
 
     jobs:
     - '{project-version}-pkg-{project-name}-build-fuel-plugin-{os}-{distro}':
+        # workaround for problem with missing one of gerrit nodes in known hosts..
+        build-node: plugin-builder
     - '{project-version}-pkg-{project-name}-publish-fuel-plugin-{os}-{distro}'
