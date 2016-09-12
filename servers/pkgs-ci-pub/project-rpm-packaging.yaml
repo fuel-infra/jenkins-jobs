@@ -160,7 +160,7 @@
               fi
 
               # Ensure that current directory contains all requred sources
-              for source in $(rpmspec -P ${{spec}} | awk '$1 ~ /^Source/ {{print $2}}'); do
+              for source in $(rpmspec -P ${{spec}} | awk -v IGNORECASE=1 '$1 ~ /^(source|patch)[0-9]*:/ {{print $2}}'); do
                   if [ -f "${{spec_src%/*}}/${{source}}" ]; then
                       # Copy source file
                       cp -v "${{spec_src%/*}}/${{source}}" .
