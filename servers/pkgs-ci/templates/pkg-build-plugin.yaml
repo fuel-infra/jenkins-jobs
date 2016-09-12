@@ -36,6 +36,8 @@
       - ssh-agent-credentials:
           users:
             - '{ssh-creds-openstack-ci-jenkins}'
+            - '{ssh-creds-fuel-osci-bot}'
+            - '{ssh-creds-pkgs-ci}'
       - timeout:
           timeout: 300 # need more precise timeout
       - timestamps
