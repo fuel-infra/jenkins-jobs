@@ -11,7 +11,8 @@
           https://github.com/openstack/{plugin_repo}
         </a>
       </ul>
-
+    properties:
+      - authorization-allow-authorized
     parameters:
       - text:
           name: SNAPSHOTS_PARAMS
