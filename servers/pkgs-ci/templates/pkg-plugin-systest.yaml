@@ -1,0 +1,161 @@
+- job-template:
+    name: '{project-version}-pkg-{project-name}-fp-systest-{os}-{distro}'
+    node: '{systest-node}'
+    concurrent: true
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+
+    properties:
+      - heavy-job:
+          weight: 8
+
+    parameters:
+
+      - string:
+          name: TEST_GROUP
+          default: 'bvt_2'
+      - bool:
+          name: NEUTRON_ENABLE
+          default: 'true'
+      - string:
+          name: MIRROR_UBUNTU
+          description: >-
+            <p>
+            If empty, it will be set automatically based on UBUNTU_MIRROR_ID value.
+            <p>
+            deb http://../ubuntu trusty main universe multiverse|deb
+            http://../ubuntu trusty-updates main universe multiverse|deb
+            http://../ubuntu trusty-security main universe multiverse|deb
+            http://../ubuntu trusty-proposed main universe multiverse
+      - string:
+          name: EXTRA_DEB_REPOS
+          # New lines will become spaces. So don't add newline near "|" because it possibly will break parsing inside scripts
+          default: >-
+            deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name} main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-security main restricted,1201|deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-proposed main restricted,1202|deb
+            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-updates  main restricted,1201
+          description: >-
+            <p>
+            Additional deb repos. Note, that empty repos will bring some errors into console output.
+            But this errors will not break the build.
+            <p>
+            deb http://... trusty main(,prio1)|deb http://... trusty main(,prio2)
+      - string:
+          name: EXTRA_DEB_REPOS_PRIORITY
+          default: '1052'
+      - string:
+          name: EXTRA_RPM_REPOS
+          default: 'release-repo,http://{repo-host}/{mos-rpm-repo-path}/os/x86_64/,98'
+          description: 'reponame1,http://...(,prio1)|reponame2,http://...(,prio2)'
+      - string:
+          name: EXTRA_RPM_REPOS_PRIORITY
+          default: '1'
+      - bool:
+          name: DEFAULT_REBUILD_ISO
+          default: false
+      - bool:
+          name: DEFAULT_UPDATE_MASTER
+          default: true
+
+    scm:
+      - upstream:
+          branch: '{fuel-main-branch}'
+          repo: fuel-main
+          fuel-namespace: '{fuel-namespace}'
+      - upstream:
+          branch: '{fuel-qa-branch}'
+          repo: fuel-qa
+          fuel-namespace: '{fuel-namespace}'
+      - upstream:
+          branch: '{plugin-test-branch}'
+          repo: '{plugin-test-repo}'
+          fuel-namespace: '{plugin-test-namespace}'
+
+    triggers:
+      - zuul
+
+    builders:
+
+      - extended-bash:
+          headers: ''
+          script: '{pre-build-script}'
+
+      - inject:
+          properties-content: |
+            OPENSTACK_RELEASE={openstack_release}
+            OS_TYPE={os}
+            ENV_PREFIX={project-version}-pkg-{project-name}-fp-systest-{os}-{distro}
+
+      - shell: |
+          #!/bin/bash
+          set -ex
+          # Clean logs from previous runs
+          rm -vf fuel-qa/logs/* logs/*
+
+      - inject-from-job(same-change):
+          job-name: '{project-version}-pkg-{project-name}-fp-build-{os}-{distro}'
+          artifact-name: 'buildresult.params'
+
+      - inject-from-job(same-change):
+          job-name: '{project-version}-pkg-{project-name}-fp-build-{os}-{distro}'
+          # add PLUGIN_FILE=XXXX.rpm
+          artifact-name: 'build_plugin.envfile'
+
+      - inject-from-job(same-change):
+          job-name: '{project-version}-pkg-{project-name}-fp-publish-{os}-{distro}'
+          artifact-name: '{pkg_type}.publish.setenvfile'
+
+      - inject-devops-env:
+          # add FUEL_QA_COMMIT MAGNET_LINK UBUNTU_MIRROR_ID for tests
+          version: '{mos_version}'
+
+      - inject:
+          properties-content: |
+            GUESS_MIRROR={guess-mirror}
+            MIRROR_HOST={mirror_host}
+            UBUNTU_MIRROR_URL={ubuntu_mirror_url}
+            MIRROR_UBUNTU={mirror_ubuntu}
+      - guess-mirror
+      - inject:
+          # when started by zuul, then parameters defaults are not applied
+          # when started by jenkins inject will not override parameters
+          properties-content: |
+            EXTRA_RPM_REPOS_PRIORITY=1
+            EXTRA_DEB_REPOS_PRIORITY=1052
+      - extended-bash:
+          headers: ''
+          script: '{plugin-test-pre-build-script}'
+      - download-rpm-files
+      - iso-download
+      # inject ISO-related variables
+      - inject-properties-file:
+          properties-file: 'iso.setenvfile'
+      - shell: rm -vf inject-with-bash.envfile
+      - plugin-deploy-test-default
+      - extended-bash:
+          headers: ''
+          script: '{plugin-test-post-build-script}'
+
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 210
+      - timestamps
+      - ansicolor
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml, logs/*, fuel-qa/logs/*'
+          latest-only: false
+      - logparser:
+          parse-rules: '/var/lib/jenkins/fuellib.parser'
+          unstable-on-warning: false
+          fail-on-error: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+      - post-destroy-vms

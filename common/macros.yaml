@@ -180,6 +180,12 @@
       - shell:
           !include-raw: scripts/plugin-deploy-test.sh
 
+- builder:
+    name: download-rpm-files
+    builders:
+      - shell:
+          !include-raw: scripts/download-rpm-files.sh
+
 ########################################################################
 # Builder guessing nearest mirror
 ########################################################################
