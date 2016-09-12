@@ -1,5 +1,6 @@
 - job-template:
     name: '{project-version}-pkg-{project-name}-build-fuel-plugin-{os}-{distro}'
+    node: '{build-node}'
     concurrent: True
     description: |
         This job builds a package and then publishes it by triggerring publisher job.<br>
@@ -10,20 +11,18 @@
         </ul>
 
     scm:
-
       - fuel-infra:
           username: '{username-openstack-ci-jenkins}'
           credentials-id: '{ssh-creds-openstack-ci-jenkins}'
-          repo: openstack/fuel-plugin-murano
+          repo: 'openstack/{plugin_repo_basename}'
           branch: $GERRIT_BRANCH
-          basedir: 'plugin'
+          basedir: '{plugin_repo_basename}'
       - fuel-infra:
           username: '{username-openstack-ci-jenkins}'
           credentials-id: '{ssh-creds-openstack-ci-jenkins}'
           repo: openstack/puppet-murano
           branch: $GERRIT_BRANCH
           basedir: 'puppet-murano'
-
       - upstream:
           branch: 'master'
           repo: fuel-plugins
@@ -34,12 +33,9 @@
       - zuul
 
     wrappers:
-      # fixme: looks like redundant, we could remove this if everything will work
-      # - ssh-agent-credentials:
-      #     users:
-      #       - '{ssh-creds-openstack-ci-jenkins}'
-      #       - '{ssh-creds-fuel-osci-bot}'
-      #       - '{ssh-creds-pkgs-ci}'
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
       - timeout:
           timeout: 300 # need more precise timeout
       - timestamps
@@ -53,6 +49,7 @@
       - extended-bash:
           headers: ''
           script: '{pre-build-script}'
+
 
       # made as sep. step because prev. injects will take effect only after build step
       - extended-bash:
@@ -91,11 +88,17 @@
             inject ADDITIONAL_EXTRAREPO_DEB   "http://{publish-repo-host}{deb-repo-path}/{project-version} {deb-dist-name} main restricted"
             inject ADDITIONAL_EXTRAREPO_RPM   "deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64"
 
+            inject PLUGIN_RELEASE_TIMESTAMP   "{plugin_release_timestamp}"
+
       - guess-mirror
-
-      - shell: |
-          exit 0
-
+      - gerrit-refspec-checkout
+      - rename:
+         src: 'puppet-murano'
+         dst: '{plugin_repo_basename}/deployment_scripts/modules/murano'
+      - plugin-release-override
+      - build-plugin
+      - convert-artifact-params:
+           src: 'build_plugin.envfile'
 
     publishers:
       - email-alert-on-merge
@@ -104,7 +107,7 @@
       #     results: 'buildresult.xml'
 
       - archive:
-          artifacts: 'buildresult.params, buildresult.xml, tests.envfile'
+          artifacts: 'buildresult.params, buildresult.xml, tests.envfile, build_plugin.envfile'
           allow-empty: True
 
       - post-tasks:
@@ -112,5 +115,3 @@
             - log-text: 'Started'
           run-if-job-successful: true
           script: rm -rf *
-
-    node: '{build-node}'

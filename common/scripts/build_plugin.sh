@@ -29,21 +29,20 @@
 #       :file build_plugin.envfile: file with variables used by deployment job
 #
 
-# Source system variables with correct rubby settings,
-# include before "set" to skip not required messages
-source /etc/profile
 
-set -ex
+set -o errexit
+set -o pipefail
+set -o xtrace
 
-# Prepare VENV for plugin build
+echo "INFO: Prepare VENV for plugin build"
 rm -rf ./venv_fpb
 virtualenv ./venv_fpb
 source ./venv_fpb/bin/activate
 
-# Install fpb
+echo "INFO:  Install fpb"
 pip install ./fuel-plugins/
 
-# Check and build plugin
+echo "INFO: Check and build plugin from ${PLUGIN_DIR}"
 fpb --check  "${PLUGIN_DIR}"
 fpb --debug --build  "${PLUGIN_DIR}"
 
@@ -54,4 +53,7 @@ PLUGIN_FILE=$(basename "$(ls "${PLUGIN_DIR}"/*.rpm)")
 cat << EOF >build_plugin.envfile
 PLUGIN_FILE=${PLUGIN_FILE}
 PLUGIN_FILE_PATH=${WORKSPACE}/${PLUGIN_DIR}/${PLUGIN_FILE}
+PKG_PATH=${WORKSPACE}/${PLUGIN_DIR}
+BUILD_HOST=${BUILD_HOST}
 EOF
+echo "INFO: Plugin build finished"

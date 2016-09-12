@@ -48,18 +48,25 @@
     mos-deb-repo-path: '/mos-repos/ubuntu'
     mos-rpm-repo-path: '/mos-repos/centos/mos9.0-centos7'
 
+    # Directory for scm fuel-plugin-murano
+    plugin_repo_basename: 'fuel-plugin-murano'
+
     pre-build-script: |
       set -ex
 
       echo "Debug: IS_PLUGIN=${{IS_PLUGIN}}"
 
-      inject IS_PLUGIN true
+      inject IS_PLUGIN                 true
+
+      inject PLUGIN_DIR '{plugin_repo_basename}'
       if echo "$GERRIT_BRANCH" | grep -q '[.0-9]*/release/[.0-9]*' ; then
         # perform such conversion:
         # 9.0/release/0.0.1 -> release/0.0.1/
-        inject BIN_REPO_SUBPATH "${{GERRIT_BRANCH#*/}}/"
+        inject BIN_REPO_SUBPATH      "${{GERRIT_BRANCH#*/}}/"
+        inject MURANO_PACKAGES_URLS  "http://mirror.fuel-infra.org/extras/murano-plugin-repos/${{GERRIT_BRANCH#*/}}/ubuntu/9.0/pool/main/"
       else
-        inject BIN_REPO_SUBPATH ''
+        inject BIN_REPO_SUBPATH      ''
+        inject MURANO_PACKAGES_URLS  "http://mirror.fuel-infra.org/extras/murano-plugin-repos/ubuntu/9.0/pool/main/"
       fi
 
     jobs:
@@ -89,7 +96,8 @@
     pkg_type: 'rpm'
     spec_prefix_path: '/{distro}'
     openstack_release: ubuntu
+    plugin_release_timestamp: true
 
     jobs:
-    - '{project-version}-pkg-{project-name}-build-fuel-plugin-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-build-fuel-plugin-{os}-{distro}':
     - '{project-version}-pkg-{project-name}-publish-fuel-plugin-{os}-{distro}'
