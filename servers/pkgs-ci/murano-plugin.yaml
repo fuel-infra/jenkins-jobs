@@ -1,8 +1,8 @@
 - project:
 
-    name: 'fuel-plugin-murano'
+    name: 'fp-murano'
 
-    project-name: 'murano-plugin'
+    project-name: 'fp-murano'
     project-version: '9.0'
 
     deb-origin-release: 'Mirantis'
@@ -70,11 +70,11 @@
       fi
 
     jobs:
-    - fuel-plugin-murano-deps
-    - fuel-plugin-murano-plugin
+    - fp-murano-deps
+    - fp-murano-plugin
 
 - job-group:
-    name: 'fuel-plugin-murano-deps'
+    name: 'fp-murano-deps'
 
     distro: trusty
     os: 'ubuntu'
@@ -89,7 +89,7 @@
     - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
 
 - job-group:
-    name: 'fuel-plugin-murano-plugin'
+    name: 'fp-murano-plugin'
 
     distro: centos7
     os: 'centos'
@@ -99,7 +99,7 @@
     plugin_release_timestamp: true
 
     jobs:
-    - '{project-version}-pkg-{project-name}-build-fuel-plugin-{os}-{distro}':
+    - '{project-version}-pkg-{project-name}-fp-build-{os}-{distro}':
         # workaround for problem with missing one of gerrit nodes in known hosts..
         build-node: plugin-builder
-    - '{project-version}-pkg-{project-name}-publish-fuel-plugin-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-fp-publish-{os}-{distro}'
