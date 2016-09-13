@@ -17,9 +17,12 @@
 #
 #   .. envvar::
 #       :var  PLUGINS: Path to directory used to store plugins required by test
+#             Default: plugins_data
 #       :var  PLUGIN_FILE_PATH: Path to file with plugin built by build job
+#             file may not exist.
 #       :var  PLUGIN_ENV_PATH_NAME: Environment name used by test group to
 #                                   store plugin file path
+#             File should exist before or after script run
 #       :var  VENV_PATH: Path to directory with already created virtualenv
 #                        and installed inside test framework
 #       :var  TEST_GROUP: Test group used in test
@@ -47,7 +50,7 @@ echo "Description string: ${TEST_GROUP} on ${ISO_VERSION_STRING}"
 export MAKE_SNAPSHOT=false
 
 # Define directory used to store plugins
-PLUGINS=plugins_data
+PLUGINS=${PLUGINS:-plugins_data}
 
 # Create the directory that will contain the plugin packages
 mkdir -p "${PLUGINS}"
@@ -56,8 +59,16 @@ mkdir -p "${PLUGINS}"
 # it is required by system test
 export ${PLUGIN_ENV_PATH_NAME}="${PLUGINS}/${PLUGIN_FILE}"
 
-# Copy plugin from build job
-cp "${PLUGIN_FILE_PATH}" "${!PLUGIN_ENV_PATH_NAME}"
+# Copy plugin from build job,
+# not fail if source file not exist - it could be copyed before
+if [ -f "${PLUGIN_FILE_PATH}" ]; then
+    cp -v "${PLUGIN_FILE_PATH}" "${!PLUGIN_ENV_PATH_NAME}"
+fi
+# But check, if destination file actually exists
+if [ ! -f "${!PLUGIN_ENV_PATH_NAME}" ]; then
+     echo "ERROR: File ${!PLUGIN_ENV_PATH_NAME} not exist!"
+     exit 1
+fi
 
 # Enable virtualenv
 source "${VENV_PATH}/bin/activate"
