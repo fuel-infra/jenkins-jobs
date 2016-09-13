@@ -9,7 +9,7 @@ To enable <b>proposed</b> repositories specify following parameters:
 
  In FUELMAIN_GERRIT_COMMIT set:
 
-    refs/changes/49/347249/6 refs/changes/25/352425/2
+    refs/changes/49/347249/6
 
  In EXTRA_RPM_REPOS set:
 
@@ -23,5 +23,3 @@ To enable <b>proposed</b> repositories specify following parameters:
 </pre>
 <p>
 See <a href="https://mirantis.jira.com/wiki/display/PRD/MOS+9.x+CI">MOS 9.x CI</a> wiki page for details.
-
-
