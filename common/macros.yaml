@@ -173,6 +173,13 @@
       - shell:
           !include-raw: scripts/gerrit-refspec-checkout.sh
 
+- builder:
+    # Standard builder for fuel-qa
+    name: plugin-deploy-test-default
+    builders:
+      - shell:
+          !include-raw: scripts/plugin-deploy-test.sh
+
 ########################################################################
 # Builder guessing nearest mirror
 ########################################################################

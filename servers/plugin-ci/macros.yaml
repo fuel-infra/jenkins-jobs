@@ -92,12 +92,6 @@
 ########################################################################
 # Builders used to deploy and test the plugin
 ########################################################################
-# Standard builder for fuel-qa
-- builder:
-    name: plugin-deploy-test-default
-    builders:
-      - shell:
-          !include-raw './builders/plugin-deploy-test.sh'
 # Builder for the ldap plugin
 - builder:
     name: plugin-deploy-test-ldap
