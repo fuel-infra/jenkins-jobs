@@ -1,5 +1,5 @@
 - job-template:
-    name: '{project-version}-pkg-{project-name}-publish-fuel-plugin-{os}-{distro}'
+    name: '{project-version}-pkg-{project-name}-fp-publish-{os}-{distro}'
     project-type: freestyle
     concurrent: false
     quiet-period: 60
@@ -70,7 +70,7 @@
 
       - inject-from-job(same-change):  # ref-updated isn't supported yet, will fail on branch creation
           # need BUILD_HOST PKG_PATH
-          job-name: '{project-version}-pkg-{project-name}-build-fuel-plugin-{os}-{distro}'
+          job-name: '{project-version}-pkg-{project-name}-fp-build-{os}-{distro}'
           artifact-name: 'buildresult.params'
 
       - shell:

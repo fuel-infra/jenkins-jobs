@@ -1,5 +1,5 @@
 - job-template:
-    name: '{project-version}-pkg-{project-name}-build-fuel-plugin-{os}-{distro}'
+    name: '{project-version}-pkg-{project-name}-fp-build-{os}-{distro}'
     node: '{build-node}'
     concurrent: True
     description: |
