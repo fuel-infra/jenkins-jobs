@@ -42,7 +42,7 @@
           colormap: xterm
       - timeout:
           fail: true
-          timeout: 20
+          timeout: 40
           write-description: true
     publishers:
       - email-default
