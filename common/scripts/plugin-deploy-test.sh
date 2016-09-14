@@ -77,9 +77,27 @@ source "${VENV_PATH}/bin/activate"
 echo "export ENV_NAME=\"${ENV_NAME}\"" > \
      "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
-# Execute test
-bash -x "./utils/jenkins/system_tests.sh" \
-     -t test -w "${WORKSPACE}" \
-     -e "${ENV_NAME}" \
-     -o --group="${TEST_GROUP}" \
-     -i "${ISO_PATH}"
+# Since many system's clone project's in 'basedir' (and not allow to clone
+# it directly into  ${WORKSPACE} - for example openstack/fuel-main will be
+# always cloned into ${WORKSPACE}/fuel-main directory) - we need to be able
+# to override env  variables for systest to be able run tests from
+# custom sub-directory
+
+if [[ -n "${PLUGIN_FRAMEWORK_WORKSPACE}" ]]; then
+    echo "INFO: PLUGIN_FRAMEWORK_WORKSPACE variable found!"
+    echo "INFO: Run sys-test with related path ${PLUGIN_FRAMEWORK_WORKSPACE}"
+    # Execute test
+    bash -x "${WORKSPACE}/${PLUGIN_FRAMEWORK_WORKSPACE}/utils/jenkins/system_tests.sh" \
+         -t test -w "${WORKSPACE}/${PLUGIN_FRAMEWORK_WORKSPACE}" \
+         -e "${ENV_NAME}" \
+         -o --group="${TEST_GROUP}" \
+         -i "${ISO_PATH}"
+else
+    # Execute test
+    bash -x "./utils/jenkins/system_tests.sh" \
+         -t test -w "${WORKSPACE}" \
+         -e "${ENV_NAME}" \
+         -o --group="${TEST_GROUP}" \
+         -i "${ISO_PATH}"
+fi
+
