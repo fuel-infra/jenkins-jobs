@@ -312,9 +312,6 @@
           timer: 'H 0 * * *'
       - '{version}.fuel-plugin.{plugin_name}.deploy-test':
           timeout: 1380
-      - '{version}.fuel-plugin.{plugin_name}.tempest-run':
-          timeout: 1380
-          plugin_test_group: 'deploy_murano_plugin'
 
 - project:
     name: stacklight-runner
