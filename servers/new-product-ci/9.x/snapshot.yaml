@@ -3,7 +3,7 @@
     version-id: '9.x'
     jobs:
     - '{version-id}.snapshot':
-        timer: '0 */6 * * *'
+        timer: '0 0,6,12,24 * * *'
     - 9.x.main.{dist}.{testgroup}:
         dist: ubuntu
         testgroup: bvt_2
