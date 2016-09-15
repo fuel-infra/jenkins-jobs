@@ -11,6 +11,7 @@
       daysToKeep: 90
 
     properties:
+    - authorization-allow-security-group
     - heavy-job:
         weight: 8
 

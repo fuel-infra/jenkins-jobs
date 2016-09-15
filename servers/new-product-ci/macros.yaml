@@ -40,6 +40,24 @@
       - throttle:
           max-per-node: 1
           option: project
+
+- property:
+    name: authorization-allow-security-group
+    properties:
+      - authorization:
+          anonymous:
+            - job-discover
+          authenticated:
+            - job-discover
+            - job-extended-read
+            - job-read
+          mos-security-eng:
+            - job-build
+            - job-cancel
+            - job-configure
+            - job-discover
+            - job-extended-read
+            - job-read
 ########################################################################
 # Section: Publishers
 ########################################################################

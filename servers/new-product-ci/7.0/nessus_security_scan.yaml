@@ -1,5 +1,5 @@
 - job:
-    name: '9.0.nessus_security_scan'
+    name: '7.0.nessus_security_scan'
     description:
       !include-raw: descriptions/nessus_security_scan
 
@@ -21,7 +21,7 @@
         default: 'nessus'
     - string:
         name: TEST_ALL_JOB_NAME
-        default: '9.0.test_all'
+        default: '7.0.test_all'
         description: Job to take artifacts from
     - string:
         name: OPENSTACK_RELEASE
@@ -36,7 +36,7 @@
         name: UBUNTU_MIRROR_ID
         default: latest-stable
         description: |
-          'latest' - latest available; 'latest-stable' - mirror from successful run of 9.0.test_all job; 'ubuntu-2015-01-01-030500'
+          'latest' - latest available; 'latest-stable' - mirror from successful run of 7.0.test_all job; 'ubuntu-2015-01-01-030500'
     - string:
         name: MIRROR_UBUNTU
         default:
@@ -53,7 +53,7 @@
         default: '1052'
     - string:
         name: ENV_PREFIX
-        default: 9.0.nessus_security_scan
+        default: 7.0.nessus_security_scan
         description: Define env prefix name. This parameter should not be changed
     - string:
         name: NESSUS_IMAGE_PATH
@@ -66,7 +66,7 @@
         default: 'r00tme'
     - string:
         name: NESSUS_ADDRESS
-        default: '10.109.0.253'
+        default: '10.107.0.253'
     - string:
         name: SECURITY_TEST
         default: 'True'
@@ -101,7 +101,7 @@
         keep-long-stdio: false
         results: '**/nosetests.xml'
     - trigger-parameterized-builds:
-      - project: '9.0-test-reports-Testrail'
+      - project: '7.0-test-reports-Testrail'
         condition: ALWAYS
         property-file: links.txt
         predefined-parameters: TEST_JOB_NAME=$JOB_NAME
