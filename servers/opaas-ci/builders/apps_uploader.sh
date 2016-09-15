@@ -107,7 +107,7 @@ if [[ "${UPLOAD_TO_OS}" == true ]] ; then
     # - so we should have ability to clean-up them also
     if [[ "${APPS_CLEAN}" == true ]]; then
         echo  'LOG: Removing ALL apps from tenant...'
-        pkg_ids=($(murano package-list --owned |grep -v 'ID\|--' |awk '{print $2}'))
+        pkg_ids=($(murano package-list --owned --limit 0|grep -v 'ID\|--' |awk '{print $2}'))
         for id in "${pkg_ids[@]}"; do
             murano package-delete "${id}" || true
         done
@@ -120,7 +120,7 @@ if [[ "${UPLOAD_TO_OS}" == true ]] ; then
         for pkg_long in ${PACKAGES_LIST}; do
             art_name=$(awk '/FullName:/ {print $2}' "${APPS_DIR}/${pkg_long}/package/manifest.yaml")
             art_file_p="${ARTIFACTS_DIR}/${art_name}.zip"
-            pkg_id=$(murano package-list --owned |awk "/$art_name/ {print \$2}")
+            pkg_id=$(murano package-list --owned --limit 0|awk "/$art_name/ {print \$2}")
             if [[ -n "${pkg_id}" ]] ; then
                 # FIXME remove 'true', after --owned flag will be fixed
                 # https://bugs.launchpad.net/mos/+bug/1593279
@@ -148,7 +148,7 @@ if [[ "${UPLOAD_TO_OS}" == true ]] ; then
         done
     fi
     echo "LOG: importing done, final package list:"
-    murano package-list --owned
+    murano package-list --owned --limit 0
     deactivate
 fi
 
