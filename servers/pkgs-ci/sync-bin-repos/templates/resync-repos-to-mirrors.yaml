@@ -54,15 +54,17 @@
           default: |
             rsync://seed-cz1.fuel-infra.org/mirror-sync
             rsync://seed-us1.fuel-infra.org/mirror-sync
+            rsync://eu.mirror.infra.mirantis.net/mirror-sync
+            rsync://eu.mirror.fuel-infra.org/mirror-sync
+            rsync://us.mirror.fuel-infra.org/mirror-sync
           description: |
             Host list sync to
             Default:
               rsync://seed-cz1.fuel-infra.org/mirror-sync
               rsync://seed-us1.fuel-infra.org/mirror-sync
-              rsync://osci-mirror-msk.msk.mirantis.net/mirror-sync
-              rsync://osci-mirror-srt.srt.mirantis.net/mirror-sync
-              rsync://osci-mirror-kha.kha.mirantis.net/mirror-sync
-              rsync://osci-mirror-poz.infra.mirantis.net/mirror-sync
+              rsync://eu.mirror.infra.mirantis.net/mirror-sync
+              rsync://eu.mirror.fuel-infra.org/mirror-sync
+              rsync://us.mirror.fuel-infra.org/mirror-sync
     wrappers:
       - build-timeout:
           timeout: 50
