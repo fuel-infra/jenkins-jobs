@@ -359,3 +359,7 @@
          timeout: '1200'
          # This test use ~400GB disk space
          node: 'huge-systest'
+     - '{version-id}.{test-type}.{dist}.{testgroup}':
+         testgroup: 'public_api'
+         properties: |
+           ENABLE_DMZ=true
