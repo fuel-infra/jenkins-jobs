@@ -13,7 +13,7 @@
     dst-branch: 9.0
 
     # Syncronization schedule
-    timer: 'H 3 * * *'  # every day at 3:XX am, spread evenly
+    timer: '0 4,10,16,22 * * *'
 
     # Gerrit parameters
     gerrit-host: 'review.fuel-infra.org'
