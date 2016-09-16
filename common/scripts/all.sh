@@ -89,7 +89,7 @@ if [[ "${make_args}" != *"MIRROR_MOS_UBUNTU="* ]]; then
     # MIRROR_MOS_UBUNTU= is not defined in make_args, so let's use the default one
     # since in fuel-main MIRROR_MOS_UBUNTU?=perestroika-repo-tst.infra.mirantis.net, we need to remove http://
     export MIRROR_MOS_UBUNTU="${CLOSEST_MIRROR_URL#http://}"
-    LATEST_TARGET_MOS_UBUNTU=$(curl -sSf "http://${MIRROR_MOS_UBUNTU}/${MOS_UBUNTU_ROOT}/${MOS_UBUNTU_TARGET}" | head -1)
+    LATEST_TARGET_MOS_UBUNTU=$(curl -sSf "http://${MIRROR_MOS_UBUNTU}/${MOS_UBUNTU_ROOT}/${MOS_UBUNTU_TARGET}" | sed '1p; d')
     export MIRROR_MOS_UBUNTU_ROOT="${MOS_UBUNTU_ROOT}/${LATEST_TARGET_MOS_UBUNTU}"
 
     echo "MOS_UBUNTU_MIRROR_ID=${LATEST_TARGET_MOS_UBUNTU}" > "${ARTS_DIR}/mos_ubuntu_mirror_id.txt"
@@ -114,7 +114,7 @@ echo "CENTOS_MIRROR_ID=${CENTOS_MIRROR_ID}" > "${ARTS_DIR}/centos_mirror_id.txt"
 
 # 5. Get MOS CentOS mirror (Fuel) snapshot
 
-LATEST_TARGET_MOS_CENTOS=$(curl -sSf "${CLOSEST_MIRROR_URL}/${MOS_CENTOS_ROOT}/os.target.txt" | head -1)
+LATEST_TARGET_MOS_CENTOS=$(curl -sSf "${CLOSEST_MIRROR_URL}/${MOS_CENTOS_ROOT}/os.target.txt" | sed '1p; d')
 
 # we need to have ability to define MIRROR_FUEL by user
 if [[ "${make_args}" != *"MIRROR_FUEL="* ]]; then

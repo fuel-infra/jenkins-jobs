@@ -77,7 +77,7 @@ if test -z $LATEST_MIRROR_ID_URL; then
 fi
 
 # define closest stable ubuntu mirror snapshot
-LATEST_TARGET_UBUNTU=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/master.target.txt" | head -1)
+LATEST_TARGET_UBUNTU=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/master.target.txt" | sed '1p; d')
 
 # we need to have ability to define UBUNTU MOS mirror by user
 if [[ "${make_args}" != *"MIRROR_MOS_UBUNTU="* ]]; then
@@ -94,7 +94,7 @@ if [[ "${make_args}" != *"MIRROR_FUEL="* ]]; then
     # MIRROR_FUEL= is not defined in make_args so let's
     # define the closest stable centos mirror snapshot
     # http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/$(PRODUCT_NAME)$(PRODUCT_VERSION)-centos7/os/x86_64
-    LATEST_TARGET_CENTOS=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos-master-centos7/os.target.txt" | head -1)
+    LATEST_TARGET_CENTOS=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos-master-centos7/os.target.txt" | sed '1p; d')
 
     export MIRROR_FUEL="${LATEST_MIRROR_ID_URL}/mos-repos/centos/mos-master-centos7/${LATEST_TARGET_CENTOS}/x86_64"
 fi

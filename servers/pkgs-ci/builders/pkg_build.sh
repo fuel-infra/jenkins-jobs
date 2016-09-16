@@ -28,7 +28,7 @@ get_deb_snapshot() {
     repo_version=${repo_url##*/}
     repo_url=${repo_url%/*}
     # Get snapshot
-    local snapshot=$(curl -fLsS "${repo_url}/snapshots/${repo_version}-latest.target.txt" | head -1)
+    local snapshot=$(curl -fLsS "${repo_url}/snapshots/${repo_version}-latest.target.txt" | sed '1p; d')
     echo "${deb_prefix}${repo_url}/snapshots/${snapshot} ${dist_name} ${components}"
 }
 
@@ -59,7 +59,7 @@ get_rpm_snapshot() {
     repo_component="${repo_url##*/}"
     repo_url=${repo_url%/*}
     # Get snapshot
-    local snapshot="$(curl -fLsS "${repo_url}/snapshots/${repo_component}-latest.target.txt" | head -1)"
+    local snapshot="$(curl -fLsS "${repo_url}/snapshots/${repo_component}-latest.target.txt" | sed '1p; d')"
     echo "${repo_name:+${repo_name},}${repo_url}/snapshots/${snapshot}/x86_64${priority:+,${priority}}"
 }
 
@@ -129,13 +129,13 @@ export REMOTE_REPO_HOST=${MIRROR_HOST}
 : "${BASE_RPM_REPO_PATH?}"
 
 # Get latest snapshots
-SNAPSHOT_DEB=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_DEB_REPO_PATH}/snapshots/${PROJECT_VERSION}-latest.target.txt" | head -1)
-SNAPSHOT_RPM_OS=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/os-latest.target.txt" | head -1)
-SNAPSHOT_RPM_HOTFIX=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/hotfix-latest.target.txt" | head -1)
-SNAPSHOT_RPM_UPDATES=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/updates-latest.target.txt" | head -1)
-SNAPSHOT_RPM_PROPOSED=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/proposed-latest.target.txt" | head -1)
-SNAPSHOT_RPM_SECURITY=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/security-latest.target.txt" | head -1)
-SNAPSHOT_RPM_HOLDBACK=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/holdback-latest.target.txt" | head -1)
+SNAPSHOT_DEB=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_DEB_REPO_PATH}/snapshots/${PROJECT_VERSION}-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_OS=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/os-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_HOTFIX=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/hotfix-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_UPDATES=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/updates-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_PROPOSED=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/proposed-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_SECURITY=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/security-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_HOLDBACK=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/holdback-latest.target.txt" | sed '1p; d')
 
 # Repository pathes for builder (for build dependencies)
 DEB_REPO_PATH=${BASE_DEB_REPO_PATH}/snapshots/${SNAPSHOT_DEB}

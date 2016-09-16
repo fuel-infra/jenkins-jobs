@@ -56,7 +56,7 @@
               read repo_url dist_name components <<< $(tr -d \" <<< "${{@}}")
               # Remove trailing slash
               repo_url=${{repo_url%/}}
-              local snapshot=$(curl -fLsS "${{repo_url}}.target.txt" | head -1)
+              local snapshot=$(curl -fLsS "${{repo_url}}.target.txt" | sed '1p; d')
               echo "${{repo_url%/*}}/${{snapshot}}${{dist_name:+ ${{dist_name}}}}${{components:+ ${{components}}}}"
           }}
 
@@ -67,7 +67,7 @@
               repo_url=${{repo_url%/}}
               # Remove architecture
               repo_url=${{repo_url%/*}}
-              local snapshot=$(curl -fLsS "${{repo_url}}.target.txt" | head -1)
+              local snapshot=$(curl -fLsS "${{repo_url}}.target.txt" | sed '1p; d')
               echo "${{repo_url%/*}}/${{snapshot}}/x86_64"
           }}
 

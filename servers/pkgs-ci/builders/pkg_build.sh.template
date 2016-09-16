@@ -85,13 +85,13 @@ PUBLISH_RPM_SECURITY_REPO_PATH=${{BASE_RPM_REPO_PATH}}/security
 PUBLISH_RPM_HOLDBACK_REPO_PATH=${{BASE_RPM_REPO_PATH}}/holdback
 
 # Get latest snapshots
-SNAPSHOT_DEB=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_DEB_REPO_PATH}}/snapshots/{mos_version}-latest.target.txt" | head -1)
-SNAPSHOT_RPM_OS=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/os-latest.target.txt" | head -1)
-SNAPSHOT_RPM_HOTFIX=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/hotfix-latest.target.txt" | head -1)
-SNAPSHOT_RPM_UPDATES=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/updates-latest.target.txt" | head -1)
-SNAPSHOT_RPM_PROPOSED=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/proposed-latest.target.txt" | head -1)
-SNAPSHOT_RPM_SECURITY=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/security-latest.target.txt" | head -1)
-SNAPSHOT_RPM_HOLDBACK=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/holdback-latest.target.txt" | head -1)
+SNAPSHOT_DEB=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_DEB_REPO_PATH}}/snapshots/{mos_version}-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_OS=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/os-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_HOTFIX=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/hotfix-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_UPDATES=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/updates-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_PROPOSED=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/proposed-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_SECURITY=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/security-latest.target.txt" | sed '1p; d')
+SNAPSHOT_RPM_HOLDBACK=$(curl -fLsS "http://${{REMOTE_REPO_HOST}}/${{BASE_RPM_REPO_PATH}}/snapshots/holdback-latest.target.txt" | sed '1p; d')
 
 # Repository pathes for builder (for build dependencies)
 DEB_REPO_PATH=${{BASE_DEB_REPO_PATH}}/snapshots/${{SNAPSHOT_DEB}}

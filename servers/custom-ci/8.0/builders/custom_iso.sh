@@ -71,7 +71,7 @@ case "${LOCATION}" in
 esac
 
 # define closest stable ubuntu mirror snapshot
-LATEST_TARGET_UBUNTU=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/8.0.target.txt" | head -1)
+LATEST_TARGET_UBUNTU=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/8.0.target.txt" | sed '1p; d')
 
 # we need to have ability to define UBUNTU MOS mirror by user
 if [[ "${make_args}" != *"MIRROR_MOS_UBUNTU="* ]]; then

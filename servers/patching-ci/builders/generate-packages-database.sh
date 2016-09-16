@@ -81,7 +81,7 @@ for URL in $URLS ; do
               )
               REPO_SUFFIX="mos6.1/updates/${CENTOS_REPO_FILENAME}"
           else
-              SNAPSHOT=$(curl -sSf "${URL}/${CENTOS_TARGET_FILE}" | head -1)
+              SNAPSHOT=$(curl -sSf "${URL}/${CENTOS_TARGET_FILE}" | sed '1p; d')
               wget "${URL}/${SNAPSHOT}/x86_64/repodata/repomd.xml" \
               -O "${RELEASE_VERSION}-${MOS_COMPONENT}-repomd.xml"
               CENTOS_REPO_FILENAME=$(\
@@ -96,7 +96,7 @@ for URL in $URLS ; do
           if [ "${RELEASE_VERSION}" == "6.1" ] ; then
               SNAPSHOT=''
           else
-              SNAPSHOT=$(curl -sSf "${URL}-${UBUNTU_TARGET_FILE}" | head -1)
+              SNAPSHOT=$(curl -sSf "${URL}-${UBUNTU_TARGET_FILE}" | sed '1p; d')
           fi
           REPO_SUFFIX="${UBUNTU_REPO_SUFFIX}"
           # Remove $RELEASE_VERSION from URL for Ubuntu repository

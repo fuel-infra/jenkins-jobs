@@ -37,7 +37,7 @@ fi
 ######## Get stable ubuntu mirror from snapshot ###############
 # Since we are building community.iso in EU dc let' hardcode this
 LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
-LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | head -1)
+LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | sed '1p; d')
 export MIRROR_MOS_UBUNTU_ROOT="/mos-repos/ubuntu/${LATEST_TARGET}"
 
 echo "Using mirror: ${USE_MIRROR} with ${MIRROR_MOS_UBUNTU_ROOT}"
