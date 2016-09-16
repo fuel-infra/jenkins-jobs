@@ -11,7 +11,7 @@
           recheck-trigger: '{gerrit_trigger_on_recheck_regexp}'
           tox_test: deploy_cicd_apps
           additional_parameters: |
-            OS_IMAGE=ubuntu_14_murano-agent_upd
+            OS_IMAGE=murano-agent_image
             UPLOAD_TO_OS=true
             APPS_CLEAN=true
             OS_CLEANUP_BEFORE=true
@@ -24,8 +24,8 @@
           recheck-trigger: '{gerrit_trigger_advanced_check_regexp}'
           tox_test: 'run_cicd_flow'
           additional_parameters: |
-            OS_IMAGE=ubuntu_14_murano-agent_upd
-            OS_DOCKER_IMAGE=ubuntu_14_murano-agent_docker
+            OS_IMAGE=murano-agent_image
+            OS_DOCKER_IMAGE=murano-agent_docker_image
             UPLOAD_TO_OS=true
             APPS_CLEAN=true
             OS_CLEANUP_BEFORE=true
@@ -52,7 +52,7 @@
           tox_test: 'deploy_scale_k8s'
           # FIXME remove PACKAGES_LIST after it will be implemented in upstream
           additional_parameters: |
-            OS_KUBERNETES_IMAGE=ubuntu_14_murano-agent_upd
+            OS_KUBERNETES_IMAGE=murano-agent_k8s_image
             UPLOAD_TO_OS=true
             APPS_CLEAN=true
             OS_CLEANUP_BEFORE=true
