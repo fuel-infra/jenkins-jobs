@@ -271,3 +271,6 @@
             - name: '10.0.system_test.ubuntu.unlock_settings_tab'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '10.0.system_test.ubuntu.public_api'
+              current-parameters: true
+              kill-phase-on: NEVER
