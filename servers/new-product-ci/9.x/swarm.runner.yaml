@@ -241,7 +241,9 @@
         - name: '9.x.system_test.ubuntu.env_customizations_check'
           current-parameters: true
           kill-phase-on: NEVER
-
+        - name: '9.x.system_test.ubuntu.graph_extension'
+          current-parameters: true
+          kill-phase-on: NEVER
     publishers:
     - description-setter:
         regexp: "'Description string: (.*)'"

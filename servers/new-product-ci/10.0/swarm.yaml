@@ -274,3 +274,6 @@
             - name: '10.0.system_test.ubuntu.public_api'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '10.0.system_test.ubuntu.graph_extension'
+              current-parameters: true
+              kill-phase-on: NEVER

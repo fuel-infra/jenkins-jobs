@@ -363,3 +363,5 @@
           ENABLE_DMZ=true
     - '9.x.{test-type}.{dist}.{testgroup}':
         testgroup: 'env_customizations_check'
+    - '9.x.{test-type}.{dist}.{testgroup}':
+        testgroup: 'graph_extension'
