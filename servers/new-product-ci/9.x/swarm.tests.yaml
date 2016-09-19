@@ -361,3 +361,5 @@
         testgroup: 'public_api'
         properties: |
           ENABLE_DMZ=true
+    - '9.x.{test-type}.{dist}.{testgroup}':
+        testgroup: 'env_customizations_check'
