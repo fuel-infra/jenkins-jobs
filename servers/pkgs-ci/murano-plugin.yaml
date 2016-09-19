@@ -51,6 +51,10 @@
     # Directory for scm fuel-plugin-murano
     plugin_repo_basename: 'fuel-plugin-murano'
 
+    plugin-test-branch: 'master'
+    plugin-test-repo: 'fuel-plugin-murano-tests'
+    plugin-test-namespace: 'openstack'
+
     pre-build-script: |
       set -ex
 
@@ -103,3 +107,33 @@
         # workaround for problem with missing one of gerrit nodes in known hosts..
         build-node: plugin-builder
     - '{project-version}-pkg-{project-name}-fp-publish-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-fp-systest-{os}-{distro}':
+         plugin-test-pre-build-script: |
+           set -ex
+
+           # needed for plugin-deploy-test.sh
+           #  Since plugin-deploy-test.sh tryes to copy plugin from
+           #  build job by PATH PLUGIN_FILE_PATH, we need to hook-up this behaviour
+           inject PLUGIN_ENV_PATH_NAME 'MURANO_PLUGIN_PATH'
+
+           # update plugin storage dir
+           inject PLUGINS "${{WORKSPACE}}/{plugin-test-repo}/plugins_data"
+           inject PLUGIN_FRAMEWORK_WORKSPACE '{plugin-test-repo}'
+
+           inject TEST_GROUP 'deploy_murano_plugin'
+           export TEST_GROUP="${{TEST_GROUP}}"
+
+           # Link logs directory, to be able fetch them with usual publishers
+           ln -fs {plugin-test-repo}/logs .
+
+           # Move venv to /tmp, due PATH lenght limit. See: https://github.com/pypa/pip/issues/1773
+           VENV_PATH=$(mktemp -d)
+           inject VENV_PATH "${{VENV_PATH}}"
+           export VENV_PATH="${{VENV_PATH}}"
+           # Run prepare script itself
+           bash -x '{plugin-test-repo}/utils/fuel-qa-builder/prepare_env.sh'
+         plugin-test-post-build-script: |
+           #!/bin/bash
+           set -ex
+           # Remove venv from run, which could be run in /tmp
+           rm -vf "${{VENV_PATH}}"
