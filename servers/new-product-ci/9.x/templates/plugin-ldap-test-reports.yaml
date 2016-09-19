@@ -1,0 +1,32 @@
+- job-template:
+    name: '{version}.{test-type}.plugin-ldap.test-reports'
+    venvpath: '$WORKSPACE/venv_testrail'
+    builders:
+      - inject:
+          properties-content: |
+            VENV_PATH={venvpath}
+      - inject:
+          properties-content: |
+            {properties}
+      - shell:
+          !include-raw-escape: ../builders/plugin_ldap_testrail_report.sh
+    node: testrail
+    publishers:
+      - email:
+          recipients: ci+alert@mirantis.com
+
+    scm:
+     - main-git:
+          reponame: 'fuel-qa'
+          repobranch: '{repobranch}'
+          basedir: ''
+
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
+
+    publishers:
+      - description-setter:
+          regexp: '^.*Report URL:\s*(.*)'
+          description: '<a href="\1">TestRail Report URL</a>'

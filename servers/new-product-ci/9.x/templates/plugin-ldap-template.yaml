@@ -80,8 +80,11 @@
     - junit:
         results: 'custom_tests/report.xml'
     - trigger-parameterized-builds:
-      - project: '9.x.{test-type}.test-reports'
+      - project: '9.x.{test-type}.plugin-ldap.test-reports'
         condition: ALWAYS
         property-file: links.txt
-        predefined-parameters: TEST_JOB_NAME=$JOB_NAME
+        predefined-parameters: |
+            PLUGIN_CONFIG=$PLUGIN_CONFIG
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            PLUGIN_TEST_URL=$BUILD_URL
         triggerWithNoParameters: false
