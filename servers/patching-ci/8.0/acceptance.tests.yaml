@@ -2,7 +2,7 @@
    name: '8.0-acceptance'
    version-id: '8.0'
    test-type: 'acceptance'
-   repobranch: 'origin/stable/8.0'
+   repobranch: '$FUEL_QA_COMMIT'
    reponame: 'fuel-qa'
    venvpath: '/home/jenkins/qa-venv-8.0'
    default_pool: '10.109.0.0/16:24'
