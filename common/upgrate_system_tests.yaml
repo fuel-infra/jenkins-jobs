@@ -42,6 +42,10 @@
 
     parameters:
     - string:
+        name: CUSTOM_VERSION
+        default: ''
+        description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+    - string:
         name: REPO_NAME
         default: 'fuel-qa'
     - bool:
@@ -123,4 +127,3 @@
     - description-setter:
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
-
