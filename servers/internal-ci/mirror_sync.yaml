@@ -1,5 +1,5 @@
 - job-template:
-    name: 'mirror-pkgs-{mirror_name}'
+    name: 'mirror-{mirror_path}-{mirror_name}'
     description: |
         This job will fetch remote upstream repo to timestamp<br>
         It and serve it using http and rsync protocols.<br><br>
@@ -61,28 +61,30 @@
           results: '*.xml'
 
 - project:
-    name: mirror-pkgs-sync
+    name: mirror-sync
     jobs:
-      - 'mirror-pkgs-{mirror_name}':
+      - 'mirror-{mirror_path}-{mirror_name}':
+          mirror_path: pkgs
           mirror_name: ubuntu
           mirror_dir: '{mirror_name}%timestamp%'
           src_url: 'rsync://cz.archive.ubuntu.com/{mirror_name}'
           sync_locations: >
-              rsync://seed01-bud.infra.mirantis.net/mirror-sync/pkgs
-              rsync://seed01-bud.fuel-infra.org/mirror-sync/pkgs
-              rsync://seed01-scc.fuel-infra.org/mirror-sync/pkgs
+              rsync://seed01-bud.infra.mirantis.net/mirror-sync/{mirror_path}
+              rsync://seed01-bud.fuel-infra.org/mirror-sync/{mirror_path}
+              rsync://seed01-scc.fuel-infra.org/mirror-sync/{mirror_path}
           updated_symlinks: '{mirror_name}'
           pull_rsync_extra_params: ''
-      - 'mirror-pkgs-{mirror_name}':
+      - 'mirror-{mirror_path}-{mirror_name}':
+          mirror_path: mirrors
           mirror_name: docker
           mirror_dir: '{mirror_name}%timestamp%'
           src_url: 'rsync://mirror.yandex.ru/mirrors/docker/'
           sync_locations: >
-              rsync://mirror.seed-us1.fuel-infra.org/mirror-sync/mirrors
-              rsync://mirror.seed-cz1.fuel-infra.org/mirror-sync/mirrors
-              rsync://seed01-bud.infra.mirantis.net/mirror-sync/mirrors
-              rsync://seed01-bud.fuel-infra.org/mirror-sync/mirrors
-              rsync://seed01-scc.fuel-infra.org/mirror-sync/mirrors
+              rsync://mirror.seed-us1.fuel-infra.org/mirror-sync/{mirror_path}
+              rsync://mirror.seed-cz1.fuel-infra.org/mirror-sync/{mirror_path}
+              rsync://seed01-bud.infra.mirantis.net/mirror-sync/{mirror_path}
+              rsync://seed01-bud.fuel-infra.org/mirror-sync/{mirror_path}
+              rsync://seed01-scc.fuel-infra.org/mirror-sync/{mirror_path}
           updated_symlinks: '{mirror_name}'
           pull_rsync_extra_params: >
               \--exclude .temp
