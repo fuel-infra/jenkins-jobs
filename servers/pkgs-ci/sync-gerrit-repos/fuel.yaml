@@ -10,7 +10,7 @@
         fallback-branch: ''
 
     # Syncronization schedule
-    timer: 'H 3 * * *'  # every day at 3:XX am, spread evenly
+    timer: 'H 4,10,16,22 * * *'  # every 6 hours, two hours before 9.x-snapshot, spread evenly
 
     # Gerrit parameters
     gerrit-host: 'review.fuel-infra.org'
