@@ -110,6 +110,8 @@
     - '{project-version}-pkg-{project-name}-fp-systest-{os}-{distro}':
          plugin-test-pre-build-script: |
            set -ex
+           # Murano env nodes need 5Gb or more RAM
+           inject SLAVE_NODE_MEMORY 5120
 
            # needed for plugin-deploy-test.sh
            #  Since plugin-deploy-test.sh tryes to copy plugin from
@@ -136,4 +138,4 @@
            #!/bin/bash
            set -ex
            # Remove venv from run, which could be run in /tmp
-           rm -vf "${{VENV_PATH}}"
+           rm -vrf "${{VENV_PATH}}"
