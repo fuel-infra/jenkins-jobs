@@ -64,6 +64,7 @@ trsync push \
         --timestamp "${TIMESTAMP}" \
         --snapshot-lifetime=None \
         --init-directory-structure \
+        --extra "${PULL_RSYNC_EXTRA_PARAMS}" \
     || STATUS=${?}
 
 if [ ${STATUS} -eq -1 ]; then
