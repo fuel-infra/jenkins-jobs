@@ -115,7 +115,7 @@
     - email-default:
         mail-to: 'ci+alert@mirantis.com'
     - trigger-parameterized-builds:
-      - project: '{version-id}.{test-type}.test-reports'
+      - project: '9.x.backup-restore.test-reports'
         condition: ALWAYS
         triggerWithNoParameters: false
 
