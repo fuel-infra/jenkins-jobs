@@ -20,9 +20,9 @@
       - fuel-infra:
           username: '{username-openstack-ci-jenkins}'
           credentials-id: '{ssh-creds-openstack-ci-jenkins}'
-          repo: openstack/puppet-murano
+          repo: '{plugin-extra-namespace}/{plugin-extra-repo}'
           branch: $GERRIT_BRANCH
-          basedir: 'puppet-murano'
+          basedir: '{plugin-extra-repo}'
       - upstream:
           branch: 'master'
           repo: fuel-plugins
@@ -51,7 +51,10 @@
       - extended-bash:
           headers: ''
           script: '{pre-build-script}'
-
+      - inject-from-job(same-change):
+          job-name: '{project-version}-pkg-{project-name}-fp-publish-{os}-{distro}'
+          # add DEB_REPO_URL
+          artifact-name: '{pkg_type}.publish.setenvfile'
 
       # made as sep. step because prev. injects will take effect only after build step
       - extended-bash:
@@ -91,12 +94,13 @@
             inject ADDITIONAL_EXTRAREPO_RPM   "deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64"
 
             inject PLUGIN_RELEASE_TIMESTAMP   "{plugin_release_timestamp}"
+            inject '{plugin-extra-variable-name}' "http://{publish-repo-host}/{deb-repo-path}/{project-version}/pool/main/ ${{DEB_REPO_URL}}"
 
       - guess-mirror
       - gerrit-refspec-checkout
       - rename:
-         src: 'puppet-murano'
-         dst: '{plugin_repo_basename}/deployment_scripts/modules/murano'
+         src: '{plugin-extra-repo}'
+         dst: '{plugin-extra-repo-dst}'
       - plugin-release-override
       - build-plugin
       - convert-artifact-params:

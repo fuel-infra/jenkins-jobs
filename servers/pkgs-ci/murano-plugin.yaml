@@ -55,23 +55,31 @@
     plugin-test-repo: 'fuel-plugin-murano-tests'
     plugin-test-namespace: 'openstack'
 
+    # Plugin additional repo
+    plugin-extra-repo: 'puppet-murano'
+    plugin-extra-namespace: 'openstack'
+    plugin-extra-repo-dst: '{plugin_repo_basename}/deployment_scripts/modules/murano'
+    # Name of variable,in which will be injected deb_requeted URL
+    # and DEB_REPO_URL from CR
+    plugin-extra-variable-name: 'MURANO_PACKAGES_URLS'
+
     pre-build-script: |
       set -ex
 
       echo "Debug: IS_PLUGIN=${{IS_PLUGIN}}"
 
       inject IS_PLUGIN                 true
+      inject PLUGIN_DIR                '{plugin_repo_basename}'
+      inject OVERRIDE_PUPPET_MURANO    false
 
-      inject PLUGIN_DIR '{plugin_repo_basename}'
       if echo "$GERRIT_BRANCH" | grep -q '[.0-9]*/release/[.0-9]*' ; then
         # perform such conversion:
         # 9.0/release/0.0.1 -> release/0.0.1/
         inject BIN_REPO_SUBPATH      "${{GERRIT_BRANCH#*/}}/"
-        inject MURANO_PACKAGES_URLS  "http://mirror.fuel-infra.org/extras/murano-plugin-repos/${{GERRIT_BRANCH#*/}}/ubuntu/9.0/pool/main/"
       else
         inject BIN_REPO_SUBPATH      ''
-        inject MURANO_PACKAGES_URLS  "http://mirror.fuel-infra.org/extras/murano-plugin-repos/ubuntu/9.0/pool/main/"
       fi
+
 
     jobs:
     - fp-murano-deps
@@ -138,4 +146,5 @@
            #!/bin/bash
            set -ex
            # Remove venv from run, which could be run in /tmp
-           rm -vrf "${{VENV_PATH}}"
+           echo "INFO: Removing ${{VENV_PATH}}"
+           rm -rf "${{VENV_PATH}}"
