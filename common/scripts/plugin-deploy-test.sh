@@ -20,7 +20,6 @@
 #             Default: plugins_data
 #       :var  PLUGIN_FILE_PATH: Path to file with plugin built by build job
 #             file may not exist.
-#       :var  PLUGIN_URL: URL of plugin package located on mirror
 #       :var  PLUGIN_ENV_PATH_NAME: Environment name used by test group to
 #                                   store plugin file path
 #             File should exist before or after script run
@@ -60,13 +59,16 @@ mkdir -p "${PLUGINS}"
 # it is required by system test
 export ${PLUGIN_ENV_PATH_NAME}="${PLUGINS}/${PLUGIN_FILE}"
 
-# Cleanup folder with plugin
-if [ -f "${PLUGIN_ENV_PATH_NAME}" ]; then
-    rm -rf "${PLUGIN_FILE_PATH}"
+# Copy plugin from build job,
+# not fail if source file not exist - it could be copyed before
+if [ -f "${PLUGIN_FILE_PATH}" ]; then
+    cp -v "${PLUGIN_FILE_PATH}" "${!PLUGIN_ENV_PATH_NAME}"
 fi
-
-# Download plugin package from mirror
-wget "${PLUGIN_URL}" -P "${!PLUGIN_ENV_PATH_NAME}"
+# But check, if destination file actually exists
+if [ ! -f "${!PLUGIN_ENV_PATH_NAME}" ]; then
+     echo "ERROR: File ${!PLUGIN_ENV_PATH_NAME} not exist!"
+     exit 1
+fi
 
 # Enable virtualenv
 source "${VENV_PATH}/bin/activate"
