@@ -13,14 +13,20 @@
         name: FUEL_QA_COMMIT
         description: "fuel-qa commit"
         default: 'stable/mitaka'
+    - string:
+        name: PLUGIN_TEST_REPO
+        description: "TBD"
+        default: 'fuel-plugin-murano-tests'
+    - string:
+        name: PLUGIN_TEST_COMMIT
+        description: "TBD"
+        default: 'master'
 
     - text:
         name: ADDITIONAL_PARAMETERS
         default: |
           SLAVE_NODE_MEMORY=5072
           PATCHING_DISABLE_UPDATES=true
-          # Plugin test-framework commit
-          PLUGIN_TESTS_COMMIT=master
           # Depends on PLUGIN_RPM_FILENAME_FROM_REPO"
           #RPM_PACKAGES_URLS=http://REPO/detach-murano-1.0-1.0.0-20160921134638.noarch.rpm.Depends
           # Depends on RPM_PACKAGES_URLS
