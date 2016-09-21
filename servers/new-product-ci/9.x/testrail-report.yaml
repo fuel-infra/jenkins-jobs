@@ -20,13 +20,11 @@
           TESTRAIL_TEST_SUITE=[{report-version}][Fuel] Auto Release Acceptance
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}
-    - '{version}.{test-type}.test-reports':
+    - '{version}.{test-type}.plugin-ldap.test-reports':
         test-type:  'ldap_deploy_test'
         properties: |
-          TESTS_RUNNER=9.x.plugin-ldap.runner
-          TESTRAIL_TEST_SUITE=[{report-version}][MOSQA] Automated Cloud Testing
           TESTRAIL_MILESTONE={report-version}
-          LAUNCHPAD_MILESTONE={report-version}
+          TESTRAIL_SUITE=[{report-version}][MOSQA] Automated Cloud Testing
     - '{version}.{test-type}.test-reports':
         test-type:  'upgrades'
         properties: |
