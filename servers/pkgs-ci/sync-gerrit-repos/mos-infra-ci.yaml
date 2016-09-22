@@ -1,0 +1,29 @@
+- project:
+    name: 'mosi'
+    sync-node: 'sync-mos-branch'
+
+    src-branch:
+    - 'master':
+        dst-branch: 'mos-infra-ci'
+        upstream-branch: 'master'
+        downstream-branch: 'mos-infra-ci'
+        fallback-branch: ''
+
+    # Syncronization schedule
+    timer: 'H 4 * * *'  # every night at 4:XX AM UTC
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: '{username-openstack-ci-mirrorer-jenkins}'
+    gerrit-creds: '{ssh-creds-openstack-ci-mirrorer-jenkins}'
+    gerrit-topic: 'sync/{src-branch}/{dst-branch}'
+
+    # List of projects to sync
+    gerrit-project-namespace: 'mos-infra'
+    gerrit-project-name:
+    - 'project-config'
+    - 'system-config'
+
+    jobs:
+    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
