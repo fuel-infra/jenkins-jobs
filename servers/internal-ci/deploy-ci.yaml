@@ -82,7 +82,7 @@
 
     scm:
       - review-fuel-infra-org:
-            project-basedir: ''
+            project-basedir: $PREFIX
             project-branch: FETCH_HEAD
             project-choosing-strategy: default
             project-name: fuel-infra/ci-lab
