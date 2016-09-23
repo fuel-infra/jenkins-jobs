@@ -28,7 +28,7 @@ source "${VENV_PATH}"/bin/activate
           ENV_DESCRIPTION="Fuel_LDAP_plugin_unknown_config"
   esac
 
-  TEST_RUN_TIMESTAMP=$(date "+%m/%d/%Y %T")
+  TEST_RUN_TIMESTAMP=$(date -d @"$SNAPSHOT_TIMESTAMP" "+%m/%d/%Y %T")
 
   "$TESTRAIL_REPORTER_PATH" -v \
   --testrail-plan-name "LDAP plugin 3.0.0 $SNAPSHOT_ID $TEST_RUN_TIMESTAMP" \

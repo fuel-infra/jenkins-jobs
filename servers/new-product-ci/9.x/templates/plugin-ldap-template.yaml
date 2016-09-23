@@ -87,4 +87,5 @@
             PLUGIN_CONFIG=$PLUGIN_CONFIG
             CUSTOM_VERSION=$CUSTOM_VERSION
             PLUGIN_TEST_URL=$BUILD_URL
+            SNAPSHOT_TIMESTAMP=$SNAPSHOT_TIMESTAMP
         triggerWithNoParameters: false
