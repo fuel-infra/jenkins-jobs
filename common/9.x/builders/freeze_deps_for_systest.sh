@@ -27,6 +27,9 @@ function store() {
 __snapshot_id_default="snapshot #${BUILD_NUMBER?}"
 __snapshot_id="${CUSTOM_VERSION:-$__snapshot_id_default}"
 store "CUSTOM_VERSION" "${__snapshot_id}"
+# unix timestamp of snapshot
+__snapshot_timestamp="$(date +%s)"
+store "SNAPSHOT_TIMESTAMP" "${__snapshot_timestamp}"
 
 
 # Create and store MAGNET_LINK

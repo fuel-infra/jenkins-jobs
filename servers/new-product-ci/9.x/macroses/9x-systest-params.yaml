@@ -10,6 +10,12 @@
           Normally should be inserted from snapshot job
 
     - string:
+        name: SNAPSHOT_TIMESTAMP
+        description: |
+          Timestamp for test rails reporting.
+          Normally should be inserted from snapshot job
+
+    - string:
         name: MAGNET_LINK
         description: "Which ISO to use in tests"
 
