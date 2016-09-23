@@ -1,0 +1,27 @@
+- parameter:
+    name: 9.0-d-murano-systest-params
+
+    parameters:
+
+    - string:
+        name: CUSTOM_VERSION
+        description: |
+          Custom version for test rails reporting.
+          Normally should be inserted from snapshot job
+
+    - string:
+        name: FUEL_QA_COMMIT
+        description: "fuel-qa commit"
+        default: 'stable/mitaka'
+
+    - text:
+        name: ADDITIONAL_PARAMETERS
+        default: |
+          SLAVE_NODE_MEMORY=5072
+          PATCHING_DISABLE_UPDATES=true
+          # Plugin test-framework commit
+          PLUGIN_TESTS_COMMIT=master
+          # Depends on PLUGIN_RPM_FILENAME_FROM_REPO"
+          #RPM_PACKAGES_URLS=http://REPO/detach-murano-1.0-1.0.0-20160921134638.noarch.rpm.Depends
+          # Depends on RPM_PACKAGES_URLS
+          #PLUGIN_RPM_FILENAME_FROM_REPO=detach-murano-1.0-1.0.0-20160921134638.noarch.rpm.

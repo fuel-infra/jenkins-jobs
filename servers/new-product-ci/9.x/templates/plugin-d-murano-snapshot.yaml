@@ -1,0 +1,94 @@
+- job-template:
+    name: '{version-id}.d-murano.snapshot'
+    description: |
+      Freeze all dependencies for systest into artifact and run initial verification.
+
+    project-type: multijob
+    node: runner
+
+    timer: ''
+    magnet-link:
+      !include-raw-escape: '../../data/9.0-iso'
+
+    triggers:
+    - timed: '{timer}'
+
+    wrrappers:
+    - timeout:
+        timeout: 300
+
+    builders:
+    - extended-bash:
+        headers: ''
+        script: |
+         # Convert all data from jjb variables to bash
+         # data for fetch latest rpm from repo
+         inject PLUGIN_REPO_SUB_URL '{plugin-repo-sub-url}'
+         inject PLUGIN_VERSION '{plugin-version}'
+         inject PLUGIN_MOS_VERSION '{plugin-mos-version}'
+         inject PLUGIN_PKG_DIST '{plugin-pkg-dist}'
+         inject PLUGIN_RPM_MASK '{plugin-rpm-mask}'
+         # Inject PLUGIN_FILE for test-runner with filename rendered from guess_rpm_filename()
+         inject MIRROR_HOST '{mirror-host}'
+
+    - inject:
+        # Magnet-link is required because it's part of snapshots.params
+        properties-content: |
+          MAGNET_LINK={magnet-link}
+    # Will generate snapshots.params snapshots.sh
+    - 9x-make-snapshots
+    # Udate snapshots.params file
+    # Inject PLUGIN-related info, where and what should snapshot catch
+    - 9x-make-plugin-snapshots
+    # Create snapshots.params
+    - inject-properties-file:
+        properties-file: 'snapshots.params'
+    - write-description:
+        description-string: $CUSTOM_VERSION
+
+    - multijob:
+        name: 'Run tests'
+        condition: COMPLETED
+        projects:
+        - name: '9.0.main.ubuntu.d-murano.deploy_murano_plugin'
+          kill-phase-on: NEVER
+          property-file: snapshots.params
+          predefined-parameters: |
+            ENABLE_MOS_UBUNTU_PROPOSED=false
+            ENABLE_MOS_UBUNTU_UPDATES=false
+            ENABLE_MOS_UBUNTU_SECURITY=false
+            ENABLE_MOS_UBUNTU_HOLDBACK=false
+
+            ENABLE_MOS_CENTOS_OS=false
+            ENABLE_MOS_CENTOS_PROPOSED=false
+            ENABLE_MOS_CENTOS_UPDATES=false
+            ENABLE_MOS_CENTOS_SECURITY=false
+            ENABLE_MOS_CENTOS_HOLDBACK=false
+            # Need more magic
+            PLUGIN_REPO_SUB_URL={plugin-repo-sub-url}
+            PLUGIN_VERSION={plugin-version}
+            PLUGIN_MOS_VERSION={plugin-mos-version}
+            PLUGIN_PKG_DIST={plugin-pkg-dist}
+            PLUGIN_RPM_MASK={plugin-rpm-mask}
+            PLUGIN_TEST_REPO={plugin-test-repo}
+            PLUGIN_TEST_COMMIT={plugin-test-commit}
+            MIRROR_HOST={mirror-host}
+
+    publishers:
+
+    - archive:
+        artifacts: 'snapshots.params'
+        allow-empty: false
+    - archive:
+        artifacts: 'snapshots.sh'
+        allow-empty: false
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+
+    - trigger-parameterized-builds:
+        - project: '9.0.bvt.d-murano.test-reports'
+          condition: ALWAYS
+          predefined-parameters: |
+            TEST_JOB_NAME=$JOB_NAME
+            CUSTOM_VERSION=snapshot #$BUILD_NUMBER

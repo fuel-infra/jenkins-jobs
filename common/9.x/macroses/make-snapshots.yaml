@@ -6,3 +6,12 @@
     - shell:
         !include-raw:
           '../builders/freeze_deps_for_systest.sh'
+
+- builder:
+    name: 9x-make-plugin-snapshots
+    builders:
+    # Calculate all plugin snapshot data
+    # updates snapshots.params and snapshots.sh
+    - shell:
+        !include-raw:
+          '../builders/freeze_deps_for_systest_plugin.sh'

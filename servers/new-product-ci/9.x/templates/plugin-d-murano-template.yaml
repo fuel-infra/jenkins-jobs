@@ -1,0 +1,98 @@
+- job-template:
+    name: '9.0.main.{dist}.d-murano.{testgroup}'
+    description: 'Run d-murano Build Verification Test {testgroup}'
+
+    email: 'ci+bvt@mirantis.com'
+    env_suffix: $BUILD_ID
+    properties: ''
+    timeout: '180'
+    trigger_projects: ''
+    weight: '7'
+    node: 'bvt'
+    concurrent: true
+    disabled: false
+    dist: ubuntu
+
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+
+    parameters:
+    - 9.0-d-murano-systest-params
+    - string: # added for cleaner which searches for job parameter
+        name: ENV_PREFIX
+        default: '9.0.main.{dist}.d-murano.{testgroup}'
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
+
+    scm:
+    - main-git:
+        repobranch: $PLUGIN_TEST_COMMIT
+        reponame: $PLUGIN_TEST_REPO
+        basedir: $PLUGIN_TEST_REPO
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+    - inject:
+          properties-content: '$ADDITIONAL_PARAMETERS' # from 9.0-d-murano-systest-params
+    - inject: # Defaults
+        properties-content: |
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          ENV_SUFFIX={env_suffix}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+    - inject: # Overrides
+        properties-content: '{properties}'
+    - extended-bash:
+        headers: ''
+        script: !include-raw-escape: builders-d-murano/pre-script.sh
+    - download-rpm-files
+    - iso-download
+    # inject ISO-related variables
+    - inject-properties-file:
+        properties-file: 'iso.setenvfile'
+    - plugin-deploy-test-default
+    - extended-bash:
+        headers: ''
+        script: |
+            echo "===POST-BUILD SCRIPT"
+            set -ex
+            # Remove venv from run, which could be run in /tmp
+            echo "INFO: Removing $VENV_PATH"
+            rm -rf "$VENV_PATH"
+
+    publishers:
+
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*,*.txt'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+
+    - post-destroy-vms # Destroy envs if left undestroyed
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+
+    - bvt-failure-email:
+        email_recipients: '{email}'
+
+    - bvt-fixed-email:
+        email_recipients: '{email}'
+
+    - trigger-parameterized-builds:
+        '{obj:trigger_projects}'

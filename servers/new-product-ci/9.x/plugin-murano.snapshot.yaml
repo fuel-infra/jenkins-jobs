@@ -1,0 +1,19 @@
+- project:
+    name: 9.0.d-murano.snapshot
+    version-id: '9.0'
+    plugin-test-repo: 'fuel-plugin-murano-tests'
+    plugin-test-commit: 'master'
+
+    plugin-repo-sub-url: "extras/murano-plugin-repos/"
+    plugin-version: "release/1.0.0"
+    plugin-mos-version: "mos9.0"
+    plugin-pkg-dist: "centos7"
+    plugin-rpm-mask: "detach-murano"
+    mirror-host: "perestroika-repo-tst.infra.mirantis.net"
+
+    jobs:
+    - '{version-id}.d-murano.snapshot':
+        timer: '0 0,6,12,18 * * *'
+    - 9.0.main.{dist}.d-murano.{testgroup}:
+        dist: ubuntu
+        testgroup: deploy_murano_plugin
