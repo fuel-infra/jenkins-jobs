@@ -173,13 +173,16 @@ FAILED PATH: ${SYNCPATH}"
             # Double quoting breaks bash quoting at UPDATE_HEAD_PARAM
             # shellcheck disable=SC2086
             for host in $HOSTS_TO_SYNC ; do
-                ${TRSYNC_BIN} push "${DSTPATH}" "${SYNCPATH##*/}" \
+                if ! ${TRSYNC_BIN} push "${DSTPATH}" "${SYNCPATH##*/}" \
                     -d "${host}/${SYNCPATH%/*}" \
                     $UPDATE_HEAD_PARAM \
                     --init-directory-structure \
                     --snapshot-dir "$SNAPSHOT_DIR" \
-                    --timestamp "$TIMESTAMP" \
-                    || failedhosts="${failedhosts} ${host}"
+                    --timestamp "$TIMESTAMP"
+                then
+                    rm -f "${DSTPATH}.chksum"
+                    failedhosts="${failedhosts} ${host}"
+                fi
             done
         fi
         #
