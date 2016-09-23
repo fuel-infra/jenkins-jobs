@@ -117,7 +117,7 @@
     - trigger-parameterized-builds:
       - project: '9.x.backup-restore.test-reports'
         condition: ALWAYS
-        triggerWithNoParameters: false
+        triggerWithNoParameters: yes
 
 - job:
     name: '9.x.backup-restore.timer'
