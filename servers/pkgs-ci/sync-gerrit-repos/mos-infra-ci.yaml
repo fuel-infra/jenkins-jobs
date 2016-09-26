@@ -24,6 +24,7 @@
     gerrit-project-name:
     - 'project-config'
     - 'system-config'
+    - 'zuul'
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
