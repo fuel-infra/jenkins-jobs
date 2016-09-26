@@ -62,6 +62,7 @@
     - inject: # Overrides
         properties-content: '{properties}'
         properties-file: '{properties-file}'
+    - guess-mirror
     - extended-bash:
         headers: ''
         script: !include-raw-escape: builders-d-murano/pre-script.sh

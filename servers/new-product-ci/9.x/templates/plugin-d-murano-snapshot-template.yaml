@@ -54,6 +54,7 @@
           TEST_GROUP={testgroup}
     - inject: # Overrides
         properties-content: '{properties}'
+    - guess-mirror
     - extended-bash:
         headers: ''
         script: !include-raw-escape: builders-d-murano/pre-script.sh

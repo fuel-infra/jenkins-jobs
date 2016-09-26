@@ -40,6 +40,12 @@ function guess_rpm_filename(){
    rm -vf "${t_file}"
 }
 
+store PLUGIN_REPO_SUB_URL "${PLUGIN_REPO_SUB_URL?}"
+store PLUGIN_VERSION "${PLUGIN_VERSION?}"
+store PLUGIN_MOS_VERSION "${PLUGIN_MOS_VERSION?}"
+store PLUGIN_PKG_DIST "${PLUGIN_PKG_DIST?}"
+store PLUGIN_RPM_MASK "${PLUGIN_RPM_MASK?}"
+
 # Store snapshot for copy of rpm repo
 # http://mirror.fuel-infra.org/extras/murano-plugin-repos/centos/mos9.0-centos7/os.target.txt >>
 # http://mirror.fuel-infra.org/extras/murano-plugin-repos/centos/mos9.0-centos7/snapshots/os-2016-09-21-210927/
