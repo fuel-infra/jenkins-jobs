@@ -20,6 +20,8 @@
 
     node: custom_test
 
+    mirror_ubuntu: ''
+
     parameters:
       - string:
           name: MAGNET_LINK
@@ -104,6 +106,7 @@
             'latest' - latest available; 'latest-stable' - mirror from successful run of 10.0.test_all job; 'ubuntu-2015-01-01-030500' for exact snapshot
       - string:
           name: MIRROR_UBUNTU
+          default: '{mirror_ubuntu}'
           description: |
             If empty, it will be set automatically based on UBUNTU_MIRROR_ID value.
             <p>
