@@ -148,7 +148,16 @@
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
           VENV_PATH={venvpath}
-
+    - text:
+        name: PLUGINS
+        description: |
+          URLs for plugins to download one by line.
+          URL1</br>
+          URL2
+    - string:
+        name: PLUGINS_DIR
+        default: '$WORKSPACE/downloaded_plugins'
+        description: 'Absolute path to the directory where downloaded plugins will be stored'
     - string: # added for cleaner which searches for job parameter
         name: ENV_PREFIX
         default: '9.x.custom.{dist}.system_test'
@@ -176,7 +185,8 @@
 
     # Section for constructing very custom snapshots.params file
     # ----------
-
+    - shell:
+        !include-raw-escape: ../builders/custom_system_test_plugins.sh
     # 1. inject latest snapshot (default values)
     - inject:
         properties-content: |
