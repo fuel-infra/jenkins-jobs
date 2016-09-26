@@ -15,7 +15,7 @@
 
     properties:
     - authorization:
-        mos-qa:
+        mos-qa-team:
           - job-read
           - job-build
         ci:
