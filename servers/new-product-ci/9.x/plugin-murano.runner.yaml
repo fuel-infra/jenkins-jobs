@@ -1,0 +1,39 @@
+- job:
+    name: '9.0.d-murano.runner'
+    description: 'Run all system tests'
+
+    concurrent: false
+    project-type: multijob
+    node: 'runner'
+
+    properties:
+    - heavy-job:
+        weight: 1
+
+    parameters:
+    - 9.0-d-murano-systest-params
+
+    wrappers:
+    - timeout:
+        fail: true
+        timeout: 1200
+
+    builders:
+    - inject:
+          properties-content: '$ADDITIONAL_PARAMETERS' # from 9.0-d-murano-systest-params
+
+    - write-description:
+        description-string: $CUSTOM_VERSION
+
+    - multijob:
+        name: 'Run system tests'
+        condition: COMPLETED
+        projects:
+        - name: '9.0.system_test.ubuntu.d-murano.deploy_murano_bvt'
+          current-parameters: true
+          kill-phase-on: NEVER
+    publishers:
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+    - email-default:
+        mail-to: 'fuel-plugin-murano@mirantis.com'

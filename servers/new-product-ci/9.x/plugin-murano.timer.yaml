@@ -1,0 +1,58 @@
+- job:
+    name: '9.0.swarm.d-murano.timer'
+    description: |
+      Trigger 9.0.swarm.runner with latest stable snapshot.
+
+    node: 'runner'
+
+    properties:
+    - heavy-job:
+        weight: 1
+
+    parameters:
+    - string:
+        name: SNAPSHOT_JOB
+        default: '9.0.d-murano.snapshot'
+        description: 'Job from which we get latest stable snapshot'
+
+    triggers:
+    - timed: '0 21 * * 1-7'
+
+    builders:
+
+    - inject-from-job():
+        job-name: $SNAPSHOT_JOB
+        which-build: last-successful
+        artifact-name: snapshots.params
+    - shell: |
+        echo "Description string: $CUSTOM_VERSION"
+
+    publishers:
+
+    - archive:
+        allow-empty: false
+        artifacts: snapshots.params
+        latest-only: false
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+
+    - email-default:
+        mail-to: 'fuel-plugin-murano@mirantis.com'
+
+    - trigger-parameterized-builds:
+        - project: 9.0.d-murano.runner
+          condition: UNSTABLE_OR_BETTER
+          property-file: snapshots.params
+          predefined-parameters: |
+            ENABLE_MOS_UBUNTU_PROPOSED=false
+            ENABLE_MOS_UBUNTU_UPDATES=false
+            ENABLE_MOS_UBUNTU_SECURITY=false
+            ENABLE_MOS_UBUNTU_HOLDBACK=false
+
+            ENABLE_MOS_CENTOS_OS=false
+            ENABLE_MOS_CENTOS_PROPOSED=false
+            ENABLE_MOS_CENTOS_UPDATES=false
+            ENABLE_MOS_CENTOS_SECURITY=false
+            ENABLE_MOS_CENTOS_HOLDBACK=false
+            PATCHING_DISABLE_UPDATES=true

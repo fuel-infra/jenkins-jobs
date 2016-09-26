@@ -1,0 +1,17 @@
+- project:
+    name: '9.0 swarm d-murano tests'
+    test-type: 'system_test'
+    default_pool: '10.109.0.0/16:24'
+    description: '9.0-d-murano swarm test group'
+    node: 'systest'
+    timeout: '480'
+    dist: ubuntu
+    properties: |
+      FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+      ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+    weight: '7'
+
+    jobs:
+    - '9.0.{test-type}.{dist}.d-murano.{testgroup}':
+        testgroup: 'deploy_murano_bvt' # test job, not included in runner
+        weight: '6'
