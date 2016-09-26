@@ -123,7 +123,8 @@
     - trigger-parameterized-builds:
       - project: '9.x.upgrades.test-reports'
         condition: ALWAYS
-        triggerWithNoParameters: yes
+        current-parameters: true
+        trigger-with-no-params: yes
 
 - job:
     name: '9.x.upgrades.timer'
