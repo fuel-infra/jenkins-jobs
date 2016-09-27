@@ -27,9 +27,10 @@
     builders:
     - inject:
          properties-content: |
-           TEST_RUNNER_JOB_NAME=9.0.swarm.d-murano.runner
-           TESTRAIL_MILESTONE=9.0XXXX
-           LAUNCHPAD_MILESTONE=9.0XXXX
+           TEST_RUNNER_JOB_NAME=9.0.d-murano.runner
+           TESTRAIL_PROJECT=Murano plugin
+           TESTRAIL_MILESTONE=1.1.0
+           LAUNCHPAD_MILESTONE=1.1.0
            HANDLE_BLOCKED=true
            PUBLISH=true
            OUTPUT_FILE=bugs_link_stat

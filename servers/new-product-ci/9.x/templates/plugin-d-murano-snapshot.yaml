@@ -28,9 +28,8 @@
          inject PLUGIN_MOS_VERSION '{plugin-mos-version}'
          inject PLUGIN_PKG_DIST '{plugin-pkg-dist}'
          inject PLUGIN_RPM_MASK '{plugin-rpm-mask}'
-         # Inject PLUGIN_FILE for test-runner with filename rendered from guess_rpm_filename()
-         inject MIRROR_HOST '{mirror-host}'
 
+    - guess-mirror
     - inject:
         # Magnet-link is required because it's part of snapshots.params
         properties-content: |
@@ -72,7 +71,6 @@
             PLUGIN_RPM_MASK={plugin-rpm-mask}
             PLUGIN_TEST_REPO={plugin-test-repo}
             PLUGIN_TEST_COMMIT={plugin-test-commit}
-            MIRROR_HOST={mirror-host}
 
     publishers:
 
