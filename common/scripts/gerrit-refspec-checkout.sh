@@ -37,6 +37,10 @@ if [[ -n "${GERRIT_REFSPEC}" ]]; then
     echo "INFO: Guess git repo checkout for project ${GERRIT_PROJECT}"
     project_dir=${GERRIT_PROJECT##*/}
     echo "INFO: Looking for project:${GERRIT_PROJECT} at dir ${project_dir}"
+    if [[ ! -d "${project_dir}" ]]; then
+        echo "WARNING: Project directory ${project_dir} not exist!"
+        exit 0
+    fi
     pushd "${project_dir}"
         echo "INFO: Switching to changeset ${GERRIT_REFSPEC}"
         git fetch "${gerrit_repo_url}" "${GERRIT_REFSPEC}"
