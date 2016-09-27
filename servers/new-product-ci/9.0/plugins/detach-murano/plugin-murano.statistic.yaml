@@ -1,52 +1,23 @@
-# todo: make as template
-- job:
-    name: '9.0.swarm.d-murano.statistic'
-    description: |
-      <iframe width="100%"
-              height="600px"
-              frameborder='0'
-              src='https://product-ci.infra.mirantis.net/job/9.0.swarm.d-murano.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'>
-      </iframe>
+- project:
+    name: product-ci/9.0/plugins/detach-murano/plugin-murano.statistic
 
-    node: testrail
+    version: '9.0'
+    test-type: swarm
+    dist: d-murano
 
-    scm:
-    - main-git:
-         reponame: 'fuel-qa'
-         repobranch: 'origin/stable/mitaka'
-         basedir: ''
 
-    triggers:
-    - timed: '30 20 * * *'
+    fuel-qa-branch: 'origin/stable/mitaka'
+    timer: '30 20 * * *'
 
-    wrappers:
-    - inject-passwords:
-         global: true
-         mask-password-params: true
+    swarm-statistics/test-runner-job-name:  '9.0.d-murano.runner'
+    swarm-statistics/testrail-project:      'Murano plugin'
+    swarm-statistics/testrail-milestone:    '1.1.0'
+    swarm-statistics/launchpad-milestone:   '1.1.0'
+    swarm-statistics/handle-blocked:        'true'
+    swarm-statistics/publish:               'true'
+    swarm-statistics/output-file:           'bugs_link_stat'
+    swarm-statistics/create-html:           'true'
+    swarm-statistics/mail-to:               'fuel-plugin-murano@mirantis.com'
 
-    builders:
-    - inject:
-         properties-content: |
-           TEST_RUNNER_JOB_NAME=9.0.d-murano.runner
-           TESTRAIL_PROJECT=Murano plugin
-           TESTRAIL_MILESTONE=1.1.0
-           LAUNCHPAD_MILESTONE=1.1.0
-           HANDLE_BLOCKED=true
-           PUBLISH=true
-           OUTPUT_FILE=bugs_link_stat
-           CREATE_HTML=true
-    - testrail-generate-statistics
-
-    publishers:
-
-    - archive:
-        allow-empty: true
-        artifacts: bugs_link_stat.html
-        latest-only: false
-
-    - email:
-        recipients: 'fuel-plugin-murano@mirantis.com'
-
-    - description-setter:
-        regexp: '^.*Found TestPlan (.*)'
-        description: 'Bugs stats for \1'
+    jobs:
+    - product-ci/templates/swarm-statistics
