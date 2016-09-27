@@ -5,8 +5,7 @@
       - inject:
            properties-content: |
              OUTPUT_FILE=bugs_stats
-      - shell:
-          !include-raw builders/testrail_generate_statistics.sh
+      - testrail-generate-statistics
     parameters:
       - string:
           name: TEST_PLAN_ID

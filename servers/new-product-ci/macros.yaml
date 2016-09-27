@@ -8,6 +8,11 @@
           !include-raw builders/run_system_test.sh
       - shell:
           !include-raw builders/erase_env.sh
+- builder:
+    name: testrail-generate-statistics
+    builders:
+      - shell:
+          !include-raw ./builders/testrail_generate_statistics.sh
 ########################################################################
 # Section: Parameters
 ########################################################################
