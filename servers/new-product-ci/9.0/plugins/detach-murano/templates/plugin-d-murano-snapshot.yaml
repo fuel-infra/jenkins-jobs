@@ -8,7 +8,7 @@
 
     timer: ''
     magnet-link:
-      !include-raw-escape: '../../data/9.0-iso'
+      !include-raw-escape: '../../../../data/9.0-iso'
 
     triggers:
     - timed: '{timer}'

@@ -1,18 +1,17 @@
 - job-template:
-    name: '9.0.{test-type}.{dist}.d-murano.{testgroup}'
-    description: 'Run Swarm Test {testgroup}'
-    node: '{node}'
-    concurrent: true
+    name: '9.0.main.{dist}.d-murano.{testgroup}'
+    description: 'Run d-murano Build Verification Test {testgroup}'
 
     email: 'fuel-plugin-murano@mirantis.com'
     env_suffix: $BUILD_ID
     properties: ''
-    properties-file: ''
-    timeout: '240'
+    timeout: '180'
+    trigger_projects: ''
     weight: '7'
+    node: 'bvt'
+    concurrent: true
+    disabled: false
     dist: ubuntu
-    test-type: system_test
-    make-snapshot: 'false'
 
     logrotate:
       artifactDaysToKeep: -1
@@ -24,7 +23,7 @@
     - 9.0-d-murano-systest-params
     - string: # added for cleaner which searches for job parameter
         name: ENV_PREFIX
-        default: '9.0.{test-type}.{dist}.d-murano.{testgroup}'
+        default: '9.0.main.{dist}.d-murano.{testgroup}'
 
     properties:
     - heavy-job:
@@ -43,8 +42,6 @@
         write-description: false
     - ansicolor:
         colormap: xterm
-    - inject-passwords:
-        global: true
 
     builders:
     - inject:
@@ -52,20 +49,15 @@
     - inject: # Defaults
         properties-content: |
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-          POOL_DEFAULT={default_pool}
-          ENV_PREFIX=$JOB_NAME
           ENV_SUFFIX={env_suffix}
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
-          MAKE_SNAPSHOT={make-snapshot}
-          KEEP_ENV=true
     - inject: # Overrides
         properties-content: '{properties}'
-        properties-file: '{properties-file}'
     - guess-mirror
     - extended-bash:
         headers: ''
-        script: !include-raw-escape: builders-d-murano/pre-script.sh
+        script: !include-raw-escape: ../builders/pre-script.sh
     - download-rpm-files
     - iso-download
     # inject ISO-related variables
@@ -78,10 +70,11 @@
             echo "===POST-BUILD SCRIPT"
             set -ex
             # Remove venv from run, which could be run in /tmp
-            echo "INFO: Removing directory: $VENV_PATH"
+            echo "INFO: Removing dir: $VENV_PATH"
             rm -rf "$VENV_PATH"
 
     publishers:
+
     - archive:
         allow-empty: true
         artifacts: '**/nosetests.xml,logs/*,*.txt'
@@ -96,8 +89,11 @@
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
 
+    - bvt-failure-email:
+        email_recipients: '{email}'
+
+    - bvt-fixed-email:
+        email_recipients: '{email}'
+
     - trigger-parameterized-builds:
-        - project: '9.0.{test-type}.d-murano.test-reports'
-          condition: ALWAYS
-          predefined-parameters: TEST_JOB_NAME=$JOB_NAME
-          triggerWithNoParameters: false
+        '{obj:trigger_projects}'

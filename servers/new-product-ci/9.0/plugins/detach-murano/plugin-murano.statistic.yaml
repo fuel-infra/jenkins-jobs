@@ -36,7 +36,7 @@
            OUTPUT_FILE=bugs_link_stat
            CREATE_HTML=true
     - shell:
-        !include-raw: builders/testrail_generate_statistics.sh
+        !include-raw: ../../builders/testrail_generate_statistics.sh
 
     publishers:
 
