@@ -7,20 +7,13 @@
     version: '9.x'
     venvpath: '/home/jenkins/qa-venv-master-3.0'
     env_suffix: $BUILD_ID
-    properties: ''
     properties-file: ''
     timeout: '360'
     weight: '1'
     disabled: false
 
     properties:
-    - authorization:
-        mos-qa-team:
-          - job-read
-          - job-build
-        ci:
-          - job-read
-          - job-build
+    - authorization-allow-mos-qa-and-ci-group
 
     parameters:
     - 9x-systest-params

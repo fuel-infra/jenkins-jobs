@@ -63,6 +63,16 @@
             - job-discover
             - job-extended-read
             - job-read
+- property:
+    name: authorization-allow-mos-qa-and-ci-group
+    properties:
+      - authorization:
+          mos-qa-team:
+            - job-read
+            - job-build
+          ci:
+            - job-read
+            - job-build
 ########################################################################
 # Section: Publishers
 ########################################################################
