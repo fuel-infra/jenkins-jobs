@@ -52,7 +52,8 @@
           headers: ''
           script: '{pre-build-script}'
       - inject-from-job(same-change):
-          job-name: '{project-version}-pkg-{project-name}-fp-publish-{os}-{distro}'
+          # Fetch info from builded DEB package
+          job-name: '{project-version}-pkg-{project-name}-fp-publish-ubuntu-trusty'
           # add DEB_REPO_URL
           artifact-name: '{pkg_type}.publish.setenvfile'
 
