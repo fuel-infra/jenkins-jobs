@@ -53,7 +53,8 @@
           script: '{pre-build-script}'
       - inject-from-job(same-change):
           # Fetch info from builded DEB package
-          job-name: '{project-version}-pkg-{project-name}-fp-publish-ubuntu-trusty'
+          # Rendered: 9.0-pkg-fp-murano-publish-ubuntu-trusty
+          job-name: '{project-version}-pkg-{project-name}-publish-ubuntu-trusty'
           # add DEB_REPO_URL
           artifact-name: '{pkg_type}.publish.setenvfile'
 
