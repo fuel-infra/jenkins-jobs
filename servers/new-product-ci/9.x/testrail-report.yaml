@@ -29,7 +29,7 @@
         test-type:  'upgrades'
         properties: |
           TESTS_RUNNER=9.x.upgrades.runner
-          TESTRAIL_TEST_SUITE="[9.1] MOS Upgrades Automated Testing"
+          TESTRAIL_TEST_SUITE=[9.1] MOS Upgrades Automated Testing
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}
           EXTRA_FACTOR_OF_TC_DEFINITION=9.x-upgrades
@@ -37,7 +37,7 @@
         test-type:  'backup-restore'
         properties: |
           TESTS_RUNNER=9.x.backup-restore.runner
-          TESTRAIL_TEST_SUITE="[9.1] MOS Upgrades Automated Testing"
+          TESTRAIL_TEST_SUITE=[9.1] MOS Upgrades Automated Testing
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}
           EXTRA_FACTOR_OF_TC_DEFINITION=9.x_backup-restore
