@@ -7,8 +7,8 @@ source "${VENV_PATH:-/home/jenkins/venv-nailgun-tests-2.9/bin/activate}"
 export PYTHONPATH="$(pwd):$PYTHONPATH"
 
 # Initialize variables
-export TESTRAIL_STATS_GENERATOR="fuelweb_test/testrail/generate_statistics.py"
-export TESTRAIL_PROJECT="Mirantis OpenStack"
+export TESTRAIL_STATS_GENERATOR="${TESTRAIL_STATS_GENERATOR:-"fuelweb_test/testrail/generate_statistics.py"}"
+export TESTRAIL_PROJECT="${TESTRAIL_PROJECT:-"Mirantis OpenStack"}"
 export TESTRAIL_URL="https://mirantis.testrail.com"
 
 OPTIONS=" --verbose"
@@ -49,4 +49,6 @@ if [ "${TEST_PLAN_ID:-none}" != "none" ]; then
     OPTIONS+=" ${TEST_PLAN_ID}"
 fi
 
+# shellcheck disable=SC2086
+# need to pass all components as separate args
 python "${TESTRAIL_STATS_GENERATOR}" ${OPTIONS}
