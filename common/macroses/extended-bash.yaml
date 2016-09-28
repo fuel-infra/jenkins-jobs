@@ -57,6 +57,7 @@
         head:
           !include-raw-escape:
             - 'includes/jenkins.lib.sh'
+            - 'includes/strings.lib.sh'
         # entry points for additional imports and raw script
         tail: |
           {headers}
