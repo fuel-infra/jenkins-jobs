@@ -1,8 +1,8 @@
 - project:
-    name: '9.0 swarm d-murano tests'
+    name: '9.0 system_test d-murano tests'
     test-type: 'system_test'
     default_pool: '10.109.0.0/16:24'
-    description: '9.0-d-murano swarm test group'
+    description: '9.0-d-murano system test group'
     node: 'systest'
     timeout: '480'
     dist: ubuntu

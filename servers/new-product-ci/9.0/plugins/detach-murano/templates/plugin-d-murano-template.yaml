@@ -1,6 +1,6 @@
 - job-template:
     name: '9.0.{test-type}.{dist}.d-murano.{testgroup}'
-    description: 'Run Swarm Test {testgroup}'
+    description: 'Run System Test {testgroup}'
     node: '{node}'
     concurrent: true
 

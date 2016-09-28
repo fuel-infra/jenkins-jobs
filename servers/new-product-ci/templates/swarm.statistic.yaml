@@ -5,7 +5,7 @@
       <iframe width="100%"
               height="600px"
               frameborder='0'
-              src='https://product-ci.infra.mirantis.net/job/9.0.swarm.d-murano.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'>
+              src='https://product-ci.infra.mirantis.net/job/{version}.{test-type}.{dist}.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'>
       </iframe>
 
     node: testrail

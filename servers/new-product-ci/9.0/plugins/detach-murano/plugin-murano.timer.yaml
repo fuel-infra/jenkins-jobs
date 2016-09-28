@@ -1,7 +1,7 @@
 - job:
-    name: '9.0.swarm.d-murano.timer'
+    name: '9.0.system_test.d-murano.timer'
     description: |
-      Trigger 9.0.swarm.runner with latest stable snapshot.
+      Trigger 9.0.system_test.runner with latest stable snapshot.
 
     node: 'runner'
 
