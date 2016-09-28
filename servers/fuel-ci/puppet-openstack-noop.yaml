@@ -24,6 +24,7 @@
       - throttle:
           max-per-node: 1
           option: project
+      - authorization-allow-descriptions-puppetgroup
     scm:
       - git:
           branches:
