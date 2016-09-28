@@ -56,7 +56,7 @@
           # Rendered: 9.0-pkg-fp-murano-publish-ubuntu-trusty
           job-name: '{project-version}-pkg-{project-name}-publish-ubuntu-trusty'
           # add DEB_REPO_URL
-          artifact-name: '{pkg_type}.publish.setenvfile'
+          artifact-name: 'deb.publish.setenvfile'
 
       # made as sep. step because prev. injects will take effect only after build step
       - extended-bash:
