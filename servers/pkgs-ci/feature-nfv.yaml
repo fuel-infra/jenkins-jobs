@@ -9,6 +9,7 @@
     deb-origin-test: 'testing'
 
     publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
     repo-base-path: '/home/jenkins/pubrepos'
 
     # Configure flows

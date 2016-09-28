@@ -65,6 +65,7 @@
             inject RPM_REQUEST_HOTFIX_REPO_PATH   "{rpm-repo-path}/hotfix"
             inject RPM_REQUEST_SECURITY_REPO_PATH "{rpm-repo-path}/security"
             inject RPM_REQUEST_PROPOSED_REPO_PATH "{rpm-repo-path}/proposed"
+            inject REMOTE_REQUEST_REPO_HOST       "{repo-host}"
 
             inject GERRIT_HOST          "{gerrit-host}"
             inject GERRIT_PORT          "{gerrit-port}"
