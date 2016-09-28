@@ -12,6 +12,7 @@
 
     publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
     repo-base-path: '/home/jenkins/pubrepos'
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
 
     # Configure flows
     is-downgrade: 'false'
