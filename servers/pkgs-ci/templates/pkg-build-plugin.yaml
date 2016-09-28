@@ -51,6 +51,7 @@
       - extended-bash:
           headers: ''
           script: '{pre-build-script}'
+      - guess-mirror
       - inject-from-job(same-change):
           # Fetch info from builded DEB package
           # Rendered: 9.0-pkg-fp-murano-publish-ubuntu-trusty
@@ -96,9 +97,14 @@
             inject ADDITIONAL_EXTRAREPO_RPM   "deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64"
 
             inject PLUGIN_RELEASE_TIMESTAMP   "{plugin_release_timestamp}"
-            inject '{plugin-extra-variable-name}' "http://{publish-repo-host}/{deb-repo-path}/{project-version}/pool/main/ ${{DEB_REPO_URL}}"
 
-      - guess-mirror
+            _target_repo_url="http://${{MIRROR_HOST}}/{deb-repo-path}/{project-version}"
+            if [[ -n ${{DEB_REPO_URL}} ]]; then
+              _review_repo_url="$(clean_url "${{DEB_REPO_URL}}" | cut -d ' ' -f 1)"
+            fi
+
+            inject '{plugin-extra-variable-name}' "${{_target_repo_url}}/pool/main/ ${{_review_repo_url+${{_review_repo_url}}/pool/main/}}"
+
       - gerrit-refspec-checkout
       - rename:
          src: '{plugin-extra-repo}'
