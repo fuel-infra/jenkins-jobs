@@ -1,5 +1,5 @@
-- job:
-    name: '9.0.system_test.d-murano.timer'
+- job-template:
+    name: '9.0.system_test.d-murano{plugin-version-id}.timer'
     description: |
       Trigger 9.0.system_test.runner with latest stable snapshot.
 
@@ -12,11 +12,11 @@
     parameters:
     - string:
         name: SNAPSHOT_JOB
-        default: '9.0.d-murano.snapshot'
+        default: '9.0.d-murano{plugin-version-id}.snapshot'
         description: 'Job from which we get latest stable snapshot'
 
     triggers:
-    - timed: '0 21 * * 1-7'
+    - timed: '{timer}'
 
     builders:
 
@@ -41,7 +41,7 @@
         mail-to: 'fuel-plugin-murano@mirantis.com'
 
     - trigger-parameterized-builds:
-        - project: 9.0.d-murano.runner
+        - project: '9.0.d-murano{plugin-version-id}.runner'
           condition: UNSTABLE_OR_BETTER
           property-file: snapshots.params
           predefined-parameters: |

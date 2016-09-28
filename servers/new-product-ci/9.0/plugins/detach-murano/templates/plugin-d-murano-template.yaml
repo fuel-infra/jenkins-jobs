@@ -1,5 +1,5 @@
 - job-template:
-    name: '9.0.{test-type}.{dist}.d-murano.{testgroup}'
+    name: '9.0.{test-type}.{dist}.d-murano{plugin-version-id}.{testgroup}'
     description: 'Run System Test {testgroup}'
     node: '{node}'
     concurrent: true

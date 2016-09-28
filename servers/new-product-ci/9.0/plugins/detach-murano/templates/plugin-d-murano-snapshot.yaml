@@ -1,5 +1,5 @@
 - job-template:
-    name: '{version-id}.d-murano.snapshot'
+    name: '{version-id}.d-murano{plugin-version-id}.snapshot'
     description: |
       Freeze all dependencies for systest into artifact and run initial verification.
 

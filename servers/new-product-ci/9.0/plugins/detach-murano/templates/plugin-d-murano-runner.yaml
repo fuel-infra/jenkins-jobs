@@ -1,5 +1,7 @@
-- job:
-    name: '9.0.d-murano.runner'
+- job-template:
+    # supposed that each version will run the same swarm threads
+    # duplicate othrwise
+    name: '9.0.d-murano{plugin-version-id}.runner'
     description: 'Run all system tests'
 
     concurrent: false
@@ -29,7 +31,7 @@
         name: 'Run system tests'
         condition: COMPLETED
         projects:
-        - name: '9.0.system_test.ubuntu.d-murano.deploy_murano_bvt'
+        - name: '9.0.system_test.ubuntu.d-murano{plugin-version-id}.deploy_murano_bvt'
           current-parameters: true
           kill-phase-on: NEVER
     publishers:
