@@ -1,0 +1,5 @@
+- builder:
+    name: 9x-prepare-baremetal-sys-test
+    builders:
+    - shell:
+        !include-raw: '../builders/prepare_baremetal_system_test.sh'
