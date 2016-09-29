@@ -80,7 +80,7 @@
           branches:
             - 'origin/stable/6.0'
     triggers:
-      - timed: 'H 2 * * *'
+      - timed: '@weekly'
     wrappers:
       - ansicolor:
           colormap: xterm

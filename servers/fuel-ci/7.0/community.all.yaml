@@ -74,7 +74,7 @@
           branches:
             - 'origin/stable/7.0'
     triggers:
-      - timed: 'H 4 * * *'
+      - timed: '@weekly'
     wrappers:
       - ansicolor:
           colormap: xterm
