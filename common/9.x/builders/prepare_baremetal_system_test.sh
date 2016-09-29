@@ -24,7 +24,7 @@ dump_devops_template () {
     # job parameters or uses predefined one stored on Jenkins slave if not.
     if [[ -n "${DEVOPS_SETTINGS_TEMPLATE}" && ! "${DEVOPS_SETTINGS_TEMPLATE}" = *"YOUR TEMPLATE FOR FUEL_DEVOPS IS HERE"* ]]; then
         echo -e "${GC}Using fuel-devops template from job parameters!${RST}"
-        DEVOPS_TEMPLATE_FILE=$(tempfile -d "${WORKSPACE}")
+        DEVOPS_TEMPLATE_FILE=$(mktemp -p "${WORKSPACE}")
         echo "${DEVOPS_SETTINGS_TEMPLATE}" > "${DEVOPS_TEMPLATE_FILE}"
         export DEVOPS_SETTINGS_TEMPLATE="${DEVOPS_TEMPLATE_FILE}"
     else
@@ -34,12 +34,6 @@ dump_devops_template () {
             echo -e "${RC}Aborting! Template for fuel-devops not found!${RST}"
             return 1
         fi
-    fi
-}
-
-clear_devops_template () {
-    if [ -f "${DEVOPS_TEMPLATE_FILE}" ]; then
-        rm -f "${DEVOPS_TEMPLATE_FILE}"
     fi
 }
 
@@ -55,7 +49,6 @@ destroy_bm_slaves () {
 
 ENV_NAME="baremetal_${BAREMETAL_ENV_NAME}"
 VENV_PATH=${VENV_PATH:-"/home/jenkins/qa-venv-master-3.0"}
-TEST_RUNNER=${TEST_RUNNER:-"utils/jenkins/system_tests.sh"}
 
 export ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
@@ -83,17 +76,4 @@ if [[ "${fuel_qa_gerrit_commit}" != "none" ]] ; then
   for commit in ${fuel_qa_gerrit_commit} ; do
     git fetch https://review.openstack.org/openstack/fuel-qa "${commit}" && git cherry-pick FETCH_HEAD
   done
-fi
-
-if "${TEST_RUNNER}" -w "$(pwd)" -o --group="${TEST_GROUP}"; then
-    TESTS_PASSED=true
-else
-    TESTS_PASSED=false
-fi
-
-clear_devops_template
-
-if ! "${TESTS_PASSED}"; then
-    echo -e "${RC}Tests failed! Check logs for details!${RST}"
-    exit 1
 fi

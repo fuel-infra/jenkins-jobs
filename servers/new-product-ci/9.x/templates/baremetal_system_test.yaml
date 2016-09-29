@@ -96,7 +96,8 @@
         #!/bin/bash
         echo "=== [systest PRE-script] ==="
         {pre-script}
-    - 9x-run-baremetal-sys-test
+    - 9x-prepare-baremetal-sys-test
+    - 9x-run-sys-test
     - shell: |
         #!/bin/bash
         echo "=== [systest POST-script] ==="
