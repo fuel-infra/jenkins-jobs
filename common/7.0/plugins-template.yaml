@@ -26,9 +26,10 @@
         description: 'Environment prefix'
 
     scm:
-    - openstack:
-        branch: 'stable/7.0'
-        repo: 'fuel-qa'
+    - main-git:
+        reponame: '{reponame}'
+        repobranch: '{repobranch}'
+        basedir: ''
 
     wrappers:
     - timeout:
