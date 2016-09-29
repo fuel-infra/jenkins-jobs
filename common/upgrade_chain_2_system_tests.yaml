@@ -127,16 +127,16 @@
 
     scm:
     - main-git:
-        reponame: {repo-name}
-        repobranch: {base-branch}
+        reponame: '{repo-name}'
+        repobranch: '{base-branch}'
         basedir: '{repo-name}-base'
     - main-git:
-        reponame: {repo-name}
-        repobranch: {intermediate-branch}
+        reponame: '{repo-name}'
+        repobranch: '{intermediate-branch}'
         basedir: '{repo-name}-intermediate'
     - main-git:
-        reponame: {repo-name}
-        repobranch: {upgrade-branch}
+        reponame: '{repo-name}'
+        repobranch: '{upgrade-branch}'
         basedir: '{repo-name}-upgrade'
 
     wrappers:
