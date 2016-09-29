@@ -4,10 +4,10 @@
 
 set -ex
 
-export TESTRAIL_USER=${TESTRAIL_USER}
-export TESTRAIL_PASSWORD=${TESTRAIL_PASSWORD}
-export TESTRAIL_REPORTER_PATH="fuelweb_test/testrail/report.py"
-export TESTRAIL_PROJECT="Mirantis OpenStack"
+export TESTRAIL_USER="${TESTRAIL_USER}"
+export TESTRAIL_PASSWORD="${TESTRAIL_PASSWORD}"
+export TESTRAIL_REPORTER_PATH="${TESTRAIL_REPORTER_PATH:-"fuelweb_test/testrail/report.py"}"
+export TESTRAIL_PROJECT="${TESTRAIL_PROJECT:-"Mirantis OpenStack"}"
 export TESTRAIL_URL="https://mirantis.testrail.com"
 
 # Prepare venv
@@ -25,4 +25,5 @@ fi
 
 export USE_UBUNTU=true
 export USE_CENTOS=false
-python ${TESTRAIL_REPORTER_PATH} -v -l -j "${TESTS_RUNNER}" "${OPTIONS}"
+# shellcheck disable=SC2086
+python ${TESTRAIL_REPORTER_PATH} -v -l -j "${TESTS_RUNNER}" ${OPTIONS}
