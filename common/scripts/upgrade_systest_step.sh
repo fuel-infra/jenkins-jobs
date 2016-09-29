@@ -143,7 +143,7 @@ export UPDATE_MASTER=true
 
 export ISO_PATH=$(seedclient-wrapper -d -m "${ISO_MAGNET}" -v --force-set-symlink -o "${WORKSPACE}")
 
-info_message "Executing ${TEST_GROUP} tests for ${REPO_DIR}..."
+echo "Executing ${TEST_GROUP} tests for ${REPO_DIR}..."
 
 pushd "${REPO_DIR}"
 
