@@ -1,5 +1,5 @@
 - job-template:
-    name: '9.0.main.{dist}.d-murano{plugin-version-id}.{testgroup}'
+    name: '9.0.main.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
     description: 'Run d-murano Build Verification Test {testgroup}'
 
     email: 'fuel-plugin-murano@mirantis.com'
@@ -12,6 +12,9 @@
     concurrent: true
     disabled: false
     dist: ubuntu
+    plugin-mos-version: "mos9.0"
+    plugin-pkg-dist: "centos7"
+
 
     logrotate:
       artifactDaysToKeep: -1
@@ -23,7 +26,7 @@
     - 9.0-d-murano-systest-params
     - string: # added for cleaner which searches for job parameter
         name: ENV_PREFIX
-        default: '9.0.main.{dist}.d-murano{plugin-version-id}.{testgroup}'
+        default: '9.0.main.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
 
     properties:
     - heavy-job:

@@ -1,5 +1,5 @@
 - job-template:
-    name: '{version-id}.d-murano{plugin-version-id}.snapshot'
+    name: '{version}.d-murano{plugin-version-suffix}.snapshot'
     description: |
       Freeze all dependencies for systest into artifact and run initial verification.
 
@@ -17,17 +17,26 @@
     - timeout:
         timeout: 300
 
+    # scm:
+    # todo: checkout fuel-qa & store fuel-qa commit!
+    # todo: checkout custom f/w & store custom f/w commit!
+    # - main-git:
+    #    repobranch: '{plugin-test-commit}'
+    #    reponame: '{plugin-test-repo}'
+    #    basedir: '{plugin-test-repo}'
+
     builders:
     - extended-bash:
         headers: ''
         script: |
-         # Convert all data from jjb variables to bash
-         # data for fetch latest rpm from repo
-         inject PLUGIN_REPO_SUB_URL '{plugin-repo-sub-url}'
-         inject PLUGIN_VERSION '{plugin-version}'
-         inject PLUGIN_MOS_VERSION '{plugin-mos-version}'
-         inject PLUGIN_PKG_DIST '{plugin-pkg-dist}'
-         inject PLUGIN_RPM_MASK '{plugin-rpm-mask}'
+         # Inject defaults and stubs
+         inject PLUGIN_REPO_SUB_URL   '{plugin-repo-sub-url}'
+         inject PLUGIN_VERSION        '{plugin-version}'
+         inject PLUGIN_MOS_VERSION    'mos{version}'
+         inject PLUGIN_PKG_DIST       '{plugin-pkg-dist}'
+         inject PLUGIN_RPM_MASK       '{plugin-rpm-mask}'
+         inject PLUGIN_TEST_REPO      '{plugin-test-repo}'
+         inject PLUGIN_TEST_COMMIT    '{plugin-test-commit}'
 
     - guess-mirror
     - inject:
@@ -52,25 +61,18 @@
         - name: '9.0.main.ubuntu.d-murano.deploy_murano_plugin'
           kill-phase-on: NEVER
           property-file: snapshots.params
-          predefined-parameters: |
-            ENABLE_MOS_UBUNTU_PROPOSED=false
-            ENABLE_MOS_UBUNTU_UPDATES=false
-            ENABLE_MOS_UBUNTU_SECURITY=false
-            ENABLE_MOS_UBUNTU_HOLDBACK=false
-
-            ENABLE_MOS_CENTOS_OS=false
-            ENABLE_MOS_CENTOS_PROPOSED=false
-            ENABLE_MOS_CENTOS_UPDATES=false
-            ENABLE_MOS_CENTOS_SECURITY=false
-            ENABLE_MOS_CENTOS_HOLDBACK=false
-            # Need more magic
-            PLUGIN_REPO_SUB_URL={plugin-repo-sub-url}
-            PLUGIN_VERSION={plugin-version}
-            PLUGIN_MOS_VERSION={plugin-mos-version}
-            PLUGIN_PKG_DIST={plugin-pkg-dist}
-            PLUGIN_RPM_MASK={plugin-rpm-mask}
-            PLUGIN_TEST_REPO={plugin-test-repo}
-            PLUGIN_TEST_COMMIT={plugin-test-commit}
+          # todo: remove? everything is false by default
+          # predefined-parameters: |
+          #   ENABLE_MOS_UBUNTU_PROPOSED=false
+          #   ENABLE_MOS_UBUNTU_UPDATES=false
+          #   ENABLE_MOS_UBUNTU_SECURITY=false
+          #   ENABLE_MOS_UBUNTU_HOLDBACK=false
+          #
+          #   ENABLE_MOS_CENTOS_OS=false
+          #   ENABLE_MOS_CENTOS_PROPOSED=false
+          #   ENABLE_MOS_CENTOS_UPDATES=false
+          #   ENABLE_MOS_CENTOS_SECURITY=false
+          #   ENABLE_MOS_CENTOS_HOLDBACK=false
 
     publishers:
 
@@ -84,6 +86,7 @@
     - description-setter:
         regexp: "'Description string: (.*)'"
 
+    # fixme: why to report?
     - trigger-parameterized-builds:
         - project: '9.0.bvt.d-murano.test-reports'
           condition: ALWAYS

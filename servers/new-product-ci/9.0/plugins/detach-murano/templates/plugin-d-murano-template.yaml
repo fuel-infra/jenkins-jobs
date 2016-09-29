@@ -1,18 +1,19 @@
 - job-template:
-    name: '9.0.{test-type}.{dist}.d-murano{plugin-version-id}.{testgroup}'
+    name: '9.0.{test-type}.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
     description: 'Run System Test {testgroup}'
     node: '{node}'
     concurrent: true
 
     email: 'fuel-plugin-murano@mirantis.com'
     env_suffix: $BUILD_ID
-    properties: ''
     properties-file: ''
     timeout: '240'
     weight: '7'
     dist: ubuntu
     test-type: system_test
     make-snapshot: 'false'
+    properties-content: ''
+
 
     logrotate:
       artifactDaysToKeep: -1
@@ -51,8 +52,11 @@
           properties-content: '$ADDITIONAL_PARAMETERS' # from 9.0-d-murano-systest-params
     - inject: # Defaults
         properties-content: |
+          FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+          ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-          POOL_DEFAULT={default_pool}
+          POOL_DEFAULT=10.109.0.0/16:24
           ENV_PREFIX=$JOB_NAME
           ENV_SUFFIX={env_suffix}
           OPENSTACK_RELEASE={dist}
@@ -60,7 +64,7 @@
           MAKE_SNAPSHOT={make-snapshot}
           KEEP_ENV=true
     - inject: # Overrides
-        properties-content: '{properties}'
+        properties-content: '{properties-content}'
         properties-file: '{properties-file}'
     - guess-mirror
     - extended-bash:
