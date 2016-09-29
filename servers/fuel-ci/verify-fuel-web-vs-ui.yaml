@@ -15,6 +15,11 @@
             - one-nailgun-db-per-node
           max-per-node: 1
           option: category
+      - authorization:
+          web-ui-team:
+            - job-read
+            - job-build
+            - job-cancel
 
     parameters:
       - string:
@@ -132,5 +137,3 @@
 
     jobs:
       - 'nightly-{proj_helper}-on-{proj_main}'
-
-
