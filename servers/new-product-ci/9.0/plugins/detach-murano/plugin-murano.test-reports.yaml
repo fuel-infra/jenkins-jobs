@@ -12,7 +12,7 @@
         test-type: 'system_test.d-murano'
         email: 'fuel-plugin-murano@mirantis.com'
         properties: |
-          TEST_JOB_NAME=9.0.d-murano.runner
+          TESTS_RUNNER=9.0.d-murano.runner
           TESTRAIL_TEST_SUITE=[{report-version}] System Tests
           TESTRAIL_MILESTONE={plugin-version}
           LAUNCHPAD_MILESTONE={plugin-version}
