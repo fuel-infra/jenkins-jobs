@@ -60,7 +60,71 @@
         weight: 1
 
     parameters:
-    - upgrade-chain-2-systest-params
+    - string:
+        name: BASE_ISO_MAGNET
+        default: 'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
+        description: Magnet link for base Fuel iso
+    - string:
+        name: INTERMEDIATE_ISO_MAGNET
+        default: 'magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
+        description: Magnet link for intermediate Fuel iso
+    - string:
+        name: UPGRADE_ISO_MAGNET
+        default: 'magnet:?xt=urn:btih:bfec808dd71ff42c5613a3527733d9012bb1fabc&dn=MirantisOpenStack-9.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-9.0.iso'
+        description: Magnet link for upgrade Fuel iso
+
+    - string:
+        name: BASE_OCTANE_LOCATION
+        default: 'http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64'
+        description: URL to development repo contains octane package
+    - string:
+        name: INTERMEDIATE_OCTANE_LOCATION
+        default: 'http://packages.fuel-infra.org/repositories/centos/liberty-centos7/os/x86_64/'
+        description: URL to development repo contains octane package
+    - string:
+        name: UPGRADE_OCTANE_LOCATION
+        default: 'http://packages.fuel-infra.org/repositories/centos/mitaka-centos7/os/x86_64/'
+        description: URL to development repo contains octane package
+
+    # Parameters below are required for building corresponding proposed repo URLs
+    # each parameter is involved only for binded Fuel/MOS version and ignored
+    # if corresponding version is not involved into upgrade chain.
+    # see $CURRENT_FUEL_VERSION usage below
+    - bool:
+        name: ENABLE_PROPOSED
+        default: true
+    - string:
+        name: FUEL_PROPOSED_7
+        default: 'mos-repos/centos/mos7.0-centos6-fuel/snapshots/proposed-latest/x86_64/'
+        description: |
+          Path to corresponding proposed repo on MIRROR_HOST server.
+          Used ONLY if upgrade chain contains 7.0 step
+          Replace proposed-latest with needed repo if you want to check specified snapshot
+    - string:
+        name: FUEL_PROPOSED_8
+        default: 'mos-repos/centos/mos8.0-centos7-fuel/snapshots/proposed-latest/x86_64/'
+        description: |
+          Path to corresponding proposed repo on MIRROR_HOST server.
+          Used ONLY if upgrade chain contains 8.0 step
+          Replace proposed-latest with needed repo if you want to check specified snapshot
+    - string:
+        name: MOS_EXTRA_DEB_7
+        default: 'mos-repos/ubuntu/snapshots/7.0-latest mos7.0-proposed main restricted'
+        description: |
+          Path to corresponding proposed repo on MIRROR_HOST server.
+          Used ONLY if upgrade chain contains 7.0 step
+          Replace proposed-latest with needed repo if you want to check specified snapshot
+    - string:
+        name: MOS_EXTRA_DEB_8
+        default: 'mos-repos/ubuntu/snapshots/8.0-latest mos8.0-proposed main restricted'
+        description: |
+          Path to corresponding proposed repo on MIRROR_HOST server.
+          Used ONLY if upgrade chain contains 8.0 step
+          Replace proposed-latest with needed repo if you want to check specified snapshot
+
+    # 9.x params used ONLY if 9.x is involved into upgrade chain
+    # section for mos rpm repos
+    - 9x-systest-params
 
     wrappers:
     - timeout:
