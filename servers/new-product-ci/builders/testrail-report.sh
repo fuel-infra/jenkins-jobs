@@ -4,10 +4,10 @@
 
 set -ex
 
-export TESTRAIL_USER=${TESTRAIL_USER}
-export TESTRAIL_PASSWORD=${TESTRAIL_PASSWORD}
-export TESTRAIL_REPORTER_PATH="fuelweb_test/testrail/report.py"
-export TESTRAIL_PROJECT="Mirantis OpenStack"
+export TESTRAIL_USER="${TESTRAIL_USER}"
+export TESTRAIL_PASSWORD="${TESTRAIL_PASSWORD}"
+export TESTRAIL_REPORTER_PATH="${TESTRAIL_REPORTER_PATH:-"fuelweb_test/testrail/report.py"}"
+export TESTRAIL_PROJECT="${TESTRAIL_PROJECT:-"Mirantis OpenStack"}"
 export TESTRAIL_URL="https://mirantis.testrail.com"
 
 # Prepare venv

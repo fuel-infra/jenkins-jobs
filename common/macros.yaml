@@ -278,6 +278,12 @@
       - shell:
           !include-raw scripts/publish_artifacts.sh
 
+- builder:
+    name: testrail-report
+    builders:
+      - shell:
+          !include-raw scripts/testrail-report.sh
+
 ########################################################################
 # Publisher creating report about published package versions
 ########################################################################

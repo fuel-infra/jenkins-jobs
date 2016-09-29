@@ -11,8 +11,7 @@
             VENV_PATH={venvpath}
             TESTS_RUNNER={version}{mod}.test_all
             TESTRAIL_TEST_SUITE=Smoke/BVT
-      - shell:
-          !include-raw-escape: ./builders/iso-report.sh
+      - testrail-report
     parameters:
       - string:
           name: RUNNER_BUILD_NUMBER

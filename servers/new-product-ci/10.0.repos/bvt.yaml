@@ -122,8 +122,7 @@
           TESTS_RUNNER=$TEST_JOB_NAME
           TESTRAIL_TEST_SUITE=Smoke/BVT
           TESTRAIL_MILESTONE=10.0
-    - shell:
-        !include-raw-escape: './scripts/bvt_report.sh'
+    - testrail-report
 
     publishers:
     - description-setter:
