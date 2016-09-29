@@ -13,8 +13,9 @@
     node: 'runner'
 
     properties:
-      - heavy-job:
-          weight: 1
+    - heavy-job:
+        weight: 1
+    - authorization-allow-mos-qa-and-ci-group
 
     parameters:
        - 9x-systest-params

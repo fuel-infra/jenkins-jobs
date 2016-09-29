@@ -6,7 +6,6 @@
 
     email: 'mos-qa@mirantis.com'
     venvpath: '/home/jenkins/qa-venv-master-3.0'
-    properties: ''
     properties-file: ''
     timeout: '360'
     weight: '1'
@@ -58,6 +57,7 @@
     properties:
     - heavy-job:
         weight: '{weight}'
+    - authorization-allow-mos-qa-and-ci-group
 
     scm:
     - main-git:
