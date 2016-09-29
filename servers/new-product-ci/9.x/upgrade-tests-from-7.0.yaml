@@ -1,0 +1,147 @@
+- project:
+    name: 9.x-from-7.0-upgrades
+    weight: '8'
+    timeout: '960'
+    node: 'systest'
+
+    venvpath: '/home/jenkins/venv-nailgun-tests-upgrades'
+    common-properties: |
+      KEYSTONE_PASSWORD=admin1
+      SLAVE_NODE_MEMORY=3072
+      UPGRADE_FUEL_FROM=7.0
+      UPGRADE_FUEL_TO=9.1
+
+
+    description: 'This is product-ci upgrade system test chain (7.0 -> 9.x).'
+
+    dist: 'ubuntu'
+    job-type: 'upgrade.chain'
+    source-version-id: '7.0'
+    version-id: '9.x'
+    repo-name: 'fuel-qa'
+
+    base-branch: 'stable/7.0'
+    intermediate-branch: 'stable/8.0'
+    upgrade-branch: 'stable/mitaka'
+
+    base-iso-magnet: magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso
+    intermediate-iso-magnet: 'magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
+    upgrade-iso-magnet: 'magnet:?xt=urn:btih:bfec808dd71ff42c5613a3527733d9012bb1fabc&dn=MirantisOpenStack-9.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-9.0.iso'
+
+    base-octane-location: 'http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos7.0-centos6-fuel/proposed/x86_64'
+    intermediate-octane-location: 'http://packages.fuel-infra.org/repositories/centos/liberty-centos7/os/x86_64/'
+    upgrade-octane-location: 'http://packages.fuel-infra.org/repositories/centos/mitaka-centos7/os/x86_64/'
+
+    base-fuel-version: '7.0'
+    intermediate-fuel-version: '8.0'
+    upgrade-fuel-version: '9.x'
+
+    jobs:
+      - common/upgrade_chain_2_system_tests:
+          base-testgroup: 'upgrade_ceph_ha_backup'
+          upgrade-testgroup: 'upgrade_ceph_ha_tests'
+          properties: |
+            UPGRADE_TEST_TEMPLATE=fuelweb_test/tests/tests_upgrade/example_upgrade_scenario.yaml
+      - common/upgrade_chain_2_system_tests:
+          base-testgroup: 'upgrade_ceph_ha_backup'
+          upgrade-testgroup: 'upgrade_cloud_live_migration'
+          properties: |
+            UPGRADE_TEST_TEMPLATE=fuelweb_test/tests/tests_upgrade/example_upgrade_scenario.yaml
+
+- job:
+    name: '9.x.upgrade.chain.7.0.upgrades.runner'
+    project-type: multijob
+    description: 'Run upgrades 7.0-9.x chain tests'
+    concurrent: false
+    node: 'runner'
+
+    properties:
+    - heavy-job:
+        weight: 1
+
+    parameters:
+    - upgrade-chain-2-systest-params
+
+    wrappers:
+    - timeout:
+        fail: true
+        timeout: 1200
+
+    builders:
+    - multijob:
+        name: 'Run upgrade tests'
+        condition: COMPLETED
+        projects:
+          - name: '9.x.upgrade.chain.7.0.ubuntu.upgrade_ceph_ha_tests'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '9.x.upgrade.chain.7.0.ubuntu.upgrade_cloud_live_migration'
+            current-parameters: true
+            kill-phase-on: NEVER
+
+    publishers:
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+    - email-default:
+        mail-to: 'ci+alert@mirantis.com'
+    - trigger-parameterized-builds:
+      - project: '9.x.upgrade.chain.7.0.test-reports'
+        condition: ALWAYS
+        current-parameters: true
+        trigger-with-no-params: yes
+
+- job:
+    name: '9.x.upgrade.chain.7.0.timer'
+    description: |
+      Trigger 9.x.upgrade.chain.7.0.runner.
+    node: 'runner'
+
+    properties:
+    - heavy-job:
+        weight: 1
+
+    parameters:
+    - string:
+        name: SNAPSHOT_JOB
+        default: '9.x.snapshot'
+        description: 'Job from which we get latest stable snapshot'
+
+    triggers:
+    - timed: '0 1 * * 1-7'
+
+    builders:
+
+    - inject-from-job():
+        job-name: $SNAPSHOT_JOB
+        which-build: last-successful
+        artifact-name: snapshots.params  # -> 9x-systest-params
+    - shell: |
+        echo "Description string: $CUSTOM_VERSION"
+
+    publishers:
+
+    - archive:
+        allow-empty: false
+        artifacts: snapshots.params
+        latest-only: false
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+
+    - email-default:
+        mail-to: 'ci+alert@mirantis.com'
+
+    - trigger-parameterized-builds:
+        - project: 9.x.upgrade.chain.7.0.runner
+          condition: UNSTABLE_OR_BETTER
+          property-file: snapshots.params
+          predefined-parameters: |
+            ENABLE_MOS_UBUNTU_PROPOSED=true
+            ENABLE_MOS_UBUNTU_UPDATES=true
+            ENABLE_MOS_UBUNTU_SECURITY=true
+            ENABLE_MOS_UBUNTU_HOLDBACK=true
+            ENABLE_MOS_CENTOS_OS=true
+            ENABLE_MOS_CENTOS_PROPOSED=true
+            ENABLE_MOS_CENTOS_UPDATES=true
+            ENABLE_MOS_CENTOS_SECURITY=true
+            ENABLE_MOS_CENTOS_HOLDBACK=true

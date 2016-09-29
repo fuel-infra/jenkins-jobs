@@ -41,3 +41,11 @@
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}
           EXTRA_FACTOR_OF_TC_DEFINITION=9.x_backup-restore
+    - '{version}.{test-type}.test-reports':
+        test-type:  'upgrade.chain.7.0'
+        properties: |
+          TESTS_RUNNER=9.x.upgrade.chain.7.0.runner
+          TESTRAIL_TEST_SUITE="[9.1] MOS Upgrades Automated Testing"
+          TESTRAIL_MILESTONE={report-version}
+          LAUNCHPAD_MILESTONE={report-version}
+          EXTRA_FACTOR_OF_TC_DEFINITION=9.x_upgrade_chain_7.0

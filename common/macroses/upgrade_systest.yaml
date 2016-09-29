@@ -1,0 +1,88 @@
+- parameter:
+    name: upgrade-chain-2-systest-params
+
+    parameters:
+    - string:
+        name: OPENSTACK_RELEASE
+        default: '{dist}'
+        description: Base distribution
+    - string:
+        name: ENV_PREFIX
+        default: '{version-id}.from.{source-version-id}.upgrade.{dist}.{upgrade-testgroup}'
+
+    - string:
+        name: BASE_ISO_MAGNET
+        default: '{base-iso-magnet}'
+        description: Magnet link for base Fuel iso
+    - string:
+        name: INTERMEDIATE_ISO_MAGNET
+        default: '{intermediate-iso-magnet}'
+        description: Magnet link for intermediate Fuel iso
+    - string:
+        name: UPGRADE_ISO_MAGNET
+        default: '{upgrade-iso-magnet}'
+        description: Magnet link for upgrade Fuel iso
+
+    - string:
+        name: BASE_OCTANE_LOCATION
+        default: '{base-octane-location}'
+        description: URL to development repo contains octane package
+    - string:
+        name: INTERMEDIATE_OCTANE_LOCATION
+        default: '{intermediate-octane-location}'
+        description: URL to development repo contains octane package
+    - string:
+        name: UPGRADE_OCTANE_LOCATION
+        default: '{upgrade-octane-location}'
+        description: URL to development repo contains octane package
+
+    # Parameters below are required for building corresponding proposed repo URLs
+    # each parameter is involved only for binded Fuel/MOS version and ignored
+    # if corresponding version is not involved into upgrade chain.
+    # see $CURRENT_FUEL_VERSION usage below
+    - bool:
+        name: ENABLE_PROPOSED
+        default: true
+    - string:
+        name: FUEL_PROPOSED_7
+        default: 'mos-repos/centos/mos7.0-centos6-fuel/snapshots/proposed-latest/x86_64/'
+        description: |
+          Path to corresponding proposed repo on MIRROR_HOST server.
+          Used ONLY if upgrade chain contains 7.0 step
+          Replace proposed-latest with needed repo if you want to check specified snapshot
+    - string:
+        name: FUEL_PROPOSED_8
+        default: 'mos-repos/centos/mos8.0-centos7-fuel/snapshots/proposed-latest/x86_64/'
+        description: |
+          Path to corresponding proposed repo on MIRROR_HOST server.
+          Used ONLY if upgrade chain contains 8.0 step
+          Replace proposed-latest with needed repo if you want to check specified snapshot
+    - string:
+        name: MOS_EXTRA_DEB_7
+        default: 'mos-repos/ubuntu/snapshots/7.0-latest mos7.0-proposed main restricted'
+        description: |
+          Path to corresponding proposed repo on MIRROR_HOST server.
+          Used ONLY if upgrade chain contains 7.0 step
+          Replace proposed-latest with needed repo if you want to check specified snapshot
+    - string:
+        name: MOS_EXTRA_DEB_8
+        default: 'mos-repos/ubuntu/snapshots/8.0-latest mos8.0-proposed main restricted'
+        description: |
+          Path to corresponding proposed repo on MIRROR_HOST server.
+          Used ONLY if upgrade chain contains 8.0 step
+          Replace proposed-latest with needed repo if you want to check specified snapshot
+
+    # 9.x params used ONLY if 9.x is involved into upgrade chain
+    # section for mos rpm repos
+    - 9x-systest-params
+
+
+
+- builder:
+    name: upgrade_systest_step
+
+    builders:
+    - extended-bash:
+        headers: '{shell_variables}'
+        script:
+            !include-raw-escape: 'common/scripts/upgrade_systest_step.sh'
