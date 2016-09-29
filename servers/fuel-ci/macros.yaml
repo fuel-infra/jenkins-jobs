@@ -153,3 +153,16 @@
          branches:
           - '{repobranch}'
          basedir: '{basedir}'
+
+########################################################################
+# Section: permissions
+########################################################################
+
+- property:
+    name: authorization-allow-descriptions-puppetgroup
+    properties:
+      - authorization:
+          fuel-puppet:
+            - job-read
+            - job-discover
+            - run-update

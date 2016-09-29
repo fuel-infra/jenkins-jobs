@@ -39,6 +39,7 @@
           option: project
       - heavy-job:
           weight: 6
+      - authorization-allow-descriptions-puppetgroup
     scm:
       - git:
           branches:
