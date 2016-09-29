@@ -49,7 +49,7 @@
             UPGRADE_TEST_TEMPLATE=fuelweb_test/tests/tests_upgrade/example_upgrade_scenario.yaml
 
 - job:
-    name: '9.x.upgrade.chain.7.0.upgrades.runner'
+    name: '9.x.upgrade.chain.7.0.runner'
     project-type: multijob
     description: 'Run upgrades 7.0-9.x chain tests'
     concurrent: false
