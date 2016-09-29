@@ -10,7 +10,7 @@
     timeout: '360'
     weight: '1'
     dist: ubuntu
-    env_suffix: $BUILD_ID
+    env_prefix: 'baremetal_'
     test-type: 'baremetal'
     pre-script: |
         echo "-SKIP-"
@@ -79,7 +79,8 @@
     - inject:
         properties-content: |
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-          ENV_SUFFIX={env_suffix}
+          ENV_SUFFIX={environment}
+          ENV_PREFIX={env_prefix}
           OPENSTACK_RELEASE={dist}
           MAKE_SNAPSHOT={make-snapshot}
           KEEP_ENV=true
@@ -87,7 +88,8 @@
           VENV_PATH={venvpath}
           NIC_FOR_ADMIN_BRIDGE={admin_nic}
           ADMIN_VLAN={admin_vlan}
-
+    - inject:
+        properties-content: $ADDITIONAL_PARAMETERS
     - inject: # Overrides
         properties-content: '{properties}'
         properties-file: '{properties-file}'
