@@ -1,12 +1,22 @@
 - job-template:
-    # supposed that each version will run the same swarm threads
-    # duplicate othrwise
     name: '9.0.d-murano{plugin-version-suffix}.runner'
     description: 'Run all system tests'
 
     concurrent: false
     project-type: multijob
     node: 'runner'
+
+    threads/0:   ''
+    threads/1:   ''
+    threads/2:   ''
+    threads/3:   ''
+    threads/4:   ''
+    threads/5:   ''
+    threads/6:   ''
+    threads/7:   ''
+    threads/8:   ''
+    threads/9:   ''
+    threads/10:  ''
 
     properties:
     - heavy-job:
@@ -31,7 +41,37 @@
         name: 'Run system tests'
         condition: COMPLETED
         projects:
-        - name: '9.0.system_test.ubuntu.d-murano{plugin-version-suffix}.deploy_murano_bvt'
+        - name: '{threads/0}'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '{threads/1}'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '{threads/2}'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '{threads/3}'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '{threads/4}'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '{threads/5}'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '{threads/6}'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '{threads/7}'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '{threads/8}'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '{threads/9}'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '{threads/10}'
           current-parameters: true
           kill-phase-on: NEVER
     publishers:
