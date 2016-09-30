@@ -18,11 +18,11 @@
 
     jobs:
     - '9.0.d-murano{plugin-version-suffix}.runner':
-        threads/0: 9.0.system_test.ubuntu.d-murano.1.1.0.check_scaling_murano
-        threads/1: 9.0.system_test.ubuntu.d-murano.1.1.0.deploy_murano_bvt
-        threads/2: 9.0.system_test.ubuntu.d-murano.1.1.0.failover
-        threads/3: 9.0.system_test.ubuntu.d-murano.1.1.0.murano_plugin_upgrade
-        threads/4: 9.0.system_test.ubuntu.d-murano.1.1.0.post_installation
+        threads/0: '{version}.system_test.ubuntu.d-murano{plugin-version-suffix}.check_scaling_murano'
+        threads/1: '{version}.system_test.ubuntu.d-murano{plugin-version-suffix}.deploy_murano_bvt'
+        threads/2: '{version}.system_test.ubuntu.d-murano{plugin-version-suffix}.failover'
+        threads/3: '{version}.system_test.ubuntu.d-murano{plugin-version-suffix}.murano_plugin_upgrade'
+        threads/4: '{version}.system_test.ubuntu.d-murano{plugin-version-suffix}.post_installation'
     - '9.0.system_test.d-murano{plugin-version-suffix}.timer':
         timer: '0 21 * * 1-7'
     - '{version}.{test-type}.test-reports':
