@@ -27,7 +27,7 @@
     parameters:
     - 9x-systest-params
     - text:
-        name: DEVOPS_SETTINGS_TEMPLATE
+        name: CUSTOM_DEVOPS_SETTINGS_TEMPLATE
         default: >
                  template:
                    devops_settings:
@@ -99,6 +99,9 @@
         echo "=== [systest PRE-script] ==="
         {pre-script}
     - 9x-prepare-baremetal-sys-test
+    - inject:
+        # load the parameter used in deployment test
+        properties-file: 'deployment.properties'
     - 9x-run-sys-test
     - shell: |
         #!/bin/bash

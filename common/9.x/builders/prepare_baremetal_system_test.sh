@@ -22,10 +22,10 @@ RST='\e[21m\e[0m'
 dump_devops_template () {
     # Sets DEVOPS_SETTINGS_TEMPLATE to the temp file if was overriden from the
     # job parameters or uses predefined one stored on Jenkins slave if not.
-    if [[ -n "${DEVOPS_SETTINGS_TEMPLATE}" && ! "${DEVOPS_SETTINGS_TEMPLATE}" = *"YOUR TEMPLATE FOR FUEL_DEVOPS IS HERE"* ]]; then
+    if [[ -n "${CUSTOM_DEVOPS_SETTINGS_TEMPLATE}" && ! "${CUSTOM_DEVOPS_SETTINGS_TEMPLATE}" = *"YOUR TEMPLATE FOR FUEL_DEVOPS IS HERE"* ]]; then
         echo -e "${GC}Using fuel-devops template from job parameters!${RST}"
         DEVOPS_TEMPLATE_FILE=$(mktemp -p "${WORKSPACE}")
-        echo "${DEVOPS_SETTINGS_TEMPLATE}" > "${DEVOPS_TEMPLATE_FILE}"
+        echo "${CUSTOM_DEVOPS_SETTINGS_TEMPLATE}" > "${DEVOPS_TEMPLATE_FILE}"
         export DEVOPS_SETTINGS_TEMPLATE="${DEVOPS_TEMPLATE_FILE}"
     else
         echo -e "${BC}Using predefined fuel-devops template stored on Jenkins slave!${RST}"
@@ -47,15 +47,17 @@ destroy_bm_slaves () {
     done
 }
 
-ENV_NAME="baremetal_${BAREMETAL_ENV_NAME}"
+function prepare_deployment_properties {
+  # pass parameters to deployment test
+  cat > deployment.properties <<DEPLOYMENTPROPERTIES
+VENV_PATH=${VENV_PATH}
+DEVOPS_SETTINGS_TEMPLATE=${DEVOPS_SETTINGS_TEMPLATE=}
+BAREMETAL_ADMIN_IFACE=${BAREMETAL_ADMIN_IFACE}
+KEEP_AFTER=${KEEP_AFTER}
+DEPLOYMENTPROPERTIES
+}
+
 VENV_PATH=${VENV_PATH:-"/home/jenkins/qa-venv-master-3.0"}
-
-export ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
-
-if [ -z "${ISO_PATH}" ]; then
-    echo -e "${RC}ISO downloading failed!${RST}"
-    exit 1
-fi
 
 dump_devops_template
 
@@ -77,3 +79,5 @@ if [[ "${fuel_qa_gerrit_commit}" != "none" ]] ; then
     git fetch https://review.openstack.org/openstack/fuel-qa "${commit}" && git cherry-pick FETCH_HEAD
   done
 fi
+
+prepare_deployment_properties
