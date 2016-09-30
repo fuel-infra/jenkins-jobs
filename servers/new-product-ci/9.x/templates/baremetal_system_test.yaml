@@ -10,7 +10,7 @@
     timeout: '360'
     weight: '1'
     dist: ubuntu
-    env_prefix: 'baremetal_'
+    env_prefix: 'baremetal'
     test-type: 'baremetal'
     pre-script: |
         echo "-SKIP-"
