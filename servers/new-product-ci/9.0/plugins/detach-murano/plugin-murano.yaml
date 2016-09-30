@@ -28,7 +28,7 @@
         email: 'fuel-plugin-murano@mirantis.com'
         properties: |
           TESTS_RUNNER={version}.d-murano{plugin-version-suffix}.runner
-          TESTRAIL_TEST_SUITE=[{version}] System Tests
+          TESTRAIL_TEST_SUITE=[9.0] System Tests
           TESTRAIL_MILESTONE={plugin-version}
           LAUNCHPAD_MILESTONE={plugin-version}
           TESTRAIL_PROJECT=Murano plugin

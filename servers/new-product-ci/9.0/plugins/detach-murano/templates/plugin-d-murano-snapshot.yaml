@@ -58,21 +58,9 @@
         name: 'Run tests'
         condition: COMPLETED
         projects:
-        - name: '9.0.main.ubuntu.d-murano.deploy_murano_plugin'
+        - name: '9.0.main.ubuntu.d-murano{plugin-version-suffix}.deploy_murano_plugin'
           kill-phase-on: NEVER
           property-file: snapshots.params
-          # todo: remove? everything is false by default
-          # predefined-parameters: |
-          #   ENABLE_MOS_UBUNTU_PROPOSED=false
-          #   ENABLE_MOS_UBUNTU_UPDATES=false
-          #   ENABLE_MOS_UBUNTU_SECURITY=false
-          #   ENABLE_MOS_UBUNTU_HOLDBACK=false
-          #
-          #   ENABLE_MOS_CENTOS_OS=false
-          #   ENABLE_MOS_CENTOS_PROPOSED=false
-          #   ENABLE_MOS_CENTOS_UPDATES=false
-          #   ENABLE_MOS_CENTOS_SECURITY=false
-          #   ENABLE_MOS_CENTOS_HOLDBACK=false
 
     publishers:
 
@@ -85,11 +73,3 @@
 
     - description-setter:
         regexp: "'Description string: (.*)'"
-
-    # fixme: why to report?
-    - trigger-parameterized-builds:
-        - project: '9.0.bvt.d-murano.test-reports'
-          condition: ALWAYS
-          predefined-parameters: |
-            TEST_JOB_NAME=$JOB_NAME
-            CUSTOM_VERSION=snapshot #$BUILD_NUMBER

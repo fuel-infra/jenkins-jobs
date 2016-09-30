@@ -101,7 +101,13 @@
         regexp-for-failed: "'Description string: (.*)'"
 
     - trigger-parameterized-builds:
-        - project: '9.0.{test-type}.d-murano.test-reports'
+        - project: '9.0.{test-type}.d-murano{plugin-version-suffix}.test-reports'
           condition: ALWAYS
-          predefined-parameters: TEST_JOB_NAME=$JOB_NAME
+          predefined-parameters: |
+              TEST_JOB_NAME=$JOB_NAME
+              TESTRAIL_TEST_SUITE=[9.0] System Tests
+              TESTRAIL_MILESTONE={plugin-version}
+              LAUNCHPAD_MILESTONE={plugin-version}
+              TESTRAIL_PROJECT=Murano plugin
+              HANDLE_BLOCKED=true
           triggerWithNoParameters: false
