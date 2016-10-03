@@ -365,3 +365,9 @@
         testgroup: 'env_customizations_check'
     - '9.x.{test-type}.{dist}.{testgroup}':
         testgroup: 'graph_extension'
+    - '9.x.{test-type}.{dist}.{testgroup}':
+        testgroup: 'add_updated_node_to_environment'
+        properties: |
+          UPDATE_MASTER=False
+          FORCE_DISABLE_UPDATES=True
+          NODES_COUNT=6
