@@ -8,7 +8,7 @@
     venvpath: '/home/jenkins/qa-venv-master-3.0'
     env_suffix: $BUILD_ID
     properties-file: ''
-    timeout: '360'
+    timeout: '2040'
     weight: '1'
     disabled: false
 
