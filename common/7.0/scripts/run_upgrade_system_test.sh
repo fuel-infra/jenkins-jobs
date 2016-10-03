@@ -43,6 +43,49 @@ elif [[ ${OPENSTACK_RELEASE} == 'ubuntu' ]]; then
 	export OPENSTACK_RELEASE="Ubuntu"
 fi
 
+###################### Get MIRROR_UBUNTU ###############
+
+if [[ ! "${MIRROR_UBUNTU}" ]]; then
+
+    case "${UBUNTU_MIRROR_ID}" in
+        latest-stable)
+            UBUNTU_MIRROR_ID="$(curl -fsS "${TEST_ISO_JOB_URL}lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt" | awk -F '[ =]' '{print $NF}')"
+            UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/${UBUNTU_MIRROR_ID}/"
+            ;;
+        latest)
+            UBUNTU_MIRROR_URL="$(curl ${MIRROR_HOST}pkgs/ubuntu-latest.htm)"
+            ;;
+        *)
+            UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/${UBUNTU_MIRROR_ID}/"
+    esac
+
+    export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse"
+fi
+
+###################### Set extra 6.1 DEB repos ####
+
+if [[ -n "${DEB_LATEST}" ]]; then
+    if [[ "${ENABLE_PROPOSED}" == "true" ]]; then
+        DEB_PROPOSED="mos-proposed,deb ${MIRROR_HOST}mos/${DEB_LATEST} mos6.1-proposed main restricted"
+        EXTRA_DEB_REPOS+="${DEB_PROPOSED}"
+    fi
+    if [[ "${ENABLE_UPDATES}" == "true" ]]; then
+        DEB_UPDATES="mos-updates,deb ${MIRROR_HOST}mos/${DEB_LATEST} mos6.1-updates main restricted"
+        if [[ -n "${EXTRA_DEB_REPOS}" ]]; then
+            EXTRA_DEB_REPOS+="|"
+        fi
+        EXTRA_DEB_REPOS+="${DEB_UPDATES}"
+    fi
+    if [[ "${ENABLE_SECURITY}" == "true" ]]; then
+        DEB_SECURITY="mos-security,deb ${MIRROR_HOST}mos/${DEB_LATEST} mos6.1-security main restricted"
+        if [[ -n "${EXTRA_DEB_REPOS}" ]]; then
+            EXTRA_DEB_REPOS+="|"
+        fi
+        EXTRA_DEB_REPOS+="${DEB_SECURITY}"
+    fi
+    export EXTRA_DEB_REPOS
+fi
+
 export TIMESTAMP=$(date +%y%m%d%H%M)
 export ENV_NAME="${ENV_PREFIX}.${BUILD_NUMBER}.${TIMESTAMP}"
 export ENV_NAME="${ENV_NAME:0:68}"
@@ -72,26 +115,7 @@ export UPGRADE_FUEL_TO=$(basename "${TARBALL_PATH}" | cut -d '-' -f 2)
 
 export VENV_PATH="/home/jenkins/qa-venv-7.0"
 
-###################### Get MIRROR_UBUNTU ###############
-
-if [[ ! "${MIRROR_UBUNTU}" ]]; then
-
-    case "${UBUNTU_MIRROR_ID}" in
-        latest-stable)
-            UBUNTU_MIRROR_ID="$(curl -fsS "${TEST_ISO_JOB_URL}lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt" | awk -F '[ =]' '{print $NF}')"
-            UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/${UBUNTU_MIRROR_ID}/"
-            ;;
-        latest)
-            UBUNTU_MIRROR_URL="$(curl ${MIRROR_HOST}pkgs/ubuntu-latest.htm)"
-            ;;
-        *)
-            UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/${UBUNTU_MIRROR_ID}/"
-    esac
-
-    export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse"
-fi
-
-###################### Set extra DEB and RPM repos ####
+###################### Set extra 7.0 DEB and RPM repos ####
 
 if [[ -n "${RPM_LATEST}" ]]; then
     RPM_MIRROR="${MIRROR_HOST}mos-repos/centos/mos7.0-centos6-fuel/snapshots/"

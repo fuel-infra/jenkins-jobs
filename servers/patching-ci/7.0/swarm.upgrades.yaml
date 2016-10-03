@@ -9,7 +9,7 @@
     base_iso_magnet_link:
         !include-raw: ../data/6.1-iso
     upgrade_reponame: 'fuel-qa'
-    upgrade_repobranch: 'origin/stable/7.0'
+    upgrade_repobranch: '$FUEL_QA_COMMIT'
     venvpath: '/home/jenkins/qa-venv-6.1'
     job-group-properties: |
       KEYSTONE_PASSWORD=newpass
