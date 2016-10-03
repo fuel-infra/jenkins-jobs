@@ -47,7 +47,8 @@
           default: '1052'
       - string:
           name: EXTRA_RPM_REPOS
-          default: 'mos,http://mirror.fuel-infra.org/{mos-rpm-repo-path}/os/x86_64/,98|{name},http://{repo-host}/{rpm-repo-path}/os/x86_64/,90'
+          # proposed-latest is added for fetching latest packages built for 9.x MOS
+          default: 'release-repo,http://{repo-host}/{mos-rpm-repo-path}/os/x86_64/,98|proposed-repo,http://{repo-host}/{mos-rpm-repo-path}/proposed/x86_64/,98|{name},http://{repo-host}/{rpm-repo-path}/os/x86_64/,90'
           description: 'reponame1,http://...(,prio1)|reponame2,http://...(,prio2)'
       - string:
           name: EXTRA_RPM_REPOS_PRIORITY
