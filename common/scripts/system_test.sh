@@ -237,7 +237,7 @@ export EXTRA_DEB_REPOS
 if [ -z "${RPM_REPO_URL}" ]; then
     # RPM_REPO_PATH will come from publisher artifact when publisher publishes rpm
     # REMOTE_REPO_HOST is used because some repositories (Fuel/feature-nfv) are not mirrored
-    UPDATE_FUEL_MIRROR=$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}")/
+    UPDATE_FUEL_MIRROR="$(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH}")/ $(get_rpm_snapshot "http://${REMOTE_REPO_HOST}/${RPM_REPO_PATH%/*/*/*}/proposed/x86_64/")/"
 else
     # when not canary builds
     # Prepare list of repositories containig Fuel updates (rpm only)
