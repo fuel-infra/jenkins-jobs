@@ -62,29 +62,17 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
     export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse"
 fi
 
-###################### Set extra 6.1 DEB repos ####
+###################### Set extra 6.1 DEB and RPM repos ####
 
-if [[ -n "${DEB_LATEST}" ]]; then
-    if [[ "${ENABLE_PROPOSED}" == "true" ]]; then
-        DEB_PROPOSED="mos-proposed,deb ${MIRROR_HOST}mos/${DEB_LATEST} mos6.1-proposed main restricted"
-        EXTRA_DEB_REPOS+="${DEB_PROPOSED}"
-    fi
-    if [[ "${ENABLE_UPDATES}" == "true" ]]; then
-        DEB_UPDATES="mos-updates,deb ${MIRROR_HOST}mos/${DEB_LATEST} mos6.1-updates main restricted"
-        if [[ -n "${EXTRA_DEB_REPOS}" ]]; then
-            EXTRA_DEB_REPOS+="|"
-        fi
-        EXTRA_DEB_REPOS+="${DEB_UPDATES}"
-    fi
-    if [[ "${ENABLE_SECURITY}" == "true" ]]; then
-        DEB_SECURITY="mos-security,deb ${MIRROR_HOST}mos/${DEB_LATEST} mos6.1-security main restricted"
-        if [[ -n "${EXTRA_DEB_REPOS}" ]]; then
-            EXTRA_DEB_REPOS+="|"
-        fi
-        EXTRA_DEB_REPOS+="${DEB_SECURITY}"
-    fi
-    export EXTRA_DEB_REPOS
-fi
+RPM_UPDATES="${MIRROR_HOST}mos/snapshots/centos-6-latest/mos6.1/updates"
+RPM_SECURITY="${MIRROR_HOST}mos/snapshots/centos-6-latest/mos6.1/security"
+export EXTRA_RPM_REPOS="mos-updates,${RPM_UPDATES}|mos-security,${RPM_SECURITY}"
+export UPDATE_FUEL_MIRROR="${RPM_UPDATES} ${RPM_SECURITY}"
+export UPDATE_MASTER=true
+
+DEB_UPDATES="mos-updates,deb ${MIRROR_HOST}mos/snapshots/ubuntu-latest mos6.1-updates main restricted"
+DEB_SECURITY="mos-security,deb ${MIRROR_HOST}mos/snapshots/ubuntu-latest mos6.1-security main restricted"
+export EXTRA_DEB_REPOS="${DEB_UPDATES}|${DEB_SECURITY}"
 
 export TIMESTAMP=$(date +%y%m%d%H%M)
 export ENV_NAME="${ENV_PREFIX}.${BUILD_NUMBER}.${TIMESTAMP}"
@@ -116,6 +104,9 @@ export UPGRADE_FUEL_TO=$(basename "${TARBALL_PATH}" | cut -d '-' -f 2)
 export VENV_PATH="/home/jenkins/qa-venv-7.0"
 
 ###################### Set extra 7.0 DEB and RPM repos ####
+unset EXTRA_RPM_REPOS
+unset UPDATE_FUEL_MIRROR
+unset EXTRA_DEB_REPOS
 
 if [[ -n "${RPM_LATEST}" ]]; then
     RPM_MIRROR="${MIRROR_HOST}mos-repos/centos/mos7.0-centos6-fuel/snapshots/"
@@ -153,7 +144,6 @@ if [[ -n "${RPM_LATEST}" ]]; then
     fi
     export EXTRA_RPM_REPOS
     export UPDATE_FUEL_MIRROR
-    export UPDATE_MASTER=true
 fi
 
 if [[ -n "${DEB_LATEST}" ]]; then
