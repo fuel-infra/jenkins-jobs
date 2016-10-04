@@ -18,7 +18,7 @@
           dos.py erase ${ENV_NAME} || echo "Nothing to erase"
           deactivate
       - shell:
-          !include-raw builders/run_system_test.sh
+          !include-raw: builders/run_system_test.sh
       - shell: |
           #!/bin/bash
           set -ex
@@ -26,7 +26,7 @@
           dos.py erase ${ENV_NAME}
     concurrent: true
     description:
-      !include-raw descriptions/community.ubuntu.bvt_2
+      !include-raw: descriptions/community.ubuntu.bvt_2
     node: bvt
     properties:
       - heavy-job:

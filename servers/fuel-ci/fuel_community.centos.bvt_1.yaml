@@ -12,7 +12,7 @@
           dos.py erase ${JOB_NAME}_system_test || echo "Nothing to erase"
           deactivate
       - shell:
-          !include-raw builders/run_system_test.sh
+          !include-raw: builders/run_system_test.sh
       - shell: |
           #!/bin/bash
           set -ex
@@ -20,7 +20,7 @@
           dos.py erase ${JOB_NAME}_system_test
     concurrent: true
     description:
-      !include-raw descriptions/community.centos.bvt_1
+      !include-raw: descriptions/community.centos.bvt_1
     node: bvt
     properties:
       - heavy-job:

@@ -1,7 +1,7 @@
 - job:
     name: 'release.create_branches'
     description:
-      !include-raw descriptions/release.create_branches.html
+      !include-raw: descriptions/release.create_branches.html
 
 
     node: osci-testing-twin0d
@@ -43,7 +43,7 @@
 
     builders:
       - shell:
-          !include-raw builders/release.create_branches.sh
+          !include-raw: builders/release.create_branches.sh
 
 
     scm:

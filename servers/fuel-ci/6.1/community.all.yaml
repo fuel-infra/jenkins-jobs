@@ -2,10 +2,10 @@
     name: '6.1-community.all'
     builders:
       - shell:
-          !include-raw builders/community.all.sh
+          !include-raw: builders/community.all.sh
     concurrent: true
     description:
-      !include-raw descriptions/community.all
+      !include-raw: descriptions/community.all
     logrotate:
       artifactDaysToKeep: 10
       artifactNumToKeep: 10

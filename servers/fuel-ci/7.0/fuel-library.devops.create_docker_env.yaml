@@ -61,7 +61,7 @@
             JENKINS_USER=jenkins
             JENKINS_GROUP=jenkins
       - shell:
-          !include-raw builders/fuel-library.devops.create_docker_env.sh
+          !include-raw: builders/fuel-library.devops.create_docker_env.sh
 
     wrappers:
       - ansicolor:

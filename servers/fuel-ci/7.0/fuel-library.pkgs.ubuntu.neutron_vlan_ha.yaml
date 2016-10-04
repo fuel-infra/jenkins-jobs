@@ -22,12 +22,12 @@
           properties-content: |
             SYNC_DEPL_TASKS=true
       - shell:
-          !include-raw builders/fuel-library-build-pkgs.sh
+          !include-raw: builders/fuel-library-build-pkgs.sh
       - shell:
-          !include-raw builders/fuel-library-review-pkgs.sh
+          !include-raw: builders/fuel-library-review-pkgs.sh
     concurrent: true
     description:
-      !include-raw descriptions/fuellib-ubuntu-pkgs
+      !include-raw: descriptions/fuellib-ubuntu-pkgs
     node: '7.0_ubuntu'
     parameters:
       - string:

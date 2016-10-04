@@ -20,12 +20,12 @@
           properties-content: |
             SYNC_DEPL_TASKS=true
       - shell:
-          !include-raw builders/fuel-library-build-pkgs.sh
+          !include-raw: builders/fuel-library-build-pkgs.sh
       - shell:
-          !include-raw builders/fuel-library-review-pkgs.sh
+          !include-raw: builders/fuel-library-review-pkgs.sh
     concurrent: true
     description:
-      !include-raw descriptions/fuellib-centos-pkgs
+      !include-raw: descriptions/fuellib-centos-pkgs
     node: '6.1_centos'
     parameters:
       - string:

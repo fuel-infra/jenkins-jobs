@@ -2,7 +2,7 @@
     name: '8.0-build-fuel-plugins'
     builders:
       - shell:
-          !include-raw ../builders/build-fuel-plugins.sh
+          !include-raw: ../builders/build-fuel-plugins.sh
     description: |
       Build plugins for fuel-plugins project <a href=https://github.com/openstack/fuel-plugins>github.com/openstack/fuel-plugins</a>
     logrotate:

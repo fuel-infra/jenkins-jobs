@@ -33,7 +33,7 @@
           name: BASE_ISO_MAGNET_LINK
           description: Magnet link to base ISO
           default:
-            !include-raw data/7.0-iso
+            !include-raw: data/7.0-iso
       - string:
           name: BASE_FUEL_QA_COMMIT
           description: |
@@ -81,7 +81,7 @@
           name: UPGRADE_ISO_MAGNET_LINK
           description: Magnet link to upgrade ISO
           default:
-            !include-raw data/8.0-iso
+            !include-raw: data/8.0-iso
       - string:
           name: UPGRADE_FUEL_QA_COMMIT
           description: |
@@ -157,7 +157,7 @@
           fi
 
       - shell:
-          !include-raw builders/custom_upgrade_system_test.sh
+          !include-raw: builders/custom_upgrade_system_test.sh
 
     properties:
       - authorization-allow-authorized

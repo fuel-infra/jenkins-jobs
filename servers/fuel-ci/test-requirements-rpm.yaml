@@ -1,7 +1,7 @@
 - job:
     builders:
       - shell:
-          !include-raw './builders/test-requirements-rpm.sh'
+          !include-raw: './builders/test-requirements-rpm.sh'
     name: test-requirements-rpm
     node: test-rpm-reqs
     properties:

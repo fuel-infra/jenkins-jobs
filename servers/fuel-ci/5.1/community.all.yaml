@@ -2,10 +2,10 @@
     name: '5.1.2-community.all'
     builders:
       - shell:
-          !include-raw builders/community.all.sh
+          !include-raw: builders/community.all.sh
     concurrent: true
     description:
-      !include-raw descriptions/5.1.2.community.all
+      !include-raw: descriptions/5.1.2.community.all
     logrotate:
       artifactDaysToKeep: 10
       artifactNumToKeep: 10
@@ -23,7 +23,7 @@
       - string:
           name: DATA_MAGNET_LINK
           default:
-            !include-raw data/community-5.1-artifacts
+            !include-raw: data/community-5.1-artifacts
       - string:
           name: deep_clean
           default: 'true'

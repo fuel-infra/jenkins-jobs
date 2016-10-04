@@ -3,7 +3,7 @@
     publishers:
         - email-ext:
             body:
-                !include-raw notifications/email.body
+                !include-raw: notifications/email.body
             always: true
             failure: false
             pre-build: true
@@ -18,7 +18,7 @@
     publishers:
         - email-ext:
             body:
-                !include-raw notifications/email.body
+                !include-raw: notifications/email.body
             always: true
             failure: false
             send-to:

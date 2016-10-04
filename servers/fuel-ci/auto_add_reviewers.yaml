@@ -2,7 +2,7 @@
     name: 'auto-add-reviewers'
     builders:
       - shell:
-          !include-raw builders/auto_add_reviewers.py
+          !include-raw: builders/auto_add_reviewers.py
     concurrent: true
     description: 'Add reviewers from MAINTAINERS file if it is present in repo'
     properties:

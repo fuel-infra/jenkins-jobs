@@ -2,7 +2,7 @@
     name: 'devops.maintain.worker'
     builders:
       - shell:
-          !include-raw builders/mos.maintain.sh
+          !include-raw: builders/mos.maintain.sh
     concurrent: true
 
     logrotate:

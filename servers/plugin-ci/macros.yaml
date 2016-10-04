@@ -79,7 +79,7 @@
     name: plugin-prepare-env
     builders:
       - shell:
-          !include-raw './builders/prepare-venv.sh'
+          !include-raw: './builders/prepare-venv.sh'
 
 # Builder for the StackLight and Murano frameworks
 - builder:
@@ -97,7 +97,7 @@
     name: plugin-deploy-test-ldap
     builders:
       - shell:
-          !include-raw './builders/plugin-ldap-deploy-test.sh'
+          !include-raw: './builders/plugin-ldap-deploy-test.sh'
 
 - builder:
     name: publish-plugin

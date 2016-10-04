@@ -39,7 +39,7 @@
     - shell: |
         echo "Description string: $CUSTOM_VERSION"
     - shell:
-        !include-raw ./builders/get_plugin_ldap_snapshot.sh
+        !include-raw: ./builders/get_plugin_ldap_snapshot.sh
     - inject:
         properties-file: snapshots.params
 

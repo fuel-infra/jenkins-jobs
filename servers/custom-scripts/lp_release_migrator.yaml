@@ -5,7 +5,7 @@
           properties-content: |
             MODE=${RUN_MODE} --projects='${PROJECTS}' --old_milestone_names='${OLD_MILESTONE_NAMES}' --new_milestone_name='${NEW_MILESTONE_NAME}' --maximum=${MAXIMUM} --statuses='${STATUSES}' --bugs_importance='${BUGS_IMPORTANCE}'
       - shell:
-          !include-raw builders/docker_run.sh
+          !include-raw: builders/docker_run.sh
     description: |
       <p><strong>The job to migrate Launchpad bugs between milestones.</strong></p>
 

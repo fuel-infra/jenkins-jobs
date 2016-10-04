@@ -2,7 +2,7 @@
     name: 'publish_fuel_community_iso'
     builders:
       - shell:
-          !include-raw builders/publish_fuel_community_iso.sh
+          !include-raw: builders/publish_fuel_community_iso.sh
     concurrent: true
     logrotate:
       daysToKeep: 20

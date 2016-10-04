@@ -8,7 +8,7 @@
     builders:
       - system-groovy:
           command:
-            !include-raw './builders/label_job_manager.groovy'
+            !include-raw: './builders/label_job_manager.groovy'
     parameters:
       - choice:
           name: ACTION

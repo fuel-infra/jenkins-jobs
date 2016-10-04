@@ -193,7 +193,7 @@
 - builder:
     name: guess-mirror
     builders:
-      - shell: !include-raw scripts/guess-mirror.sh
+      - shell: !include-raw: scripts/guess-mirror.sh
       - inject:
           properties-file: mirror.jenkins-injectfile
 
@@ -249,7 +249,7 @@
 - builder:
     name: iso-download
     builders:
-      - shell: !include-raw scripts/iso_download.sh
+      - shell: !include-raw: scripts/iso_download.sh
       - inject:
           properties-file: iso.setenvfile
 
@@ -266,7 +266,7 @@
             TRACKER_URL=http://retracker.local:80/announce,http://seed-us1.fuel-infra.org:8080/announce,http://seed-cz1.fuel-infra.org:8080/announce
             SEED_HOST=seed-us1.fuel-infra.org:17333,seed-cz1.fuel-infra.org:17333
       - shell:
-          !include-raw scripts/publish_artifacts.sh
+          !include-raw: scripts/publish_artifacts.sh
 
 - builder:
     name: publish-product-iso
@@ -276,13 +276,13 @@
             HTTP_ROOT=http://@HOSTNAME@/fuelweb-iso
             TRACKER_URL=http://tracker01-bud.infra.mirantis.net:8080/announce,http://tracker01-scc.infra.mirantis.net:8080/announce,http://tracker01-msk.infra.mirantis.net:8080/announce
       - shell:
-          !include-raw scripts/publish_artifacts.sh
+          !include-raw: scripts/publish_artifacts.sh
 
 - builder:
     name: testrail-report
     builders:
       - shell:
-          !include-raw scripts/testrail-report.sh
+          !include-raw: scripts/testrail-report.sh
 
 ########################################################################
 # Publisher creating report about published package versions
@@ -295,7 +295,7 @@
         - matches:
             - log-text: 'Started'
           run-if-job-successful: true
-          script: !include-raw scripts/pkg-report.py
+          script: !include-raw: scripts/pkg-report.py
       - post-tasks:
         - matches:
             - log-text: 'Started'

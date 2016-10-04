@@ -20,14 +20,14 @@
           flatten:
           parameter-filters:
       - shell:
-          !include-raw builders/licens_report.sh
+          !include-raw: builders/licens_report.sh
       - shell:
-          !include-raw builders/encryption_report.sh
+          !include-raw: builders/encryption_report.sh
       - shell:
-          !include-raw builders/create_reports.sh
+          !include-raw: builders/create_reports.sh
     node: blackduck
     description:
-      !include-raw descriptions/compliance_report.html
+      !include-raw: descriptions/compliance_report.html
     parameters:
       - string:
           name: RELEASE

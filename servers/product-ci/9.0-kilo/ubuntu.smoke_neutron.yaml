@@ -36,7 +36,7 @@
       - post-destroy-vms
       - email-systest:
           body-failed:
-            !include-raw notifications/smoke.failed
+            !include-raw: notifications/smoke.failed
           mail-to: ci+alert@mirantis.com,mos-qa@mirantis.com
     scm:
       - openstack:

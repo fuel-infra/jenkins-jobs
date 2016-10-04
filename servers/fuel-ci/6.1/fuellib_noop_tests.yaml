@@ -2,7 +2,7 @@
     name: '6.1.fuellib_noop_tests'
     builders:
       - shell:
-          !include-raw builders/fuellib_noop_tests.sh
+          !include-raw: builders/fuellib_noop_tests.sh
     concurrent: true
     description: Runs ./utils/jenkins/fuel_noop_tests.sh
     node: fuel-library-unit-tests

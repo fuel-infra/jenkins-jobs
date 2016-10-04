@@ -2,7 +2,7 @@
     name: fuel.test_impact
     builders:
       - shell:
-          !include-raw builders/fuel.test_impact.sh
+          !include-raw: builders/fuel.test_impact.sh
     concurrent: true
     description: 'Inform QA team if TestImpact is in commit message'
     properties:

@@ -2,7 +2,7 @@
     name: 'bandit-security-check'
     builders:
       - shell:
-          !include-raw builders/bandit-security-check.sh
+          !include-raw: builders/bandit-security-check.sh
     description: |
       Security tests for python code.
     node: bandit-security-check

@@ -7,7 +7,7 @@
             DOCS_HOST=docs@docs.fuel-infra.org
             DOCS_ROOT=/var/www/fuel-qa
       - shell:
-          !include-raw builders/build-fuel-qa-docs.sh
+          !include-raw: builders/build-fuel-qa-docs.sh
     description: |
       Build fuel-qa/docs for master branch and publishes to <a
       href="https://docs.fuel-infra.org/fuel-qa/">http://docs.fuel-infra.org/fuel-qa/</a>

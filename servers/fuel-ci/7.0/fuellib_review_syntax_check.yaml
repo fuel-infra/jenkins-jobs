@@ -2,7 +2,7 @@
     name: old.fuellib_review_syntax_check
     builders:
       - shell:
-          !include-raw builders/fuellib_review_syntax_check.sh
+          !include-raw: builders/fuellib_review_syntax_check.sh
     concurrent: true
     description: Runs ./utils/jenkins/fuel_syntax_check.sh
     node: fuel-library-syntax-check

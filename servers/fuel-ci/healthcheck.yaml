@@ -3,7 +3,7 @@
     node: 'healthcheck'
     builders:
       - shell:
-          !include-raw './builders/healthcheck.py'
+          !include-raw: './builders/healthcheck.py'
     description: |
       This job checks an output of other important jobs and generates raport.
     concurrent: true

@@ -1,10 +1,10 @@
 - job:
     name: '9.0-kilo.all'
     disabled: true
-    
+
     builders:
       - shell:
-          !include-raw builders/all.sh
+          !include-raw: builders/all.sh
     description: |
       Build artifacts: iso
 
@@ -113,7 +113,7 @@
           description: Use ubuntu-<timestamp> or latest for latest mirror available.
     builders:
       - shell:
-          !include-raw builders/test_all.sh
+          !include-raw: builders/test_all.sh
       - multijob:
           name: Run_BVT_and_Smoke
           condition: COMPLETED
@@ -127,7 +127,7 @@
     publishers:
       - email-systest:
           body-failed:
-            !include-raw notifications/test_all.failed
+            !include-raw: notifications/test_all.failed
           mail-to: 'ci+alert@mirantis.com, mos-qa@mirantis.com'
       - description-setter:
           regexp: |
@@ -163,7 +163,7 @@
             TESTRAIL_TEST_SUITE=Smoke/BVT
             TESTRAIL_URL=https://mirantis.testrail.com
       - shell:
-          !include-raw builders/all-Testrail.sh
+          !include-raw: builders/all-Testrail.sh
 
     node: testrail
     publishers:

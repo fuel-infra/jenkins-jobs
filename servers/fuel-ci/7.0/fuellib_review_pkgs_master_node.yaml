@@ -11,9 +11,9 @@
             ASTUTE_GERRIT_URL=https://review.openstack.org/openstack/fuel-astute
             OSTF_GERRIT_URL=https://review.openstack.org/openstack/fuel-ostf
       - shell:
-          !include-raw builders/fuel-library-build-pkgs.sh
+          !include-raw: builders/fuel-library-build-pkgs.sh
       - shell:
-          !include-raw builders/fuellib_review_pkgs_master_node.sh
+          !include-raw: builders/fuellib_review_pkgs_master_node.sh
     concurrent: true
     description: |
       Runs smoke_neutron test group with:<br>

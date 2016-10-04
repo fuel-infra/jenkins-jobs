@@ -25,11 +25,11 @@
             name: REFSPEC
             default: '+refs/heads/*:refs/remotes/origin/*'
             description:
-                !include-raw descriptions/REFSPEC
+                !include-raw: descriptions/REFSPEC
         - choice:
             name: BRANCH
             description:
-                !include-raw descriptions/BRANCH
+                !include-raw: descriptions/BRANCH
             choices:
                 - 'origin/master'
                 - 'FETCH_HEAD'
@@ -68,16 +68,16 @@
         - string:
             name: ISO_CUSTOM_URL
             description:
-                !include-raw descriptions/ISO_CUSTOM_URL
+                !include-raw: descriptions/ISO_CUSTOM_URL
         - string:
             name: REFSPEC
             default: '+refs/heads/*:refs/remotes/origin/*'
             description:
-                !include-raw descriptions/REFSPEC
+                !include-raw: descriptions/REFSPEC
         - choice:
             name: BRANCH
             description:
-                !include-raw descriptions/BRANCH
+                !include-raw: descriptions/BRANCH
             choices:
                 - 'origin/master'
                 - 'FETCH_HEAD'
@@ -115,11 +115,11 @@
             name: REFSPEC
             default: '+refs/heads/*:refs/remotes/origin/*'
             description:
-                !include-raw descriptions/REFSPEC
+                !include-raw: descriptions/REFSPEC
         - choice:
             name: BRANCH
             description:
-                !include-raw descriptions/BRANCH
+                !include-raw: descriptions/BRANCH
             choices:
                 - 'origin/master'
                 - 'FETCH_HEAD'
@@ -239,11 +239,11 @@
             name: REFSPEC
             default: '+refs/heads/*:refs/remotes/origin/*'
             description:
-                !include-raw descriptions/REFSPEC
+                !include-raw: descriptions/REFSPEC
         - choice:
             name: BRANCH
             description:
-                !include-raw descriptions/BRANCH
+                !include-raw: descriptions/BRANCH
             choices:
                 - 'origin/master'
                 - 'FETCH_HEAD'
@@ -287,11 +287,11 @@
             name: REFSPEC
             default: '+refs/heads/*:refs/remotes/origin/*'
             description:
-                !include-raw descriptions/REFSPEC
+                !include-raw: descriptions/REFSPEC
         - choice:
             name: BRANCH
             description:
-                !include-raw descriptions/BRANCH
+                !include-raw: descriptions/BRANCH
             choices:
                 - 'origin/master'
                 - 'FETCH_HEAD'
@@ -330,11 +330,11 @@
             name: REFSPEC
             default: '+refs/heads/*:refs/remotes/origin/*'
             description:
-                !include-raw descriptions/REFSPEC
+                !include-raw: descriptions/REFSPEC
         - choice:
             name: BRANCH
             description:
-                !include-raw descriptions/BRANCH
+                !include-raw: descriptions/BRANCH
             choices:
                 - 'origin/master'
                 - 'FETCH_HEAD'
@@ -381,11 +381,11 @@
             name: REFSPEC
             default: '+refs/heads/*:refs/remotes/origin/*'
             description:
-                !include-raw descriptions/REFSPEC
+                !include-raw: descriptions/REFSPEC
         - choice:
             name: BRANCH
             description:
-                !include-raw descriptions/BRANCH
+                !include-raw: descriptions/BRANCH
             choices:
                 - 'origin/master'
                 - 'FETCH_HEAD'
@@ -425,11 +425,11 @@
             name: REFSPEC
             default: '+refs/heads/*:refs/remotes/origin/*'
             description:
-                !include-raw descriptions/REFSPEC
+                !include-raw: descriptions/REFSPEC
         - choice:
             name: BRANCH
             description:
-                !include-raw descriptions/BRANCH
+                !include-raw: descriptions/BRANCH
             choices:
                 - 'origin/master'
                 - 'FETCH_HEAD'

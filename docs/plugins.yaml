@@ -15,7 +15,7 @@
       - timed: "@midnight"
     builders:
       - shell:
-          !include-raw './builders/prepare_env.sh'
+          !include-raw: './builders/prepare_env.sh'
     description: 'Prepare environment to testing'
     logrotate:
       numToKeep: 10
@@ -28,7 +28,7 @@
     name: '{name}.build'
     builders:
       - shell:
-          !include-raw './builders/syntax-build-plugin.sh'
+          !include-raw: './builders/syntax-build-plugin.sh'
     description: '<a href=https://github.com/openstack/{plugin_repo}>Build {name} plugin from fuel-plugins project</a>'
     logrotate:
       numToKeep: 10
@@ -81,7 +81,7 @@
           project: '{name}.build'
           which-build: last-successful
       - shell:
-          !include-raw './builders/syntax-build-plugin.sh'
+          !include-raw: './builders/syntax-build-plugin.sh'
     description: 'Deploy {name} plugin to prepared environment'
     logrotate:
       numToKeep: 10

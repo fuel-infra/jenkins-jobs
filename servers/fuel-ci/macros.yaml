@@ -17,7 +17,7 @@
           recipients: 'ci+alert@mirantis.net'
           subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
           presend-script:
-            !include-raw 'email_ext_groovy.inc'
+            !include-raw: 'email_ext_groovy.inc'
           failure: true
 - publisher:
     name: email-alert-on-merge
@@ -45,7 +45,7 @@
           subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
       - email-ext:
           body:
-            !include-raw notifications/test.passed
+            !include-raw: notifications/test.passed
           failure: false
           fixed: true
           send-to:

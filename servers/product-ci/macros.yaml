@@ -5,14 +5,14 @@
     name: systest
     builders:
       - shell:
-          !include-raw builders/run_system_test.sh
+          !include-raw: builders/run_system_test.sh
       - shell:
-          !include-raw builders/erase_env.sh
+          !include-raw: builders/erase_env.sh
 - builder:
     name: testrail-generate-statistics
     builders:
       - shell:
-          !include-raw ./builders/testrail_generate_statistics.sh
+          !include-raw: ./builders/testrail_generate_statistics.sh
 ########################################################################
 # Section: Parameters
 ########################################################################
@@ -92,7 +92,7 @@
           subject: '[Jenkins] $BUILD_STATUS - $PROJECT_NAME - # $BUILD_NUMBER'
       - email-ext:
           body:
-            !include-raw notifications/test.passed
+            !include-raw: notifications/test.passed
           failure: false
           fixed: true
           send-to:

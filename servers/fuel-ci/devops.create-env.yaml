@@ -2,7 +2,7 @@
     name: 'devops.{version-id}.create-env'
     concurrent: true
     description:
-      !include-raw descriptions/fuel-library.create_env
+      !include-raw: descriptions/fuel-library.create_env
     properties:
       - heavy-job:
           weight: '4'

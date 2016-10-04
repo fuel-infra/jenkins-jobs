@@ -5,7 +5,7 @@
           !include-raw-escape: './builders/debug_session.sh'
     concurrent: true
     description:
-      !include-raw './descriptions/debug_session'
+      !include-raw: './descriptions/debug_session'
     parameters:
       - node:
           name: NODE

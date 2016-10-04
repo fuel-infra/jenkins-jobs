@@ -2,7 +2,7 @@
     name: nailgun_performance_tests
     builders:
       - shell:
-          !include-raw builders/nailgun_performance_tests.sh
+          !include-raw: builders/nailgun_performance_tests.sh
     description: "Nailgun performance tests. Uses venv with python2.7"
     node: fuel-web-master
     properties:

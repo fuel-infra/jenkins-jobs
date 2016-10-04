@@ -2,7 +2,7 @@
     name: 'devops.fuel-library.create_old_env'
     concurrent: true
     description:
-      !include-raw descriptions/fuel-library.create_env
+      !include-raw: descriptions/fuel-library.create_env
     properties:
       - heavy-job:
           weight: '1'
@@ -47,9 +47,9 @@
 
     builders:
       - shell:
-          !include-raw builders/update_venv.sh
+          !include-raw: builders/update_venv.sh
       - shell:
-          !include-raw builders/fuel-library.create_env.sh
+          !include-raw: builders/fuel-library.create_env.sh
 
     publishers:
       - description-setter:

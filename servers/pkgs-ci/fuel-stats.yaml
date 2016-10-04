@@ -52,7 +52,7 @@
             GERRIT_PORT={gerrit_port}
             GERRIT_USER={username-openstack-ci-jenkins}
             GERRIT_USER_MAIL={packaging_gerrit_user_email}
-      - shell: !include-raw-escape builders/fuel-stats-prepare-package-sources.sh
+      - shell: !include-raw-escape: builders/fuel-stats-prepare-package-sources.sh
     triggers:
       - gerrit:
           trigger-on:

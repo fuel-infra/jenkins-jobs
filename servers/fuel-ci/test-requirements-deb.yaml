@@ -1,7 +1,7 @@
 - job:
     builders:
       - shell:
-          !include-raw './builders/test-requirements-deb.sh'
+          !include-raw: './builders/test-requirements-deb.sh'
     name: test-requirements-deb
     node: test-deb-reqs
     properties:

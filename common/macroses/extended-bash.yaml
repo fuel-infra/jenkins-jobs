@@ -1,6 +1,6 @@
 - builder:
     # Helper macros to concatenate 2 text blocks which could come from
-    # different sources (from files by !include-raw-escape and typed inline)
+    # different sources (from files by !include-raw-escape: and typed inline)
     # This macros is needed to build macros from below with included list
     # of core includes.
     #

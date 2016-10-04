@@ -2,7 +2,7 @@
     name: openstack-verify-fuel-web
     builders:
         - shell:
-            !include-raw './builders/openstack-verify-fuel-web.sh'
+            !include-raw: './builders/openstack-verify-fuel-web.sh'
     concurrent: true
     description: |
         Test requests for fuel-web repository <p>Uses venv with python2.6
