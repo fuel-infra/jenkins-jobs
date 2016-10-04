@@ -21,6 +21,8 @@ query_plugins_info=False
 [job_builder]
 ignore_cache=True
 recursive=True
+[__future__]
+param_order_from_yaml=true
 EOF
 
 jenkins-jobs --conf "${CONFIG_PATH}/jenkins_jobs.ini" update "common:servers/${CI_NAME}" "${JOBS_LIST[@]}"
