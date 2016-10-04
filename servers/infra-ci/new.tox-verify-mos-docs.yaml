@@ -1,5 +1,5 @@
 - job-template:
-    name: 'master.tox-verify-mos-docs-{check-name}'
+    name: 'new.tox-verify-mos-docs-{check-name}'
     description: |
        Tox checks on MOS documentation
        Job is currently running in non-voting mode
@@ -48,15 +48,15 @@
           allow-empty: 'true'
 
 - project:
-    name: master.tox-verify-mos-docs
+    name: new.tox-verify-mos-docs
     jobs:
-      - 'master.tox-verify-mos-docs-{check-name}':
+      - 'new.tox-verify-mos-docs-{check-name}':
           check-name: checkniceness
-      - 'master.tox-verify-mos-docs-{check-name}':
+      - 'new.tox-verify-mos-docs-{check-name}':
           check-name: checksyntax
-      - 'master.tox-verify-mos-docs-{check-name}':
+      - 'new.tox-verify-mos-docs-{check-name}':
           check-name: checkdeletions
-      - 'master.tox-verify-mos-docs-{check-name}':
+      - 'new.tox-verify-mos-docs-{check-name}':
           check-name: checklinks
-      - 'master.tox-verify-mos-docs-{check-name}':
+      - 'new.tox-verify-mos-docs-{check-name}':
           check-name: checklang

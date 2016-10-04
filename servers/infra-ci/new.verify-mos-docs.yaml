@@ -2,7 +2,7 @@
 # with new docs layout.
 
 - job:
-    name: master.verify-mos-docs
+    name: new.verify-mos-docs
     description: |
       Check patchsets in mos/mos-docs repository to master branch
 
@@ -40,6 +40,8 @@
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: 'master'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/9.1'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
     wrappers:
@@ -52,7 +54,7 @@
 
     builders:
       - shell:
-          !include-raw: './builders/master.verify-mos-docs.sh'
+          !include-raw: './builders/new.verify-mos-docs.sh'
 
     publishers:
       - html-publisher:
