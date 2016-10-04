@@ -56,7 +56,7 @@ BRANCH_ID="${GERRIT_BRANCH##*/}"
 
 DOCS_PATH="${DOCS_HOST}:${DOCS_ROOT}/fuel-${BRANCH_ID}"
 
-if [ "${GERRIT_BRANCH}" = "master" ]; then
+if [ "${GERRIT_BRANCH}" = "master" -o "${GERRIT_BRANCH}" = "stable/9.1" ]; then
   rsync -rv publish-docs/ "${DOCS_PATH}"
 else
   rsync -rv --delete --exclude pdf/ _build/html/ "${DOCS_PATH}"
