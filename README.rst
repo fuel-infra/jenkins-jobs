@@ -33,7 +33,7 @@ https://ci.fuel-infra.org/
 
 http://jenkins-product.srt.mirantis.net:8080/
 
-``servers/new-product-ci/``
+``servers/product-ci/``
 
 https://product-ci.infra.mirantis.net/
 

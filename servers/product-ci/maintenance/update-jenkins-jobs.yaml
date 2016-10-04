@@ -1,0 +1,5 @@
+- project:
+    name: product-ci.update-jenkins-jobs
+    ci-name: product-ci
+    jobs:
+      - update-jenkins-jobs

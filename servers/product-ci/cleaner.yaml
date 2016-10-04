@@ -1,5 +1,5 @@
 - project:
-    name: new-product-ci-cleaner
+    name: product-ci-cleaner
     devops_25: true
     devops_29: true
     devops_upgrades: true
