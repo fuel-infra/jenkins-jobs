@@ -116,7 +116,7 @@ done
 # otherwise there will be no reason to start updating without any repos to update from
 
 if [[ -n "${UPDATE_FUEL_MIRROR}" ]] ; then
-    UPDATE_MASTER=true
+    UPDATE_MASTER=${UPDATE_MASTER:-true}
 fi
 
 # Adding MOS deb repos to
