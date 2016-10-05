@@ -110,6 +110,7 @@
     - '9.x.{test-type}.{dist}.{testgroup}':
          testgroup: 'install_mu_no_ha_failover'
          properties: |
+          UPDATE_MASTER=False
           FORCE_DISABLE_UPDATES=True
           REPLACE_DEFAULT_REPOS=True
           REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
@@ -122,6 +123,7 @@
     - '9.x.{test-type}.{dist}.{testgroup}':
          testgroup: 'install_mu_ha'
          properties: |
+          UPDATE_MASTER=False
           FORCE_DISABLE_UPDATES=True
           REPLACE_DEFAULT_REPOS=True
           REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
@@ -134,6 +136,7 @@
     - '9.x.{test-type}.{dist}.{testgroup}':
          testgroup: 'install_mu_no_ha_base_negative'
          properties: |
+          UPDATE_MASTER=False
           FORCE_DISABLE_UPDATES=True
           REPLACE_DEFAULT_REPOS=True
           REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
@@ -146,6 +149,7 @@
     - '9.x.{test-type}.{dist}.{testgroup}':
          testgroup: 'install_mu_ironic_ceilometer'
          properties: |
+          UPDATE_MASTER=False
           FORCE_DISABLE_UPDATES=True
           REPLACE_DEFAULT_REPOS=True
           REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
@@ -161,6 +165,7 @@
     - '9.x.{test-type}.{dist}.{testgroup}':
          testgroup: 'install_mu_murano_ha'
          properties: |
+          UPDATE_MASTER=False
           FORCE_DISABLE_UPDATES=True
           REPLACE_DEFAULT_REPOS=True
           REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
@@ -175,6 +180,7 @@
     - '9.x.{test-type}.{dist}.{testgroup}':
          testgroup: 'install_mu_sahara_ha'
          properties: |
+          UPDATE_MASTER=False
           FORCE_DISABLE_UPDATES=True
           REPLACE_DEFAULT_REPOS=True
           REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
