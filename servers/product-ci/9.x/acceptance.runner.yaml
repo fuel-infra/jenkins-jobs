@@ -153,6 +153,9 @@
         - name: '9.x.acceptance.ubuntu.install_mu_sahara_ha'
           current-parameters: true
           kill-phase-on: NEVER
+        - name: '9.x.system_test.ubuntu.tests_configdb_api'
+          current-parameters: true
+          kill-phase-on: NEVER
 
     publishers:
     - description-setter:

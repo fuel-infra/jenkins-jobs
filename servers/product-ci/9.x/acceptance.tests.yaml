@@ -187,3 +187,7 @@
           SLAVE_NODE_MEMORY=8192
           SLAVE_NODE_CPU=4
           SERVTEST_LOCAL_PATH=/srv/downloads
+    - '9.x.{test-type}.{dist}.{testgroup}':
+        testgroup: 'tests_configdb_api'
+        properties: |
+          PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64/
