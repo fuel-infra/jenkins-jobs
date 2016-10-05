@@ -15,6 +15,19 @@
        <b>Contacts:</b> #infra
     node: '{publish-node}'
     concurrent: false
+
+    properties:
+
+    - authorization:
+        plugin-release-team:
+          - job-read
+          - job-build
+          - job-cancel
+        ci:
+          - job-read
+          - job-build
+          - job-cancel
+
     parameters:
       - string:
           name: MOS_VERSION
