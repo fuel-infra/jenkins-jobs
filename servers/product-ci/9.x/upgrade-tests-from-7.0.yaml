@@ -38,12 +38,12 @@
 
     jobs:
       - common/upgrade_chain_2_system_tests:
-          base-testgroup: 'upgrade_ceph_ha_backup'
+          base-testgroup: 'prepare_upgrade_ceph_ha_before_backup'
           upgrade-testgroup: 'upgrade_ceph_ha_tests'
           properties: |
             UPGRADE_TEST_TEMPLATE=fuelweb_test/tests/tests_upgrade/example_upgrade_scenario.yaml
       - common/upgrade_chain_2_system_tests:
-          base-testgroup: 'upgrade_ceph_ha_backup'
+          base-testgroup: 'prepare_upgrade_ceph_ha_before_backup'
           upgrade-testgroup: 'upgrade_cloud_live_migration'
           properties: |
             UPGRADE_TEST_TEMPLATE=fuelweb_test/tests/tests_upgrade/example_upgrade_scenario.yaml
