@@ -77,9 +77,9 @@
           srcpaths: |
             extras/feature-nfv-repos/ubuntu/9.0
             extras/murano-plugin-repos/ubuntu/9.0
-            extras/murano-plugin-repos/centos/mos9.0-centos7
+            extras/murano-plugin-repos/centos/mos9.0-centos7/os
             extras/murano-plugin-repos/release/*/ubuntu/9.0
-            extras/murano-plugin-repos/release/*/centos/mos9.0-centos7
+            extras/murano-plugin-repos/release/*/centos/mos9.0-centos7/os
           update-head: true
 
     jobs:
