@@ -9,6 +9,11 @@
           results-dir: 'publish-docs'
           timer: 'H * * * *'
       - '{version-id}.build-mos-docs':
+          version-id: 9.1
+          branch: stable/9.1
+          results-dir: 'publish-docs'
+          timer: 'H * * * *'
+      - '{version-id}.build-mos-docs':
           version-id: 9.0
           branch: stable/9.0
           timer: 'H * * * *'
