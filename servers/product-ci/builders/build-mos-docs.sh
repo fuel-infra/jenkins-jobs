@@ -37,7 +37,7 @@ VENV="${WORKSPACE}_VENV"
 virtualenv "${VENV}"
 source "${VENV}/bin/activate" || exit 1
 
-if [ "${GERRIT_BRANCH}" = "master" ]; then
+if [ "${GERRIT_BRANCH}" = "master" -o "${GERRIT_BRANCH}" = "stable/9.1" ]; then
   pip install tox
   tox -e publishdocs
 else
