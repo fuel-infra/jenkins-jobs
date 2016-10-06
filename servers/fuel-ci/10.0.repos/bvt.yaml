@@ -43,6 +43,9 @@
 
     builders:
 
+    - inject-fuel-qa-global-defaults:
+        version: '10.0'
+
     - inject: # Defaults
         properties-content: |
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system

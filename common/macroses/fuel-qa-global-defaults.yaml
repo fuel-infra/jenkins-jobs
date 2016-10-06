@@ -1,0 +1,40 @@
+- builder:
+    name: 'inject-fuel-qa-global-defaults'
+    builders:
+    - extended-bash:
+        headers: ''
+        script: |
+          case {version} in
+            8.0)
+
+              ;;
+            9.0)
+
+              ;;
+            9.x)
+
+              ;;
+            10.0)
+
+              ;;
+            0.10)
+                    # used in plugin-ci:
+                    # - elasticsearch-kibana
+                    # - influxdb-grafana
+                    # - lma-collector
+                    # - lma-infrastructure-alerting
+                    # .. and must be fixed
+              ;;
+            master)
+
+              ;;
+            mitaka)
+
+              ;;
+            liberty)
+
+              ;;
+            *)
+              echo 'unsupported version of product'
+              exit 1
+          esac

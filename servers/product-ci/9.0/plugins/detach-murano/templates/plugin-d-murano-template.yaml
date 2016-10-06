@@ -50,6 +50,8 @@
     builders:
     - inject:
           properties-content: '$ADDITIONAL_PARAMETERS' # from 9.0-d-murano-systest-params
+    - inject-fuel-qa-global-defaults:
+        version: '9.0'
     - inject: # Defaults
         properties-content: |
           FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net

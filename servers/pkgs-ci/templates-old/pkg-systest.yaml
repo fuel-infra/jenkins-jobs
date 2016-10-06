@@ -89,7 +89,10 @@
     triggers:
       - zuul
       - timed: '{timer}'
+
     builders:
+      - inject-fuel-qa-global-defaults:
+          version: '{mos_version}'
       - shell: |
           #!/bin/bash
           set -ex

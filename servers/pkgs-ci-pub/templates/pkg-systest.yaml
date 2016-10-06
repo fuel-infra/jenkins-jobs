@@ -89,6 +89,9 @@
       - ansicolor
 
     builders:
+      - inject-fuel-qa-global-defaults:
+          version: '{project-version}'
+
       - inject:
           # Set defaults which could be reinjected
           properties-content: |

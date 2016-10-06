@@ -75,6 +75,8 @@
       - timed: "H */12 * * *"
 
     builders:
+      - inject-fuel-qa-global-defaults:
+          version: '{project-version}'
 
       - extended-bash:
           headers: ''

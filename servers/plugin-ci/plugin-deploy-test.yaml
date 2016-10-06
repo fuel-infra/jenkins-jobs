@@ -73,6 +73,8 @@
           write-description: false
 
     builders:
+      - inject-fuel-qa-global-defaults:
+          version: '{version}'
       - guess-mirror
       - iso-download
       - inject:
