@@ -38,9 +38,20 @@
             - project-compare-type: PLAIN
               project-pattern: 'mos/mos-docs'
               branches:
-                - branch-compare-type: REG_EXP
-                  # Any branch except 'feature/layout'
-                  branch-pattern: 'stable/.*'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/5.0'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/5.1'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/6.0'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/6.1'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/7.0'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/8.0'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/9.0'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
 
