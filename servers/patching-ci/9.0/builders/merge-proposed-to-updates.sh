@@ -15,6 +15,8 @@
 #      :type CUSTOM_SYMLINK: str
 #      :var  DISTRO: distributive name
 #      :type DISTRO: str
+#      :var  PROJECT_NAME: MOS project name (default `mos`)
+#      :type PROJECT_NAME: str
 #      :var  PROJECT_VERSION: MOS version
 #      :type PROJECT_VERSION: float
 #      :var  PUBLISHER_HOST: publisher host
@@ -42,6 +44,8 @@
 
 set -ex
 
+PROJECT_NAME=${PROJECT_NAME:-mos}
+
 # detect timestamp
 TIMESTAMP_TARGET_ARTIFACT="${WORKSPACE}/timestamp.txt"
 TIMESTAMP_TARGET="$(cat "${TIMESTAMP_TARGET_ARTIFACT}")"
@@ -54,8 +58,8 @@ case $DISTRO in
         # fixme: line wrapping, let's see this working first
         # shellcheck disable=SC2086
         # take the first host
-        CURRENT_PROPOSED_SNAPSHOT=$(rsync -l rsync://${REMOTE_HOST%% *}/mirror/mos-repos/centos/mos${PROJECT_VERSION}-centos7-fuel/snapshots/proposed-latest | awk '{print $NF}')
-        echo "NOARTIFACT_MIRROR = http://${REMOTE_HOST%% *}/mos-repos/centos/mos${PROJECT_VERSION}-centos7-fuel/snapshots/${CURRENT_PROPOSED_SNAPSHOT}" > "${NOARTIFACT_MIRROR_ARTIFACT}"
+        CURRENT_PROPOSED_SNAPSHOT=$(rsync -l rsync://${REMOTE_HOST%% *}/mirror/mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos7/snapshots/proposed-latest | awk '{print $NF}')
+        echo "NOARTIFACT_MIRROR = http://${REMOTE_HOST%% *}/mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos7/snapshots/${CURRENT_PROPOSED_SNAPSHOT}" > "${NOARTIFACT_MIRROR_ARTIFACT}"
         ;;
 esac
 
@@ -68,7 +72,7 @@ rsync -avPzt -e "ssh ${SSH_OPTS[*]}" trsync "${USER}@${PUBLISHER_HOST}:${SCRIPT_
 # and run script
 case $DISTRO in
     "centos-7" ) SCRIPT_NAME="merge-rpm-repos.sh"
-                 REMOTE_PATH="/mos-repos/centos/mos${PROJECT_VERSION}-centos7-fuel"
+                 REMOTE_PATH="/mos-repos/centos/${PROJECT_NAME}${PROJECT_VERSION}-centos7"
                  ;;
       "ubuntu" ) SCRIPT_NAME="merge-deb-repos.sh"
                  REMOTE_PATH="/mos-repos/ubuntu/${PROJECT_VERSION}"
@@ -78,7 +82,7 @@ case $DISTRO in
                  ;;
 esac
 #fixme: line wrapping, let's see this working first
-CMD="export UPDATE_HEAD=${UPDATE_HEAD} PROJECT_VERSION=${PROJECT_VERSION} REMOTE_PATH=${REMOTE_PATH} REPO_BASE_PATH=${REPO_BASE_PATH} SIGKEYID=${SIGKEYID} REMOTE_HOST=\"${REMOTE_HOST}\""
+CMD="export UPDATE_HEAD=${UPDATE_HEAD} PROJECT_NAME=${PROJECT_NAME} PROJECT_VERSION=${PROJECT_VERSION} REMOTE_PATH=${REMOTE_PATH} REPO_BASE_PATH=${REPO_BASE_PATH} SIGKEYID=${SIGKEYID} REMOTE_HOST=\"${REMOTE_HOST}\""
 CMD="${CMD}; ${SCRIPT_PATH}/mos-proposed-to-updates/${SCRIPT_NAME} ${TIMESTAMP_SOURCE} ${TIMESTAMP_TARGET} ${CUSTOM_SYMLINK}"
 
 # shellcheck disable=SC2029
