@@ -6,7 +6,7 @@
     fuel-branch: 'stable/6.1'
     updates: true
     prjsuffix: '-stable'
-    build-node: 'osci-fuel-meta-ubuntu'
+    build-node: 'obs-build'
     mailto: 'dburmistrov@mirantis.com'
     is-disabled: ''
     daysToKeep: 10
