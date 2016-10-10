@@ -54,8 +54,14 @@
           update-head: false
 
       - '10.0':
-          timer: '' # manual trigger by request
+          timer: '*/20 * * * *'
           srcpaths: |
+            mos-repos/centos/mos10.0-centos7/os
+            mos-repos/centos/mos10.0-centos7/proposed
+            mos-repos/centos/mos10.0-centos7/updates
+            mos-repos/centos/mos10.0-centos7/security
+            mos-repos/centos/mos10.0-centos7/holdback
+            mos-repos/centos/mos10.0-centos7/hotfix
             mos-repos/ubuntu/10.0
           update-head: true
 
