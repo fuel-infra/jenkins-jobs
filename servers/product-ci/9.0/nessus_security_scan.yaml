@@ -34,9 +34,9 @@
         default: /home/jenkins/venv-nailgun-tests-2.9
     - string:
         name: UBUNTU_MIRROR_ID
-        default: latest-stable
+        default: latest
         description: |
-          'latest' - latest available; 'latest-stable' - mirror from successful run of 9.0.test_all job; 'ubuntu-2015-01-01-030500'
+          'latest' - latest available
     - string:
         name: MIRROR_UBUNTU
         default:
@@ -97,15 +97,6 @@
         allow-empty: true
         artifacts: '**/nosetests.xml,logs/*'
         latest-only: false
-    - junit:
-        keep-long-stdio: false
-        results: '**/nosetests.xml'
-    - trigger-parameterized-builds:
-      - project: '9.0-test-reports-Testrail'
-        condition: ALWAYS
-        property-file: links.txt
-        predefined-parameters: TEST_JOB_NAME=$JOB_NAME
-        triggerWithNoParameters: false
     - email-ext:
         default-subject: '$DEFAULT_SUBJECT'
         failure: true

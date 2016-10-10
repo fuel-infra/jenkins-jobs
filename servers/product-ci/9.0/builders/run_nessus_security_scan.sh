@@ -2,9 +2,8 @@
 
 set -ex
 
-TEST_ISO_JOB_URL="${JENKINS_URL}job/${TEST_ALL_JOB_NAME}/"
-curl -fsS "${TEST_ISO_JOB_URL}"lastSuccessfulBuild/artifact/magnet_link.txt > magnet_link.txt
-MAGNET_LINK=$(sed s/MAGNET_LINK=// magnet_link.txt)
+# link from https://mirantis.jira.com/wiki/display/PRD/9.0+release
+MAGNET_LINK='magnet:?xt=urn:btih:bfec808dd71ff42c5613a3527733d9012bb1fabc&dn=MirantisOpenStack-9.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-9.0.iso'
 
 ###################### Get MIRROR HOST ###############
 
@@ -42,10 +41,6 @@ esac
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
 
     case "${UBUNTU_MIRROR_ID}" in
-        latest-stable)
-            UBUNTU_MIRROR_ID=$(curl -fsS "${TEST_ISO_JOB_URL}"lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt | awk -F '[ =]' '{print $NF}')
-            UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
-            ;;
         latest)
             UBUNTU_MIRROR_URL="$(curl ${MIRROR_HOST}ubuntu-latest.htm)"
             ;;
