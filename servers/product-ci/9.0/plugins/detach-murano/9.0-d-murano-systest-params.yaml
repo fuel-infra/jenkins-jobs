@@ -25,7 +25,9 @@
     - text:
         name: ADDITIONAL_PARAMETERS
         default: |
-          SLAVE_NODE_MEMORY=5072
+          SLAVE_NODE_MEMORY=8192
+          KVM_USE=true
+          SLAVE_NODE_CPU=2
           PATCHING_DISABLE_UPDATES=true
           # Depends on PLUGIN_RPM_FILENAME_FROM_REPO"
           #RPM_PACKAGES_URLS=http://REPO/detach-murano-1.0-1.0.0-20160921134638.noarch.rpm.Depends
