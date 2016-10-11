@@ -9,7 +9,7 @@
 #  - skip environments younger then global minimal lifetime
 #  - skip jobs not executed by jenkins until they pass max lifetime
 #  - skip jobs which looks like latest execution in jenkins, start/execution
-#    time less then 1 h (can be omited by protect_latest)
+#    time less then 1 h (can be omitted by protect_latest)
 #  - delete all job older then max lifetime
 #
 
@@ -17,15 +17,6 @@ import datetime
 import os
 import re
 import subprocess
-
-_boolean_states = {'1': True, 'yes': True, 'true': True, 'on': True,
-                   '0': False, 'no': False, 'false': False, 'off': False}
-
-
-def get_var_as_bool(name, default):
-    value = os.environ.get(name, '')
-    return _boolean_states.get(value.lower(), default)
-
 
 #
 # Definition for known systests, this dictionary should contain all known
@@ -39,8 +30,8 @@ def get_var_as_bool(name, default):
 #
 tests_list = [
 
-    # Custom tests run on custom CI should be kept for a day.
-    # Could be kept for more time by request and disconnecting slave
+    # custom tests run on custom CI should be kept for a day
+    # could be kept for more time by request and disconnecting slave
     ('custom', {
         'env_regexp': '.*\.custom\..*',
         'lifetime': int(os.environ.get('LIFETIME_CUSTOM', 24*3)),
@@ -64,7 +55,7 @@ tests_list = [
         'protect_latest': True,
     }),
 
-    # Acceptance tests executed every week
+    # acceptance tests executed every week
     # should be investigated by QA team before next run
     # cannot be deleted before next acceptance test, need to store
     # at least 7 days
@@ -74,7 +65,7 @@ tests_list = [
         'protect_latest': False,
     }),
 
-    # Upgrade tests, executed every day or less (based on upgrade scenario)
+    # upgrade tests, executed every day or less (based on upgrade scenario)
     # should be investigated by QA team but most useful jobs runs every day
     # so cleanup should be performed before next test execution
     ('upgrade', {
@@ -85,31 +76,33 @@ tests_list = [
 
 ]
 
-# Default lifetime for not specified tests
+# default lifetime for not specified tests
 lifetime_other = int(os.environ.get('LIFETIME_OTHER', 16))
 
-# Define minimal safety lifetime, we dont want to delete fresh systems,
+# define minimal safety lifetime, we dont want to delete fresh systems,
 # defined in hours
 lifetime_minimal = 6
 
-# Define maximum lifetime, this is used for jobs which are protected by
+# define maximum lifetime, this is used for jobs which are protected by
 # protect_latest variable, latest protection is not respected for enviroments
 # which are longer then max lifetime
 lifetime_max = 120
 
+# define 'jenkins' user home directory
+jenkins_home = '/home/jenkins'
 
 class Cleaner():
     def __init__(self):
 
-        # Get job list from jobs.txt and prepare dictionary with run parameters
+        # get job list from jobs.txt and prepare dictionary with run parameters
         self.prefixes = {}
         with open('jobs.txt', 'r') as jobs_all:
             for job in jobs_all:
 
-                # Get job parameters
+                # get job parameters
                 job_name, env_prefix, last_ts_txt = job.strip().split()
 
-                # Skip jobs without execution, it should not exists on slaves
+                # skip jobs without execution, it should not exists on slaves
                 if last_ts_txt == 'None':
                     continue
 
@@ -120,19 +113,12 @@ class Cleaner():
                     'latest_timestamp': last_ts.replace(microsecond=0),
                 }
 
-        # prepare list of devops envs to iterate
+        # prepare list of devops envs to iterate by looking for bin/dos.py file
         self.devops = []
-        if get_var_as_bool('DEVOPS_2_9', True):
-            self.devops.append('/home/jenkins/venv-nailgun-tests-2.9')
-        if get_var_as_bool('DEVOPS_2_5', False):
-            self.devops.append('/home/jenkins/venv-nailgun-tests')
-        # upgrade tests are using separate venv
-        if get_var_as_bool('DEVOPS_UPGRADES', False):
-            self.devops.append('/home/jenkins/venv-nailgun-tests-upgrades')
-        if get_var_as_bool('RELEASE_60', False):
-            self.devops.append('/home/jenkins/qa-venv-6.0')
-        if get_var_as_bool('RELEASE_61', False):
-            self.devops.append('/home/jenkins/qa-venv-6.1')
+        # list all directories in jenkins home to find venvs
+        for directory in os.listdir(jenkins_home):
+            if os.path.exists(os.path.join(jenkins_home, directory, 'bin/dos.py')):
+                self.devops.append(os.path.join(jenkins_home, directory))
 
     def start(self):
         # cleaner itself
@@ -174,12 +160,12 @@ class Cleaner():
 
                 print '\nAnalyzing {} environment:'.format(env_name)
 
-                # Skip protected environemts
+                # skip protected environemts
                 if env_name.startswith('env_'):
                     print '- environment is env_* - skipping'
                     continue
 
-                # Get lifetime for this type of env
+                # get lifetime for this type of env
                 (env_type, env_lifetime_hours, env_protect_latest) = \
                     self.get_job_lifetime(env_name)
                 print '- env type is {0}'.format(env_type)
@@ -197,7 +183,7 @@ class Cleaner():
                     )
                     env_prefix = self.get_prefix_by_env_name(env_name)
 
-                    # Delete all environments after max lifetime
+                    # delete all environments after max lifetime
                     if time_diff > datetime.timedelta(hours=lifetime_max):
                         print '- remove - max lifetime ({}h) passed'.format(
                             lifetime_max
@@ -205,7 +191,7 @@ class Cleaner():
                         self.local_remove_env(dos_path, env_name)
                         continue
 
-                    # Skip environment without jenkins job
+                    # skip environment without jenkins job
                     if not env_prefix:
                         print '- cannot find related jenkins job' \
                               ', wait for max lifetime ({}h)'.format(
@@ -213,7 +199,7 @@ class Cleaner():
                         )
                         continue
 
-                    # Get latests jenkins job execution for this prefix
+                    # get latests jenkins job execution for this prefix
                     timestamp_env_latest = \
                         self.prefixes[env_prefix]['latest_timestamp']
                     print '- jenkins job = {}'.format(
@@ -232,10 +218,9 @@ class Cleaner():
                         )
                         continue
 
-                    # Check latest job protection, if is set we will not delete
-                    # envs which have time execution similar to latest job
-                    # start
-                    # Additionaly check max lifetime, if job is older we can
+                    # check latest job protection, if is set we will not delete
+                    # envs which have time execution similar to latest job start
+                    # additionaly check max lifetime, if job is older we can
                     # deleted it
                     time_diff_latest = \
                         timestamp_env_local - timestamp_env_latest
