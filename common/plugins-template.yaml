@@ -48,6 +48,8 @@
         colormap: xterm
 
     builders:
+    - inject-fuel-qa-global-defaults:
+        version: '{version-id}'
     - inject:
         properties-content: |
           VENV_PATH={venvpath}
