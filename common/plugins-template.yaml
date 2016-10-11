@@ -1,16 +1,20 @@
-- defaults:
-    name: '{version-id}.{test-type}.{dist}.plugins.{testgroup}'
-    make-snapshot: 'false'
-
 - job-template:
     name: '{version-id}.{test-type}.{dist}.plugins.{testgroup}'
-    description: '{version-id} {test-type} test group'
+    id: common/plugins-template
 
-    disabled: false
+    plugins-template/description: ''
+    plugins-template/node: ''
+    plugins-template/common-overrides-plain-properties: ''
+    plugins-template/custom-overrides-plain-properties: ''
+    plugins-template/make-snapshot: 'false'
+    plugins-template/job-weight: 8
+
+    description: '{version-id} {test-type} test group'
     concurrent: true
-    defaults: '{version-id}.{test-type}.{dist}.plugins.{testgroup}'
-    jg-properties: ''
-    node: 'systest'
+    disabled: false
+    block-downstream: false
+    block-upstream: false
+    node: '{plugins-template/node}'
 
     logrotate:
       artifactDaysToKeep: 14
@@ -19,8 +23,8 @@
       numToKeep: 50
 
     properties:
-      - heavy-job:
-          weight: 8
+    - heavy-job:
+        weight: '{plugins-template/job-weight}'
 
     parameters:
     - string:
@@ -30,17 +34,35 @@
         name: ENV_PREFIX
         default: '{version-id}.{test-type}.{dist}.plugins.{testgroup}'
         description: 'Environment prefix'
+    - string:
+        name: UPGRADE_TARBALL_MAGNET_LINK
+        default: $UPGRADE_TARBALL_MAGNET_LINK
+        description: 'Upgrade tarball magnet link'
+    - string:
+        name: UBUNTU_MIRROR_ID
+        default: $UBUNTU_MIRROR_ID
+        description: |
+          'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+    - string:
+        name: CUSTOM_VERSION
+        default: $CUSTOM_VERSION
+        description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+    - bool:
+        name: ENABLE_PROPOSED
+        default: $ENABLE_PROPOSED
+        description: 'If false only stable repositories are used'
+
 
     scm:
     - main-git:
-        reponame: '{reponame}'
-        repobranch: '{repobranch}'
+        reponame: '{plugins-template/reponame}'
+        repobranch: '{plugins-template/repobranch}'
         basedir: ''
 
     wrappers:
     - timeout:
         fail: false
-        timeout: '{timeout}'
+        timeout: '{plugins-template/timeout}'
         write-description: false
     - inject-passwords:
         global: true
@@ -52,7 +74,7 @@
         version: '{version-id}'
     - inject:
         properties-content: |
-          VENV_PATH={venvpath}
+          VENV_PATH={plugins-template/venvpath}
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
@@ -66,11 +88,11 @@
           SEPARATE_SERVICE_HAPROXY_PLUGIN_URL=https://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/detach_haproxy-2.0-2.0.0-1.noarch.rpm
           SEPARATE_SERVICE_BALANCER_PLUGIN_URL=https://product-ci.infra.mirantis.net/job/{version-id}.build-fuel-plugins/lastSuccessfulBuild/artifact/built_plugins/external_loadbalancer-2.0-2.0.0-1.noarch.rpm
           SLAVE_NODE_MEMORY=3072
-          MAKE_SNAPSHOT={make-snapshot}
+          MAKE_SNAPSHOT={plugins-template/make-snapshot}
     - inject: # job-group level overrides
-        properties-content: '{jg-properties}'
+        properties-content: '{plugins-template/common-overrides-plain-properties}'
     - inject: # overrides
-        properties-content: '{properties}'
+        properties-content: '{plugins-template/custom-overrides-plain-properties}'
     - shell:
         !include-raw-escape: 'scripts/run_plugin_example_system_test.sh'
 
