@@ -1,23 +1,29 @@
 - job-template:
     name: '9.x.{test-type}.{dist}.{testgroup}'
-    description: 'Run Swarm Test {testgroup}'
-    node: '{node}'
-    concurrent: true
+    id: product-ci/9.x/templates/swarm-test
 
-    email: 'ci+bvt@mirantis.com'
-    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
-    env_suffix: $BUILD_ID
-    properties: ''
-    properties-file: ''
-    timeout: '180'
-    weight: '7'
-    dist: ubuntu
-    test-type: system_test
-    pre-script: |
+    # swarm-test/node: ''
+    swarm-test/email: 'ci+bvt@mirantis.com'
+    swarm-test/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    swarm-test/env_suffix: $BUILD_ID
+    # swarm-test/default_pool: ''
+
+    swarm-test/custom-overrides-plain-properties: ''
+    swarm-test/custom-overrides-properties-file: ''
+    swarm-test/timeout: '180'
+    swarm-test/weight: '7'
+    swarm-test/dist: ubuntu
+    swarm-test/test-type: system_test
+    swarm-test/pre-script: |
         echo "-SKIP-"
-    post-script: |
+    swarm-test/post-script: |
         echo "-SKIP-"
-    make-snapshot: 'false'
+    swarm-test/make-snapshot: 'false'
+
+
+    description: 'Run Swarm Test {testgroup}'
+    node: '{swarm-test/node}'
+    concurrent: true
 
     logrotate:
       artifactDaysToKeep: -1
@@ -33,7 +39,7 @@
 
     properties:
     - heavy-job:
-        weight: '{weight}'
+        weight: '{swarm-test/job-weight}'
 
     scm:
     - main-git:
@@ -44,7 +50,7 @@
     wrappers:
     - timeout:
         fail: false
-        timeout: '{timeout}'
+        timeout: '{swarm-test/timeout}'
         write-description: false
     - ansicolor:
         colormap: xterm
@@ -58,27 +64,27 @@
     - inject: # Defaults
         properties-content: |
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-          POOL_DEFAULT={default_pool}
+          POOL_DEFAULT={swarm-test/default_pool}
           ENV_PREFIX=$JOB_NAME
-          ENV_SUFFIX={env_suffix}
+          ENV_SUFFIX={swarm-test/env_suffix}
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
-          VENV_PATH={venvpath}
-          MAKE_SNAPSHOT={make-snapshot}
+          VENV_PATH={swarm-test/venvpath}
+          MAKE_SNAPSHOT={swarm-test/make-snapshot}
           KEEP_ENV=true
 
     - inject: # Overrides
-        properties-content: '{properties}'
-        properties-file: '{properties-file}'
+        properties-content: '{swarm-test/custom-overrides-plain-properties}'
+        properties-file: '{swarm-test/custom-overrides-properties-file}'
     - shell: |
         #!/bin/bash
         echo "=== [systest PRE-script] ==="
-        {pre-script}
+        {swarm-test/pre-script}
     - 9x-run-sys-test
     - shell: |
         #!/bin/bash
         echo "=== [systest POST-script] ==="
-        {post-script}
+        {swarm-test/post-script}
 
     publishers:
 
