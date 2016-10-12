@@ -273,7 +273,7 @@
               SLAVE_NODE_CPU=2
 
         - services_reconfiguration_thread_2:
-            swarm-test/timeout: '600'
+            swarm-test/timeout: '660'
             swarm-test/custom-overrides-plain-properties: |
               DISABLE_SSL=true
               SLAVE_NODE_CPU=2
