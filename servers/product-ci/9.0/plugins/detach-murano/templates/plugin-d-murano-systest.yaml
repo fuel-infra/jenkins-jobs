@@ -47,8 +47,6 @@
         colormap: xterm
 
     builders:
-    - inject:
-          properties-content: '$ADDITIONAL_PARAMETERS' # from 9.0-d-murano-systest-params
     - inject-fuel-qa-global-defaults:
         version: '9.0'
     - inject: # Defaults
@@ -59,6 +57,8 @@
           TEST_GROUP={testgroup}
     - inject: # Overrides
         properties-content: '{properties}'
+    - inject:
+        properties-content: '$ADDITIONAL_PARAMETERS' # from 9.0-d-murano-systest-params
     - guess-mirror
     - extended-bash:
         headers: ''
