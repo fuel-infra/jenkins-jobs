@@ -9,13 +9,13 @@
 
               ;;
             9.0)
-              inject SLAVE_NODE_MEMORY 4096
+              inject SLAVE_NODE_MEMORY 3968
               ;;
             9.x)
-              inject SLAVE_NODE_MEMORY 4096
+              inject SLAVE_NODE_MEMORY 3968
               ;;
             10.0)
-              inject SLAVE_NODE_MEMORY 4096
+              inject SLAVE_NODE_MEMORY 3968
               ;;
             0.10)
                     # used in plugin-ci:
