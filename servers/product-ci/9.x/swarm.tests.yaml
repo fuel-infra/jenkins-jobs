@@ -12,7 +12,6 @@
 
     # fixme: need additional section in template for common overrides
     swarm-test/custom-overrides-plain-properties: |
-      SLAVE_NODE_MEMORY=3072
       FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
       ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
     # fixme: need additional section in template for common overrides
@@ -21,7 +20,6 @@
 
     swarm-test-plugins/node: systest
     swarm-test-plugins/custom-overrides-plain-properties: |
-      SLAVE_NODE_MEMORY=3072
       FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
       ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
 
@@ -148,7 +146,6 @@
             swarm-test/node: 'huge-systest'
             swarm-test/custom-overrides-plain-properties: |
               SLAVE_NODE_CPU=2
-              SLAVE_NODE_MEMORY=3072
               SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
 
         - repeatable_image_based

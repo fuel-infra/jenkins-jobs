@@ -65,7 +65,6 @@
           VENV_PATH={swarm-test-plugins/venvpath}
           CLASSIC_PROVISIONING=false
           KEEP_ENV=true
-          SLAVE_NODE_MEMORY=3072
 
     - inject: # Overrides
         properties-content: '{swarm-test-plugins/custom-overrides-plain-properties}'
