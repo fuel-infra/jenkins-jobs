@@ -56,7 +56,7 @@
       # general settings
       - string:
           name: PARALLELISM
-          default: '10'
+          default: '3'
           description: 'how many parallel tests to run'
       - string:
           name: INCLUDE
