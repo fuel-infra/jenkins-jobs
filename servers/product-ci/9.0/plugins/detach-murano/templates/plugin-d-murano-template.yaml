@@ -107,9 +107,3 @@
           condition: ALWAYS
           predefined-parameters: |
               TEST_JOB_NAME=$JOB_NAME
-              TESTRAIL_TEST_SUITE=[9.0] System Tests
-              TESTRAIL_MILESTONE={plugin-version}
-              LAUNCHPAD_MILESTONE={plugin-version}
-              TESTRAIL_PROJECT=Murano plugin
-              HANDLE_BLOCKED=true
-          triggerWithNoParameters: false
