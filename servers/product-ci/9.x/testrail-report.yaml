@@ -1,7 +1,7 @@
 - project:
     name: 9.x.test-reports
     version: '9.x'
-    report-version: '9.1'
+    report-version: '9.2'
     repobranch: 'origin/stable/mitaka'
 
     jobs:
@@ -10,14 +10,14 @@
         test-type:  'system_test'
         properties: |
           TESTS_RUNNER=9.x.swarm.runner
-          TESTRAIL_TEST_SUITE=[{report-version}] Swarm
+          TESTRAIL_TEST_SUITE=[9.1] Swarm
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}
     - '{version}.{test-type}.test-reports':
         test-type:  'acceptance'
         properties: |
           TESTS_RUNNER=9.x.acceptance.runner
-          TESTRAIL_TEST_SUITE=[{report-version}][Fuel] Auto Release Acceptance
+          TESTRAIL_TEST_SUITE=[9.1][Fuel] Auto Release Acceptance
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}
     - '{version}.{test-type}.plugin-ldap.test-reports':
