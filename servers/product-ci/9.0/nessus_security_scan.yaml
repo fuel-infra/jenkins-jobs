@@ -78,7 +78,7 @@
         - 'origin/stable/mitaka'
 
     triggers:
-    - timed: '0 23 * * 1'
+    - timed: '0 23 */2 * *'
 
 
     wrappers:
