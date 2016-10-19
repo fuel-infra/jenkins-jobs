@@ -54,11 +54,3 @@
     jobs:
       - 'new.tox-verify-mos-docs-{check-name}':
           check-name: checkniceness
-      - 'new.tox-verify-mos-docs-{check-name}':
-          check-name: checksyntax
-      - 'new.tox-verify-mos-docs-{check-name}':
-          check-name: checkdeletions
-      - 'new.tox-verify-mos-docs-{check-name}':
-          check-name: checklinks
-      - 'new.tox-verify-mos-docs-{check-name}':
-          check-name: checklang
