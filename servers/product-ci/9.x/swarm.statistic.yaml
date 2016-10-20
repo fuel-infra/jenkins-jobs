@@ -28,8 +28,8 @@
     - inject:
          properties-content: |
            TEST_RUNNER_JOB_NAME=9.x.swarm.runner
-           TESTRAIL_MILESTONE=9.1
-           LAUNCHPAD_MILESTONE=9.1
+           TESTRAIL_MILESTONE=9.2
+           LAUNCHPAD_MILESTONE=9.2
            HANDLE_BLOCKED=true
            PUBLISH=true
            OUTPUT_FILE=bugs_link_stat
