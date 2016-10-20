@@ -29,7 +29,7 @@
           VENV_PATH={venvpath}
           TESTS_RUNNER=$TEST_JOB_NAME
           TESTRAIL_TEST_SUITE=Smoke/BVT
-          TESTRAIL_MILESTONE=9.1
+          TESTRAIL_MILESTONE=9.2
     - testrail-report
 
     publishers:
