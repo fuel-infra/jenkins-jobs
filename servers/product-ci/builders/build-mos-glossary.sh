@@ -47,9 +47,6 @@ deactivate
 # shellcheck disable=SC2029
 ssh "${DOCS_USER}@${DOCS_HOST}" "mkdir -p ${DOCS_ROOT}"
 
-# BRANCH_ID is part of GERRIT_BRANCH after last "/"
-BRANCH_ID="${GERRIT_BRANCH##*/}"
-
-DOCS_PATH="${DOCS_USER}@${DOCS_HOST}:${DOCS_ROOT}/fuel-${BRANCH_ID}/glossary/"
+DOCS_PATH="${DOCS_USER}@${DOCS_HOST}:${DOCS_ROOT}/glossary/"
 
     rsync -rv doc/build/html/ "${DOCS_PATH}"

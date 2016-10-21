@@ -5,8 +5,8 @@
 
       Build glossary from mos/glossary for branch master and
       publish it to <a
-      href="https://docs.mirantis.com/openstack/fuel/fuel-master/glossary">
-      https://docs.mirantis.com/openstack/fuel/fuel-master/glossary</a>
+      href="https://docs.mirantis.com/glossary">
+      https://docs.mirantis.com/glossary</a>
 
       <p>Contacts: ci-team at #infra in Slack</p>
     concurrent: false
@@ -51,7 +51,7 @@
           properties-content: |
             DOCS_USER=docs
             DOCS_HOST=docs.fuel-infra.org
-            DOCS_ROOT=/var/www/openstack/fuel/
+            DOCS_ROOT=/var/www/
       - shell:
           !include-raw: builders/build-mos-glossary.sh
 
