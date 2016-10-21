@@ -1,14 +1,14 @@
 - project:
-    name: '9.0.d-murano for branch: 9.0/release/1.1.0'
+    name: '9.0.d-murano for branch: 9.0/release/1.2.0'
     # ISO-version
     version: '9.0'
     # For job-name rendering only
-    plugin-version-suffix: '.1.1.0'
+    plugin-version-suffix: '.1.2.0'
     # REPO url depended.Example:
-    # http://mirror/extras/murano-plugin-repos/release/1.1.0/centos/
+    # http://mirror/extras/murano-plugin-repos/release/1.2.0/centos/
     #                                          ^^^^^^^^^^^^^
 
-    plugin-version: "release/1.1.0"
+    plugin-version: "release/1.2.0"
     plugin-rpm-mask: "detach-murano"
     plugin-pkg-dist: "centos7"
     plugin-repo-sub-url: "extras/murano-plugin-repos/"
@@ -16,8 +16,8 @@
     plugin-test-repo: 'fuel-plugin-murano-tests'
     plugin-test-commit: 'master'
 
-    tr_milestone: '1.1.0'
-    lp_milestone: '1.1.0'
+    tr_milestone: '1.2.0'
+    lp_milestone: '1.2.0'
 
 
     jobs:

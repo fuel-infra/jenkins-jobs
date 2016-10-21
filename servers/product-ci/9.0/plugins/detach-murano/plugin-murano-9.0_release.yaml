@@ -5,7 +5,7 @@
     # For job-name rendering only
     plugin-version-suffix: ''
     # REPO url depended.Example:
-    # http://mirror/extras/murano-plugin-repos/release/1.1.0/centos/
+    # http://mirror/extras/murano-plugin-repos/release/1.3.0/centos/
     #                                          ^^^^^^^^^^^^^
 
     plugin-version: ""
@@ -17,8 +17,8 @@
     plugin-test-commit: 'master'
 
     # TestRail milestone always shifted to (current_release+1)
-    tr_milestone: '1.2.0'
-    lp_milestone: '1.2.0'
+    tr_milestone: '1.3.0'
+    lp_milestone: '1.3.0'
 
     jobs:
     - '9.0.d-murano{plugin-version-suffix}.runner':
