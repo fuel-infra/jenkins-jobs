@@ -162,7 +162,7 @@
     name: authorization-allow-descriptions-puppetgroup
     properties:
       - authorization:
-          fuel-puppet:
+          mkarpin:
             - job-read
             - job-discover
             - run-update
