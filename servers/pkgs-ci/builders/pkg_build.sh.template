@@ -10,6 +10,7 @@ set -o xtrace
 
 test -f mirror.setenvfile && source mirror.setenvfile
 export REMOTE_REPO_HOST=${{MIRROR_HOST:-mirror.fuel-infra.org}}
+export REMOTE_REQUEST_REPO_HOST={repo-host}
 
 ############################
 # Project parameters
