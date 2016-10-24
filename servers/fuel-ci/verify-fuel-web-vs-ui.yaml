@@ -16,7 +16,7 @@
           max-per-node: 1
           option: category
       - authorization:
-          web-ui-team:
+          gmikhailov:
             - job-read
             - job-build
             - job-cancel
