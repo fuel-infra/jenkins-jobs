@@ -1,0 +1,18 @@
+- project:
+    name: '9.0.d-murano for branch: 9.0/plugin'
+
+    # ISO-version
+    version: '9.0'
+    # For job-name rendering only
+    plugin-version-suffix: ''
+    # REPO url depended.Example:
+    # http://mirror/extras/murano-plugin-repos/release/1.2.0/centos/
+    #                                          ^^^^^^^^^^^^^
+
+    test-type: 'system_test'
+
+    jobs:
+    - '{version}.{test-type}.d-murano{plugin-version-suffix}.timer':
+        timer: '0 21 * * 1-7'
+
+    - '{version}.d-murano{plugin-version-suffix}.runner'

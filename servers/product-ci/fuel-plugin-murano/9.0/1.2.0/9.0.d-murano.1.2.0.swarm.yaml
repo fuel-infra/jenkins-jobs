@@ -1,0 +1,26 @@
+- project:
+    name: '9.0.d-murano swarm tests for 9.0/release/1.2.0'
+    test-type: 'system_test'
+    description: '9.0 murano swarm test group'
+    murano-swarm-test/node: 'systest'
+    murano-swarm-test/timeout: '480'
+    dist: ubuntu
+    version: '9.0'
+    plugin-version-suffix: '.1.2.0'
+
+    murano-swarm-test/job-weight: '6'
+
+    jobs:
+    - product-ci/fuel-plugin-murano/templates/murano-swarm-test:
+
+        testgroup:
+
+        - deploy_murano_bvt
+
+        - failover
+
+        - murano_plugin_upgrade
+
+        - post_installation
+
+        - check_scaling_murano

@@ -1,5 +1,5 @@
 - parameter:
-    name: 9.0-d-murano-systest-params
+    name: d-murano-systest-params
 
     parameters:
 

@@ -1,5 +1,5 @@
 - job-template:
-    name: '9.0.main.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
+    name: '{version}.main.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
     description: 'Run d-murano Build Verification Test {testgroup}'
 
     email: 'fuel-plugin-murano@mirantis.com'
@@ -23,10 +23,10 @@
       numToKeep: 50
 
     parameters:
-    - 9.0-d-murano-systest-params
+    - d-murano-systest-params
     - string: # added for cleaner which searches for job parameter
         name: ENV_PREFIX
-        default: '9.0.main.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
+        default: '{version}.main.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
 
     properties:
     - heavy-job:

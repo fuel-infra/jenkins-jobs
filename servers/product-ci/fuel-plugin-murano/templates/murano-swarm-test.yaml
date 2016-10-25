@@ -1,19 +1,22 @@
 - job-template:
-    name: '9.0.{test-type}.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
+    name: '{version}.{test-type}.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
+    id: product-ci/fuel-plugin-murano/templates/murano-swarm-test
+
+    murano-swarm-test/email: 'fuel-plugin-murano@mirantis.com'
+    murano-swarm-test/env_suffix: $BUILD_ID
+
+    murano-swarm-test/properties-file: ''
+    murano-swarm-test/timeout: '240'
+    murano-swarm-test/weight: '6'
+    murano-swarm-test/dist: ubuntu
+    murano-swarm-test/test-type: system_test
+    murano-swarm-test/make-snapshot: 'false'
+    murano-swarm-test/properties-content: ''
+
+
     description: 'Run System Test {testgroup}'
-    node: '{node}'
+    node: '{murano-swarm-test/node}'
     concurrent: true
-
-    email: 'fuel-plugin-murano@mirantis.com'
-    env_suffix: $BUILD_ID
-    properties-file: ''
-    timeout: '240'
-    weight: '7'
-    dist: ubuntu
-    test-type: system_test
-    make-snapshot: 'false'
-    properties-content: ''
-
 
     logrotate:
       artifactDaysToKeep: -1
@@ -22,14 +25,14 @@
       numToKeep: 50
 
     parameters:
-    - 9.0-d-murano-systest-params
+    - d-murano-systest-params
     - string: # added for cleaner which searches for job parameter
         name: ENV_PREFIX
-        default: '9.0.{test-type}.{dist}.d-murano.{testgroup}'
+        default: '{version}.{test-type}.{dist}.d-murano.{testgroup}'
 
     properties:
     - heavy-job:
-        weight: '{weight}'
+        weight: '{murano-swarm-test/job-weight}'
 
     scm:
     - main-git:
@@ -40,7 +43,7 @@
     wrappers:
     - timeout:
         fail: false
-        timeout: '{timeout}'
+        timeout: '{murano-swarm-test/timeout}'
         write-description: false
     - ansicolor:
         colormap: xterm
@@ -58,16 +61,16 @@
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
           POOL_DEFAULT=10.109.0.0/16:24
           ENV_PREFIX=$JOB_NAME
-          ENV_SUFFIX={env_suffix}
-          OPENSTACK_RELEASE={dist}
+          ENV_SUFFIX={murano-swarm-test/env_suffix}
+          OPENSTACK_RELEASE={murano-swarm-test/dist}
           TEST_GROUP={testgroup}
-          MAKE_SNAPSHOT={make-snapshot}
+          MAKE_SNAPSHOT={murano-swarm-test/make-snapshot}
           KEEP_ENV=true
     - inject: # Overrides
-        properties-content: '{properties-content}'
-        properties-file: '{properties-file}'
+        properties-content: '{murano-swarm-test/properties-content}'
+        properties-file: '{murano-swarm-test/properties-file}'
     - inject:
-        properties-content: '$ADDITIONAL_PARAMETERS' # from 9.0-d-murano-systest-params
+        properties-content: '$ADDITIONAL_PARAMETERS' # from d-murano-systest-params
     - guess-mirror
     - extended-bash:
         headers: ''
@@ -103,7 +106,7 @@
         regexp-for-failed: "'Description string: (.*)'"
 
     - trigger-parameterized-builds:
-        - project: '9.0.{test-type}.d-murano{plugin-version-suffix}.test-reports'
+        - project: '{version}.{test-type}.d-murano{plugin-version-suffix}.test-reports'
           condition: ALWAYS
           predefined-parameters: |
               TEST_JOB_NAME=$JOB_NAME
