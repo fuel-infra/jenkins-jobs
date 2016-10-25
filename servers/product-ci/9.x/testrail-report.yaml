@@ -24,7 +24,7 @@
         test-type:  'ldap_deploy_test'
         properties: |
           TESTRAIL_MILESTONE={report-version}
-          TESTRAIL_SUITE=[{report-version}][MOSQA] Automated Cloud Testing
+          TESTRAIL_SUITE=[9.1][MOSQA] Automated Cloud Testing
     - '{version}.{test-type}.test-reports':
         test-type:  'upgrades'
         properties: |
