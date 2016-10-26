@@ -1,10 +1,12 @@
 - job-template:
     name: "{version}.{test-type}.d-murano{plugin-version-suffix}.timer"
+    id: product-ci/fuel-plugin-murano/templates/murano-timer
     description: |
       Trigger 9.0.system_test.runner with latest stable snapshot.
 
 
     node: 'runner'
+    test-type: 'system_test'
 
     properties:
     - heavy-job:

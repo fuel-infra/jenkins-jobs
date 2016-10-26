@@ -1,5 +1,6 @@
 - job-template:
     name: '{version}.main.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
+    id: product-ci/fuel-plugin-murano/templates/murano-bvt
     description: 'Run d-murano Build Verification Test {testgroup}'
 
     email: 'fuel-plugin-murano@mirantis.com'

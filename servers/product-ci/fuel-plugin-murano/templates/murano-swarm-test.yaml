@@ -13,6 +13,8 @@
     murano-swarm-test/make-snapshot: 'false'
     murano-swarm-test/properties-content: ''
 
+    dist: ubuntu
+    test-type: 'system_test'
 
     description: 'Run System Test {testgroup}'
     node: '{murano-swarm-test/node}'

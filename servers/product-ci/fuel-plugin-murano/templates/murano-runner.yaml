@@ -1,10 +1,12 @@
 - job-template:
     name: '{version}.d-murano{plugin-version-suffix}.runner'
+    id: product-ci/fuel-plugin-murano/templates/murano-runner
     description: 'Run all system tests'
 
     concurrent: false
     project-type: multijob
     node: 'runner'
+    test-type: 'system_test'
 
     properties:
     - heavy-job:
