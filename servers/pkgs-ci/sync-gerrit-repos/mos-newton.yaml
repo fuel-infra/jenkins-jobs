@@ -1,0 +1,81 @@
+- project:
+    name: 'mos-sync-newton'
+    sync-node: 'sync-mos-branch'
+
+    # Branches to sync (see also short names below)
+    upstream-branch: 'stable/newton'
+    downstream-branch: '10.0/newton'
+    fallback-branch: 'master'
+
+    # Branch short names for jobs naming
+    src-branch: newton
+    dst-branch: 10.0
+
+    # Syncronization schedule
+    timer: '0 4,10,16,22 * * *'
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: '{username-openstack-ci-mirrorer-jenkins}'
+    gerrit-creds: '{ssh-creds-openstack-ci-mirrorer-jenkins}'
+    gerrit-topic: 'sync/stable/newton'
+
+    # List of projects to sync
+    gerrit-project-name:
+    - 'nova'
+    - 'python-novaclient'
+    - 'neutron'
+    - 'python-neutronclient'
+    - 'neutron-lib'
+    - 'neutron-fwaas'
+    - 'neutron-lbaas'
+    - 'neutron-vpnaas'
+    - 'keystone'
+    - 'python-keystoneclient'
+    - 'keystonemiddleware'
+    - 'glance'
+    - 'python-glanceclient'
+    - 'glance_store'
+    - 'cinder'
+    - 'python-cinderclient'
+    - 'os-brick'
+    - 'heat'
+    - 'python-heatclient'
+    - 'horizon'
+    - 'django_openstack_auth'
+    - 'sahara'
+    - 'sahara-dashboard'
+    - 'python-saharaclient'
+    - 'murano'
+    - 'murano-dashboard'
+    - 'python-muranoclient'
+    - 'ceilometer'
+    - 'python-ceilometerclient'
+    - 'ceilometermiddleware'
+    - 'swift'
+    - 'python-swiftclient'
+    - 'ironic'
+    - 'python-ironicclient'
+    - 'oslo.cache'
+    - 'oslo.concurrency'
+    - 'oslo.config'
+    - 'oslo.context'
+    - 'oslo.db'
+    - 'oslo.i18n'
+    - 'oslo.log'
+    - 'oslo.messaging'
+    - 'oslo.middleware'
+    - 'oslo.policy'
+    - 'oslo.reports'
+    - 'oslo.rootwrap'
+    - 'oslo.serialization'
+    - 'oslo.service'
+    - 'oslo.utils'
+    - 'oslo.versionedobjects'
+    - 'oslo.vmware'
+    - 'oslosphinx'
+    - 'oslotest'
+
+    jobs:
+    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
