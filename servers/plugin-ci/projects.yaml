@@ -277,40 +277,6 @@
           timeout: 600
 
 - project:
-    name: murano-plugin-timer
-    defaults: plugins-defaults
-
-    test_framework_url: 'https://github.com/openstack/fuel-plugin-murano-tests'
-    plugin_prepare_env_builder: plugin-prepare-env-fuel-qa-plugins
-
-    version:
-      - 9.0:
-          plugin_branch: master
-          iso_magnet_link: release-9.0
-          plugin_release_timestamp: true
-          plugin_custom_variables: |
-            MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/ubuntu/9.0/pool/main/
-      - 9.0_murano-plugin_r1:
-          plugin_branch: master
-          iso_magnet_link: release-9.0
-          plugin_release_timestamp: true
-          plugin_custom_variables: |
-            MURANO_PACKAGES_URLS=http://mirror.fuel-infra.org/extras/murano-plugin-repos/release/1.0.0/ubuntu/9.0/pool/main/
-
-    plugin_name:
-      - detach-murano-timer:
-          plugin_repo: fuel-plugin-murano
-          plugin_owner: 'Murano Team'
-          plugin_test_group: 'murano'
-          plugin_env_path_name: 'MURANO_PLUGIN_PATH'
-
-    jobs:
-      - '{version}.fuel-plugin.{plugin_name}.build-timer':
-          timer: 'H 0 * * *'
-      - '{version}.fuel-plugin.{plugin_name}.deploy-test':
-          timeout: 1380
-
-- project:
     name: stacklight-runner
     defaults: plugins-defaults
 
