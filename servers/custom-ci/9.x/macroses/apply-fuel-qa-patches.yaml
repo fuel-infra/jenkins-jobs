@@ -4,6 +4,9 @@
     - shell: |
         #!/bin/bash
         set -ex
+        if [ "${TEST_FRAMEWORK_URL}" != "https://github.com/openstack/fuel-qa.git" ] ; then
+           exit 0
+        fi
         git checkout $FUEL_QA_COMMIT
         # Checking gerrit commits for fuel-mirror
         if [ "$FUEL_QA_PATCH_LIST" != "none" ] ; then

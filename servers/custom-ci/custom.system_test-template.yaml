@@ -121,6 +121,17 @@
           default: 'none'
           description: 'Refspecs for commits in fuel-qa gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
+      - string: # added for ability switch test framework
+          name: TEST_FRAMEWORK_URL
+          default: https://github.com/openstack/fuel-qa.git
+          description: |
+               Test framework url. As alternative can use the following urls:
+               https://github.com/openstack/stacklight-integration-tests.git
+               https://github.com/openstack/fuel-plugin-murano-tests.git
+      - string: # added for ability override test framework branch
+          name: TEST_FRAMEWORK_BRANCH
+          default: 'stable/mitaka'
+          description: 'Default value for quel-qa, for custom framework need change e.g. "master"'
       - text:
           name: PLUGINS
           description: |
@@ -146,9 +157,10 @@
 
     scm:
       - git:
+          basedir: ''
           branches:
-            - '$FUEL_QA_COMMIT'
-          url: 'https://github.com/openstack/fuel-qa.git'
+            - '$TEST_FRAMEWORK_BRANCH'
+          url: '$TEST_FRAMEWORK_URL'
 
     builders:
       - inject:
@@ -162,6 +174,8 @@
             TEST_ISO_JOB_URL={test_iso_job_url}
       - inject:
           properties-content: $ADDITIONAL_PARAMETERS
+      - shell:
+          !include-raw-escape: builders/prepare-env-fuel-qa.sh
       - shell:
           !include-raw-escape: builders/custom_system_test_plugins.sh
       - shell:
