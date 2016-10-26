@@ -1,20 +1,24 @@
 - job-template:
-    name: '9.0.main.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
-    description: 'Run d-murano Build Verification Test {testgroup}'
+    name: '{version}.{test-type}.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
+    id: product-ci/fuel-plugin-murano/templates/murano-swarm-test
 
-    email: 'fuel-plugin-murano@mirantis.com'
-    env_suffix: $BUILD_ID
-    properties: ''
-    timeout: '180'
-    trigger_projects: ''
-    weight: '7'
-    node: 'bvt'
-    concurrent: true
-    disabled: false
+    murano-swarm-test/email: 'fuel-plugin-murano@mirantis.com'
+    murano-swarm-test/env_suffix: $BUILD_ID
+
+    murano-swarm-test/properties-file: ''
+    murano-swarm-test/timeout: '240'
+    murano-swarm-test/weight: '6'
+    murano-swarm-test/dist: ubuntu
+    murano-swarm-test/test-type: system_test
+    murano-swarm-test/make-snapshot: 'false'
+    murano-swarm-test/properties-content: ''
+
     dist: ubuntu
-    plugin-mos-version: "mos9.0"
-    plugin-pkg-dist: "centos7"
+    test-type: 'system_test'
 
+    description: 'Run System Test {testgroup}'
+    node: '{murano-swarm-test/node}'
+    concurrent: true
 
     logrotate:
       artifactDaysToKeep: -1
@@ -23,14 +27,14 @@
       numToKeep: 50
 
     parameters:
-    - 9.0-d-murano-systest-params
+    - d-murano-systest-params
     - string: # added for cleaner which searches for job parameter
         name: ENV_PREFIX
-        default: '9.0.main.{dist}.d-murano{plugin-version-suffix}.{testgroup}'
+        default: '{version}.{test-type}.{dist}.d-murano.{testgroup}'
 
     properties:
     - heavy-job:
-        weight: '{weight}'
+        weight: '{murano-swarm-test/job-weight}'
 
     scm:
     - main-git:
@@ -41,24 +45,34 @@
     wrappers:
     - timeout:
         fail: false
-        timeout: '{timeout}'
+        timeout: '{murano-swarm-test/timeout}'
         write-description: false
     - ansicolor:
         colormap: xterm
+    - inject-passwords:
+        global: true
 
     builders:
     - inject-fuel-qa-global-defaults:
         version: '9.0'
     - inject: # Defaults
         properties-content: |
+          FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+          ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+
           CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
-          ENV_SUFFIX={env_suffix}
-          OPENSTACK_RELEASE={dist}
+          POOL_DEFAULT=10.109.0.0/16:24
+          ENV_PREFIX=$JOB_NAME
+          ENV_SUFFIX={murano-swarm-test/env_suffix}
+          OPENSTACK_RELEASE={murano-swarm-test/dist}
           TEST_GROUP={testgroup}
+          MAKE_SNAPSHOT={murano-swarm-test/make-snapshot}
+          KEEP_ENV=true
     - inject: # Overrides
-        properties-content: '{properties}'
+        properties-content: '{murano-swarm-test/properties-content}'
+        properties-file: '{murano-swarm-test/properties-file}'
     - inject:
-        properties-content: '$ADDITIONAL_PARAMETERS' # from 9.0-d-murano-systest-params
+        properties-content: '$ADDITIONAL_PARAMETERS' # from d-murano-systest-params
     - guess-mirror
     - extended-bash:
         headers: ''
@@ -75,11 +89,10 @@
             echo "===POST-BUILD SCRIPT"
             set -ex
             # Remove venv from run, which could be run in /tmp
-            echo "INFO: Removing dir: $VENV_PATH"
+            echo "INFO: Removing directory: $VENV_PATH"
             rm -rf "$VENV_PATH"
 
     publishers:
-
     - archive:
         allow-empty: true
         artifacts: '**/nosetests.xml,logs/*,*.txt'
@@ -94,11 +107,8 @@
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
 
-    - bvt-failure-email:
-        email_recipients: '{email}'
-
-    - bvt-fixed-email:
-        email_recipients: '{email}'
-
     - trigger-parameterized-builds:
-        '{obj:trigger_projects}'
+        - project: '{version}.{test-type}.d-murano{plugin-version-suffix}.test-reports'
+          condition: ALWAYS
+          predefined-parameters: |
+              TEST_JOB_NAME=$JOB_NAME

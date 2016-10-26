@@ -1,5 +1,6 @@
 - job-template:
     name: '{version}.d-murano{plugin-version-suffix}.snapshot'
+    id: product-ci/fuel-plugin-murano/templates/murano-snapshot
     description: |
       Freeze all dependencies for systest into artifact and run initial verification.
 
@@ -8,7 +9,7 @@
 
     timer: ''
     magnet-link:
-      !include-raw-escape: '../../../../data/9.0-iso'
+      !include-raw-escape: '../../data/9.0-iso'
 
     triggers:
     - timed: '{timer}'
@@ -58,7 +59,7 @@
         name: 'Run tests'
         condition: COMPLETED
         projects:
-        - name: '9.0.main.ubuntu.d-murano{plugin-version-suffix}.deploy_murano_plugin'
+        - name: '{version}.main.ubuntu.d-murano{plugin-version-suffix}.deploy_murano_plugin'
           kill-phase-on: NEVER
           property-file: snapshots.params
 
