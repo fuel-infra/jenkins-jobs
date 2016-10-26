@@ -1,0 +1,91 @@
+- project:
+    name: '9.1.d-murano for branch: 9.0/release/1.2.0'
+
+    # ISO-version
+    version: '9.1'
+    # For job-name rendering only
+    plugin-version-suffix: '.1.2.0'
+    # REPO url depended.Example:
+    # http://mirror/extras/murano-plugin-repos/release/1.2.0/centos/
+    #                                          ^^^^^^^^^^^^^
+    plugin-version: "release/1.2.0"
+    plugin-rpm-mask: "detach-murano"
+    plugin-pkg-dist: "centos7"
+    plugin-repo-sub-url: "extras/murano-plugin-repos/"
+
+    plugin-test-repo: 'fuel-plugin-murano-tests'
+    plugin-test-commit: 'master'
+
+    jobs:
+
+    - product-ci/fuel-plugin-murano/templates/murano-snapshot:
+        timer: '0 0,6,12,18 * * *'
+
+    - product-ci/fuel-plugin-murano/templates/murano-bvt:
+        testgroup: deploy_murano_plugin
+
+    - product-ci/fuel-plugin-murano/templates/murano-swarm-test:
+        murano-swarm-test/node: 'systest'
+        murano-swarm-test/timeout: '480'
+        murano-swarm-test/job-weight: '6'
+
+        description: '9.1 murano swarm test group'
+
+        testgroup:
+
+        - deploy_murano_bvt
+
+        - failover
+
+        - murano_plugin_upgrade
+
+        - post_installation
+
+        - check_scaling_murano
+
+    - product-ci/fuel-plugin-murano/templates/murano-timer:
+        timer: '0 21 * * 1-7'
+        murano-timer/current-parameters: true
+        # Hardcode #343 snapshot of 9.x which is 9.1 release snapshot
+        murano-timer/override-snapshot-params: |
+          UBUNTU_MIRROR_ID=ubuntu-2016-09-14-213640
+          CENTOS_MIRROR_ID=centos-7.2.1511-2016-05-31-083834
+          MOS_UBUNTU_MIRROR_ID=9.0-2016-10-03-142321
+          MOS_CENTOS_OS_MIRROR_ID=os-2016-06-23-135731
+          MOS_CENTOS_PROPOSED_MIRROR_ID=proposed-2016-10-03-142321
+          MOS_CENTOS_UPDATES_MIRROR_ID=updates-2016-06-23-135916
+          MOS_CENTOS_HOLDBACK_MIRROR_ID=holdback-2016-06-23-140047
+          MOS_CENTOS_HOTFIX_MIRROR_ID=hotfix-2016-09-23-124321
+          MOS_CENTOS_SECURITY_MIRROR_ID=security-2016-06-23-140002
+        murano-timer/predefined-runner-params: |
+          UPDATE_MASTER=true
+          ENABLE_MOS_UBUNTU_PROPOSED=true
+          ENABLE_MOS_UBUNTU_UPDATES=true
+          ENABLE_MOS_UBUNTU_SECURITY=true
+          ENABLE_MOS_UBUNTU_HOLDBACK=true
+
+          ENABLE_MOS_CENTOS_OS=true
+          ENABLE_MOS_CENTOS_PROPOSED=true
+          ENABLE_MOS_CENTOS_UPDATES=true
+          ENABLE_MOS_CENTOS_SECURITY=true
+          ENABLE_MOS_CENTOS_HOLDBACK=true
+          FORCE_DISABLE_UPDATES=false
+
+    - product-ci/fuel-plugin-murano/templates/murano-runner
+
+    - '{version}.{test-type}.test-reports':
+        repobranch: 'origin/stable/mitaka'
+        tr_milestone: '1.2.0'
+        lp_milestone: '1.2.0'
+        test-type: 'system_test.d-murano{plugin-version-suffix}'
+        email: 'fuel-plugin-murano@mirantis.com'
+        properties: |
+          TESTS_RUNNER={version}.d-murano{plugin-version-suffix}.runner
+          TESTRAIL_TEST_SUITE=[9.1] System Tests
+          TESTRAIL_MILESTONE={tr_milestone}
+          LAUNCHPAD_MILESTONE={lp_milestone}
+          TESTRAIL_PROJECT=Murano plugin
+          HANDLE_BLOCKED=true
+          PUBLISH=true
+          OUTPUT_FILE=bugs_link_stat
+          CREATE_HTML=true
