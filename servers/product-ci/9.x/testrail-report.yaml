@@ -55,3 +55,4 @@
           VENV_PATH=/home/jenkins/venv-nailgun-tests-2.9
           TESTS_RUNNER_JOB=9.x.baremetal.runner
           TESTRAIL_TEST_SUITE=[WIP] Automated Baremetal Acceptance
+          TESTRAIL_MILESTONE={report-version}
