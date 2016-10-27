@@ -62,5 +62,5 @@
           keep-long-stdio: false
           results: '**/nosetests.xml'
       - trigger-parameterized-builds:
-        - project: '{version}.baremetal.reporter'
+        - project: '{version}.baremetal.test-reports'
           predefined-parameters: TEST_JOB_NAME=$JOB_NAME

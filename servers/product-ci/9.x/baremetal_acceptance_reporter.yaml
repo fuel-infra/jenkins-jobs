@@ -1,5 +1,5 @@
 - job:
-    name: '9.x.baremetal.reporter'
+    name: '9.x.baremetal.test-reports'
     concurrent: false
     node: 'testrail'
 
