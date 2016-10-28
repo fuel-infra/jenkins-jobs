@@ -3,7 +3,7 @@
     name: 'devops'
     regex: '(test\.|devops).*'
     jobs:
-      - environment_update
+      - puppet_update
       - run_on_node
       - update-jenkins-jobs
       - verify-sandbox

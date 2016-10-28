@@ -1,0 +1,37 @@
+- job-template:
+    name: puppet_update
+    concurrent: true
+    description: |
+      Run puppet agent on ci slaves with update (optional)<br>
+      <b>NOTE</b>: Requires sudo rights to run 'puppet agent' from 'jenkins' user
+    properties:
+      - heavy-job:
+          weight: 8
+    parameters:
+      - bool:
+          name: UPDATE_SLAVE
+          default: false
+          description: 'If enabled - slave will be updated by puppet agent'
+      - string:
+          name: FACTER_ROLE
+          default: 'systest_slave'
+          description: 'Facter role used during puppet agent run'
+      - node:
+          name: NODE
+          description: "Select slaves"
+          ignore-offline-nodes: true
+          allowed-multiselect: true
+    builders:
+      - shell:
+          !include-raw-escape: scripts/puppet_update.sh
+    publishers:
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'ci+alert@mirantis.com'
+          send-to-individuals: false
+      - description-setter:
+          regexp: 'Description string: (slave:\s+.*\s+updated:\s+.*\s+.*)'
+          regexp-for-failed: 'Description string: (slave:\s+.*\s+updated:\s+.*\s+.*)'
+    wrappers:
+        - ansicolor:
+            colormap: xterm
