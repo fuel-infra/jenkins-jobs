@@ -88,5 +88,16 @@
             extras/murano-plugin-repos/release/*/centos/mos9.0-centos7/os
           update-head: true
 
+      - infra:
+          timer: 'H/20 * * * *'
+          srcpaths: |
+            infra/packages/centos7/os
+            infra/packages/trusty
+            infra/packages/xenial
+            infra/backports/centos7/os
+            infra/backports/trusty
+            infra/backports/xenial
+          update-head: true
+
     jobs:
       - '{mos_version}.resync-repos-to-mirrors'
