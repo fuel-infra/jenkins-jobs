@@ -66,6 +66,16 @@
       - '{branch-id}.puppet-openstack.fuel.noop'
 
 - project:
+    name: 'Newton puppet-openstack-noop'
+    branch-id: 'newton'
+    fuellib-branch: 'stable/newton'
+    puppet-branch: 'stable/newton'
+    puppet-projects-regexp: '{puppet_openstack_projects_regexp}'
+    gerrit-macro: 'puppet-openstack-request-newton'
+    jobs:
+      - '{branch-id}.puppet-openstack.fuel.noop'
+
+- project:
     name: 'Master puppet-openstack-noop'
     branch-id: 'master'
     fuellib-branch: 'master'
