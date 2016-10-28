@@ -48,7 +48,7 @@
 
     - product-ci/fuel-plugin-murano/templates/murano-runner
 
-    - '{version}.{test-type}.test-reports':
+    - product-ci/test-reports:
         repobranch: 'origin/stable/mitaka'
         tr_milestone: '1.2.0'
         lp_milestone: '1.2.0'

@@ -1,11 +1,10 @@
-- defaults:
+- job-template:
     name: '{version}.{test-type}.test-reports'
+    id: product-ci/test-reports
+
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     email: 'ci+alert@mirantis.com'
 
-- job-template:
-    name: '{version}.{test-type}.test-reports'
-    defaults: '{version}.{test-type}.test-reports'
     builders:
       - inject:
           properties-content: |

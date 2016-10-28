@@ -6,14 +6,14 @@
 
     jobs:
     - '9.x.bvt.test-reports'
-    - '{version}.{test-type}.test-reports':
+    - product-ci/test-reports:
         test-type:  'system_test'
         properties: |
           TESTS_RUNNER=9.x.swarm.runner
           TESTRAIL_TEST_SUITE=[9.1] Swarm
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}
-    - '{version}.{test-type}.test-reports':
+    - product-ci/test-reports:
         test-type:  'acceptance'
         properties: |
           TESTS_RUNNER=9.x.acceptance.runner
@@ -25,7 +25,7 @@
         properties: |
           TESTRAIL_MILESTONE={report-version}
           TESTRAIL_SUITE=[9.1][MOSQA] Automated Cloud Testing
-    - '{version}.{test-type}.test-reports':
+    - product-ci/test-reports:
         test-type:  'upgrades'
         properties: |
           TESTS_RUNNER=9.x.upgrades.runner
@@ -33,7 +33,7 @@
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}
           EXTRA_FACTOR_OF_TC_DEFINITION=9.x-upgrades
-    - '{version}.{test-type}.test-reports':
+    - product-ci/test-reports:
         test-type:  'backup-restore'
         properties: |
           TESTS_RUNNER=9.x.backup-restore.runner
@@ -41,7 +41,7 @@
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}
           EXTRA_FACTOR_OF_TC_DEFINITION=9.x_backup-restore
-    - '{version}.{test-type}.test-reports':
+    - product-ci/test-reports:
         test-type:  'upgrade.chain.7.0'
         properties: |
           TESTS_RUNNER=9.x.upgrade.chain.7.0.runner
@@ -49,7 +49,7 @@
           TESTRAIL_MILESTONE={report-version}
           LAUNCHPAD_MILESTONE={report-version}
           EXTRA_FACTOR_OF_TC_DEFINITION=9.x_upgrade_chain_7.0
-    - '{version}.{test-type}.test-reports':
+    - product-ci/test-reports:
         test-type:  'baremetal'
         properties: |
           TESTS_RUNNER=9.x.baremetal.runner
