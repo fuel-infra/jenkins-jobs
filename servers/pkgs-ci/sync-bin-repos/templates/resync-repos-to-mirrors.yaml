@@ -52,12 +52,16 @@
       - text:
           name: HOSTS_TO_SYNC
           default: |
+            rsync://seed-cz1.fuel-infra.org/mirror-sync
+            rsync://seed-us1.fuel-infra.org/mirror-sync
             rsync://eu.mirror.infra.mirantis.net/mirror-sync
             rsync://eu.mirror.fuel-infra.org/mirror-sync
             rsync://us.mirror.fuel-infra.org/mirror-sync
           description: |
             Host list sync to
             Default:
+              rsync://seed-cz1.fuel-infra.org/mirror-sync
+              rsync://seed-us1.fuel-infra.org/mirror-sync
               rsync://eu.mirror.infra.mirantis.net/mirror-sync
               rsync://eu.mirror.fuel-infra.org/mirror-sync
               rsync://us.mirror.fuel-infra.org/mirror-sync
