@@ -51,6 +51,13 @@
         block: true
         block-thresholds:
           build-step-failure-threshold: never
+    - shell: |
+        #!/bin/bash
+        set -ex
+        # workaround: we need to wait for some time before nosetests.xml will be archived to
+        # jenkins-master. Otherwise next step could be failed.
+        sleep 5
+
     - copyartifact:
         project: 'fuel.baremetal.{downstream_environment}'
         filter: 'nosetests.xml'
