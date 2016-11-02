@@ -57,7 +57,8 @@
 
         - ha_scale_group_3
 
-        - ha_scale_group_4
+        - ha_scale_group_4:
+            swarm-test/node: 'acceptance-highmemory'
 
         - ha_scale_group_5
 
