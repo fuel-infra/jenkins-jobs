@@ -24,6 +24,7 @@
     - 'fuel-main'
     - 'fuel-ui'
     - 'fuel-web'
+    - 'python-fuelclient'
 
     jobs:
     - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
