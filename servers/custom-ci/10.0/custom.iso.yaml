@@ -12,7 +12,7 @@
       # Ubuntu Xenial
       MIRROR_UBUNTU=cz.archive.ubuntu.com
       MIRROR_UBUNTU_ROOT=/ubuntu
-      MOS_UBUNTU_ROOT=/mos-repos/xenial
+      MOS_UBUNTU_ROOT=/mos-repos/ubuntu
     description:
       !include-raw: descriptions/custom.iso
     jobs:

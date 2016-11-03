@@ -42,7 +42,7 @@
     rpm-dist-name: mos-master-centos7
 
     # MOS repositories (build/test dependencies)
-    mos-deb-repo-path: mos-repos/xenial
+    mos-deb-repo-path: mos-repos/ubuntu
     mos-rpm-repo-path: mos-repos/centos/mos-master-centos7
 
     jobs:

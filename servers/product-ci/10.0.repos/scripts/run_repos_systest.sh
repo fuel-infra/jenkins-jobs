@@ -122,7 +122,7 @@ EOF
 fi
 
 __repo_id_ptr="MOS_UBUNTU_MIRROR_ID"
-__repo_url="http://${MIRROR_HOST}/mos-repos/xenial/snapshots/${!__repo_id_ptr}"
+__repo_url="http://${MIRROR_HOST}/mos-repos/ubuntu/snapshots/${!__repo_id_ptr}"
 
 cat >> "${DEB_REPOS_YAML}" <<EOF
 -

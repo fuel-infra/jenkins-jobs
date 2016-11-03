@@ -74,7 +74,7 @@ store "CENTOS_MIRROR_ID" "${__centos_latest_repo_snaphot_id}"
 # 9.0-2016-06-23-164100
 # ^^^^^^^^^^^^^^^^^^^^^
 __mos_latest_deb_mirror_id="$(\
-    curl "http://${MIRROR_HOST}/mos-repos/xenial/snapshots/${MOS_UBUNTU_VERSION}-latest.target.txt" \
+    curl "http://${MIRROR_HOST}/mos-repos/ubuntu/snapshots/${MOS_UBUNTU_VERSION}-latest.target.txt" \
     | head -1)"
 store "MOS_UBUNTU_MIRROR_ID" "${__mos_latest_deb_mirror_id}"
 
