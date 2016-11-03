@@ -108,6 +108,116 @@
       - 'devops.{version-id}.env'
       - '{version-id}.{project}.pkgs.{dist}.{testgroup}'
 
+- project:
+    name: Collection deployment tests for 10.0
+    version-id: newton
+    projectbranch: stable/newton
+    ubuntu_dist: 'xenial'
+    dist: ubuntu
+    properties: ''
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    deb-mirror-base-name: 'ubuntu/mos10.0 mos10.0'
+    rpm-mirror-base-name: 'mos10.0-centos7'
+    timeout: 200
+    non_voting: false
+
+    project:
+      - fuel-agent:
+          projectpackage: fuel-agent
+          testgroup: review_fuel_agent_ironic_deploy
+          timed: '30 */12 * * *'
+          non_voting: true
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+            KEEP_BEFORE=yes
+            BUILD_IMAGES=true
+            SLAVE_NODE_MEMORY=4096
+            IRONIC_ENABLED=true
+            IRONIC_NODES_COUNT=1
+
+      - fuel-astute:
+          projectpackage: astute
+          testgroup: review_astute_patched
+          timed: '20 */12 * * *'
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+            KEEP_BEFORE=yes
+
+      - fuel-library:
+          projectpackage: fuel-library10.0
+          testgroup: smoke_neutron
+          timed: '0 */12 * * *'
+          # NOTE(mkarpin): as workaround for https://bugs.launchpad.net/fuel/+bug/1623394
+          # memory is set to 4096, to unblock CI of master in upstream
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+            SLAVE_NODE_MEMORY=4096
+
+      - fuel-library:
+          projectpackage: fuel-library10.0
+          testgroup: neutron_vlan_ha
+          timed: '59 */12 * * *'
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+            SYNC_DEPL_TASKS=true
+            KEEP_BEFORE=yes
+
+      - fuel-library:
+          projectpackage: fuel-library10.0
+          testgroup: review_in_fuel_library
+          non_voting: true # override
+          timed: '30 */12 * * *'
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+
+      - fuel-nailgun-agent:
+          projectpackage: nailgun-agent
+          testgroup: review_nailgun_agent_one_node
+          timed: '25 */12 * * *'
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+            KEEP_BEFORE=yes
+            CUSTOM_ENV=false
+
+      - fuel-ostf:
+          projectpackage: fuel-ostf
+          testgroup: gate_ostf_update
+          timed: '45 */12 * * *'
+          timeout: 300  # override
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+            UPDATE_FUEL=true
+            KEEP_BEFORE=yes
+            SLAVE_NODE_MEMORY=5140
+
+      - fuel-web:
+          projectpackage: fuel-nailgun
+          testgroup: review_fuel_web_deploy
+          timed: '15 */12 * * *'
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+
+      - python-fuelclient:
+          projectpackage: python-fuelclient
+          testgroup: review_fuel_client
+          timed: '15 */12 * * *'
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+            KEEP_BEFORE=yes
+            BUILD_IMAGES=true
+            UPLOAD_PATCHSET=true
+
+    jobs:
+      - 'devops.{version-id}.create-env'
+      - 'devops.{version-id}.env'
+      - '{version-id}.{project}.pkgs.{dist}.{testgroup}'
+
 
 - project:
     name: Collection deployment tests for 9.0
