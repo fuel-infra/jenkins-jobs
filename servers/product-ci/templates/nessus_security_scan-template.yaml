@@ -1,0 +1,122 @@
+- job-template:
+    name: '{version-id}.nessus_security_scan'
+    description:
+      !include-raw: ../descriptions/nessus_security_scan
+    concurrent: true
+    node: 'security'
+
+    triggers:
+      - timed: '{timer}'
+
+    properties:
+      - authorization-allow-security-group
+      - heavy-job:
+          weight: 8
+
+    parameters:
+      - bool:
+          name: DEFAULT_REBUILD_ISO
+          default: false
+      - bool:
+          name: DEFAULT_UPDATE_MASTER
+          default: '{update_master}'
+      - string:
+          name: MAGNET_LINK
+          default: '{magnet_link}'
+          description: Full URL to a magnet_link.txt with a MOS {version-id} ISO
+      - string:
+          name: UPGRADE_TARBALL_MAGNET_LINK
+          default: '{upgrade_tarball_magnet_link}'
+          description: Upgrade tarball magnet link
+      - string:
+          name: EXTRA_DEB_REPOS
+          default: '{extra_deb_repos}'
+          description: 'deb http://... trusty main'
+      - string:
+          name: EXTRA_RPM_REPOS
+          default: '{extra_rpm_repos}'
+          description: 'reponame1,http://... |reponame2,http://...'
+
+    scm:
+      - git:
+          url: 'https://git.openstack.org/openstack/fuel-qa.git'
+          branches:
+            - '{branch}'
+
+    builders:
+      - extended-bash:
+          headers: ''
+          script: '{pre-build-script}'
+
+      - inject:
+          properties-content: |
+            OPENSTACK_RELEASE={openstack_release}
+            OS_TYPE={os}
+            DISTRO={distro}
+            ENV_PREFIX={version-id}.nessus_security_scan
+
+      - inject:
+          # Set defaults which could be reinjected
+          properties-content: |
+            REBUILD_ISO=$DEFAULT_REBUILD_ISO
+            UPDATE_MASTER=$DEFAULT_UPDATE_MASTER
+
+      - guess-mirror
+
+      - inject:
+          # system-test parameters
+          properties-content: |
+            TEST_GROUP={test_group}
+            VENV_PATH={venv_path}
+            EXTRA_DEB_REPOS_PRIORITY=1052
+            EXTRA_RPM_REPOS_PRIORITY=1
+            FUEL_RELEASE_VERSION={fuel_release_version}
+            MAKE_SNAPSHOT=false
+            NESSUS_ADDRESS={nessus_address}
+            NESSUS_IMAGE_NAME=nessus
+            NESSUS_PASSWORD=r00tme
+            NESSUS_USERNAME=root
+            NEUTRON_ENABLE=true
+            SECURITY_TEST=true
+
+      - shell:
+          !include-raw-escape: ../builders/nessus_remove_envs.sh
+      - shell:
+          !include-raw-escape: ../builders/run_nessus_security_scan.sh
+      - shell:
+          !include-raw-escape: ../builders/nessus_remove_envs.sh
+
+    wrappers:
+      - timestamps
+      - ansicolor
+      - timeout:
+          fail: true
+          timeout: 400
+
+    logrotate:
+      artifactDaysToKeep: 90
+      daysToKeep: 90
+
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml, logs/*'
+          latest-only: false
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml'
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'
+          failure: true
+          success: true
+          recipients: aheczko@mirantis.com
+          attachments: "*.html"
+          send-to:
+          - requester
+          - recipients
+      - trigger-parameterized-builds:
+          - project: '{testrail-report-job}'
+            condition: ALWAYS
+            property-file: links.txt
+            predefined-parameters: TEST_JOB_NAME=$JOB_NAME
+            triggerWithNoParameters: false
