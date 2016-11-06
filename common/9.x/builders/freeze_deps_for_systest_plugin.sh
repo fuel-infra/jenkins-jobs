@@ -36,7 +36,7 @@ function guess_rpm_filename(){
    local snapshot_id;snapshot_id=$2
 
    wget  "${plugin_repo_long_url}/snapshots/${snapshot_id}/x86_64/Packages/" -O "${t_file}"
-   store "PLUGIN_RPM_FILENAME_FROM_REPO" "$(grep "${file_mask}" "${t_file}" | sed -n 's/.*href="\([^"]*\).*/\1/p'  | sort -u | head -n 1)"
+   store "PLUGIN_RPM_FILENAME_FROM_REPO" "$(grep "${file_mask}" "${t_file}" | sed -n 's/.*href="\([^"]*\).*/\1/p'  | sort -ru | head -n 1)"
    rm -vf "${t_file}"
 }
 
