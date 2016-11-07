@@ -33,7 +33,7 @@
          # Inject defaults and stubs
          inject PLUGIN_REPO_SUB_URL   '{plugin-repo-sub-url}'
          inject PLUGIN_VERSION        '{plugin-version}'
-         inject PLUGIN_MOS_VERSION    'mos{version}'
+         inject PLUGIN_MOS_VERSION    'mos{plugin-global-version}'
          inject PLUGIN_PKG_DIST       '{plugin-pkg-dist}'
          inject PLUGIN_RPM_MASK       '{plugin-rpm-mask}'
          inject PLUGIN_TEST_REPO      '{plugin-test-repo}'

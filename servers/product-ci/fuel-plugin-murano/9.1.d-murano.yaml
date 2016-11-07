@@ -3,6 +3,7 @@
 
     # ISO-version
     version: '9.1'
+    plugin-global-version: '9.0'
     # For job-name rendering only
     plugin-version-suffix: ''
     # REPO url depended.Example:
