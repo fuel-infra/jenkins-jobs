@@ -43,5 +43,7 @@ do
   do
     docker tag -f "${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}" "${URL}/${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}"
     docker push "${URL}/${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}"
+    docker rmi "${URL}/${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}"
   done
+  docker rmi "${PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}"
 done
