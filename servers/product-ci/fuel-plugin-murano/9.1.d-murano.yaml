@@ -24,6 +24,8 @@
 
     - product-ci/fuel-plugin-murano/templates/murano-bvt:
         testgroup: deploy_murano_plugin
+        murano-snapshot/predefined-params: |
+          UPDATE_MASTER=true
 
     - product-ci/fuel-plugin-murano/templates/murano-swarm-test:
         murano-swarm-test/node: 'systest'
@@ -47,30 +49,8 @@
     - product-ci/fuel-plugin-murano/templates/murano-timer:
         timer: '0 21 * * 1-7'
         murano-timer/current-parameters: true
-        # Hardcode #343 snapshot of 9.x which is 9.1 release snapshot
-        murano-timer/override-snapshot-params: |
-          UBUNTU_MIRROR_ID=ubuntu-2016-09-14-213640
-          CENTOS_MIRROR_ID=centos-7.2.1511-2016-05-31-083834
-          MOS_UBUNTU_MIRROR_ID=9.0-2016-10-03-142321
-          MOS_CENTOS_OS_MIRROR_ID=os-2016-06-23-135731
-          MOS_CENTOS_PROPOSED_MIRROR_ID=proposed-2016-10-03-142321
-          MOS_CENTOS_UPDATES_MIRROR_ID=updates-2016-06-23-135916
-          MOS_CENTOS_HOLDBACK_MIRROR_ID=holdback-2016-06-23-140047
-          MOS_CENTOS_HOTFIX_MIRROR_ID=hotfix-2016-09-23-124321
-          MOS_CENTOS_SECURITY_MIRROR_ID=security-2016-06-23-140002
         murano-timer/predefined-runner-params: |
           UPDATE_MASTER=true
-          ENABLE_MOS_UBUNTU_PROPOSED=true
-          ENABLE_MOS_UBUNTU_UPDATES=true
-          ENABLE_MOS_UBUNTU_SECURITY=true
-          ENABLE_MOS_UBUNTU_HOLDBACK=true
-
-          ENABLE_MOS_CENTOS_OS=true
-          ENABLE_MOS_CENTOS_PROPOSED=true
-          ENABLE_MOS_CENTOS_UPDATES=true
-          ENABLE_MOS_CENTOS_SECURITY=true
-          ENABLE_MOS_CENTOS_HOLDBACK=true
-          FORCE_DISABLE_UPDATES=false
 
     - product-ci/fuel-plugin-murano/templates/murano-runner
 

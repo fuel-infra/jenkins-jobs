@@ -8,8 +8,6 @@
     node: 'runner'
     test-type: 'system_test'
 
-    # Add inject mechanism for the build to override snapshot params
-    murano-timer/override-snapshot-params: ''
     # Whether upgrade cluster or not
     murano-timer/predefined-runner-params: |
       ENABLE_MOS_UBUNTU_PROPOSED=false
@@ -22,7 +20,7 @@
       ENABLE_MOS_CENTOS_UPDATES=false
       ENABLE_MOS_CENTOS_SECURITY=false
       ENABLE_MOS_CENTOS_HOLDBACK=false
-      PATCHING_DISABLE_UPDATES=true
+      FORCE_DISABLE_UPDATES=true
     # Use params from current job or not
     murano-timer/current-parameters: true
 
@@ -47,8 +45,6 @@
         artifact-name: snapshots.params
     - shell: |
         echo "Description string: $CUSTOM_VERSION"
-    - inject:
-        properties-content: '{murano-timer/override-snapshot-params}'
 
     publishers:
 

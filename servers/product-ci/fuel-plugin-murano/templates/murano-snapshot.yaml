@@ -7,6 +7,7 @@
     project-type: multijob
     node: runner
 
+    murano-snapshot/predefined-params: ''
     timer: ''
     magnet-link:
       !include-raw-escape: '../../data/9.0-iso'
@@ -62,6 +63,7 @@
         - name: '{version}.main.ubuntu.d-murano{plugin-version-suffix}.deploy_murano_plugin'
           kill-phase-on: NEVER
           property-file: snapshots.params
+          predefined-parameters: '{murano-snapshot/predefined-params}'
 
     publishers:
 
