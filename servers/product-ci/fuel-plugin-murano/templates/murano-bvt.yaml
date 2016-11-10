@@ -15,6 +15,7 @@
     dist: ubuntu
     plugin-mos-version: "mos9.0"
     plugin-pkg-dist: "centos7"
+    murano-bvt/additional-params-override: ''
 
 
     logrotate:
@@ -60,6 +61,8 @@
         properties-content: '{properties}'
     - inject:
         properties-content: '$ADDITIONAL_PARAMETERS' # from 9.0-d-murano-systest-params
+    - inject:
+        properties-content: '{murano-bvt/additional-params-override}'
     - guess-mirror
     - extended-bash:
         headers: ''
