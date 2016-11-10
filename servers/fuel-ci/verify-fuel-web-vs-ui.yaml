@@ -109,6 +109,8 @@
         branch-pattern: 'master'
       - branch-compare-type: PLAIN
         branch-pattern: 'stable/mitaka'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/newton'
 
     default_branch: master
     default_refspec: refs/heads/master
