@@ -12,8 +12,8 @@
           timer: 'H 5-23/6 * * *'
           variables: |
             MOS_CENTOS_ROOT=/mos-repos/centos/mos10.0-centos7/
-            MOS_UBUNTU_TARGET=master.target.txt
-            MOS_UBUNTU_ROOT=/mos-repos/xenial/
+            MOS_UBUNTU_TARGET=10.0.target.txt
+            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
             MIRROR_MOS_UBUNTU_SUITE=mos10.0
             UBUNTU_RELEASE=xenial
             UBUNTU_KERNEL_FLAVOR=lts-xenial
