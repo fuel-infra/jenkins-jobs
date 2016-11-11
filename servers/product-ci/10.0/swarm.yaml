@@ -10,7 +10,7 @@
       - '10.0.swarm.runner'
       - product-ci/test-reports:
           version: '10.0'
-          repobranch: 'origin/master'
+          repobranch: 'origin/stable/newton'
           test-type:  'system_test'
           properties: |
             TESTS_RUNNER=10.0.swarm.runner

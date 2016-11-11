@@ -1,7 +1,7 @@
 - project:
     name: 'Main 10.0 iso'
     version: '10.0'
-    branch: 'master'
+    branch: 'stable/newton'
     qa_branch: '{branch}'
     mod: ''
     bvt-mail: 'mos-qa@mirantis.com'
@@ -10,11 +10,10 @@
           description: 'Build main product ISO'
           timer: '0 5-23/6 * * *'
           variables: |
-            BUILD_PACKAGES=0
-            MOS_CENTOS_ROOT=/mos-repos/centos/mos-master-centos7/
-            MOS_UBUNTU_TARGET=master.target.txt
-            MOS_UBUNTU_ROOT=/mos-repos/xenial/
-            MIRROR_MOS_UBUNTU_SUITE=mos-master
+            MOS_CENTOS_ROOT=/mos-repos/centos/mos10.0-centos7/
+            MOS_UBUNTU_TARGET=10.0.target.txt
+            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
+            MIRROR_MOS_UBUNTU_SUITE=mos10.0
             UBUNTU_RELEASE=xenial
             UBUNTU_KERNEL_FLAVOR=lts-xenial
             # FIXME(aevseev): Use upstream Ubuntu mirrors until there is no
