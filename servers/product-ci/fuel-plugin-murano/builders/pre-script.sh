@@ -22,6 +22,8 @@ ln -fs "${PLUGIN_TEST_REPO}/logs" .
 
 # Move venv to /tmp, due PATH lenght limit. See: https://github.com/pypa/pip/issues/1773
 VENV_PATH=$(mktemp -d)
+# Grant permissions for all users to make possible using venv for debugging
+chmod 755 "${VENV_PATH}"
 inject VENV_PATH "${VENV_PATH}"
 
 # Run prepare script itself
