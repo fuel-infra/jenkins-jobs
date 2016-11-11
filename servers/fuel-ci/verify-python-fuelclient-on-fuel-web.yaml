@@ -68,6 +68,8 @@
                   branch-pattern: 'stable/8.0'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/mitaka'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/newton'
           skip-vote:
             successful: true
             failed: true
@@ -94,4 +96,3 @@
                 comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           email-type: default
           timed: '0 13 * * *'
-

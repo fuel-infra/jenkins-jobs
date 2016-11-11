@@ -48,6 +48,8 @@
                   branch-pattern: 'stable/8.0'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/mitaka'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/newton'
           custom-url: '* $JOB_NAME $BUILD_URL'
       - timed: '{timed}'
     wrappers:
