@@ -4,4 +4,4 @@
     jobs:
       - '{version-id}.build-fuel-plugins':
           version-id: '10.0'
-          repo_branch: 'master'
+          repo_branch: 'stable/newton'
