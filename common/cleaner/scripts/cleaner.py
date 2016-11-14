@@ -223,7 +223,7 @@ class Cleaner():
                     # additionaly check max lifetime, if job is older we can
                     # deleted it
                     time_diff_latest = \
-                        timestamp_env_local - timestamp_env_latest
+                        timestamp_env_latest - timestamp_env_local
                     if not env_protect_latest or \
                                     time_diff_latest > datetime.timedelta(hours=1):
                         print '- remove - this build is safe to remove'
