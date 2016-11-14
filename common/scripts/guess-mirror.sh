@@ -16,16 +16,6 @@ LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location || :)
 LOCATION=${LOCATION_FACT:-bud}
 
 case "${LOCATION}" in
-    srt)
-        MIRROR_HOST="osci-mirror-srt.srt.mirantis.net"
-        ;;
-    msk)
-        MIRROR_HOST="osci-mirror-msk.msk.mirantis.net"
-        ;;
-    kha)
-        MIRROR_HOST="osci-mirror-kha.kha.mirantis.net"
-        LOCATION="hrk"
-        ;;
     poz|bud|budext|undef)
         MIRROR_HOST="mirror.seed-cz1.fuel-infra.org"
         LOCATION="cz"
