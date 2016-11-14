@@ -40,6 +40,12 @@
               operator: AND
           script:
             !include-raw-escape: builders/install.destroy.vm.sh
+      - html-publisher:
+            name: 'MOS documentation'
+            dir: 'publish-docs'
+            files: 'index.html'
+            keep-all: true
+            allow-missing: true
       - archive:
           artifacts: '**/*.xml'
           allow-empty: true
