@@ -1,0 +1,22 @@
+- job-template:
+    name: 'infra-maintain-starter'
+    concurrent: false
+    node: '{infra-build-node}'
+    logrotate:
+      daysToKeep: '{daysToKeep}'
+    triggers:
+      - timed: '@midnight'
+    builders:
+      - trigger-builds:
+          - project: 'infra-maintain-worker'
+            parameter-factories:
+              - factory: allnodesforlabel
+                name: 'reBuilder-build-hosts'
+                node-label: '{infra-build-node}'
+                ignore-offline-nodes: true
+            block: false
+    publishers:
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: false

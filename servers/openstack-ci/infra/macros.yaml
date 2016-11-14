@@ -1,0 +1,46 @@
+########################################################################
+# Section: Wrappers
+########################################################################
+# 8c2355ba-9693-40c6-b44f-20ebfe87bb17 - openstack-ci-jenkins
+# 35fc8f47-a728-4d5a-bfeb-9338089f31fa - osci-jenkins-reporter
+# 46923a07-4383-4c6b-9ba2-235f6685b32c - ci-build-stage
+# 9654daf3-36d4-4998-909e-c4085330b8e7 - ci-build-rpm
+# 817edea8-b597-4a6e-9aeb-bad57b109e66 - ci-build-deb
+# 13b61915-1976-4795-8e34-675256ba98a8 - ci-test-stage
+# 11acbe7e-c816-478d-b484-04adf29f4888 - vm-check-install-deb
+# 06bc7ed4-3174-4c49-bb54-63a301874199 - vm-check-install-rpm
+# 9428948a-0524-44df-b35f-ae3e0843532b - vm-check-install-trusty
+# 40ab8819-655e-4090-b1c4-10a5e09d1cc2 - ci-patching-deb
+# 390d0795-c242-46b1-b3f1-6dd2bcf9a24e - ci-patching-rpm
+# 4c78c2d6-a0d6-49b7-a398-d728a1b6a85c - openstack-ci-packtest-deb
+# efa71805-f1ea-4ad4-9f26-32277f8bcc7a - openstack-ci-packtest-rpm
+# 346bbf1a-8922-49c8-b963-7ed7c1a696ce - ci-patching-master-centos
+# 3c86d0cf-5b31-4a53-a397-f94342075abe - ci-patching-master-ubuntu
+# ae9514af-9683-4fc7-8984-30d8024ce570 - ci-build-xenial
+# a2d1802c-7c9b-4c21-bd87-f683a80ea51e - ci-test-xenial
+
+- wrapper:
+    name: vote-users
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '8c2355ba-9693-40c6-b44f-20ebfe87bb17'
+            - '9654daf3-36d4-4998-909e-c4085330b8e7'
+            - '817edea8-b597-4a6e-9aeb-bad57b109e66'
+            - '11acbe7e-c816-478d-b484-04adf29f4888'
+            - '06bc7ed4-3174-4c49-bb54-63a301874199'
+            - '9428948a-0524-44df-b35f-ae3e0843532b'
+            - 'ae9514af-9683-4fc7-8984-30d8024ce570'
+            - 'a2d1802c-7c9b-4c21-bd87-f683a80ea51e'
+
+########################################################################
+### Section: Publishers
+#########################################################################
+
+- publisher:
+    name: archive-trace-files
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: "*.trace"
+          latest-only: false

@@ -1,0 +1,93 @@
+- job-template:
+    name: 'infra-pipeline-starter'
+    concurrent: true
+    node: '{infra-build-node}'
+    logrotate:
+        daysToKeep: '{daysToKeep}'
+    wrappers:
+        - timeout:
+            fail: true
+            timeout: 120
+        - openstack-ci-jenkins
+    properties:
+      - inject:
+          properties-content: |
+              GERRIT_USER=openstack-ci-jenkins
+              REMOTE_REPO_HOST={repo-host}
+              REPO_REQUEST_PATH_PREFIX={cr-path-prefix}
+              ORIGIN={deb-origin}
+              centos7_dist_type=rpm
+              centos7_packages_os_repo_path=infra/packages/centos7/os
+              centos7_backports_os_repo_path=infra/backports/centos7/os
+              trusty_dist_type=deb
+              trusty_packages_repo_path=infra/packages/trusty
+              trusty_packages_dist_name=trusty
+              trusty_backports_repo_path=infra/backports/trusty
+              trusty_backports_dist_name=trusty
+              xenial_dist_type=deb
+              xenial_packages_repo_path=infra/packages/xenial
+              xenial_packages_dist_name=xenial
+              xenial_backports_repo_path=infra/backports/xenial
+              xenial_backports_dist_name=xenial
+              packages_code_project_prefix=fuel-infra/packages
+              backports_code_project_prefix=fuel-infra/backports
+              centos7_build_vote_user=ci-build-rpm
+              trusty_build_vote_user=ci-build-deb
+              xenial_build_vote_user=ci-build-xenial
+              centos7_test_vote_user=vm-check-install-rpm
+              trusty_test_vote_user=vm-check-install-deb
+              xenial_test_vote_user=ci-test-xenial
+    triggers:
+        - gerrit:
+            trigger-on:
+              - change-merged-event
+              - patchset-created-event
+            projects:
+              - project-compare-type: 'ANT'
+                project-pattern: '{backports-code-project}'
+                branches:
+                  - branch-compare-type: 'ANT'
+                    branch-pattern: '{backports-code-branch}'
+                file-paths:
+                  - compare-type: 'ANT'
+                    pattern: 'specs/centos7/**'
+              - project-compare-type: 'ANT'
+                project-pattern: '{backports-code-project}'
+                branches:
+                  - branch-compare-type: 'ANT'
+                    branch-pattern: '{backports-code-branch}'
+                file-paths:
+                  - compare-type: 'ANT'
+                    pattern: 'specs/trusty/**'
+              - project-compare-type: 'ANT'
+                project-pattern: '{backports-code-project}'
+                branches:
+                  - branch-compare-type: 'ANT'
+                    branch-pattern: '{backports-code-branch}'
+                file-paths:
+                  - compare-type: 'ANT'
+                    pattern: 'specs/xenial/**'
+              - project-compare-type: 'ANT'
+                project-pattern: '{packages-code-project}'
+                branches:
+                  - branch-compare-type: 'ANT'
+                    branch-pattern: '{packages-code-branch}'
+            server-name: fuel-infra
+            silent: true
+    builders:
+        - shell:
+            !include-raw-escape: builders/pipeline-starter.sh
+        - trigger-builds:
+            - project: 'infra-build'
+              block: false
+              current-parameters: true
+              parameter-factories:
+                - factory: filebuild
+                  file-pattern: '*.pipeline.params'
+                  no-files-found-action: FAIL
+    publishers:
+        - pkgname-as-desc
+        - email:
+            recipients: '{mailto}'
+            notify-every-unstable-build: false
+            send-to-individuals: false
