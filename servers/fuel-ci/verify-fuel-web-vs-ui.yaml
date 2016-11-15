@@ -78,6 +78,7 @@
       - inject:
           properties-content: |
             UI_TEST_GROUP={ui_test_group}
+            FAIL_FAST=false
       - shell:
           !include-raw-escape: builders/verify-fuel-web-vs-ui.sh
 
