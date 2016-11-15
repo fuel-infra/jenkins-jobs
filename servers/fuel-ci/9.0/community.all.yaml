@@ -15,7 +15,6 @@
             MOS_UBUNTU_ROOT=/mos-repos/ubuntu/snapshots/
             EXTRA_RPM_REPOS=proposed,http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/proposed-latest/x86_64/
             EXTRA_RPM_BUILDDEP_REPO=http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/proposed-latest/x86_64/
-            FUELMAIN_GERRIT_COMMIT=refs/changes/49/347249/6
       - 'community-{version}{mod}.test_all':
           email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
