@@ -28,10 +28,6 @@
           testgroup: 'bvt_2'
           env_suffix: ''
           email: '{bvt-mail}'
-          # FIXME: Use upstream Ubuntu mirrors until there is no
-          # mirrored xenial on Mirantis' mirrors
-          properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
           trigger_projects:
           - project: fuel_community_build_reports
             condition: UNSTABLE_OR_BETTER
