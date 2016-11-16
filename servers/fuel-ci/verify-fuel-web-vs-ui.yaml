@@ -78,7 +78,7 @@
       - inject:
           properties-content: |
             UI_TEST_GROUP={ui_test_group}
-            FAIL_FAST=false
+            FAIL_FAST={fail_fast}
       - shell:
           !include-raw-escape: builders/verify-fuel-web-vs-ui.sh
 
@@ -104,6 +104,7 @@
     name: dualcheck-fuel-ui-on-fuel-web
     email-type: default
     ui_test_group: 'test'
+    fail_fast: 'true'
     timer: '@midnight'
     branches:
       - branch-compare-type: PLAIN
@@ -134,6 +135,7 @@
     name: nightly-dualcheck-fuel-ui-on-fuel-web
 
     prefix: nightly
+    fail_fast: 'false'
     proj_main: fuel-ui
     proj_helper: fuel-web
     ui_test_group: 'nightly-func-tests'
