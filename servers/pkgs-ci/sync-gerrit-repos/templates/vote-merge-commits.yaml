@@ -1,0 +1,38 @@
+#
+# Job votes CR+2 and W+1 for merge-commits having V+1 from packaging CI
+#
+# Parameters:
+#   [*gerrit-host*] - Gerrit host
+#   [*gerrit-port*] - Gerrit port (usually 29418)
+#   [*gerrit-user*] - User for Gerrit
+#   [*gerrit-creds*] - Credentials ID for specified user
+#   [*git-branch*] - Git branch to search changes
+#   [*mos-version*] - MOS version for job name
+#
+# Note, using SSH for accessing Gerrit requires to export credentials
+# via ssh-agent-credentials wrapper!!!
+#
+
+- job-template:
+    name: '{mos-version}-vote-merge-commits'
+    disabled: '{is-disabled}'
+    timer: ''
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '{gerrit-creds}'
+      - timeout:
+          timeout: 10
+    builders:
+      - inject:
+          properties-content: |
+            GERRIT_HOST={gerrit-host}
+            GERRIT_PORT={gerrit-port}
+            GERRIT_USER={gerrit-user}
+            GIT_BRANCH={git-branch}
+      - shell:
+          !include-raw-escape:
+            '../builders/vote-merge-commits.sh'
+    triggers:
+        - timed: '{timer}'
+    node: '{sync-node}'
