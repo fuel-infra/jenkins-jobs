@@ -42,7 +42,8 @@
 
         - post_installation
 
-        - check_scaling_murano
+        - check_scaling_murano:
+            murano-swarm-test/job-weight: '11'
 
     - product-ci/fuel-plugin-murano/templates/murano-timer:
         timer: '0 21 * * 1-7'
