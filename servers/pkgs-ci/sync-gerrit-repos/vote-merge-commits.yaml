@@ -1,0 +1,23 @@
+- project:
+    name: 'vote-merge-commits'
+    sync-node: 'sync-mos-branch'
+
+    mos-version:
+    - '8.0':
+        git-branch: 'openstack-ci/fuel-8.0/liberty'
+    - '9.0':
+        git-branch: '9.0/mitaka'
+    - '10.0':
+        git-branch: '10.0/newton'
+
+    # Syncronization schedule
+    timer: 'H */12 * * *'  # twice per day
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: 'pkgs-ci'
+    gerrit-creds: '{ssh-creds-pkgs-ci}'
+
+    jobs:
+    - '{mos-version}-vote-merge-commits'
