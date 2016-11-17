@@ -10,29 +10,11 @@ UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
 CENTOS_UPDATE_HOST="http://pkg-updates.fuel-infra.org/centos7/"
 
 case "${LOCATION}" in
-    srt)
-        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/"
-        ;;
-    msk)
-        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/"
-        ;;
-    kha)
-        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/"
-        ;;
-    poz)
-        MIRROR_HOST="http://osci-mirror-poz.poz.mirantis.net/"
-        ;;
-    bud)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/"
-        ;;
-    bud-ext)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/"
-        ;;
     mnv|scc)
-        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/"
+        MIRROR_HOST="http://us.mirror.fuel-infra.org/"
         ;;
     *)
-        MIRROR_HOST="http://mirror.fuel-infra.org/"
+        MIRROR_HOST="http://eu.mirror.fuel-infra.org/"
 esac
 
 ###################### Get MIRROR_UBUNTU ###############
