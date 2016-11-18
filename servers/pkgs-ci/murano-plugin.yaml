@@ -73,9 +73,10 @@
       inject PLUGIN_DIR                '{plugin_repo_basename}'
       inject OVERRIDE_PUPPET_MURANO    false
 
-      if echo "$GERRIT_BRANCH" | grep -q '[.0-9]*/release/[.0-9]*' ; then
+      if echo "$GERRIT_BRANCH" | grep -q '[.0-9]*/release/.+' ; then
         # perform such conversion:
-        # 9.0/release/0.0.1 -> release/0.0.1/
+        # 9.0/release/<release name> -> release/<release name>/
+        # 9.0/release/0.0.1          -> release/0.0.1/
         inject BIN_REPO_SUBPATH      "${{GERRIT_BRANCH#*/}}/"
       else
         inject BIN_REPO_SUBPATH      ''
