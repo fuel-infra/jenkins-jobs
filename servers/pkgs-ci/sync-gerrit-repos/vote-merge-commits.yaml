@@ -9,8 +9,6 @@
         git-branch: '9.0/mitaka'
     - '10.0':
         git-branch: '10.0/newton'
-        # FIXME: Disable while jobs are run in non-voting mode
-        is-disabled: true
 
     # Syncronization schedule
     timer: 'H */12 * * *'  # twice per day
