@@ -11,6 +11,7 @@
           description: 'Build main product ISO'
           timer: '0 5-23/6 * * *'
           variables: |
+            BUILD_PACKAGES=0
             MOS_CENTOS_ROOT=/mos-repos/centos/mos10.0-centos7/
             MOS_UBUNTU_TARGET=10.0.target.txt
             MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
