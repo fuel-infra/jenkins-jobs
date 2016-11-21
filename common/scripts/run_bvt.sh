@@ -4,42 +4,39 @@ set -ex
 
 ###################### Get MIRROR HOST ###############
 
-LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location || :)
 LOCATION=${LOCATION_FACT:-bud}
 UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
 DISTRO=${DISTRO:-trusty}
 
 case "${LOCATION}" in
     srt)
-        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/pkgs/"
+        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/pkgs/snapshots/"
         ;;
     msk)
-        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/pkgs/"
+        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/pkgs/snapshots/"
         ;;
     kha)
-        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/pkgs/"
+        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/pkgs/snapshots/"
         ;;
     poz|bud|budext|cz)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
+        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/snapshots/"
         ;;
     scc)
-        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/pkgs/"
+        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/pkgs/snapshots/"
         ;;
     *)
-        MIRROR_HOST="http://mirror.fuel-infra.org/pkgs/"
+        MIRROR_HOST="http://mirror.fuel-infra.org/pkgs/snapshots/"
 esac
 
 ###################### Get MIRROR_UBUNTU ###############
 
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
 
-    case "${UBUNTU_MIRROR_ID}" in
-        latest)
-            UBUNTU_MIRROR_URL="$(curl ${MIRROR_HOST}ubuntu-latest.htm)"
-            ;;
-        *)
-            UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
-    esac
+    if [ "${UBUNTU_MIRROR_ID}" = 'latest' ]; then
+        UBUNTU_MIRROR_ID=$(curl -sSf "${MIRROR_HOST}ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
+    fi
+    UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
 
     UBUNTU_REPOS="deb ${UBUNTU_MIRROR_URL} ${DISTRO} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${DISTRO}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${DISTRO}-security main universe multiverse"
 

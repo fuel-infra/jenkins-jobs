@@ -41,7 +41,7 @@ fi
 
 # 1. Define closest mirror based on server location
 
-LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location || :)
 LOCATION=${LOCATION_FACT:-bud}
 
 if [ -z "${CLOSEST_MIRROR_URL}" ]; then
@@ -70,16 +70,16 @@ fi
 
 if [ "${UBUNTU_MIRROR_ID}" == 'latest' ]
 then
-    # Get the latest mirror and set the mirror id
-    UBUNTU_MIRROR_URL=$(curl -sSf "${CLOSEST_MIRROR_URL}/pkgs/ubuntu-latest.htm")
-    UBUNTU_MIRROR_ID=$(expr "${UBUNTU_MIRROR_URL}" : '.*/\(ubuntu-.*\)')
+    # Get the latest mirror id and set the mirror URL
+    UBUNTU_MIRROR_ID=$(curl -sSf "${CLOSEST_MIRROR_URL}/pkgs/snapshots/ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
+    export UBUNTU_MIRROR_URL="${CLOSEST_MIRROR_URL}/pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
 fi
 
 # make system uses both MIRROR_UBUNTU and MIRROR_UBUNTU_ROOT
 # parameters and concatenates them
 
 export MIRROR_UBUNTU=${MIRROR_UBUNTU:-"${CLOSEST_MIRROR_URL#http://}"}
-export MIRROR_UBUNTU_ROOT=${MIRROR_UBUNTU_ROOT:-"/pkgs/${UBUNTU_MIRROR_ID}"}
+export MIRROR_UBUNTU_ROOT=${MIRROR_UBUNTU_ROOT:-"/pkgs/snapshots/${UBUNTU_MIRROR_ID}"}
 
 echo "UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID}" > "${ARTS_DIR}/ubuntu_mirror_id.txt"
 
@@ -99,9 +99,9 @@ fi
 
 if [ "${CENTOS_MIRROR_ID}" == 'centos-7.2.1511' ]
 then
-    # Get the latest mirror and set the mirror id
-    CENTOS_MIRROR_URL=$(curl -sSf "${CLOSEST_MIRROR_URL}/pkgs/centos-7.2.1511-latest.htm")
-    CENTOS_MIRROR_ID=$(expr "${CENTOS_MIRROR_URL}" : '.*/\(centos-.*\)')
+    # Get the latest mirror id and set the mirror URL
+    CENTOS_MIRROR_ID=$(curl -sSf "${CLOSEST_MIRROR_URL}/pkgs/snapshots/${CENTOS_MIRROR_ID}-latest.target.txt" | sed '1p;d')
+    export CENTOS_MIRROR_URL="${CLOSEST_MIRROR_URL}/pkgs/snapshots/${CENTOS_MIRROR_ID}/"
 fi
 
 MIRROR_CENTOS_ROOT="pkgs/snapshots/${CENTOS_MIRROR_ID}"

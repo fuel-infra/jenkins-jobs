@@ -6,7 +6,7 @@ set -ex
 
 ###################### Get MIRROR HOST ###############
 
-LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location || :)
 LOCATION=${LOCATION_FACT:-bud}
 UBUNTU_DIST=${UBUNTU_DIST:-trusty}
 
@@ -31,13 +31,10 @@ case "${LOCATION}" in
 esac
 
 export $(curl -sSf "${JENKINS_URL}job/${ENV_JOB}/lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt")
-case "${UBUNTU_MIRROR_ID}" in
-    latest)
-        UBUNTU_MIRROR_URL="$(curl ${MIRROR_HOST}pkgs/ubuntu-latest.htm)"
-        ;;
-    *)
-        UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/${UBUNTU_MIRROR_ID}/"
-esac
+if [ "${UBUNTU_MIRROR_ID}" = 'latest' ]; then
+    UBUNTU_MIRROR_ID=$(curl -sSf "${MIRROR_HOST}pkgs/snapshots/ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
+fi
+UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
 
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
     export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-proposed main universe multiverse"

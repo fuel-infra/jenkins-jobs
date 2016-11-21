@@ -43,10 +43,9 @@ ENABLE_UBUNTU_PROPOSED=${ENABLE_UBUNTU_PROPOSED:-false}
 
 if [ -z "${MIRROR_UBUNTU}" ]; then
     if [ "${UBUNTU_MIRROR_ID}" = "latest" ]; then
-        UBUNTU_MIRROR_URL=$(curl -fLsS "http://${MIRROR_HOST}/pkgs/ubuntu-latest.htm")
-    else
-        UBUNTU_MIRROR_URL="http://${MIRROR_HOST}/pkgs/${UBUNTU_MIRROR_ID}/"
+        UBUNTU_MIRROR_ID=$(curl -sSf "http://${MIRROR_HOST}/pkgs/snapshots/ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
     fi
+    UBUNTU_MIRROR_URL="http://${MIRROR_HOST}/pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
 
     MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse"
 

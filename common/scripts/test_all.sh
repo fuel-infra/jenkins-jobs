@@ -6,12 +6,8 @@ set -ex
 
 if [ "${UBUNTU_MIRROR_ID}" == 'latest' ]
 then
-    # Get the latest mirror and set the mirror id
-    UBUNTU_MIRROR_URL=$(curl "http://mirror.fuel-infra.org/pkgs/ubuntu-latest.htm")
-    UBUNTU_MIRROR_ID=$(expr "${UBUNTU_MIRROR_URL}" : '.*/\(ubuntu-.*\)')
-else
-    # Don't change mirror id, set mirror url only
-    UBUNTU_MIRROR_URL="http://mirror.fuel-infra.org/pkgs/${UBUNTU_MIRROR_ID}"
+    # Get the latest mirror id
+    UBUNTU_MIRROR_ID=$(curl -sSf "http://mirror.fuel-infra.org/pkgs/snapshots/ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
 fi
 
 # Get the real build number from the lastSuccessfulBuild link

@@ -14,34 +14,34 @@ TEST_ISO_JOB_URL="${JENKINS_URL}job/${ENV_PREFIX:0:3}.test_all/"
 
 ###################### Get MIRROR HOST ###############
 
-LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location || :)
 LOCATION=${LOCATION_FACT:-bud}
 UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
 
 case "${LOCATION}" in
     srt)
-        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/pkgs/"
+        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/pkgs/snapshots/"
         ;;
     msk)
-        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/pkgs/"
+        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/pkgs/snapshots/"
         ;;
     kha)
-        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/pkgs/"
+        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/pkgs/snapshots/"
         ;;
     poz)
-        MIRROR_HOST="http://osci-mirror-poz.poz.mirantis.net/pkgs/"
+        MIRROR_HOST="http://osci-mirror-poz.poz.mirantis.net/pkgs/snapshots/"
         ;;
     bud)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
+        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/snapshots/"
         ;;
     bud-ext)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/"
+        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/snapshots/"
         ;;
     mnv|scc)
-        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/pkgs/"
+        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/pkgs/snapshots/"
         ;;
     *)
-        MIRROR_HOST="http://mirror.fuel-infra.org/pkgs/"
+        MIRROR_HOST="http://mirror.fuel-infra.org/pkgs/snapshots/"
 esac
 
 ###################### Get MIRROR_UBUNTU ###############
@@ -51,14 +51,12 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
     case "${UBUNTU_MIRROR_ID}" in
         latest-stable)
             UBUNTU_MIRROR_ID="$(curl -fsS "${TEST_ISO_JOB_URL}lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt" | awk -F '[ =]' '{print $NF}')"
-            UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
             ;;
         latest)
-            UBUNTU_MIRROR_URL="$(curl ${MIRROR_HOST}ubuntu-latest.htm)"
+            UBUNTU_MIRROR_ID=$(curl -sSf "${MIRROR_HOST}ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
             ;;
-        *)
-            UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
     esac
+    UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
 
     export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-proposed main universe multiverse"
 fi
