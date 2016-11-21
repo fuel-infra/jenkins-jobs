@@ -9,90 +9,145 @@
     dist: 'ubuntu'
     weight: '1'
     version-id: '9.x'
-    properties: |
+    properties-content-overrides: |
       FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
       ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+
     jobs:
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'sriov'
-         downstream_environment: 'alpha'
-         properties: |
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
+         properties-content-overrides: |
            KVM_USE=True
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'ceph_for_volumes_images_ephemeral_rados'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'lock_db_access_from_primary_controller'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'shut_down_mongo_node'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'recovery_neutron_agents_after_restart'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'kill_mongo_processes'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'close_connections_for_mongo'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'power_outage_cinder_cluster'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'shutdown_ceph_for_all'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'ha_neutron_haproxy_termination'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'tun_ceph_all'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'cinder_ceph_for_images_ephemeral_rados'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'ceph_volumes_ephemeral'
-         downstream_environment: 'alpha'
+         environment: 'alpha'
+         admin_nic: 'eno2'
+         admin_vlan: '270'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'four_controllers'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'add_ceph_stop'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'mongo_ceph_with_ceilometer'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'ceph_for_images_ephemeral_rados'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'shutdown_primary_controller_ceph'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'safe_reboot_primary_controller'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'remove_controllers'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'add_delete_compute'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'add_delete_cinder'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'add_delete_ceph'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'huge_separate_rabbitmq_db'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'hard_reset_primary_controller'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'safe_reboot_primary_controller_ceph'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
      - '{version-id}.baremetal.{dist}.{testgroup}':
          testgroup: 'shutdown_cinder_cluster'
-         downstream_environment: 'beta'
+         environment: 'beta'
+         admin_nic: 'eno2'
+         admin_vlan: '223'
