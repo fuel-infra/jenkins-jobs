@@ -48,7 +48,7 @@ main () {
 
     # Create or update chroots
     local _rpmchroots
-    _rpmchroots="$(ls -1 /var/cache/docker-builder/mock/cache/)"
+    _rpmchroots="$(ls -1 /var/cache/docker-builder/mock/cache/ || :)"
     for target in $(find "${_dpath}/mockbuild/" -maxdepth 1 -name '*.conf' | egrep -o '[0-9]+') ; do
         if [ "$(echo "${_rpmchroots}" | grep -Fc -e "-${target}-")" -eq 0 ] ; then
             env "DIST=${target}" bash "${_dpath}/create-rpm-chroot.sh"
@@ -58,7 +58,7 @@ main () {
     done
 
     local _debchroots
-    _debchroots="$(ls -1 /var/cache/docker-builder/sbuild/)"
+    _debchroots="$(ls -1 /var/cache/docker-builder/sbuild/ || :)"
     target='trusty'
     if [ "$(echo "${_debchroots}" | grep -Fc -e "${target}")" -eq 0 ] ; then
         env "DIST=${target}" "UPSTREAM_MIRROR=${UBUNTU_MIRROR_URL}" bash "${_dpath}/create-deb-chroot.sh"
