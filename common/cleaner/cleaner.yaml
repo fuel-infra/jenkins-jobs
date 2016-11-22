@@ -9,6 +9,7 @@
     lifetime_bvt: '24'
     lifetime_swarm: '22'
     lifetime_upgrades: '22'
+    lifetime_fuel: '72'
     lifetime_other: '16'
     lifetime_custom: '72'
 
@@ -48,6 +49,10 @@
           name: LIFETIME_UPGRADES
           description: 'Lifetime for custom systests'
           default: '{lifetime_upgrades}'
+      - string:
+          name: LIFETIME_FUEL
+          description: 'Lifetime for fuel deployment environments'
+          default: '{lifetime_fuel}'
       - string:
           name: LIFETIME_OTHER
           description: 'Lifetime for other systests'

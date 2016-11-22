@@ -8,6 +8,7 @@
     lifetime_acceptance: '168'
     lifetime_bvt: '24'
     lifetime_swarm: '22'
+    lifetime_fuel: '72'
     lifetime_other: '16'
     jobs:
       - cleaner

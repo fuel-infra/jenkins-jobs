@@ -74,6 +74,14 @@ tests_list = [
         'protect_latest': False,
     }),
 
+    # fuel deployment tests, executed per-change to some fuel projects
+    # should be investigated by change author
+    ('fuel', {
+        'env_regexp': '^env_\w+_\w+',
+        'lifetime': int(os.environ.get('LIFETIME_FUEL', 72)),
+        'protect_latest': False,
+    }),
+
 ]
 
 # default lifetime for not specified tests
