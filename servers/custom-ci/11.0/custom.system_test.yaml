@@ -4,6 +4,5 @@
     mos: '11.0'
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     test_iso_job_url: 'https://product-ci.infra.mirantis.net/job/{mos}.test_all/'
-    mirror_ubuntu: 'deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse'
     jobs:
       - '{mos}.custom.system_test'

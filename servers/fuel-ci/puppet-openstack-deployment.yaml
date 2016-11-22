@@ -193,7 +193,6 @@
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             SLAVE_NODE_MEMORY=4096
 
       - '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
@@ -202,7 +201,6 @@
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
 
 - project:
     name: 'Master fuel-library puppet-openstack deployment tests'
@@ -228,7 +226,6 @@
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             SLAVE_NODE_MEMORY=4096
 
       - '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
@@ -237,4 +234,3 @@
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
