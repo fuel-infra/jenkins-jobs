@@ -1,0 +1,14 @@
+- project:
+    name: product-ci-cleaner
+    devops_25: true
+    devops_29: true
+    devops_upgrades: true
+    release_60: false
+    release_61: false
+    lifetime_acceptance: '168'
+    lifetime_bvt: '24'
+    lifetime_swarm: '22'
+    lifetime_other: '16'
+    jobs:
+      - cleaner
+      - cleaner-on-labels
