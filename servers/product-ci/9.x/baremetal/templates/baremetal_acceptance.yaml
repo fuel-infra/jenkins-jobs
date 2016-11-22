@@ -4,7 +4,6 @@
     node: 'baremetal'
     concurrent: false
 
-
     version: '9.x'
     venvpath: '/home/jenkins/qa-venv-master-3.0'
     env_suffix: $BUILD_ID

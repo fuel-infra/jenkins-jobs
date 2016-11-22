@@ -1,5 +1,6 @@
 - project:
-    name: '{version-id}.baremetal'
+    name: 'Baremetal tests'
+
     test-type: 'baremetal'
     repobranch: 'origin/stable/mitaka'
     reponame: 'fuel-qa'
@@ -9,145 +10,67 @@
     dist: 'ubuntu'
     weight: '1'
     version-id: '9.x'
-    properties-content-overrides: |
-      FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
-      ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
 
     jobs:
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'sriov'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-         properties-content-overrides: |
-           KVM_USE=True
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'ceph_for_volumes_images_ephemeral_rados'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'lock_db_access_from_primary_controller'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'shut_down_mongo_node'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'recovery_neutron_agents_after_restart'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'kill_mongo_processes'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'close_connections_for_mongo'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'power_outage_cinder_cluster'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'shutdown_ceph_for_all'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'ha_neutron_haproxy_termination'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'tun_ceph_all'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'cinder_ceph_for_images_ephemeral_rados'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'ceph_volumes_ephemeral'
-         environment: 'alpha'
-         admin_nic: 'eno2'
-         admin_vlan: '270'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'four_controllers'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'add_ceph_stop'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'mongo_ceph_with_ceilometer'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'ceph_for_images_ephemeral_rados'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'shutdown_primary_controller_ceph'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'safe_reboot_primary_controller'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'remove_controllers'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'add_delete_compute'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'add_delete_cinder'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'add_delete_ceph'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'huge_separate_rabbitmq_db'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'hard_reset_primary_controller'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'safe_reboot_primary_controller_ceph'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
-     - '{version-id}.baremetal.{dist}.{testgroup}':
-         testgroup: 'shutdown_cinder_cluster'
-         environment: 'beta'
-         admin_nic: 'eno2'
-         admin_vlan: '223'
+
+    # customized
+    - '{version-id}.baremetal.{dist}.{testgroup}':
+        properties-content-overrides: |
+          KVM_USE=True
+
+        environment: 'alpha'
+        admin_nic: 'eno2'
+        admin_vlan: '270'
+
+        testgroup:
+        - 'sriov'
+
+    # alpha group
+    - '{version-id}.baremetal.{dist}.{testgroup}':
+        properties-content-overrides: |
+          FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+          ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+
+        environment: 'alpha'
+        admin_nic: 'eno2'
+        admin_vlan: '270'
+
+        testgroup:
+        - 'ceph_for_volumes_images_ephemeral_rados'
+        - 'lock_db_access_from_primary_controller'
+        - 'shut_down_mongo_node'
+        - 'recovery_neutron_agents_after_restart'
+        - 'kill_mongo_processes'
+        - 'close_connections_for_mongo'
+        - 'power_outage_cinder_cluster'
+        - 'shutdown_ceph_for_all'
+        - 'ha_neutron_haproxy_termination'
+        - 'tun_ceph_all'
+        - 'cinder_ceph_for_images_ephemeral_rados'
+        - 'ceph_volumes_ephemeral'
+
+    # beta group
+    - '{version-id}.baremetal.{dist}.{testgroup}':
+        properties-content-overrides: |
+          FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+          ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+
+        environment: 'beta'
+        admin_nic: 'eno2'
+        admin_vlan: '223'
+
+        testgroup:
+        - 'four_controllers'
+        - 'add_ceph_stop'
+        - 'mongo_ceph_with_ceilometer'
+        - 'ceph_for_images_ephemeral_rados'
+        - 'shutdown_primary_controller_ceph'
+        - 'safe_reboot_primary_controller'
+        - 'remove_controllers'
+        - 'add_delete_compute'
+        - 'add_delete_cinder'
+        - 'add_delete_ceph'
+        - 'huge_separate_rabbitmq_db'
+        - 'hard_reset_primary_controller'
+        - 'safe_reboot_primary_controller_ceph'
+        - 'shutdown_cinder_cluster'
