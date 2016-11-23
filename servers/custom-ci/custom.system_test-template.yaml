@@ -130,7 +130,7 @@
                https://github.com/openstack/fuel-plugin-murano-tests.git
       - string: # added for ability override test framework branch
           name: TEST_FRAMEWORK_BRANCH
-          default: 'stable/mitaka'
+          default: 'origin/{projectbranch}'
           description: 'Default value for quel-qa, for custom framework need change e.g. "master"'
       - text:
           name: PLUGINS
