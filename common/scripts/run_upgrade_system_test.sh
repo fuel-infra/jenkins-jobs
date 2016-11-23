@@ -2,6 +2,8 @@
 
 set -ex
 
+UBUNTU_DIST=${UBUNTU_DIST:-trusty}
+
 # Set proper Openstack Release
 if [[ ${OPENSTACK_RELEASE} == 'centos' ]]; then
 	export OPENSTACK_RELEASE="CentOS"
@@ -56,7 +58,7 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
             UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
     esac
 
-    export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-proposed main universe multiverse"
+    export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-proposed main universe multiverse"
 fi
 
 export TIMESTAMP=$(date +%y%m%d%H%M)
