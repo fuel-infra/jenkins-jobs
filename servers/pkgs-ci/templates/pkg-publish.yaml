@@ -78,7 +78,7 @@
     publishers:
       - pkg-version-report
       - archive:
-           artifacts: '{pkg_type}.publish.setenvfile, tests.envfile'
+           artifacts: '{pkg_type}.publish.setenvfile, tests.envfile, pkg-versions.*'
            allow-empty: true
 
     node: '{publish-node}'
