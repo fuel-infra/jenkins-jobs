@@ -8,7 +8,7 @@ if [ -f mirror.setenvfile ]; then
     source mirror.setenvfile
 else
     MIRROR_HOST="http://mirror.fuel-infra.org/"
-    UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/latest/"
+    UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/snapshots/ubuntu-latest/"
     export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse"
 fi
 

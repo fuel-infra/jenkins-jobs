@@ -45,12 +45,9 @@ store "FUEL_QA_COMMIT" "$(git -C . rev-parse HEAD)"
 
 # Store snapshot for copy of Ubuntu deb repo
 
-# http://mirror.seed-cz1.fuel-infra.org/pkgs/ubuntu-2016-07-13-172538
-#                                            ^^^^^^^^^^^^^^^^^^^^^^^^
-__ubuntu_latest_repo_snaphot_url="$(\
-    curl "http://${MIRROR_HOST}/pkgs/ubuntu-latest.htm" \
-    | head -1)"
-__ubuntu_latest_repo_snaphot_id="${__ubuntu_latest_repo_snaphot_url##*/}"
+# http://mirror.seed-cz1.fuel-infra.org/pkgs/snapshots/ubuntu-2016-07-13-172538
+#                                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+__ubuntu_latest_repo_snaphot_id=$(curl -sSf "${MIRROR_HOST}/pkgs/snapshots/ubuntu-latest.target.txt" | sed '1p;d')
 store "UBUNTU_MIRROR_ID" "${__ubuntu_latest_repo_snaphot_id}"
 
 
@@ -59,11 +56,7 @@ store "UBUNTU_MIRROR_ID" "${__ubuntu_latest_repo_snaphot_id}"
 
 # http://mirror.fuel-infra.org/pkgs/snapshots/centos-7.2.1511-2016-05-31-083834/
 #                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-__centos_latest_repo_snaphot_url="$(\
-    curl "http://${MIRROR_HOST}/pkgs/centos-latest.htm" \
-    | head -1)"
-__tmp="${__centos_latest_repo_snaphot_url%/}"
-__centos_latest_repo_snaphot_id="${__tmp##*/}"
+__centos_latest_repo_snaphot_id=$(curl -sSf "${MIRROR_HOST}/pkgs/snapshots/centos-7.2.1511-latest.target.txt" | sed '1p;d')
 store "CENTOS_MIRROR_ID" "${__centos_latest_repo_snaphot_id}"
 
 
