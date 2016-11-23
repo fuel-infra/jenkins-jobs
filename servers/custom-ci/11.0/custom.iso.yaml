@@ -1,13 +1,13 @@
 - project:
-    name: '10.0 custom iso'
-    version: '10.0'
+    name: '11.0 custom iso'
+    version: '11.0'
     mod: '-custom'
-    default_commit: 'stable/newton'
+    default_commit: 'master'
     defaults: '{version}.custom.iso'
     overridden_parameters: |
-      MOS_CENTOS_ROOT=/mos-repos/centos/mos-10.0-centos7/
-      MOS_UBUNTU_TARGET=10.0.target.txt
-      MIRROR_MOS_UBUNTU_SUITE=mos-10.0
+      MOS_CENTOS_ROOT=/mos-repos/centos/mos-master-centos7/
+      MOS_UBUNTU_TARGET=master.target.txt
+      MIRROR_MOS_UBUNTU_SUITE=mos-master
 
       # Ubuntu Xenial
       MIRROR_UBUNTU=cz.archive.ubuntu.com

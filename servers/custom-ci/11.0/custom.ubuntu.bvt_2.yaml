@@ -1,5 +1,5 @@
 - job:
-    name: '10.0.custom.ubuntu.bvt_2'
+    name: '11.0.custom.ubuntu.bvt_2'
     builders:
       - inject:
           properties-content: |
@@ -34,7 +34,7 @@
           name: UBUNTU_MIRROR_ID
           default: latest
           description: |
-            'latest' - latest available; 'latest-stable' - mirror from successful run of 10.0.test_all job; 'ubuntu-2015-01-01-030500' for exact snapshot
+            'latest' - latest available; 'latest-stable' - mirror from successful run of 11.0.test_all job; 'ubuntu-2015-01-01-030500' for exact snapshot
       - string:
           name: MIRROR_UBUNTU
           default:
@@ -52,13 +52,13 @@
 
       - string:
           name: ENV_PREFIX
-          default: 10.0.custom.ubuntu.bvt_2
+          default: 11.0.custom.ubuntu.bvt_2
           description: Define env prefix name. This parameter should not be changed
     scm:
       - git:
           url: 'https://git.openstack.org/openstack/fuel-qa.git'
           branches:
-            - 'stable/newton'
+            - 'origin/master'
     wrappers:
       - ansicolor:
           colormap: xterm
