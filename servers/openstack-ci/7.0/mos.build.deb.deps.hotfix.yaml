@@ -1,5 +1,5 @@
 - job-template:
-    name: '7.0.mos-new.fuel.build-rpm-deps-security'
+    name: '7.0.mos-new.build-deb-deps-hotfix'
     disabled: '{is-disabled}'
     concurrent: true
     node: '{build-node}'
@@ -8,26 +8,28 @@
     properties:
       - inject:
           properties-content: |
-            GERRIT_USER=ci-build-rpm
+            GERRIT_USER=ci-build-deb
             GERRIT_VOTE=1
-            SRC_PROJECT_PATH=packages/{rpm-dist-fuel}
-            DIST={rpm-dist-fuel}
+            SRC_PROJECT_PATH=packages/{deb-dist-env}
+            DIST={deb-dist-env}
             IS_OPENSTACK=false
-            IS_SECURITY=true
+            IS_SECURITY=false
+            IS_HOTFIX=true
             IS_UPDATES={is-updates}
-            IS_HOTFIX=false
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
-            RPM_OS_REPO_PATH={rpm-os-repo-path-fuel}
-            RPM_PROPOSED_REPO_PATH={rpm-proposed-repo-path-fuel}
-            RPM_UPDATES_REPO_PATH={rpm-updates-repo-path-fuel}
-            RPM_SECURITY_REPO_PATH={rpm-security-repo-path-fuel}
-            RPM_HOLDBACK_REPO_PATH={rpm-holdback-repo-path-fuel}
-            RPM_HOTFIX_REPO_PATH={rpm-hotfix-repo-path-fuel}
-            DISPLAY_NAME=Build rpm package on primary repository
-            REQUEST_TYPE=Centos6
+            ORIGIN={deb-origin}
+            DEB_REPO_PATH={deb-base-repo-path}
+            DEB_DIST_NAME={deb-base-dist-name}
+            DEB_PROPOSED_DIST_NAME={deb-proposed-dist-name}
+            DEB_UPDATES_DIST_NAME={deb-updates-dist-name}
+            DEB_SECURITY_DIST_NAME={deb-security-dist-name}
+            DEB_HOLDBACK_DIST_NAME={deb-holdback-dist-name}
+            DEB_HOTFIX_DIST_NAME={deb-hotfix-dist-name}
+            DISPLAY_NAME=Build deb package on temporary repository
+            REQUEST_TYPE=Trusty
     wrappers:
-      - ci-build-rpm
+      - ci-build-deb
       - timeout:
           fail: true
           timeout: 120
@@ -62,8 +64,8 @@
           scm-branch: '{scm-ci-status-client-branch}'
     triggers:
       - fuel-infra-deps-submit:
-          code-project: '{fuel-rpm-deps-code-project}'
-          branch: '{deps-security-branch}'
+          code-project: '{cluster-deb-deps-code-project}'
+          branch: '{deps-hotfix-branch}'
     builders:
       - shell:
           !include-raw-escape: builders/ci.status.report.start.sh
@@ -72,7 +74,7 @@
           # Remove junk files
           [ -f "corr.setenvfile" ] && rm -f corr.setenvfile || :
       - shell:
-          !include-raw-escape: builders/mos.build.rpm.sh
+          !include-raw-escape: builders/mos.build.deb.sh
       - inject:
           properties-file: 'setenvfile'
       - conditional-step:
@@ -91,26 +93,28 @@
                       IS_UPDATES=${{IS_UPDATES}}
                       IS_HOTFIX=${{IS_HOTFIX}}
                       DIST=${{DIST}}
+                      ORIGIN=${{ORIGIN}}
                       REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
                       REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
-                      RPM_OS_REPO_PATH=${{RPM_OS_REPO_PATH}}
-                      RPM_PROPOSED_REPO_PATH=${{RPM_PROPOSED_REPO_PATH}}
-                      RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
-                      RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
-                      RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
-                      RPM_HOTFIX_REPO_PATH=${{RPM_HOTFIX_REPO_PATH}}
+                      DEB_REPO_PATH=${{DEB_REPO_PATH}}
+                      DEB_DIST_NAME=${{DEB_DIST_NAME}}
+                      DEB_PROPOSED_DIST_NAME=${{DEB_PROPOSED_DIST_NAME}}
+                      DEB_UPDATES_DIST_NAME=${{DEB_UPDATES_DIST_NAME}}
+                      DEB_SECURITY_DIST_NAME=${{DEB_SECURITY_DIST_NAME}}
+                      DEB_HOLDBACK_DIST_NAME=${{DEB_HOLDBACK_DIST_NAME}}
+                      DEB_HOTFIX_DIST_NAME=${{DEB_HOTFIX_DIST_NAME}}
                   block: true
              - copyartifact:
                   project: '7.0.mos-new.publisher'
-                  filter: 'rpm.publish.setenvfile'
+                  filter: 'deb.publish.setenvfile'
                   parameter-filters: 'GERRIT_PATCHSET_REVISION=${{GERRIT_PATCHSET_REVISION}}'
                   optional: true
                   which-build: 'last-successful'
              - shell: |
                   #!/bin/bash -ex
                   # Fail stage if packages is not published
-                  [ -f "rpm.publish.setenvfile" ] && source rpm.publish.setenvfile
-                  [ "${{RPM_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
+                  [ -f "deb.publish.setenvfile" ] && source deb.publish.setenvfile
+                  [ "${{DEB_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
       - shell:
           !include-raw-escape: builders/mos.vote.sh
     publishers:
@@ -122,7 +126,7 @@
            script:
               !include-raw-escape: builders/ci.status.report.stop.sh
       - archive:
-           artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
+           artifacts: '**/buildlog.txt, **/buildresult.xml'
            allow-empty: true
       - email:
            recipients: '{mailto}'

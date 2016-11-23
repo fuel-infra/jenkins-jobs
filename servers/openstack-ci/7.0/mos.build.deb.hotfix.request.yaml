@@ -1,5 +1,5 @@
 - job-template:
-    name: '7.0.mos-new.build-deb-security-request'
+    name: '7.0.mos-new.build-deb-hotfix-request'
     disabled: '{is-disabled}'
     concurrent: true
     node: '{build-node}'
@@ -16,8 +16,8 @@
             SPEC_PREFIX_PATH=/{deb-dist-env}
             DIST={deb-dist-env}
             IS_OPENSTACK=true
-            IS_SECURITY=true
-            IS_HOTFIX=false
+            IS_SECURITY=false
+            IS_HOTFIX=true
             IS_UPDATES={is-updates}
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
@@ -45,7 +45,7 @@
           default: '{release}'
       - string:
           name: SOURCE_BRANCH
-          default: '{ops-security-branch}'
+          default: '{ops-hotfix-branch}'
       - string:
           name: SPEC_BRANCH
           default: '{ops-security-branch}'
@@ -69,7 +69,7 @@
       - fuel-infra-request:
           code-project: '{ops-code-prj}'
           spec-project: '{ops-spec-prj}'
-          branch: '{ops-security-branch}'
+          branch: '{ops-hotfix-branch}'
           files: '{deb-dist-env}/debian/**'
     builders:
       - shell:

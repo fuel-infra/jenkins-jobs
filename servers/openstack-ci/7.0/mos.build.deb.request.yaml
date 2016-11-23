@@ -16,10 +16,11 @@
             SPEC_PREFIX_PATH=/{deb-dist-env}
             DIST={deb-dist-env}
             IS_OPENSTACK=true
+            IS_SECURITY=false
+            IS_HOTFIX=false
+            IS_UPDATES={is-updates}
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
-            DISPLAY_NAME=Build deb package on temporary repository
-            REQUEST_TYPE=Trusty
             ORIGIN={deb-origin}
             DEB_REPO_PATH={deb-base-repo-path}
             DEB_DIST_NAME={deb-base-dist-name}
@@ -27,6 +28,9 @@
             DEB_UPDATES_DIST_NAME={deb-updates-dist-name}
             DEB_SECURITY_DIST_NAME={deb-security-dist-name}
             DEB_HOLDBACK_DIST_NAME={deb-holdback-dist-name}
+            DEB_HOTFIX_DIST_NAME={deb-hotfix-dist-name}
+            DISPLAY_NAME=Build deb package on temporary repository
+            REQUEST_TYPE=Trusty
     wrappers:
       - ci-build-deb
       - timeout:
@@ -45,9 +49,6 @@
       - string:
           name: SPEC_BRANCH
           default: '{ops-branch}'
-      - bool:
-          name: IS_UPDATES
-          default: '{is-updates}'
       - bool:
           name: LAST_STAGE
           default: '{last_stage}'
@@ -95,6 +96,9 @@
                   current-parameters: true
                   property-file: buildresult.params
                   predefined-parameters: |
+                      IS_SECURITY=${{IS_SECURITY}}
+                      IS_UPDATES=${{IS_UPDATES}}
+                      IS_HOTFIX=${{IS_HOTFIX}}
                       DIST=${{DIST}}
                       ORIGIN=${{ORIGIN}}
                       REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
@@ -105,6 +109,7 @@
                       DEB_UPDATES_DIST_NAME=${{DEB_UPDATES_DIST_NAME}}
                       DEB_SECURITY_DIST_NAME=${{DEB_SECURITY_DIST_NAME}}
                       DEB_HOLDBACK_DIST_NAME=${{DEB_HOLDBACK_DIST_NAME}}
+                      DEB_HOTFIX_DIST_NAME=${{DEB_HOTFIX_DIST_NAME}}
                   block: true
              - copyartifact:
                   project: '7.0.mos-new.publisher'
@@ -130,8 +135,9 @@
                 PACKAGEVERSION=${{DEB_VERSION}}
                 PACKAGELIST=${{DEB_BINARIES}}
                 REPO_URL=${{DEB_REPO_URL}}
+                DIST=${{DIST}}
                 DISPLAY_NAME=Check deb package for installation and simple testing
-                REQUEST_TYPE=Trusty
+                REQUEST_TYPE=${{REQUEST_TYPE}}
           - project: '7.0.mos-new.deploy-deb'
             current-parameters: true
             property-file: 'corr.setenvfile,buildresult.params,tests.envfile'
@@ -139,7 +145,7 @@
             predefined-parameters: |
                 REPO_URL=${{DEB_REPO_URL}}
                 DISPLAY_NAME=Check deb package for installation in environment
-                REQUEST_TYPE=Trusty
+                REQUEST_TYPE=${{REQUEST_TYPE}}
     publishers:
       - pkgname-as-desc
       - post-tasks:

@@ -1,5 +1,5 @@
 - job-template:
-    name: '7.0.mos-new.fuel.build-rpm-deps-security'
+    name: '7.0.mos-new.fuel.build-rpm-deps-hotfix'
     disabled: '{is-disabled}'
     concurrent: true
     node: '{build-node}'
@@ -13,9 +13,9 @@
             SRC_PROJECT_PATH=packages/{rpm-dist-fuel}
             DIST={rpm-dist-fuel}
             IS_OPENSTACK=false
-            IS_SECURITY=true
+            IS_SECURITY=false
             IS_UPDATES={is-updates}
-            IS_HOTFIX=false
+            IS_HOTFIX=true
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
             RPM_OS_REPO_PATH={rpm-os-repo-path-fuel}
@@ -43,7 +43,7 @@
           default: ''
       - string:
           name: SOURCE_BRANCH
-          default: '{deps-security-branch}'
+          default: '{deps-hotfix-branch}'
       - bool:
           name: LAST_STAGE
           default: '{last_stage}'
@@ -63,7 +63,7 @@
     triggers:
       - fuel-infra-deps-submit:
           code-project: '{fuel-rpm-deps-code-project}'
-          branch: '{deps-security-branch}'
+          branch: '{deps-hotfix-branch}'
     builders:
       - shell:
           !include-raw-escape: builders/ci.status.report.start.sh

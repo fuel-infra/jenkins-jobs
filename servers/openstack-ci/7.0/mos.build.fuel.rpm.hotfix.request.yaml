@@ -1,5 +1,5 @@
 - job-template:
-    name: '7.0.mos-new.fuel.build-rpm-deps-security'
+    name: '7.0.mos-new.fuel.build-rpm-hotfix-request'
     disabled: '{is-disabled}'
     concurrent: true
     node: '{build-node}'
@@ -8,14 +8,12 @@
     properties:
       - inject:
           properties-content: |
-            GERRIT_USER=ci-build-rpm
-            GERRIT_VOTE=1
-            SRC_PROJECT_PATH=packages/{rpm-dist-fuel}
+            GERRIT_USER=openstack-ci-jenkins
             DIST={rpm-dist-fuel}
             IS_OPENSTACK=false
-            IS_SECURITY=true
+            IS_SECURITY=false
             IS_UPDATES={is-updates}
-            IS_HOTFIX=false
+            IS_HOTFIX=true
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
             RPM_OS_REPO_PATH={rpm-os-repo-path-fuel}
@@ -24,10 +22,10 @@
             RPM_SECURITY_REPO_PATH={rpm-security-repo-path-fuel}
             RPM_HOLDBACK_REPO_PATH={rpm-holdback-repo-path-fuel}
             RPM_HOTFIX_REPO_PATH={rpm-hotfix-repo-path-fuel}
-            DISPLAY_NAME=Build rpm package on primary repository
+            DISPLAY_NAME=Build rpm package on temporary repository
             REQUEST_TYPE=Centos6
     wrappers:
-      - ci-build-rpm
+      - openstack-ci-jenkins
       - timeout:
           fail: true
           timeout: 120
@@ -39,14 +37,8 @@
           name: PROJECT_VERSION
           default: '{release}'
       - string:
-          name: PACKAGENAME
-          default: ''
-      - string:
           name: SOURCE_BRANCH
-          default: '{deps-security-branch}'
-      - bool:
-          name: LAST_STAGE
-          default: '{last_stage}'
+          default: '{fuel-hotfix-branch}'
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
@@ -54,25 +46,72 @@
           scm-basedir: '{scm-basedir}'
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{scm-branch}'
-      - fuel-infra:
-          scm-user: '{scm-user}'
-          scm-repo: '{scm-ci-status-client-repo}'
-          scm-basedir: '{scm-ci-status-client-basedir}'
-          scm-credentials-id: '{scm-credentials-id}'
-          scm-branch: '{scm-ci-status-client-branch}'
     triggers:
-      - fuel-infra-deps-submit:
-          code-project: '{fuel-rpm-deps-code-project}'
-          branch: '{deps-security-branch}'
+      - gerrit:
+          trigger-on:
+            - patchset-created-event:
+                exclude-drafts: true
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/python-fuelclient'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/fuel-ostf'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/fuel-agent'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/fuel-astute'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/fuel-main'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/fuel-mirror'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/fuel-nailgun-agent'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/fuel-octane'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/fuel-web'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/fuel-library'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+            - project-compare-type: 'PLAIN'
+              project-pattern: 'openstack/fuel-upgrade'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '{fuel-hotfix-branch}'
+          silent: true
+          server-name: review.openstack.org
     builders:
       - shell:
-          !include-raw-escape: builders/ci.status.report.start.sh
-      - shell: |
-          #!/bin/bash -ex
-          # Remove junk files
-          [ -f "corr.setenvfile" ] && rm -f corr.setenvfile || :
-      - shell:
-          !include-raw-escape: builders/mos.build.rpm.sh
+          !include-raw-escape: builders/mos.build.fuel.rpm.sh
       - inject:
           properties-file: 'setenvfile'
       - conditional-step:
@@ -111,20 +150,12 @@
                   # Fail stage if packages is not published
                   [ -f "rpm.publish.setenvfile" ] && source rpm.publish.setenvfile
                   [ "${{RPM_PUBLISH_SUCCEEDED}}" != "true" ] && sed -i 's|^RESULT=|RESULT=1|' setenvfile || :
-      - shell:
-          !include-raw-escape: builders/mos.vote.sh
+      - shell: |
+          #!/bin/bash -ex
+          source setenvfile
+          exit "${{RESULT}}"
     publishers:
       - pkgname-as-desc
-      - post-tasks:
-         - matches:
-            - log-text: Building
-              operator: AND
-           script:
-              !include-raw-escape: builders/ci.status.report.stop.sh
       - archive:
            artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
            allow-empty: true
-      - email:
-           recipients: '{mailto}'
-           notify-every-unstable-build: false
-           send-to-individuals: false

@@ -16,6 +16,9 @@
             SPEC_PREFIX_PATH=/{rpm-dist-fuel}
             DIST={rpm-dist-fuel}
             IS_OPENSTACK=true
+            IS_SECURITY=false
+            IS_UPDATES={is-updates}
+            IS_HOTFIX=false
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
             RPM_OS_REPO_PATH={rpm-os-repo-path-fuel}
@@ -23,6 +26,9 @@
             RPM_UPDATES_REPO_PATH={rpm-updates-repo-path-fuel}
             RPM_SECURITY_REPO_PATH={rpm-security-repo-path-fuel}
             RPM_HOLDBACK_REPO_PATH={rpm-holdback-repo-path-fuel}
+            RPM_HOTFIX_REPO_PATH={rpm-hotfix-repo-path-fuel}
+            DISPLAY_NAME=Build rpm package on temporary repository
+            REQUEST_TYPE=Centos6
     wrappers:
       - ci-build-rpm
       - timeout:
@@ -41,15 +47,6 @@
       - string:
           name: SPEC_BRANCH
           default: '{ops-fuel-branch}'
-      - string:
-          name: DISPLAY_NAME
-          default: "Build rpm package on temporary repository"
-      - string:
-          name: REQUEST_TYPE
-          default: "Centos6"
-      - bool:
-          name: IS_UPDATES
-          default: '{is-updates}'
       - bool:
           name: LAST_STAGE
           default: '{last_stage}'
@@ -97,6 +94,9 @@
                   current-parameters: true
                   property-file: buildresult.params
                   predefined-parameters: |
+                      IS_SECURITY=${{IS_SECURITY}}
+                      IS_UPDATES=${{IS_UPDATES}}
+                      IS_HOTFIX=${{IS_HOTFIX}}
                       DIST=${{DIST}}
                       REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
                       REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
@@ -105,6 +105,7 @@
                       RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
                       RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
                       RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
+                      RPM_HOTFIX_REPO_PATH=${{RPM_HOTFIX_REPO_PATH}}
                   block: true
              - copyartifact:
                   project: '7.0.mos-new.publisher'
@@ -130,8 +131,8 @@
                 PACKAGELIST=${{RPM_BINARIES}}
                 REPO_URL=${{RPM_REPO_URL}}
                 DIST=${{DIST}}
-                REQUEST_TYPE='Centos6'
                 DISPLAY_NAME=Check rpm package for installation and simple testing
+                REQUEST_TYPE=${{REQUEST_TYPE}}
             property-file-fail-on-missing: false
     publishers:
       - pkgname-as-desc
