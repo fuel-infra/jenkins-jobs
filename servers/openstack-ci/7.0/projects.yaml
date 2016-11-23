@@ -30,7 +30,6 @@
     #cluster-deb-deps-code-project: '{project-name}/packages/{component-path-cluster}trusty/**'
     #fuel-rpm-deps-code-project: '{project-name}/packages/{component-path-fuel}centos6/**'
     # changed in order to backward compatibility with current 7.0 source scheme
-    cluster-rpm-deps-code-project: 'packages/centos7/**'
     cluster-deb-deps-code-project: 'packages/trusty/**'
     fuel-rpm-deps-code-project: 'packages/centos6/**'
     deps-branch: '7.0'
@@ -50,13 +49,6 @@
     rpm-updates-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/updates'
     rpm-security-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/security'
     rpm-holdback-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/holdback'
-    # rpm environment
-    rpm-dist-env: 'centos7'
-    rpm-os-repo-path-env: 'mos-repos/centos/mos7.0-centos7/os'
-    rpm-proposed-repo-path-env: 'mos-repos/centos/mos7.0-centos7/proposed'
-    rpm-updates-repo-path-env: 'mos-repos/centos/mos7.0-centos7/updates'
-    rpm-security-repo-path-env: 'mos-repos/centos/mos7.0-centos7/security'
-    rpm-holdback-repo-path-env: 'mos-repos/centos/mos7.0-centos7/holdback'
     # deb environment
     deb-origin: 'Mirantis'
     deb-dist-env: 'trusty'
@@ -70,7 +62,6 @@
     is-updates: true
     is-disabled: ''
     jobs:
-      - '7.0.mos-new.rpm'
       - '7.0.mos-new.deb'
       - '7.0.mos-new.publisher'
       - '7.0.mos-new.fuel'
@@ -85,34 +76,6 @@
       - '7.0.mos-new.maintain'
       - '7.0.mos-new.abort-package-testing'
       - '7.0.mos-new.comment-abort'
-
-- job-group:
-    name: '7.0.mos-new.rpm'
-    jobs:
-      - '7.0.mos-new.build-rpm':
-          is-disabled: true
-          last_stage: true
-      - '7.0.mos-new.build-rpm-request':
-          is-disabled: true
-          last_stage: false
-      - '7.0.mos-new.build-rpm-deps':
-          is-disabled: true
-          last_stage: true
-      - '7.0.mos-new.build-rpm-deps-request':
-          is-disabled: true
-          last_stage: false
-      - '7.0.mos-new.build-rpm-security':
-          is-disabled: true
-          last_stage: true
-      - '7.0.mos-new.build-rpm-security-request':
-          is-disabled: true
-          last_stage: false
-      - '7.0.mos-new.build-rpm-deps-security':
-          is-disabled: true
-          last_stage: true
-      - '7.0.mos-new.build-rpm-deps-security-request':
-          is-disabled: true
-          last_stage: false
 
 - job-group:
     name: '7.0.mos-new.deb'
