@@ -123,6 +123,9 @@
            # Murano env nodes need 5Gb or more RAM
            inject SLAVE_NODE_MEMORY 5120
 
+           # Murano systest shouldn't use xenial kernel
+           inject DISABLE_XENIAL_KERNEL true
+
            # needed for plugin-deploy-test.sh
            #  Since plugin-deploy-test.sh tryes to copy plugin from
            #  build job by PATH PLUGIN_FILE_PATH, we need to hook-up this behaviour
