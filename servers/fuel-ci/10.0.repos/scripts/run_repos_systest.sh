@@ -42,18 +42,11 @@ case "${LOCATION}" in
 esac
 FUEL_MIRROR_HOST="packages.fuel-infra.org"
 
-# FIXME(kozhukalov): use mirantis mirrors once they are ready
-MIRROR_UBUNTU=http://archive.ubuntu.com/ubuntu
-
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
-
-    case "${UBUNTU_MIRROR_ID}" in
-        latest)
-            MIRROR_UBUNTU="$(curl "http://${MIRROR_HOST}/pkgs/ubuntu-latest.htm")"
-            ;;
-        *)
-            MIRROR_UBUNTU="http://${MIRROR_HOST}/pkgs/${UBUNTU_MIRROR_ID}/"
-    esac
+    if [ "${UBUNTU_MIRROR_ID}" = 'latest' ]; then
+        UBUNTU_MIRROR_ID=$(curl -sSf "${MIRROR_HOST}/pkgs/snapshots/ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
+    fi
+    MIRROR_UBUNTU="${MIRROR_HOST}/pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
 fi
 
 MOS_UBUNTU_VERSION=${MOS_UBUNTU_VERSION:-master}

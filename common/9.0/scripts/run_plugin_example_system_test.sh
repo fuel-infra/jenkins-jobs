@@ -14,7 +14,7 @@ export ANALYTICS_IP="${ANALYTICS_IP}"
 
 ###################### Get MIRROR HOST ###############
 
-LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location || :)
 LOCATION=${LOCATION_FACT:-bud}
 UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
 
@@ -54,14 +54,12 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
     case "${UBUNTU_MIRROR_ID}" in
         latest-stable)
             UBUNTU_MIRROR_ID="$(curl -fsS "${TEST_ISO_JOB_URL}lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt" | awk -F '[ =]' '{print $NF}')"
-            UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/${UBUNTU_MIRROR_ID}/"
             ;;
         latest)
-            UBUNTU_MIRROR_URL="$(curl ${MIRROR_HOST}pkgs/ubuntu-latest.htm)"
+            UBUNTU_MIRROR_ID=$(curl -sSf "${MIRROR_HOST}pkgs/snapshots/ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
             ;;
-        *)
-            UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/${UBUNTU_MIRROR_ID}/"
     esac
+    UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
 
     UBUNTU_REPOS="deb ${UBUNTU_MIRROR_URL} trusty main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} trusty-security main universe multiverse"
 
