@@ -64,6 +64,16 @@
             CUSTOM_ENV=true
             BUILD_IMAGES=true
 
+      - fuel-library:
+          projectpackage: fuel-library10.0
+          testgroup: uca_neutron_ha
+          non_voting: true # override
+          timed: '30 */12 * * *'
+          properties: |
+            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+
       - fuel-nailgun-agent:
           projectpackage: nailgun-agent
           testgroup: review_nailgun_agent_one_node
