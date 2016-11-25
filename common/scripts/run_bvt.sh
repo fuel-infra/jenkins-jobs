@@ -62,6 +62,7 @@ ENV_NAME=${ENV_NAME:0:68}
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
 ISO_PATH=$(seedclient.py -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
+FUEL_QA_COMMIT=$(git -C "${WORKSPACE}" rev-parse HEAD)
 
 ISO_NAME_REPORT=$(basename "${ISO_PATH}")
 ISO_NAME_REPORT="${ISO_NAME_REPORT//.iso/}"
@@ -70,6 +71,7 @@ echo "BUILD=${ISO_NAME_REPORT}" > "${WORKSPACE}/iso_report.properties"
 # Create files which will be published as artifacts
 echo "MAGNET_LINK=${MAGNET_LINK}" > magnet_link.txt
 echo "UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID}" > ubuntu_mirror_id.txt
+echo "FUEL_QA_COMMIT=${FUEL_QA_COMMIT}" > fuel_qa_commit.txt
 
 sh -x "utils/jenkins/system_tests.sh" \
     -t test \
