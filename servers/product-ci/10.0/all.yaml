@@ -3,6 +3,7 @@
     version: '10.0'
     branch: 'stable/newton'
     qa_branch: '{branch}'
+    ubuntu_dist: 'xenial'
     mod: ''
     bvt-mail: 'mos-qa@mirantis.com'
     jobs:
@@ -16,30 +17,15 @@
             MIRROR_MOS_UBUNTU_SUITE=mos10.0
             UBUNTU_RELEASE=xenial
             UBUNTU_KERNEL_FLAVOR=lts-xenial
-            # FIXME(aevseev): Use upstream Ubuntu mirrors until there is no
-            # mirrored xenial on Mirantis' mirrors
-            MIRROR_UBUNTU=cz.archive.ubuntu.com
-            MIRROR_UBUNTU_ROOT=/ubuntu/
-
       - 'product-{version}{mod}.test_all':
           email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'bvt_2'
           email: '{bvt-mail}'
-          # FIXME: Use upstream Ubuntu mirrors until there is no
-          # mirrored xenial on Mirantis' mirrors
-          properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
       - '{version}{mod}.main.{dist}.{testgroup}':
           dist: 'ubuntu'
           testgroup: 'smoke_neutron'
           email: '{bvt-mail}'
-          # FIXME: Use upstream Ubuntu mirrors until there is no
-          # mirrored xenial on Mirantis' mirrors
-          properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
-
       - '{version}{mod}.iso-report':
           repobranch: '{branch}'
-
