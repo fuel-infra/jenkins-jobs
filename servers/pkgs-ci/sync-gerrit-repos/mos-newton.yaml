@@ -23,6 +23,8 @@
 
     # List of projects to sync
     gerrit-project-name:
+    - 'aodh'
+    - 'python-aodhclient'
     - 'nova'
     - 'python-novaclient'
     - 'neutron'
