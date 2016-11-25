@@ -3,6 +3,7 @@
     email: 'ci+bvt@mirantis.com'
     description: 'Run Build Verification Tests'
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    ubuntu_dist: ''
     env_suffix: .$BUILD_ID
     reponame: 'fuel-qa'
     repobranch: 'master'
@@ -40,6 +41,10 @@
     #     Branch of the repository
     # venvpath
     #     Path to virtual env with fuel-devops installed (VENV_PATH)
+    # ubuntu_dist
+    #     Ubuntu distributive family, used in mirror adding process
+    #     Example: `trusty`, `xenial`
+    #     Default value in the scpipt: `trusty`
     # weight
     #     Job weight
     # properties
@@ -102,6 +107,7 @@
           OPENSTACK_RELEASE={dist}
           TEST_GROUP={testgroup}
           TEST_ISO_JOB={version}{mod}.test_all
+          UBUNTU_DIST={ubuntu_dist}
           VENV_PATH={venvpath}
     - inject: # Overrides
         properties-content: '{properties}'
