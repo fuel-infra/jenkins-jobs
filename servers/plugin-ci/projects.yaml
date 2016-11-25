@@ -250,6 +250,11 @@
     test_framework_url: 'https://github.com/openstack/fuel-plugin-murano-tests'
     plugin_prepare_env_builder: plugin-prepare-env-fuel-qa-plugins
 
+    test_properties: |
+      DISABLE_XENIAL_KERNEL=true
+      FORCE_DISABLE_UPDATES=true
+      UPDATE_MASTER=false
+
     version:
       - 9.0:
           plugin_branch: master
