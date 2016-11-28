@@ -26,6 +26,11 @@
     # Install test repository
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'master'
+
+    # Parameters for utility projects
+    fuel-namespace: 'openstack'
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
     perestroika-branch: 'master'
 
     # Job slave nodes
@@ -64,4 +69,5 @@
     - '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-install-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-systest-{os}-{distro}'
 
