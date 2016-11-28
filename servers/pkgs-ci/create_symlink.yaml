@@ -1,0 +1,64 @@
+- job:
+    name: 'create_symlink'
+    node: 'mirror-sync'
+    logrotate:
+        daysToKeep: 10
+
+    description: |
+      <h3> Create symlink to released version of MU <h3>
+        <ul>
+          <li> <b> Owner: </b> build-team </li>
+          <li> <b> Contacts: </b> #infra </li>
+        </ul>
+      </p>
+
+    parameters:
+      - string:
+          name: SYMLINK
+          default: ''
+          description: |
+               Use this parameter for creating custom symlink name, e.g. mu-6-updates
+      - string:
+          name: TARGET
+          default: ''
+          description: |
+               Symlink target relative symlink file location, e.g. snapshots/updates-2016-11-02-115005/
+               or snapshots/7.0-2016-11-16-142156/
+      - string:
+          name: ROOT_DIR_TARGET
+          description: |
+               Full path to directory where shoud be created symlink, exclude URI.
+               Ror example mos-repos/centos/mos7.0-centos6-fuel/ or
+               mos-repos/ubuntu/
+      - bool:
+          name: DRY_RUN
+          default: true
+          description: "All the changes will not be pushed on mirror if this option enabled"
+      - text:
+          name: HOSTS
+          default: |
+              rsync://eu.mirror.infra.mirantis.net
+              rsync://eu.mirror.fuel-infra.org
+              rsync://us.mirror.fuel-infra.org
+          description: "Host list to update"
+    wrappers:
+      - build-timeout:
+          timeout: 50
+
+    scm:
+      - git:
+          url: 'https://review.fuel-infra.org/infra/trsync'
+          branches:
+             - 'v0.9'
+          basedir: 'trsync'
+
+    builders:
+      - shell:
+          !include-raw:
+            'builders/create_symlink.sh'
+
+    publishers:
+      - email:
+          recipients: 'fuel-build+ci-packaging@mirantis.com'
+          notify-every-unstable-build: false
+          send-to-individuals: false
