@@ -3,6 +3,7 @@
     version-id: master
     projectbranch: master
     ubuntu_dist: 'xenial'
+    bvt_job_url: 'https://ci.fuel-infra.org/job/11.0-community.main.ubuntu.bvt_2'
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
@@ -123,6 +124,7 @@
     version-id: newton
     projectbranch: stable/newton
     ubuntu_dist: 'xenial'
+    bvt_job_url: 'https://ci.fuel-infra.org/job/10.0-community.main.ubuntu.bvt_2'
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
@@ -234,6 +236,7 @@
     version-id: mitaka
     projectbranch: stable/mitaka
     ubuntu_dist: 'trusty'
+    bvt_job_url: 'https://ci.fuel-infra.org/job/9.0-community.main.ubuntu.bvt_2'
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'

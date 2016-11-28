@@ -1,8 +1,11 @@
 - project:
     name: 'devops-env'
     version-id:
-      - 'master'
-      - 'liberty'
-      - 'mitaka'
+      - 'master':
+          bvt_job_url: 'https://ci.fuel-infra.org/job/11.0-community.main.ubuntu.bvt_2'
+      - 'liberty':
+          bvt_job_url: ''
+      - 'mitaka':
+          bvt_job_url: 'https://ci.fuel-infra.org/job/9.0-community.main.ubuntu.bvt_2'
     jobs:
       - 'devops.{version-id}.env'

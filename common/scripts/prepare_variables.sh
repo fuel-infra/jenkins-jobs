@@ -2,10 +2,26 @@
 
 set -ex
 
+BVT_JOB_URL=${BVT_JOB_NAME:-https://ci.fuel-infra.org/job/10.0-community.main.ubuntu.bvt_2}
+LAST_SUCCESSFUL_BUILD=${LAST_SUCCESSFUL_BUILD:-lastSuccessfulBuild/artifact}
 UBUNTU_DIST=${UBUNTU_DIST:-trusty}
 
 rm -f ./*.txt
 
+# check and use latest values
+if [ "${FUEL_QA_COMMIT}" = "latest-stable" ] ; then
+    export $(curl -sSf "${BVT_JOB_URL}/${LAST_SUCCESSFUL_BUILD}/fuel_qa_commit.txt")
+fi
+
+if [ "${MAGNET_LINK}" = "latest-stable" ] ; then
+    export $(curl -sSf "${BVT_JOB_URL}/${LAST_SUCCESSFUL_BUILD}/magnet_link.txt")
+fi
+
+if [ "${UBUNTU_MIRROR_ID}" = "latest-stable" ] ; then
+    export $(curl -sSf "${BVT_JOB_URL}/${LAST_SUCCESSFUL_BUILD}/ubuntu_mirror_id.txt")
+fi
+
+# mirror customisation
 if [ "${MIRROR_HOST}" != "none" ] ; then
     UBUNTU_MIRROR_URL="${MIRROR_HOST}/${UBUNTU_MIRROR_ID}/"
     MIRROR_UBUNTU_DATA="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse"
