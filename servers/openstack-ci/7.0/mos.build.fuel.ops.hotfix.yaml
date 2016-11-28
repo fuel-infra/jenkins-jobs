@@ -1,5 +1,5 @@
 - job-template:
-    name: '7.0.mos-new.fuel.build-rpm-deps-security'
+    name: '7.0.mos-new.fuel.build-ops-hotfix'
     disabled: '{is-disabled}'
     concurrent: true
     node: '{build-node}'
@@ -10,12 +10,15 @@
           properties-content: |
             GERRIT_USER=ci-build-rpm
             GERRIT_VOTE=1
-            SRC_PROJECT_PATH=packages/{rpm-dist-fuel}
+            SRC_PROJECT_PATH=openstack
+            SPEC_PROJECT_PATH=openstack-build
+            SPEC_PROJECT_SUFFIX=-build
+            SPEC_PREFIX_PATH=/{rpm-dist-fuel}
             DIST={rpm-dist-fuel}
-            IS_OPENSTACK=false
-            IS_SECURITY=true
+            IS_OPENSTACK=true
+            IS_SECURITY=false
             IS_UPDATES={is-updates}
-            IS_HOTFIX=false
+            IS_HOTFIX=true
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
             RPM_OS_REPO_PATH={rpm-os-repo-path-fuel}
@@ -24,7 +27,7 @@
             RPM_SECURITY_REPO_PATH={rpm-security-repo-path-fuel}
             RPM_HOLDBACK_REPO_PATH={rpm-holdback-repo-path-fuel}
             RPM_HOTFIX_REPO_PATH={rpm-hotfix-repo-path-fuel}
-            DISPLAY_NAME=Build rpm package on primary repository
+            DISPLAY_NAME=Build rpm package on temporary repository
             REQUEST_TYPE=Centos6
     wrappers:
       - ci-build-rpm
@@ -43,7 +46,10 @@
           default: ''
       - string:
           name: SOURCE_BRANCH
-          default: '{deps-security-branch}'
+          default: '{ops-fuel-hotfix-branch}'
+      - string:
+          name: SPEC_BRANCH
+          default: '{ops-fuel-hotfix-branch}'
       - bool:
           name: LAST_STAGE
           default: '{last_stage}'
@@ -61,9 +67,11 @@
           scm-credentials-id: '{scm-credentials-id}'
           scm-branch: '{scm-ci-status-client-branch}'
     triggers:
-      - fuel-infra-deps-submit:
-          code-project: '{fuel-rpm-deps-code-project}'
-          branch: '{deps-security-branch}'
+      - fuel-infra-submit:
+          code-project: '{ops-code-prj}'
+          spec-project: '{ops-spec-prj}'
+          branch: '{ops-fuel-hotfix-branch}'
+          files: '{rpm-dist-fuel}/rpm/**'
     builders:
       - shell:
           !include-raw-escape: builders/ci.status.report.start.sh

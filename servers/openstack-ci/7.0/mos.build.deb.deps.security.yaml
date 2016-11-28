@@ -14,6 +14,7 @@
             DIST={deb-dist-env}
             IS_OPENSTACK=false
             IS_SECURITY=true
+            IS_HOTFIX=false
             IS_UPDATES={is-updates}
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
@@ -24,6 +25,7 @@
             DEB_UPDATES_DIST_NAME={deb-updates-dist-name}
             DEB_SECURITY_DIST_NAME={deb-security-dist-name}
             DEB_HOLDBACK_DIST_NAME={deb-holdback-dist-name}
+            DEB_HOTFIX_DIST_NAME={deb-hotfix-dist-name}
             DISPLAY_NAME=Build deb package on temporary repository
             REQUEST_TYPE=Trusty
     wrappers:
@@ -89,6 +91,7 @@
                   predefined-parameters: |
                       IS_SECURITY=${{IS_SECURITY}}
                       IS_UPDATES=${{IS_UPDATES}}
+                      IS_HOTFIX=${{IS_HOTFIX}}
                       DIST=${{DIST}}
                       ORIGIN=${{ORIGIN}}
                       REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
@@ -99,6 +102,7 @@
                       DEB_UPDATES_DIST_NAME=${{DEB_UPDATES_DIST_NAME}}
                       DEB_SECURITY_DIST_NAME=${{DEB_SECURITY_DIST_NAME}}
                       DEB_HOLDBACK_DIST_NAME=${{DEB_HOLDBACK_DIST_NAME}}
+                      DEB_HOTFIX_DIST_NAME=${{DEB_HOTFIX_DIST_NAME}}
                   block: true
              - copyartifact:
                   project: '7.0.mos-new.publisher'

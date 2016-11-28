@@ -10,6 +10,10 @@
           properties-content: |
             GERRIT_USER=openstack-ci-jenkins
             DIST={rpm-dist-fuel}
+            IS_OPENSTACK=false
+            IS_SECURITY=false
+            IS_UPDATES={is-updates}
+            IS_HOTFIX=false
             REMOTE_REPO_HOST={repo-host}
             REPO_REQUEST_PATH_PREFIX={repo-request-path-prefix}
             RPM_OS_REPO_PATH={rpm-os-repo-path-fuel}
@@ -17,6 +21,9 @@
             RPM_UPDATES_REPO_PATH={rpm-updates-repo-path-fuel}
             RPM_SECURITY_REPO_PATH={rpm-security-repo-path-fuel}
             RPM_HOLDBACK_REPO_PATH={rpm-holdback-repo-path-fuel}
+            RPM_HOTFIX_REPO_PATH={rpm-hotfix-repo-path-fuel}
+            DISPLAY_NAME=Build rpm package on primary repository
+            REQUEST_TYPE=Centos6
     wrappers:
       - openstack-ci-jenkins
       - timeout:
@@ -32,9 +39,6 @@
       - string:
           name: SOURCE_BRANCH
           default: '{fuel-branch}'
-      - bool:
-          name: IS_UPDATES
-          default: '{is-updates}'
     scm:
       - fuel-infra:
           scm-user: '{scm-user}'
@@ -121,6 +125,9 @@
                   current-parameters: true
                   property-file: buildresult.params
                   predefined-parameters: |
+                      IS_SECURITY=${{IS_SECURITY}}
+                      IS_UPDATES=${{IS_UPDATES}}
+                      IS_HOTFIX=${{IS_HOTFIX}}
                       DIST=${{DIST}}
                       REMOTE_REPO_HOST=${{REMOTE_REPO_HOST}}
                       REPO_REQUEST_PATH_PREFIX=${{REPO_REQUEST_PATH_PREFIX}}
@@ -129,6 +136,7 @@
                       RPM_UPDATES_REPO_PATH=${{RPM_UPDATES_REPO_PATH}}
                       RPM_SECURITY_REPO_PATH=${{RPM_SECURITY_REPO_PATH}}
                       RPM_HOLDBACK_REPO_PATH=${{RPM_HOLDBACK_REPO_PATH}}
+                      RPM_HOTFIX_REPO_PATH=${{RPM_HOTFIX_REPO_PATH}}
                   block: true
              - copyartifact:
                   project: '7.0.mos-new.publisher'
@@ -148,8 +156,8 @@
     publishers:
       - pkgname-as-desc
       - archive:
-           artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
-           allow-empty: true
+          artifacts: '**/buildlog.txt, **/rootlog.txt, **/buildresult.xml'
+          allow-empty: true
       - email:
           recipients: '{mailto}'
           notify-every-unstable-build: false

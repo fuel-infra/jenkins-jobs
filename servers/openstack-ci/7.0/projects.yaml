@@ -24,7 +24,9 @@
     ops-branch: 'openstack-ci/fuel-7.0/2015.1.0'
     ops-fuel-branch: 'openstack-ci/fuel/centos6/juno'
     ops-security-branch: 'openstack-ci/fuel-7.0/2015.1.0-security-**'
+    ops-hotfix-branch: 'openstack-ci/fuel-7.0/2015.1.0-hotfix-**'
     ops-fuel-security-branch: 'openstack-ci/fuel/centos6/juno-security-**'
+    ops-fuel-hotfix-branch: 'openstack-ci/fuel/centos6/juno-hotfix-**'
     # original scheme should be:
     #cluster-rpm-deps-code-project: '{project-name}/packages/{component-path-cluster}centos7/**'
     #cluster-deb-deps-code-project: '{project-name}/packages/{component-path-cluster}trusty/**'
@@ -34,10 +36,12 @@
     fuel-rpm-deps-code-project: 'packages/centos6/**'
     deps-branch: '7.0'
     deps-security-branch: '7.0-security-**'
+    deps-hotfix-branch: '7.0-hotfix-**'
     # don't put "origin" in fuel-branch variable
     # fuel-branch MUST be in format: stable/version
     fuel-branch: 'stable/7.0'
     fuel-security-branch: 'stable/7.0-security-**'
+    fuel-hotfix-branch: 'stable/7.0-hotfix-**'
     mailto: 'fuel-build+ci-packaging@mirantis.com'
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
     repo-request-path-prefix: 'review/'
@@ -49,7 +53,8 @@
     rpm-updates-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/updates'
     rpm-security-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/security'
     rpm-holdback-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/holdback'
-    # deb environment
+    rpm-hotfix-repo-path-fuel: 'mos-repos/centos/mos7.0-centos6-fuel/hotfix'
+   # deb environment
     deb-origin: 'Mirantis'
     deb-dist-env: 'trusty'
     deb-base-repo-path: 'mos-repos/ubuntu/7.0'
@@ -58,6 +63,7 @@
     deb-updates-dist-name: 'mos7.0-updates'
     deb-security-dist-name: 'mos7.0-security'
     deb-holdback-dist-name: 'mos7.0-holdback'
+    deb-hotfix-dist-name: 'mos7.0-hotfix'
     ##################################
     is-updates: true
     is-disabled: ''
@@ -92,9 +98,17 @@
           last_stage: true
       - '7.0.mos-new.build-deb-security-request':
           last_stage: false
+      - '7.0.mos-new.build-deb-hotfix':
+          last_stage: true
+      - '7.0.mos-new.build-deb-hotfix-request':
+          last_stage: false
       - '7.0.mos-new.build-deb-deps-security':
           last_stage: true
       - '7.0.mos-new.build-deb-deps-security-request':
+          last_stage: false
+      - '7.0.mos-new.build-deb-deps-hotfix':
+          last_stage: true
+      - '7.0.mos-new.build-deb-deps-hotfix-request':
           last_stage: false
 
 - job-group:
@@ -114,15 +128,27 @@
           last_stage: false
       - '7.0.mos-new.fuel.build-rpm-security':
       - '7.0.mos-new.fuel.build-rpm-security-request':
+      - '7.0.mos-new.fuel.build-rpm-hotfix':
+      - '7.0.mos-new.fuel.build-rpm-hotfix-request':
       - '7.0.mos-new.fuel.build-deb-security':
       - '7.0.mos-new.fuel.build-deb-security-request':
+      - '7.0.mos-new.fuel.build-deb-hotfix':
+      - '7.0.mos-new.fuel.build-deb-hotfix-request':
       - '7.0.mos-new.fuel.build-rpm-deps-security':
           last_stage: true
       - '7.0.mos-new.fuel.build-rpm-deps-security-request':
           last_stage: false
+      - '7.0.mos-new.fuel.build-rpm-deps-hotfix':
+          last_stage: true
+      - '7.0.mos-new.fuel.build-rpm-deps-hotfix-request':
+          last_stage: false
       - '7.0.mos-new.fuel.build-ops-security':
           last_stage: true
       - '7.0.mos-new.fuel.build-ops-security-request':
+          last_stage: false
+      - '7.0.mos-new.fuel.build-ops-hotfix':
+          last_stage: true
+      - '7.0.mos-new.fuel.build-ops-hotfix-request':
           last_stage: false
 
 - job-group:
