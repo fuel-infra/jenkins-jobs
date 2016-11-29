@@ -1,8 +1,9 @@
 #!/bin/bash
 
+# BVT_JOB_URL - should be set in the project over {bvt_job_url} jjb variable
+
 set -ex
 
-BVT_JOB_URL=${BVT_JOB_NAME:-https://ci.fuel-infra.org/job/10.0-community.main.ubuntu.bvt_2}
 LAST_SUCCESSFUL_BUILD=${LAST_SUCCESSFUL_BUILD:-lastSuccessfulBuild/artifact}
 UBUNTU_DIST=${UBUNTU_DIST:-trusty}
 
