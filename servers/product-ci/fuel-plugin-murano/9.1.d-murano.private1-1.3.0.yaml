@@ -1,0 +1,75 @@
+- project:
+    name: '9.1.d-murano for branch: 9.0/release/private1-1.3.0'
+
+    # ISO-version
+    version: '9.1'
+    plugin-global-version: '9.0'
+    # For job-name rendering only
+    plugin-version-suffix: '.private1-1.3.0'
+    # REPO url depended.Example:
+    # http://mirror/extras/murano-plugin-repos/release/private1-1.3.0/centos/
+    #                                          ^^^^^^^^^^^^^^^^^^^^^^
+    plugin-version: "release/private1-1.3.0"
+    plugin-rpm-mask: "detach-murano"
+    plugin-pkg-dist: "centos7"
+    plugin-repo-sub-url: "extras/murano-plugin-repos/"
+
+    plugin-test-repo: 'fuel-plugin-murano-tests'
+    plugin-test-commit: 'master'
+
+    jobs:
+
+    - product-ci/fuel-plugin-murano/templates/murano-snapshot:
+        timer: '0 0,6,12,18 * * *'
+
+    - product-ci/fuel-plugin-murano/templates/murano-bvt:
+        testgroup: deploy_murano_plugin
+        murano-bvt/additional-params-override: |
+          UPDATE_MASTER=true
+          FORCE_DISABLE_UPDATES=false
+
+    - product-ci/fuel-plugin-murano/templates/murano-swarm-test:
+        murano-swarm-test/node: 'systest'
+        murano-swarm-test/timeout: '480'
+        murano-swarm-test/job-weight: '6'
+
+        description: '9.1 murano swarm test group'
+
+        testgroup:
+
+        - deploy_murano_bvt
+
+        - failover
+
+        - murano_plugin_upgrade
+
+        - post_installation
+
+        - check_scaling_murano:
+            murano-swarm-test/job-weight: '11'
+
+    - product-ci/fuel-plugin-murano/templates/murano-timer:
+        timer: '0 21 * * 1-7'
+        murano-timer/current-parameters: true
+        murano-timer/predefined-runner-params: |
+          UPDATE_MASTER=true
+          FORCE_DISABLE_UPDATES=false
+
+    - product-ci/fuel-plugin-murano/templates/murano-runner
+
+    - product-ci/test-reports:
+        repobranch: 'origin/stable/mitaka'
+        tr_milestone: 'private1-1.3.0'
+        lp_milestone: 'private1-1.3.0'
+        test-type: 'system_test.d-murano{plugin-version-suffix}'
+        email: 'fuel-plugin-murano@mirantis.com'
+        properties: |
+          TESTS_RUNNER={version}.d-murano{plugin-version-suffix}.runner
+          TESTRAIL_TEST_SUITE=[9.1] System Tests
+          TESTRAIL_MILESTONE={tr_milestone}
+          LAUNCHPAD_MILESTONE={lp_milestone}
+          TESTRAIL_PROJECT=Murano plugin
+          HANDLE_BLOCKED=true
+          PUBLISH=true
+          OUTPUT_FILE=bugs_link_stat
+          CREATE_HTML=true
