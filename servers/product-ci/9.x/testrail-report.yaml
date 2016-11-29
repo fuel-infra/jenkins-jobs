@@ -53,5 +53,5 @@
         test-type:  'baremetal'
         properties: |
           TESTS_RUNNER=9.x.baremetal.runner
-          TESTRAIL_TEST_SUITE=[WIP] Automated Baremetal Acceptance
+          TESTRAIL_TEST_SUITE=[9.2][Fuel] Automated Baremetal Acceptance
           TESTRAIL_MILESTONE={report-version}
