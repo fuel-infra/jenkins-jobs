@@ -62,7 +62,6 @@
           basedir: '{project}'
           timeout: 20
           choosing-strategy: gerrit
-          wipe-workspace: false
       - git:
           url: 'https://git.openstack.org/openstack/fuel-mirror.git'
           branches:
