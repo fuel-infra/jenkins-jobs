@@ -23,7 +23,7 @@
     wrappers:
       - timeout:
           fail: true
-          timeout: 1200
+          timeout: 1800
 
     builders:
 
