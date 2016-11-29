@@ -74,6 +74,7 @@
             MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
+            SLAVE_NODE_MEMORY=3584
 
       - fuel-nailgun-agent:
           projectpackage: nailgun-agent

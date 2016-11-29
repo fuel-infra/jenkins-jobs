@@ -49,3 +49,5 @@
           testgroup: 'uca_neutron_ha'
           env_suffix: ''
           email: '{bvt-mail}'
+          properties: |
+            SLAVE_NODE_MEMORY=3584
