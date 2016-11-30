@@ -37,7 +37,12 @@ fi
 UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
 
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
-    export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-proposed main universe multiverse"
+    MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse"
+    if [ "${ENABLE_PROPOSED:-false}" = 'true' ]; then
+        UBUNTU_PROPOSED="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-proposed main universe multiverse"
+        MIRROR_UBUNTU="${MIRROR_UBUNTU}|${UBUNTU_PROPOSED}"
+    fi
+    export MIRROR_UBUNTU
 fi
 
 export SYSTEM_TESTS="${SYSTEST_ROOT}/utils/jenkins/system_tests.sh"

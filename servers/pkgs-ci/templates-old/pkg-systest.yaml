@@ -49,7 +49,6 @@
             deb
             http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name} main restricted,1200|deb
             http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-security main restricted,1201|deb
-            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-proposed main restricted,1202|deb
             http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-updates  main restricted,1201
           description: >-
             <p>

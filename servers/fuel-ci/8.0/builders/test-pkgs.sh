@@ -38,15 +38,19 @@ case "${UBUNTU_MIRROR_ID}" in
         UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/${UBUNTU_MIRROR_ID}/"
 esac
 
-export MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-proposed main universe multiverse"
-
+MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse"
+if [ "${ENABLE_PROPOSED:-false}" = 'true' ]; then
+    UBUNTU_PROPOSED="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-proposed main universe multiverse"
+    MIRROR_UBUNTU="${MIRROR_UBUNTU}|${UBUNTU_PROPOSED}"
+fi
+export MIRROR_UBUNTU
 
 export SYSTEM_TESTS="${SYSTEST_ROOT}/utils/jenkins/system_tests.sh"
 export LOGS_DIR=/home/jenkins/workspace/${JOB_NAME}/logs/${BUILD_NUMBER}
 
 #test params
 
-VERSION_STRING=`readlink ${ISO_PATH} | cut -d '-' -f 2-4`
+VERSION_STRING=$(readlink "${ISO_PATH}" | cut -d '-' -f 2-4)
 echo "Description string: ${VERSION_STRING}"
 
-sh -x "${SYSTEM_TESTS}" -w "${SYSTEST_ROOT}" -V "${VENV_PATH}" -i "${ISO_PATH}" -t test -e "${ENV_NAME}" -o --group=${TEST_GROUP}
+sh -x "${SYSTEM_TESTS}" -w "${SYSTEST_ROOT}" -V "${VENV_PATH}" -i "${ISO_PATH}" -t test -e "${ENV_NAME}" -o --group="${TEST_GROUP}"
