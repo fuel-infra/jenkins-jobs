@@ -1,5 +1,5 @@
 - job-template:
-    name: 'mos9.0-{gerrit-project-name}-custom-patches'
+    name: 'mos{version}-{gerrit-project-name}-custom-patches'
     disabled: '{is-disabled}'
     wrappers:
     - ssh-agent-credentials:

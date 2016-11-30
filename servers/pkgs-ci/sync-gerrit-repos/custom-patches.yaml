@@ -1,12 +1,17 @@
 - project:
-    name: 'mos9.0-{gerrit-project-name}-custom-patches'
+    name: 'custom-patches'
 
-    is-disabled: true
+    version:
+    - '9.0':
+        old-branch: openstack-ci/fuel-8.0/liberty
+        new-branch: 9.0/mitaka
+        gerrit-topic: custom/patches/9.0
+        is-disabled: true
+    - '10.0':
+        old-branch: 9.0/mitaka
+        new-branch: 10.0/newton
+        gerrit-topic: custom/patches/10.0
 
-    # Script parameters
-    old-branch: openstack-ci/fuel-8.0/liberty
-    new-branch: 9.0/mitaka
-    gerrit-topic: custom/patches/9.0
 
     # Gerrit parameters
     gerrit-host: 'review.fuel-infra.org'
@@ -72,4 +77,4 @@
     - swift
 
     jobs:
-    - 'mos9.0-{gerrit-project-name}-custom-patches'
+    - 'mos{version}-{gerrit-project-name}-custom-patches'
