@@ -1,0 +1,49 @@
+- job:
+    name: '11.0.swarm.statistic'
+    description: |
+      <iframe width="100%"
+              height="600px"
+              frameborder='0'
+              src='https://product-ci.infra.mirantis.net/job/11.0.swarm.statistic/lastSuccessfulBuild/artifact/bugs_link_stat.html'>
+      </iframe>
+
+    node: testrail
+
+    scm:
+    - main-git:
+        reponame: 'fuel-qa'
+        repobranch: 'master'
+        basedir: ''
+
+    triggers:
+    - timed: '30 20 * * *'
+
+    wrappers:
+    - inject-passwords:
+        global: true
+        mask-password-params: true
+
+    builders:
+    - inject:
+        properties-content: |
+          TEST_RUNNER_JOB_NAME=11.0.swarm.runner
+          TESTRAIL_MILESTONE=11.0
+          LAUNCHPAD_MILESTONE=11.0
+          HANDLE_BLOCKED=true
+          PUBLISH=true
+          OUTPUT_FILE=bugs_link_stat
+          CREATE_HTML=true
+    - testrail-generate-statistics
+
+    publishers:
+    - archive:
+        allow-empty: true
+        artifacts: bugs_link_stat.html
+        latest-only: false
+
+    - email:
+        recipients: ci+swarm@mirantis.com
+
+    - description-setter:
+        regexp: '^.*Found TestPlan (.*)'
+        description: 'Bugs stats for \1'
