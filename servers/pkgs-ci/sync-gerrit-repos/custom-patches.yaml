@@ -1,6 +1,8 @@
 - project:
     name: 'mos9.0-{gerrit-project-name}-custom-patches'
 
+    is-disabled: true
+
     # Script parameters
     old-branch: openstack-ci/fuel-8.0/liberty
     new-branch: 9.0/mitaka
