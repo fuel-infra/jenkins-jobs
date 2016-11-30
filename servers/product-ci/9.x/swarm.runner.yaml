@@ -12,6 +12,9 @@
 
     parameters:
     - 9x-systest-params
+    - text:
+        name: EXTRA_OPTS
+        default: ""
 
     wrappers:
     - timeout:
