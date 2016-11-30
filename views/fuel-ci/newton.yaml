@@ -1,0 +1,13 @@
+- view:
+    type: list
+    name: 'newton'
+    regex: 'newton.*'
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False
