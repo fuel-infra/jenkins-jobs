@@ -60,7 +60,6 @@
                 refspec: $GERRIT_REFSPEC
                 url: https://review.openstack.org/openstack/{project}.git
           basedir: '{project}'
-          wipe-workspace: false
           timeout: 20
           choosing-strategy: gerrit
       - git:
