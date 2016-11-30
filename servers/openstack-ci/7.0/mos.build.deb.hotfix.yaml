@@ -51,7 +51,7 @@
           default: '{ops-hotfix-branch}'
       - string:
           name: SPEC_BRANCH
-          default: '{ops-security-branch}'
+          default: '{ops-hotfix-branch}'
       - bool:
           name: LAST_STAGE
           default: '{last_stage}'

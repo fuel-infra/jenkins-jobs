@@ -45,7 +45,7 @@
           default: ''
       - string:
           name: SOURCE_BRANCH
-          default: '{deps-security-branch}'
+          default: '{deps-hotfix-branch}'
       - bool:
           name: LAST_STAGE
           default: '{last_stage}'
