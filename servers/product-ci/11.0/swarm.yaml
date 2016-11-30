@@ -1,0 +1,279 @@
+- project:
+    name: 11.0.systests
+    jobs:
+      - '11.0-system_tests':
+          dist: 'ubuntu'
+
+- project:
+    name: 11.0.swarm-helpers
+    jobs:
+      - '11.0.swarm.runner'
+      - product-ci/test-reports:
+          version: '11.0'
+          repobranch: 'master'
+          test-type:  'system_test'
+          properties: |
+            TESTS_RUNNER=10.0.swarm.runner
+            TESTRAIL_TEST_SUITE=[11.0] Swarm
+            TESTRAIL_MILESTONE=11.0
+            LAUNCHPAD_MILESTONE=11.0
+
+- job:
+    name: '11.0.swarm.runner'
+    project-type: multijob
+    description: 'Run all system tests'
+    concurrent: false
+    node: 'runner'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          description: 'ISO magnet link'
+      - string:
+          name: UPGRADE_TARBALL_MAGNET_LINK
+          description: 'Upgrade tarball magnet link'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: 'ubuntu-latest'
+          description: |
+            'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+      - string:
+          name: CUSTOM_VERSION
+          default: ''
+          description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+      - bool:
+          name: ENABLE_PROPOSED
+          default: false
+          description: 'If false only stable repositories are used'
+    publishers:
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+      - email-default:
+          mail-to: 'ci+alert@mirantis.com'
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 1200
+    builders:
+      - shell: # Get description from MAGNET_LINK variable
+          !include-raw: builders/get_version_from_magnet.sh
+      - multijob:
+          name: 'Run system tests'
+          condition: COMPLETED
+          projects:
+            # Ubuntu
+            - name: '11.0.system_test.ubuntu.thread_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.jumbo_frames'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ceph_ha_one_controller'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.one_controller_actions'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.multirole'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.thread_3'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.thread_7'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.bonding_ha'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.bonding_ha_one_controller'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.cluster_actions'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.cluster_actions_ha'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.controller_replacement'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.cic_maintenance_mode'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.offloading'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.filling_root'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ha_neutron'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ha_neutron_tun'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ha_neutron_tun_scale'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ha_neutron_public'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ha_neutron_destructive'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ha_neutron_destructive_vlan'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ha_neutron_destructive_vxlan'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.command_line'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.logrotate'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ha_destructive_ceph_neutron'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.huge_ha_neutron'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.reduced_footprint'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.repeatable_image_based'
+              current-parameters: true
+              kill-phase-on: NEVER
+            #- name: '10.0.system_test.ubuntu.known_issues'
+            #  current-parameters: true
+            #  kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.plugins.fuel_plugin_example'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.plugins.install_plugin_after_cluster_create'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.plugins.thread_2_separate_services'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.plugins.thread_separate_haproxy'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.fuel_plugin_reboot'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.fuel_plugin_vip_reservation'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.rh'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ol'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.services_ha'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.services_ha.ceilometer'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.services_ha_one_controller'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.thread_non_func_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.thread_usb'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.custom_hostname'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.fuel_master_migrate'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.repetitive_restart'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ready_node_reinstallation'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.error_node_reinstallation'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.bvt_ubuntu_bootstrap'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.full_cluster_reinstallation'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.partition_preservation'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.network_templates'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ironic_deploy_swift'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.ironic_deploy_ceph'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.services_reconfiguration_thread_1'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.services_reconfiguration_thread_2'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.cgroup_ha'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.multiracks_2'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.numa_cpu_pinning'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.support_dpdk'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.custom_graph'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.support_dpdk_bond'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.system_test.deploy_centos_master'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.deploy_multipath'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.test_ibp'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.test_bdd'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.support_hugepages'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.unlock_settings_tab_states'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.smoke_test_configdb'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.unlock_settings_tab'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.public_api'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '11.0.system_test.ubuntu.graph_extension'
+              current-parameters: true
+              kill-phase-on: NEVER

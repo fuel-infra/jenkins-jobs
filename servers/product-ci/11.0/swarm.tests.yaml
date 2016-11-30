@@ -1,0 +1,381 @@
+- job-group:
+    name: '11.0-system_tests'
+    version-id: '11.0'
+    test-type:  'system_test'
+    system_tests/repobranch: 'master'
+    system_tests/reponame: 'fuel-qa'
+    system_tests/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    system_tests/default_pool: '10.109.0.0/16:24'
+    system_tests/description: '11.0 swarm test group'
+    system_tests/node: 'systest'
+    system_tests/timeout: '480'
+    system_tests/job-weight: '7'
+
+    plugins-template/repobranch: 'origin/stable/newton'
+    plugins-template/reponame: 'fuel-qa'
+    plugins-template/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    plugins-template/description: '11.0 swarm test group'
+    plugins-template/node: 'systest'
+    plugins-template/timeout: '480'
+    plugins-template/job-weight: '8'
+
+    jobs:
+
+    - common/system_tests:
+
+        testgroup:
+
+        - setup: # test job, not included in runner
+            system_tests/job-weight: '6'
+
+        - jumbo_frames
+
+        - thread_1:
+            system_tests/job-weight: '6'
+            system_tests/timeout: '600'
+
+        - ceph_ha_one_controller:
+            system_tests/job-weight: '6'
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              KVM_USE=true
+
+
+        - one_controller_actions:
+            system_tests/job-weight: '6'
+            system_tests/timeout: '600'
+
+        - multirole:
+            system_tests/job-weight: '6'
+            system_tests/timeout: '600'
+
+        - thread_3:
+            system_tests/node: 'huge-systest'
+            system_tests/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=5632
+
+
+        - thread_7:
+            system_tests/custom-overrides-plain-properties: |
+              MULTIPLE_NETWORKS=true
+              FUEL_STATS_ENABLED=true
+
+        - thread_usb:
+            system_tests/custom-overrides-plain-properties: |
+              ADMIN_BOOT_DEVICE=usb
+              SHOW_FUELMENU=true
+
+        - thread_non_func_1
+
+        - bonding_ha:
+            system_tests/custom-overrides-plain-properties: |
+              BONDING=true
+
+        - bonding_ha_one_controller:
+            system_tests/job-weight: '6'
+            system_tests/custom-overrides-plain-properties: |
+              BONDING=true
+
+        - cluster_actions
+
+        - cluster_actions_ha
+
+        - controller_replacement:
+            system_tests/timeout: '540'
+
+        - cic_maintenance_mode:
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=5120
+
+        - offloading
+
+        - filling_root:
+            system_tests/timeout: '600'
+
+        - ha_neutron:
+            system_tests/timeout: '600'
+
+        - ha_neutron_tun:
+            system_tests/timeout: '600'
+
+        - ha_neutron_tun_scale:
+            system_tests/timeout: '600'
+
+        - ha_neutron_public:
+            system_tests/timeout: '600'
+
+        - ha_neutron_destructive:
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              NEUTRON_ENABLE=true
+
+        - ha_neutron_destructive_vlan:
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              NEUTRON_ENABLE=true
+
+        - ha_neutron_destructive_vxlan:
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              NEUTRON_ENABLE=true
+
+        - command_line:
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              NEUTRON_ENABLE=true
+
+        - logrotate:
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              NEUTRON_ENABLE=true
+
+        - ha_destructive_ceph_neutron
+
+        - huge_ha_neutron:
+            system_tests/job-weight: '20'
+            system_tests/timeout: '600'
+            system_tests/node: 'huge-systest'
+            system_tests/custom-overrides-plain-properties: |
+              SLAVE_NODE_CPU=2
+              SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+
+        - repeatable_image_based
+
+        - known_issues
+
+        - rh:
+            system_tests/node: 'systest-rh'
+            system_tests/custom-overrides-properties-file: /home/jenkins/.rhel_creds
+            system_tests/custom-overrides-plain-properties: |
+              EXTRA_COMP_IMAGE=rhel7_02062016.qcow2
+              EXTRA_COMP_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
+              EXTRA_COMP_IMAGE_MD5=ff0d5ba348ebb5641801cc531d57020d
+              EXTRA_COMP_IMAGE_USER=root
+              EXTRA_COMP_IMAGE_PASSWORD=r00tme
+              CENTOS_DUMMY_DEPLOY=False
+              PERESTROIKA_REPO=http://nailgun.test.domain.local:8080/mos-centos/x86_64/
+
+        - ol:
+            system_tests/custom-overrides-plain-properties: |
+              EXTRA_COMP_IMAGE=oracle-linux-20160523164500.qcow2
+              EXTRA_COMP_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
+              EXTRA_COMP_IMAGE_MD5=98cdedebed05e9d6091de7bccdb214e1
+              EXTRA_COMP_IMAGE_USER=root
+              EXTRA_COMP_IMAGE_PASSWORD=r00tme
+              PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64/
+
+        - services_ha:
+            system_tests/job-weight: '11'
+            system_tests/node: 'services-systest'
+            system_tests/timeout: '1200'
+            system_tests/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=2
+              KVM_USE=true
+              SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+              EXTERNAL_MONGO_URLS=172.18.184.111,172.18.184.112,172.18.184.127
+              EXTERNAL_MONGO_USER=$EXTERNAL_MONGO_USER
+              EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
+              EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+              EXTERNAL_MONGO_REPL_SET=ceilometer
+
+        - services_ha.ceilometer:
+            system_tests/job-weight: '11'
+            system_tests/node: 'services-systest'
+            system_tests/timeout: '1200'
+            system_tests/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=6144
+              SLAVE_NODE_CPU=2
+              KVM_USE=true
+              SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+              EXTERNAL_MONGO_URLS=172.18.184.111,172.18.184.112,172.18.184.127
+              EXTERNAL_MONGO_USER=$EXTERNAL_MONGO_USER
+              EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
+              EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+              EXTERNAL_MONGO_REPL_SET=ceilometer
+
+        - services_ha_one_controller:
+            system_tests/job-weight: '11'
+            system_tests/node: 'services-systest'
+            system_tests/timeout: '1200'
+            system_tests/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=2
+              KVM_USE=true
+              SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+              EXTERNAL_MONGO_URLS=172.18.184.111,172.18.184.112,172.18.184.127
+              EXTERNAL_MONGO_USER=$EXTERNAL_MONGO_USER
+              EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
+              EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+              EXTERNAL_MONGO_REPL_SET=ceilometer
+
+        - custom_hostname
+
+        - fuel_master_migrate:
+            system_tests/job-weight: 11
+            system_tests/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=6144
+              SLAVE_NODE_CPU=4
+              NODES_COUNT=3
+
+        - repetitive_restart:
+            system_tests/timeout: '960'
+            system_tests/custom-overrides-plain-properties: |
+              PATCHING_RUN_RALLY=true
+
+        - ready_node_reinstallation
+
+        - error_node_reinstallation
+
+        - bvt_ubuntu_bootstrap
+
+        - full_cluster_reinstallation
+
+        - partition_preservation
+
+        - fuel_plugin_reboot
+
+        - fuel_plugin_vip_reservation
+
+        - network_templates:
+            system_tests/timeout: '600'
+
+        - reduced_footprint
+
+        - ironic_deploy_swift:
+            system_tests/custom-overrides-plain-properties: |
+              IRONIC_ENABLED=true
+              IRONIC_NODES_COUNT=1
+
+        - ironic_deploy_ceph:
+            system_tests/custom-overrides-plain-properties: |
+              IRONIC_ENABLED=true
+              IRONIC_NODES_COUNT=1
+
+        - services_reconfiguration_thread_1:
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              DISABLE_SSL=true
+              SLAVE_NODE_CPU=2
+
+        - services_reconfiguration_thread_2:
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              DISABLE_SSL=true
+              SLAVE_NODE_CPU=2
+
+        - cgroup_ha
+
+        - multiracks_2:
+            system_tests/custom-overrides-plain-properties: |
+              MULTIPLE_NETWORKS=true
+
+        - numa_cpu_pinning:
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              KVM_USE=true
+              SLAVE_NODE_CPU=6
+              DRIVER_ENABLE_ACPI=true
+              NUMA_NODES=2
+              ENV_SLAVE_LOGIN=root
+              ENV_SLAVE_PASSWORD=r00tme
+
+        - support_dpdk:
+            system_tests/custom-overrides-plain-properties: |
+              KVM_USE=true
+
+        - custom_graph
+
+        - support_dpdk_bond:
+            system_tests/custom-overrides-plain-properties: |
+              KVM_USE=true
+              BONDING=true
+
+        - system_test.deploy_centos_master:
+            system_tests/pre-script: |
+              wget -r --no-parent -A 'fuel-release*.noarch.rpm' -nd --directory-prefix=$WORKSPACE/ -e robots=off http://mirror.fuel-infra.org/mos-repos/centos/mos-master-centos7/os/x86_64/Packages/ && mv "$WORKSPACE"/fuel-release*.noarch.rpm "$WORKSPACE/fuel-release.noarch.rpm"
+            system_tests/custom-overrides-plain-properties: |
+              CENTOS_CLOUD_IMAGE_PATH=/srv/downloads/qa-centos-cloud-2016-05-05.qcow2
+              EXTRA_DEB_REPOS=mos,deb http://mirror.fuel-infra.org/mos-repos/ubuntu/master mos-master.0 main restricted'
+              FUEL_RELEASE_PATH=$WORKSPACE/fuel-release.noarch.rpm
+
+        - deploy_multipath:
+            system_tests/node: 'huge-systest'
+            system_tests/timeout: '600'
+            system_tests/custom-overrides-plain-properties: |
+              MULTIPATH=True
+              SLAVE_MULTIPATH_DISKS_COUNT=2
+              SLAVE_NODE_CPU=4
+              NODES_COUNT=4
+              NODE_VOLUME_SIZE=40
+
+        - support_hugepages:
+            system_tests/timeout: '600'
+            system_tests/node: 'systest-hugepages'
+            system_tests/custom-overrides-plain-properties: |
+              KVM_USE=True
+              DRIVER_ENABLE_ACPI=true
+              NUMA_NODES=2
+              SLAVE_NODE_CPU=4
+              SLAVE_NODE_MEMORY=5120
+              ENV_SLAVE_LOGIN=root
+              ENV_SLAVE_PASSWORD=r00tme
+
+        - test_ibp
+
+        - test_bdd
+
+        - smoke_test_configdb:
+            system_tests/custom-overrides-plain-properties: |
+              PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64/
+
+        - unlock_settings_tab_states:
+            system_tests/timeout: '600'
+
+        - unlock_settings_tab:
+            system_tests/timeout: '1200'
+            # This test use ~400GB disk space
+            system_tests/node: 'huge-systest'
+
+
+        - public_api:
+            system_tests/custom-overrides-plain-properties: |
+              ENABLE_DMZ=true
+
+        - graph_extension
+
+    - common/plugins-template:
+
+        testgroup:
+
+        - fuel_plugin_example:
+            plugins-template/timeout: '600'
+            plugins-template/custom-overrides-plain-properties: |
+              NODES_COUNT=8
+
+        - install_plugin_after_cluster_create:
+            plugins-template/timeout: '600'
+            plugins-template/custom-overrides-plain-properties: |
+              NODES_COUNT=8
+
+        - thread_2_separate_services:
+            # recently we have these lines in cfg. But they were not supported by
+            # corresponding template. looks like this params are not required.
+            # but they are kept as references during refactoring process.
+            #
+            # plugins-template/job-weight: '20'
+            # plugins-template/node: 'huge-systest'
+            plugins-template/timeout: '600'
+
+        - thread_separate_haproxy:
+            # recently we have these lines in cfg. But they were not supported by
+            # corresponding template. looks like this params are not required.
+            # but they are kept as references during refactoring process.
+            #
+            # plugins-template/job-weight: '20'
+            # plugins-template/node: 'huge-systest'
+            plugins-template/timeout: '600'
+            plugins-template/custom-overrides-plain-properties: |
+              MULTIPLE_NETWORKS=true
+              USE_HAPROXY_TEMPLATE=true

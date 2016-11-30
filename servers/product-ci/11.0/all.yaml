@@ -1,0 +1,31 @@
+- project:
+    name: 'Main 11.0 iso'
+    version: '11.0'
+    branch: 'master'
+    qa_branch: '{branch}'
+    ubuntu_dist: 'xenial'
+    mod: ''
+    bvt-mail: 'mos-qa@mirantis.com'
+    jobs:
+      - 'product-{version}{mod}.all':
+          description: 'Build main product ISO'
+          timer: '0 5-23/6 * * *'
+          variables: |
+            MOS_CENTOS_ROOT=/mos-repos/centos/mos-master-centos7/
+            MOS_UBUNTU_TARGET=master.target.txt
+            MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
+            MIRROR_MOS_UBUNTU_SUITE=mos-master
+            UBUNTU_RELEASE=xenial
+            UBUNTU_KERNEL_FLAVOR=lts-xenial
+      - 'product-{version}{mod}.test_all':
+          email: '{bvt-mail}'
+      - '{version}{mod}.main.{dist}.{testgroup}':
+          dist: 'ubuntu'
+          testgroup: 'bvt_2'
+          email: '{bvt-mail}'
+      - '{version}{mod}.main.{dist}.{testgroup}':
+          dist: 'ubuntu'
+          testgroup: 'smoke_neutron'
+          email: '{bvt-mail}'
+      - '{version}{mod}.iso-report':
+          repobranch: '{branch}'
