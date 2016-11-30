@@ -5,7 +5,7 @@ set -ex
 echo STARTED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" > ci_status_params.txt
 
 TEST_ISO_JOB_URL="https://product-ci.infra.mirantis.net/job/11.0.test_all/"
-MIRROR_HOST="http://mirror-pkgs.vm.mirantis.net/pkgs/snapshots/"
+MIRROR_HOST="http://mirror.fuel-infra.org/pkgs/snapshots/"
 UBUNTU_DIST=${UBUNTU_DIST:-xenial}
 
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
