@@ -23,6 +23,10 @@ import libvirt
 
 from xml.dom import minidom
 
+if os.environ.get('VENV_PATH'):
+    activate_this = os.environ.get('VENV_PATH') + "/bin/activate_this.py"
+    execfile(activate_this, dict(__file__=activate_this))
+
 try:
     import devops
     from devops.models import environment
@@ -107,10 +111,28 @@ def parse_cli_arguments():
                         help="Direct use fuel-devops or libvirt "
                         "for counting disc space. Used all the methods"
                         "by default")
-    parser.add_argument('-f', '--file-name', type=argparse.FileType('w'),
-                        help="Output file name. Only report to stdout"
-                        "by default")
+    parser.add_argument('-f', '--file-name', type=str,
+                        default="job_disk_space.txt", help="Output file name.")
     return parser.parse_args()
+
+
+def write_artifact(env_name, summ, filename=None):
+    """Write counted disk space message to stdout and to file if specified
+    :param env_name: used fuel-devops environment name
+    :type env_name: string
+
+    :param summ: counted used disk space
+    :type summ: string
+
+    :param filename: filepath for result filename
+    :type filename: string
+    """
+
+    msg = "{}={}".format(env_name, summ)
+    logging.info(msg)
+    if filename:
+        with open(filename, 'w') as f:
+            f.write(msg)
 
 
 def main(env_name, artifact_file, way):
@@ -122,7 +144,7 @@ def main(env_name, artifact_file, way):
     :param: env_name: fuel-devops environment name
     :type: env_name: string
 
-    :param: artifact_file: output file
+    :param: artifact_file: output filepath
     :type: file object
 
     :param: way: method of counting
@@ -137,8 +159,7 @@ def main(env_name, artifact_file, way):
             summ = find_devops(env_name)
             logging.info("Disc space is counted by fuel-devops")
             print("%s=%s\n" % (env_name, summ))
-            if artifact_file:
-                artifact_file.write("%s=%s\n" % (env_name, summ))
+            write_artifact(env_name, summ, artifact_file)
             return
         except RuntimeError as error:
             logging.error("Disc space is not counted by fuel-devops")
@@ -148,9 +169,7 @@ def main(env_name, artifact_file, way):
         try:
             summ = find_libvirt(env_name)
             logging.info("Disc space is counted by libvirt")
-            print("%s=%s\n" % (env_name, summ))
-            if artifact_file:
-                artifact_file.write("%s=%s\n" % (env_name, summ))
+            write_artifact(env_name, summ, artifact_file)
             return
         except RuntimeError as error:
             logging.error("Disc space is not counted by libvirt")
