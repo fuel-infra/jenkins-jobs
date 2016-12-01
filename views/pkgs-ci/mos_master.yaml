@@ -1,7 +1,7 @@
 - view:
     type: list
     name: 'MOS master'
-    regex: '^master-pkg-.+'
+    regex: '^master-pkg-(?!(?:mass|trunk)).+'
     columns:
       - status
       - weather
