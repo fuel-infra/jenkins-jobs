@@ -47,7 +47,6 @@
 
     jobs:
       - 'master-pkg-centos-jobs'
-      - 'master-pkg-ubuntu-jobs'
 
 - job-group:
     name: 'master-pkg-centos-jobs'
@@ -56,21 +55,6 @@
     pkg_type: 'rpm'
     spec_path_prefix: '/{distro}'
     timer: 'H */12 * * *'
-    openstack_release: 'ubuntu'
-    jobs:
-      - '{mos_version}-pkg-pipeline-{os}'
-      - '{mos_version}-pkg-publish-{os}'
-      - '{mos_version}-pkg-install-{os}'
-      - '{mos_version}-pkg-repotest-{os}'
-      - '{mos_version}-pkg-systest-{os}'
-
-- job-group:
-    name: 'master-pkg-ubuntu-jobs'
-    os: 'ubuntu'
-    distro: 'xenial'
-    pkg_type: 'deb'
-    spec_path_prefix: '/{distro}'
-    timer: ''
     openstack_release: 'ubuntu'
     jobs:
       - '{mos_version}-pkg-pipeline-{os}'
