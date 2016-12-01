@@ -47,6 +47,15 @@
           mos-deb-dist-name: 'mos-master'
           mos-deb-repo-path: '/mos-repos/ubuntu/master'
           mos-rpm-repo-path: '/mos-repos/centos/mos-master-centos7'
+      - 'newton':
+          centos_distro: 'centos7'
+          ubuntu_distro: 'xenial'
+          # Enables patching workflow
+          is_updates: 'false'
+          # Build requirements
+          mos-deb-dist-name: 'mos10.0'
+          mos-deb-repo-path: '/mos-repos/ubuntu/10.0'
+          mos-rpm-repo-path: '/mos-repos/centos/mos10.0-centos7'
       - 'mitaka':
           centos_distro: 'centos7'
           ubuntu_distro: 'trusty'
