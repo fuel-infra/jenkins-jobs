@@ -154,7 +154,7 @@ export RPM_OS_REPO_PATH RPM_HOTFIX_REPO_PATH RPM_UPDATES_REPO_PATH RPM_PROPOSED_
 
 # Set parameters specific to project(s)
 case "${GERRIT_PROJECT}" in
-    openstack/fuel-*|openstack/network-checker|openstack/python-fuelclient|openstack/solar|openstack/shotgun|openstack/tuning-box )
+    openstack/fuel-*|openstack/network-checker|openstack/python-fuelclient|openstack/solar|openstack/shotgun|openstack/timmy|openstack/tuning-box )
         IS_FUEL=true
         export IS_OPENSTACK=false
         unset SPEC_PROJECT
