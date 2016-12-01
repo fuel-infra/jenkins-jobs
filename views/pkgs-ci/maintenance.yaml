@@ -1,7 +1,7 @@
 - view:
     type: list
     name: 'Maintenance'
-    regex: '^maintain\..+|zuul-.+|sync_.+|update-jenkins-.*|devops\..+\.env'
+    regex: '^maintain\..+|zuul-.+|sync_.+|update-jenkins-.*|devops\..+\.env(_params)?'
     jobs:
       - cleaner
       - cleaner-on-labels

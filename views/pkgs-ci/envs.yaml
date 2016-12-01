@@ -1,7 +1,7 @@
 - view:
     type: list
     name: 'envs'
-    regex: 'devops.*.env'
+    regex: '^devops\..+\.env(_params)?'
     columns:
       - status
       - weather
