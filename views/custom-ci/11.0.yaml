@@ -1,0 +1,13 @@
+- view:
+    type: list
+    name: '11.0'
+    regex: '11.0.custom.*'
+    columns:
+      - status
+      - weather
+      - job
+      - last_success
+      - last_failure
+      - last_duration
+      - build_button
+    recurse: False
