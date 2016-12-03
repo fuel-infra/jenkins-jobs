@@ -34,6 +34,9 @@
     - string: # added for cleaner which searches for job parameter
         name: ENV_PREFIX
         default: '9.x.{test-type}.{dist}.plugins.{testgroup}'
+    - text:
+        name: EXTRA_OPTS
+        default: ""
 
     properties:
     - heavy-job:
@@ -69,6 +72,8 @@
     - inject: # Overrides
         properties-content: '{swarm-test-plugins/custom-overrides-plain-properties}'
         properties-file: '{swarm-test-plugins/custom-overrides-properties-file}'
+    - inject:
+        properties-content: $EXTRA_OPTS
     - shell: |
         #!/bin/bash
         echo "=== [systest PRE-script] ==="
