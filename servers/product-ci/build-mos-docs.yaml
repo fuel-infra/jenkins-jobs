@@ -1,12 +1,12 @@
 ---
 - job-template:
-    name: '{version-id}.build-mos-docs'
+    name: '{version-id}.build-{project}'
     description: |
 
-      Build documentation from mos/mos-docs for branch {branch} and
+      Build documentation from {repository} for branch {branch} and
       publish it to <a
-      href="https://docs.mirantis.com/openstack/fuel/fuel-{version-id}/">
-      https://docs.mirantis.com/openstack/fuel/fuel-{version-id}/</a>
+      href="https://docs.mirantis.com/{path-to-publish}/">
+      https://docs.mirantis.com/{path-to-publish}/</a>
 
       <p>Contacts: ci-team at #infra in Slack
     concurrent: false
@@ -28,7 +28,7 @@
       - git:
           branches:
             - $GERRIT_BRANCH
-          url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/mos/mos-docs'
+          url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/{repository}'
           clean: true
 
     triggers:
@@ -50,13 +50,12 @@
       - inject:
           properties-content: |
             DOCS_HOST=docs@docs.fuel-infra.org
-            DOCS_ROOT=/var/www/openstack/fuel
-      - shell:
-          !include-raw-escape: builders/build-mos-docs.sh
+            DOCS_ROOT={docs-root}
+      - shell: '{obj:shell}'
 
     publishers:
       - html-publisher:
-          name: 'MOS Docs build results'
+          name: '{publish-name}'
           dir: '{results-dir}'
           files: 'index.html'
           keep-all: true
