@@ -8,6 +8,7 @@
     deb-origin-release: 'Mirantis'
     deb-origin-test: 'testing'
 
+    main_ubuntu_release: 'xenial'
     openstack_release: 'Ubuntu 16.04'  # Important to use Xenial in fuel-qa framework
 
     publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
