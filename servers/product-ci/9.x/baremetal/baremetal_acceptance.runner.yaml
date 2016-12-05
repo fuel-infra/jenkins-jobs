@@ -76,9 +76,6 @@
           - name: '9.x.baremetal.ubuntu.mongo_ceph_with_ceilometer'
             current-parameters: true
             kill-phase-on: NEVER
-          - name: '9.x.baremetal.ubuntu.ceph_for_images_ephemeral_rados'
-            current-parameters: true
-            kill-phase-on: NEVER
           - name: '9.x.baremetal.ubuntu.shutdown_primary_controller_ceph'
             current-parameters: true
             kill-phase-on: NEVER
@@ -86,12 +83,6 @@
             current-parameters: true
             kill-phase-on: NEVER
           - name: '9.x.baremetal.ubuntu.remove_controllers'
-            current-parameters: true
-            kill-phase-on: NEVER
-          - name: '9.x.baremetal.ubuntu.add_delete_compute'
-            current-parameters: true
-            kill-phase-on: NEVER
-          - name: '9.x.baremetal.ubuntu.add_delete_cinder'
             current-parameters: true
             kill-phase-on: NEVER
           - name: '9.x.baremetal.ubuntu.add_delete_ceph'
