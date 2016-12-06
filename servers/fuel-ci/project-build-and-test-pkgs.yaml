@@ -22,7 +22,6 @@
             MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
-            SLAVE_NODE_MEMORY=4096
             IRONIC_ENABLED=true
             IRONIC_NODES_COUNT=1
 
@@ -38,13 +37,10 @@
           projectpackage: fuel-library10.0
           testgroup: smoke_neutron
           timed: '0 */12 * * *'
-          # NOTE(mkarpin): as workaround for https://bugs.launchpad.net/fuel/+bug/1623394
-          # memory is set to 4096, to unblock CI of master in upstream
           properties: |
             MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
-            SLAVE_NODE_MEMORY=4096
 
       - fuel-library:
           projectpackage: fuel-library10.0
@@ -74,7 +70,6 @@
             MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
-            SLAVE_NODE_MEMORY=3584
 
       - fuel-nailgun-agent:
           projectpackage: nailgun-agent
@@ -144,7 +139,6 @@
             MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
-            SLAVE_NODE_MEMORY=4096
             IRONIC_ENABLED=true
             IRONIC_NODES_COUNT=1
 
@@ -160,13 +154,10 @@
           projectpackage: fuel-library10.0
           testgroup: smoke_neutron
           timed: '0 */12 * * *'
-          # NOTE(mkarpin): as workaround for https://bugs.launchpad.net/fuel/+bug/1623394
-          # memory is set to 4096, to unblock CI of master in upstream
           properties: |
             MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
-            SLAVE_NODE_MEMORY=4096
 
       - fuel-library:
           projectpackage: fuel-library10.0
@@ -254,7 +245,6 @@
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
-            SLAVE_NODE_MEMORY=4096
             IRONIC_ENABLED=true
             IRONIC_NODES_COUNT=1
 
