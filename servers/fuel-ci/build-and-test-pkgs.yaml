@@ -70,6 +70,8 @@
           wipe-workspace: false
 
     builders:
+      - inject-fuel-qa-global-defaults:
+          version: '{version-id}'
       - inject:
           # pkgs variables
           properties-content: |
