@@ -57,7 +57,7 @@
     # FIXME: refactor
     # added for systest:
     mos_version: 'master'
-    main_ubuntu_release: 'trusty'
+    main_ubuntu_release: 'xenial'
     openstack_release: 'ubuntu'
     rpm-dist-name: 'mos-master-centos7'
     fuel-main-branch: 'master'

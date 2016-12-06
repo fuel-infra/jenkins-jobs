@@ -85,8 +85,15 @@
           properties-content: |
             OPENSTACK_RELEASE={openstack_release}
             OS_TYPE={os}
+            UBUNTU_DIST={main_ubuntu_release}
+
             ENV_PREFIX={project-version}-pkg-systest-{os}-{distro}
 
+            REMOTE_REPO_HOST={repo-host}
+
+            DEB_DIST_NAME={deb-dist-name}
+            DEB_REPO_PATH={mos-deb-repo-path}/{project-version}
+            RPM_REPO_PATH={mos-rpm-repo-path}/os/x86_64/
       - inject:
           # Set defaults which could be reinjected
           properties-content: |
