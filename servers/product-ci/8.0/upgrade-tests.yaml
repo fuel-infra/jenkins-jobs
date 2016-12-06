@@ -78,7 +78,7 @@
         description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
 
     triggers:
-    - timed: 'H 1 * * 2,4,7'
+    - timed: ''
 
     wrappers:
     - timeout:
