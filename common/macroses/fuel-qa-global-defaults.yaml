@@ -17,6 +17,9 @@
             10.0)
               inject SLAVE_NODE_MEMORY 3968
               ;;
+            11.0)
+              inject SLAVE_NODE_MEMORY 3968
+              ;;
             0.10)
                     # used in plugin-ci:
                     # - elasticsearch-kibana
@@ -28,11 +31,14 @@
             master)
 
               ;;
+            liberty)
+
+              ;;
             mitaka)
 
               ;;
-            liberty)
-
+            newton)
+              inject SLAVE_NODE_MEMORY 3968
               ;;
             *)
               echo 'unsupported version of product'
