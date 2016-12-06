@@ -258,7 +258,7 @@ rm -rvf "${UPDATE_FUEL_PATH:-~/fuel/pkgs}"
 # If UPDATE_MASTER is true, given repository is used for package updates as is
 # If UPDATE_FUEL is true, packages from given URL are downloaded and installed as needed by test cases
 if [ "${UPDATE_FUEL}" = "true" ]; then
-    UPDATE_FUEL_MIRROR="${UPDATE_FUEL_MIRROR}Packages/"
+    UPDATE_FUEL_MIRROR="${UPDATE_FUEL_MIRROR}/Packages/"
     # Given repo URL with appended 'Packages' can't be used for updates
     UPDATE_MASTER=false
     CUSTOM_ENV=true
