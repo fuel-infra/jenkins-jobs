@@ -27,6 +27,7 @@
         murano-bvt/additional-params-override: |
           UPDATE_MASTER=true
           FORCE_DISABLE_UPDATES=false
+          FUEL_RELEASE_VERSION=9.0
 
     - product-ci/fuel-plugin-murano/templates/murano-swarm-test:
         murano-swarm-test/node: 'systest'
@@ -54,6 +55,7 @@
         murano-timer/predefined-runner-params: |
           UPDATE_MASTER=true
           FORCE_DISABLE_UPDATES=false
+          FUEL_RELEASE_VERSION=9.0
 
     - product-ci/fuel-plugin-murano/templates/murano-runner
 

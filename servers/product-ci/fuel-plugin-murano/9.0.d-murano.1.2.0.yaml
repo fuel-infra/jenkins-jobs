@@ -24,6 +24,8 @@
 
     - product-ci/fuel-plugin-murano/templates/murano-bvt:
         testgroup: deploy_murano_plugin
+        murano-bvt/additional-params-override: |
+          FUEL_RELEASE_VERSION=9.0
 
     - product-ci/fuel-plugin-murano/templates/murano-swarm-test:
         murano-swarm-test/node: 'systest'
@@ -47,6 +49,8 @@
 
     - product-ci/fuel-plugin-murano/templates/murano-timer:
         timer: '0 21 * * 1-7'
+        murano-timer/predefined-runner-params: |
+          FUEL_RELEASE_VERSION=9.0
 
     - product-ci/fuel-plugin-murano/templates/murano-runner
 
