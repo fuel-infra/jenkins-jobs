@@ -17,6 +17,7 @@
             MIRROR_MOS_UBUNTU_SUITE=mos10.0
             UBUNTU_RELEASE=xenial
             UBUNTU_KERNEL_FLAVOR=lts-xenial
+      - '10.0.swarm.timers'
       - 'product-{version}{mod}.test_all':
           email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':

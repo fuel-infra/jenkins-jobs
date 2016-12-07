@@ -1,0 +1,14 @@
+- job-group:
+    name: '10.0.swarm.timers'
+    test-type: swarm
+    version-id: 10.0
+    test-job-name: '{version-id}.test_all'
+    jobs:
+      - '{version-id}.{test-type}.timer.{repo_type}':
+         repo_type: stable
+         trigger: '0 14 * * 3'
+         enable_proposed: false
+      - '{version-id}.{test-type}.timer.{repo_type}':
+         repo_type: proposed
+         trigger: '0 14 * * 7'
+         enable_proposed: true
