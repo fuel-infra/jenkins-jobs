@@ -16,7 +16,7 @@
         description: 'Job from which we get latest stable snapshot'
 
     triggers:
-    - timed: '0 21 * * 1-7'
+    - timed: '0 21 * * 1,2,4,6'
 
     builders:
 
