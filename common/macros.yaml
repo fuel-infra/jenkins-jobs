@@ -12,7 +12,7 @@
             return [BUILD_TIMESTAMP:currentBuild.getTime().format("yyyy-MM-dd_HH-mm-ss")]
 
 - publisher:
-    name: post-destroy-vms
+    name: post-destroy-vms(build-timeout)
     publishers:
     - post-tasks:
       - matches:

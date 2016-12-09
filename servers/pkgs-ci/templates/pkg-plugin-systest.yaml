@@ -160,4 +160,4 @@
       - junit:
           keep-long-stdio: false
           results: '**/nosetests.xml'
-      - post-destroy-vms
+      - post-destroy-vms(build-timeout)

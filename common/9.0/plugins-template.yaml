@@ -95,7 +95,7 @@
     - junit:
         keep-long-stdio: false
         results: '**/nosetests.xml'
-    - post-destroy-vms
+    - post-destroy-vms(build-timeout)
     - description-setter:
         regexp: "'Description string: (.*)'"
         regexp-for-failed: "'Description string: (.*)'"
