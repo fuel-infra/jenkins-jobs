@@ -5,7 +5,7 @@
     disabled: false
     concurrent: true
     jg-properties: ''
-    node: 'systest'
+    node: 'ldap-systest'
 
     logrotate:
       artifactDaysToKeep: 14
