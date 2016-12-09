@@ -1,0 +1,9 @@
+- project:
+    name: 'gitrepo'
+    reponame: 'mcp-ci/gitrepo'
+    tox-test:
+      - 'pep8'
+      - 'py35'
+      - 'py27'
+    jobs:
+      - 'verify-{name}-{tox-test}'

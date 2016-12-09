@@ -1,6 +1,6 @@
 - job-template:
     name: 'verify-{name}-{tox-test}'
-    description: 'Run tests for fuel-infra/jim'
+    description: 'Run tests for fuel-infra/{name}'
     node: 'tox'
     concurrent: true
 
