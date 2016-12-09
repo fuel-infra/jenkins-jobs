@@ -205,7 +205,7 @@
         allow-empty: true
         artifacts: '**/nosetests.xml,*/logs/*,logs/*'
         latest-only: false
-    - post-destroy-vms
+    - post-destroy-vms(build-timeout)
     - junit:
         keep-long-stdio: false
         results: '**/nosetests.xml'

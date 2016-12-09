@@ -28,7 +28,7 @@
           test-type: 'kilo'
     publishers:
       - nosetests
-      - post-destroy-vms
+      - post-destroy-vms(build-timeout)
       - email-systest:
           body-failed:
             !include-raw: notifications/bvt.failed

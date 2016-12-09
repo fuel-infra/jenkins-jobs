@@ -106,7 +106,7 @@
     - junit:
         keep-long-stdio: false
         results: '**/nosetests.xml'
-    - post-destroy-vms
+    - post-destroy-vms(build-timeout)
     - trigger-parameterized-builds:
       - project: '{version-id}-test-reports-Testrail'
         condition: ALWAYS

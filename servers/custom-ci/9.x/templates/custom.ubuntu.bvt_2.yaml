@@ -256,7 +256,7 @@
         keep-long-stdio: false
         results: '**/nosetests.xml'
 
-    - post-destroy-vms # Destroy envs if left undestroyed
+    - post-destroy-vms(build-timeout) # Destroy envs if left undestroyed
 
     - description-setter:
         regexp: "'Description string: (.*)'"

@@ -116,7 +116,7 @@
           allow-empty: true
           artifacts: '**/nosetests.xml,logs/*'
           latest-only: false
-      - post-destroy-vms
+      - post-destroy-vms(build-timeout)
       - description-setter:
           regexp: "'Description string: (.*)'"
           regexp-for-failed: "'Description string: (.*)'"
@@ -129,7 +129,7 @@
           allow-empty: true
           artifacts: 'custom_tests/report.xml, custom_tests/*.log, *.log, snapshots.params'
           latest-only: false
-      - post-destroy-vms
+      - post-destroy-vms(build-timeout)
       - description-setter:
           regexp: "'Description string: (.*)'"
           regexp-for-failed: "'Description string: (.*)'"
