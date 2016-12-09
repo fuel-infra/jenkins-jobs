@@ -8,7 +8,7 @@
       href="https://docs.mirantis.com/{path-to-publish}/">
       https://docs.mirantis.com/{path-to-publish}/</a>
 
-      <p>Contacts: ci-team at #infra in Slack
+      <p>Contacts: ci-team at #infra in Slack</p>
     concurrent: false
     node: docs
     logrotate:
@@ -59,7 +59,8 @@
     builders:
       - inject:
           properties-content: |
-            DOCS_HOST=docs@docs.fuel-infra.org
+            DOCS_USER=docs
+            DOCS_HOST=docs.fuel-infra.org
             DOCS_ROOT={docs-root}
       - shell: '{obj:shell}'
 
