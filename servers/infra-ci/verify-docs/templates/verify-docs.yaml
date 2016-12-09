@@ -1,16 +1,16 @@
-# This job is created for a separate feature/layout branch
-# with new docs layout.
-
-- job:
-    name: new.verify-mos-docs
+- job-template:
+    name: '{prefix}verify-{project}'
     description: |
-      Check patchsets in mos/mos-docs repository to master branch
-
-      <p>Contacts: ci-team at #infra
+      Check patchsets in '{repository}' repository
+      <p>Contacts: ci-team at #infra</p>
     logrotate:
       daysToKeep: 30
     node: docs
     concurrent: false
+
+    builders:
+      - shell: '{obj:shell}'
+
     parameters:
       - string:
           name: GERRIT_REFSPEC
@@ -26,22 +26,19 @@
           remotes:
             - gerrit:
                 refspec: $GERRIT_REFSPEC
-                url: 'ssh://infra-ci@review.fuel-infra.org:29418/mos/mos-docs'
+                url: 'ssh://infra-ci@review.fuel-infra.org:29418/{repository}'
                 credentials-id: '70105253-c857-4463-a927-f47307911e45'
           choosing-strategy: gerrit
 
     triggers:
+      - timed: '{timer}'
       - gerrit:
           trigger-on:
             - patchset-created-event
           projects:
             - project-compare-type: PLAIN
-              project-pattern: 'mos/mos-docs'
-              branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/9.1'
+              project-pattern: '{repository}'
+              branches: '{obj:branches}'
           custom-url: '* $JOB_NAME $BUILD_URL'
 
     wrappers:
@@ -52,14 +49,10 @@
           write-description: true
           timeout: 45
 
-    builders:
-      - shell:
-          !include-raw: './builders/new.verify-mos-docs.sh'
-
     publishers:
       - html-publisher:
-          name: 'MOS documentation'
-          dir: 'publish-docs'
+          name: '{publish_name}'
+          dir: '{publish_dir}'
           files: 'index.html'
           keep-all: true
           allow-missing: true

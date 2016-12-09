@@ -1,0 +1,61 @@
+- project:
+    name: verify-docs
+    jobs:
+    - '{prefix}verify-{project}':
+        shell: !include-raw-escape: './builders/new.verify-docs.sh'
+        prefix: new.
+        publish_dir: publish-docs
+        publish_name: 'MOS documentation'
+        repository: mos/mos-docs
+        project: mos-docs
+        timer: ''
+        branches:
+          - branch-compare-type: PLAIN
+            branch-pattern: 'master'
+          - branch-compare-type: PLAIN
+            branch-pattern: 'stable/9.1'
+    - '{prefix}verify-{project}':
+        shell: !include-raw-escape: './builders/new.verify-docs.sh'
+        prefix: ""
+        publish_dir: publish-docs
+        publish_name: 'MCP documentation'
+        repository: mcp/mcp-docs
+        project: mcp-docs
+        timer: '5 2 * * *'
+        branches:
+          - branch-compare-type: PLAIN
+            branch-pattern: 'master'
+    - '{prefix}verify-{project}':
+        shell: !include-raw-escape: './builders/verify-mos-docs.sh'
+        prefix: ""
+        publish_dir: _build/html
+        publish_name: 'MOS Docs build results'
+        repository: mos/mos-docs
+        project: mos-docs
+        timer: ''
+        branches:
+           - branch-compare-type: PLAIN
+             branch-pattern: 'stable/5.0'
+           - branch-compare-type: PLAIN
+             branch-pattern: 'stable/5.1'
+           - branch-compare-type: PLAIN
+             branch-pattern: 'stable/6.0'
+           - branch-compare-type: PLAIN
+             branch-pattern: 'stable/6.1'
+           - branch-compare-type: PLAIN
+             branch-pattern: 'stable/7.0'
+           - branch-compare-type: PLAIN
+             branch-pattern: 'stable/8.0'
+           - branch-compare-type: PLAIN
+             branch-pattern: 'stable/9.0'
+    - '{prefix}verify-{project}':
+        shell: !include-raw-escape: './builders/verify-mos-glossary.sh'
+        prefix: ""
+        publish_dir: doc/build/html
+        publish_name: 'mos-glossary build results'
+        repository: mos/glossary
+        project: mos-glossary
+        timer: ''
+        branches:
+          - branch-compare-type: ANT
+            branch-pattern: '**'
