@@ -3,7 +3,7 @@
     reponame: 'mcp-ci/gitrepo'
     tox-test:
       - 'pep8'
-      - 'py35'
+      # FIXME: add 'py35' when will be support on CI side
       - 'py27'
     jobs:
       - 'verify-{name}-{tox-test}'
