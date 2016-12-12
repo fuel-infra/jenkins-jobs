@@ -1,0 +1,41 @@
+- job-template:
+    name: 'verify-{name}-{tox-test}'
+    id: 'infra-ci/templates/verify-tox'
+    description: 'Run tests for {reponame}'
+    node: 'tox'
+    concurrent: true
+
+    builders:
+      - shell: 'tox -v -e {tox-test}'
+
+    properties:
+      - heavy-job:
+          weight: 1
+
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://infra-ci@review.fuel-infra.org:29418/{reponame}'
+                credentials-id: '70105253-c857-4463-a927-f47307911e45'
+          choosing-strategy: gerrit
+
+    triggers:
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: '{reponame}'
+              branches:
+                - branch-compare-type: ANT
+                  branch-pattern: '**'
+          custom-url: '* $JOB_NAME $BUILD_URL'

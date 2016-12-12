@@ -6,4 +6,4 @@
       # FIXME: add 'py35' when will be support on CI side
       - 'py27'
     jobs:
-      - 'verify-{name}-{tox-test}'
+      - 'infra-ci/templates/verify-tox'
