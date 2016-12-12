@@ -1,6 +1,6 @@
 - project:
-    name: 'jimmy'
-    reponame: 'fuel-infra/jimmy'
+    name: 'jim'
+    reponame: 'fuel-infra/jim'
     tox-test:
       - 'flake8'
       - 'unittests'

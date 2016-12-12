@@ -6,4 +6,4 @@
       - 'py35'
       - 'py27'
     jobs:
-      - 'verify-{name}-{tox-test}'
+      - 'infra-ci/templates/verify-tox'
