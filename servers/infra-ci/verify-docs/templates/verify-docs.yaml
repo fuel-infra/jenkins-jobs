@@ -53,6 +53,6 @@
       - html-publisher:
           name: '{publish_name}'
           dir: '{publish_dir}'
-          files: 'index.html'
+          files: '{publish_files}'
           keep-all: true
           allow-missing: true
