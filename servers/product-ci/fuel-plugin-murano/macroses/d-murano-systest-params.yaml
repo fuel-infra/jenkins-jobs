@@ -30,6 +30,7 @@
           SLAVE_NODE_CPU=2
           FORCE_DISABLE_UPDATES=true
           DISABLE_XENIAL_KERNEL=true
+          DEPLOYMENT_TIMEOUT=11400
           # Depends on PLUGIN_RPM_FILENAME_FROM_REPO"
           #RPM_PACKAGES_URLS=http://REPO/detach-murano-1.0-1.0.0-20160921134638.noarch.rpm.Depends
           # Depends on RPM_PACKAGES_URLS
