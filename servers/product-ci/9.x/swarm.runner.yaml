@@ -136,12 +136,12 @@
         - name: '9.x.system_test.ubuntu.fuel_plugin_vip_reservation'
           current-parameters: true
           kill-phase-on: NEVER
-        - name: '9.x.system_test.ubuntu.rh'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '9.x.system_test.ubuntu.ol'
-          current-parameters: true
-          kill-phase-on: NEVER
+        #- name: '9.x.system_test.ubuntu.rh'
+        #  current-parameters: true
+        #  kill-phase-on: NEVER
+        #- name: '9.x.system_test.ubuntu.ol'
+        #  current-parameters: true
+        #  kill-phase-on: NEVER
         - name: '9.x.system_test.ubuntu.services_ha'
           current-parameters: true
           kill-phase-on: NEVER
