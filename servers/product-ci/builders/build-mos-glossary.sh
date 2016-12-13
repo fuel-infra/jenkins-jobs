@@ -49,4 +49,5 @@ ssh "${DOCS_USER}@${DOCS_HOST}" "mkdir -p ${DOCS_ROOT}"
 
 DOCS_PATH="${DOCS_USER}@${DOCS_HOST}:${DOCS_ROOT}/glossary/"
 
-    rsync -rv doc/build/html/ "${DOCS_PATH}"
+    rsync -rv build-docs/mos-glossary/ "${DOCS_PATH}"
+    rsync -rv build-docs/mcp-glossary/ "${DOCS_PATH}mcp/"
