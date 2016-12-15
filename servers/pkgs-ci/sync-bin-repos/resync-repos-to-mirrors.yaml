@@ -99,5 +99,11 @@
             infra/backports/xenial
           update-head: true
 
+      - decapod:
+          timer: 'H/20 * * * *'
+          srcpaths: |
+            decapod/ceph
+          update-head: true
+
     jobs:
       - '{mos_version}.resync-repos-to-mirrors'
