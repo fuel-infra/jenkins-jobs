@@ -1,5 +1,6 @@
 - project:
     name: verify-docs
+    publish_files: 'index.html'
     jobs:
     - '{prefix}verify-{project}':
         shell: !include-raw-escape: './builders/new.verify-docs.sh'
@@ -51,8 +52,9 @@
     - '{prefix}verify-{project}':
         shell: !include-raw-escape: './builders/verify-mos-glossary.sh'
         prefix: ""
-        publish_dir: doc/build/html
-        publish_name: 'mos-glossary build results'
+        publish_dir: build-docs
+        publish_name: 'Glossary build results'
+        publish_files: '**/index.html'
         repository: mos/glossary
         project: mos-glossary
         timer: ''
