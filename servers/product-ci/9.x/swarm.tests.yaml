@@ -358,6 +358,7 @@
 
         - add_updated_node_to_environment:
             swarm-test/custom-overrides-plain-properties: |
+              FUEL_RELEASE_VERSION=9.0
               UPDATE_MASTER=False
               FORCE_DISABLE_UPDATES=True
               NODES_COUNT=6
