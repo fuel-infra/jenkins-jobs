@@ -1,32 +1,52 @@
 - project:
     name: 'MOS Docs'
     results-dir: '_build/html'
-
+    docs-root: '/var/www/openstack/fuel'
+    shell: !include-raw-escape: builders/build-mos-docs.sh
+    publish-name: 'MOS Docs build results'
+    repository: mos/mos-docs
+    path-to-publish: 'openstack/fuel/fuel-{version-id}'
     jobs:
-      - '{version-id}.build-mos-docs':
+      - '{version-id}.build-{project}':
+          project: mos-docs
           version-id: master
           branch: master
           results-dir: 'publish-docs'
           timer: 'H * * * *'
-      - '{version-id}.build-mos-docs':
+      - '{version-id}.build-{project}':
+          project: mos-docs
           version-id: 9.1
           branch: stable/9.1
           results-dir: 'publish-docs'
           timer: 'H * * * *'
-      - '{version-id}.build-mos-docs':
+      - '{version-id}.build-{project}':
+          project: mos-docs
           version-id: 9.0
           branch: stable/9.0
           timer: 'H * * * *'
-      - '{version-id}.build-mos-docs':
+      - '{version-id}.build-{project}':
+          project: mos-docs
           version-id: 8.0
           branch: stable/8.0
           timer: 'H 17 * * *'
-      - '{version-id}.build-mos-docs':
+      - '{version-id}.build-{project}':
+          project: mos-docs
           version-id: 7.0
           branch: stable/7.0
           timer: 'H 16 * * *'
-      - '{version-id}.build-mos-docs':
+      - '{version-id}.build-{project}':
+          project: mos-docs
           version-id: 6.1
           branch: stable/6.1
           timer: 'H 15 * * *'
-
+      - '{version-id}.build-{project}':
+          project: mcp-docs
+          version-id: master
+          branch: master
+          docs-root: '/var/www/mcp/'
+          results-dir: 'publish-docs'
+          shell: !include-raw-escape: builders/build-mcp-docs.sh
+          repository: mcp/mcp-docs
+          path-to-publish: mcp
+          publish-name: 'MCP Docs build results'
+          timer: 'H * * * *'
