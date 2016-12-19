@@ -136,22 +136,46 @@
           current-parameters: true
           kill-phase-on: NEVER
         - name: '9.x.acceptance.ubuntu.install_mu_no_ha_failover'
-          current-parameters: true
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
           kill-phase-on: NEVER
         - name: '9.x.acceptance.ubuntu.install_mu_ha'
-          current-parameters: true
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
           kill-phase-on: NEVER
         - name: '9.x.acceptance.ubuntu.install_mu_no_ha_base_negative'
-          current-parameters: true
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
           kill-phase-on: NEVER
         - name: '9.x.acceptance.ubuntu.install_mu_ironic_ceilometer'
-          current-parameters: true
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
           kill-phase-on: NEVER
         - name: '9.x.acceptance.ubuntu.install_mu_murano_ha'
-          current-parameters: true
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
           kill-phase-on: NEVER
         - name: '9.x.acceptance.ubuntu.install_mu_sahara_ha'
-          current-parameters: true
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
           kill-phase-on: NEVER
         - name: '9.x.acceptance.ubuntu.tests_configdb_api'
           current-parameters: true
