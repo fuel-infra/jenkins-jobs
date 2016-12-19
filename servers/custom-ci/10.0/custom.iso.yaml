@@ -5,9 +5,9 @@
     default_commit: 'stable/newton'
     defaults: '{version}.custom.iso'
     overridden_parameters: |
-      MOS_CENTOS_ROOT=/mos-repos/centos/mos-10.0-centos7/
+      MOS_CENTOS_ROOT=/mos-repos/centos/mos10.0-centos7/
       MOS_UBUNTU_TARGET=10.0.target.txt
-      MIRROR_MOS_UBUNTU_SUITE=mos-10.0
+      MIRROR_MOS_UBUNTU_SUITE=mos10.0
 
       # Ubuntu Xenial
       MIRROR_UBUNTU=cz.archive.ubuntu.com
