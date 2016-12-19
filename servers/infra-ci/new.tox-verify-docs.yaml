@@ -1,7 +1,7 @@
 - job-template:
-    name: 'new.tox-verify-mos-docs-{check-name}'
+    name: 'new.tox-verify-docs-{check-name}'
     description: |
-       Tox checks on MOS documentation
+       Tox checks on MOS and MCP documentation
        Job is currently running in non-voting mode
     node: docs
     concurrent: true
@@ -18,7 +18,7 @@
           remotes:
             - gerrit:
                 refspec: $GERRIT_REFSPEC
-                url: 'ssh://infra-ci@review.fuel-infra.org:29418/mos/mos-docs'
+                url: 'ssh://infra-ci@review.fuel-infra.org:29418/$GERRIT_PROJECT'
                 credentials-id: '70105253-c857-4463-a927-f47307911e45'
           choosing-strategy: gerrit
 
@@ -34,6 +34,11 @@
                   branch-pattern: 'master'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/9.1'
+            - project-compare-type: PLAIN
+              project-pattern: 'mcp/mcp-docs'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
           custom-url: '* $JOB_NAME $BUILD_URL'
           skip-vote:
             successful: true
@@ -50,7 +55,7 @@
           allow-empty: 'true'
 
 - project:
-    name: new.tox-verify-mos-docs
+    name: new.tox-verify-docs
     jobs:
-      - 'new.tox-verify-mos-docs-{check-name}':
+      - 'new.tox-verify-docs-{check-name}':
           check-name: checkniceness
