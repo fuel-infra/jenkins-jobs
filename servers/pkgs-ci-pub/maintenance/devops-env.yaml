@@ -1,5 +1,6 @@
 - project:
     name: 'devops-env'
+    env_update_time: ''
     version-id:
       - 'master':
           bvt_job_url: 'https://ci.fuel-infra.org/job/11.0-community.main.ubuntu.bvt_2'
