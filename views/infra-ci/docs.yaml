@@ -3,6 +3,10 @@
     name: 'Docs'
     jobs:
       - verify-mos-docs
+      - verify-mcp-docs
+      - new.verify-mos-docs
+      - verify-mos-glossary
+      - new.tox-verify-docs-checkniceness
     columns:
       - status
       - weather
