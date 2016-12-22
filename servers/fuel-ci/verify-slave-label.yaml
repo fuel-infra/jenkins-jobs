@@ -1,0 +1,4 @@
+- project:
+    name: 'Verify slave by label'
+    jobs:
+      - 'verify-slave-label'
