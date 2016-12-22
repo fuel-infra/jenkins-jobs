@@ -1,10 +1,10 @@
-- job:
+- job-template:
     name: 'verify-slave-label'
     concurrent: true
     description: |
       This is a helper job for checking if specified job should be ran
       on a targeted Jenkins Slave node. Triggers specific job on a selected node,
-      to test if jobs code from master branch build there. On success it will
+      to test if jobs code fromtox  master branch build there. On success it will
       trigger add/remove helper job to set specific label on a tested node.
     scm:
       - git:
@@ -22,12 +22,8 @@
             Jobs label, which shall be set on a slave. Example:
             verify-fuel-web
     builders:
-      - shell: |
-          #!/bin/bash
-          set -ex
-          cd utils/label_compliance
-          ./parse_yaml.py ${LABEL_NAME} > test.param
-          curl https://product-ci.infra.mirantis.net/job/8.0.test_all/lastSuccessfulBuild/artifact/magnet_link.txt >> test.param
+      - shell:
+          !include-raw-escape: scripts/verify-slave-label.sh
       - inject:
           properties-file: utils/label_compliance/test.param
       - trigger-builds:
