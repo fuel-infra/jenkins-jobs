@@ -27,7 +27,7 @@ https://ci.fuel-infra.org/
 
 ``servers/infra-ci/``
 
-???
+https://infra-ci.fuel-infra.org/
 
 ``servers/jenkins-product-ci/``
 
@@ -39,7 +39,7 @@ https://product-ci.infra.mirantis.net/
 
 ``servers/old-stable-ci/``
 
-???
+https://old-stable-ci.infra.mirantis.net/
 
 ``servers/openstack-ci/``
 
@@ -47,7 +47,7 @@ http://osci-jenkins.srt.mirantis.net:8080/
 
 ``servers/patching-ci/``
 
-???
+https://patching-ci.infra.mirantis.net/
 
 ``servers/pkgs-ci/``
 
@@ -55,7 +55,7 @@ https://packaging-ci.infra.mirantis.net/
 
 ``servers/plugins-ci/``
 
-???
+https://plugin-ci.fuel-infra.org/
 
 ``servers/scale-ci/``
 
