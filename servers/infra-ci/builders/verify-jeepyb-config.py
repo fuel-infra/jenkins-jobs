@@ -207,6 +207,7 @@ REPOSITORIES_WHITELIST = {
     'packages/centos7/python-WSGIProxy2',
     'packages/centos7/python-XStatic-bootswatch',
     'packages/centos7/python-XStatic-termjs',
+    'packages/centos7/python-backports_abc',
     'packages/centos7/python-sphinx_rtd_theme',
     'packages/centos7/rubygem-Platform',
     'packages/centos7/rubygem-RedCloth',
