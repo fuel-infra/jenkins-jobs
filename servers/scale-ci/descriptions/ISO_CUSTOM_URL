@@ -1,8 +1,0 @@
-URL for ISO downloading <br>
-Support http, file and torrent url
-Examples <br>
-http://mc0n1-msk.msk.mirantis.net/fuelweb-iso/fuel-master-524-2014-09-23_00-01-46.iso <br>
-or <br>
-http://mc0n1-msk.msk.mirantis.net/fuelweb-iso/fuel-master-524-2014-09-23_00-01-46.iso.torrent <br>
-or <br>
-file://tmp/fuel-master-524-2014-09-23_00-01-46.iso
