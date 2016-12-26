@@ -12,7 +12,7 @@
     dst-branch: 10.0
 
     # Syncronization schedule
-    timer: '0 4,10,16,22 * * *'
+    timer: 'H 22 * * *'
 
     # Gerrit parameters
     gerrit-host: 'review.fuel-infra.org'
