@@ -57,10 +57,6 @@ https://packaging-ci.infra.mirantis.net/
 
 https://plugin-ci.fuel-infra.org/
 
-``servers/scale-ci/``
-
-???
-
 ``common/``
 
   Common templates.
