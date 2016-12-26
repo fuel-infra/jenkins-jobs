@@ -120,7 +120,9 @@
           # Prepare renderspec
           virtualenv -p python2.7 rpm-packaging-venv
           source rpm-packaging-venv/bin/activate
-          pip install --upgrade pbr git+https://github.com/openstack/pymod2pkg.git
+          pip install --upgrade pbr
+          pip install --upgrade git+https://github.com/openstack/renderspec.git
+          pip install --upgrade git+https://github.com/openstack/pymod2pkg.git
           pip install -r test-requirements.txt -r openstack-rpm-ci/requirements.txt
 
           for spec_src in ${{CHANGED_FILES}}; do
