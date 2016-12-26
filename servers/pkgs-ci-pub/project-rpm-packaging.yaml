@@ -303,6 +303,9 @@
       - 'mitaka':
           mos-version: '9.0'
           mos-repo-name-sep: ''
+      - 'newton':
+          mos-version: '10.0'
+          mos-repo-name-sep: ''
     os: 'centos'
     distro: 'centos7'
     pkg_type: 'rpm'
