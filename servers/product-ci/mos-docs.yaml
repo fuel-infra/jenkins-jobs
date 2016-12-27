@@ -12,18 +12,18 @@
           version-id: master
           branch: master
           results-dir: 'publish-docs'
-          timer: 'H * * * *'
+          timer: 'H 8,20 * * *'
       - '{version-id}.build-{project}':
           project: mos-docs
           version-id: 9.1
           branch: stable/9.1
           results-dir: 'publish-docs'
-          timer: 'H * * * *'
+          timer: 'H 7,19 * * *'
       - '{version-id}.build-{project}':
           project: mos-docs
           version-id: 9.0
           branch: stable/9.0
-          timer: 'H * * * *'
+          timer: 'H 18 * * *'
       - '{version-id}.build-{project}':
           project: mos-docs
           version-id: 8.0
@@ -49,4 +49,4 @@
           repository: mcp/mcp-docs
           path-to-publish: mcp
           publish-name: 'MCP Docs build results'
-          timer: 'H * * * *'
+          timer: 'H 2,14 * * *'

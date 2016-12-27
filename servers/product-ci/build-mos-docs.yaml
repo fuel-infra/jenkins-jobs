@@ -33,6 +33,16 @@
 
     triggers:
       - timed: '{timer}'
+      - gerrit:
+          trigger-on:
+            - change-merged-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: '{repository}'
+              branches:
+                 - branch-compare-type: 'PLAIN'
+                   branch-pattern: '{branch}'
+          custom-url: '* $JOB_NAME $BUILD_URL'
 
     wrappers:
       - ssh-agent-credentials:
