@@ -287,6 +287,130 @@
               SLAVE_NODE_CPU=4
               SERVTEST_LOCAL_PATH=/srv/downloads
 
+        - mos_mu_customization_included:
+            swarm-test/custom-overrides-plain-properties: |
+              ENABLE_MOS_CENTOS_HOLDBACK=false
+              ENABLE_MOS_CENTOS_HOTFIX=false
+              ENABLE_MOS_CENTOS_OS=false
+              ENABLE_MOS_CENTOS_PROPOSED=false
+              ENABLE_MOS_CENTOS_SECURITY=false
+              ENABLE_MOS_CENTOS_UPDATES=false
+              ENABLE_MOS_UBUNTU_HOLDBACK=false
+              ENABLE_MOS_UBUNTU_HOTFIX=false
+              ENABLE_MOS_UBUNTU_OS=false
+              ENABLE_MOS_UBUNTU_PROPOSED=false
+              ENABLE_MOS_UBUNTU_SECURITY=false
+              ENABLE_MOS_UBUNTU_UPDATES=false
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FUEL_RELEASE_VERSION=9.0
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos9.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/9.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/9.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=4
+              SERVTEST_LOCAL_PATH=/srv/downloads
+
+        - mos_mu_customization_pkg:
+            swarm-test/custom-overrides-plain-properties: |
+              ENABLE_MOS_CENTOS_HOLDBACK=false
+              ENABLE_MOS_CENTOS_HOTFIX=false
+              ENABLE_MOS_CENTOS_OS=false
+              ENABLE_MOS_CENTOS_PROPOSED=false
+              ENABLE_MOS_CENTOS_SECURITY=false
+              ENABLE_MOS_CENTOS_UPDATES=false
+              ENABLE_MOS_UBUNTU_HOLDBACK=false
+              ENABLE_MOS_UBUNTU_HOTFIX=false
+              ENABLE_MOS_UBUNTU_OS=false
+              ENABLE_MOS_UBUNTU_PROPOSED=false
+              ENABLE_MOS_UBUNTU_SECURITY=false
+              ENABLE_MOS_UBUNTU_UPDATES=false
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FUEL_RELEASE_VERSION=9.0
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos9.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/9.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/9.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=4
+              SERVTEST_LOCAL_PATH=/srv/downloads
+
+        - mos_mu_customization_excluded:
+            swarm-test/custom-overrides-plain-properties: |
+              ENABLE_MOS_CENTOS_HOLDBACK=false
+              ENABLE_MOS_CENTOS_HOTFIX=false
+              ENABLE_MOS_CENTOS_OS=false
+              ENABLE_MOS_CENTOS_PROPOSED=false
+              ENABLE_MOS_CENTOS_SECURITY=false
+              ENABLE_MOS_CENTOS_UPDATES=false
+              ENABLE_MOS_UBUNTU_HOLDBACK=false
+              ENABLE_MOS_UBUNTU_HOTFIX=false
+              ENABLE_MOS_UBUNTU_OS=false
+              ENABLE_MOS_UBUNTU_PROPOSED=false
+              ENABLE_MOS_UBUNTU_SECURITY=false
+              ENABLE_MOS_UBUNTU_UPDATES=false
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FUEL_RELEASE_VERSION=9.0
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos9.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/9.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/9.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=4
+              SERVTEST_LOCAL_PATH=/srv/downloads
+
+        - install_mu_no_ha_scale_90:
+            swarm-test/custom-overrides-plain-properties: |
+              ENABLE_MOS_CENTOS_HOLDBACK=false
+              ENABLE_MOS_CENTOS_HOTFIX=false
+              ENABLE_MOS_CENTOS_OS=false
+              ENABLE_MOS_CENTOS_PROPOSED=false
+              ENABLE_MOS_CENTOS_SECURITY=false
+              ENABLE_MOS_CENTOS_UPDATES=false
+              ENABLE_MOS_UBUNTU_HOLDBACK=false
+              ENABLE_MOS_UBUNTU_HOTFIX=false
+              ENABLE_MOS_UBUNTU_OS=false
+              ENABLE_MOS_UBUNTU_PROPOSED=false
+              ENABLE_MOS_UBUNTU_SECURITY=false
+              ENABLE_MOS_UBUNTU_UPDATES=false
+              UPDATE_MASTER=False
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FUEL_RELEASE_VERSION=9.0
+              FORCE_DISABLE_UPDATES=True
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos9.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/9.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/9.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=4
+              SERVTEST_LOCAL_PATH=/srv/downloads
+
         - tests_configdb_api:
             swarm-test/custom-overrides-plain-properties: |
               PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64/

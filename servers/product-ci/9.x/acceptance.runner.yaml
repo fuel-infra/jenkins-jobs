@@ -170,7 +170,35 @@
             FUEL_QA_COMMIT=$FUEL_QA_COMMIT
             MAGNET_LINK=$MAGNET_LINK
           kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.install_mu_no_ha_scale_90'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+          kill-phase-on: NEVER
         - name: '9.x.acceptance.ubuntu.install_mu_sahara_ha'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.mos_mu_customization_included'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.mos_mu_customization_pkg'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.mos_mu_customization_excluded'
           current-parameters: false
           predefined-parameters: |
             CUSTOM_VERSION=$CUSTOM_VERSION
