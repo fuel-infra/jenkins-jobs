@@ -31,7 +31,10 @@
     name: post-destroy-vms(always)
     publishers:
     - post-tasks:
-      - script: |
+      - matches:
+        - log-text: 'Started'
+          operator: AND
+        script: |
           #!/bin/bash
 
           set -ex
