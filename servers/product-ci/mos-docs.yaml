@@ -11,13 +11,17 @@
           project: mos-docs
           version-id: master
           branch: master
+          docs-root: '/var/www/openstack/fuel/fuel-'
           results-dir: 'publish-docs'
+          shell: !include-raw-escape: builders/build-docs.sh
           timer: 'H 8,20 * * *'
       - '{version-id}.build-{project}':
           project: mos-docs
           version-id: 9.1
           branch: stable/9.1
+          docs-root: '/var/www/openstack/fuel/fuel-'
           results-dir: 'publish-docs'
+          shell: !include-raw-escape: builders/build-docs.sh
           timer: 'H 7,19 * * *'
       - '{version-id}.build-{project}':
           project: mos-docs
@@ -45,7 +49,7 @@
           branch: master
           docs-root: '/var/www/mcp/'
           results-dir: 'publish-docs'
-          shell: !include-raw-escape: builders/build-mcp-docs.sh
+          shell: !include-raw-escape: builders/build-docs.sh
           repository: mcp/mcp-docs
           path-to-publish: mcp
           publish-name: 'MCP Docs build results'
