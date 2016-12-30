@@ -164,6 +164,10 @@
 
     builders:
 
+    # 0. inject global defaults
+    - inject-fuel-qa-global-defaults:
+        version: "9.x"
+
     # Section for constructing very custom snapshots.params file
     # ----------
 
