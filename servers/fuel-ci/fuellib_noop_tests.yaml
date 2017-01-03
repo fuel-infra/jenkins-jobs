@@ -1,8 +1,8 @@
-- job:
+- job-template:
     name: fuellib_noop_tests
     builders:
       - shell:
-          !include-raw: builders/fuellib_noop_tests.sh
+          !include-raw-escape: builders/fuellib_noop_tests.sh
     concurrent: true
     description: Runs ./utils/jenkins/fuel_noop_tests.sh
     node: fuel-library-unit-tests
@@ -55,3 +55,8 @@
           write-description: true
     publishers:
       - email-default
+
+- project:
+    name: fuel-library noop tests
+    jobs:
+      - 'fuellib_noop_tests'
