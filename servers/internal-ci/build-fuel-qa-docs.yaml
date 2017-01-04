@@ -34,7 +34,7 @@
     wrappers:
       - ssh-agent-credentials:
           users:
-            - 'c8f503aa-46a3-49e4-a8be-4ed35f00500f'    # fuel_docs@jenkins
+            - '2883cde5-8472-4292-8460-e7c6ec0b85aa'    # fuel_docs@jenkins
       - ansicolor:
           colormap: xterm
       - timeout:

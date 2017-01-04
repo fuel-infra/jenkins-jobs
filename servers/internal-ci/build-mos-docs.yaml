@@ -47,8 +47,8 @@
     wrappers:
       - ssh-agent-credentials:
           users:
-            - '6fa3dffe-2f91-4a9b-a011-68e29f1b2468' # openstack-ci-jenkins
-            - 'c8f503aa-46a3-49e4-a8be-4ed35f00500f' # fuel_docs@jenkins
+            - '55e5b205-a099-4efd-8fca-110bbb5714fc' # openstack-ci-jenkins
+            - '2883cde5-8472-4292-8460-e7c6ec0b85aa' # fuel_docs@jenkins
       - ansicolor:
           colormap: xterm
       - timeout:

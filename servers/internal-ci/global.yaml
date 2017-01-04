@@ -7,3 +7,12 @@
       numToKeep: 10
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
+
+- scm:
+    name: main-git
+    scm:
+      - git:
+         url: 'https://git.openstack.org/openstack/{reponame}.git'
+         branches:
+          - '{repobranch}'
+         basedir: '{basedir}'

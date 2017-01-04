@@ -41,10 +41,10 @@ if [ ! -d "${VENV}" ]; then
   virtualenv "${VENV}"
 fi
 
-source ${VENV}/bin/activate || exit 1
+source "${VENV}/bin/activate" || exit 1
 
-pip install -r ${WORKSPACE}/fuelweb_test/requirements.txt
-pip install -r ${WORKSPACE}/doc/requirements.txt
+pip install -r "${WORKSPACE}/fuelweb_test/requirements.txt"
+pip install -r "${WORKSPACE}/doc/requirements.txt"
 
 (cd doc/ && make clean-doc doc-html)
 
