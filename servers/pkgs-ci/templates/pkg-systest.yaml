@@ -33,8 +33,10 @@
           default: >-
             deb
             http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name} main restricted,1200|deb
-            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name}-security main restricted,1201|deb
-            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name}-updates  main restricted,1201
+            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name}-holdback main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name}-security main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name}-proposed main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name}-updates  main restricted,1200
           description: >-
             <p>
             Additional deb repos. Note, that empty repos will bring some errors into console output.
