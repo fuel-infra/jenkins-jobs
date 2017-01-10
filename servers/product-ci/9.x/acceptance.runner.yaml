@@ -27,6 +27,15 @@
         name: 'Run system tests'
         condition: COMPLETED
         projects:
+        - name: '9.x.acceptance.ubuntu.iac_git_download_settings'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.iac_git_install_remove_package'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.iac_git_set_non_openstack_settings'
+          current-parameters: true
+          kill-phase-on: NEVER
         - name: '9.x.acceptance.ubuntu.ha_vlan_group_1'
           current-parameters: true
           kill-phase-on: NEVER

@@ -18,6 +18,12 @@
 
         testgroup:
 
+        - iac_git_download_settings
+
+        - iac_git_install_remove_package
+
+        - iac_git_set_non_openstack_settings
+
         - ha_vlan_group_1
 
         - ha_vlan_group_2
