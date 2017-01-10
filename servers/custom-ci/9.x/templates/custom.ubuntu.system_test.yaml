@@ -275,7 +275,7 @@
              # which run fuel-qa after customs prepare environment
              # Redefine path to venv if use non standart test framework
              if [ "$TEST_FRAMEWORK_URL" != "https://github.com/openstack/fuel-qa.git" ] ; then
-                 VENV_PATH="${{WORKSPACE}}/venv_test"
+                 VENV_PATH=${{VENV_PATH:-"${{WORKSPACE}}/venv_test"}}
                  inject VENV_PATH ${{VENV_PATH}}
                  export VENV_PATH=${{VENV_PATH}}
                  # The variable FUELQA_GITREF used prepare env script in stacklight-integration-tests
