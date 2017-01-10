@@ -56,4 +56,4 @@
             ENABLE_MOS_CENTOS_SECURITY=true
             ENABLE_MOS_CENTOS_HOLDBACK=true
 
-
+            ENABLE_CENTOS_MIRROR=true
