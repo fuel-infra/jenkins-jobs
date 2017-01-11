@@ -133,7 +133,7 @@ export RPM_SECURITY_REPO_PATH={rpm-repo-path}/security
 export RPM_HOLDBACK_REPO_PATH={rpm-repo-path}/holdback
 
 # Per-CR repository pathes
-export DEB_REQUEST_REPO_PATH={deb-repo-path}/{project-version}
+export DEB_REQUEST_REPO_PATH={deb-repo-path}
 export RPM_REQUEST_OS_REPO_PATH={rpm-repo-path}/os
 export RPM_REQUEST_HOTFIX_REPO_PATH={rpm-repo-path}/hotfix
 export RPM_REQUEST_SECURITY_REPO_PATH={rpm-repo-path}/security
