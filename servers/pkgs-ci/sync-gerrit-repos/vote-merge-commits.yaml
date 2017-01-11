@@ -7,6 +7,8 @@
         git-branch: 'openstack-ci/fuel-8.0/liberty'
     - '9.0':
         git-branch: '9.0/mitaka'
+        # FIXME(aevseev) Disabled due to HCF. To be reverted after release.
+        timer: ''
     - '10.0':
         git-branch: '10.0/newton'
 
