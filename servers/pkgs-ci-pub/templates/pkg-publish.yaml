@@ -11,7 +11,6 @@
             REPO_BASE_PATH={repo-base-path}
             SIGKEYID={pkg-sign-key}
             PKG_JSON_REPORT=/home/jenkins/{name}-{project-version}-pkg-versions.json
-            IS_DOWNGRADE=true
 
     parameters:
       - string:

@@ -42,7 +42,6 @@
           export REPO_URL=${{DEB_REPO_URL:-${{RPM_REPO_URL}}}}
           export REPO_TYPE={pkg_type}
           export GERRIT_PROJECT=${{ZUUL_PROJECT}}
-          export IS_DOWNGRADE=true
 
           # Remove quotes, double and trailing slashes
           REPO_URL=$(echo "${{REPO_URL}}"   | sed 's|"||g; s|/\+|/|g; s|:|:/|g; s|/ | |g')

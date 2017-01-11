@@ -42,6 +42,9 @@
             # FIXME: Use upstream Ubuntu mirror
             MIRROR_UBUNTU=deb http://archive.ubuntu.com/ubuntu {ubuntu_distro} main universe multiverse|deb http://archive.ubuntu.com/ubuntu {ubuntu_distro}-updates main universe multiverse|deb http://archive.ubuntu.com/ubuntu {ubuntu_distro}-security main universe multiverse
 
+            # See: https://bugs.launchpad.net/fuel/+bug/1651771
+            OVERRIDE_PKG_REVISION=2
+
     scm:
       - perestroika
       - openstack-gerrit:
