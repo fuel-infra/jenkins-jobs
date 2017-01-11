@@ -104,12 +104,12 @@
           - name: '9.x.upgrades.ubuntu.cluster_upgrade_extension'
             current-parameters: true
             kill-phase-on: NEVER
-          - name: '9.x.upgrades.ubuntu.upgrade_net_tmpl_tests'
-            current-parameters: true
-            kill-phase-on: NEVER
-          - name: '9.x.upgrades.ubuntu.upgrade_multirack_test'
-            current-parameters: true
-            kill-phase-on: NEVER
+#          - name: '9.x.upgrades.ubuntu.upgrade_net_tmpl_tests'
+#            current-parameters: true
+#            kill-phase-on: NEVER
+#          - name: '9.x.upgrades.ubuntu.upgrade_multirack_test'
+#            current-parameters: true
+#            kill-phase-on: NEVER
 
     publishers:
     - archive:

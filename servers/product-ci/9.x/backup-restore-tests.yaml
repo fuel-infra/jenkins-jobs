@@ -98,12 +98,12 @@
           - name: '9.x.backup-restore.ubuntu.upgrade_plugin_tests'
             current-parameters: true
             kill-phase-on: NEVER
-          - name: '9.x.backup-restore.ubuntu.replace_controller_net_tmpl'
-            current-parameters: true
-            kill-phase-on: NEVER
-          - name: '9.x.backup-restore.ubuntu.upgrade_multirack_test'
-            current-parameters: true
-            kill-phase-on: NEVER
+#          - name: '9.x.backup-restore.ubuntu.replace_controller_net_tmpl'
+#            current-parameters: true
+#            kill-phase-on: NEVER
+#          - name: '9.x.backup-restore.ubuntu.upgrade_multirack_test'
+#            current-parameters: true
+#            kill-phase-on: NEVER
 
     publishers:
     - archive:
