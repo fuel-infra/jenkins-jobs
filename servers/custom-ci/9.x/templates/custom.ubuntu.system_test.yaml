@@ -285,6 +285,7 @@
                     ./utils/fuel-qa-builder/prepare_env.sh
                  fi
              fi
+             wget -r --no-parent -A 'fuel-release*.noarch.rpm' -nd --directory-prefix=$WORKSPACE/ -e robots=off http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/os/x86_64/Packages/ && mv "$WORKSPACE"/fuel-release*.noarch.rpm "$WORKSPACE/fuel-release.noarch.rpm"
 
     - apply-fuel-qa-patches
 
