@@ -97,10 +97,10 @@ fi
 
 # 4. Get Upstream CentOS mirror snapshot
 
-if [ "${CENTOS_MIRROR_ID}" == 'centos-7.2.1511' ]
+if [ "${CENTOS_MIRROR_ID}" == 'latest' ]
 then
     # Get the latest mirror id and set the mirror URL
-    CENTOS_MIRROR_ID=$(curl -sSf "${CLOSEST_MIRROR_URL}/pkgs/snapshots/${CENTOS_MIRROR_ID}-latest.target.txt" | sed '1p;d')
+    CENTOS_MIRROR_ID=$(curl -sSf "${CLOSEST_MIRROR_URL}/pkgs/snapshots/centos-${CENTOS_VERSION:?}-latest.target.txt" | sed '1p;d')
     export CENTOS_MIRROR_URL="${CLOSEST_MIRROR_URL}/pkgs/snapshots/${CENTOS_MIRROR_ID}/"
 fi
 

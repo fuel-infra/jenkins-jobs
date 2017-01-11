@@ -5,6 +5,7 @@
     default_commit: 'master'
     defaults: '{version}.custom.iso'
     overridden_parameters: |
+      CENTOS_VERSION=7.3.1611
       MOS_CENTOS_ROOT=/mos-repos/centos/mos-master-centos7/
       MOS_UBUNTU_TARGET=master.target.txt
       MIRROR_MOS_UBUNTU_SUITE=mos-master
