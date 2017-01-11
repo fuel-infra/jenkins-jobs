@@ -84,7 +84,4 @@
 
     - string:
         name: CENTOS_MIRROR_ID
-    - bool:
-        name: ENABLE_CENTOS_MIRROR
-        description: "Use CentOS mirrors to update Fuel-master (and cloud hosts if any)"
-        default: false
+        # TBD

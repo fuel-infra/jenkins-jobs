@@ -109,17 +109,6 @@ for _dn in  "os"        \
     fi
 done
 
-# Adding upstream centos mirror
-if [[ "${ENABLE_CENTOS_MIRROR:-false}" = true ]] ; then
-    for _dn in  "os"        \
-                "updates"   ; do
-        __repo_url="http://${MIRROR_HOST}/pkgs/snapshots/${CENTOS_MIRROR_ID}/${_dn}/x86_64"
-        __repo_name="centos-${_dn},${__repo_url}"
-        UPDATE_FUEL_MIRROR="$(join "${__space}" "${UPDATE_FUEL_MIRROR}" "${__repo_url}" )"
-        EXTRA_RPM_REPOS="$(join "${__pipe}" "${EXTRA_RPM_REPOS}" "${__repo_name}" )"
-    done
-fi
-
 # UPDATE_MASTER=true in case when we have set some repos
 # otherwise there will be no reason to start updating without any repos to update from
 
