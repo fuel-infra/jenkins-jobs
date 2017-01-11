@@ -6,9 +6,13 @@
     jobs:
       - '{version-id}.{test-type}.timer.{repo_type}':
          repo_type: stable
-         trigger: '0 21 * * 3'
+         # FIXME(aevseev) Disabled until MOS 9.2 release
+         #trigger: '0 21 * * 3'
+         trigger: ''
          enable_proposed: false
       - '{version-id}.{test-type}.timer.{repo_type}':
          repo_type: proposed
-         trigger: '0 21 * * 7'
+         # FIXME(aevseev) Disabled until MOS 9.2 release
+         #trigger: '0 21 * * 7'
+         trigger: ''
          enable_proposed: true
