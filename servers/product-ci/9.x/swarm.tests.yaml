@@ -363,6 +363,13 @@
               FORCE_DISABLE_UPDATES=True
               NODES_COUNT=6
 
+        # test group below uses only 4 VMs at the same time so there is no need
+        # to put in in huge_systest node
+        - multiqueue_base_check:
+            swarm-test/custom-overrides-plain-properties: |
+              KVM_USE=true
+              SLAVE_NODE_CPU=4
+
     - product-ci/9.x/templates/swarm-test-plugins:
 
         testgroup:
