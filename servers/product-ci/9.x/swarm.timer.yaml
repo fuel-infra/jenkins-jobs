@@ -18,8 +18,8 @@
     triggers:
     # FIXME(aevseev) At wednesday and sunday should be run MOS 10.0 swarm.
     # Revert after 9.2 release.
-    #- timed: '0 21 * * 1,2,5,6'
-    - timed: '0 21 * * 1,2,3,5,6,7'
+    #- timed: '0 21 * * 1,2,4,6'
+    - timed: '0 21 * * *'
 
     builders:
 
