@@ -29,7 +29,7 @@
                     # .. and must be fixed
               ;;
             master)
-
+              inject SLAVE_NODE_MEMORY 3968
               ;;
             liberty)
 
