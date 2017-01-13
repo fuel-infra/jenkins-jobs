@@ -421,6 +421,13 @@
             swarm-test/custom-overrides-plain-properties: |
               PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64/
 
+        - test_multiqueue_acceptance:
+            swarm-test/custom-overrides-plain-properties: |
+              SLAVE_NODE_CPU=6
+              SLAVE_NODE_MEMORY=6144
+              DRIVER_ENABLE_ACPI=true
+              KVM_USE=true
+
     - product-ci/9.x/templates/swarm-test-plugins:
 
         testgroup:
