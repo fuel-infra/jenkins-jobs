@@ -1,0 +1,33 @@
+- job:
+    name: 'ceph-builder'
+    concurrent: false
+    node: 'ceph-build-node'
+    logrotate:
+      numToKeep: 20
+    wrappers:
+    - timeout:
+        fail: true
+        timeout: 180
+    scm:
+    - git:
+        url: 'https://github.com/asheplyakov/pkg-ceph'
+        basedir: 'sourcecode'
+        skip-tag: true
+        branches:
+        - '*/tags/decapod/*'
+        refspec: '+refs/tags/decapod/*:refs/remotes/origin/tags/decapod/*'
+        wipe-workspace: true
+    triggers:
+    - pollscm:
+        cron: "H/5 * * * *"
+        ignore-post-commit-hooks: True
+    builders:
+    - shell:
+        !include-raw: builders/builder.sh
+    publishers:
+    - description-setter:
+        regexp: '(GIT_TAG=)(.+)'
+        regexp-for-failed: '(GIT_TAG=)(.+)'
+        description: '\2'
+        description-for-failed: '\2'
+
