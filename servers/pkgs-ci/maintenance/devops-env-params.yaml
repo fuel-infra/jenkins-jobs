@@ -1,19 +1,13 @@
 - project:
     name: 'devops.env.params'
-    jenkins_url: 'https://product-ci.infra.mirantis.net'
+    env-id:
+     - '9.0':
+        test-job-name: '9.x.snapshot'
+        artifact-name: 'snapshots.params'
+     - '10.0':
+        test-job-name: '{env-id}.test_all'
+     - 'master':
+        test-job-name: '11.0.test_all'
+        timer: 'H/30 * * * *'
     jobs:
-      - 'devops.{env-id}.env_params':
-          env-id: '9.0'
-          job-name: '9.0-mos.test_all'
-      - 'devops.{env-id}.env_params':
-          env-id: 'master'
-          job-name: '10.0.test_all'
-          # schedule is much more frequent than scheduled building of new ISOs
-          # because we sometimes trigger building manually and don't want to
-          # keep in mind that after ~2 hours we need to retrigger this job too
-          # so .. let it be triggered reasonably often
-          #################
-          # FIXME(aevseev): Temporary disable periodic run to use ISO not passed BVT2
-          # See: https://bugs.launchpad.net/fuel/+bug/1603138
-          #################
-          timer: ''
+      - devops.{env-id}.env_params:
