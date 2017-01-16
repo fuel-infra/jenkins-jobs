@@ -58,10 +58,10 @@ tests_list = [
     # acceptance tests executed every week
     # should be investigated by QA team before next run
     # cannot be deleted before next acceptance test, need to store
-    # at least 7 days
+    # at least 2 days
     ('acceptance', {
         'env_regexp': '.*acceptance.*',
-        'lifetime': int(os.environ.get('LIFETIME_ACCEPTANCE', 168)),
+        'lifetime': int(os.environ.get('LIFETIME_ACCEPTANCE', 48)),
         'protect_latest': False,
     }),
 
