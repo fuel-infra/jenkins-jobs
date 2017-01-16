@@ -22,7 +22,6 @@
     # List of projects to sync
     gerrit-project-namespace: 'mos-infra'
     gerrit-project-name:
-    - 'project-config'
     - 'system-config'
     - 'zuul'
 
