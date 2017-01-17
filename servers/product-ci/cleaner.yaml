@@ -5,7 +5,7 @@
     devops_upgrades: true
     release_60: false
     release_61: false
-    lifetime_acceptance: '168'
+    lifetime_acceptance: '48'
     lifetime_bvt: '24'
     lifetime_swarm: '22'
     lifetime_other: '16'
