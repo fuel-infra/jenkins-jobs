@@ -5,7 +5,6 @@
 # list of all jobs on slaves
 #
 # Delete procedure:
-#  - skip all protected jobs (env_*)
 #  - skip environments younger then global minimal lifetime
 #  - skip jobs not executed by jenkins until they pass max lifetime
 #  - skip jobs which looks like latest execution in jenkins, start/execution
@@ -167,11 +166,6 @@ class Cleaner():
                     continue
 
                 print '\nAnalyzing {} environment:'.format(env_name)
-
-                # skip protected environemts
-                if env_name.startswith('env_'):
-                    print '- environment is env_* - skipping'
-                    continue
 
                 # get lifetime for this type of env
                 (env_type, env_lifetime_hours, env_protect_latest) = \
