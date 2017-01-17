@@ -123,6 +123,9 @@
            # Murano env nodes need 5Gb or more RAM
            inject SLAVE_NODE_MEMORY 7168
 
+           # Fix fuel release version
+           inject FUEL_RELEASE_VERSION 9.0
+
            # Murano systest shouldn't use xenial kernel
            inject DISABLE_XENIAL_KERNEL true
 
