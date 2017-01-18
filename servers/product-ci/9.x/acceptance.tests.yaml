@@ -113,8 +113,6 @@
               PATCHING_RUN_RALLY=true
               ENABLE_LIBVIRT_NWFILTERS=true
 
-        - deploy_from_uca
-
         - fuel_plugin_etckeeper
 
         - install_mu_no_ha_failover:

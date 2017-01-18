@@ -138,9 +138,6 @@
         - name: '9.x.acceptance.ubuntu.network_outage'
           current-parameters: true
           kill-phase-on: NEVER
-        - name: '9.x.acceptance.ubuntu.deploy_from_uca'
-          current-parameters: true
-          kill-phase-on: NEVER
         - name: '9.x.acceptance.ubuntu.fuel_plugin_etckeeper'
           current-parameters: true
           kill-phase-on: NEVER
