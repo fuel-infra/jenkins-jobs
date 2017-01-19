@@ -58,7 +58,7 @@
           !include-raw-escape: './builders/mirror_pull_push.sh'
 
     triggers:
-        - timed: '0 3 * * *'
+        - timed: '0 17 * * *'
     publishers:
       - email:
           recipients: fuel-build+alert@mirantis.com
