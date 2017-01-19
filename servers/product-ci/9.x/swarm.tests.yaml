@@ -376,6 +376,8 @@
             swarm-test/custom-overrides-plain-properties: |
               KVM_USE=true
 
+        - test_tags
+
     - product-ci/9.x/templates/swarm-test-plugins:
 
         testgroup:
