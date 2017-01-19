@@ -10,6 +10,7 @@
     lifetime_swarm: '22'
     lifetime_upgrades: '22'
     lifetime_fuel: '72'
+    lifetime_package: '6'
     lifetime_other: '16'
     lifetime_custom: '72'
 
@@ -53,6 +54,10 @@
           name: LIFETIME_FUEL
           description: 'Lifetime for fuel deployment environments'
           default: '{lifetime_fuel}'
+      - string:
+          name: LIFETIME_PACKAGE
+          description: 'Lifetime for package creation environment'
+          default: '{lifetime_package}'
       - string:
           name: LIFETIME_OTHER
           description: 'Lifetime for other systests'
