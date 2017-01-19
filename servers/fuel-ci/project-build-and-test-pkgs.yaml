@@ -20,7 +20,6 @@
           timed: '30 */12 * * *'
           non_voting: true
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
             IRONIC_ENABLED=true
@@ -31,7 +30,6 @@
           testgroup: review_astute_patched
           timed: '20 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             KEEP_BEFORE=yes
 
       - fuel-library:
@@ -39,7 +37,6 @@
           testgroup: smoke_neutron
           timed: '0 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
 
@@ -48,7 +45,6 @@
           testgroup: neutron_vlan_ha
           timed: '59 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             SYNC_DEPL_TASKS=true
             KEEP_BEFORE=yes
 
@@ -58,7 +54,6 @@
           non_voting: true # override
           timed: '30 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
 
@@ -68,7 +63,6 @@
           non_voting: true # override
           timed: '30 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
 
@@ -77,7 +71,6 @@
           testgroup: review_nailgun_agent_one_node
           timed: '25 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             KEEP_BEFORE=yes
             CUSTOM_ENV=false
 
@@ -87,7 +80,6 @@
           timed: '45 */12 * * *'
           timeout: 300  # override
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             UPDATE_FUEL=true
             KEEP_BEFORE=yes
             SLAVE_NODE_MEMORY=5140
@@ -97,7 +89,6 @@
           testgroup: review_fuel_web_deploy
           timed: '15 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
 
@@ -106,7 +97,6 @@
           testgroup: review_fuel_client
           timed: '15 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
             UPLOAD_PATCHSET=true
@@ -138,7 +128,6 @@
           timed: '30 */12 * * *'
           non_voting: true
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
             IRONIC_ENABLED=true
@@ -149,7 +138,6 @@
           testgroup: review_astute_patched
           timed: '20 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             KEEP_BEFORE=yes
 
       - fuel-library:
@@ -157,7 +145,6 @@
           testgroup: smoke_neutron
           timed: '0 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
 
@@ -166,7 +153,6 @@
           testgroup: neutron_vlan_ha
           timed: '59 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             SYNC_DEPL_TASKS=true
             KEEP_BEFORE=yes
 
@@ -176,7 +162,6 @@
           non_voting: true # override
           timed: '30 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
 
@@ -185,7 +170,6 @@
           testgroup: review_nailgun_agent_one_node
           timed: '25 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             KEEP_BEFORE=yes
             CUSTOM_ENV=false
 
@@ -195,7 +179,6 @@
           timed: '45 */12 * * *'
           timeout: 300  # override
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             UPDATE_FUEL=true
             KEEP_BEFORE=yes
             SLAVE_NODE_MEMORY=5140
@@ -205,7 +188,6 @@
           testgroup: review_fuel_web_deploy
           timed: '15 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             CUSTOM_ENV=true
             BUILD_IMAGES=true
 
@@ -214,7 +196,6 @@
           testgroup: review_fuel_client
           timed: '15 */12 * * *'
           properties: |
-            MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
             UPLOAD_PATCHSET=true

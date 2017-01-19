@@ -9,10 +9,6 @@
     system_tests/description: '10.0 swarm test group'
     system_tests/node: 'systest'
     system_tests/timeout: '480'
-    # FIXME: MIRROR_UBUNTU should be constructed with data from mirror_id.txt
-    # but we are waiting for patches related to new mirrors, so we hardcode canonical mirrors for now.
-    system_tests/common-overrides-plain-properties: |
-      MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
     system_tests/job-weight: '7'
 
     plugins-template/repobranch: 'origin/stable/newton'
@@ -21,8 +17,6 @@
     plugins-template/description: '10.0 swarm test group'
     plugins-template/node: 'systest'
     plugins-template/timeout: '480'
-    plugins-template/common-overrides-plain-properties: |
-      MIRROR_UBUNTU=deb http://cz.archive.ubuntu.com/ubuntu/ xenial main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-updates main universe multiverse|deb http://cz.archive.ubuntu.com/ubuntu/ xenial-security main universe multiverse
     plugins-template/job-weight: '8'
 
     jobs:

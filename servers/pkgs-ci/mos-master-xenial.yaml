@@ -57,12 +57,12 @@
         spec_prefix_path: '/{distro}'
         # fixme: this section is for disabling our mirror snapshots, thin needs rework
         mirror_host: '{publish-repo-host}'
-        ubuntu_mirror_url: http://cz.archive.ubuntu.com/ubuntu/
+        ubuntu_mirror_url: http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/
         mirror_ubuntu: >-
-          deb http://cz.archive.ubuntu.com/ubuntu/ {distro} main universe multiverse|deb
-          http://cz.archive.ubuntu.com/ubuntu/ {distro}-updates main universe multiverse|deb
-          http://cz.archive.ubuntu.com/ubuntu/ {distro}-security main universe multiverse|deb
-          http://cz.archive.ubuntu.com/ubuntu/ {distro}-proposed main universe multiverse
+          deb http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro} main universe multiverse|deb
+          http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro}-updates main universe multiverse|deb
+          http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro}-security main universe multiverse|deb
+          http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro}-proposed main universe multiverse
         guess-mirror: 'false'
 
     jobs:

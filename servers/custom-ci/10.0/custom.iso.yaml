@@ -8,10 +8,6 @@
       MOS_CENTOS_ROOT=/mos-repos/centos/mos10.0-centos7/
       MOS_UBUNTU_TARGET=10.0.target.txt
       MIRROR_MOS_UBUNTU_SUITE=mos10.0
-
-      # Ubuntu Xenial
-      MIRROR_UBUNTU=cz.archive.ubuntu.com
-      MIRROR_UBUNTU_ROOT=/ubuntu
       MOS_UBUNTU_ROOT=/mos-repos/ubuntu
     description:
       !include-raw: descriptions/custom.iso
