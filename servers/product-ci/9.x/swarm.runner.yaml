@@ -250,6 +250,12 @@
         - name: '9.x.system_test.ubuntu.add_updated_node_to_environment'
           current-parameters: true
           kill-phase-on: NEVER
+        - name: '9.x.system_test.ubuntu.ovs_firewall'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.system_test.ubuntu.ovs_firewall_with_dpdk'
+          current-parameters: true
+          kill-phase-on: NEVER
     publishers:
     - description-setter:
         regexp: "'Description string: (.*)'"

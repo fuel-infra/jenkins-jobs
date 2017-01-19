@@ -370,6 +370,12 @@
               KVM_USE=true
               SLAVE_NODE_CPU=4
 
+        - ovs_firewall
+
+        - ovs_firewall_with_dpdk:
+            swarm-test/custom-overrides-plain-properties: |
+              KVM_USE=true
+
     - product-ci/9.x/templates/swarm-test-plugins:
 
         testgroup:
