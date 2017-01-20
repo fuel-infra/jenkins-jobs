@@ -218,6 +218,7 @@
     timeout: 200
     non_voting: false
     env_update_time: '0 0 *  * 6'
+    # EXTRA_RPM_REPOS_PRIORITY=5 - temporarry workaround for all mitaka branch
 
     project:
       - fuel-agent:
@@ -229,6 +230,7 @@
             BUILD_IMAGES=true
             IRONIC_ENABLED=true
             IRONIC_NODES_COUNT=1
+            EXTRA_RPM_REPOS_PRIORITY=5
 
       - fuel-astute:
           projectpackage: astute
@@ -236,6 +238,7 @@
           timed: '20 */12 * * *'
           properties: |
             KEEP_BEFORE=yes
+            EXTRA_RPM_REPOS_PRIORITY=5
 
       - fuel-library:
           projectpackage: fuel-library9.0
@@ -244,6 +247,7 @@
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
+            EXTRA_RPM_REPOS_PRIORITY=5
 
       - fuel-library:
           projectpackage: fuel-library9.0
@@ -251,6 +255,7 @@
           timed: '59 */12 * * *'
           properties: |
             SYNC_DEPL_TASKS=true
+            EXTRA_RPM_REPOS_PRIORITY=5
 
       - fuel-nailgun-agent:
           projectpackage: nailgun-agent
@@ -259,6 +264,7 @@
           properties: |
             KEEP_BEFORE=yes
             CUSTOM_ENV=false
+            EXTRA_RPM_REPOS_PRIORITY=5
 
       - fuel-ostf:
           projectpackage: fuel-ostf
@@ -269,6 +275,7 @@
             UPDATE_FUEL=true
             KEEP_BEFORE=yes
             SLAVE_NODE_MEMORY=5140
+            EXTRA_RPM_REPOS_PRIORITY=5
 
       - fuel-web:
           projectpackage: fuel-nailgun
@@ -277,6 +284,7 @@
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
+            EXTRA_RPM_REPOS_PRIORITY=5
 
       - python-fuelclient:
           projectpackage: python-fuelclient
@@ -286,6 +294,7 @@
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
             UPLOAD_PATCHSET=true
+            EXTRA_RPM_REPOS_PRIORITY=5
 
     jobs:
       - 'devops.{version-id}.create-env'
