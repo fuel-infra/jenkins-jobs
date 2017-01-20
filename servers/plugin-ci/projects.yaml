@@ -194,6 +194,10 @@
           plugin_branch: stable/0.10
           iso_magnet_link: https://ci.fuel-infra.org/job/9.0-community.main.ubuntu.bvt_2/lastSuccessfulBuild/artifact/magnet_link.txt
 
+      - "1.0":
+          plugin_branch: stable/1.0
+          iso_magnet_link: https://ci.fuel-infra.org/job/9.0-community.main.ubuntu.bvt_2/lastSuccessfulBuild/artifact/magnet_link.txt
+
     plugin_name:
       - elasticsearch-kibana:
           plugin_repo: fuel-plugin-elasticsearch-kibana
@@ -237,6 +241,12 @@
       - version: "0.10"
         plugin_name: ceilometer-redis
       - version: "0.10"
+        plugin_name: openstack-telemetry
+      - version: "1.0"
+        plugin_name: kafka
+      - version: "1.0"
+        plugin_name: ceilometer-redis
+      - version: "1.0"
         plugin_name: openstack-telemetry
 
     jobs:
