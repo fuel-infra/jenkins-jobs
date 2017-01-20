@@ -46,7 +46,6 @@
           timed: '59 */12 * * *'
           properties: |
             SYNC_DEPL_TASKS=true
-            KEEP_BEFORE=yes
 
       - fuel-library:
           projectpackage: fuel-library10.0
@@ -154,7 +153,6 @@
           timed: '59 */12 * * *'
           properties: |
             SYNC_DEPL_TASKS=true
-            KEEP_BEFORE=yes
 
       - fuel-library:
           projectpackage: fuel-library10.0
@@ -253,7 +251,6 @@
           timed: '59 */12 * * *'
           properties: |
             SYNC_DEPL_TASKS=true
-            KEEP_BEFORE=yes
 
       - fuel-nailgun-agent:
           projectpackage: nailgun-agent
