@@ -110,6 +110,15 @@
           artifact-name: '{pkg_type}.publish.setenvfile'
       - inject-devops-env:
           version: '{mos_version}'
+      # FIXME(aevseev) Above macros does not injects variable MOS_UBUNTU_MIRROR_ID
+      # required by fuel-qa for mitaka
+      # This is workaround for LP bug: https://bugs.launchpad.net/fuel/+bug/1658069
+      - inject-from-job:
+          job-name: 'devops.{mos_version}.env_params'
+          artifact-name: 'properties.txt'
+          which-build: 'last-successful'
+          parameter-filters: ''
+          optional: true
       - guess-mirror
       - guess-testgroup
       - inject:
