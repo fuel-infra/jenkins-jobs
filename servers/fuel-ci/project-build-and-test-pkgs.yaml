@@ -254,6 +254,7 @@
           testgroup: neutron_vlan_ha
           timed: '59 */12 * * *'
           properties: |
+            CUSTOM_ENV=true
             SYNC_DEPL_TASKS=true
             EXTRA_RPM_REPOS_PRIORITY=5
 
