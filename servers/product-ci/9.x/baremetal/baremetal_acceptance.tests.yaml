@@ -68,9 +68,21 @@
         - 'safe_reboot_primary_controller'
         - 'remove_controllers'
         - 'add_delete_compute'
-        - 'add_delete_cinder'
         - 'add_delete_ceph'
         - 'huge_separate_rabbitmq_db'
         - 'hard_reset_primary_controller'
         - 'safe_reboot_primary_controller_ceph'
         - 'shutdown_cinder_cluster'
+
+    # gamma group
+    - '{version-id}.baremetal.{dist}.{testgroup}':
+        properties-content-overrides: |
+          FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+          ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+
+        environment: 'gamma'
+        admin_nic: 'eno2'
+        admin_vlan: '225'
+
+        testgroup:
+        - 'add_delete_cinder'
