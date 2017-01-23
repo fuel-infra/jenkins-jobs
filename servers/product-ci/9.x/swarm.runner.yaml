@@ -178,9 +178,6 @@
         - name: '9.x.system_test.ubuntu.full_cluster_reinstallation'
           current-parameters: true
           kill-phase-on: NEVER
-        - name: '9.x.system_test.ubuntu.partition_preservation'
-          current-parameters: true
-          kill-phase-on: NEVER
         - name: '9.x.system_test.ubuntu.network_templates'
           current-parameters: true
           kill-phase-on: NEVER

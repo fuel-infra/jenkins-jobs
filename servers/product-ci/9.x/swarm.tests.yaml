@@ -240,8 +240,6 @@
 
         - full_cluster_reinstallation
 
-        - partition_preservation
-
         - fuel_plugin_reboot
 
         - fuel_plugin_vip_reservation
