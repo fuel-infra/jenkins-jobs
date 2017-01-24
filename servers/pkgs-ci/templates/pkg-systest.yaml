@@ -149,7 +149,6 @@
             EXTRA_RPM_REPOS_PRIORITY=1
             EXTRA_DEB_REPOS_PRIORITY=1052
       - system-test
-
     wrappers:
       - timeout:
           fail: true
@@ -158,9 +157,10 @@
       - ansicolor
 
     publishers:
+      - post-disc-space # Counting space used by fuel-devops
       - archive:
           allow-empty: true
-          artifacts: '**/nosetests.xml, logs/*, fuel-qa/logs/*'
+          artifacts: '**/nosetests.xml, logs/*, fuel-qa/logs/*, *.txt'
           latest-only: false
       - logparser:
           parse-rules: '/var/lib/jenkins/fuellib.parser'

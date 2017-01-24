@@ -71,6 +71,7 @@ export VENV_PATH="${VENV_PATH:-${HOME}/venv-nailgun-tests-2.9}"
 ENV_NAME="${ENV_PREFIX}.${BUILD_NUMBER}.${BUILD_ID}"
 ENV_NAME="${ENV_NAME:0:68}"
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
+echo "export VENV_PATH=\"${VENV_PATH}\"" >> "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
 
 ###################### Guess how to use EXTRAREPO if given ###############
 

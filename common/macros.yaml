@@ -43,6 +43,18 @@
           source "${VENV_PATH}/bin/activate"
           dos.py destroy "${ENV_NAME}"
 
+########################################################################
+# Publisher creating report about used disc space
+########################################################################
+- publisher:
+    name: post-disc-space
+    publishers:
+    - post-tasks:
+      - matches:
+        - log-text: 'Started'
+          operator: AND
+        script: !include-raw: scripts/spacefinder.py
+
 - builder:
     name: inject-properties-file
 

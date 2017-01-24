@@ -135,9 +135,10 @@
       - timestamps
       - ansicolor
     publishers:
+      - post-disc-space # Counting space used by fuel-devops
       - archive:
           allow-empty: true
-          artifacts: '**/nosetests.xml, logs/*, fuel-qa/logs/*'
+          artifacts: '**/nosetests.xml, logs/*, fuel-qa/logs/*, *.txt'
           latest-only: false
       - logparser:
           parse-rules: '/var/lib/jenkins/fuellib.parser'

@@ -18,14 +18,23 @@ import argparse
 import logging
 import os
 import re
+import subprocess
 
 import libvirt
 
 from xml.dom import minidom
 
-if os.environ.get('VENV_PATH'):
-    activate_this = os.environ.get('VENV_PATH') + "/bin/activate_this.py"
-    execfile(activate_this, dict(__file__=activate_this))
+if os.path.isfile(".dos_environment_name"):
+    command = ['bash', '-c', 'source .dos_environment_name && env']
+    proc = subprocess.Popen(command, stdout = subprocess.PIPE)
+    for line in proc.stdout:
+        (key, _, value) = line.partition("=")
+        os.environ[key] = value.strip("\n")
+    proc.communicate()
+
+    if os.environ.get('VENV_PATH'):
+        activate_this = os.environ.get('VENV_PATH') + "/bin/activate_this.py"
+        execfile(activate_this, dict(__file__=activate_this))
 
 try:
     import devops
