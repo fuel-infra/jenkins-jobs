@@ -26,6 +26,10 @@
         name: LDAP_PLUGIN_URL
         default: ''
         description: 'URL of ldap plugin package'
+    - string:
+        name: LDAP_PLUGIN_RPM
+        default: ''
+        description: 'Name of ldap plugin package'
 
     scm:
     - main-git:

@@ -19,6 +19,10 @@
         name: LDAP_PLUGIN_URL
         default: ''
         description: 'URL of ldap plugin package'
+    - string:
+        name: LDAP_PLUGIN_RPM
+        default: 'ldap-3.0-3.0.1-1.noarch.rpm'
+        description: 'Name of ldap plugin package'
 
     wrappers:
     - timeout:
