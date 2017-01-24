@@ -256,6 +256,9 @@
         - name: '9.x.system_test.ubuntu.test_tags'
           current-parameters: true
           kill-phase-on: NEVER
+        - name: '9.x.system_test.ubuntu.multiqueue_base_check'
+          current-parameters: true
+          kill-phase-on: NEVER
     publishers:
     - description-setter:
         regexp: "'Description string: (.*)'"

@@ -304,6 +304,9 @@
         - name: '9.x.acceptance.ubuntu.tests_configdb_api'
           current-parameters: true
           kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.test_multiqueue_acceptance'
+          current-parameters: true
+          kill-phase-on: NEVER
 
     publishers:
     - description-setter:
