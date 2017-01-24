@@ -48,6 +48,7 @@ case "${GERRIT_EVENT_TYPE}" in
         ;;
 esac
 
+[ -d "${REPO_DIR}" ] && rm -rf "${REPO_DIR}"
 mkdir -p "${REPO_DIR}"
 cp "${PLUGIN_FILE_PATH}" "${REPO_DIR}"
 createrepo "${REPO_DIR}"
