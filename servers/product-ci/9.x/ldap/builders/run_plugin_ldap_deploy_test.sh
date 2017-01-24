@@ -50,7 +50,7 @@ source "${VENV_PATH}/bin/activate"
 
   # Get plugin from snapshot
   pushd "${PLUGINS_PATH}"
-    wget -nc -nd -nH -np -r -A '*.rpm' "${LDAP_PLUGIN_URL}"
+    wget "${LDAP_PLUGIN_URL}/${LDAP_PLUGIN_RPM}"
   popd
 
   # Required by mos-ci-deployment-scripts
