@@ -163,10 +163,7 @@
           url: '$TEST_FRAMEWORK_URL'
 
     builders:
-      - inject:
-          properties-content: |
-            ADMIN_NODE_MEMORY=3072
-            SLAVE_NODE_MEMORY=3072
+      - inject-fuel-qa-global-defaults
       - inject:
           # env variables
           properties-content: |
