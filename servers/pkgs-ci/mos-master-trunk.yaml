@@ -331,7 +331,9 @@
     project-name: trunk
 
     # rebuild all in 2 days, spreaded evenly
-    timed: 'H H H/2 * *'
+    # FIXME(aevseev) disable trunk jobs to free resources
+    #timed: 'H H H/2 * *'
+    timed: ''
 
     os_project_name:
 
