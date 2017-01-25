@@ -16,7 +16,9 @@
         description: 'Job from which we get latest stable snapshot'
 
     triggers:
-    - timed: '0 21 * * 4'
+    # disabled until 9.2 HCF
+    #- timed: '0 21 * * 4'
+    - timed: ''
 
     builders:
 
