@@ -423,6 +423,7 @@
             swarm-test/custom-overrides-plain-properties: |
               SLAVE_NODE_CPU=6
               SLAVE_NODE_MEMORY=6144
+              NUMA_NODES=2
               DRIVER_ENABLE_ACPI=true
               KVM_USE=true
 
