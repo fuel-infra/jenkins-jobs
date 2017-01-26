@@ -15,6 +15,7 @@
             MOS_UBUNTU_TARGET=master.target.txt
             MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
             MIRROR_MOS_UBUNTU_SUITE=mos-master
+            UBUNTU_DIST={ubuntu_dist}
             UBUNTU_RELEASE=xenial
             UBUNTU_KERNEL_FLAVOR=lts-xenial
       - 'product-{version}{mod}.test_all':
