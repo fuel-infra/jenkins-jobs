@@ -18,6 +18,9 @@
           virtualenv -p python2.7 "${{VENV}}"
           source "${{VENV}}/bin/activate"
 
+          # Install pip & co
+          pip install --upgrade pip setuptools packaging
+
           # Install zuul
           pip install --upgrade pytz "${{WORKSPACE}}/zuul"
 
