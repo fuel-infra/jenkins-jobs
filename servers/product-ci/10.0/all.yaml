@@ -15,6 +15,7 @@
             MOS_UBUNTU_TARGET=10.0.target.txt
             MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
             MIRROR_MOS_UBUNTU_SUITE=mos10.0
+            UBUNTU_DIST={ubuntu_dist}
             UBUNTU_RELEASE=xenial
             UBUNTU_KERNEL_FLAVOR=lts-xenial
       - '10.0.swarm.timers'
