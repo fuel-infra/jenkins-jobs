@@ -81,6 +81,12 @@ tests_list = [
         'protect_latest': False,
     }),
 
+    # package environment, not required to store
+    ('package', {
+        'env_regexp': '.*-pkg-.*',
+        'lifetime': int(os.environ.get('LIFETIME_PACKAGE', 6)),
+        'protect_latest': False,
+    }),
 ]
 
 # default lifetime for not specified tests
