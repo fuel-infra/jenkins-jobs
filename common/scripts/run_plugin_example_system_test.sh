@@ -20,29 +20,16 @@ LOCATION=${LOCATION_FACT:-bud}
 UBUNTU_MIRROR_ID=${UBUNTU_MIRROR_ID:-latest}
 
 case "${LOCATION}" in
-    srt)
-        MIRROR_HOST="http://osci-mirror-srt.srt.mirantis.net/pkgs/snapshots/"
+    poz|bud|bud-ext|undef)
+        MIRROR_HOST="mirror.seed-cz1.fuel-infra.org"
+        LOCATION="cz"
         ;;
-    msk)
-        MIRROR_HOST="http://osci-mirror-msk.msk.mirantis.net/pkgs/snapshots/"
-        ;;
-    kha)
-        MIRROR_HOST="http://osci-mirror-kha.kha.mirantis.net/pkgs/snapshots/"
-        ;;
-    poz)
-        MIRROR_HOST="http://osci-mirror-poz.poz.mirantis.net/pkgs/snapshots/"
-        ;;
-    bud)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/snapshots/"
-        ;;
-    bud-ext)
-        MIRROR_HOST="http://mirror.seed-cz1.fuel-infra.org/pkgs/snapshots/"
-        ;;
-    mnv|scc)
-        MIRROR_HOST="http://mirror.seed-us1.fuel-infra.org/pkgs/snapshots/"
+    mnv|scc|sccext)
+        MIRROR_HOST="mirror.seed-us1.fuel-infra.org"
+        LOCATION="usa"
         ;;
     *)
-        MIRROR_HOST="http://mirror.fuel-infra.org/pkgs/snapshots/"
+        MIRROR_HOST="mirror.seed-cz1.fuel-infra.org"
 esac
 
 ###################### Get MIRROR_UBUNTU ###############
@@ -54,10 +41,10 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
             UBUNTU_MIRROR_ID="$(curl -fsS "${TEST_ISO_JOB_URL}lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt" | awk -F '[ =]' '{print $NF}')"
             ;;
         latest)
-            UBUNTU_MIRROR_ID=$(curl -sSf "${MIRROR_HOST}ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
+            UBUNTU_MIRROR_ID=$(curl -sSf "http://${MIRROR_HOST}/pkgs/snapshots/ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
             ;;
     esac
-    UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
+    UBUNTU_MIRROR_URL="http://${MIRROR_HOST}/pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
 
     MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse"
     if [ "${ENABLE_PROPOSED:-false}" = 'true' ]; then
