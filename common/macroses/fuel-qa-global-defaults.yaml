@@ -4,6 +4,8 @@
     - extended-bash:
         headers: ''
         script: |
+          set -ex
+
           case {version} in
             8.0)
 

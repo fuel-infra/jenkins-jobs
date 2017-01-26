@@ -163,7 +163,8 @@
           url: '$TEST_FRAMEWORK_URL'
 
     builders:
-      - inject-fuel-qa-global-defaults
+      - inject-fuel-qa-global-defaults:
+          version: '{mos}'
       - inject:
           # env variables
           properties-content: |
