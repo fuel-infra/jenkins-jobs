@@ -16,9 +16,11 @@
               ;;
             10.0)
               inject SLAVE_NODE_MEMORY 3968
+              inject UBUNTU_DIST       xenial
               ;;
             11.0)
               inject SLAVE_NODE_MEMORY 3968
+              inject UBUNTU_DIST       xenial
               ;;
             0.10)
                     # used in plugin-ci:
@@ -30,6 +32,7 @@
               ;;
             master)
               inject SLAVE_NODE_MEMORY 3968
+              inject UBUNTU_DIST       xenial
               ;;
             liberty)
 
