@@ -1,6 +1,8 @@
 - project:
     name: 'devops.env.params'
     env-id:
+     - '8.0':
+        test-job-name: '{env-id}.test_all'
      - '9.0':
         test-job-name: '9.x.snapshot'
         artifact-name: 'snapshots.params'
