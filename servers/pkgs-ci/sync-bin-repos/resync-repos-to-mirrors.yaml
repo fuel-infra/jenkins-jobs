@@ -105,5 +105,10 @@
             decapod/ceph
           update-head: true
 
+      - mcp:
+          timer: 'H/20 * * * *'
+          srcpaths: |
+            mcp-repos/1.0
+          update-head: true
     jobs:
       - '{mos_version}.resync-repos-to-mirrors'
