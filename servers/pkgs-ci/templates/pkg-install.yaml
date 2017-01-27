@@ -66,6 +66,11 @@
           artifact-name: 'buildresult.params'
 
       - inject-from-job(same-change):
+          # need TESTS_CONTENT
+          job-name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+          artifact-name: 'tests.envfile'
+
+      - inject-from-job(same-change):
           # need {pkg_type}_VERSION {pkg_type}_BINARIES {pkg_type}_REPO_URL {pkg_type}_VERSION
           job-name: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
           artifact-name: '{pkg_type}.publish.setenvfile'
