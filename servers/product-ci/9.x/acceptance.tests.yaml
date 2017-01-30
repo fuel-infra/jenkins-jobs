@@ -274,6 +274,7 @@
               ENABLE_MOS_UBUNTU_PROPOSED=false
               ENABLE_MOS_UBUNTU_SECURITY=false
               ENABLE_MOS_UBUNTU_UPDATES=false
+              KVM_USE=True
               UPDATE_MASTER=True
               UPDATE_MASTER_VIA_MOS_MU=False
               FUEL_RELEASE_VERSION=9.0
