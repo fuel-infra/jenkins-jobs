@@ -28,9 +28,11 @@
       - review-openstack-org:
           project-basedir: '{plugin_dir}'
           project-name: 'openstack/{plugin_repo}'
-      - review-fuel-infra:
-          project-basedir: 'trsync'
-          project-name: 'infra/trsync'
+      - git:
+          basedir: 'trsync'
+          branches:
+            - master
+          url: 'https://review.fuel-infra.org/infra/trsync'
 
     triggers:
       - review-openstack-org:
