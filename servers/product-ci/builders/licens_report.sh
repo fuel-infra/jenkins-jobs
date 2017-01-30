@@ -34,7 +34,10 @@ create_deb_repos () {
 	Method: http://${MIRROR_HOST%% *}${REMOTE_PATH%/*}/${FILES_DIR}/${SNAPSHOT}
 	EOF
     REPREPRO_OPTS="--verbose --basedir "${WRK_DIR}/${DSC_DIR}" --dbdir +b/db --outdir +b/public/ --distdir +b/public/dists/ --confdir +b/conf"
+    #need pass all components as separate arguments
+    # shellcheck disable=SC2086
     reprepro $REPREPRO_OPTS export
+    # shellcheck disable=SC2086
     reprepro $REPREPRO_OPTS update
 }
 
@@ -51,14 +54,22 @@ UPDATES_REPO_NAME=${UPDATES_REPO_NAME:-"updates"}
 export UBUNTU_REPO=mirror/"${RELEASE}_deb_packages${UPDATES_SUFFIX}"
 export CENTOS_REPO=mirror/"${RELEASE}_rpm_packages${UPDATES_SUFFIX}"
 
-DEB_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/mos-repos/ubuntu/${RELEASE}" | awk '{print $7}' | cut -d'/' -f2)
-RPM_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/mos-repos/centos/mos${RELEASE}-${RPM_DIST_NAME}/${BASE}" | awk '{print $7}')
-
 [ ! -d "mirror" ] && mkdir mirror
+RSYNC_OPTIONS="-avPzt --delete --chmod=a+rx"
+
+if [ "${DIRECT_LINKS}" != true ] ; then
+    DEB_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/mos-repos/ubuntu/${RELEASE}" | awk '{print $7}' | cut -d'/' -f2)
+    RPM_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/mos-repos/centos/mos${RELEASE}-${RPM_DIST_NAME}/${BASE}" | awk '{print $7}' | cut -d'/' -f2)
+else
+    DEB_SNAPSHOT=$(echo "${DEB_URL}" | awk -F'/' '{print $(NF-1)}')
+    RPM_SNAPSHOT=$(echo "${RPM_URL}" | awk -F'/' '{print $(NF-1)}')
+fi
+
 # Copy src and bin packages for analyse from mirrors
 create_deb_repos "${UBUNTU_REPO}" "${DEB_SNAPSHOT}"
-RSYNC_OPTIONS="-avPzt --delete --chmod=a+rx"
-rsync ${RSYNC_OPTIONS} rsync://"${MIRROR_HOST}/mirror/mos-repos/centos/mos${RELEASE}-${RPM_DIST_NAME}/${RPM_SNAPSHOT}"/ "${CENTOS_REPO}"
+# need pass all components as separate arguments
+# shellcheck disable=SC2086
+rsync ${RSYNC_OPTIONS} rsync://"${MIRROR_HOST}/mirror/mos-repos/centos/mos${RELEASE}-${RPM_DIST_NAME}/snapshots/${RPM_SNAPSHOT}"/ "${CENTOS_REPO}"
 
 # Create License Report with delimited |||
 license-compliance/rpm_license.sh "${CENTOS_REPO}"/x86_64/Packages/* > license_mos_"${RELEASE}${UPDATES_SUFFIX}"_centos

@@ -3,6 +3,7 @@
     builders:
       - inject:
           properties-content: |
+            BLACKDUCK_HOST=blackduck.infra.mirantis.net
             GERRIT_USER=openstack-ci-jenkins
             GERRIT_HOST=https://review.fuel-infra.org
             SRT_MIRROR_HOST=osci-mirror-srt.infra.mirantis.net
@@ -10,6 +11,7 @@
             SDKPATH=/home/jenkins/Export-6.1.1-SDK-V6.1/
             CUSTOMCLASS=/usr/local/bin
             KEYPATH=/etc/blackduck/credentials.json
+            MIRROR_HOST=mirror.fuel-infra.org
       - copyartifact:
           project: create-mos-compliance-reports
           filter: "projects.tar.gz"
@@ -31,15 +33,18 @@
     parameters:
       - string:
           name: RELEASE
+      - bool:
+          name: DIRECT_LINKS
+          description: "Use this option for scan via direct links to snapshots"
       - string:
-          name: BLACKDUCK_HOST
-          default: blackduck.infra.mirantis.net
+          name: DEB_URL
+          description: "Specify direct path to snapshot"
+      - string:
+          name: RPM_URL
+          description: "Specify direct path to snapshot"
       - string:
           name: BLACKDUCK_USER
           default: testuser@mirantis.com
-      - string:
-          name: MIRROR_HOST
-          default: mirror.fuel-infra.org
       - choice:
           name: UPDATES_REPO_NAME
           choices:
@@ -54,6 +59,10 @@
       - bool:
           name: UPDATES
           default:
+      - string:
+          name: MU_NUMBER
+      - bool:
+          name: ONLY_LICENSE_REPORT
       - bool:
           name: FORCE_ANALYSIS
           default:

@@ -1,6 +1,7 @@
 #!/bin/bash
 set -ex
 # Encryption compliance
+[[ "${ONLY_LICENSE_REPORT}" == true ]] && exit 0
 
 create_artifacts () {
     SOURCE_DIR="${1}"
@@ -17,7 +18,7 @@ create_artifacts () {
 }
 
 remove_projects () {
-    for i in $(cat $@) ; do
+    for i in $(cat "$@") ; do
        project_id=$(echo "${i}" | cut -d':' -f2)
        project=$(echo "${i}" | cut -d':' -f1)
        echo "Remove project ${project}"
