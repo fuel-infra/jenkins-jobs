@@ -40,7 +40,7 @@ pushd "${TRSYNC_DIR}" &>/dev/null
 popd &>/dev/null
 
 case "${GERRIT_EVENT_TYPE}" in
-    patchset-created)
+    patchset-created|comment-added)
         REPO_DIR="review/CR-${GERRIT_CHANGE_NUMBER}"
         ;;
     change-merged-event)
