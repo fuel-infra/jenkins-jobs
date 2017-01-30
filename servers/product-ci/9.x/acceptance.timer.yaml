@@ -18,7 +18,7 @@
     triggers:
     # disabled until 9.2 HCF
     #- timed: '0 21 * * 4'
-    - timed: '0 15 * * 7'
+    - timed: ''
 
     builders:
 
