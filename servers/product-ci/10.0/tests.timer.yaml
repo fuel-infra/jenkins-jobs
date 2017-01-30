@@ -6,7 +6,7 @@
     jobs:
       - '{version-id}.{test-type}.timer.{repo_type}':
          repo_type: stable
-         trigger: '0 21 * * 1,2,3,4,7'
+         trigger: '0 21 * * *'
          enable_proposed: false
       - '{version-id}.{test-type}.timer.{repo_type}':
          repo_type: proposed
