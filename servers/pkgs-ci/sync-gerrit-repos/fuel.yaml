@@ -15,7 +15,8 @@
         fallback-branch: ''
 
     # Syncronization schedule
-    timer: '0 4,10,16,22 * * *'  # every 6 hours, two hours before 9.x-snapshot
+    #timer: '0 4,10,16,22 * * *'  # every 6 hours, two hours before 9.x-snapshot
+    timer: 'H */2 * * *'  # every 2 hours and 16:00UTC: two hours before 9.x-snapshot
 
     # Gerrit parameters
     gerrit-host: 'review.fuel-infra.org'
