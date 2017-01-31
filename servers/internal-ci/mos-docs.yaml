@@ -22,7 +22,15 @@
           docs-root: '/var/www/openstack/fuel/fuel-'
           results-dir: 'publish-docs'
           shell: !include-raw-escape: builders/build-docs.sh
-          timer: 'H 7,19 * * *'
+          timer: 'H 19 * * *'
+      - '{version-id}.build-{project}':
+          project: mos-docs
+          version-id: 9.2
+          branch: stable/9.2
+          docs-root: '/var/www/openstack/fuel/fuel-'
+          results-dir: 'publish-docs'
+          shell: !include-raw-escape: builders/build-docs.sh
+          timer: 'H 7,21 * * *'
       - '{version-id}.build-{project}':
           project: mos-docs
           version-id: 9.0
