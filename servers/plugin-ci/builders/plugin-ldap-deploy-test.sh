@@ -82,7 +82,7 @@ mkdir -p "${PLUGINS}"
 export ${PLUGIN_ENV_PATH_NAME}="${PLUGINS}/${PLUGIN_FILE}"
 
 # Download plugin file from mirror
-wget "${PLUGIN_URL}" -P "${!PLUGIN_ENV_PATH_NAME}"
+wget "${PLUGIN_URL}" -O "${!PLUGIN_ENV_PATH_NAME}"
 
 # Enable virtualenv
 source "${VENV_PATH}/bin/activate"
