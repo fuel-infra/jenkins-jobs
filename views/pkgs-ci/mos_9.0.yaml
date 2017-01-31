@@ -1,7 +1,7 @@
 - view:
     type: list
     name: 'MOS 9.0'
-    regex: '9.0-pkg-(install|pipeline|publish|repotest|systest)-(centos|ubuntu)'
+    regex: '9.0-pkg-(install|pipeline|publish|repotest|republish|systest)-(centos|ubuntu)'
     jobs:
       - 9.0-deb-repo-monitor
       - 9.0-pkg-gate

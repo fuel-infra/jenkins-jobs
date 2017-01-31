@@ -1,0 +1,40 @@
+- job-template:
+    name: '{mos_version}-pkg-republish-{os}'
+    description: Build and publish package for some project using code from branch head.
+    project-type: freestyle
+    concurrent: false
+
+    parameters:
+    - string:
+        name: GERRIT_PROJECT
+        description: |
+          Project name to build/publish package
+    - string:
+        name: GERRIT_BRANCH
+        description: |
+          Branch to build package from
+          <ul>
+            <li>{mos_version}/&lt;codename&gt; for OpenStack projects
+            <li>mos/&lt;codename&gt; for Fuel projects having downstream (fuel-main, fuel-ui, fuel-web, python-fuelclient)
+            <li>stable/&lt;codename&gt; for Fuel projects without downstream
+            <li>{mos_version} for dependencies
+          </ul>
+        default: '{mos_version}'
+
+    wrappers:
+      - timestamps
+      - ansicolor
+
+    builders:
+    - trigger-builds:
+      - project: '{mos_version}-pkg-pipeline-{os}'
+        block: true
+        current-parameters: true
+        predefined-parameters: |
+          GERRIT_CHANGE_STATUS=MERGED
+          GERRIT_OLDREV=$BUILD_TAG
+          GERRIT_NEWREV=$GERRIT_BRANCH
+          GERRIT_HOST=review.fuel-infra.org
+          GERRIT_USER=pkgs-ci
+
+    node: 'runner'

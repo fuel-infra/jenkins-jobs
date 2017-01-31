@@ -62,6 +62,7 @@
       - '{mos_version}-pkg-install-{os}'
       - '{mos_version}-pkg-repotest-{os}'
       - '{mos_version}-pkg-systest-{os}'
+      - '{mos_version}-pkg-republish-{os}'
 
 - job-group:
     name: '8.0-pkg-ubuntu-jobs'
@@ -76,3 +77,4 @@
       - '{mos_version}-pkg-install-{os}'
       - '{mos_version}-pkg-repotest-{os}'
       - '{mos_version}-pkg-systest-{os}'
+      - '{mos_version}-pkg-republish-{os}'

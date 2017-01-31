@@ -1,0 +1,51 @@
+- job-template:
+    name: '{project-version}-pkg-{project-name}-republish-{os}-{distro}'
+    description: Build and publish package for some project using code from branch head.
+    project-type: multijob
+    concurrent: false
+
+    parameters:
+    - string:
+        name: GERRIT_PROJECT
+        description: |
+          Project name to build/publish package
+    - string:
+        name: GERRIT_BRANCH
+        description: |
+          Branch to build package from
+          <ul>
+            <li>{project-version}/&lt;codename&gt; for OpenStack projects
+            <li>mos/&lt;codename&gt; for Fuel projects having downstream (fuel-main, fuel-ui, fuel-web, python-fuelclient)
+            <li>stable/&lt;codename&gt; for Fuel projects without downstream
+            <li>{project-version} for dependencies
+          </ul>
+        default: '{project-version}'
+
+    wrappers:
+      - timestamps
+      - ansicolor
+
+    builders:
+    - multijob:
+        name: 'Build package'
+        projects:
+          - name: '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+            current-parameters: true
+            predefined-parameters: |
+              GERRIT_CHANGE_STATUS=MERGED
+              GERRIT_OLDREV=$BUILD_TAG
+              GERRIT_NEWREV=$GERRIT_BRANCH
+              GERRIT_REFNAME=$GERRIT_BRANCH
+              GERRIT_HOST=review.fuel-infra.org
+              GERRIT_USER=pkgs-ci
+    - multijob:
+        name: 'Publish package'
+        projects:
+          - name: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+            current-parameters: true
+            predefined-parameters: |
+              GERRIT_CHANGE_STATUS=MERGED
+              GERRIT_OLDREV=$BUILD_TAG
+              GERRIT_NEWREV=$GERRIT_BRANCH
+
+    node: 'runner'

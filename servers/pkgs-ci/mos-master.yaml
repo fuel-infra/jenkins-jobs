@@ -62,3 +62,4 @@
       - '{mos_version}-pkg-install-{os}'
       - '{mos_version}-pkg-repotest-{os}'
       - '{mos_version}-pkg-systest-{os}'
+      - '{mos_version}-pkg-republish-{os}'

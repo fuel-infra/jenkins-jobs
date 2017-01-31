@@ -47,10 +47,21 @@ export SRC_PROJECT_PATH SPEC_PROJECT_PATH
 export SPEC_PROJECT_SUFFIX=-build
 
 # Set parameters specific to project(s)
-case ${{ZUUL_PROJECT}} in
+case "${{GERRIT_PROJECT}}" in
     openstack/fuel-*|openstack/network-checker|openstack/python-fuelclient|openstack/solar|openstack/shotgun|openstack/timmy|openstack/tuning-box )
         IS_FUEL=true
-        IS_OPENSTACK=false
+        export IS_OPENSTACK=false
+        unset SPEC_PROJECT
+        ;;
+    openstack/*|openstack-build/*-build )
+        export IS_OPENSTACK=true
+        # Check parameters required by perestroika builder to compose spec project name
+        : "${{SPEC_PROJECT_PATH:?}}"
+        : "${{SPEC_PROJECT_SUFFIX:?}}"
+        ;;
+    * )
+        export IS_OPENSTACK=false
+        export SRC_PROJECT_PATH="${{GERRIT_PROJECT%/*}}"
         unset SPEC_PROJECT
         ;;
 esac
