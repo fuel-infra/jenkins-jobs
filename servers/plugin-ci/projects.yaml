@@ -184,6 +184,9 @@
     # Override the test framework
     test_framework_url: 'https://github.com/openstack/stacklight-integration-tests'
     plugin_prepare_env_builder: plugin-prepare-env-fuel-qa-plugins
+    # override 'fuel-qa-global-defaults' macros variables, LP #1660620
+    test_properties: |
+      UBUNTU_DIST=trusty
 
     version:
       - master:
