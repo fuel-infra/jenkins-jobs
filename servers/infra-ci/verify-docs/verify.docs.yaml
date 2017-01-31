@@ -15,6 +15,8 @@
             branch-pattern: 'master'
           - branch-compare-type: PLAIN
             branch-pattern: 'stable/9.1'
+          - branch-compare-type: PLAIN
+            branch-pattern: 'stable/9.2'
     - '{prefix}verify-{project}':
         shell: !include-raw-escape: './builders/new.verify-docs.sh'
         prefix: ""
