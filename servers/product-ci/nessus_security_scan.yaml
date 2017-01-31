@@ -1,0 +1,71 @@
+- project:
+    name: Security test for 7.0 branch
+    version-id: 7.0
+    branch: 'origin/stable/7.0'
+    timer: "0 23 * * 1"
+    mos_version: '{version-id}'
+    update_master: true
+    magnet_link: 'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
+    upgrade_tarball_magnet_link: 'magnet:?xt=urn:btih:e4521941a159cbbf345884c7c7ec6a484a139d3b&dn=MirantisOpenStack-7.0-upgrade.tar.lrz&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0-upgrade.tar.lrz'
+    fuel_release_version: ''
+    pre-build-script: ''
+    openstack_release: 'Ubuntu'
+    nessus_address: '10.109.0.253'
+    os: 'ubuntu'
+    distro: 'trusty'
+    test_group: 'nessus'
+    venv_path: '/home/jenkins/venv-nailgun-tests-2.9'
+    extra_deb_repos: 'deb http://mirror.fuel-infra.org/mos-repos/ubuntu/{version-id} mos{version-id}-updates main restricted'
+    extra_rpm_repos: 'updates,http://mirror.fuel-infra.org/mos-repos/centos/mos{version-id}-centos6-fuel/mu-6-updates/x86_64/'
+    testrail-report-job: ''
+
+    jobs:
+      - '{version-id}.nessus_security_scan'
+
+- project:
+    name: Security test for 8.0 branch
+    version-id: 8.0
+    branch: 'origin/stable/8.0'
+    timer: "0 19 * * 1"
+    mos_version: '{version-id}'
+    update_master: true
+    magnet_link: 'magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
+    upgrade_tarball_magnet_link: ''
+    fuel_release_version: ''
+    pre-build-script: ''
+    openstack_release: 'Ubuntu'
+    nessus_address: '10.109.0.253'
+    os: 'ubuntu'
+    distro: 'trusty'
+    test_group: 'nessus'
+    venv_path: '/home/jenkins/venv-nailgun-tests-2.9'
+    extra_deb_repos: 'deb http://mirror.fuel-infra.org/mos-repos/ubuntu/{version-id} mos{version-id}-updates main restricted'
+    extra_rpm_repos: 'updates,http://mirror.fuel-infra.org/mos-repos/centos/mos{version-id}-centos7-fuel/updates/x86_64/'
+    testrail-report-job: ''
+
+    jobs:
+      - '{version-id}.nessus_security_scan'
+
+- project:
+    name: Security test for 9.0 branch
+    version-id: 9.0
+    branch: 'origin/stable/mitaka'
+    timer: "0 3 * * 1"
+    mos_version: '{version-id}'
+    update_master: ''
+    magnet_link: 'magnet:?xt=urn:btih:bfec808dd71ff42c5613a3527733d9012bb1fabc&dn=MirantisOpenStack-9.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-9.0.iso'
+    upgrade_tarball_magnet_link: ''
+    fuel_release_version: 9.0
+    pre-build-script: ''
+    openstack_release: 'Ubuntu'
+    nessus_address: '10.109.0.253'
+    os: 'ubuntu'
+    distro: 'trusty'
+    test_group: 'nessus'
+    venv_path: '/home/jenkins/venv-nailgun-tests-2.9'
+    extra_deb_repos: ''
+    extra_rpm_repos: ''
+    testrail-report-job: ''
+
+    jobs:
+      - '{version-id}.nessus_security_scan'
