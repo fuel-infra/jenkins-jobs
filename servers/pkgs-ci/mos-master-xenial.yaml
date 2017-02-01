@@ -55,15 +55,6 @@
         os: 'ubuntu'
         pkg_type: 'deb'
         spec_prefix_path: '/{distro}'
-        # fixme: this section is for disabling our mirror snapshots, thin needs rework
-        mirror_host: '{publish-repo-host}'
-        ubuntu_mirror_url: http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/
-        mirror_ubuntu: >-
-          deb http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro} main universe multiverse|deb
-          http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro}-updates main universe multiverse|deb
-          http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro}-security main universe multiverse|deb
-          http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro}-proposed main universe multiverse
-        guess-mirror: 'false'
 
     jobs:
     - '{project-version}-pkg-{project-name}-build-{os}-{distro}'
@@ -71,4 +62,3 @@
     - '{project-version}-pkg-{project-name}-install-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-systest-{os}-{distro}'
-
