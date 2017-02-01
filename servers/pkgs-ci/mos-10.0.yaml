@@ -11,9 +11,9 @@
     main_ubuntu_release: 'xenial'
     openstack_release: 'Ubuntu 16.04'  # Important to use Xenial in fuel-qa framework
 
-    # FIXME: switch to stable/newton
-    fuel-main-branch: 'master'
-    fuel-qa-branch: 'master'
+
+    fuel-main-branch: 'stable/newton'
+    fuel-qa-branch: 'stable/newton'
     fuel-namespace: 'openstack'
 
     publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
@@ -32,8 +32,8 @@
     # Install test repository
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'master'
-    # FIXME: switch to stable/newton
-    perestroika-branch: 'master'
+
+    perestroika-branch: 'stable/newton'
 
     # Job slave nodes
     build-node: 'new-builder'
@@ -56,22 +56,10 @@
         os: 'ubuntu'
         pkg_type: 'deb'
         spec_prefix_path: '/{distro}'
-        # fixme: this section is for disabling our mirror snapshots, thin needs rework
-        mirror_host: '{publish-repo-host}'
-        ubuntu_mirror_url: http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/
-        mirror_ubuntu: >-
-          deb http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro} main universe multiverse|deb
-          http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro}-updates main universe multiverse|deb
-          http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro}-security main universe multiverse|deb
-          http://mirror.seed-us1.fuel-infra.org/pkgs/ubuntu/ {distro}-proposed main universe multiverse
-        guess-mirror: 'false'
     - centos7:
         os: 'centos'
         pkg_type: 'rpm'
         spec_prefix_path: '/{distro}'
-        # fixme: this section is for disabling our mirror snapshots, thin needs rework
-        mirror_host: '{publish-repo-host}'
-        guess-mirror: 'false'
 
     jobs:
     - '{project-version}-pkg-{project-name}-build-{os}-{distro}'
