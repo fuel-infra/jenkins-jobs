@@ -75,7 +75,6 @@
     builders:
       - inject-fuel-qa-global-defaults:
           version: '{version}'
-      - guess-mirror
       - iso-download
       - inject:
           # Define default variables used for systest
@@ -87,10 +86,9 @@
       - inject:
           # additional variables
           properties-content: '{test_properties}'
+      - guess-mirror
       - '{plugin_prepare_env_builder}'
       - '{plugin_deploy_test_builder}'
 
     publishers:
       - '{plugin_deploy_test_publisher}'
-
-

@@ -187,6 +187,7 @@
     # override 'fuel-qa-global-defaults' macros variables, LP #1660620
     test_properties: |
       UBUNTU_DIST=trusty
+      SLAVE_NODE_MEMORY=3968
 
     version:
       - master:
