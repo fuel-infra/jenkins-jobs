@@ -34,11 +34,13 @@
                   branch-pattern: 'master'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/9.1'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/9.2'
             - project-compare-type: PLAIN
               project-pattern: 'mcp/mcp-docs'
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
+                  branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
           skip-vote:
             successful: true
