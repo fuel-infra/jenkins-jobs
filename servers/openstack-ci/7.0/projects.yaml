@@ -65,7 +65,7 @@
     deb-holdback-dist-name: 'mos7.0-holdback'
     deb-hotfix-dist-name: 'mos7.0-hotfix'
     ##################################
-    is-updates: true
+    is-updates: 'true'
     is-disabled: ''
     jobs:
       - '7.0.mos-new.deb'
