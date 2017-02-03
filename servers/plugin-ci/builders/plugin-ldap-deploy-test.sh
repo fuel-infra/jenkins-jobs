@@ -36,7 +36,7 @@
 set -ex
 
 
-#get 9.x repositories
+# get 9.x repositories
 wget "${REPO_SNAPSHOTS_URL}"
 ./utils/jenkins/conv_snapshot_file.py
 source extra_repos.sh
@@ -45,6 +45,10 @@ export EXTRA_DEB_REPOS
 export EXTRA_RPM_REPOS
 export UPDATE_FUEL_MIRROR
 export UPDATE_MASTER
+
+# workaround for LP #1661567
+source snapshots.params
+export MOS_UBUNTU_MIRROR_ID
 
 # Required by mos-ci-deployment-scripts
 PLUGIN_DIR=$(dirname "${PLUGIN_FILE_PATH}")
