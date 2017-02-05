@@ -53,6 +53,7 @@
             OPENSTACK_RELEASE={openstack_release}
             OS_TYPE={os}
             DISTRO={distro}
+            UBUNTU_DIST={distro}
             ENV_PREFIX={version-id}.nessus_security_scan
 
       - inject:
