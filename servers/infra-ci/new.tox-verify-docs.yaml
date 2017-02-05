@@ -39,7 +39,7 @@
             - project-compare-type: PLAIN
               project-pattern: 'mcp/mcp-docs'
               branches:
-                - branch-compare-type: PLAIN
+                - branch-compare-type: ANT
                   branch-pattern: '**'
           custom-url: '* $JOB_NAME $BUILD_URL'
           skip-vote:

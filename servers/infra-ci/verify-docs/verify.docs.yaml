@@ -26,7 +26,7 @@
         project: mcp-docs
         timer: '5 2 * * *'
         branches:
-          - branch-compare-type: PLAIN
+          - branch-compare-type: ANT
             branch-pattern: '**'
     - '{prefix}verify-{project}':
         shell: !include-raw-escape: './builders/verify-mos-docs.sh'
