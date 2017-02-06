@@ -30,8 +30,6 @@
               project-pattern: openstack/fuel-library
               branches:
                 - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-                - branch-compare-type: PLAIN
                   branch-pattern: 'stable/8.0'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/mitaka'
