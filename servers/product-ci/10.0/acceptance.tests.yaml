@@ -1,0 +1,314 @@
+- project:
+    name: '10.0 acceptance tests'
+    version-id: '10.0'
+    test-type: 'acceptance'
+
+    system_tests/repobranch: 'origin/stable/newton'
+    system_tests/reponame: 'fuel-qa'
+    system_tests/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    system_tests/default_pool: '10.109.0.0/16:24'
+    system_tests/description: '10.0 acceptance test group'
+    system_tests/node: 'acceptance'
+    system_tests/timeout: '480'
+    system_tests/job-weight: '7'
+
+    plugins-template/repobranch: 'origin/stable/newton'
+    plugins-template/reponame: 'fuel-qa'
+    plugins-template/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    plugins-template/description: '10.0 acceptance test group'
+    plugins-template/node: 'systest'
+    plugins-template/timeout: '480'
+    plugins-template/job-weight: '8'
+
+    dist: ubuntu
+
+    jobs:
+    - common/system_tests:
+
+        testgroup:
+
+        - iac_git_download_settings
+
+        - iac_git_install_remove_package
+
+        - iac_git_set_non_openstack_settings
+
+        - ha_vlan_group_1
+
+        - ha_vlan_group_2
+
+        - ha_vlan_group_3
+
+        - ha_vlan_group_4
+
+        - ha_vlan_group_5:
+            system_tests/custom-overrides-plain-properties: |
+              EXTERNAL_DNS=8.8.4.4, 172.18.80.136
+              EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
+
+        - ha_vlan_group_6:
+            system_tests/custom-overrides-plain-properties: |
+              EXTERNAL_DNS=8.8.4.4, 172.18.80.136
+              EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
+        - ha_vlan_group_7:
+            system_tests/custom-overrides-plain-properties: |
+              EXTERNAL_DNS=8.8.4.4, 172.18.80.136
+              EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
+        - ha_tun_group_1:
+            system_tests/custom-overrides-plain-properties: |
+              EXTERNAL_DNS=8.8.4.4, 172.18.80.136
+              EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
+
+        - ha_tun_group_2
+
+        - ha_tun_group_3:
+            system_tests/custom-overrides-plain-properties: |
+              EXTERNAL_DNS=8.8.4.4, 172.18.80.136
+              EXTERNAL_NTP=ntp4.stratum2.ru, 2.pool.ntp.org
+
+        - ha_scale_group_1
+
+        - ha_scale_group_2
+
+        - ha_scale_group_3
+
+        - ha_scale_group_4:
+            system_tests/node: 'acceptance-highmemory'
+
+        - ha_scale_group_5
+
+        - ha_scale_group_6
+
+        - mongo_multirole
+
+        - multirole_group_1
+
+        - mixed_os_components
+
+        - murano_os_component
+
+        - sahara_os_component
+
+        - cli_acceptance_deployment_tests
+
+        - cli_acceptance_ceph_deployment_tests
+
+        - cli_component_role_tests
+
+        - tests_gpg_singing_check
+
+        - failover_group_1
+
+        - failover_group_2
+
+        - failover_group_3
+
+        - failover_group_mongo
+
+        - load:
+            system_tests/custom-overrides-plain-properties: |
+              PATCHING_RUN_RALLY=true
+
+        - change_vip_manually
+
+        - ssl:
+            system_tests/custom-overrides-plain-properties: |
+              DISABLE_SSL=true
+              FORCE_HTTPS_MASTER_NODE=true
+
+        - network_outage:
+            system_tests/node: 'network-systest'
+            system_tests/custom-overrides-plain-properties: |
+              PATCHING_RUN_RALLY=true
+              ENABLE_LIBVIRT_NWFILTERS=true
+
+        - fuel_plugin_etckeeper
+
+        - install_mu_no_ha_failover:
+            system_tests/custom-overrides-plain-properties: |
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos10.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/10.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/10.0-centos-mu-1.sqlite
+
+        - install_mu_ha:
+            system_tests/custom-overrides-plain-properties: |
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos10.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/10.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/10.0-centos-mu-1.sqlite
+
+        - install_mu_no_ha_base_negative:
+            system_tests/custom-overrides-plain-properties: |
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos10.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/10.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/10.0-centos-mu-1.sqlite
+
+        - install_mu_ironic_ceilometer:
+            system_tests/custom-overrides-plain-properties: |
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos10.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/10.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/10.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=4096
+              IRONIC_ENABLED=True
+              IRONIC_NODES_COUNT=1
+
+        - install_mu_murano_ha:
+            system_tests/custom-overrides-plain-properties: |
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos10.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/10.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/10.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=4
+
+        - install_mu_sahara_ha:
+            system_tests/custom-overrides-plain-properties: |
+              KVM_USE=True
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos10.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/10.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/10.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=4
+              SERVTEST_LOCAL_PATH=/srv/downloads
+
+        - mos_mu_customization_included:
+            system_tests/custom-overrides-plain-properties: |
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos10.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/10.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/10.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=4
+              SERVTEST_LOCAL_PATH=/srv/downloads
+
+        - mos_mu_customization_pkg:
+            system_tests/custom-overrides-plain-properties: |
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos10.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/10.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/10.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=4
+              SERVTEST_LOCAL_PATH=/srv/downloads
+
+        - mos_mu_customization_excluded:
+            system_tests/custom-overrides-plain-properties: |
+              UPDATE_MASTER=True
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FORCE_DISABLE_UPDATES=False
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos10.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/10.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/10.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=4
+              SERVTEST_LOCAL_PATH=/srv/downloads
+
+        - install_mu_no_ha_scale_100:
+            system_tests/custom-overrides-plain-properties: |
+              UPDATE_MASTER=False
+              UPDATE_MASTER_VIA_MOS_MU=False
+              FORCE_DISABLE_UPDATES=True
+              USE_MOS_MU_FOR_UPGRADE=True
+              REPLACE_DEFAULT_REPOS=True
+              REPLACE_DEFAULT_REPOS_ONLY_ONCE=True
+              UPGRADE_CLUSTER_FROM_PROPOSED=True
+              #UPGRADE_CLUSTER_FROM_PROPOSED_DEB=http://mirror.fuel-infra.org/mos-repos/ubuntu/snapshots/$MOS_UBUNTU_MIRROR_ID/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/x86_64/
+              UPGRADE_CLUSTER_FROM_PROPOSED_RPM_KEY=http://mirror.fuel-infra.org/mos-repos/centos/mos10.0-centos7/snapshots/$MOS_CENTOS_PROPOSED_MIRROR_ID/RPM-GPG-KEY-mos10.0
+              CUDET_UBUNTU_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/9/artifact/10.0-ubuntu-mu-1.sqlite
+              CUDET_CENTOS_DB_URL=https://jenkins-sandbox.infra.mirantis.net/job/generate-packages-database/8/artifact/10.0-centos-mu-1.sqlite
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=4
+              SERVTEST_LOCAL_PATH=/srv/downloads
+
+        - tests_configdb_api:
+            system_tests/custom-overrides-plain-properties: |
+              PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64/
+
+        - test_multiqueue_acceptance:
+            system_tests/custom-overrides-plain-properties: |
+              SLAVE_NODE_CPU=6
+              SLAVE_NODE_MEMORY=6144
+              NUMA_NODES=2
+              DRIVER_ENABLE_ACPI=true
+              KVM_USE=true
+
+    - common/plugins-template:
+
+        testgroup:
+
+        - thread_separate_services_ceph

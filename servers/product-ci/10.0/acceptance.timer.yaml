@@ -1,0 +1,16 @@
+- job-group:
+    name: '10.0.acceptance.timers'
+    test-type: acceptance
+    version-id: 10.0
+    test-job-name: '{version-id}.test_all'
+    jobs:
+      - '{version-id}.{test-type}.timer.{repo_type}':
+         repo_type: stable
+         # FIXME(aevseev) discuss schedule
+         trigger: ''
+         enable_proposed: false
+      - '{version-id}.{test-type}.timer.{repo_type}':
+         repo_type: proposed
+         # FIXME(aevseev) discuss schedule
+         trigger: ''
+         enable_proposed: true
