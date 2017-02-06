@@ -20,6 +20,7 @@
             UBUNTU_RELEASE=xenial
             UBUNTU_KERNEL_FLAVOR=lts-xenial
       - '10.0.swarm.timers'
+      - '10.0.acceptance.timers'
       - 'product-{version}{mod}.test_all':
           email: '{bvt-mail}'
       - '{version}{mod}.main.{dist}.{testgroup}':
