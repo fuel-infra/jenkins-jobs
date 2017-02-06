@@ -312,3 +312,13 @@
         testgroup:
 
         - thread_separate_services_ceph
+
+    - product-ci/test-reports:
+        test-type:  'acceptance'
+        version: '{version-id}'
+        repobranch: 'origin/stable/newton'
+        properties: |
+          TESTS_RUNNER={version-id}.acceptance.runner
+          TESTRAIL_TEST_SUITE=[{version-id}][Fuel] Auto Release Acceptance
+          TESTRAIL_MILESTONE={version-id}
+          LAUNCHPAD_MILESTONE={version-id}
