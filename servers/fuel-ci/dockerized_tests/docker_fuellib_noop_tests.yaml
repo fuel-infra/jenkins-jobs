@@ -1,11 +1,11 @@
 - job-template:
-    name: docker_fuellib_noop_tests
+    name: docker_{fuellib_suffix}_noop_tests
     builders:
       - shell:
           !include-raw-escape: builders/run_docker.sh
     concurrent: true
     description: |
-      Runs ./utils/jenkins/fuel_noop_tests.sh<br><br>
+      Runs ./{script_path}<br><br>
       Uses Docker container<br>
       Job is currently running in non-voting mode
     node: 'fuel-library-unit-tests'
@@ -24,6 +24,14 @@
           name: VOLUMES
           default: '{volumes}'
           description: 'Volumes to mount into container separated with spaces'
+      - string:
+          name: SCRIPT_PATH
+          default: '{script_path}'
+          description: 'Path of fuel_noop_tests script inside Jenkins workspace'
+      - string:
+          name: PUPPET_GEM_VERSION
+          default: '{puppet_gem_version}'
+          description: 'Version of puppet gem used. Set by fuel_noop_tests script if empty'
     properties:
       - heavy-job:
           weight: 2
@@ -70,8 +78,14 @@
     name: docker_fuellib_noop_tests
     volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
     envvars: ''
+    puppet_gem_version: ''
+    fuellib_suffix:
+      - fuellib:
+          script_path: 'utils/jenkins/fuel_noop_tests.sh'
+      - fuellib_puppet4:
+          script_path: 'utils/jenkins/fuel_noop_tests4.sh'
     jobs:
-      - 'docker_fuellib_noop_tests':
+      - 'docker_{fuellib_suffix}_noop_tests':
           trigger_on:
             - patchset-created-event
             - comment-added-contains-event:
