@@ -12,6 +12,7 @@ export TESTRAIL_URL="https://mirantis.testrail.com"
 rm -rf "${VENV_PATH}"
 virtualenv "${VENV_PATH}"
 source "${VENV_PATH}"/bin/activate
+  pip install -U pip
   # NEED FIX! (move scripts from custom repo to Mirantis repo)
   pip install git+https://github.com/gdyuldin/testrail_reporter.git@stable
   wget "$PLUGIN_TEST_URL"/artifact/custom_tests/report.xml
