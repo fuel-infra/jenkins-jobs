@@ -1,0 +1,13 @@
+- view:
+      type: list
+      name: '10.0_acceptance'
+      regex: '^10\.0\.acceptance.+'
+      columns:
+        - status
+        - weather
+        - job
+        - last_success
+        - last_failure
+        - last_duration
+        - build_button
+      recurse: False
