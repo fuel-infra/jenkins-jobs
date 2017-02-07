@@ -3,6 +3,8 @@
     node: 'docker-builder'
     builders:
       - shell:
+          !include-raw-escape: './builders/docker-lint.sh'
+      - shell:
           !include-raw-escape: './builders/docker-build.sh'
       - trigger-builds:
         - project: 'docker-publish'
@@ -28,6 +30,10 @@
           name: REBUILD
           default: '{rebuild}'
           description: 'Set --no-cache docker build option if true'
+      - string:
+          name: IGNORE_CHECKS
+          default: ''
+          description: "List of hadolint rules to skip separated by spaces. Ex: 'DL3003 DL3003'"
     scm:
       - main:
           reponame: 'fuel-infra/dockerfiles'
