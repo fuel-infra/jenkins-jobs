@@ -69,7 +69,8 @@ docker_build_image() {
     DOCKER_CLI_OPTS=${4}
     pushd .
     cd "${DOCKERFILE_PATH}"
-    docker build "${DOCKER_CLI_OPTS}" -t "${IMAGE_NAME}:${IMAGE_TAG}" .
+    # needs for passing shellcheck. docker_cli_opts usualy is an empty string
+    eval "docker build ${DOCKER_CLI_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} ."
     popd
 }
 
