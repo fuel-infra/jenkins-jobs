@@ -1,0 +1,39 @@
+---
+- job:
+    name: gather-jenkins-resources-stats
+    node: internal-slave02
+    builders:
+      - python:
+          !include-raw: builders/store_used_resources.py
+    wrappers:
+      - inject-passwords:
+          global: true
+      - inject:
+          properties-content: |
+            MYSQL_HOST=miscdb02-bud.infra.mirantis.net
+            MYSQL_PORT=3306
+            MYSQL_DB=jobs_stats
+            MYSQL_USERNAME=jobs_stats
+            ZABBIX_USERNAME=jobs-stats
+            JENKINS_SERVERS=https://packaging-ci.infra.mirantis.net https://product-ci.infra.mirantis.net https://ci.fuel-infra.org http://custom-ci.infra.mirantis.net
+    description: |
+      Gather used resources stats from jenkins jobs
+
+      This variables should be in jenkins global passwords:
+          - MYSQL_PASSWORD
+          - ZABBIX_PASSWORD
+
+      This packages should be installed on slave node:
+          - python
+          - python-mysqldb
+          - python-jenkins
+          - python-requests
+          - python-sqlalchemy
+          - python-sqlalchemy-ext
+    logrotate:
+      artifactDaysToKeep: 3
+      daysToKeep: 3
+    concurrent: false
+    triggers:
+      - timed: '@hourly'
+
