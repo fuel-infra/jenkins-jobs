@@ -52,7 +52,7 @@ docker_linter() {
 
 main() {
     pushd "${WORKSPACE}"
-    DOCKERFILES=$(git -C "$WORKSPACE" diff --name-only HEAD~40 \
+    DOCKERFILES=$(git -C "$WORKSPACE" diff --name-only HEAD~1 \
                 | egrep "*/Dockerfile" \
                 | sort|uniq)
     for DOCKERFILE in ${DOCKERFILES}
