@@ -5,6 +5,8 @@
       artifactDaysToKeep: 90
       daysToKeep: 90
 
+    timer: ''
+
     properties:
       - heavy-job:
           weight: 8
@@ -73,7 +75,7 @@
 
     triggers:
       - zuul
-      - timed: "H */12 * * *"
+      - timed: '{timer}'
 
     builders:
       - inject-fuel-qa-global-defaults:
