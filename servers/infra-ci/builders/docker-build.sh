@@ -89,7 +89,7 @@ verify_fuel_ci() {
     # run default tests
     echo "[ STATUS ] Fuel CI image verification started."
     docker run --cidfile="${CONTAINER_ID}" -t "${IMAGE_NAME}:${IMAGE_TAG}" \
-            /bin/bash -exc ${SCRIPT_PATH} verify_image
+            /bin/bash -exc "${SCRIPT_PATH} verify_image"
     exitcode=$?
     docker stop "$(cat "${CONTAINER_ID}")"
     echo "[ STATUS ] Fuel-ci verification exit code was ${exitcode}"
