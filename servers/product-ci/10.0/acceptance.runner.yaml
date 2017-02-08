@@ -156,36 +156,6 @@
         - name: '10.0.acceptance.ubuntu.fuel_plugin_etckeeper'
           current-parameters: true
           kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.install_mu_no_ha_failover'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.install_mu_ha'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.install_mu_no_ha_base_negative'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.install_mu_ironic_ceilometer'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.install_mu_murano_ha'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.install_mu_no_ha_scale_100'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.install_mu_sahara_ha'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.mos_mu_customization_included'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.mos_mu_customization_pkg'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.mos_mu_customization_excluded'
-          current-parameters: true
-          kill-phase-on: NEVER
         - name: '10.0.acceptance.ubuntu.tests_configdb_api'
           current-parameters: true
           kill-phase-on: NEVER
