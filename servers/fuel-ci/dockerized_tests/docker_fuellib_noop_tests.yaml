@@ -5,7 +5,7 @@
           !include-raw-escape: builders/run_docker.sh
     concurrent: true
     description: |
-      Runs ./{script_path}<br><br>
+      Runs ./{runner_script}<br><br>
       Uses Docker container<br>
       Job is currently running in non-voting mode
     node: 'fuel-library-unit-tests'
@@ -25,8 +25,8 @@
           default: '{volumes}'
           description: 'Volumes to mount into container separated with spaces'
       - string:
-          name: SCRIPT_PATH
-          default: '{script_path}'
+          name: RUNNER_SCRIPT
+          default: '{runner_script}'
           description: 'Path of fuel_noop_tests script inside Jenkins workspace'
       - string:
           name: PUPPET_GEM_VERSION
@@ -81,9 +81,9 @@
     puppet_gem_version: ''
     fuellib_suffix:
       - fuellib:
-          script_path: 'utils/jenkins/fuel_noop_tests.sh'
+          runner_script: 'utils/jenkins/fuel_noop_tests.sh'
       - fuellib_puppet4:
-          script_path: 'utils/jenkins/fuel_noop_tests4.sh'
+          runner_script: 'utils/jenkins/fuel_noop_tests4.sh'
     jobs:
       - 'docker_{fuellib_suffix}_noop_tests':
           trigger_on:
