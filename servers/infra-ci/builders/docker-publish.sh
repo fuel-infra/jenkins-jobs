@@ -18,11 +18,11 @@ for IMAGE in ${IMAGES}
 do
   for URL in ${REGISTRY_URLS}
   do
-    docker tag -f "${IMAGE}" "${URL}/${IMAGE}"
+    docker tag "${IMAGE}" "${URL}/${IMAGE}"
     docker push "${URL}/${IMAGE}"
     # upload additional date tagged image
     if [[ "${DATE_TAG}" == 'true' ]]; then
-      docker tag -f "${IMAGE}" "${URL}/${IMAGE}-${DATE}"
+      docker tag "${IMAGE}" "${URL}/${IMAGE}-${DATE}"
       docker push "${URL}/${IMAGE}-${DATE}"
       docker rmi "${URL}/${IMAGE}-${DATE}"
     fi
