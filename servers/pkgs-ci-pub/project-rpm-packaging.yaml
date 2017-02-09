@@ -306,6 +306,9 @@
       - 'newton':
           mos-version: '10.0'
           mos-repo-name-sep: ''
+      - 'ocata':
+          mos-version: '11.0'
+          mos-repo-name-sep: ''
     os: 'centos'
     distro: 'centos7'
     pkg_type: 'rpm'
