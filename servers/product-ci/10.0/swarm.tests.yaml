@@ -359,23 +359,7 @@
             plugins-template/custom-overrides-plain-properties: |
               NODES_COUNT=8
 
-        - thread_2_separate_services:
-            # recently we have these lines in cfg. But they were not supported by
-            # corresponding template. looks like this params are not required.
-            # but they are kept as references during refactoring process.
-            #
-            # plugins-template/job-weight: '20'
-            # plugins-template/node: 'huge-systest'
+        - detach-rabbitmq-ci-group:
+            plugins-template/job-weight: '20'
+            plugins-template/node: 'huge-systest'
             plugins-template/timeout: '600'
-
-        - thread_separate_haproxy:
-            # recently we have these lines in cfg. But they were not supported by
-            # corresponding template. looks like this params are not required.
-            # but they are kept as references during refactoring process.
-            #
-            # plugins-template/job-weight: '20'
-            # plugins-template/node: 'huge-systest'
-            plugins-template/timeout: '600'
-            plugins-template/custom-overrides-plain-properties: |
-              MULTIPLE_NETWORKS=true
-              USE_HAPROXY_TEMPLATE=true
