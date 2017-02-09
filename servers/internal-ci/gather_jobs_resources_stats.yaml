@@ -1,7 +1,7 @@
 ---
 - job:
     name: gather-jenkins-resources-stats
-    node: internal-slave02
+    node: gather-jobs-resources
     builders:
       - python:
           !include-raw: builders/store_used_resources.py
