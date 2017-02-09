@@ -1,10 +1,10 @@
 - job-template:
-    name: '{version-id}.baremetal.{dist}.{testgroup}'
+    name: '10.0.baremetal.{dist}.{testgroup}'
     description: 'Run Baremetal Acceptance Test {testgroup} on {environment}'
     node: 'baremetal'
     concurrent: false
 
-    version: '9.x'
+    version: '{version-id}'
     venvpath: '/home/jenkins/qa-venv-master-3.0'
     env_suffix: $BUILD_ID
     properties-file: ''
@@ -39,7 +39,22 @@
         weight: '{weight}'
 
     parameters:
-    - 9x-systest-params
+    - string:
+        name: MAGNET_LINK
+        description: 'ISO magnet link'
+    - string:
+        name: UBUNTU_MIRROR_ID
+        default: 'ubuntu-latest'
+        description: |
+          'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+    - string:
+        name: CUSTOM_VERSION
+        default: ''
+        description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+    - bool:
+        name: ENABLE_PROPOSED
+        default: false
+        description: 'If false only stable repositories are used'
     - text:
         name: CUSTOM_DEVOPS_SETTINGS_TEMPLATE
         default: >
@@ -111,7 +126,7 @@
     - inject:
         # load the parameter used in deployment test
         properties-file: 'deployment.properties'
-    - 9x-run-sys-test
+    - system-test
     - shell: |
         #!/bin/bash
         echo "=== [systest POST-script] ==="

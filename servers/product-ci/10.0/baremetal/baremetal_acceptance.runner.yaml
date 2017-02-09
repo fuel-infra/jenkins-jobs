@@ -1,0 +1,122 @@
+- job:
+    name: '10.0.baremetal.runner'
+    description: 'Run baremetal_acceptance tests'
+
+    concurrent: false
+    project-type: multijob
+    node: 'runner'
+
+    properties:
+    - heavy-job:
+        weight: 1
+
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          description: 'ISO magnet link'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: 'ubuntu-latest'
+          description: |
+            'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
+      - string:
+          name: CUSTOM_VERSION
+          default: ''
+          description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+      - bool:
+          name: ENABLE_PROPOSED
+          default: false
+          description: 'If false only stable repositories are used'
+
+    wrappers:
+    - timeout:
+        fail: true
+        timeout: 1200
+
+    builders:
+
+    - shell: # Get description from MAGNET_LINK variable
+       !include-raw: ../builders/get_version_from_magnet.sh
+
+    - multijob:
+        name: 'Run baremetal_acceptance tests on baremetal'
+        condition: COMPLETED
+        projects:
+          - name: '10.0.baremetal.ubuntu.sriov'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.ha_neutron_haproxy_termination'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.ceph_for_volumes_images_ephemeral_rados'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.lock_db_access_from_primary_controller'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.shut_down_mongo_node'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.recovery_neutron_agents_after_restart'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.kill_mongo_processes'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.close_connections_for_mongo'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.power_outage_cinder_cluster'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.shutdown_ceph_for_all'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.ceph_volumes_ephemeral'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.four_controllers'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.add_ceph_stop'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.mongo_ceph_with_ceilometer'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.shutdown_primary_controller_ceph'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.safe_reboot_primary_controller'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.remove_controllers'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.add_delete_ceph'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.huge_separate_rabbitmq_db'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.shutdown_cinder_cluster'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.safe_reboot_primary_controller_ceph'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.hard_reset_primary_controller'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.cinder_ceph_for_images_ephemeral_rados'
+            current-parameters: true
+            kill-phase-on: NEVER
+          - name: '10.0.baremetal.ubuntu.tun_ceph_all'
+            current-parameters: true
+            kill-phase-on: NEVER
+
+    publishers:
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+    - email-default:
+        mail-to: 'ci+alert@mirantis.com'

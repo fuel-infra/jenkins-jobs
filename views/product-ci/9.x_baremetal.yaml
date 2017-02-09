@@ -1,7 +1,7 @@
 - view:
       type: list
-      name: 'baremetal'
-      regex: '.*baremetal.*'
+      name: '9.x baremetal'
+      regex: '9\.x\.baremetal.*'
       columns:
         - status
         - weather
