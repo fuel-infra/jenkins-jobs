@@ -16,7 +16,7 @@
             TESTS_RUNNER=10.0.swarm.runner
             TESTRAIL_TEST_SUITE=[10.0] Swarm
             TESTRAIL_MILESTONE=10.0
-            LAUNCHPAD_MILESTONE=10.0
+            LAUNCHPAD_MILESTONE=10.1
 
 - job:
     name: '10.0.swarm.runner'
