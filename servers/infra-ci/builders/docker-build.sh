@@ -84,14 +84,12 @@ docker_rm_image() {
 verify_fuel_ci() {
     IMAGE_NAME=${1}
     IMAGE_TAG=${2}
-    CONTAINER_ID="${WORKSPACE}/container.id"
     SCRIPT_PATH="/opt/jenkins/runner.sh"
     # run default tests
     echo "[ STATUS ] Fuel CI image verification started."
-    docker run --cidfile="${CONTAINER_ID}" -t "${IMAGE_NAME}:${IMAGE_TAG}" \
+    docker run --rm -t "${IMAGE_NAME}:${IMAGE_TAG}" \
             /bin/bash -exc "${SCRIPT_PATH} verify_image"
     exitcode=$?
-    docker stop "$(cat "${CONTAINER_ID}")"
     echo "[ STATUS ] Fuel-ci verification exit code was ${exitcode}"
 }
 
