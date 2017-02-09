@@ -10,17 +10,17 @@
           global: true
       - inject:
           properties-content: |
-            MYSQL_HOST=miscdb02-bud.infra.mirantis.net
-            MYSQL_PORT=3306
-            MYSQL_DB=jobs_stats
-            MYSQL_USERNAME=jobs_stats
+            STATS_MYSQL_HOST=miscdb02-bud.infra.mirantis.net
+            STATS_MYSQL_PORT=3306
+            STATS_MYSQL_DB=jobs_stats
+            STATS_MYSQL_USERNAME=jobs_stats
             ZABBIX_USERNAME=jobs-stats
             JENKINS_SERVERS=https://packaging-ci.infra.mirantis.net https://product-ci.infra.mirantis.net https://ci.fuel-infra.org http://custom-ci.infra.mirantis.net
     description: |
       Gather used resources stats from jenkins jobs
 
       This variables should be in jenkins global passwords:
-          - MYSQL_PASSWORD
+          - STATS_MYSQL_PASSWORD
           - ZABBIX_PASSWORD
 
       This packages should be installed on slave node:

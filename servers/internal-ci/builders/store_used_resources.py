@@ -18,12 +18,13 @@ import sqlalchemy.orm
 
 import urlparse
 
-assert os.getenv("MYSQL_USERNAME")
-assert os.getenv("MYSQL_PASSWORD")
-assert os.getenv("MYSQL_HOST")
+assert os.getenv("STATS_MYSQL_USERNAME")
+assert os.getenv("STATS_MYSQL_PASSWORD")
+assert os.getenv("STATS_MYSQL_HOST")
 assert os.getenv("ZABBIX_USERNAME")
 assert os.getenv("ZABBIX_PASSWORD")
 
+ZABBIX_URL = os.getenv("ZABBIX_URL", "https://monitoring.infra.mirantis.net")
 JENKINS_SERVERS = os.getenv("JENKINS_SERVERS", "").split(" ")
 for url in JENKINS_SERVERS:
     assert urlparse.urlparse(url).netloc, "Can't parse jenkins server url: " \
@@ -189,16 +190,16 @@ class StoreJobsStats:
         self.servers = map(jenkins.Jenkins, JENKINS_SERVERS)
         self.db_eng = sqlalchemy.create_engine(
             "mysql+mysqldb://{user}:{passwd}@{host}:{port}/{db}".format(
-                host=os.getenv("MYSQL_HOST", "127.0.0.1"),
-                port=int(os.getenv("MYSQL_PORT", 3306)),
-                user=os.getenv("MYSQL_USERNAME", "root"),
-                passwd=os.getenv("MYSQL_PASSWORD", ""),
-                db=os.getenv("MYSQL_DB", "jobs_stats")
+                host=os.getenv("STATS_MYSQL_HOST", "127.0.0.1"),
+                port=int(os.getenv("STATS_MYSQL_PORT", 3306)),
+                user=os.getenv("STATS_MYSQL_USERNAME", "root"),
+                passwd=os.getenv("STATS_MYSQL_PASSWORD", ""),
+                db=os.getenv("STATS_MYSQL_DB", "jobs_stats")
             ))
         Base.metadata.create_all(self.db_eng)
         self.Session = sqlalchemy.orm.sessionmaker(bind=self.db_eng)
         self.ses = self.Session()
-        self.zapi = ZabbixAPI("https://monitoring.infra.mirantis.net",
+        self.zapi = ZabbixAPI(ZABBIX_URL,
                               username=os.getenv("ZABBIX_USERNAME"),
                               password=os.getenv("ZABBIX_PASSWORD"))
         self.zapi.timeout = 10
