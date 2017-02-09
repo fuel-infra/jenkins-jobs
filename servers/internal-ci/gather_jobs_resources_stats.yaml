@@ -3,7 +3,7 @@
     name: gather-jenkins-resources-stats
     node: gather-jobs-resources
     builders:
-      - python:
+      - shell:
           !include-raw: builders/store_used_resources.py
     wrappers:
       - inject-passwords:
