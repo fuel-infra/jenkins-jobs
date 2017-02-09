@@ -36,5 +36,6 @@
           GERRIT_NEWREV=$GERRIT_BRANCH
           GERRIT_HOST=review.fuel-infra.org
           GERRIT_USER=pkgs-ci
+          ZUUL_UUID=$BUILD_TAG
 
     node: 'runner'
