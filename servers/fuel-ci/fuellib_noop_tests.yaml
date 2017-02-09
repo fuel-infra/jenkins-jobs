@@ -1,15 +1,23 @@
 - job-template:
-    name: fuellib_noop_tests
+    name: '{fuellib_prefix}_noop_tests'
     builders:
       - shell:
           !include-raw-escape: builders/fuellib_noop_tests.sh
     concurrent: true
-    description: Runs ./utils/jenkins/fuel_noop_tests.sh
+    description: Runs ./{runner_script}
     node: fuel-library-unit-tests
     parameters:
       - string:
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
+      - string:
+          name: RUNNER_SCRIPT
+          default: '{runner_script}'
+          description: 'Path of fuel_noop_tests script inside Jenkins workspace'
+      - string:
+          name: PUPPET_GEM_VERSION
+          default: '{puppet_gem_version}'
+          description: 'Version of puppet gem used. Set by fuel_noop_tests script if empty'
     properties:
       - heavy-job:
           weight: 2
@@ -36,16 +44,14 @@
           projects:
             - project-compare-type: PLAIN
               project-pattern: openstack/fuel-library
-              branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'master'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/8.0'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/mitaka'
-                - branch-compare-type: PLAIN
-                  branch-pattern: 'stable/newton'
+              branches: '{obj:branches}'
           custom-url: '* $JOB_NAME $BUILD_URL'
+          # if true - then run in non-voting mode
+          skip-vote:
+            successful: '{obj:non_voting}'
+            failed: '{obj:non_voting}'
+            unstable: '{obj:non_voting}'
+            notbuilt: '{obj:non_voting}'
     wrappers:
       - ansicolor:
           colormap: xterm
@@ -58,5 +64,25 @@
 
 - project:
     name: fuel-library noop tests
+    puppet_gem_version: ''
+    non_voting: false
+    fuellib_prefix:
+      - fuellib:
+          runner_script: 'utils/jenkins/fuel_noop_tests.sh'
+          branches:
+            - branch-compare-type: PLAIN
+              branch-pattern: 'master'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/8.0'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/mitaka'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/newton'
+      - fuellib_puppet4:
+          runner_script: 'utils/jenkins/fuel_noop_tests4.sh'
+          non_voting: true
+          branches:
+            - branch-compare-type: PLAIN
+              branch-pattern: 'master'
     jobs:
-      - 'fuellib_noop_tests'
+      - '{fuellib_prefix}_noop_tests'
