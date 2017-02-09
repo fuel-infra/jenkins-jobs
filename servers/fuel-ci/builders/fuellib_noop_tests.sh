@@ -1,4 +1,8 @@
 #!/bin/bash
-set -e
+
+set -ex
+
+RUNNER_SCRIPT=${RUNNER_SCRIPT:-utils/jenkins/fuel_noop_tests.sh}
+
 source /etc/profile
-/bin/bash $WORKSPACE/utils/jenkins/fuel_noop_tests.sh
+/bin/bash "${WORKSPACE}/${RUNNER_SCRIPT}"
