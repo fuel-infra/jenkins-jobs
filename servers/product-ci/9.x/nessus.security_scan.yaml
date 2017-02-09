@@ -1,0 +1,49 @@
+- project:
+    name: 'Security test for 9.x'
+    test-type: 'security_scan'
+    swarm-test/repobranch: 'origin/stable/mitaka'
+    swarm-test/reponame: 'fuel-qa'
+    swarm-test/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    swarm-test/default_pool: '10.109.0.0/16:24'
+    description: '9.x nessus security test' # fixme!
+    swarm-test/node: 'security'
+    swarm-test/timeout: '480'
+    dist: ubuntu
+
+    swarm-test/job-weight: '7'
+
+    jobs:
+    - product-ci/9.x/templates/swarm-test:
+
+        testgroup:
+
+        - nessus:
+            swarm-test/custom-overrides-plain-properties: |
+              KVM_USE=true
+              MAKE_SNAPSHOT=false
+              NESSUS_ADDRESS=10.109.0.253
+              NESSUS_IMAGE_NAME=nessus
+              NESSUS_PASSWORD=r00tme
+              NESSUS_USERNAME=root
+              NEUTRON_ENABLE=true
+              SECURITY_TEST=true
+            swarm-test/pre-script: |
+              set -ex
+              source "${{VENV_PATH}}/bin/activate"
+              ENVS=$(dos.py list --timestamp | grep nessus | cut -d ' ' -f1)
+              if [ -n "${{ENVS}}" ] ; then
+                  for ENV in ${{ENVS}} ; do dos.py erase "${{ENV}}" ; done
+              fi
+
+              NESSUS_IMAGE_NAME=${{NESSUS_IMAGE_NAME:=nessus}}
+              rm -rf logs/*
+              virsh vol-delete "${{NESSUS_IMAGE_NAME}}.qcow2" --pool default || true
+              virsh vol-clone "${{NESSUS_IMAGE_NAME}}_orig.qcow2" "${{NESSUS_IMAGE_NAME}}.qcow2" --pool default
+            swarm-test/post-script: |
+              set -ex
+              source "${{VENV_PATH}}/bin/activate"
+              ENVS=$(dos.py list --timestamp | grep nessus | cut -d ' ' -f1)
+              if [ -n "${{ENVS}}" ] ; then
+                  for ENV in ${{ENVS}} ; do dos.py erase "${{ENV}}" ; done
+              fi
+
