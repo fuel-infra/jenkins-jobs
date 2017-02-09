@@ -65,6 +65,18 @@
             mos-repos/ubuntu/10.0
           update-head: true
 
+      - '11.0':
+          timer: '*/20 * * * *'
+          srcpaths: |
+            mos-repos/centos/mos11.0-centos7/os
+            mos-repos/centos/mos11.0-centos7/proposed
+            mos-repos/centos/mos11.0-centos7/updates
+            mos-repos/centos/mos11.0-centos7/security
+            mos-repos/centos/mos11.0-centos7/holdback
+            mos-repos/centos/mos11.0-centos7/hotfix
+            mos-repos/ubuntu/11.0
+          update-head: true
+
       - master:
           timer: '*/20 * * * *'
           srcpaths: |
