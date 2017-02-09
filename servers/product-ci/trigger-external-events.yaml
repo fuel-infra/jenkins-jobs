@@ -18,11 +18,11 @@
     parameters:
       - string:
           name: TRIGGER_ONLY_FOR_ISO_VERSION
-          default: '9.0-mos'
+          default: '10.0'
           description: 'Limit trigger execution to specified ISO version'
     publishers:
       - description-setter:
           regexp: 'Description string: (.*)'
           set-for-matrix: false
       - email-default:
-          mail-to: 'ci+alert@mirantis.com'
+          mail-to: 'ci+alert@mirantis.com rkhozinov@mirantis.com'
