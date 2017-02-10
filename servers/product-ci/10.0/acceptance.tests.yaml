@@ -1,6 +1,7 @@
 - project:
     name: '10.0 acceptance tests'
     version-id: '10.0'
+    launchpad-milestone: '10.1'
     test-type: 'acceptance'
 
     system_tests/repobranch: 'origin/stable/newton'
@@ -150,4 +151,4 @@
           TESTS_RUNNER={version-id}.acceptance.runner
           TESTRAIL_TEST_SUITE=[{version-id}][Fuel] Auto Release Acceptance
           TESTRAIL_MILESTONE={version-id}
-          LAUNCHPAD_MILESTONE={version-id}
+          LAUNCHPAD_MILESTONE={launchpad-milestone}
