@@ -1,0 +1,108 @@
+- job-template:
+    name: '9.x.{test-type}.{dist}.plugins.{testgroup}'
+    id: product-ci/9.x/templates/swarm-test-plugins
+
+    swarm-test-plugins/email: 'ci+bvt@mirantis.com'
+    swarm-test-plugins/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    swarm-test-plugins/env_suffix: $BUILD_ID
+    swarm-test-plugins/custom-overrides-plain-properties: ''
+    swarm-test-plugins/custom-overrides-properties-file: ''
+    swarm-test-plugins/timeout: '180'
+    swarm-test-plugins/job-weight: '7'
+    dist: ubuntu
+
+    swarm-test-plugins/test-type: system_test
+    swarm-test-plugins/pre-script: |
+        echo "-SKIP-"
+    swarm-test-plugins/post-script: |
+        echo "-SKIP-"
+    swarm-test-plugins/make-snapshot: 'false'
+
+
+    description: 'Run Swarm Test {testgroup}'
+    concurrent: true
+    node: '{swarm-test-plugins/node}'
+
+    logrotate:
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+      daysToKeep: 30
+      numToKeep: 50
+
+    parameters:
+    - 9x-systest-params
+    - string: # added for cleaner which searches for job parameter
+        name: ENV_PREFIX
+        default: '9.x.{test-type}.{dist}.plugins.{testgroup}'
+    - text:
+        name: EXTRA_OPTS
+        default: ""
+
+    properties:
+    - heavy-job:
+        weight: '{swarm-test-plugins/job-weight}'
+
+    scm:
+    - main-git:
+        reponame: 'fuel-qa'
+        repobranch: '$FUEL_QA_COMMIT'
+        basedir: ''
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{swarm-test-plugins/timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+    - inject-fuel-qa-global-defaults:
+        version: '9.x'
+    - inject: # Defaults
+        properties-content: |
+          CONNECTION_STRING=qemu+tcp://127.0.0.1:16509/system
+          ENV_SUFFIX={swarm-test-plugins/env_suffix}
+          OPENSTACK_RELEASE={dist}
+          TEST_GROUP={testgroup}
+          VENV_PATH={swarm-test-plugins/venvpath}
+          CLASSIC_PROVISIONING=false
+          KEEP_ENV=true
+
+    - inject: # Overrides
+        properties-content: '{swarm-test-plugins/custom-overrides-plain-properties}'
+        properties-file: '{swarm-test-plugins/custom-overrides-properties-file}'
+    - inject:
+        properties-content: $EXTRA_OPTS
+    - shell: |
+        #!/bin/bash
+        echo "=== [systest PRE-script] ==="
+        {swarm-test-plugins/pre-script}
+    - download-plugins
+    - 9x-run-sys-test
+    - shell: |
+        #!/bin/bash
+        echo "=== [systest POST-script] ==="
+        {swarm-test-plugins/post-script}
+
+    publishers:
+
+    - archive:
+        allow-empty: true
+        artifacts: '**/nosetests.xml,logs/*,*.txt'
+        latest-only: false
+    - junit:
+        keep-long-stdio: false
+        results: '**/nosetests.xml'
+
+    - post-destroy-vms(build-timeout) # Destroy envs if left undestroyed
+
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+        regexp-for-failed: "'Description string: (.*)'"
+
+    - trigger-parameterized-builds:
+        - project: '9.x.{test-type}.test-reports'
+          condition: ALWAYS
+          predefined-parameters: TEST_JOB_NAME=$JOB_NAME
+          triggerWithNoParameters: false

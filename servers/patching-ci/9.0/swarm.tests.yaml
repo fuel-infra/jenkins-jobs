@@ -1,0 +1,404 @@
+- project:
+    name: '9.x swarm tests'
+    test-type: 'system_test'
+    swarm-test/repobranch: 'origin/stable/mitaka'
+    swarm-test/reponame: 'fuel-qa'
+    swarm-test/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    swarm-test/default_pool: '10.109.0.0/16:24'
+    description: '9.1 swarm test group' # fixme!
+    swarm-test/node: 'systest'
+    swarm-test/timeout: '480'
+    dist: ubuntu
+
+    # fixme: need additional section in template for common overrides
+    swarm-test/custom-overrides-plain-properties: |
+      FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+      ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+    # fixme: need additional section in template for common overrides
+
+    swarm-test/job-weight: '7'
+
+    swarm-test-plugins/node: systest
+    swarm-test-plugins/custom-overrides-plain-properties: |
+      FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+      ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+
+
+    jobs:
+    - product-ci/9.x/templates/swarm-test:
+
+        testgroup:
+
+        - setup: # test job, not included in runner
+            swarm-test/job-weight: '6'
+
+        - jumbo_frames
+
+        - thread_1:
+            swarm-test/job-weight: '6'
+            swarm-test/timeout: '600'
+
+        - ceph_ha_one_controller:
+            swarm-test/job-weight: '6'
+            swarm-test/timeout: '600'
+            swarm-test/custom-overrides-plain-properties: |
+              KVM_USE=true
+
+        - one_controller_actions:
+            swarm-test/job-weight: '6'
+            swarm-test/timeout: '600'
+
+        - multirole:
+            swarm-test/job-weight: '6'
+            swarm-test/timeout: '600'
+
+        - thread_3:
+            swarm-test/node: 'huge-systest'
+            swarm-test/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=5632
+
+        - thread_7:
+            swarm-test/custom-overrides-plain-properties: |
+              MULTIPLE_NETWORKS=true
+              FUEL_STATS_ENABLED=true
+
+        - thread_usb:
+            swarm-test/custom-overrides-plain-properties: |
+              ADMIN_BOOT_DEVICE=usb
+              SHOW_FUELMENU=true
+
+        - thread_non_func_1
+
+        - bonding_ha:
+            swarm-test/custom-overrides-plain-properties: |
+              BONDING=true
+              SLAVE_NODE_MEMORY=4096
+
+        - bonding_ha_one_controller:
+            swarm-test/job-weight: '6'
+            swarm-test/custom-overrides-plain-properties: |
+              BONDING=true
+
+        - cluster_actions
+
+        - cluster_actions_ha
+
+        - controller_replacement:
+            swarm-test/timeout: '540'
+
+        - cic_maintenance_mode:
+            swarm-test/timeout: '600'
+            swarm-test/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=5120
+
+        - offloading
+
+        - filling_root:
+            swarm-test/timeout: '600'
+
+        - ha_neutron:
+            swarm-test/timeout: '600'
+
+        - ha_neutron_tun:
+            swarm-test/timeout: '600'
+
+        - ha_neutron_tun_scale:
+            swarm-test/timeout: '600'
+
+        -  ha_neutron_public:
+            swarm-test/timeout: '600'
+
+        - ha_neutron_destructive:
+            swarm-test/timeout: '660'
+            swarm-test/custom-overrides-plain-properties: |
+              NEUTRON_ENABLE=true
+              ADMIN_NODE_MEMORY=3072
+
+        - ha_neutron_destructive_vlan:
+            swarm-test/timeout: '600'
+            swarm-test/custom-overrides-plain-properties: |
+              NEUTRON_ENABLE=true
+              ADMIN_NODE_MEMORY=3072
+
+        - ha_neutron_destructive_vxlan:
+            swarm-test/timeout: '600'
+            swarm-test/custom-overrides-plain-properties: |
+              NEUTRON_ENABLE=true
+              ADMIN_NODE_MEMORY=3072
+
+        - command_line:
+            swarm-test/timeout: '600'
+            swarm-test/custom-overrides-plain-properties: |
+              NEUTRON_ENABLE=true
+              ADMIN_NODE_MEMORY=3072
+
+        - logrotate:
+            swarm-test/timeout: '600'
+            swarm-test/custom-overrides-plain-properties: |
+              NEUTRON_ENABLE=true
+              ADMIN_NODE_MEMORY=3072
+
+        - ha_destructive_ceph_neutron
+
+        - huge_ha_neutron:
+            swarm-test/job-weight: '20'
+            swarm-test/timeout: '600'
+            swarm-test/node: 'huge-systest'
+            swarm-test/custom-overrides-plain-properties: |
+              SLAVE_NODE_CPU=2
+              SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+
+        - repeatable_image_based
+
+        - known_issues
+
+        - rh:
+            swarm-test/node: 'systest-rh'
+            swarm-test/custom-overrides-properties-file: /home/jenkins/.rhel_creds
+            swarm-test/custom-overrides-plain-properties: |
+               EXTRA_COMP_IMAGE=rhel7_02062016.qcow2
+               EXTRA_COMP_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
+               EXTRA_COMP_IMAGE_MD5=ff0d5ba348ebb5641801cc531d57020d
+               EXTRA_COMP_IMAGE_USER=root
+               EXTRA_COMP_IMAGE_PASSWORD=r00tme
+               CENTOS_DUMMY_DEPLOY=False
+               PERESTROIKA_REPO=http://nailgun.test.domain.local:8080/mos-centos/x86_64/
+
+        - ol:
+            swarm-test/custom-overrides-plain-properties: |
+               EXTRA_COMP_IMAGE=oracle-linux-20160523164500.qcow2
+               EXTRA_COMP_IMAGE_PATH=/home/jenkins/workspace/cloud-images/
+               EXTRA_COMP_IMAGE_MD5=98cdedebed05e9d6091de7bccdb214e1
+               EXTRA_COMP_IMAGE_USER=root
+               EXTRA_COMP_IMAGE_PASSWORD=r00tme
+               PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos9.0-centos7/os/x86_64/
+
+        - services_ha:
+            swarm-test/job-weight: '11'
+            swarm-test/node: 'services-systest'
+            swarm-test/timeout: '1200'
+            swarm-test/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=2
+              KVM_USE=true
+              SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+              EXTERNAL_MONGO_URLS=172.18.184.111,172.18.184.112,172.18.184.127
+              EXTERNAL_MONGO_USER=$EXTERNAL_MONGO_USER
+              EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
+              EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+              EXTERNAL_MONGO_REPL_SET=ceilometer
+
+        - services_ha.ceilometer:
+            swarm-test/job-weight: '11'
+            swarm-test/node: 'services-systest'
+            swarm-test/timeout: '1200'
+            swarm-test/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=6144
+              SLAVE_NODE_CPU=2
+              KVM_USE=true
+              SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+              EXTERNAL_MONGO_URLS=172.18.184.111,172.18.184.112,172.18.184.127
+              EXTERNAL_MONGO_USER=$EXTERNAL_MONGO_USER
+              EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
+              EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+              EXTERNAL_MONGO_REPL_SET=ceilometer
+
+        - services_ha_one_controller:
+            swarm-test/job-weight: '11'
+            swarm-test/node: 'services-systest'
+            swarm-test/timeout: '1200'
+            swarm-test/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=8192
+              SLAVE_NODE_CPU=2
+              KVM_USE=true
+              SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
+              EXTERNAL_MONGO_URLS=172.18.184.111,172.18.184.112,172.18.184.127
+              EXTERNAL_MONGO_USER=$EXTERNAL_MONGO_USER
+              EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
+              EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
+              EXTERNAL_MONGO_REPL_SET=ceilometer
+
+        - custom_hostname
+
+        - fuel_master_migrate:
+            swarm-test/job-weight: 11
+            swarm-test/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=6144
+              SLAVE_NODE_CPU=4
+              NODES_COUNT=3
+
+        - repetitive_restart:
+            swarm-test/timeout: '960'
+            swarm-test/custom-overrides-plain-properties: |
+              PATCHING_RUN_RALLY=true
+
+        - ready_node_reinstallation
+
+        - error_node_reinstallation
+
+        - bvt_ubuntu_bootstrap
+
+        - full_cluster_reinstallation
+
+        - fuel_plugin_reboot
+
+        - fuel_plugin_vip_reservation
+
+        - network_templates:
+            swarm-test/timeout: '600'
+
+        - reduced_footprint
+
+        - ironic_deploy_swift:
+            swarm-test/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=4096
+              IRONIC_ENABLED=true
+              IRONIC_NODES_COUNT=1
+
+        - ironic_deploy_ceph:
+            swarm-test/custom-overrides-plain-properties: |
+              SLAVE_NODE_MEMORY=4096
+              IRONIC_ENABLED=true
+              IRONIC_NODES_COUNT=1
+
+        - services_reconfiguration_thread_1:
+            swarm-test/timeout: '600'
+            swarm-test/custom-overrides-plain-properties: |
+              DISABLE_SSL=true
+              SLAVE_NODE_CPU=2
+
+        - services_reconfiguration_thread_2:
+            swarm-test/timeout: '660'
+            swarm-test/custom-overrides-plain-properties: |
+              DISABLE_SSL=true
+              SLAVE_NODE_CPU=2
+
+        - cgroup_ha
+
+        - multiracks_2:
+            swarm-test/custom-overrides-plain-properties: |
+              MULTIPLE_NETWORKS=true
+
+        - numa_cpu_pinning:
+            swarm-test/timeout: '600'
+            swarm-test/custom-overrides-plain-properties: |
+              KVM_USE=true
+              SLAVE_NODE_CPU=6
+              DRIVER_ENABLE_ACPI=true
+              NUMA_NODES=2
+
+        - support_dpdk:
+            swarm-test/custom-overrides-plain-properties: |
+              KVM_USE=true
+
+        - custom_graph
+
+        - support_dpdk_bond:
+            swarm-test/custom-overrides-plain-properties: |
+              KVM_USE=true
+              BONDING=true
+
+        - system_test.deploy_centos_master:
+            swarm-test/pre-script: |
+              wget -r --no-parent -A 'fuel-release*.noarch.rpm' -nd --directory-prefix=$WORKSPACE/ -e robots=off http://mirror.fuel-infra.org/mos-repos/centos/mos9.0-centos7/os/x86_64/Packages/ && mv "$WORKSPACE"/fuel-release*.noarch.rpm "$WORKSPACE/fuel-release.noarch.rpm"
+            swarm-test/custom-overrides-plain-properties: |
+              CENTOS_CLOUD_IMAGE_PATH=/srv/downloads/qa-centos-cloud-2016-05-05.qcow2
+              EXTRA_DEB_REPOS=mos,deb http://mirror.fuel-infra.org/mos-repos/ubuntu/9.0/ mos9.0 main restricted
+              SLAVE_NODE_MEMORY=4096
+              FUEL_RELEASE_PATH=$WORKSPACE/fuel-release.noarch.rpm
+
+        - deploy_multipath:
+            swarm-test/node: 'huge-systest'
+            swarm-test/timeout: '600'
+            swarm-test/custom-overrides-plain-properties: |
+              MULTIPATH=True
+              SLAVE_MULTIPATH_DISKS_COUNT=2
+              SLAVE_NODE_CPU=4
+              DEVOPS_SETTINGS_TEMPLATE=$WORKSPACE/system_test/tests_templates/tests_configs/multipath_3_nodes.yaml
+              NODES_COUNT=4
+              NODE_VOLUME_SIZE=40
+
+        - support_hugepages:
+            swarm-test/timeout: '600'
+            swarm-test/node: 'systest-hugepages'
+            swarm-test/custom-overrides-plain-properties: |
+               KVM_USE=True
+               DRIVER_ENABLE_ACPI=true
+               NUMA_NODES=2
+               SLAVE_NODE_CPU=4
+               SLAVE_NODE_MEMORY=5120
+               ENV_SLAVE_LOGIN=root
+               ENV_SLAVE_PASSWORD=r00tme
+
+        - test_ibp
+
+        - test_bdd
+
+        - smoke_test_configdb:
+            swarm-test/custom-overrides-plain-properties: |
+              PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64/
+
+        - unlock_settings_tab_states:
+            swarm-test/timeout: '600'
+
+        - unlock_settings_tab:
+            swarm-test/timeout: '1200'
+            # This test use ~400GB disk space
+            swarm-test/node: 'huge-systest'
+
+        - public_api:
+            swarm-test/custom-overrides-plain-properties: |
+              ENABLE_DMZ=true
+
+        - env_customizations_check
+
+        - graph_extension
+
+        - add_updated_node_to_environment:
+            swarm-test/custom-overrides-plain-properties: |
+              FUEL_RELEASE_VERSION=9.0
+              UPDATE_MASTER=False
+              FORCE_DISABLE_UPDATES=True
+              NODES_COUNT=6
+
+        # test group below uses only 4 VMs at the same time so there is no need
+        # to put in in huge_systest node
+        - multiqueue_base_check:
+            swarm-test/custom-overrides-plain-properties: |
+              KVM_USE=true
+              SLAVE_NODE_CPU=4
+
+        - ovs_firewall
+
+        - ovs_firewall_with_dpdk:
+            swarm-test/custom-overrides-plain-properties: |
+              KVM_USE=true
+
+        - test_tags
+
+    - product-ci/9.x/templates/swarm-test-plugins:
+
+        testgroup:
+
+        - fuel_plugin_example:
+            swarm-test-plugins/timeout: '660'
+            swarm-test-plugins/custom-overrides-plain-properties: |
+              NODES_COUNT=8
+
+        - install_plugin_after_cluster_create:
+            swarm-test-plugins/timeout: '660'
+            swarm-test-plugins/custom-overrides-plain-properties: |
+              NODES_COUNT=8
+
+        - detach-rabbitmq-ci-group:
+            swarm-test-plugins/job-weight: '20'
+            swarm-test-plugins/node: 'huge-systest'
+            swarm-test-plugins/timeout: '600'
+
+        - thread_separate_haproxy:
+            swarm-test-plugins/job-weight: '20'
+            swarm-test-plugins/node: 'huge-systest'
+            swarm-test-plugins/timeout: '600'
+            swarm-test-plugins/custom-overrides-plain-properties: |
+              MULTIPLE_NETWORKS=true
+              USE_HAPROXY_TEMPLATE=true
