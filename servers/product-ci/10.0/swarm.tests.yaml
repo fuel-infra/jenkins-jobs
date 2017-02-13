@@ -345,6 +345,13 @@
 
         - graph_extension
 
+        # test group below uses only 4 VMs at the same time so there is no need
+        # to put in in huge_systest node
+        - multiqueue_base_check:
+            swarm-test/custom-overrides-plain-properties: |
+              KVM_USE=true
+              SLAVE_NODE_CPU=4
+
     - common/plugins-template:
 
         testgroup:
