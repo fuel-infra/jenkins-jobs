@@ -277,3 +277,6 @@
             - name: '10.0.system_test.ubuntu.graph_extension'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '10.0.system_test.ubuntu.multiqueue_base_check'
+              current-parameters: true
+              kill-phase-on: NEVER
