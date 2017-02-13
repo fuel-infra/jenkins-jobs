@@ -280,3 +280,9 @@
             - name: '10.0.system_test.ubuntu.multiqueue_base_check'
               current-parameters: true
               kill-phase-on: NEVER
+            - name: '10.0.system_test.ubuntu.ovs_firewall'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '10.0.system_test.ubuntu.ovs_firewall_with_dpdk'
+              current-parameters: true
+              kill-phase-on: NEVER
