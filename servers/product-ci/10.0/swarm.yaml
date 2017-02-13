@@ -157,10 +157,7 @@
             - name: '10.0.system_test.ubuntu.plugins.install_plugin_after_cluster_create'
               current-parameters: true
               kill-phase-on: NEVER
-            #- name: '10.0.system_test.ubuntu.plugins.thread_2_separate_services'
-            #  current-parameters: true
-            #  kill-phase-on: NEVER
-            - name: '10.0.system_test.ubuntu.plugins.thread_separate_haproxy'
+            - name: '10.0.system_test.ubuntu.plugins.detach-rabbitmq-ci-group'
               current-parameters: true
               kill-phase-on: NEVER
             - name: '10.0.system_test.ubuntu.fuel_plugin_reboot'
