@@ -37,6 +37,9 @@
      - inject-passwords:
           global: true
           mask-password-params: true
+     - timeout:
+          fail: true
+          timeout: 120
 
     publishers:
       - description-setter:
