@@ -1,6 +1,7 @@
 - project:
     name: verify-docs
     publish_files: 'index.html'
+    credentials-id: '70105253-c857-4463-a927-f47307911e45'
     jobs:
     - '{prefix}verify-{project}':
         shell: !include-raw-escape: './builders/new.verify-docs.sh'
