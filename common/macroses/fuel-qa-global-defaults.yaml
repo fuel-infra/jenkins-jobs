@@ -7,45 +7,19 @@
           set -ex
 
           case {version} in
-            8.0)
-
-              ;;
-            9.0)
+            9.?|mitaka)
               inject SLAVE_NODE_MEMORY 3968
               ;;
-            9.x)
-              inject SLAVE_NODE_MEMORY 3968
-              ;;
-            10.0)
+            10.0|newton)
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
               ;;
-            11.0)
+            11.0|ocata)
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
-              ;;
-            0.10)
-                    # used in plugin-ci:
-                    # - elasticsearch-kibana
-                    # - influxdb-grafana
-                    # - lma-collector
-                    # - lma-infrastructure-alerting
-                    # .. and must be fixed
               ;;
             master)
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
               ;;
-            liberty)
-
-              ;;
-            mitaka)
-
-              ;;
-            newton)
-              inject SLAVE_NODE_MEMORY 3968
-              ;;
-            *)
-              echo 'unsupported version of product'
-              exit 1
           esac
