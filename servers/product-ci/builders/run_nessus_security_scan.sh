@@ -2,7 +2,10 @@
 
 set -ex
 
-#MAGNET_LINK=$(sed s/MAGNET_LINK=// magnet_link.txt)
+if echo "${MAGNET_LINK}" | grep "magnet_link\.txt" ; then
+    wget "${MAGNET_LINK}"
+    MAGNET_LINK=$(sed s/MAGNET_LINK=// magnet_link.txt)
+fi
 
 NESSUS_IMAGE_NAME=${NESSUS_IMAGE_NAME:=nessus}
 

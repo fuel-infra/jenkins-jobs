@@ -69,3 +69,27 @@
 
     jobs:
       - '{version-id}.nessus_security_scan'
+
+- project:
+    name: Security test for 10.0 branch
+    version-id: 10.0
+    branch: 'origin/stable/newton'
+    timer: "0 3 * * 4"
+    mos_version: '{version-id}'
+    update_master: ''
+    magnet_link: 'https://product-ci.infra.mirantis.net/job/10.0.test_all/lastSuccessfulBuild/artifact/magnet_link.txt'
+    upgrade_tarball_magnet_link: ''
+    fuel_release_version: ''
+    pre-build-script: ''
+    openstack_release: 'Ubuntu'
+    nessus_address: '10.109.0.253'
+    os: 'ubuntu'
+    distro: 'xenial'
+    test_group: 'nessus'
+    venv_path: '/home/jenkins/venv-nailgun-tests-2.9'
+    extra_deb_repos: ''
+    extra_rpm_repos: ''
+    testrail-report-job: ''
+
+    jobs:
+      - '{version-id}.nessus_security_scan'
