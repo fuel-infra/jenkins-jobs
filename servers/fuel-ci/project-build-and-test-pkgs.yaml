@@ -286,6 +286,7 @@
             CUSTOM_ENV=true
             BUILD_IMAGES=true
             EXTRA_RPM_REPOS_PRIORITY=5
+            FUEL_RELEASE_VERSION=9.0
 
       - python-fuelclient:
           projectpackage: python-fuelclient
