@@ -9,6 +9,7 @@ VENV=${WORKSPACE}_VENV
 virtualenv -p python2.6 "${VENV}"
 source "${VENV}/bin/activate"
 pip install -U pip
+pip install -U setuptools
 
 NODE_MODULES=${VENV}/node_modules
 
