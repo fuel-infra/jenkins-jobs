@@ -32,7 +32,7 @@
           description: 'Set --no-cache docker build option if true'
       - string:
           name: IGNORE_CHECKS
-          default: 'DL4001 DL3009 DL3008 DL3015'
+          default: 'DL3004 DL3008 DL3009 DL3015'
           description: "List of hadolint rules to skip separated by spaces. Ex: 'DL3003 DL3003'"
     scm:
       - main:
