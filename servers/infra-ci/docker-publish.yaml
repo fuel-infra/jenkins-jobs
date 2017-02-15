@@ -31,6 +31,10 @@
           name: DATE_TAG
           default: true
           description: 'set additional date tag for images to build'
+      - bool:
+          name: LATEST_TAG
+          default: false
+          description: 'set additional latest tag for images'
       - string:
           name: IMAGE
           default: ''
