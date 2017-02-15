@@ -7,6 +7,21 @@
       - '{version-id}.{test-type}.timer.{repo_type}':
          repo_type: stable
          # FIXME(aevseev) discuss schedule
+         #every day at 17:00  UTC (8 MSK)
+         #trigger: '0 17 * * *'
+         #
+         #every day at 17:15  UTC (8 MSK)
+         #trigger: '15 17 * * *'
+         #
+         #At 22:00 on every day-of-week from Monday through Friday
+         #trigger: '0 22 * * 1-5'
+         #
+         #At 04:05 on Sunday.
+         #trigger: '5 4 * * sun'
+         #OR
+         #trigger: '5 4 * * 7'
+         #
+         #
          trigger: '0 21 * * 3'
          enable_proposed: false
       - '{version-id}.{test-type}.timer.{repo_type}':
