@@ -5,6 +5,8 @@
       - shell:
           !include-raw-escape: './builders/docker-lint.sh'
       - shell:
+          !include-raw-escape: './builders/check_shell.sh'
+      - shell:
           !include-raw-escape: './builders/docker-build.sh'
       - trigger-builds:
         - project: 'docker-publish'
