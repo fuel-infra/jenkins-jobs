@@ -357,7 +357,7 @@
         - ovs_firewall
 
         - ovs_firewall_with_dpdk:
-            swarm-test/custom-overrides-plain-properties: |
+            system_tests/custom-overrides-plain-properties: |
               KVM_USE=true
 
         - test_tags
