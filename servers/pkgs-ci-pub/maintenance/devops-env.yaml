@@ -8,5 +8,9 @@
           bvt_job_url: ''
       - 'mitaka':
           bvt_job_url: 'https://ci.fuel-infra.org/job/9.0-community.main.ubuntu.bvt_2'
+      - 'newton':
+          bvt_job_url: 'https://ci.fuel-infra.org/job/10.0-community.main.ubuntu.bvt_2'
+      - 'ocata':
+          bvt_job_url: 'https://ci.fuel-infra.org/job/11.0-community.main.ubuntu.bvt_2'
     jobs:
       - 'devops.{version-id}.env'
