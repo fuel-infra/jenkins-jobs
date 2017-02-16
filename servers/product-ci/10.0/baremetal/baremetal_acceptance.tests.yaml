@@ -1,50 +1,51 @@
-- project:
-    name: 'MOS 10.0 baremetal tests'
-
-    test-type: 'baremetal'
-    repobranch: 'origin/stable/newton'
-    reponame: 'fuel-qa'
-    venvpath: '/home/jenkins/fuel-devops-3'
-    timeout: 2040
-    description: '10.0 baremetal acceptance test group'
-    dist: 'ubuntu'
-    weight: '1'
+- job-group:
+    name: '10.0-baremetal'
     version-id: '10.0'
+    test-type:  'baremetal'
+    system_tests/repobranch: 'origin/stable/newton'
+    system_tests/reponame: 'fuel-qa'
+    system_tests/venvpath: '/home/jenkins/fuel-devops-3'
+    system_tests/default_pool: '10.109.0.0/16:24'
+    system_tests/description: '{version-id} {test-type} test group'
+    system_tests/node: 'baremetal'
+    system_tests/timeout: '2040'
+    system_tests/job-weight: '7'
+
+    system_tests/common-overrides-plain-properties: |
+      ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+      FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+      KEEP_AFTER=yes
+      KEEP_BEFORE=no
+      BOOTSTRAP_TIMEOUT=1800
+
+    system_tests/pre-script: !include-raw-escape: 'builders/prepare_baremetal_system_test.sh'
 
     jobs:
 
-    - '10.0.baremetal.timers'
+    - common/system_tests:
 
-    - 'product-ci/test-reports':
-        version: '{version-id}'
-        repobranch: 'origin/stable/newton'
-        properties: |
-          TESTS_RUNNER={version-id}.{test-type}.runner
-          TESTRAIL_TEST_SUITE=[{version-id}][Fuel] Automated Baremetal Acceptance
-          TESTRAIL_MILESTONE={version-id}
-          LAUNCHPAD_MILESTONE=10.1
-
-    # customized
-    - '10.0.baremetal.{dist}.{testgroup}':
-        properties-content-overrides: |
+        system_tests/custom-overrides-plain-properties: |
           KVM_USE=True
-
-        environment: 'alpha'
-        admin_nic: 'eno2'
-        admin_vlan: '270'
+          BAREMETAL_ENV_NAME=alpha
+          NIC_FOR_ADMIN_BRIDGE=eno2
+          ADMIN_VLAN=270
+          ENV_NAME={test-type}.${{BAREMETAL_ENV_NAME}}
+          BAREMETAL_ADMIN_IFACE=${{NIC_FOR_ADMIN_BRIDGE}}.${{ADMIN_VLAN}}
+          DEVOPS_SETTINGS_TEMPLATE=/home/jenkins/devops_templates/baremetal_${{BAREMETAL_ENV_NAME}}.yaml
 
         testgroup:
         - 'sriov'
 
     # alpha group
-    - '10.0.baremetal.{dist}.{testgroup}':
-        properties-content-overrides: |
-          FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
-          ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+    - common/system_tests:
 
-        environment: 'alpha'
-        admin_nic: 'eno2'
-        admin_vlan: '270'
+        system_tests/custom-overrides-plain-properties: |
+          BAREMETAL_ENV_NAME=alpha
+          NIC_FOR_ADMIN_BRIDGE=eno2
+          ADMIN_VLAN=270
+          ENV_NAME={test-type}.${{BAREMETAL_ENV_NAME}}
+          BAREMETAL_ADMIN_IFACE=${{NIC_FOR_ADMIN_BRIDGE}}.${{ADMIN_VLAN}}
+          DEVOPS_SETTINGS_TEMPLATE=/home/jenkins/devops_templates/baremetal_${{BAREMETAL_ENV_NAME}}.yaml
 
         testgroup:
         - 'ceph_for_volumes_images_ephemeral_rados'
@@ -61,14 +62,15 @@
         - 'ceph_volumes_ephemeral'
 
     # beta group
-    - '10.0.baremetal.{dist}.{testgroup}':
-        properties-content-overrides: |
-          FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
-          ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+    - common/system_tests:
 
-        environment: 'beta'
-        admin_nic: 'eno2'
-        admin_vlan: '223'
+        system_tests/custom-overrides-plain-properties: |
+          BAREMETAL_ENV_NAME=beta
+          NIC_FOR_ADMIN_BRIDGE=eno2
+          ADMIN_VLAN=223
+          ENV_NAME={test-type}.${{BAREMETAL_ENV_NAME}}
+          BAREMETAL_ADMIN_IFACE=${{NIC_FOR_ADMIN_BRIDGE}}.${{ADMIN_VLAN}}
+          DEVOPS_SETTINGS_TEMPLATE=/home/jenkins/devops_templates/baremetal_${{BAREMETAL_ENV_NAME}}.yaml
 
         testgroup:
         - 'four_controllers'
@@ -86,14 +88,15 @@
         - 'shutdown_cinder_cluster'
 
     # gamma group
-    - '10.0.baremetal.{dist}.{testgroup}':
-        properties-content-overrides: |
-          FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
-          ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+    - common/system_tests:
 
-        environment: 'gamma'
-        admin_nic: 'eno2'
-        admin_vlan: '225'
+        system_tests/custom-overrides-plain-properties: |
+          BAREMETAL_ENV_NAME=gamma
+          NIC_FOR_ADMIN_BRIDGE=eno2
+          ADMIN_VLAN=225
+          ENV_NAME={test-type}.${{BAREMETAL_ENV_NAME}}
+          BAREMETAL_ADMIN_IFACE=${{NIC_FOR_ADMIN_BRIDGE}}.${{ADMIN_VLAN}}
+          DEVOPS_SETTINGS_TEMPLATE=/home/jenkins/devops_templates/baremetal_${{BAREMETAL_ENV_NAME}}.yaml
 
         testgroup:
         - 'add_delete_cinder'
