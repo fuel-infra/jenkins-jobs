@@ -20,6 +20,10 @@
           description: |
             'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
       - string:
+          name: FUEL_QA_COMMIT
+          default: 'stable/newton'
+          description: "fuel-qa commit"
+      - string:
           name: CUSTOM_VERSION
           default: ''
           description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
