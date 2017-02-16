@@ -14,12 +14,17 @@
     triggers:
         - timed: '{trigger}'
     builders:
+      - shell: rm -rf *.txt
+      - copyartifact:
+          project: $TEST_JOB
+          filter: '*.txt'
+          which-build: last-successful
       - shell:
           !include-raw-escape: builders/test.timer.sh
     publishers:
       - archive:
           allow-empty: false
-          artifacts: 'links.txt'
+          artifacts: '*.txt'
           latest-only: false
       - description-setter:
           regexp: "'Description string: (.*)'"
@@ -28,7 +33,7 @@
       - trigger-parameterized-builds:
         - project: '{version-id}.{test-type}.runner'
           condition: UNSTABLE_OR_BETTER
-          property-file: links.txt
+          property-file: properties_file.txt
           boolean-parameters:
             ENABLE_PROPOSED: '{enable_proposed}'
           triggerWithNoParameters: false
