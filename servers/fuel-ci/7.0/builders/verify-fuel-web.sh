@@ -8,6 +8,12 @@ export PATH=$PATH:$NPM_CONFIG_PREFIX/bin
 VENV=${WORKSPACE}_VENV
 virtualenv -p python2.6 "${VENV}"
 source "${VENV}/bin/activate"
+
+# Workaround for https://github.com/kennethreitz/requests/issues/3670
+pip uninstall requests
+pip install --upgrade requests
+
+# Upgrade too old core packages which can't be upgrade we requirements file
 pip install -U pip
 pip install -U setuptools
 
