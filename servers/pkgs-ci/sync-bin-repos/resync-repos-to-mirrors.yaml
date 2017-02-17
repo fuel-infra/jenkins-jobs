@@ -110,5 +110,11 @@
           srcpaths: |
             mcp-repos/1.0
           update-head: true
+
+      - underlay-mvp:
+          timer: 'H/20 * * * *'
+          srcpaths: |
+            extras/underlay-mvp-repos/ubuntu/11.0
+          update-head: true
     jobs:
       - '{mos_version}.resync-repos-to-mirrors'
