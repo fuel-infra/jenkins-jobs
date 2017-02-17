@@ -1,0 +1,20 @@
+- project:
+    name: 10.0.baremetal
+    jobs:
+      - '10.0-baremetal':
+          dist: 'ubuntu'
+
+- project:
+    name: 10.0.baremetal-helpers
+    jobs:
+      - '10.0.baremetal.timers'
+      - '10.0.baremetal.runner'
+      - 'product-ci/test-reports':
+          version: '10.0'
+          repobranch: 'origin/stable/newton'
+          test-type:  'baremetal'
+          properties: |
+            TESTS_RUNNER={version}.{test-type}.runner
+            TESTRAIL_TEST_SUITE=[{version}][Fuel] Automated Baremetal Acceptance
+            TESTRAIL_MILESTONE={version}
+            LAUNCHPAD_MILESTONE=10.1
