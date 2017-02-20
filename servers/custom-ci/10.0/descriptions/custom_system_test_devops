@@ -1,0 +1,5 @@
+<p>To run the test use "Build with Parameters" link from the left sidebar.
+<p>Fill in the ISO MAGNET_LINK and choose TEST_GROUP from the list.
+<p>You'll get e-mail notification with build result
+<p>Build description has form: "$TEST_GROUP on $NODE_NAME: $ENV_NAME"
+<p>After complettition of job env will be destroyed because of the bug with naming of bridges (https://mirantis.jira.com/browse/QA-1797).

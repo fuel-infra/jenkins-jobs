@@ -1,0 +1,108 @@
+- job:
+    name: 10.0.custom.system_test_devops
+    concurrent: true
+    description:
+      !include-raw: './descriptions/custom_system_test_devops'
+    logrotate:
+      artifactDaysToKeep: 10
+      daysToKeep: 30
+    node: devops-test
+    builders:
+      - inject:
+          properties-content: |
+            ADMIN_NODE_MEMORY=3072
+            SLAVE_NODE_MEMORY=3072
+      - inject:
+          properties-content: $ADDITIONAL_PARAMETERS
+      - shell: |
+          #!/bin/bash
+
+          set -ex
+
+          PLUGINS_URLS_FILE='plugins_urls'
+          echo "${PLUGINS}" > "${WORKSPACE}/${PLUGINS_URLS_FILE}"
+          wget --no-verbose --input-file="${WORKSPACE}/${PLUGINS_URLS_FILE}" --directory-prefix="${PLUGINS_DIR}"
+
+      - shell:
+          !include-raw: './builders/custom_system_test_devops.sh'
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          description: Magnet link for the ISO file
+      - string:
+          name: TEST_GROUP
+          description: |
+            Specify the name of a custom test group.
+      - string:
+          name: FUEL_QA_COMMIT
+          default: 'origin/stable/newton'
+          description: |
+            git-sha commit in any format, for example: origin/stable/newton or 90a7d02bf
+      - string:
+          name: fuel_qa_gerrit_commit
+          default: 'none'
+          description: 'Refspecs for commits in fuel-qa gerrit separated with spaces.
+            For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
+      - text:
+          name: PLUGINS
+          description: |
+            URLs for plugins to download one by line.
+            URL1</br>
+            URL2
+      - string:
+          name: PLUGINS_DIR
+          default: '$WORKSPACE/downloaded_plugins'
+          description: 'Absolute path to the directory where downloaded plugins will be stored'
+      - text:
+          name: ADDITIONAL_PARAMETERS
+          description: |
+            NAME1=VALUE1</br>
+            NAME1=VALUE1
+      - string:
+          name: MAKE_SNAPSHOT
+          default: 'false'
+      - string:
+          name: ENV_PREFIX
+          default: 10.0.custom.system_test_devops
+          description: Define env prefix name. This parameter should not be changed
+      - string:
+          name: FUEL_DEVOPS_COMMIT
+          default: 'none'
+          description: Define DevOps commit. If none - will be used from fuel-qa requirements.
+      - string:
+          name: fuel_devops_gerrit_commit
+          default: 'none'
+          description: 'Refspecs for commits in fuel-devops gerrit separated with spaces.
+            For example, refs/changes/55/242455/1 refs/changes/55/242455/2'
+
+    properties:
+      - authorization-allow-authorized
+      - heavy-job:
+          weight: 8
+      - throttle:
+          enabled: true
+          max-per-node: 1
+          option: project
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: '**/nosetests.xml,logs/*'
+          latest-only: false
+      - description-setter:
+          regexp: 'Description string: (.*)'
+          regexp-for-failed: 'Description string: (.*)'
+      - post-destroy-vms(build-timeout)
+      - email-ext:
+          default-subject: '$DEFAULT_SUBJECT'
+          failure: true
+          success: true
+          send-to:
+            - requester
+    scm:
+      - git:
+          branches:
+            - '$FUEL_QA_COMMIT'
+          url: 'https://github.com/openstack/fuel-qa.git'
+    wrappers:
+      - ansicolor:
+          colormap: xterm
