@@ -1,0 +1,27 @@
+- project:
+    name: verify-fuel-web-docs
+    docker_image: 'fuel-web-docs'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
+    envvars: ''
+    gerrit_project_pattern: 'openstack/fuel-web'
+    timed: '0 2 * * *'
+    publishers:
+      - email-default
+      - html-publisher:
+          allow-missing: true
+          keep-all: true
+          dir: 'docs/_build/html'
+          files: 'index.html'
+          name: 'Fuel Development Docs build results'
+    scm:
+      - gerrit-openstack:
+          repo: '{gerrit_project_pattern}'
+    jobs:
+      - 'dockerized-{name}':
+          gerrit_branches:
+            - branch-compare-type: ANT
+              branch-pattern: '**'
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'

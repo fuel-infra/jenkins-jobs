@@ -33,7 +33,7 @@
           description: 'set additional date tag for images to build'
       - bool:
           name: LATEST_TAG
-          default: false
+          default: true
           description: 'set additional latest tag for images'
       - string:
           name: IMAGE

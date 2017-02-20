@@ -1,0 +1,37 @@
+- project:
+    name: docker-dualcheck-fuel-astute
+    suffix: 'fuel-astute'
+    docker_image: 'fuel-astute'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-astute'
+    envvars: ''
+    gerrit_project_pattern: 'openstack/fuel-astute'
+    timed: ''
+    publishers:
+      - email-default
+      - ruby-metrics:
+          report-dir: 'coverage/rcov'
+          target:
+            - code-coverage:
+                healthy: 80
+                unhealth: 0
+                unstable: 0
+    gerrit_branches:
+      - branch-compare-type: ANT
+        branch-pattern: '*'
+    jobs:
+      - 'dockerized-{name}':
+          name: 'verify-{suffix}'
+          scm:
+            - gerrit-openstack:
+                repo: '{gerrit_project_pattern}'
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+      - 'dockerized-{name}':
+          name: 'gate-{suffix}'
+          scm:
+            - gerrit-openstack-branch:
+                repo: '{gerrit_project_pattern}'
+          gerrit_trigger_on:
+            - change-merged-event

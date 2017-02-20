@@ -1,0 +1,30 @@
+- project:
+    name: docker-dualcheck-python-fuelclient-on-fuel-web
+    docker_image: 'python-fuelclient-on-fuel-web'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
+    envvars: '-e JENKINS_URL=$JENKINS_URL'
+    gerrit_project_pattern: 'openstack/fuel-web'
+    timed: '0 13 * * *'
+    publishers:
+      - email-default
+    gerrit_branches:
+      - branch-compare-type: PLAIN
+        branch-pattern: 'master'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/8.0'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/mitaka'
+    gerrit_trigger_on:
+      - patchset-created-event
+      - comment-added-contains-event:
+          comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+    scm:
+      - gerrit-openstack:
+          repo: 'openstack/fuel-web'
+      - main-git:
+          basedir: python-fuelclient
+          reponame: python-fuelclient
+          repobranch: origin/master
+    jobs:
+      - 'dockerized-{name}':
+
