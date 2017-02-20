@@ -18,8 +18,15 @@ export VENV_PATH="/home/jenkins/venv-nailgun-tests-2.9"
 # Checking gerrit commits for fuel-devops
 if [[ ${FUEL_DEVOPS_COMMIT} != "none" ]] ; then
   export VENV_PATH="${WORKSPACE}/devops-venv"
+  # clean up previous run if exist
+  rm -rf "${VENV_PATH}"
+
   virtualenv "${VENV_PATH}"
   . "${VENV_PATH}/bin/activate"
+
+  # default pip is 1.4.1 which produces
+  # ImportError: No module named packaging.version error
+  pip install -U pip
 
   # Install fuel-devops
   git clone https://github.com/openstack/fuel-devops.git
