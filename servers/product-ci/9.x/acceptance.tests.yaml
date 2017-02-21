@@ -5,7 +5,7 @@
     swarm-test/reponame: 'fuel-qa'
     swarm-test/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
     swarm-test/default_pool: '10.109.0.0/16:24'
-    description: '9.1 acceptance test group'
+    swarm-test/description: 'Run Swarm Test {testgroup}'
     swarm-test/node: 'acceptance'
     swarm-test/timeout: '480'
     dist: ubuntu
