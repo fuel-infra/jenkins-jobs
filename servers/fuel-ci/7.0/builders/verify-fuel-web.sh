@@ -10,7 +10,11 @@ virtualenv -p python2.6 "${VENV}"
 source "${VENV}/bin/activate"
 
 # Upgrade too old core packages which can't be upgrade with requirements file
+pip install -U packaging
+pip install -U appdirs
+pip install -U six
 pip install -U setuptools
+pip list
 
 NODE_MODULES=${VENV}/node_modules
 
