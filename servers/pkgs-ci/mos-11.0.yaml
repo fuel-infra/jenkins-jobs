@@ -1,0 +1,72 @@
+- project:
+
+    name: 'mos-11.0'
+
+    project-name: 'mos'
+    project-version: '11.0'
+
+    deb-origin-release: 'Mirantis'
+    deb-origin-test: 'testing'
+
+    main_ubuntu_release: 'xenial'
+    openstack_release: 'Ubuntu 16.04'  # Important to use Xenial in fuel-qa framework
+
+    # FIXME(aevseev) Switch to stable/ocata
+    fuel-main-branch: 'master'
+    fuel-qa-branch: 'master'
+    fuel-namespace: 'openstack'
+
+    publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    repo-base-path: '/home/jenkins/pubrepos'
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+
+    # Configure flows
+    is-downgrade: 'false'
+    is-updates: 'false'
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: 'openstack-ci-jenkins'
+
+    # Install test repository
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'master'
+
+    # FIXME(aevseev) Switch to stable/ocata
+    perestroika-branch: 'master'
+
+    # Job slave nodes
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+    install-node: 'install-node'
+    systest-node: 'systest'
+
+    # Repository parameters for project
+    deb-dist-name: 'mos11.0'
+    deb-repo-path: '/mos-repos/ubuntu'
+    rpm-repo-path: '/mos-repos/centos/mos11.0-centos7'
+
+    # MOS repositories (build/test dependencies)
+    mos-deb-repo-path: '/mos-repos/ubuntu'
+    mos-rpm-repo-path: '/mos-repos/centos/mos11.0-centos7'
+
+
+    distro:
+    - xenial:
+        os: 'ubuntu'
+        pkg_type: 'deb'
+        spec_prefix_path: '/{distro}'
+    - centos7:
+        os: 'centos'
+        pkg_type: 'rpm'
+        spec_prefix_path: '/{distro}'
+
+    jobs:
+    - '{project-version}-pkg-{project-name}-build-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-install-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
+    - '{project-version}-pkg-{project-name}-systest-{os}-{distro}':
+        timer: 'H */12 * * *'
+    - '{project-version}-pkg-{project-name}-republish-{os}-{distro}'

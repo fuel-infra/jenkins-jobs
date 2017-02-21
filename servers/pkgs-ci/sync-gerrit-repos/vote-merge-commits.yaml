@@ -11,6 +11,8 @@
         timer: ''
     - '10.0':
         git-branch: '10.0/newton'
+    - '11.0':
+        git-branch: '11.0/ocata'
 
     # Syncronization schedule
     timer: 'H */12 * * *'  # twice per day
