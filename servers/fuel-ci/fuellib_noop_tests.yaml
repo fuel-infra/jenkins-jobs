@@ -80,7 +80,6 @@
               branch-pattern: 'stable/newton'
       - fuellib_puppet4:
           runner_script: 'utils/jenkins/fuel_noop_tests4.sh'
-          non_voting: true
           branches:
             - branch-compare-type: PLAIN
               branch-pattern: 'master'
