@@ -285,9 +285,7 @@
             system_tests/custom-overrides-plain-properties: |
               KVM_USE=true
 
-        - custom_graph:
-            # FIXME(aevseev) test unicode fix for fuel-devops
-            system_tests/node: 'devops-unicode'
+        - custom_graph
 
         - support_dpdk_bond:
             system_tests/custom-overrides-plain-properties: |
