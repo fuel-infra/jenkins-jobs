@@ -12,9 +12,7 @@
     dst-branch: 9.0
 
     # Syncronization schedule
-    # FIXME(aevseev) Disabled due to HCF. To be reverted after release.
-    #timer: 'H 4 * * *'
-    timer: ''
+    timer: 'H 4 * * *'
 
     # Gerrit parameters
     gerrit-host: 'review.fuel-infra.org'
