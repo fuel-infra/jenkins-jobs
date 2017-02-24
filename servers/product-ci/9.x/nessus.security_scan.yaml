@@ -9,6 +9,16 @@
     swarm-test/node: 'security'
     swarm-test/timeout: '480'
     dist: ubuntu
+    swarm-test/description: '<p>Nessus security scan</p>
+                 <pre style="font-size: 10px">
+                 Case: nessus
+                 https://blueprints.launchpad.net/fuel/+spec/security-scanning-nessus
+                 </pre>
+
+                 <p>
+                 <b>Ownership:</b> Issues with this job are tracked by QA team.
+                 <p>
+                 <b>Contacts:</b> aheczko, fuel-qa'
 
     swarm-test/job-weight: '7'
 

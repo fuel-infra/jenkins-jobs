@@ -9,6 +9,7 @@
     swarm-test/node: 'systest'
     swarm-test/timeout: '480'
     dist: ubuntu
+    swarm-test/description: 'Run Swarm Test {testgroup}'
 
     # fixme: need additional section in template for common overrides
     swarm-test/custom-overrides-plain-properties: |

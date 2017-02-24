@@ -21,7 +21,7 @@
     swarm-test/make-snapshot: 'false'
 
 
-    description: 'Run Swarm Test {testgroup}'
+    description: '{swarm-test/description}'
     node: '{swarm-test/node}'
     concurrent: true
 
