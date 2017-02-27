@@ -20,7 +20,7 @@
     jobs:
 
     - product-ci/fuel-plugin-murano/templates/murano-snapshot:
-        timer: '0 0,6,12,18 * * *'
+        timer: ''
 
     - product-ci/fuel-plugin-murano/templates/murano-bvt:
         testgroup: deploy_murano_plugin
@@ -46,7 +46,7 @@
             murano-swarm-test/job-weight: '11'
 
     - product-ci/fuel-plugin-murano/templates/murano-timer:
-        timer: '0 21 * * 1-7'
+        timer: ''
 
     - product-ci/fuel-plugin-murano/templates/murano-runner
 
