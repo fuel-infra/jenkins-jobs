@@ -11,9 +11,8 @@
     main_ubuntu_release: 'xenial'
     openstack_release: 'Ubuntu 16.04'  # Important to use Xenial in fuel-qa framework
 
-    # FIXME(aevseev) Switch to stable/ocata
-    fuel-main-branch: 'master'
-    fuel-qa-branch: 'master'
+    fuel-main-branch: 'stable/ocata'
+    fuel-qa-branch: 'stable/ocata'
     fuel-namespace: 'openstack'
 
     publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
@@ -33,8 +32,7 @@
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'master'
 
-    # FIXME(aevseev) Switch to stable/ocata
-    perestroika-branch: 'master'
+    perestroika-branch: 'stable/ocata'
 
     # Job slave nodes
     build-node: 'new-builder'
