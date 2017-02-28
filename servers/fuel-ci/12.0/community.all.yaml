@@ -1,22 +1,22 @@
 - project:
-    name: 'Community 11.0 iso'
-    version: '11.0'
-    branch: 'stable/ocata'
+    name: 'Community 12.0 iso'
+    version: '12.0'
+    branch: 'master'
     qa_branch: '{branch}'
     ubuntu_dist: 'xenial'
     mod: '-community'
     bvt-mail: 'ci+alert@mirantis.com'
     jobs:
       - 'community-{version}{mod}.all':
-          description: "Build: 11.0 iso"
+          description: "Build: 12.0 iso"
           email: '{bvt-mail}'
           timer: 'H 5-23/6 * * *'
           variables: |
             CENTOS_VERSION=7.3.1611
-            MOS_CENTOS_ROOT=/mos-repos/centos/mos11.0-centos7/
-            MOS_UBUNTU_TARGET=11.0.target.txt
+            MOS_CENTOS_ROOT=/mos-repos/centos/mos-master-centos7/
+            MOS_UBUNTU_TARGET=master.target.txt
             MOS_UBUNTU_ROOT=/mos-repos/ubuntu/
-            MIRROR_MOS_UBUNTU_SUITE=mos11.0
+            MIRROR_MOS_UBUNTU_SUITE=mos-master
             UBUNTU_RELEASE=xenial
             UBUNTU_KERNEL_FLAVOR=lts-xenial
       - 'community-{version}{mod}.test_all':
