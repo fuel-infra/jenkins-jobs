@@ -6,6 +6,7 @@ set -o pipefail
 get_deb_snapshot() {
     # Remove quotes from input argument(s)
     local INPUT
+    local snapshot
     INPUT=( $(tr -d \" <<< "${@}") )
     # Ubuntu repos may have format "[deb] URL DISTRO COMPONENT1 [COMPONENTN][,PRIORITY]"
     local deb_prefix=''
@@ -23,13 +24,14 @@ get_deb_snapshot() {
     repo_version=${repo_url##*/}
     repo_url=${repo_url%/*}
     # Get snapshot
-    local snapshot=$(curl -fLsS "${repo_url}/snapshots/${repo_version}-latest.target.txt" | sed '1p; d')
+    snapshot=$(curl -fLsS "${repo_url}/snapshots/${repo_version}-latest.target.txt" | sed '1p; d')
     echo "${deb_prefix}${repo_url}/snapshots/${snapshot} ${dist_name} ${components}"
 }
 
 get_rpm_snapshot() {
     # Remove quotes from input argument
     local INPUT
+    local snapshot
     INPUT=$(tr -d \" <<< "${1}")
     # Centos repos may have format "[NAME,]URL[,PRIORITY]"
     read -r repo_name repo_url priority <<< "${INPUT//,/ }"
@@ -54,7 +56,7 @@ get_rpm_snapshot() {
     repo_component="${repo_url##*/}"
     repo_url=${repo_url%/*}
     # Get snapshot
-    local snapshot="$(curl -fLsS "${repo_url}/snapshots/${repo_component}-latest.target.txt" | sed '1p; d')"
+    snapshot="$(curl -fLsS "${repo_url}/snapshots/${repo_component}-latest.target.txt" | sed '1p; d')"
     echo "${repo_name:+${repo_name},}${repo_url}/snapshots/${snapshot}/x86_64${priority:+,${priority}}"
 }
 
@@ -254,7 +256,9 @@ else
 fi
 
 # Clear stale package cache
-rm -rvf "${UPDATE_FUEL_PATH:-~/fuel/pkgs}"
+# Must be NOT quoted to expand path using tilde and/or shell variables
+# shellcheck disable=SC2086
+rm -rvf ${UPDATE_FUEL_PATH:-~/fuel/pkgs}
 
 # If UPDATE_MASTER is true, given repository is used for package updates as is
 # If UPDATE_FUEL is true, packages from given URL are downloaded and installed as needed by test cases
