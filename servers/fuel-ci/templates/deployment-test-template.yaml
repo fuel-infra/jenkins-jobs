@@ -106,16 +106,16 @@
           properties-content: '{properties}'
       - shell:
           # check and prepare testing environment
-          !include-raw-escape: builders/deployment-env.sh
+          !include-raw-escape: ../builders/deployment-env.sh
       - inject:
           # load the parameter used in deployment test
           properties-file: 'deployment.properties'
       - shell:
           # build package
-          !include-raw-escape: builders/build-pkgs.sh
+          !include-raw-escape: ../builders/build-pkgs.sh
       - shell:
           # run deployment test
-          !include-raw-escape: builders/test-pkgs.sh
+          !include-raw-escape: ../builders/test-pkgs.sh
 
     publishers:
       - archive:
