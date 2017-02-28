@@ -25,8 +25,7 @@
     install-scm-repo: 'infra/ci-test-request'
     install-scm-branch: 'master'
 
-    # FIXME(aevseev) Switch to stable/ocata
-    perestroika-branch: 'master'
+    perestroika-branch: 'stable/ocata'
 
     # Job slave nodes
     build-node: 'new-builder'
