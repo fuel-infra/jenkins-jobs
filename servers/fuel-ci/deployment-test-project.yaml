@@ -3,7 +3,7 @@
     version-id: master
     projectbranch: master
     ubuntu_dist: 'xenial'
-    bvt_job_url: 'https://ci.fuel-infra.org/job/11.0-community.main.ubuntu.bvt_2'
+    bvt_job_url: 'https://ci.fuel-infra.org/job/12.0-community.main.ubuntu.bvt_2'
     dist: ubuntu
     properties: ''
     venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
