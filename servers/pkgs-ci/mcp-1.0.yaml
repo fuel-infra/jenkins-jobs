@@ -43,11 +43,11 @@
 
     # Repository parameters for project
     deb-dist-name: 'mitaka'
-    deb-repo-path: '/mcp-repos'
+    deb-repo-path: '/mcp-repos/{project-version}'
     rpm-repo-path: '/mcp-repos'
 
     # MOS repositories (build/test dependencies)
-    mos-deb-repo-path: '/mcp-repos'
+    mos-deb-repo-path: '/mcp-repos/{project-version}'
     mos-rpm-repo-path: '/mcp-repos'
 
     distro:
