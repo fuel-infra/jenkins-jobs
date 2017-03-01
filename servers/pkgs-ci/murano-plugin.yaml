@@ -40,13 +40,12 @@
 
     # Repository parameters for project
     deb-dist-name: 'mos9.0'
-    deb-repo-path: '/extras/murano-plugin-repos/${{BIN_REPO_SUBPATH}}ubuntu'
+    deb-repo-path: '/extras/murano-plugin-repos/${{BIN_REPO_SUBPATH}}ubuntu/{project-version}'
     rpm-repo-path: '/extras/murano-plugin-repos/${{BIN_REPO_SUBPATH}}centos/mos9.0-centos7'
 
     # MOS repositories (build/test dependencies)
     repo-host: '{publish-repo-host}'
-    mos_version: '{project-version}'
-    mos-deb-repo-path: '/mos-repos/ubuntu'
+    mos-deb-repo-path: '/mos-repos/ubuntu/{project-version}'
     mos-rpm-repo-path: '/mos-repos/centos/mos9.0-centos7'
 
     # Directory for scm fuel-plugin-murano

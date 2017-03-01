@@ -33,10 +33,10 @@
           # New lines will become spaces. So don't add newline near "|" because it possibly will break parsing inside scripts
           default: >-
             deb
-            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name} main restricted,1200|deb
-            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-security main restricted,1201|deb
-            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-proposed main restricted,1202|deb
-            http://{repo-host}/{mos-deb-repo-path}/{mos_version} {deb-dist-name}-updates  main restricted,1201
+            http://{repo-host}/{mos-deb-repo-path} {deb-dist-name} main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path} {deb-dist-name}-security main restricted,1201|deb
+            http://{repo-host}/{mos-deb-repo-path} {deb-dist-name}-proposed main restricted,1202|deb
+            http://{repo-host}/{mos-deb-repo-path} {deb-dist-name}-updates  main restricted,1201
           description: >-
             <p>
             Additional deb repos. Note, that empty repos will bring some errors into console output.
@@ -112,7 +112,7 @@
 
       - inject-devops-env:
           # add FUEL_QA_COMMIT MAGNET_LINK UBUNTU_MIRROR_ID for tests
-          version: '{mos_version}'
+          version: '{project-version}'
 
       - inject:
           properties-content: |

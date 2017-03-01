@@ -34,11 +34,11 @@
           # New lines will become spaces. So don't add newline near "|" because it possibly will break parsing inside scripts
           default: >-
             deb
-            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name} main restricted,1200|deb
-            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name}-holdback main restricted,1200|deb
-            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name}-security main restricted,1200|deb
-            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name}-proposed main restricted,1200|deb
-            http://{repo-host}/{mos-deb-repo-path}/{project-version} {deb-dist-name}-updates  main restricted,1200
+            http://{repo-host}/{mos-deb-repo-path} {deb-dist-name} main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path} {deb-dist-name}-holdback main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path} {deb-dist-name}-security main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path} {deb-dist-name}-proposed main restricted,1200|deb
+            http://{repo-host}/{mos-deb-repo-path} {deb-dist-name}-updates  main restricted,1200
           description: >-
             <p>
             Additional deb repos. Note, that empty repos will bring some errors into console output.
@@ -96,7 +96,7 @@
             REMOTE_REPO_HOST={repo-host}
 
             DEB_DIST_NAME={deb-dist-name}
-            DEB_REPO_PATH={mos-deb-repo-path}/{project-version}
+            DEB_REPO_PATH={mos-deb-repo-path}
             RPM_REPO_PATH={mos-rpm-repo-path}/os/x86_64/
       - inject:
           # Set defaults which could be reinjected

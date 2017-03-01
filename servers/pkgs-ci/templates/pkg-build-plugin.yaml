@@ -63,6 +63,9 @@
       - extended-bash:
           headers: ''
           script: |
+            _MOS_DEB_REPO_PATH="{mos-deb-repo-path}"
+            BASE_DEB_REPO_PATH=${{_MOS_DEB_REPO_PATH%/*}}
+
             inject PROJECT_NAME         "{project-name}"
             inject PROJECT_VERSION      "{project-version}"
 
@@ -80,10 +83,10 @@
             inject SPEC_PREFIX_PATH     "{spec_prefix_path}"
 
             inject BASE_RPM_REPO_PATH   "{mos-rpm-repo-path}"
-            inject BASE_DEB_REPO_PATH   "{mos-deb-repo-path}"
+            inject BASE_DEB_REPO_PATH   ${{BASE_DEB_REPO_PATH}}
             inject DEB_DIST_NAME        "{deb-dist-name}"
 
-            inject DEB_REQUEST_REPO_PATH          "{deb-repo-path}/{project-version}"
+            inject DEB_REQUEST_REPO_PATH          "{deb-repo-path}"
             inject RPM_REQUEST_OS_REPO_PATH       "{rpm-repo-path}/os"
             inject RPM_REQUEST_HOTFIX_REPO_PATH   "{rpm-repo-path}/hotfix"
             inject RPM_REQUEST_SECURITY_REPO_PATH "{rpm-repo-path}/security"
@@ -94,12 +97,12 @@
             inject GERRIT_PORT          "{gerrit-port}"
             inject GERRIT_USER          "{gerrit-user}"
 
-            inject ADDITIONAL_EXTRAREPO_DEB   "http://{publish-repo-host}{deb-repo-path}/{project-version} {deb-dist-name} main restricted"
+            inject ADDITIONAL_EXTRAREPO_DEB   "http://{publish-repo-host}{deb-repo-path} {deb-dist-name} main restricted"
             inject ADDITIONAL_EXTRAREPO_RPM   "deps,http://{publish-repo-host}{rpm-repo-path}/os/x86_64"
 
             inject PLUGIN_RELEASE_TIMESTAMP   "{plugin_release_timestamp}"
 
-            _target_repo_url="http://${{MIRROR_HOST}}/{deb-repo-path}/{project-version}"
+            _target_repo_url="http://${{MIRROR_HOST}}/{deb-repo-path}"
             if [[ -n ${{DEB_REPO_URL}} ]]; then
               _review_repo_url="$(clean_url "${{DEB_REPO_URL}}" | cut -d ' ' -f 1)"
             fi

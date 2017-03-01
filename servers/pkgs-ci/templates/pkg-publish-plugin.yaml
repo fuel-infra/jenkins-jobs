@@ -48,7 +48,7 @@
             inject REPO_REQUEST_PATH_PREFIX "review/"
             inject REPO_BASE_PATH           "{repo-base-path}"
 
-            inject DEB_REPO_PATH            "{deb-repo-path}/{project-version}"
+            inject DEB_REPO_PATH            "{deb-repo-path}"
             inject DEB_DIST_NAME            "{deb-dist-name}"
             inject DEB_HOTFIX_DIST_NAME     "{deb-dist-name}-hotfix"
             inject DEB_PROPOSED_DIST_NAME   "{deb-dist-name}-proposed"
