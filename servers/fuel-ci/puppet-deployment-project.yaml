@@ -64,7 +64,7 @@
 - project:
     name: 'Ocata fuel-library puppet-openstack deployment tests'
     ubuntu_dist: 'xenial'
-    projectpackage: 'fuel-library10.0'
+    projectpackage: 'fuel-library11.0'
     deb-mirror-base-name: '11.0 mos11.0'
     rpm-mirror-base-name: 'mos11.0-centos7'
     branch-id: 'ocata'
