@@ -78,6 +78,8 @@
               branch-pattern: 'stable/mitaka'
             - branch-compare-type: PLAIN
               branch-pattern: 'stable/newton'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/ocata'
       - fuellib_puppet4:
           runner_script: 'utils/jenkins/fuel_noop_tests4.sh'
           branches:

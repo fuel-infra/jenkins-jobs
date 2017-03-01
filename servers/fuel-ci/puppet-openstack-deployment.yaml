@@ -203,6 +203,39 @@
             BUILD_IMAGES=true
 
 - project:
+    name: 'Ocata fuel-library puppet-openstack deployment tests'
+    ubuntu_dist: 'xenial'
+    projectpackage: 'fuel-library10.0'
+    deb-mirror-base-name: '11.0 mos11.0'
+    rpm-mirror-base-name: 'mos11.0-centos7'
+    branch-id: 'ocata'
+    fuellib-branch: 'stable/ocata'
+    fuelmirror-branch: 'stable/ocata'
+    puppet-branch: 'stable/ocata'
+    puppet-projects-regexp: '{puppet_openstack_projects_regexp}'
+    gerrit-macro: 'puppet-openstack-request-ocata'
+    properties: ''
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    timeout: 200
+    jobs:
+      # NOTE(mkarpin): as workaround for https://bugs.launchpad.net/fuel/+bug/1623394
+      # memory is set to 4096, to unblock CI of master in upstream
+      - '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
+          dist: ubuntu
+          testgroup: smoke_neutron
+          properties: |
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+            SLAVE_NODE_MEMORY=4096
+
+      - '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}':
+          dist: ubuntu
+          testgroup: review_in_fuel_library
+          properties: |
+            CUSTOM_ENV=true
+            BUILD_IMAGES=true
+
+- project:
     name: 'Master fuel-library puppet-openstack deployment tests'
     ubuntu_dist: 'xenial'
     projectpackage: 'fuel-library10.0'

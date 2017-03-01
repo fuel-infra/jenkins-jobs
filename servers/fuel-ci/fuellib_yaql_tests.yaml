@@ -43,6 +43,8 @@
                   branch-pattern: 'stable/mitaka'
                 - branch-compare-type: PLAIN
                   branch-pattern: 'stable/newton'
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'stable/ocata'
           skip-vote:
             successful: true
             failed: true
