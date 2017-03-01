@@ -173,6 +173,30 @@
           - '{repobranch}'
          basedir: '{basedir}'
 
+- scm:
+    name: gerrit-openstack
+    scm:
+      - git:
+          url: 'https://review.openstack.org/{repo}.git'
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'https://review.openstack.org/{repo}.git'
+          choosing-strategy: gerrit
+
+
+- scm:
+    name: gerrit-openstack-branch
+    scm:
+      - git:
+          url: https://review.openstack.org/{repo}.git
+          branches:
+            - $GERRIT_BRANCH
+          refspec: refs/heads/$GERRIT_BRANCH
+          choosing-strategy: default
+
 ########################################################################
 # Section: permissions
 ########################################################################

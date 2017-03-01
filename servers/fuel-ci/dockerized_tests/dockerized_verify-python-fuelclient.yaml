@@ -1,0 +1,25 @@
+- project:
+    name: 'verify-python-fuelclient'
+    docker_image: 'python-fuelclient'
+    volumes: '$WORKSPACE:/opt/jenkins/python-fuelclient'
+    envvars: '-e JENKINS_URL=$JENKINS_URL'
+    gerrit_project_pattern: 'openstack/python-fuelclient'
+    timed: '0 13 * * *'
+    publishers:
+      - email-default
+    scm:
+      - gerrit-openstack:
+          repo: '{gerrit_project_pattern}'
+    jobs:
+      - 'dockerized-{name}':
+          gerrit_branches:
+            - branch-compare-type: PLAIN
+              branch-pattern: 'master'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/8.0'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/mitaka'
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'

@@ -1,0 +1,32 @@
+- project:
+    name: 'fuel_noop_fixtures_tests'
+    docker_image: 'fuel_noop_fixtures'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
+    envvars: ''
+    gerrit_project_pattern: 'openstack/fuel-noop-fixtures'
+    timed: 'H 2 * * *'
+    publishers:
+      - email-default
+    scm:
+      - gerrit-openstack:
+          repo: '{gerrit_project_pattern}'
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/openstack/fuel-noop-fixtures.git
+          choosing-strategy: gerrit
+          basedir: tests/noop/fuel-noop-fixtures
+    jobs:
+      - 'dockerized-{name}':
+          gerrit_branches:
+            - branch-compare-type: PLAIN
+              branch-pattern: 'master'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/mitaka'
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'

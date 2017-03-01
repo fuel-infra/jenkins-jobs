@@ -1,0 +1,27 @@
+- project:
+    name: 'fuellib_noop_tests'
+    docker_image: 'fuel-ci/fuellib_noop'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
+    envvars: ''
+    gerrit_project_pattern: 'openstack/fuel-library'
+    gerrit_trigger_on:
+      - patchset-created-event
+      - comment-added-contains-event:
+          comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+    timed: 'H 2 * * *'
+    publishers:
+      - email-default
+    scm:
+      - gerrit-openstack:
+          repo: '{gerrit_project_pattern}'
+    gerrit_branches:
+      - branch-compare-type: REG_EXP
+        branch-pattern: '^(?!stable/(?:5\.0|5\.1|6\.0|6\.1|7\.0)).*$'
+    jobs:
+      - 'dockerized-{name}':
+          test_variables: |
+            SCRIPT_PATH='utils/jenkins/fuel_noop_tests.sh'
+      - 'dockerized-{name}':
+          name: fuellib_puppet4_noop_tests
+          test_variables: |
+            SCRIPT_PATH='utils/jenkins/fuel_noop_tests4.sh'

@@ -1,0 +1,21 @@
+- project:
+    name: docker-dualcheck-fuel-stats
+    docker_image: 'fuel-stats'
+    volumes: '$WORKSPACe:/opt/jenkins/fuel-stats'
+    envvars: ''
+    gerrit_project_pattern: 'openstack/fuel-stats'
+    timed: 'H 2 * * *'
+    publishers:
+      - email-default
+    scm:
+      - gerrit-openstack:
+          repo: '{gerrit_project_pattern}'
+    jobs:
+      - 'dockerized-{name}':
+          gerrit_branches:
+            - branch-compare-type: ANT
+              branch-pattern: '**'
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'

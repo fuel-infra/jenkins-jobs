@@ -1,0 +1,59 @@
+- job-template:
+    name: 'dockerized-{name}'
+    node: 'dockerized-tests'
+    description: |
+      Dockerized test
+      Job is crrently works in non-voting mode
+    concurrent: true
+
+    # default empty values, may be overwritten in projects
+    gerrit_project_pattern: ''
+    non_voting: 'true'
+    scm: ''
+    test_variables: ''
+    timed: ''
+
+    # job parameters
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+          description: Refs used in the test
+      - text:
+          name: TEST_VARIABLES
+          default: '{test_variables}'
+          description: Test variables
+
+    scm: '{obj:scm}'
+
+    triggers:
+      - gerrit:
+          trigger-on: '{obj:gerrit_trigger_on}'
+          server-name: defaultServer
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: '{gerrit_project_pattern}'
+              branches: '{obj:gerrit_branches}'
+              custom-url: '* $JOB_NAME $BUILD_URL'
+              skip-vote:
+                successful: '{non_voting}'
+                failed: '{non_voting}'
+                unstable: '{non_voting}'
+                notbuilt: '{non_voting}'
+      - timed: '{timed}'
+
+    builders:
+      - inject: # docker common parameters
+          properties-content: |
+            DOCKER_IMAGE={docker_image}
+            VOLUMES={volumes}
+            ENVVARS={envvars}
+
+      - inject: # test parameters
+          properties-content: |
+            $TEST_VARIABLES
+
+      - shell: # script
+          !include-raw-escape: ../dockerized_tests/builders/run_docker.sh
+
+    publishers: '{obj:publishers}'
