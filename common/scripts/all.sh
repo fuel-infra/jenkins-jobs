@@ -46,15 +46,6 @@ LOCATION=${LOCATION_FACT:-bud}
 
 if [ -z "${CLOSEST_MIRROR_URL}" ]; then
     case "${LOCATION}" in
-        srt)
-            CLOSEST_MIRROR_URL="http://osci-mirror-srt.srt.mirantis.net"
-            ;;
-        msk)
-            CLOSEST_MIRROR_URL="http://osci-mirror-msk.msk.mirantis.net"
-            ;;
-        hrk)
-            CLOSEST_MIRROR_URL="http://osci-mirror-kha.kha.mirantis.net"
-            ;;
         poz|bud|budext|cz)
             CLOSEST_MIRROR_URL="http://mirror.seed-cz1.fuel-infra.org"
             ;;
