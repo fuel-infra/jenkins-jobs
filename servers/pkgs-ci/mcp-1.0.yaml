@@ -43,18 +43,24 @@
 
     # Repository parameters for project
     deb-dist-name: 'mitaka'
-    deb-repo-path: '/mcp-repos/{project-version}'
     rpm-repo-path: '/mcp-repos'
 
     # MOS repositories (build/test dependencies)
-    mos-deb-repo-path: '/mcp-repos/{project-version}'
     mos-rpm-repo-path: '/mcp-repos'
 
     distro:
+    - trusty:
+        os: 'ubuntu'
+        pkg_type: 'deb'
+        spec_prefix_path: '/{distro}'
+        deb-repo-path: '/mcp-repos/{project-version}/{distro}'
+        mos-deb-repo-path: '/mcp-repos/{project-version}/{distro}'
     - xenial:
         os: 'ubuntu'
         pkg_type: 'deb'
         spec_prefix_path: '/{distro}'
+        deb-repo-path: '/mcp-repos/{project-version}/{distro}'
+        mos-deb-repo-path: '/mcp-repos/{project-version}/{distro}'
 
     jobs:
       - '{project-version}-pkg-{project-name}-build-{os}-{distro}'
