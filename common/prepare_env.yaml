@@ -11,6 +11,12 @@
 
     parameters:
     - bool:
+        name: 'drop_all_envs_2_9_x'
+        default: false
+        description: |
+           This flag will trigger "dos.py erase" and full recreation of the database!!!
+           Use ONLY for switching between 2.9 and 3.0 devops
+    - bool:
         name: 'update_devops_2_9_x'
         default: true
     - bool:

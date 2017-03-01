@@ -95,7 +95,26 @@ function download_images () {
     done
 }
 
+function drop_all_envs () {
+    # for moving between 2.9 and 3.0 devops we have to wipe all environments
+    # for now the name of venv is semi-hardcoded like function above
+    local VIRTUAL_ENV="/home/jenkins/venv-nailgun-tests${1}"
+    source "${VIRTUAL_ENV}/bin/activate"
+      dos.py list | tail -n +3 | xargs -tI% dos.py erase %
+    deactivate
+
+    sudo -u postgres dropdb fuel_devops
+    sudo -u postgres createdb fuel_devops -O fuel_devops
+}
+
 ACT=
+
+# DevOps 2.9.x
+if [[ ${drop_all_envs_2_9_x} == "true" ]]; then
+    drop_all_envs "-2.9"
+    ACT=1
+fi
+
 # DevOps 2.5.x
 if [[ ${update_devops_2_5_x} == "true" ]]; then
     update_devops "" "fuel-main" "stable/6.1"
