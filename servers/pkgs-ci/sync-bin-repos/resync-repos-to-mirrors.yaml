@@ -120,7 +120,8 @@
       - mcp:
           timer: 'H/20 * * * *'
           srcpaths: |
-            mcp-repos/1.0
+            mcp-repos/1.0/trusty
+            mcp-repos/1.0/xenial
           update-head: true
 
       - underlay-mvp:
