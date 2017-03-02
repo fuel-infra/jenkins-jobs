@@ -11,7 +11,7 @@
     rpm-mirror-base-name: 'mos-master-centos7'
     timeout: 200
     non_voting: false
-    env_update_time: '0 0 *  * 6'
+    env_update_time: 'H 0 *  * *'
 
     project:
       - fuel-agent:
@@ -118,7 +118,7 @@
     rpm-mirror-base-name: 'mos11.0-centos7'
     timeout: 200
     non_voting: false
-    env_update_time: '0 0 *  * 6'
+    env_update_time: 'H 0 *  * *'
 
     project:
       - fuel-agent:
