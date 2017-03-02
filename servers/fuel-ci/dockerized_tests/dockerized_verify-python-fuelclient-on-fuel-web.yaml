@@ -5,8 +5,6 @@
     envvars: '-e JENKINS_URL=$JENKINS_URL'
     gerrit_project_pattern: 'openstack/fuel-web'
     timed: '0 13 * * *'
-    publishers:
-      - email-default
     gerrit_branches:
       - branch-compare-type: PLAIN
         branch-pattern: 'master'

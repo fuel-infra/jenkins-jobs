@@ -5,8 +5,6 @@
     envvars: ''
     gerrit_project_pattern: 'openstack/fuel-stats'
     timed: 'H 2 * * *'
-    publishers:
-      - email-default
     scm:
       - gerrit-openstack:
           repo: '{gerrit_project_pattern}'

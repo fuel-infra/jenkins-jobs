@@ -1,0 +1,38 @@
+- project:
+    name: 'docker-verify-fuel-qa-docs'
+    docker_image: 'fuel-qa-docs'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-qa'
+    envvars: ''
+    gerrit_project_pattern: 'openstack/fuel-qa'
+    timed: 'H 2 * * *'
+    job_publishers:
+      - email-default
+      - html-publisher:
+          name: 'Fuel QA Docs build results'
+          dir: 'doc/_build/html'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+          wrapper-name: 'htmlpublisher-wrapper.html'
+    gerrit_trigger_on:
+      - patchset-created-event
+      - comment-added-contains-event:
+          comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+    gerrit_branches:
+      - branch-compare-type: ANT
+        branch-pattern: '**'
+    job_wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+      - ssh-agent-credentials:
+          users:
+            - 'e0991f76-20e6-4617-9f6d-cf85600789fe'
+    scm:
+      - gerrit-openstack:
+          repo: '{gerrit_project_pattern}'
+    jobs:
+      - 'dockerized-{name}':

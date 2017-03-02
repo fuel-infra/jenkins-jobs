@@ -9,8 +9,6 @@
       - comment-added-contains-event:
           comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
     timed: 'H 2 * * *'
-    publishers:
-      - email-default
     scm:
       - gerrit-openstack:
           repo: '{gerrit_project_pattern}'

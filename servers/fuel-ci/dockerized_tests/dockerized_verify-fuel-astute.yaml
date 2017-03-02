@@ -6,7 +6,7 @@
     envvars: ''
     gerrit_project_pattern: 'openstack/fuel-astute'
     timed: ''
-    publishers:
+    job_publishers:
       - email-default
       - ruby-metrics:
           report-dir: 'coverage/rcov'

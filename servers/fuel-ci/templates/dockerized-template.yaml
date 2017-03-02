@@ -12,6 +12,11 @@
     scm: ''
     test_variables: ''
     timed: ''
+    job_wrappers:
+      - ansicolor:
+          colormap: css
+    job_publishers:
+      - email-default
 
     # job parameters
     parameters:
@@ -25,6 +30,8 @@
           description: Test variables
 
     scm: '{obj:scm}'
+    publishers: '{obj:job_publishers}'
+    wrappers: '{obj:job_wrappers}'
 
     triggers:
       - gerrit:
@@ -55,5 +62,3 @@
 
       - shell: # script
           !include-raw-escape: ../dockerized_tests/builders/run_docker.sh
-
-    publishers: '{obj:publishers}'

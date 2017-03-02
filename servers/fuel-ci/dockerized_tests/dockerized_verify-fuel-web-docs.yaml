@@ -5,7 +5,7 @@
     envvars: ''
     gerrit_project_pattern: 'openstack/fuel-web'
     timed: '0 2 * * *'
-    publishers:
+    job_publishers:
       - email-default
       - html-publisher:
           allow-missing: true

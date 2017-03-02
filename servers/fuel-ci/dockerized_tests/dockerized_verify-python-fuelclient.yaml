@@ -5,8 +5,6 @@
     envvars: '-e JENKINS_URL=$JENKINS_URL'
     gerrit_project_pattern: 'openstack/python-fuelclient'
     timed: '0 13 * * *'
-    publishers:
-      - email-default
     scm:
       - gerrit-openstack:
           repo: '{gerrit_project_pattern}'
