@@ -42,6 +42,7 @@
           script: |
             _MOS_DEB_REPO_PATH="{mos-deb-repo-path}"
             BASE_DEB_REPO_PATH=${{_MOS_DEB_REPO_PATH%/*}}
+            DEB_SNAPSHOT_NAME=${{_MOS_DEB_REPO_PATH##*/}}
 
             inject PROJECT_NAME         "{project-name}"
             inject PROJECT_VERSION      "{project-version}"
@@ -62,6 +63,7 @@
             inject BASE_RPM_REPO_PATH   "{mos-rpm-repo-path}"
             inject BASE_DEB_REPO_PATH   ${{BASE_DEB_REPO_PATH}}
             inject DEB_DIST_NAME        "{deb-dist-name}"
+            inject DEB_SNAPSHOT_NAME    ${{DEB_SNAPSHOT_NAME}}
 
             inject DEB_REQUEST_REPO_PATH          "{deb-repo-path}"
             inject RPM_REQUEST_OS_REPO_PATH       "{rpm-repo-path}/os"

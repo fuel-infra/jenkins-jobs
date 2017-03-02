@@ -127,9 +127,11 @@ export REMOTE_REPO_HOST=${MIRROR_HOST}
 # Base repository pathes
 : "${BASE_DEB_REPO_PATH?}"
 : "${BASE_RPM_REPO_PATH?}"
+# ... and snapshot name of DEB repository
+: "${DEB_SNAPSHOT_NAME?}"
 
 # Get latest snapshots
-SNAPSHOT_DEB=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_DEB_REPO_PATH}/snapshots/${PROJECT_VERSION}-latest.target.txt" | sed '1p; d')
+SNAPSHOT_DEB=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_DEB_REPO_PATH}/snapshots/${DEB_SNAPSHOT_NAME}-latest.target.txt" | sed '1p; d')
 SNAPSHOT_RPM_OS=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/os-latest.target.txt" | sed '1p; d')
 SNAPSHOT_RPM_HOTFIX=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/hotfix-latest.target.txt" | sed '1p; d')
 SNAPSHOT_RPM_UPDATES=$(curl -fLsS "http://${MIRROR_HOST}/${BASE_RPM_REPO_PATH}/snapshots/updates-latest.target.txt" | sed '1p; d')
