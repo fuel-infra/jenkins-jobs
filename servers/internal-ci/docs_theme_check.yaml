@@ -1,0 +1,86 @@
+---
+- job:
+    name: docs-theme-check
+    builders:
+      - shell:
+         !include-raw: builders/docs_theme_check.sh
+    description: |
+      Test Mirantis documentation theme for master branch
+      <p>Contacts: #infra </p>
+    logrotate:
+      artifactDaysToKeep: 30
+      daysToKeep: 100
+    node: docs
+    concurrent: false
+    parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+      - string:
+          name: DOCS_REPO
+          default: 'mos/mos-docs'
+      - string:
+          name: GERRIT_BRANCH
+          default: 'master'
+    properties:
+      - heavy-job:
+          weight: 1
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/docs/mirantisdocstheme'
+                clean: true
+                basedir: mirantisdocstheme
+                # openstack-ci-jenkins
+                credentials-id: '55e5b205-a099-4efd-8fca-110bbb5714fc'
+          choosing-strategy: gerrit
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/$DOCS_REPO'
+          clean: true
+          # openstack-ci-jenkins
+          credentials-id: '55e5b205-a099-4efd-8fca-110bbb5714fc'
+    triggers:
+      - timed: 'H 14 * * *'
+      - gerrit:
+          override-votes: true
+          gerrit-build-successful-verified-value: 2
+          gerrit-build-failed-verified-value: -2
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: docs/mirantisdocstheme
+              branches:
+                 - branch-compare-type: 'PLAIN'
+                   branch-pattern: 'master'
+          custom-url: '* $JOB_NAME $BUILD_URL'
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '55e5b205-a099-4efd-8fca-110bbb5714fc' # openstack-ci-jenkins
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+    publishers:
+      - html-publisher:
+          name: 'Docs build results'
+          dir: 'publish-docs'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+      - description-setter:
+          regexp: 'Description string: (.*)'
+          regexp-for-failed: 'Description string: (.*)'
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'ci+alert@mirantis.com'
+          send-to-individuals: false
