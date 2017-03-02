@@ -8,7 +8,7 @@
 
     # default empty values, may be overwritten in projects
     gerrit_project_pattern: ''
-    non_voting: 'true'
+    non_voting: true
     scm: ''
     test_variables: ''
     timed: ''
