@@ -2,9 +2,9 @@
     name: '{branch-id}.puppet-openstack.fuel.noop'
     builders:
       - shell:
-          !include-raw-escape: builders/prepare-puppet-module.sh
+          !include-raw-escape: ../builders/prepare-puppet-module.sh
       - shell:
-          !include-raw-escape: builders/fuellib_noop_tests.sh
+          !include-raw-escape: ../builders/fuellib_noop_tests.sh
     concurrent: true
     description: Runs fuel-library noop tests using master of puppet-openstack modules.
     node: fuel-library-unit-tests
@@ -54,43 +54,3 @@
           fail: true
           timeout: 90
           write-description: true
-
-- project:
-    name: 'Mitaka puppet-openstack-noop'
-    branch-id: 'mitaka'
-    fuellib-branch: 'stable/mitaka'
-    puppet-branch: 'stable/mitaka'
-    puppet-projects-regexp: '{mitaka_puppet_openstack_projects_regexp}'
-    gerrit-macro: 'puppet-openstack-request-mitaka'
-    jobs:
-      - '{branch-id}.puppet-openstack.fuel.noop'
-
-- project:
-    name: 'Newton puppet-openstack-noop'
-    branch-id: 'newton'
-    fuellib-branch: 'stable/newton'
-    puppet-branch: 'stable/newton'
-    puppet-projects-regexp: '{puppet_openstack_projects_regexp}'
-    gerrit-macro: 'puppet-openstack-request-newton'
-    jobs:
-      - '{branch-id}.puppet-openstack.fuel.noop'
-
-- project:
-    name: 'Ocata puppet-openstack-noop'
-    branch-id: 'ocata'
-    fuellib-branch: 'stable/ocata'
-    puppet-branch: 'stable/ocata'
-    puppet-projects-regexp: '{puppet_openstack_projects_regexp}'
-    gerrit-macro: 'puppet-openstack-request-ocata'
-    jobs:
-      - '{branch-id}.puppet-openstack.fuel.noop'
-
-- project:
-    name: 'Master puppet-openstack-noop'
-    branch-id: 'master'
-    fuellib-branch: 'master'
-    puppet-branch: 'master'
-    puppet-projects-regexp: '{puppet_openstack_projects_regexp}'
-    gerrit-macro: 'puppet-openstack-request-master'
-    jobs:
-      - '{branch-id}.puppet-openstack.fuel.noop'

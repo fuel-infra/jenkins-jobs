@@ -1,0 +1,140 @@
+- job-template:
+    # Variables required:
+    #
+    # testgroup
+    #     Test group used as --group parameter in system_test.sh
+    #     (ex, smoke_neutron)
+    # ubuntu_dist
+    #     'trusty' or 'xenial'
+    # mos
+    #     MOS version
+    # projectpackage
+    #     Name of the package to build from project repository
+    # venvpath
+    #     Path to virtual env with fuel-devops installed (VENV_PATH)
+    # properties
+    #     List of strings "VAR=value".
+    #     Additional variables injected in job environment.
+
+    name: '{branch-id}.puppet-openstack.fuel-library.pkgs.{dist}.{testgroup}'
+    properties: ''
+    concurrent: true
+
+    description: |
+      Runs Fuel deployment test with TEST_GROUP={testgroup} for patches to puppet-openstack modules
+    node: '{branch-id}-puppet-openstack-pkgs'
+    parameters:
+      - string:
+          name: GERRIT_PROJECT
+          default: 'openstack/puppet-nova'
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/{puppet-branch}'
+      - string:
+          name: GERRIT_BRANCH
+          default: '{puppet-branch}'
+    properties:
+      - throttle:
+          max-per-node: 1
+          option: project
+      - heavy-job:
+          weight: 6
+      - authorization-allow-descriptions-puppetgroup
+    scm:
+      - git:
+          branches:
+            - '{fuellib-branch}'
+          remotes:
+            - gerrit:
+                url: 'https://review.openstack.org/openstack/fuel-library.git'
+          basedir: 'fuel-library'
+          timeout: 20
+          choosing-strategy: 'default'
+      - git:
+          url: 'https://git.openstack.org/openstack/fuel-mirror.git'
+          branches:
+            - '{fuelmirror-branch}'
+          basedir: 'fuel-mirror'
+      - git:
+          branches:
+            - '$GERRIT_BRANCH'
+          remotes:
+            - gerrit:
+                 url: 'https://review.openstack.org/$GERRIT_PROJECT.git'
+                 refspec: '$GERRIT_REFSPEC'
+          basedir: 'upstream_module/$GERRIT_PROJECT'
+          choosing-strategy: 'gerrit'
+    builders:
+      - inject:
+          # pkgs variables
+          properties-content: |
+            RPM_MIRROR_BASE_NAME={rpm-mirror-base-name}
+            DEB_MIRROR_BASE_NAME={deb-mirror-base-name}
+            PROJECT=fuel-library
+            PROJECT_PACKAGE={projectpackage}
+      - inject:
+          # env variables
+          properties-content: |
+            FUEL_QA_REPO=https://git.openstack.org/openstack/fuel-qa.git
+            FUEL_QA_BRANCH={puppet-branch}
+            VENV_PATH={venvpath}
+            SYSTEST_ROOT=$WORKSPACE/fuel-qa
+            ENV_PREFIX=env_{branch-id}_{testgroup}
+            ENV_JOB=devops.{branch-id}.env
+      - inject:
+          # deployment test variables
+          properties-content: |
+            UBUNTU_DIST={ubuntu_dist}
+            OPENSTACK_RELEASE={dist}
+            TEST_GROUP={testgroup}
+            UPDATE_FUEL=true
+            UPDATE_FUEL_PATH=$WORKSPACE/packages/
+            UBUNTU_RELEASE=auxiliary
+            LOCAL_MIRROR_UBUNTU=/var/www/nailgun/ubuntu/auxiliary/
+            LOCAL_MIRROR_CENTOS=/var/www/nailgun/centos/auxiliary/
+            EXTRA_RPM_REPOS_PRIORITY=15
+            EXTRA_DEB_REPOS_PRIORITY=1100
+      - inject:
+          # overrides
+          properties-content: '{properties}'
+      - shell:
+          # check and prepare testing environment
+          !include-raw-escape: ../builders/deployment-env.sh
+      - inject:
+          # load the parameter used in deployment test
+          properties-file: 'deployment.properties'
+      - shell:
+          # prepare upstream_modules.tar.gz
+          !include-raw-escape: ../builders/prepare-fuel-library.sh
+      - shell:
+          # build package
+          !include-raw-escape: ../builders/build-pkgs.sh
+      - shell:
+          # run deployment test
+          !include-raw-escape: ../builders/test-pkgs.sh
+
+    triggers:
+      - timed: 'H 2 * * *'
+      - '{gerrit-macro}':
+          recheck_regexp: '{puppet_openstack_recheck_regexp}'
+          projects_regexp: '{puppet-projects-regexp}'
+    publishers:
+      - archive:
+          allow-empty: true
+          artifacts: 'logs/$BUILD_NUMBER/*,packages/*'
+          latest-only: false
+      - description-setter:
+          regexp: 'Description string: (iso:\s+.*\s+fuel-qa:\s+.*\s+fuel-devops:.*)'
+          regexp-for-failed: 'Description string: (iso:\s+.*\s+fuel-qa:\s+.*\s+fuel-devops:.*)'
+
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: '{timeout}'
+          write-description: true
+
+    logrotate:
+      daysToKeep: 30
+      numToKeep: -1
+      artifactDaysToKeep: 3
+      artifactNumToKeep: -1
