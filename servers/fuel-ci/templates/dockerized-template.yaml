@@ -43,10 +43,10 @@
               branches: '{obj:gerrit_branches}'
               custom-url: '* $JOB_NAME $BUILD_URL'
               skip-vote:
-                successful: '{non_voting}'
-                failed: '{non_voting}'
-                unstable: '{non_voting}'
-                notbuilt: '{non_voting}'
+                successful: '{obj:non_voting}'
+                failed: '{obj:non_voting}'
+                unstable: '{obj:non_voting}'
+                notbuilt: '{obj:non_voting}'
       - timed: '{timed}'
 
     builders:
