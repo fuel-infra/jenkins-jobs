@@ -2,7 +2,6 @@
     name: 'fuellib_noop_tests'
     docker_image: 'fuel-ci/fuellib_noop'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
-    envvars: ''
     gerrit_project_pattern: 'openstack/fuel-library'
     gerrit_trigger_on:
       - patchset-created-event

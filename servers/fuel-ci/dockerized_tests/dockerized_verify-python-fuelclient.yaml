@@ -2,7 +2,8 @@
     name: 'verify-python-fuelclient'
     docker_image: 'python-fuelclient'
     volumes: '$WORKSPACE:/opt/jenkins/python-fuelclient'
-    envvars: '-e JENKINS_URL=$JENKINS_URL'
+    test_variables: |
+      ENVVARS='-e JENKINS_URL=$JENKINS_URL'
     gerrit_project_pattern: 'openstack/python-fuelclient'
     timed: '0 13 * * *'
     scm:

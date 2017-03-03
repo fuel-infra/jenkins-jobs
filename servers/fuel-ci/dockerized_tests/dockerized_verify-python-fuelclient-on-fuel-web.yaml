@@ -2,7 +2,8 @@
     name: docker-dualcheck-python-fuelclient-on-fuel-web
     docker_image: 'python-fuelclient-on-fuel-web'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
-    envvars: '-e JENKINS_URL=$JENKINS_URL'
+    test_variables: |
+       ENVVARS='-e JENKINS_URL=$JENKINS_URL'
     gerrit_project_pattern: 'openstack/fuel-web'
     timed: '0 13 * * *'
     gerrit_branches:
@@ -25,4 +26,3 @@
           repobranch: origin/master
     jobs:
       - 'dockerized-{name}':
-

@@ -8,7 +8,6 @@
 
     # default empty values, may be overwritten in projects
     gerrit_project_pattern: ''
-    envvars: ''
     non_voting: true
     scm: ''
     test_variables: ''
@@ -55,7 +54,6 @@
           properties-content: |
             DOCKER_IMAGE={docker_image}
             VOLUMES={volumes}
-            ENVVARS={envvars}
 
       - inject: # test parameters
           properties-content: |

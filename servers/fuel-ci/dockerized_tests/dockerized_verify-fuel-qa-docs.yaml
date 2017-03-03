@@ -2,7 +2,6 @@
     name: 'docker-verify-fuel-qa-docs'
     docker_image: 'fuel-qa-docs'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-qa'
-    envvars: ''
     gerrit_project_pattern: 'openstack/fuel-qa'
     timed: 'H 2 * * *'
     job_publishers:

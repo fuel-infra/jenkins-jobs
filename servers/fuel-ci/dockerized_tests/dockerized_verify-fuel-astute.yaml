@@ -3,7 +3,6 @@
     suffix: 'fuel-astute'
     docker_image: 'fuel-astute'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-astute'
-    envvars: ''
     gerrit_project_pattern: 'openstack/fuel-astute'
     timed: ''
     job_publishers:
