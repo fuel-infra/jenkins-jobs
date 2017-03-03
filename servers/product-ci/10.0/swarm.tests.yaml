@@ -284,6 +284,8 @@
         - support_dpdk:
             system_tests/custom-overrides-plain-properties: |
               KVM_USE=true
+              ENV_SLAVE_LOGIN=root
+              ENV_SLAVE_PASSWORD=r00tme
 
         - custom_graph
 
@@ -350,12 +352,16 @@
               KVM_USE=true
               SLAVE_NODE_CPU=4
 
-        - ovs_firewall
+        - ovs_firewall:
+            system_tests/custom-overrides-plain-properties: |
+              ENV_SLAVE_LOGIN=root
+              ENV_SLAVE_PASSWORD=r00tme
 
         - ovs_firewall_with_dpdk:
             system_tests/custom-overrides-plain-properties: |
               KVM_USE=true
-
+              ENV_SLAVE_LOGIN=root
+              ENV_SLAVE_PASSWORD=r00tme
         - test_tags
 
     - common/plugins-template:
