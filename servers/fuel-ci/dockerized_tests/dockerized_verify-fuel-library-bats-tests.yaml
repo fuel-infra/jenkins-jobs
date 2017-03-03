@@ -1,0 +1,38 @@
+- project:
+    name: docker-dualcheck-fuel-library-bats-tests
+    docker_image: 'fuel-library-bats-tests'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
+    gerrit_project_pattern: 'openstack/fuel-library'
+    gerrit_branches:
+      - branch-compare-type: ANT
+        branch-pattern: '**'
+    suffix: 'fuel-library-bats-tests'
+    jobs:
+      - 'dockerized-{name}':
+          name: 'verify-{suffix}'
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          timed: '0 12 * * *'
+          scm:
+            - git:
+                branches:
+                  - $GERRIT_BRANCH
+                url: https://review.openstack.org/openstack/fuel-library.git
+                refspec: $GERRIT_REFSPEC
+                choosing-strategy: gerrit
+
+      - 'dockerized-{name}':
+          name: 'gate-{suffix}'
+          gerrit_trigger_on:
+            - change-merged-event
+          publishers:
+            - 'email-alert-on-merge'
+          scm:
+            - git:
+                branches:
+                  - $GERRIT_BRANCH
+                url: https://review.openstack.org/openstack/fuel-library.git
+                refspec: refs/heads/$GERRIT_BRANCH
+                choosing-strategy: default
