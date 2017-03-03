@@ -5,7 +5,25 @@ set -ex
 echo STARTED_TIME="$(date -u +'%Y-%m-%dT%H:%M:%S')" > ci_status_params.txt
 
 TEST_ISO_JOB_URL="https://product-ci.infra.mirantis.net/job/11.0.test_all/"
-MIRROR_HOST="http://mirror.fuel-infra.org/pkgs/snapshots/"
+
+###################### Get MIRROR HOST ###############
+LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location || :)
+LOCATION=${LOCATION_FACT:-bud}
+UBUNTU_DIST=${UBUNTU_DIST:-trusty}
+
+case "${LOCATION}" in
+    poz|bud|bud-ext|undef)
+        MIRROR_HOST='mirror.seed-cz1.fuel-infra.org'
+        LOCATION='cz'
+        ;;
+    mnv|scc|sccext)
+        MIRROR_HOST='mirror.seed-us1.fuel-infra.org'
+        LOCATION='usa'
+        ;;
+    *)
+        MIRROR_HOST='mirror.seed-cz1.fuel-infra.org'
+esac
+
 UBUNTU_DIST=${UBUNTU_DIST:-xenial}
 
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
