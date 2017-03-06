@@ -180,21 +180,6 @@
               EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
               EXTERNAL_MONGO_REPL_SET=ceilometer
 
-        - services_ha.ceilometer:
-            system_tests/job-weight: '11'
-            system_tests/node: 'services-systest'
-            system_tests/timeout: '1200'
-            system_tests/custom-overrides-plain-properties: |
-              SLAVE_NODE_MEMORY=6144
-              SLAVE_NODE_CPU=2
-              KVM_USE=true
-              SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
-              EXTERNAL_MONGO_URLS=172.18.184.111,172.18.184.112,172.18.184.127
-              EXTERNAL_MONGO_USER=$EXTERNAL_MONGO_USER
-              EXTERNAL_MONGO_DB_NAME=$EXTERNAL_MONGO_DB_NAME
-              EXTERNAL_MONGO_PASS=$EXTERNAL_MONGO_PASS
-              EXTERNAL_MONGO_REPL_SET=ceilometer
-
         - services_ha_one_controller:
             system_tests/job-weight: '11'
             system_tests/node: 'services-systest'
