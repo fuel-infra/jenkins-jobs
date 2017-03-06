@@ -1,7 +1,7 @@
 - project:
     name: 'Main 11.0 iso'
     version: '11.0'
-    branch: 'stable/ocata'
+    branch: 'mos/ocata'
     qa_branch: '{branch}'
     ubuntu_dist: 'xenial'
     mod: ''
