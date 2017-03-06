@@ -24,8 +24,6 @@ case "${LOCATION}" in
         MIRROR_HOST='mirror.seed-cz1.fuel-infra.org'
 esac
 
-UBUNTU_DIST=${UBUNTU_DIST:-xenial}
-
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
 
     case "${UBUNTU_MIRROR_ID}" in
@@ -33,10 +31,10 @@ if [[ ! "${MIRROR_UBUNTU}" ]]; then
             UBUNTU_MIRROR_ID="$(curl -fsS "${TEST_ISO_JOB_URL}lastSuccessfulBuild/artifact/ubuntu_mirror_id.txt" | awk -F '[ =]' '{print $NF}')"
             ;;
         latest)
-            UBUNTU_MIRROR_ID=$(curl -sSf "${MIRROR_HOST}ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
+            UBUNTU_MIRROR_ID=$(curl -sSf "http://${MIRROR_HOST}/pkgs/snapshots/ubuntu-${UBUNTU_MIRROR_ID}.target.txt" | sed '1p;d')
             ;;
     esac
-    UBUNTU_MIRROR_URL="${MIRROR_HOST}${UBUNTU_MIRROR_ID}/"
+    UBUNTU_MIRROR_URL="http://${MIRROR_HOST}/pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
 
     MIRROR_UBUNTU="deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST} main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-updates main universe multiverse|deb ${UBUNTU_MIRROR_URL} ${UBUNTU_DIST}-security main universe multiverse"
     if [ "${ENABLE_PROPOSED:-false}" = 'true' ]; then
