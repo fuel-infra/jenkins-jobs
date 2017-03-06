@@ -37,6 +37,8 @@
               NESSUS_USERNAME=root
               NEUTRON_ENABLE=true
               SECURITY_TEST=true
+              NESSUS_IMAGE_PATH=/var/lib/libvirt/images/$NESSUS_IMAGE_NAME.qcow2
+              DEVOPS_SETTINGS_TEMPLATE=$WORKSPACE/system_test/tests_templates/devops_configs/security_scan.yaml
             swarm-test/pre-script: |
               set -ex
               source "${{VENV_PATH}}/bin/activate"
