@@ -80,8 +80,6 @@
 
         - ha_scale_group_6
 
-        - mongo_multirole
-
         - multirole_group_1
 
         - mixed_os_components
@@ -103,8 +101,6 @@
         - failover_group_2
 
         - failover_group_3
-
-        - failover_group_mongo
 
         - load:
             system_tests/custom-overrides-plain-properties: |

@@ -99,9 +99,6 @@
         - name: '10.0.acceptance.ubuntu.ha_scale_group_6'
           current-parameters: true
           kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.mongo_multirole'
-          current-parameters: true
-          kill-phase-on: NEVER
         - name: '10.0.acceptance.ubuntu.multirole_group_1'
           current-parameters: true
           kill-phase-on: NEVER
@@ -133,9 +130,6 @@
           current-parameters: true
           kill-phase-on: NEVER
         - name: '10.0.acceptance.ubuntu.failover_group_3'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.failover_group_mongo'
           current-parameters: true
           kill-phase-on: NEVER
         - name: '10.0.acceptance.ubuntu.load'
