@@ -1,10 +1,8 @@
 - job:
     name: '10.0.custom.ubuntu.bvt_2'
     builders:
-      - inject:
-          properties-content: |
-            SLAVE_NODE_CPU=2
-            SLAVE_NODE_MEMORY=3584
+      - inject-fuel-qa-global-defaults:
+          version: '10.0'
       - shell:
           !include-raw: builders/run_system_test.sh
     concurrent: true
