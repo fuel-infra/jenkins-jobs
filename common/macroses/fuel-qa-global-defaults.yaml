@@ -18,6 +18,10 @@
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
               ;;
+            12.0|pike)
+              inject SLAVE_NODE_MEMORY 3968
+              inject UBUNTU_DIST       xenial
+              ;;
             master)
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
