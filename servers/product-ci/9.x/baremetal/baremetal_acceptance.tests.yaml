@@ -18,7 +18,7 @@
         properties-content-overrides: |
           KVM_USE=True
 
-        environment: 'alpha'
+        environment: 'beta'
         admin_nic: 'eno2'
         admin_vlan: '270'
 

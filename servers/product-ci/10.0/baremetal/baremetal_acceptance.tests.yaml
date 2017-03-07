@@ -26,7 +26,7 @@
 
         system_tests/custom-overrides-plain-properties: |
           KVM_USE=True
-          BAREMETAL_ENV_NAME=alpha
+          BAREMETAL_ENV_NAME=beta
           NIC_FOR_ADMIN_BRIDGE=eno2
           ADMIN_VLAN=270
           ENV_NAME={test-type}.${{BAREMETAL_ENV_NAME}}
