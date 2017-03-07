@@ -46,7 +46,8 @@
     rpm-repo-path: '/mcp-repos'
 
     # MOS repositories (build/test dependencies)
-    mos-rpm-repo-path: '/mcp-repos'
+    mos-deb-repo-path: '/mos-repos/ubuntu/9.0'
+    mos-rpm-repo-path: '/mos-repos/centos/mos9.0-centos7'
 
     distro:
     - trusty:
@@ -54,13 +55,11 @@
         pkg_type: 'deb'
         spec_prefix_path: '/{distro}'
         deb-repo-path: '/mcp-repos/{project-version}/{distro}'
-        mos-deb-repo-path: '/mcp-repos/{project-version}/{distro}'
     - xenial:
         os: 'ubuntu'
         pkg_type: 'deb'
         spec_prefix_path: '/{distro}'
         deb-repo-path: '/mcp-repos/{project-version}/{distro}'
-        mos-deb-repo-path: '/mcp-repos/{project-version}/{distro}'
 
     jobs:
       - '{project-version}-pkg-{project-name}-build-{os}-{distro}'
