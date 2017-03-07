@@ -11,9 +11,13 @@ Repo Structure
   Example config file. Can be used as it is to run tests, when tests
   don't require Jenkins connection.
 
-``conf/requirements.txt``
+``conf/requirements-jobs.txt``
 
-  Python requirements to run tox tests.
+  Python requirements to run tox tests for jenkins jobs.
+
+``conf/requirements-views.txt``
+
+  Python requirements to run tox tests for jenkins views.
 
 ``servers/<jenkins-master-id>/``
 
