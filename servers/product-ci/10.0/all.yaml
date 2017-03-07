@@ -1,6 +1,7 @@
 - project:
     name: 'Main 10.0 iso'
     version: '10.0'
+    git-root: 'ssh://product-ci@review.fuel-infra.org:29418/openstack/'
     branch: 'mos/newton'
     qa_branch: '{branch}'
     ubuntu_dist: 'xenial'
