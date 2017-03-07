@@ -37,7 +37,7 @@ set -ex
 
 tox -e ci-views
 
-source ".tox/${CI_NAME}/bin/activate"
+source ".tox/ci-views/bin/activate"
 
 CONFIG_PATH="${WORKSPACE}/../tmp/${JOB_NAME}"
 

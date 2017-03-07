@@ -3,7 +3,7 @@ set -ex
 
 tox -e ci-jobs
 
-source ".tox/${CI_NAME}/bin/activate"
+source ".tox/ci-jobs/bin/activate"
 
 CONFIG_PATH="${WORKSPACE}/../tmp/${JOB_NAME}"
 # JOBS_LIST - Jenkins string parameter. Space separated list of job names to update.
