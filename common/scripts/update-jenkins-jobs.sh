@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-tox -e "${CI_NAME}"
+tox -e ci-jobs
 
 source ".tox/${CI_NAME}/bin/activate"
 

@@ -35,7 +35,7 @@
 
 set -ex
 
-tox -e "${CI_NAME}"
+tox -e ci-views
 
 source ".tox/${CI_NAME}/bin/activate"
 
