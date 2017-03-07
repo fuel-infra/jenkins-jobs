@@ -132,14 +132,6 @@
 
         - ha_destructive_ceph_neutron
 
-        - huge_ha_neutron:
-            system_tests/job-weight: '20'
-            system_tests/timeout: '600'
-            system_tests/node: 'huge-systest'
-            system_tests/custom-overrides-plain-properties: |
-              SLAVE_NODE_CPU=2
-              SERVTEST_LOCAL_PATH=/home/jenkins/workspace/cloud-images
-
         - repeatable_image_based
 
         - known_issues
