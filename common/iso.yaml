@@ -49,6 +49,7 @@
     publish_iso_builder: 'publish-product-iso'
     wrappers:
     - iso-timeout
+    - product-ci-credentials
     - timestamps
     jobs:
     - '{version}{mod}.all'
