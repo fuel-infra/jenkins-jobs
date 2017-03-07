@@ -45,13 +45,16 @@ function update_devops () {
             echo "Problem with downloading devops requirements"
             exit 1
         fi
-
+        # insert new line after received file
+        echo '' >> "${WORKSPACE}/venv-requirements.txt"
         # fetching requirements for fuel-qa itself
         local REQUIREMENTS_URL="${SOURCES_BASE_URL}/fuelweb_test/requirements.txt"
         if ! curl -fsS "${REQUIREMENTS_URL}" >> "${WORKSPACE}/venv-requirements.txt"; then
             echo "Problem with downloading requirements"
             exit 1
         fi
+        # insert new line after received file
+        echo '' >> "${WORKSPACE}/venv-requirements.txt"
     fi
 
     # Upgrade setuptools before pip
