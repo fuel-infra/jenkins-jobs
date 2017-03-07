@@ -1,0 +1,41 @@
+- project:
+    name: docker-multi-linkcheck
+    docker_image: 'linkcheck'
+    volumes: '$WORKSPACE:/opt/jenkins/{prefix}'
+    test_variables:
+      ENVVARS='-e PREFIX={prefix} -e REQUIREMENTS={requirements} -e MAKEDIR={makedir} -e REGEX={exclude_regex}'
+    gerrit_branches:
+      - branch-compare-type: ANT
+        branch-pattern: '**'
+    job_publishers:
+      - archive:
+          artifacts: 'build_*.txt'
+          allow-empty: 'true'
+          fingerprint: true
+    gerrit_trigger_on:
+      - patchset-created-event
+    job_wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          timeout: 30
+    timed: 'H 1 * * *'
+    scm:
+      - gerrit-openstack:
+          repo: '{gerrit_project_pattern}'
+    jobs:
+      - 'dockerized-{name}':
+          name: '{prefix}-docker-linkcheck'
+          prefix: fuel-web
+          makedir: docs
+          exclude_regex: 'working|redirected'
+          requirements: 'nailgun/test-requirements.txt'
+          gerrit_project_pattern: 'openstack/fuel-web'
+      - 'dockerized-{name}':
+          name: '{prefix}-docker-linkcheck'
+          prefix: fuel-docs
+          makedir: '.'
+          exclude_regex: 'ok|redirect'
+          requirements: 'requirements.txt'
+          gerrit_project_pattern: 'openstack/fuel-docs'
