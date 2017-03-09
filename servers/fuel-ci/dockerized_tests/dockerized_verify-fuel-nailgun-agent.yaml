@@ -1,0 +1,31 @@
+- project:
+    name: dualcheck-docker-fuel-nailgun-agent
+    docker_image: 'fuel-nailgun-agent'
+    volumes: '$WORKSPACe:/opt/jenkins/fuel-nailgun-agent'
+    job_publishers:
+      - 'email-{email-type}'
+    gerrit_project_pattern: 'openstack/fuel-nailgun-agent'
+    gerrit_branches:
+      - branch-compare-type: ANT
+        branch-pattern: '**'
+
+    jobs:
+      - 'dockerized-{name}':
+          name: verify-docker-fuel-nailgun-agent
+          email-type: default
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-value:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          scm:
+            - gerrit-openstack:
+                repo: '{gerrit_project_pattern}'
+          timd: '0 2 * * *'
+      - 'dockerized-{name}':
+          name: gate-docker-fuel-nailgun-agent
+          email-type: alert-on-merge
+          gerrit_trigger_on:
+            - change-merged-event
+          scm:
+            - gerrit-openstack-branch:
+                repo: '{gerrit_project_pattern}'
