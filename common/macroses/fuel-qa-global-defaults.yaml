@@ -13,17 +13,21 @@
             10.0|newton)
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
+              inject CENTOS_VERSION    7.3.1611
               ;;
             11.0|ocata)
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
+              inject CENTOS_VERSION    7.3.1611
               ;;
             12.0|pike)
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
+              inject CENTOS_VERSION    7.3.1611
               ;;
             master)
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
+              inject CENTOS_VERSION    7.3.1611
               ;;
           esac

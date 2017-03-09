@@ -28,6 +28,18 @@ case "${LOCATION}" in
         MIRROR_HOST="mirror.fuel-infra.org"
 esac
 
+###################### Get MIRROR_CENTOS ###############
+
+CENTOS_MIRROR_ID=${CENTOS_MIRROR_ID:-latest}
+CENTOS_VERSION=${CENTOS_VERSION:-7.2.1511}
+
+if [ -z "${MIRROR_CENTOS}" ]; then
+    if [ "${CENTOS_MIRROR_ID}" == 'latest' ]; then
+        CENTOS_MIRROR_ID=$(curl -sSf "http://${MIRROR_HOST}/pkgs/snapshots/centos-${CENTOS_VERSION}-latest.target.txt" | sed '1p;d')
+    fi
+    MIRROR_CENTOS="http://${MIRROR_HOST}/pkgs/snapshots/${CENTOS_MIRROR_ID}/"
+fi
+
 ###################### Get MIRROR_UBUNTU ###############
 
 # If UBUNTU_MIRROR_ARTIFACT is set get UBUNTU_MIRROR_ID from artifact
@@ -58,12 +70,14 @@ fi
 # Save parameters to file in format required by source in bash
 cat > mirror.setenvfile <<EOF
 MIRROR_HOST="${MIRROR_HOST}"
+MIRROR_CENTOS="${MIRROR_CENTOS}"
 UBUNTU_MIRROR_URL="${UBUNTU_MIRROR_URL}"
 MIRROR_UBUNTU="${MIRROR_UBUNTU}"
 EOF
 # Save parameters to file in format required by jenkins inject
 cat > mirror.jenkins-injectfile <<EOF
 MIRROR_HOST=${MIRROR_HOST}
+MIRROR_CENTOS="${MIRROR_CENTOS}"
 UBUNTU_MIRROR_URL=${UBUNTU_MIRROR_URL}
 MIRROR_UBUNTU=${MIRROR_UBUNTU}
 EOF
