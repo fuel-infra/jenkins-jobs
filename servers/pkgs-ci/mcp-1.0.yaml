@@ -46,6 +46,7 @@
     rpm-repo-path: '/mcp-repos'
 
     # MOS repositories (build/test dependencies)
+    mos-deb-dist-name: 'mos9.0'
     mos-deb-repo-path: '/mos-repos/ubuntu/9.0'
     mos-rpm-repo-path: '/mos-repos/centos/mos9.0-centos7'
 

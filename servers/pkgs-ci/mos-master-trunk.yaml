@@ -38,6 +38,7 @@
     rpm-repo-path: '/trunk/mos-repos/centos/mos-master-centos7'
 
     # MOS repositories (build/test dependencies)
+    mos-deb-dist-name: '{deb-dist-name}'
     mos-deb-repo-path: '/mos-repos/ubuntu/{project-version}'
     mos-rpm-repo-path: '/mos-repos/centos/mos-master-centos7'
 
@@ -150,7 +151,7 @@
           _REPO_FOR_USTABLE_RPM=testing,http://{publish-repo-host}/$CUSTOM_REPO_ID/mos-repos/centos/mos-master-centos7/os
           _ORIGINAL_DESTINATION_REPO_DEB=http://{publish-repo-host}/{deb-repo-path} {deb-dist-name} main restricted
           _ORIGINAL_DESTINATION_REPO_RPM=deps,http://{publish-repo-host}/{rpm-repo-path}/os/x86_64
-          _MASTER_REPO_FOR_DEP_DEB=http://{publish-repo-host}/{mos-deb-repo-path} {deb-dist-name} main restricted
+          _MASTER_REPO_FOR_DEP_DEB=http://{publish-repo-host}/{mos-deb-repo-path} {mos-deb-dist-name} main restricted
           _MASTER_REPO_FOR_DEP_RPM=deps,http://{publish-repo-host}/{mos-rpm-repo-path}/os/x86_64
 
     - multijob:

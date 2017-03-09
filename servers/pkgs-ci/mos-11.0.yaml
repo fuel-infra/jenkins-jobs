@@ -46,6 +46,7 @@
     rpm-repo-path: '/mos-repos/centos/mos11.0-centos7'
 
     # MOS repositories (build/test dependencies)
+    mos-deb-dist-name: '{deb-dist-name}'
     mos-deb-repo-path: '/mos-repos/ubuntu/{project-version}'
     mos-rpm-repo-path: '/mos-repos/centos/mos11.0-centos7'
 

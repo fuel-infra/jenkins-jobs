@@ -62,7 +62,7 @@
 
             inject BASE_RPM_REPO_PATH   "{mos-rpm-repo-path}"
             inject BASE_DEB_REPO_PATH   ${{BASE_DEB_REPO_PATH}}
-            inject DEB_DIST_NAME        "{deb-dist-name}"
+            inject DEB_DIST_NAME        "{mos-deb-dist-name}"
             inject DEB_SNAPSHOT_NAME    ${{DEB_SNAPSHOT_NAME}}
 
             inject DEB_REQUEST_REPO_PATH          "{deb-repo-path}"
