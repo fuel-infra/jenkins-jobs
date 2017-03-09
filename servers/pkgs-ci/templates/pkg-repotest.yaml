@@ -23,6 +23,9 @@
 
     builders:
 
+      - inject-fuel-qa-global-defaults:
+          version: '{project-version}'
+
       - extended-bash:
           headers: ''
           script: '{pre-build-script}'
@@ -40,6 +43,8 @@
       - inject:
           properties-content: |
             REPO_TYPE={pkg_type}
+
+      - guess-mirror
 
       - shell: |
           #!/bin/bash -xe
