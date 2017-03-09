@@ -1,0 +1,25 @@
+- project:
+    name: dualcheck-docker-fuel-library-puppetfile
+    docker_image: 'fuel-library-puppetfile'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
+    gerrit_project_pattern: 'openstack/fuel-library'
+    gerrit_trigger_on:
+      - patchset-created-event
+      - commend-added-contains-event: '{gerrit_trigger_on_recheck_regexp}'
+    gerrit_branches:
+      - branch-compare-type: REG_EXP
+        branch-pattern: '^(?!stable/(?:5\.0|5\.1|6\.0|6\.1|7\.0)).*$'
+    timed: 'H 2 * * *'
+    scm:
+      - gerrit-openstack:
+          repo: '{gerrit_project_pattern}'
+    job_wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          timeout: 20
+          write-description: true
+    jobs:
+      - 'dockerized-{name}':
+          name: verify-docker-fuel-library-puppetfile
