@@ -1,0 +1,44 @@
+- project:
+    name: dualcheck-docker-fuel-plugins
+    docker_image: 'fuel-plugins'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-plugins'
+    job_publishers:
+      - 'email-{email-type}'
+      - archive:
+          allow-emtpy: true
+          artifacts: 'built_plugins/*.fp, built_plugins/*.rpm'
+          latest-only: false
+      - description-setter:
+          regexp: '(<a href=.*a>)'
+    job_wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 10
+    gerrit_project_pattern: 'openstack/fuel-plugins'
+    gerrit_branches:
+      - branch-compare-type: ANT
+        branch-pattern: '**'
+    jobs:
+      - 'dockerized-{name}':
+          name: verify-docker-fuel-plugins
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          timed: '0 11 * * *'
+          email-type: default
+          scm:
+            - gerrit-openstack:
+                repo: '{gerrit_project_pattern}'
+      - 'dockerized-{name}':
+          name: gate-docker-fuel-plugins
+          gerrit_trigger_on:
+            - change-merged-event
+          timed: ''
+          email-type: alert-on-merge
+          scm:
+            - gerrit-openstack-branch:
+                repo: '{gerrit_project_pattern}'
