@@ -1,0 +1,64 @@
+- project:
+    name: verify-fuel-web-on-fuel-ui
+    docker_image: 'fuel-web-vs-ui'
+    volumes: '$WORKSPACE/{proj_main}:/opt/jenkins/{proj_main} $WORKSPACE/{proj_helper}:/opt/jenkins/{proj_helper}'
+    scm:
+      - git:
+          basedir: '{proj_main}'
+          remotes:
+            - gerrit:
+                refspec: $GERRIT_REFSPEC
+                url: https://review.openstack.org/openstack/{proj_main}.git
+          choosing-strategy: gerrit
+          branches:
+            - $GERRIT_BRANCH
+      - git:
+          basedir: '{proj_helper}'
+          url: https://git.openstack.org/openstack/{proj_helper}.git
+          branches:
+            - $GERRIT_BRANCH
+    gerrit_trigger_on:
+      - patchset-created-event
+      - comment-added-contains-event:
+          comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+    gerrit_project_pattern: '{proj_main}'
+    job_wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+    job_publishers:
+      - email-default
+      - archive:
+          artifacts: 'artifacts/*.png, artifacts/*.log'
+          latest-only: false
+    fail_fast: true
+    ui_test_group: 'test'
+    testvars: |
+      ENVVARS='-e UI_TEST_GROUP={ui_test_group} -e NPM_CONFIG=/home/jenkins/npm -e FAIL_FAST={fail_fast}'
+    gerrit_branches:
+      - branch-compare-type: PLAIN
+        branch-pattern: 'master'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/mitaka'
+    jobs:
+      - 'dockerized-{name}':
+          name: 'verify-fuel-web-on-fuel-ui'
+          proj_main: 'fuel-web'
+          proj_helper: 'fuel-ui'
+
+
+      - 'dockerized-{name}':
+          name: 'verify-fuel-ui-on-fuel-web'
+          proj_main: 'fuel-ui'
+          proj_helper: 'fuel-web'
+
+      - 'dockerized-{name}':
+          name: 'nightly-verify-fuel-web-on-fuel-ui'
+          proj_main: 'fuel-web'
+          proj_helper: 'fuel-ui'
+          timed: '@midnight'
+          fail_fast: false
+

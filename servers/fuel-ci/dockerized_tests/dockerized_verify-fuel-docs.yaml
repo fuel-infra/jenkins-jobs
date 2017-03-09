@@ -1,0 +1,54 @@
+- project:
+    name: docker-dualcheck-fuel-docs
+    docker_image: 'fuel-docs'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-docs'
+    gerrit_project_pattern: 'openstack/fuel-docs'
+    gerrit_branches:
+      - branch-compare-type: ANT
+        branch-pattern: '**'
+    wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          timeout: 45
+      - ssh-agent-credentials:
+          users:
+            - 'e0991f76-20e6-4617-9f6d-cf85600789fe'
+    publishers:
+      - 'email-{email-type}'
+      - html-publisher:
+          name: 'Fuel Docs build results'
+          dir: '_build/html'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+          wrapper-name: 'htmlpublisher-wrapper.html'
+    scm:
+      - git:
+          branches:
+            - $GERRIT_BRANCH
+          remotes:
+            - gerrit:
+                refspec: '{refspec}'
+                url: https://review.openstack/fuel-docs.git
+          choosing-strategy: '{choosing-strategy}'
+    jobs:
+      - 'dockerized-{name}':
+          name: verify-fuel-docs
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          email-type: default
+          timed: 'H 2 * * *'
+          refspec: $GERRIT_REFSPEC
+          choosing-strategy: gerrit
+      - 'dockerized-{name}':
+          name: gate-fuel-docs
+          gerrit_trigger_on:
+            - change-merged-event
+          email-type: alert-on-merge
+          choosing-strategy: default
+          timed: ''
+          refspec: refs/heads/$GERRIT_BRANCH
