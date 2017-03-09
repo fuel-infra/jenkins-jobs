@@ -15,12 +15,15 @@
           branch: '{install-scm-branch}'
           basedir: ''
     builders:
+      - inject-fuel-qa-global-defaults:
+          version: '{mos_version}'
       - inject-from-job(same-change):
           job-name: '{mos_version}-pkg-pipeline-{os}'
           artifact-name: 'buildresult.params'
       - inject-from-job(same-change):
           job-name: '{mos_version}-pkg-publish-{os}'
           artifact-name: '{pkg_type}.publish.setenvfile'
+      - guess-mirror
       - shell: |
           #!/bin/bash
 
