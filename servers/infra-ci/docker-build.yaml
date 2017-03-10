@@ -9,14 +9,16 @@
       - shell:
           !include-raw-escape: './builders/docker-build.sh'
       - trigger-builds:
-        - project:
-            - 'docker-publish'
+        - project: 'docker-publish'
           bool-parameters:
             - name: "DATE_TAG"
               value: "false"
             - name: "LATEST_TAG"
               value: "true"
+          predefined-parameters: |
+              IMAGES=$IMAGES
           block: true
+          same-node: true
     description: |
      This job will use docker builder host, build image from the given git url and
      verify image.
