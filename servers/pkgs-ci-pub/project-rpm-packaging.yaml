@@ -314,20 +314,9 @@
     pkg_type: 'rpm'
     rpm-repo-path: '/rpm-packaging/{project-version}/{distro}'
 
-    # Publisher's parameters
-    repo-host: 'packages.fuel-infra.org'
-    repo-base-path: '/home/jenkins/pubrepos'
-    cr-path-prefix: 'review/'
-    pkg-sign-key: '1FA22B08'
-
-    # Parameters for install-test
-    install-scm-repo: 'infra/ci-test-request'
-    install-scm-branch: 'origin/master'
-
     is_updates: false
 
     build-node: 'rpm-builder'
-    publish-node: 'new-publisher'
     install-node: 'rpm-install'
 
     jobs:

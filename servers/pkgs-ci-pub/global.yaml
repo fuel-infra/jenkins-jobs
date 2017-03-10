@@ -13,3 +13,23 @@
       numToKeep: -1
       artifactDaysToKeep: -1
       artifactNumToKeep: -1
+
+    repo-host: 'packages.fuel-infra.org'
+    repo-base-path: '/home/jenkins/pubrepos'
+
+    pkg-sign-key: '1FA22B08'
+
+    deb-origin-release: 'OpenStack'
+    deb-origin-test: 'testing'
+
+    cr-path-prefix: 'review/'
+
+    # Parameters for install-test
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'origin/master'
+
+    # Job slave nodes
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+    install-node: 'install-node'
+    systest-node: 'systest'

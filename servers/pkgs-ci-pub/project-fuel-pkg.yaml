@@ -7,35 +7,10 @@
 
     project-name: 'openstack'
 
-    repo-host: 'packages.fuel-infra.org'
-
-    base-path: 'base/'
-    updates-path: 'updates/'
-    security-path: 'security/'
-
-    cr-path-prefix: 'review/'
-
-    deb-origin-release: 'OpenStack'
-    deb-origin-test: 'testing'
-
-    repo-base-path: '/home/jenkins/pubrepos'
-
-    pkg-sign-key: '1FA22B08'
-
     spec-path-prefix: ''
     spec-path-suffix: '-build'
     spec-project-prefix: ''
     spec-project-suffix: '-build'
-
-    # Parameters for install-test
-    install-scm-repo: 'infra/ci-test-request'
-    install-scm-branch: 'origin/master'
-
-    # Job slave nodes
-    build-node: 'new-builder'
-    publish-node: 'new-publisher'
-    install-node: 'install-node'
-    systest-node: 'systest'
 
     project-version:
       - 'master':
