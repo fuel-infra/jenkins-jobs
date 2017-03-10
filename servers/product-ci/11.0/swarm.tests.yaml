@@ -245,10 +245,12 @@
 
         - ironic_deploy_swift:
             system_tests/custom-overrides-plain-properties: |
+              IRONIC_ENABLED=true
               DEVOPS_SETTINGS_TEMPLATE=system_test/tests_templates/devops_configs/ironic.yaml
 
         - ironic_deploy_ceph:
             system_tests/custom-overrides-plain-properties: |
+              IRONIC_ENABLED=true
               DEVOPS_SETTINGS_TEMPLATE=system_test/tests_templates/devops_configs/ironic.yaml
 
         - services_reconfiguration_thread_1:
