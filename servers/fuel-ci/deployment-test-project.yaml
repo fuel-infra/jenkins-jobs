@@ -140,7 +140,7 @@
             KEEP_BEFORE=yes
 
       - fuel-library:
-          projectpackage: fuel-library10.0
+          projectpackage: fuel-library11.0
           testgroup: smoke_neutron
           timed: '0 */12 * * *'
           properties: |
@@ -148,14 +148,14 @@
             BUILD_IMAGES=true
 
       - fuel-library:
-          projectpackage: fuel-library10.0
+          projectpackage: fuel-library11.0
           testgroup: neutron_vlan_ha
           timed: '59 */12 * * *'
           properties: |
             SYNC_DEPL_TASKS=true
 
       - fuel-library:
-          projectpackage: fuel-library10.0
+          projectpackage: fuel-library11.0
           testgroup: review_in_fuel_library
           non_voting: true # override
           timed: '30 */12 * * *'
