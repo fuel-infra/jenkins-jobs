@@ -14,8 +14,6 @@
     perestroika-branch: 'stable/mitaka'
     install-scm-branch: 'origin/master'
 
-    spec_prefix_path: '/{distro}'
-
     # Repository parameters for project
     deb-dist-name: 'mitaka'
     deb-repo-path: '/mcp-repos/{project-version}/{distro}'

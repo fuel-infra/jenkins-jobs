@@ -58,7 +58,7 @@
             inject SRC_PROJECT_PATH     "openstack"
             inject SPEC_PROJECT_PATH    "openstack-build"
             inject SPEC_PROJECT_SUFFIX  "-build"
-            inject SPEC_PREFIX_PATH     "{spec_prefix_path}"
+            inject SPEC_PREFIX_PATH     "/{distro}"
 
             inject BASE_RPM_REPO_PATH   "{mos-rpm-repo-path}"
             inject BASE_DEB_REPO_PATH   ${{BASE_DEB_REPO_PATH}}

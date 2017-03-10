@@ -13,8 +13,6 @@
 
     perestroika-branch: 'stable/newton'
 
-    spec_prefix_path: '/{distro}'
-
     # Repository parameters for project
     deb-dist-name: 'mos10.0'
     deb-repo-path: '/mos-repos/ubuntu/{project-version}'

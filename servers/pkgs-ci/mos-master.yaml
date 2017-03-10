@@ -13,8 +13,6 @@
     fuel-qa-branch: 'master'
     perestroika-branch: 'master'
 
-    spec_prefix_path: '/{distro}'
-
     # Repository parameters for project
     deb-dist-name: 'mos-master'
     deb-repo-path: '/mos-repos/ubuntu/{project-version}'

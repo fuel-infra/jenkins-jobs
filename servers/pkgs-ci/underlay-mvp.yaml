@@ -11,8 +11,6 @@
 
     perestroika-branch: 'stable/ocata'
 
-    spec_prefix_path: '/{distro}'
-
     # Repository parameters for project
     deb-dist-name: 'mos11.0'
     deb-repo-path: 'extras/underlay-mvp-repos/ubuntu/{project-version}'

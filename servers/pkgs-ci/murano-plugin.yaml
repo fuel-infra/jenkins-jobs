@@ -10,8 +10,6 @@
     fuel-qa-branch: 'stable/mitaka'
     perestroika-branch: 'stable/mitaka'
 
-    spec_prefix_path: '/{distro}'
-
     # Repository parameters for project
     deb-dist-name: 'mos9.0'
     deb-repo-path: '/extras/murano-plugin-repos/${{BIN_REPO_SUBPATH}}ubuntu/{project-version}'
@@ -81,7 +79,6 @@
     distro: centos7
     os: 'centos'
     pkg_type: 'rpm'
-    spec_prefix_path: '/{distro}'
     openstack_release: ubuntu
     plugin_release_timestamp: true
 
