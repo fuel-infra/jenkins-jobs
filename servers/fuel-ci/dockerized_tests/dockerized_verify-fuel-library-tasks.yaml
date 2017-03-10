@@ -1,0 +1,44 @@
+- project:
+    name: dualcheck-docker-fuel-library-tasks
+    docker_image: 'fuel-library-tasks'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
+    gerrit_project_pattern: 'openstack/fuel-library'
+    gerrit_branches:
+      - branch-compare-type: PLAIN
+        branch-pattern: 'master'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/8.0'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/mitaka'
+    job_publishers:
+      - description-setter:
+          regexp-for-failed: '(Failed tests: (.*))'
+      - 'email-{email-type}'
+    job_wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+    jobs:
+      - 'dockerized-{name}':
+          name: verify-docker-fuel-library-tasks
+          email-type: default
+          timed: '0 9 * * *'
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          scm:
+            - gerrit-openstack:
+                repo: '{gerrit_project_pattern}'
+      - 'dockerized-{name}':
+          name: gate-docker-fuel-library-tasks
+          email-type: alert-on-merge
+          timed: ''
+          gerrit_trigger_on:
+            - change-merged-event
+          scm:
+            - gerrit-openstack-branch:
+                repo: '{gerrit_project_pattern}'
