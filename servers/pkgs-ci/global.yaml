@@ -44,4 +44,30 @@
     # stuff related to pre-build / post-build magic
     pre-build-script: ''
 
+    deb-origin-release: 'Mirantis'
+    deb-origin-test: 'testing'
 
+    fuel-namespace: 'openstack'
+
+    publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
+    repo-base-path: '/home/jenkins/pubrepos'
+
+    # Configure flows
+    is-downgrade: 'false'
+    is-updates: 'false'
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: 'openstack-ci-jenkins'
+
+    # Install test repository
+    install-scm-repo: 'infra/ci-test-request'
+    install-scm-branch: 'master'
+
+    # Job slave nodes
+    build-node: 'new-builder'
+    publish-node: 'new-publisher'
+    install-node: 'install-node'
+    systest-node: 'systest'

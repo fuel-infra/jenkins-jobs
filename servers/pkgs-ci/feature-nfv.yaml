@@ -5,32 +5,11 @@
     project-name: 'feature-nfv'
     project-version: '9.0'
 
-    deb-origin-release: 'Mirantis'
-    deb-origin-test: 'testing'
-
-    publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
-    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
-    repo-base-path: '/home/jenkins/pubrepos'
-
     # Configure flows
     is-downgrade: 'true'
     is-updates: 'false'
 
-    # Gerrit parameters
-    gerrit-host: 'review.fuel-infra.org'
-    gerrit-port: '29418'
-    gerrit-user: 'openstack-ci-jenkins'
-
-    # Install test repository
-    install-scm-repo: 'infra/ci-test-request'
-    install-scm-branch: 'master'
     perestroika-branch: 'stable/mitaka'
-
-    # Job slave nodes
-    build-node: 'new-builder'
-    publish-node: 'new-publisher'
-    install-node: 'install-node'
-    systest-node: 'systest'
 
     spec_prefix_path: '/{distro}'
 

@@ -5,41 +5,14 @@
     project-name: 'mcp'
     project-version: '1.0'
 
-    deb-origin-release: 'Mirantis'
-    deb-origin-test: 'testing'
-
     main_ubuntu_release: 'xenial'
     openstack_release: 'ubuntu'
 
-
     fuel-main-branch: 'stable/mitaka'
     fuel-qa-branch: 'stable/mitaka'
-    fuel-namespace: 'openstack'
-
-    publish-repo-host: 'perestroika-repo-tst.infra.mirantis.net'
-    repo-base-path: '/home/jenkins/pubrepos'
-    repo-host: 'perestroika-repo-tst.infra.mirantis.net'
-
-    # Configure flows
-    is-downgrade: 'false'
-    is-updates: 'false'
-
-    # Gerrit parameters
-    gerrit-host: 'review.fuel-infra.org'
-    gerrit-port: '29418'
-    gerrit-user: 'openstack-ci-jenkins'
-
-    # Install test repository
-    install-scm-repo: 'infra/ci-test-request'
-    install-scm-branch: 'origin/master'
 
     perestroika-branch: 'stable/mitaka'
-
-    # Job slave nodes
-    build-node: 'new-builder'
-    publish-node: 'new-publisher'
-    install-node: 'install-node'
-    systest-node: 'systest'
+    install-scm-branch: 'origin/master'
 
     spec_prefix_path: '/{distro}'
 
