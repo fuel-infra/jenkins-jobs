@@ -3,7 +3,7 @@
     version: '10.0'
     git-root: 'ssh://product-ci@review.fuel-infra.org:29418/openstack/'
     branch: 'mos/newton'
-    qa_branch: '{branch}'
+    qa_branch: 'stable/newton'
     ubuntu_dist: 'xenial'
     mod: ''
     bvt-mail: 'mos-qa@mirantis.com'
