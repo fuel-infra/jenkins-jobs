@@ -9,9 +9,7 @@
      - '10.0':
         test-job-name: '{env-id}.test_all'
      - '11.0':
-        # FIXME(aevseev) Switch to downstream ISO
-        iso-ci-url: 'https://ci.fuel-infra.org/'
-        test-job-name: '{env-id}-community.test_all'
+        test-job-name: '{env-id}.test_all'
      - 'master':
         test-job-name: '11.0.test_all'
         timer: 'H/30 * * * *'
