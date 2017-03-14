@@ -1,0 +1,62 @@
+- job:
+    name: 'cve_tracking'
+    node: 'cve-tracking'
+    logrotate:
+        daysToKeep: 10
+
+    description: |
+      <h3> Tracking of CVE in Mirants forked packages <h3>
+        <ul>
+          <li> <b> Owner: </b> Linux team </li>
+          <li> <b> Contacts: </b> #infra </li>
+        </ul>
+      </p>
+
+#    parameters:
+#      - string:
+#          name: PACKAGE_NAME
+#          default: ''
+#          description: "Name of ported package"
+#      - string:
+#          name: RELEASE_NAME
+#          default: ''
+#          description: "Name of release"
+#      - string:
+#          name: CVE_NAME
+#          default: ''
+#          description: "Name of CVE"
+#      - file:
+#          name: packages_list
+#          description: "File with list of packages to check"
+    wrappers:
+      - build-timeout:
+          timeout: 50
+      - ssh-agent-credentials:
+          users:
+            - '{ssh-creds-openstack-ci-jenkins}'
+    properties:
+      - authorization:
+           mos-security-eng:
+             - job-build
+             - job-cancel
+             - job-configure
+             - job-discover
+             - job-extended-read
+             - job-read
+    scm:
+      - git:
+          url: 'https://review.fuel-infra.org/infra/trsync'
+          branches:
+             - 'v0.9'
+          basedir: 'trsync'
+
+    builders:
+      - shell: |
+           #!/bin/bash -ex
+           cve_tracking.sh
+
+    publishers:
+      - email:
+          recipients: 'ci+alert@mirantis.com'
+          notify-every-unstable-build: false
+          send-to-individuals: false
