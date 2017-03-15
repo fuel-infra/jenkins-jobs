@@ -25,27 +25,25 @@
 #       :type JOB_NAME: str
 #       :var REGISTRY:
 #       :type REGISTRY: str
-# TODO: possibility to not remove container after tests
 
 set -ex
 
 SCRIPT_PATH="${SCRIPT_PATH:-/opt/jenkins/runner.sh}"
 SCRIPT_ARGS="${SCRIPT_ARGS:-}"
+REGISTRY_PROTOCOL="${REGISTRY_PROTOCOL:-https}"
 REGISTRY="${REGISTRY:-registry.fuel-infra.org}"
-# TODO: Remove it after docker registry api v1 will accessible
-REGISTRY_SEARCH_PORT="${REGISTRY_SEARCH_PORT:-5002}"
 IMAGE="${IMAGE:-fuel-ci/base}"
 VOLUMES="${VOLUMES:-}"
 ENVVARS="${ENVVARS:-}"
 WORKSPACE="${WORKSPACE:-${PWD}}"
 JOB_NAME="${JOB_NAME:-debug_docker_script}"
 
-LATEST_IMAGE=$(curl -ksSL "${REGISTRY}:${REGISTRY_SEARCH_PORT}/?name=${IMAGE}&tag=.*&format=select"|sort|tail -n1)
+LATEST_IMAGE=$(curl -ksSL "${REGISTRY_PROTOCOL}://${REGISTRY}/v2/${IMAGE}/tags/list"|jq -r '.tags[]'|grep -v -e latest -e 2017|sort|tail -n1)
 
 CMD_VOLUMES="-v ${WORKSPACE}/${JOB_NAME}:/opt/jenkins/${JOB_NAME}"
 for volume in ${VOLUMES}; do
     CMD_VOLUMES+=" -v ${volume}"
 done
-bash -exc "docker run --rm ${CMD_VOLUMES} ${ENVVARS} -t ${REGISTRY}/${LATEST_IMAGE} /bin/bash -exc '${SCRIPT_PATH} ${SCRIPT_ARGS}'"
+bash -exc "docker run --rm ${CMD_VOLUMES} ${ENVVARS} -t ${REGISTRY}/${IMAGE}:${LATEST_IMAGE} /bin/bash -exc '${SCRIPT_PATH} ${SCRIPT_ARGS}'"
 # Sometimes container didn't stops after script was run
 docker rm -f || echo "Container removed"
