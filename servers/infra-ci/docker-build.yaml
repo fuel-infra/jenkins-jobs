@@ -1,6 +1,5 @@
-- job-template:
-    name: 'docker-build-{action}'
-    node: 'docker-builder'
+- builder:
+    name: docker_common
     builders:
       - shell:
           !include-raw-escape: './builders/docker-lint.sh'
@@ -8,6 +7,10 @@
           !include-raw-escape: './builders/check_shell.sh'
       - shell:
           !include-raw-escape: './builders/docker-build.sh'
+
+- builder:
+    name: docker_publish
+    builders:
       - trigger-builds:
         - project: 'docker-publish'
           bool-parameters:
@@ -19,6 +22,13 @@
               IMAGES=$IMAGES
           block: true
           same-node: true
+
+- job-template:
+    name: 'docker-build-{action}'
+    node: 'docker-builder'
+    job_builders:
+      - docker_common
+    builders: '{obj:job_builders}'
     description: |
      This job will use docker builder host, build image from the given git url and
      verify image.
@@ -117,3 +127,6 @@
           file_path: '**'
           trigger_on:
             - change-merged-event
+          job_builders:
+            - docker_common
+            - docker_publish
