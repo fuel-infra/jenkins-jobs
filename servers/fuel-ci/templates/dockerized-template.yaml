@@ -52,7 +52,7 @@
     builders:
       - inject: # docker common parameters
           properties-content: |
-            DOCKER_IMAGE={docker_image}
+            IMAGE={docker_image}
             VOLUMES={volumes}
 
       - inject: # test parameters
