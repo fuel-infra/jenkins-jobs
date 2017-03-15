@@ -2,11 +2,11 @@
     name: docker_common
     builders:
       - shell:
-          !include-raw-escape: './builders/docker-lint.sh'
+          !include-raw: './builders/docker-lint.sh'
       - shell:
-          !include-raw-escape: './builders/check_shell.sh'
+          !include-raw: './builders/check_shell.sh'
       - shell:
-          !include-raw-escape: './builders/docker-build.sh'
+          !include-raw: './builders/docker-build.sh'
 
 - builder:
     name: docker_publish
