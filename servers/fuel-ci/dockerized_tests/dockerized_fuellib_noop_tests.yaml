@@ -25,11 +25,11 @@
             - branch-compare-type: PLAIN
               branch-pattern: 'stable/ocata'
           test_variables: |
-            SCRIPT_PATH='utils/jenkins/fuel_noop_tests.sh'
+            ENVVARS="-e RUNNER_SCRIPT='utils/jenkins/fuel_noop_tests.sh'"
       - 'dockerized-{name}':
           name: fuellib_puppet4_noop_tests
           gerrit_branches:
             - branch-compare-type: PLAIN
               branch-pattern: 'master'
           test_variables: |
-            SCRIPT_PATH='utils/jenkins/fuel_noop_tests4.sh'
+            ENVVARS="-e RUNNER_SCRIPT='utils/jenkins/fuel_noop_tests4.sh'"
