@@ -56,7 +56,7 @@ store "UBUNTU_MIRROR_ID" "${__ubuntu_latest_repo_snaphot_id}"
 
 # http://mirror.fuel-infra.org/pkgs/snapshots/centos-7.2.1511-2016-05-31-083834/
 #                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-__centos_latest_repo_snaphot_id=$(curl -sSf "${MIRROR_HOST}/pkgs/snapshots/centos-7.2.1511-latest.target.txt" | sed '1p;d')
+__centos_latest_repo_snaphot_id=$(curl -sSf "${MIRROR_HOST}/pkgs/snapshots/centos-7.3.1611-latest.target.txt" | sed '1p;d')
 store "CENTOS_MIRROR_ID" "${__centos_latest_repo_snaphot_id}"
 
 
