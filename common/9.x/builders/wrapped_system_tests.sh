@@ -86,6 +86,17 @@ function to_uppercase() {
 __space=' '
 __pipe='|'
 
+# Adding snapshots of upstream CentOS repositories os, updates and extras
+# using snapshot ID to the UPDATE_FUEL_MIRROR variable
+
+if [[ ! -z ${CENTOS_MIRROR_ID} ]]; then
+    for __repo in "os"      \
+                  "extras"  \
+                  "updates" ; do
+        __url="http://${MIRROR_HOST}/pkgs/snapshots/${CENTOS_MIRROR_ID}/${__repo}/x86_64"
+        UPDATE_FUEL_MIRROR="$(join "${__space}" "${UPDATE_FUEL_MIRROR}" "${__url}" )"
+    done
+fi
 
 # Adding MOS rpm repos to
 # - UPDATE_FUEL_MIRROR - will be used for master node
