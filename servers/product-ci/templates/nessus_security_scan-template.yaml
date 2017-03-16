@@ -77,6 +77,8 @@
             NESSUS_IMAGE_NAME=nessus
             NESSUS_PASSWORD=r00tme
             NESSUS_USERNAME=root
+            NESSUS_IMAGE_PATH=/var/lib/libvirt/images/$NESSUS_IMAGE_NAME.qcow2
+            DEVOPS_SETTINGS_TEMPLATE=$WORKSPACE/system_test/tests_templates/devops_configs/security_scan.yaml
             NEUTRON_ENABLE=true
             SECURITY_TEST=true
 
