@@ -1,24 +1,46 @@
 - project:
-    name: 'verify-python-fuelclient'
+    name: 'python-fuelclient'
     docker_image: 'python-fuelclient'
     volumes: '$WORKSPACE:/opt/jenkins/python-fuelclient'
     test_variables: |
       ENVVARS='-e JENKINS_URL=$JENKINS_URL'
     gerrit_project_pattern: 'openstack/python-fuelclient'
-    timed: '0 13 * * *'
     scm:
       - gerrit-openstack:
           repo: '{gerrit_project_pattern}'
+    gerrit_branches:
+      - branch-compare-type: PLAIN
+        branch-pattern: 'master'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/8.0'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/mitaka'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/newton'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/ocata'
+    suffix: 'python-fuelclient'
+    job_wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
     jobs:
       - 'dockerized-{name}':
-          gerrit_branches:
-            - branch-compare-type: PLAIN
-              branch-pattern: 'master'
-            - branch-compare-type: PLAIN
-              branch-pattern: 'stable/8.0'
-            - branch-compare-type: PLAIN
-              branch-pattern: 'stable/mitaka'
+          name: 'verify-{suffix}'
           gerrit_trigger_on:
             - patchset-created-event
             - comment-added-contains-event:
                 comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          timed: '0 13 * * *'
+      - 'dockerized-{name}':
+          name: 'gate-{suffix}'
+          gerrit_trigger_on:
+            - change-merged-event
+          job_publishers:
+            - email-alert-on-merge
+          scm:
+            - gerrit-openstack-branch:
+                repo: '{gerrit_project_pattern}'

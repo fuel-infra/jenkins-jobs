@@ -10,6 +10,10 @@
         branch-pattern: 'stable/8.0'
       - branch-compare-type: PLAIN
         branch-pattern: 'stable/mitaka'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/newton'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/ocata'
     job_publishers:
       - description-setter:
           regexp-for-failed: '(Failed tests: (.*))'
@@ -21,9 +25,10 @@
           fail: true
           write-description: true
           timeout: 45
+    suffix: 'docker-fuel-library-python'
     jobs:
       - 'dockerized-{name}':
-          name: verify-docker-fuel-library-python
+          name: 'verify-{suffix}'
           email-type: default
           timed: '0 12 * * *'
           gerrit_trigger_on:
@@ -34,7 +39,7 @@
             - gerrit-openstack:
                 repo: '{gerrit_project_pattern}'
       - 'dockerized-{name}':
-          name: gate-docker-fuel-library-python
+          name: 'gate-{suffix}'
           email-type: alert-on-merge
           timed: ''
           gerrit_trigger_on:

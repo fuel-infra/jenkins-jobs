@@ -13,6 +13,10 @@
         branch-pattern: 'stable/8.0'
       - branch-compare-type: PLAIN
         branch-pattern: 'stable/mitaka'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/newton'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/ocata'
     gerrit_trigger_on:
       - patchset-created-event
       - comment-added-contains-event:

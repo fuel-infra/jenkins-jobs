@@ -7,12 +7,19 @@
     scm:
       - gerrit-openstack:
           repo: '{gerrit_project_pattern}'
+    gerrit_branches:
+      - branch-compare-type: ANT
+        branch-pattern: '**'
+    gerrit_trigger_on:
+      - patchset-created-event
+      - comment-added-contains-event:
+          comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+    job_wrappers:
+      - timeout:
+          fail: true
+          timeout: 10
+          write-description: true
+      - ansicolor:
+          colormap: css
     jobs:
       - 'dockerized-{name}':
-          gerrit_branches:
-            - branch-compare-type: ANT
-              branch-pattern: '**'
-          gerrit_trigger_on:
-            - patchset-created-event
-            - comment-added-contains-event:
-                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'

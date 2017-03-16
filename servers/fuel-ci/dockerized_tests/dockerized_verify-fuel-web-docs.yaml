@@ -12,15 +12,22 @@
           dir: 'docs/_build/html'
           files: 'index.html'
           name: 'Fuel Development Docs build results'
+    job_wrappers:
+      - timeout:
+          fail: true
+          timeout: 15
+          write-description: true
+      - ansicolor:
+          colormap: xterm
     scm:
       - gerrit-openstack:
           repo: '{gerrit_project_pattern}'
+    gerrit_branches:
+      - branch-compare-type: ANT
+        branch-pattern: '**'
+    gerrit_trigger_on:
+      - patchset-created-event
+      - comment-added-contains-event:
+          comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
     jobs:
       - 'dockerized-{name}':
-          gerrit_branches:
-            - branch-compare-type: ANT
-              branch-pattern: '**'
-          gerrit_trigger_on:
-            - patchset-created-event
-            - comment-added-contains-event:
-                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
