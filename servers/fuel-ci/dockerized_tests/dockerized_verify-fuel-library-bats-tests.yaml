@@ -7,6 +7,8 @@
       - branch-compare-type: ANT
         branch-pattern: '**'
     suffix: 'fuel-library-bats-tests'
+    job_publishers:
+      - 'email-{email-type}'
     jobs:
       - 'dockerized-{name}':
           name: 'verify-{suffix}'
@@ -14,25 +16,17 @@
             - patchset-created-event
             - comment-added-contains-event:
                 comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
-          timed: '0 12 * * *'
+          timed: '0 13 * * *'
           scm:
-            - git:
-                branches:
-                  - $GERRIT_BRANCH
-                url: https://review.openstack.org/openstack/fuel-library.git
-                refspec: $GERRIT_REFSPEC
-                choosing-strategy: gerrit
+            - gerrit-openstack:
+                repo: '{gerrit_project_pattern}'
+          email-type: default
 
       - 'dockerized-{name}':
           name: 'gate-{suffix}'
           gerrit_trigger_on:
             - change-merged-event
-          publishers:
-            - 'email-alert-on-merge'
           scm:
-            - git:
-                branches:
-                  - $GERRIT_BRANCH
-                url: https://review.openstack.org/openstack/fuel-library.git
-                refspec: refs/heads/$GERRIT_BRANCH
-                choosing-strategy: default
+            - gerrit-openstack-branch:
+                repo: '{gerrit_project_pattern}'
+          email-type: alert-on-merge

@@ -36,13 +36,17 @@
           latest-only: false
     fail_fast: true
     ui_test_group: 'test'
-    testvars: |
+    test_variables: |
       ENVVARS='-e UI_TEST_GROUP={ui_test_group} -e NPM_CONFIG=/home/jenkins/npm -e FAIL_FAST={fail_fast}'
     gerrit_branches:
       - branch-compare-type: PLAIN
         branch-pattern: 'master'
       - branch-compare-type: PLAIN
         branch-pattern: 'stable/mitaka'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/newton'
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/ocata'
     jobs:
       - 'dockerized-{name}':
           name: 'verify-fuel-web-on-fuel-ui'

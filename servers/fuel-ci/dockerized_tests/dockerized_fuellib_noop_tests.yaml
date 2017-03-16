@@ -11,14 +11,25 @@
     scm:
       - gerrit-openstack:
           repo: '{gerrit_project_pattern}'
-    gerrit_branches:
-      - branch-compare-type: REG_EXP
-        branch-pattern: '^(?!stable/(?:5\.0|5\.1|6\.0|6\.1|7\.0)).*$'
     jobs:
       - 'dockerized-{name}':
+          gerrit_branches:
+            - branch-compare-type: PLAIN
+              branch-pattern: 'master'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/8.0'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/mitaka'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/newton'
+            - branch-compare-type: PLAIN
+              branch-pattern: 'stable/ocata'
           test_variables: |
             SCRIPT_PATH='utils/jenkins/fuel_noop_tests.sh'
       - 'dockerized-{name}':
           name: fuellib_puppet4_noop_tests
+          gerrit_branches:
+            - branch-compare-type: PLAIN
+              branch-pattern: 'master'
           test_variables: |
             SCRIPT_PATH='utils/jenkins/fuel_noop_tests4.sh'

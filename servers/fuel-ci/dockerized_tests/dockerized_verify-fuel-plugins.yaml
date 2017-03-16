@@ -37,7 +37,6 @@
           name: gate-docker-fuel-plugins
           gerrit_trigger_on:
             - change-merged-event
-          timed: ''
           email-type: alert-on-merge
           scm:
             - gerrit-openstack-branch:
