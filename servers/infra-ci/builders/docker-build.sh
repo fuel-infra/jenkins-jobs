@@ -93,6 +93,48 @@ verify_fuel_ci() {
     echo "[ STATUS ] Fuel-ci verification exit code was ${exitcode}"
 }
 
+docker_push() {
+    # get image tag first
+    IMAGES=${1}
+    REGISTRIES=${2}
+    DATE_TAG=${3}
+    LATEST_TAG=${4}
+    DATE=$(date +"%Y-%m-%d-%H-%M-%S")
+    if [ -z "${IMAGES}" ]
+    then
+      echo "[ ERROR ] IMAGES to publish are not set"
+      exit 1
+    fi
+
+    if [ -z "${REGISTRIES}" ]
+    then
+      echo "[ ERROR ] REGISTRY_URLS are not set"
+      exit 1
+    fi
+
+    # iterate through all the images
+    for IMAGE in ${IMAGES}
+    do
+      for URL in ${REGISTRIES}
+      do
+        docker tag "${IMAGE}" "${URL}/${IMAGE}"
+        docker push "${URL}/${IMAGE}"
+        # upload additional date tagged image
+        if [[ "${DATE_TAG}" == 'true' ]]; then
+          docker tag "${IMAGE}" "${URL}/${IMAGE}-${DATE}"
+          docker push "${URL}/${IMAGE}-${DATE}"
+          docker rmi "${URL}/${IMAGE}-${DATE}"
+        fi
+        if [[ "${LATEST_TAG}" == 'true' ]]; then
+            IMAGE_LATEST=$(echo "${IMAGE}" | awk -F: '$NF="latest"' OFS=':')
+            docker tag "${IMAGE}" "${URL}/${IMAGE_LATEST}"
+            docker push "${URL}/${IMAGE_LATEST}"
+            docker rmi "${URL}/${IMAGE_LATEST}"
+        fi
+        docker rmi "${URL}/${IMAGE}"
+      done
+    done
+}
 main() {
     if [ "${REBUILD}" == "true" ]; then
         BUILD_OPTS="--no-cache"
@@ -141,7 +183,17 @@ main() {
     done
     # remove trailing, leading spaces
     VIMAGES=$(echo -e "${VIMAGES}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-    echo "IMAGES='${VIMAGES}'" > "${WORKSPACE}/publish_env.sh"
+    echo "IMAGES='${VIMAGES}'"
+    if [ "${PUBLISH}" == "true" ]; then
+        if [ "${TYPE}" == "flat" ]; then
+            date_tag=true
+            latest_tag=false
+        else
+            date_tag=false
+            latest_tag=true
+        fi
+        docker_push "${VIMAGES}" "${REGISTRY_URLS}" "${date_tag}" "${latest_tag}"
+    fi
     popd
     echo "${OUTPUT}"
 }
@@ -152,4 +204,6 @@ REBUILD=${REBUILD:-"false"}
 BUILD_ID=${BUILD_ID:-}
 FORCE_PREFIX=${FORCE_PREFIX:-}
 FILTER=${FILTER:="."}
+REGISTRY_URLS=${REGISTRY_URLS:-''}
+PUBLISH=${PUBLISH:-"false"}
 main

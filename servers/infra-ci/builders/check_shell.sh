@@ -2,7 +2,6 @@
 set -ex
 
 ARGS="-e SC2013"
-
 if [ "${GERRIT_REFSPEC}" = "refs/heads/master" ]; then
   find "${WORKSPACE}" -name "*.sh" -type f -print0 | xargs -0 shellcheck "${ARGS}"
 else

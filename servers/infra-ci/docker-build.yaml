@@ -1,34 +1,6 @@
-- builder:
-    name: docker_common
-    builders:
-      - shell:
-          !include-raw: './builders/docker-lint.sh'
-      - shell:
-          !include-raw: './builders/check_shell.sh'
-      - shell:
-          !include-raw: './builders/docker-build.sh'
-
-- builder:
-    name: docker_publish
-    builders:
-      - trigger-builds:
-        - project: 'docker-publish'
-          bool-parameters:
-            - name: "DATE_TAG"
-              value: "false"
-            - name: "LATEST_TAG"
-              value: "true"
-          predefined-parameters: |
-              IMAGES=$IMAGES
-          block: true
-          same-node: true
-
 - job-template:
     name: 'docker-build-{action}'
     node: 'docker-builder'
-    job_builders:
-      - docker_common
-    builders: '{obj:job_builders}'
     description: |
      This job will use docker builder host, build image from the given git url and
      verify image.
@@ -55,6 +27,22 @@
           name: IGNORE_CHECKS
           default: 'DL3002 DL3004 DL3007 DL3008 DL3009 DL3013 DL3015'
           description: "List of hadolint rules to skip separated by spaces. Ex: 'DL3003 DL3003'"
+      - string:
+          name: REGISTRY_URLS
+          default: 'registry02-bud.fuel-infra.org registry03-scc.fuel-infra.org'
+          description: 'list of registry urls'
+      - string:
+          name: PUBLISH
+          default: '{publish}'
+          description: 'publish or not after build'
+    publish: 'false'
+    builders:
+      - shell:
+          !include-raw-escape: './builders/docker-lint.sh'
+      - shell:
+          !include-raw-escape: './builders/check_shell.sh'
+      - shell:
+          !include-raw-escape: './builders/docker-build.sh'
     scm:
       - main:
           reponame: 'fuel-infra/dockerfiles'
@@ -83,10 +71,6 @@
           fail: true
           timeout: 120
     publishers:
-      - archive:
-          allow-empty: false
-          artifacts: 'publish_env.sh'
-          latest-only: false
       - description-setter:
           regexp: ^\[urls\](.*)
           set-for-matrix: true
@@ -123,10 +107,9 @@
           action: 'merge'
           force_prefix: ''
           rebuild: 'false'
+          publish: 'true'
           skip_path: ''
           file_path: '**'
           trigger_on:
             - change-merged-event
-          job_builders:
-            - docker_common
-            - docker_publish
+
