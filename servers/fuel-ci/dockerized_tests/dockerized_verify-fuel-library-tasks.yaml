@@ -10,8 +10,6 @@
         branch-pattern: 'stable/mitaka'
       - branch-compare-type: PLAIN
         branch-pattern: 'stable/newton'
-      - branch-compare-type: PLAIN
-        branch-pattern: 'stable/ocata'
     job_publishers:
       - description-setter:
           regexp-for-failed: '(Failed tests: (.*))'
