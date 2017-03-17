@@ -26,6 +26,7 @@ fi
 # Checking gerrit commits for fuel-main
 if [ "${fuelmain_gerrit_commit}" != "none" ] ; then
   for commit in ${fuelmain_gerrit_commit} ; do
+    # shellcheck disable=SC2015
     git fetch https://review.openstack.org/openstack/fuel-main "${commit}" && git cherry-pick FETCH_HEAD || false
   done
 fi
@@ -52,29 +53,17 @@ if [ "${USE_MIRROR}" != "none" ]; then
   fi
 
   case "${LOCATION}" in
-      srt)
-          USE_MIRROR=srt
-          LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
-          ;;
-      msk)
-          USE_MIRROR=msk
-          LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
-          ;;
-      hrk)
-          USE_MIRROR=hrk
-          LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
-          ;;
-      poz|bud|bud-ext|cz)
+      poz|bud|bud-ext|cz|undef)
           USE_MIRROR=cz
           LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
           ;;
-      mnv|scc)
+      mnv|scc|sccext)
           USE_MIRROR=usa
           LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
           ;;
       *)
-          USE_MIRROR=msk
-          LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+          USE_MIRROR=cz
+          LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
   esac
 
   LATEST_TARGET=$(curl -sSf "${LATEST_MIRROR_ID_URL}/mos-repos/ubuntu/7.0.target.txt" | sed '1p; d')
@@ -95,6 +84,8 @@ echo "ENV VARIABLES START"
 printenv
 echo "ENV VARIABLES END"
 
+# should be word splitted
+# shellcheck disable=SC2086
 make $make_args iso version-yaml
 
 #########################################
@@ -102,6 +93,7 @@ make $make_args iso version-yaml
 echo "STEP 2. Publish everything"
 
 cd "${ARTS_DIR}"
+# shellcheck disable=SC2045
 for artifact in $(ls fuel-*)
 do
   "${WORKSPACE}/utils/jenkins/process_artifacts.sh" "${artifact}"
@@ -109,14 +101,16 @@ done
 
 cd "${WORKSPACE}"
 
-echo FUELMAIN_GERRIT_COMMIT="${fuelmain_gerrit_commit}" > "${ARTS_DIR}/gerrit_commits.txt"
-echo NAILGUN_GERRIT_COMMIT="${nailgun_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
-echo ASTUTE_GERRIT_COMMIT="${astute_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
-echo OSTF_GERRIT_COMMIT="${ostf_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
-echo FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
-echo PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
-echo FUEL_AGENT_GERRIT_COMMIT="${fuel_agent_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
-echo FUEL_NAILGUN_AGENT_GERRIT_COMMIT="${fuel_nailgun_agent_gerrit_commit}" >> "${ARTS_DIR}/gerrit_commits.txt"
+cat > "${ARTS_DIR}/gerrit_commits.txt" <<EOF
+FUELMAIN_GERRIT_COMMIT=${fuelmain_gerrit_commit}
+NAILGUN_GERRIT_COMMIT=${nailgun_gerrit_commit}
+ASTUTE_GERRIT_COMMIT=${astute_gerrit_commit}
+OSTF_GERRIT_COMMIT=${ostf_gerrit_commit}
+FUELLIB_GERRIT_COMMIT=${fuellib_gerrit_commit}
+PYTHON_FUELCLIENT_GERRIT_COMMIT=${python_fuelclient_gerrit_commit}
+FUEL_AGENT_GERRIT_COMMIT=${fuel_agent_gerrit_commit}
+FUEL_NAILGUN_AGENT_GERRIT_COMMIT=${fuel_nailgun_agent_gerrit_commit}
+EOF
 
 # let's save fuel-centos-build.log as artifact
 gzip -c "${BUILD_DIR}/docker/fuel-centos-build.log" > "${ARTS_DIR}/fuel-centos-build.log.gz" || true
