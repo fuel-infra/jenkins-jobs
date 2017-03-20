@@ -11,6 +11,10 @@
     system_tests/timeout: '480'
     system_tests/job-weight: '7'
 
+    system_tests/common-overrides-plain-properties: |
+      ANALYTICS_IP=fuel-stats-systest.infra.mirantis.net
+      FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
+
     plugins-template/repobranch: 'origin/stable/newton'
     plugins-template/reponame: 'fuel-qa'
     plugins-template/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
