@@ -99,7 +99,6 @@ docker_push() {
     REGISTRIES=${2}
     DATE_TAG=${3}
     LATEST_TAG=${4}
-    DATE=$(date +"%Y-%m-%d-%H-%M-%S")
     if [ -z "${IMAGES}" ]
     then
       echo "[ ERROR ] IMAGES to publish are not set"
@@ -112,18 +111,16 @@ docker_push() {
       exit 1
     fi
 
-    # iterate through all the images
-    for IMAGE in ${IMAGES}
-    do
-      for URL in ${REGISTRIES}
-      do
+    for IMAGE in ${IMAGES}; do
+      for URL in ${REGISTRIES}; do
         docker tag "${IMAGE}" "${URL}/${IMAGE}"
         docker push "${URL}/${IMAGE}"
-        # upload additional date tagged image
         if [[ "${DATE_TAG}" == 'true' ]]; then
-          docker tag "${IMAGE}" "${URL}/${IMAGE}-${DATE}"
-          docker push "${URL}/${IMAGE}-${DATE}"
-          docker rmi "${URL}/${IMAGE}-${DATE}"
+            DATE=$(date +"%Y-%m-%d-%H-%M-%S")
+            IMAGE_DATE="${IMAGE}-${DATE}"
+            docker tag "${IMAGE}" "${URL}/${IMAGE_DATE}"
+            docker push "${URL}/${IMAGE}-${DATE}"
+            docker rmi "${URL}/${IMAGE}-${DATE}"
         fi
         if [[ "${LATEST_TAG}" == 'true' ]]; then
             IMAGE_LATEST=$(echo "${IMAGE}" | awk -F: '$NF="latest"' OFS=':')
@@ -186,11 +183,11 @@ main() {
     echo "IMAGES='${VIMAGES}'"
     if [ "${PUBLISH}" == "true" ]; then
         if [ "${TYPE}" == "flat" ]; then
-            date_tag=true
-            latest_tag=false
+            date_tag='false'
+            latest_tag='true'
         else
-            date_tag=false
-            latest_tag=true
+            date_tag='true'
+            latest_tag='false'
         fi
         docker_push "${VIMAGES}" "${REGISTRY_URLS}" "${date_tag}" "${latest_tag}"
     fi
