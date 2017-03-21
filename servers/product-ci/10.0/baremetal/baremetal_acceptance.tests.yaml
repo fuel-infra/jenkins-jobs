@@ -50,16 +50,15 @@
         testgroup:
         - 'ceph_for_volumes_images_ephemeral_rados'
         - 'lock_db_access_from_primary_controller'
-        - 'shut_down_mongo_node'
         - 'recovery_neutron_agents_after_restart'
-        - 'kill_mongo_processes'
-        - 'close_connections_for_mongo'
         - 'power_outage_cinder_cluster'
         - 'shutdown_ceph_for_all'
         - 'ha_neutron_haproxy_termination'
         - 'tun_ceph_all'
         - 'cinder_ceph_for_images_ephemeral_rados'
         - 'ceph_volumes_ephemeral'
+        - 'safe_reboot_primary_controller_ceph'
+        - 'shutdown_cinder_cluster'
 
     # beta group
     - common/system_tests:
@@ -75,28 +74,11 @@
         testgroup:
         - 'four_controllers'
         - 'add_ceph_stop'
-        - 'mongo_ceph_with_ceilometer'
         - 'ceph_for_images_ephemeral_rados'
         - 'shutdown_primary_controller_ceph'
         - 'safe_reboot_primary_controller'
         - 'remove_controllers'
         - 'add_delete_compute'
         - 'add_delete_ceph'
-        - 'huge_separate_rabbitmq_db'
-        - 'hard_reset_primary_controller'
-        - 'safe_reboot_primary_controller_ceph'
-        - 'shutdown_cinder_cluster'
-
-    # gamma group
-    - common/system_tests:
-
-        system_tests/custom-overrides-plain-properties: |
-          BAREMETAL_ENV_NAME=gamma
-          NIC_FOR_ADMIN_BRIDGE=eno2
-          ADMIN_VLAN=225
-          ENV_NAME={test-type}.${{BAREMETAL_ENV_NAME}}
-          BAREMETAL_ADMIN_IFACE=${{NIC_FOR_ADMIN_BRIDGE}}.${{ADMIN_VLAN}}
-          DEVOPS_SETTINGS_TEMPLATE=/home/jenkins/devops_templates/baremetal_${{BAREMETAL_ENV_NAME}}.yaml
-
-        testgroup:
         - 'add_delete_cinder'
+        - 'hard_reset_primary_controller'
