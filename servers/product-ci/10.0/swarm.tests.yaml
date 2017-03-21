@@ -356,7 +356,3 @@
             plugins-template/custom-overrides-plain-properties: |
               NODES_COUNT=8
 
-        - detach-rabbitmq-ci-group:
-            plugins-template/job-weight: '20'
-            plugins-template/node: 'huge-systest'
-            plugins-template/timeout: '600'

@@ -154,9 +154,6 @@
             - name: '10.0.system_test.ubuntu.plugins.install_plugin_after_cluster_create'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: '10.0.system_test.ubuntu.plugins.detach-rabbitmq-ci-group'
-              current-parameters: true
-              kill-phase-on: NEVER
             - name: '10.0.system_test.ubuntu.fuel_plugin_reboot'
               current-parameters: true
               kill-phase-on: NEVER
