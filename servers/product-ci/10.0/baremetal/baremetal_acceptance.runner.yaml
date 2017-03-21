@@ -58,16 +58,7 @@
           - name: '10.0.baremetal.ubuntu.lock_db_access_from_primary_controller'
             current-parameters: true
             kill-phase-on: NEVER
-          - name: '10.0.baremetal.ubuntu.shut_down_mongo_node'
-            current-parameters: true
-            kill-phase-on: NEVER
           - name: '10.0.baremetal.ubuntu.recovery_neutron_agents_after_restart'
-            current-parameters: true
-            kill-phase-on: NEVER
-          - name: '10.0.baremetal.ubuntu.kill_mongo_processes'
-            current-parameters: true
-            kill-phase-on: NEVER
-          - name: '10.0.baremetal.ubuntu.close_connections_for_mongo'
             current-parameters: true
             kill-phase-on: NEVER
           - name: '10.0.baremetal.ubuntu.power_outage_cinder_cluster'
@@ -85,9 +76,6 @@
           - name: '10.0.baremetal.ubuntu.add_ceph_stop'
             current-parameters: true
             kill-phase-on: NEVER
-          - name: '10.0.baremetal.ubuntu.mongo_ceph_with_ceilometer'
-            current-parameters: true
-            kill-phase-on: NEVER
           - name: '10.0.baremetal.ubuntu.shutdown_primary_controller_ceph'
             current-parameters: true
             kill-phase-on: NEVER
@@ -98,9 +86,6 @@
             current-parameters: true
             kill-phase-on: NEVER
           - name: '10.0.baremetal.ubuntu.add_delete_ceph'
-            current-parameters: true
-            kill-phase-on: NEVER
-          - name: '10.0.baremetal.ubuntu.huge_separate_rabbitmq_db'
             current-parameters: true
             kill-phase-on: NEVER
           - name: '10.0.baremetal.ubuntu.shutdown_cinder_cluster'
