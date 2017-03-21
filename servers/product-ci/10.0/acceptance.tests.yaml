@@ -133,11 +133,6 @@
               DRIVER_ENABLE_ACPI=true
               KVM_USE=true
 
-    - common/plugins-template:
-
-        testgroup:
-
-        - thread_separate_services_ceph
 
     - product-ci/test-reports:
         test-type:  'acceptance'

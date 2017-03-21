@@ -135,9 +135,6 @@
         - name: '10.0.acceptance.ubuntu.load'
           current-parameters: true
           kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.plugins.thread_separate_services_ceph'
-          current-parameters: true
-          kill-phase-on: NEVER
         - name: '10.0.acceptance.ubuntu.change_vip_manually'
           current-parameters: true
           kill-phase-on: NEVER
