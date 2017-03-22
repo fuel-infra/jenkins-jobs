@@ -1,6 +1,6 @@
 - project:
     name: docker-nailgun_permormance_tests
-    docker_image: nailgun_performance_tests
+    docker_image: 'fuel-ci/nailgun_performance_tests'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
     test_variables:
       ENVVARS='-e JENKINS_URL=$JENKINS_URL'

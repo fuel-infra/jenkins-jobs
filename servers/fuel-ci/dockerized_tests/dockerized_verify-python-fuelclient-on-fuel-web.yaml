@@ -1,6 +1,6 @@
 - project:
     name: docker-dualcheck-python-fuelclient-on-fuel-web
-    docker_image: 'python-fuelclient-on-fuel-web'
+    docker_image: 'fuel-ci/python-fuelclient-on-fuel-web'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
     test_variables: |
        ENVVARS='-e JENKINS_URL=$JENKINS_URL'

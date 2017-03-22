@@ -1,6 +1,6 @@
 - project:
     name: docker-dualcheck-fuel-library-bats-tests
-    docker_image: 'fuel-library-bats-tests'
+    docker_image: 'fuel-ci/fuel-library-bats-tests'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
     gerrit_project_pattern: 'openstack/fuel-library'
     gerrit_branches:

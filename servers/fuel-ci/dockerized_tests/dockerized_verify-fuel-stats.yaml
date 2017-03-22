@@ -1,6 +1,6 @@
 - project:
     name: docker-dualcheck-fuel-stats
-    docker_image: 'fuel-stats'
+    docker_image: 'fuel-ci/fuel-stats'
     volumes: '$WORKSPACe:/opt/jenkins/fuel-stats'
     gerrit_project_pattern: 'openstack/fuel-stats'
     timed: 'H 2 * * *'

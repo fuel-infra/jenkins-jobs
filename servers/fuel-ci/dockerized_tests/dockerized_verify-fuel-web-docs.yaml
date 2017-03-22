@@ -1,6 +1,6 @@
 - project:
     name: verify-fuel-web-docs
-    docker_image: 'fuel-web-docs'
+    docker_image: 'fuel-ci/fuel-web-docs'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
     gerrit_project_pattern: 'openstack/fuel-web'
     timed: '0 2 * * *'

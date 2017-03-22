@@ -1,6 +1,6 @@
 - project:
     name: dualcheck-docker-fuel-plugins
-    docker_image: 'fuel-plugins'
+    docker_image: 'fuel-ci/fuel-plugins'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-plugins'
     job_publishers:
       - 'email-{email-type}'

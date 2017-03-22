@@ -1,6 +1,6 @@
 - project:
     name: 'python-fuelclient'
-    docker_image: 'python-fuelclient'
+    docker_image: 'fuel-ci/python-fuelclient'
     volumes: '$WORKSPACE:/opt/jenkins/python-fuelclient'
     test_variables: |
       ENVVARS='-e JENKINS_URL=$JENKINS_URL'

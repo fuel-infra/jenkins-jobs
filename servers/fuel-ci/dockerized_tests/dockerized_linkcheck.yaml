@@ -1,6 +1,6 @@
 - project:
     name: docker-multi-linkcheck
-    docker_image: 'linkcheck'
+    docker_image: 'fuel-ci/linkcheck'
     volumes: '$WORKSPACE:/opt/jenkins/{prefix}'
     test_variables:
       ENVVARS='-e PREFIX={prefix} -e REQUIREMENTS={requirements} -e MAKEDIR={makedir} -e REGEX={exclude_regex}'

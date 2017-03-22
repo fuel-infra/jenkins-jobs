@@ -1,6 +1,6 @@
 - project:
     name: dualcheck-docker-fuel-nailgun-agent
-    docker_image: 'fuel-nailgun-agent'
+    docker_image: 'fuel-ci/fuel-nailgun-agent'
     volumes: '$WORKSPACe:/opt/jenkins/fuel-nailgun-agent'
     job_publishers:
       - 'email-{email-type}'

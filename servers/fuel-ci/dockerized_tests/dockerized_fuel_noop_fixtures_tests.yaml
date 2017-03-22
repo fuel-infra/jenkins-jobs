@@ -1,6 +1,6 @@
 - project:
     name: 'fuel_noop_fixtures_tests'
-    docker_image: 'fuel_noop_fixtures'
+    docker_image: 'fuel-ci/fuel_noop_fixtures'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
     gerrit_project_pattern: 'openstack/fuel-noop-fixtures'
     timed: 'H 2 * * *'

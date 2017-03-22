@@ -1,6 +1,6 @@
 - project:
     name: dualcheck-docker-fuel-library-puppetfile
-    docker_image: 'fuel-library-puppetfile'
+    docker_image: 'fuel-ci/fuel-library-puppetfile'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
     gerrit_project_pattern: 'openstack/fuel-library'
     gerrit_trigger_on:

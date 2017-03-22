@@ -1,6 +1,6 @@
 - project:
     name: docker-dualcheck-fuel-docs
-    docker_image: 'fuel-docs'
+    docker_image: 'fuel-ci/fuel-docs'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-docs'
     gerrit_project_pattern: 'openstack/fuel-docs'
     gerrit_branches:

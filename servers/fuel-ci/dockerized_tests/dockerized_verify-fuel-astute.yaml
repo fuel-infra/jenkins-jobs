@@ -1,7 +1,7 @@
 - project:
     name: docker-dualcheck-fuel-astute
     suffix: 'fuel-astute'
-    docker_image: 'fuel-astute'
+    docker_image: 'fuel-ci/fuel-astute'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-astute'
     gerrit_project_pattern: 'openstack/fuel-astute'
     job_publishers:

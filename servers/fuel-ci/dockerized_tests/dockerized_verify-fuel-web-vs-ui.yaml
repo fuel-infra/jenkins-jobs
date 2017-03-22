@@ -1,6 +1,6 @@
 - project:
     name: verify-fuel-web-on-fuel-ui
-    docker_image: 'fuel-web-vs-ui'
+    docker_image: 'fuel-ci/fuel-web-vs-ui'
     volumes: '$WORKSPACE/{proj_main}:/opt/jenkins/{proj_main} $WORKSPACE/{proj_helper}:/opt/jenkins/{proj_helper}'
     scm:
       - git:
