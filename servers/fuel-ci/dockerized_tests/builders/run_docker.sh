@@ -40,10 +40,11 @@ JOB_NAME="${JOB_NAME:-debug_docker_script}"
 
 LATEST_IMAGE=$(curl -ksSL "${REGISTRY_PROTOCOL}://${REGISTRY}/v2/${IMAGE}/tags/list"|jq -r '.tags[]'|grep -v -e latest -e 2017|sort|tail -n1)
 
-CMD_VOLUMES="-v ${WORKSPACE}/${JOB_NAME}:/opt/jenkins/${JOB_NAME}"
+CMD_VOLUMES="-v ${WORKSPACE}:/opt/jenkins/${JOB_NAME}"
 for volume in ${VOLUMES}; do
     CMD_VOLUMES+=" -v ${volume}"
 done
+bash -exc "docker pull ${REGISTRY}/${IMAGE}:${LATEST_IMAGE}"
 bash -exc "docker run --rm ${CMD_VOLUMES} ${ENVVARS} -t ${REGISTRY}/${IMAGE}:${LATEST_IMAGE} /bin/bash -exc '${SCRIPT_PATH} ${SCRIPT_ARGS}'"
 # Sometimes container didn't stops after script was run
 docker rm -f || echo "Container removed"
