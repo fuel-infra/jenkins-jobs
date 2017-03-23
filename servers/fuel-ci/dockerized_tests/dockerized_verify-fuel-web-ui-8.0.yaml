@@ -1,0 +1,35 @@
+- project:
+    name: dualcheck-docker-fuel-web-ui-8.0
+    docker_image: 'fuel-ci/fuel-web-ui-8.0'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
+    gerrit_project_pattern: 'openstack/fuel-web'
+    gerrit_branches:
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/8.0'
+    suffix: docker-fuel-web-ui-8.0
+    job_publishers:
+      - description-setter:
+          regexp-for-failed: '(Failed tests: (.*))'
+      - archive:
+          allow-empty: true
+          artifacts: 'test_run/ui_func/*.png, test_run/ui_func/app.log'
+          latest-only: false
+    jobs:
+      - 'dockerized-{name}':
+          name: 'verify-{suffix}'
+          gerrit_trigger_on:
+            - patchset-created-event
+            - comment-added-contains-event:
+                comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+          email-type: default
+          scm:
+            - gerrit-openstack:
+                repo: '{gerrit_project_pattern}'
+      - 'dockerized-{name}':
+          name: 'gate-{suffix}'
+          gerrit_trigger_on:
+            - change-merged-event
+          email-type: alert-on-merge
+          scm:
+            - gerrit-openstack-branch:
+                repo: '{gerrit_project_pattern}'
