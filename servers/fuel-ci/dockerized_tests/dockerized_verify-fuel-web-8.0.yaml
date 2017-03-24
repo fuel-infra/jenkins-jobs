@@ -3,10 +3,9 @@
     docker_image: 'fuel-ci/fuel-web-ui-8.0'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
     gerrit_project_pattern: 'openstack/fuel-web'
-    runner_args: '--with-xunit --no-webui'
     non_voting: false
     test_variables: |
-      ENVVARS=-e TEST_NAILGUN_DB=nailgun -e TOXENV=py27
+      ENVVARS=-e TEST_NAILGUN_DB=nailgun -e TOXENV=py27 -e RUNNER_ARGS='--with-xunit --no-webui'
     gerrit_branches:
       - branch-compare-type: PLAIN
         branch-pattern: 'stable/8.0'

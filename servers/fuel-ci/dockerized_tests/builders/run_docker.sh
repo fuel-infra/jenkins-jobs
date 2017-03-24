@@ -38,7 +38,7 @@ ENVVARS="${ENVVARS:-}"
 WORKSPACE="${WORKSPACE:-${PWD}}"
 JOB_NAME="${JOB_NAME:-debug_docker_script}"
 
-LATEST_IMAGE=$(curl -ksSL "${REGISTRY_PROTOCOL}://${REGISTRY}/v2/${IMAGE}/tags/list"|jq -r '.tags[]'|grep -v -e latest -e 2017|sort|tail -n1)
+LATEST_IMAGE=$(curl -ksSL "${REGISTRY_PROTOCOL}://${REGISTRY}/v2/${IMAGE}/tags/list"|jq -r '.tags[]'|grep -v -e latest -e 2017|sort -n|tail -n1)
 
 CMD_VOLUMES="-v ${WORKSPACE}:/opt/jenkins/${JOB_NAME}"
 for volume in ${VOLUMES}; do
