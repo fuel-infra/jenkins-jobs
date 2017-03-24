@@ -46,5 +46,8 @@ for volume in ${VOLUMES}; do
 done
 bash -exc "docker pull ${REGISTRY}/${IMAGE}:${LATEST_IMAGE}"
 bash -exc "docker run --rm ${CMD_VOLUMES} ${ENVVARS} -t ${REGISTRY}/${IMAGE}:${LATEST_IMAGE} /bin/bash -exc '${SCRIPT_PATH} ${SCRIPT_ARGS}'"
-# Sometimes container didn't stops after script was run
-docker rm -f || echo "Container removed"
+EXIT_CODE=${?}
+# restore permissions of workspace
+# shellcheck disable=SC2086
+docker run --rm -v ${WORKSPACE}:/workspace -t ubuntu /bin/bash -c "chown -R $(id -u):$(id -g) /workspace"
+exit ${EXIT_CODE}

@@ -6,7 +6,7 @@
     runner_args: '--webui'
     non_voting: false
     test_variables: |
-      ENVVARS=-e PIP_OPTION= VENV_CLEANUP=true
+      ENVVARS=-e PIP_OPTION= -e VENV_CLEANUP=true
     gerrit_branches:
       - branch-compare-type: PLAIN
         branch-pattern: 'stable/8.0'
