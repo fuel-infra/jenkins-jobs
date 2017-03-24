@@ -23,7 +23,7 @@
           name: 'verify-{suffix}'
           gerrit_trigger_on:
             - patchset-created-event
-            - commend-added-contains-event:
+            - comment-added-contains-event:
                 comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
           email-type: default
           scm:
