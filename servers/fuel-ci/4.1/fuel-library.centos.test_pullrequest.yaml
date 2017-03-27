@@ -1,5 +1,6 @@
 - job:
     name: '4.1.fuel-library.centos.test_pullrequest'
+    disabled: true
     builders:
       - inject: # default env variables
           properties-content: |

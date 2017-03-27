@@ -1,5 +1,6 @@
 - job:
     name: 'devops.6.1.fuel-library.create_docker_env'
+    disabled: true
     concurrent: true
     description: |
       Create docker env for building packages

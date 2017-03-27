@@ -1,5 +1,6 @@
 - job:
     name: '6.0.fuel-library.centos.deploy_neutron_gre'
+    disabled: true
     builders:
       - inject: # default env variables
           properties-content: |

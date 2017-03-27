@@ -1,5 +1,6 @@
 - job:
     name: '6.1.fuel-library.pkgs.centos.ha_nova_vlan'
+    disabled: true
     builders:
       - inject: # Gerrit url fix
           properties-content: |

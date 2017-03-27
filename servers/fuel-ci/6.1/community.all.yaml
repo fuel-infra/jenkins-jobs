@@ -1,5 +1,6 @@
 - job:
     name: '6.1-community.all'
+    disabled: true
     builders:
       - shell:
           !include-raw: builders/community.all.sh
