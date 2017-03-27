@@ -1,0 +1,39 @@
+- project:
+    name: '7.0.verify-fuel-web'
+    docker_image: 'fuel-ci/fuel-web-ui-7.0'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-web $WORKSPACE/artifacts:/opt/jenkins/artifacts'
+    gerrit_project_pattern: 'openstack/fuel-web'
+    non_voting: false
+    job_publishers:
+      - 'email-{email-type}'
+      - junit:
+          keep-long-stdio: false
+          results: '**/nosetests.xml,**/nailgun.xml,**/fuelclient.xml,**/fuelupgrade.xml,**/fuelupgradedownloader.xml,**/shotgun.xml'
+      - description-setter:
+          regexp-for-failed: '(Failed tests: (.*))'
+    job_wrappers:
+      - ansicolor:
+          colormap: css
+      - timeout:
+          fail: true
+          write-description: true
+          timeout: 45
+    scm:
+      - gerrit-openstack:
+          repo: '{gerrit_project_pattern}'
+    gerrit_branches:
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/7.0'
+    suffix: 'docker-fuel-web-7.0'
+    jobs:
+      - 'dockerized-{name}':
+          name: 'verify-{suffix}'
+          timed: 'H 11 * * *'
+          email-type: default
+          gerrit_trigger_on:
+            - patchset-created-event
+      - 'dockerized-{name}':
+          name: 'gate-{suffix}'
+          email-type: alert-on-merge
+          gerrit_trigger_on:
+            - change-merged-event
