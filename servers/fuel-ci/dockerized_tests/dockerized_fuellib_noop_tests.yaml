@@ -2,7 +2,7 @@
     name: 'fuellib_noop_tests'
     docker_image: 'fuel-ci/fuellib_noop'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
-    gerrit_project_pattern: 'openstack/fuel-library'
+    gerrit_project_pattern: openstack/fuel-library
     gerrit_trigger_on:
       - patchset-created-event
       - comment-added-contains-event:
@@ -11,6 +11,13 @@
     scm:
       - gerrit-openstack:
           repo: '{gerrit_project_pattern}'
+    job_wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 90
+          write-description: true
     jobs:
       - 'dockerized-{name}':
           gerrit_branches:
@@ -25,11 +32,11 @@
             - branch-compare-type: PLAIN
               branch-pattern: 'stable/ocata'
           test_variables: |
-            ENVVARS="-e RUNNER_SCRIPT='utils/jenkins/fuel_noop_tests.sh'"
+            ENVVARS=-e RUNNER_SCRIPT='utils/jenkins/fuel_noop_tests.sh'
       - 'dockerized-{name}':
           name: fuellib_puppet4_noop_tests
           gerrit_branches:
             - branch-compare-type: PLAIN
               branch-pattern: 'master'
           test_variables: |
-            ENVVARS="-e RUNNER_SCRIPT='utils/jenkins/fuel_noop_tests4.sh'"
+            ENVVARS=-e RUNNER_SCRIPT='utils/jenkins/fuel_noop_tests4.sh'
