@@ -153,7 +153,12 @@ def run_checks():
 REPOSITORIES_WHITELIST = {
     'fuel-infra/backports/SDL2',
     'fuel-infra/backports/rubygem-safe_yaml',
+    'fuel-infra/puppet-augeasproviders_core',
+    'fuel-infra/puppet-augeasproviders_grub',
+    'fuel-infra/puppet-lib-file_concat',
+    'fuel-infra/puppet-project_config',
     'fuel-infra/puppet-os_client_config',
+    'fuel-infra/puppetlabs-java_ks',
     'infra/ci_status',
     'infra/release_scripts',
     'mos-infra/puppet-etherpad_lite',
