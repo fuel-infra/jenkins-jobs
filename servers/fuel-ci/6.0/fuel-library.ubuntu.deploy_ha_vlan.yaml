@@ -1,5 +1,6 @@
 - job:
     name: '6.0.fuel-library.ubuntu.deploy_ha_vlan'
+    disabled: true
     builders:
       - inject: # default env variables
           properties-content: |

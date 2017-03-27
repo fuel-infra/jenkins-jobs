@@ -1,5 +1,6 @@
 - job-template:
     name: '6.1.{prefix}-python-fuelclient'
+    disabled: true
     builders:
       - shell:
           !include-raw-escape: builders/verify-python-fuelclient.sh

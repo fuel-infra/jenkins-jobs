@@ -1,5 +1,6 @@
 - job:
     name: '6.1.fuellib_noop_tests'
+    disabled: true
     builders:
       - shell:
           !include-raw: builders/fuellib_noop_tests.sh

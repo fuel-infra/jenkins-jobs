@@ -1,5 +1,6 @@
 - job:
     name: 'devops.6.1.fuel-library.create_env'
+    disabled: true
     concurrent: true
     description:
       !include-raw: descriptions/fuel-library.create_env

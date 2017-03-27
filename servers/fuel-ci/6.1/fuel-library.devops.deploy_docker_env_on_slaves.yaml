@@ -1,5 +1,6 @@
 - job:
     name: 'devops.6.1.fuel-library.deploy_docker_env_on_slaves'
+    disabled: true
     concurrent: true
     description: |
       Deploy docker environment on slaves
