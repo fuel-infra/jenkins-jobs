@@ -1,5 +1,6 @@
 - job-template:
     name: sync_debian_specs
+    disabled: true
     description: |
       <p>Syncronizes package building specs from upstream debian packages to OpenStack spec projects.</p>
       <p><b>Ownership:</b> Issues with this job are tracked by MOS DA team.</p>
