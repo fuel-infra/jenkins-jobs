@@ -113,6 +113,8 @@
             system_tests/timeout: '600'
             system_tests/custom-overrides-plain-properties: |
               NEUTRON_ENABLE=true
+              ENV_SLAVE_LOGIN=root
+              ENV_SLAVE_PASSWORD=r00tme
 
         - ha_neutron_destructive_vlan:
             system_tests/timeout: '600'
