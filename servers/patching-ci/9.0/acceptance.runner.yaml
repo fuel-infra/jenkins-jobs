@@ -1,0 +1,315 @@
+- job:
+    name: '9.x.acceptance.runner'
+    description: 'Run all system tests'
+
+    concurrent: false
+    project-type: multijob
+    node: 'runner'
+
+    properties:
+    - heavy-job:
+        weight: 1
+
+    parameters:
+    - 9x-systest-params
+
+    wrappers:
+    - timeout:
+        fail: true
+        timeout: 1200
+
+    builders:
+
+    - shell: |
+        echo "\'Description string: $CUSTOM_VERSION\'"
+
+    - multijob:
+        name: 'Run system tests'
+        condition: COMPLETED
+        projects:
+        - name: '9.x.acceptance.ubuntu.iac_git_download_settings'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.iac_git_install_remove_package'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.iac_git_set_non_openstack_settings'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_vlan_group_1'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_vlan_group_2'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_vlan_group_3'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_vlan_group_4'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_vlan_group_5'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_vlan_group_6'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_vlan_group_7'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_tun_group_1'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_tun_group_2'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_tun_group_3'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_scale_group_1'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_scale_group_2'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_scale_group_3'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_scale_group_4'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_scale_group_5'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ha_scale_group_6'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.mongo_multirole'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.multirole_group_1'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.mixed_os_components'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.murano_os_component'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.sahara_os_component'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.cli_acceptance_deployment_tests'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.cli_acceptance_ceph_deployment_tests'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.cli_component_role_tests'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.tests_gpg_singing_check'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.failover_group_1'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.failover_group_2'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.failover_group_3'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.failover_group_mongo'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.load'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.plugins.thread_separate_services_ceph'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.change_vip_manually'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.ssl'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.network_outage'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.fuel_plugin_etckeeper'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.install_mu_no_ha_failover'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+            UBUNTU_MIRROR_ID=$UBUNTU_MIRROR_ID
+            CENTOS_MIRROR_ID=$CENTOS_MIRROR_ID
+            MOS_UBUNTU_MIRROR_ID=$MOS_UBUNTU_MIRROR_ID
+            MOS_CENTOS_OS_MIRROR_ID=$MOS_CENTOS_OS_MIRROR_ID
+            MOS_CENTOS_PROPOSED_MIRROR_ID=$MOS_CENTOS_PROPOSED_MIRROR_ID
+            MOS_CENTOS_UPDATES_MIRROR_ID=$MOS_CENTOS_UPDATES_MIRROR_ID
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=$MOS_CENTOS_HOLDBACK_MIRROR_ID
+            MOS_CENTOS_HOTFIX_MIRROR_ID=$MOS_CENTOS_HOTFIX_MIRROR_ID
+            MOS_CENTOS_SECURITY_MIRROR_ID=$MOS_CENTOS_SECURITY_MIRROR_ID
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.install_mu_ha'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+            UBUNTU_MIRROR_ID=$UBUNTU_MIRROR_ID
+            CENTOS_MIRROR_ID=$CENTOS_MIRROR_ID
+            MOS_UBUNTU_MIRROR_ID=$MOS_UBUNTU_MIRROR_ID
+            MOS_CENTOS_OS_MIRROR_ID=$MOS_CENTOS_OS_MIRROR_ID
+            MOS_CENTOS_PROPOSED_MIRROR_ID=$MOS_CENTOS_PROPOSED_MIRROR_ID
+            MOS_CENTOS_UPDATES_MIRROR_ID=$MOS_CENTOS_UPDATES_MIRROR_ID
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=$MOS_CENTOS_HOLDBACK_MIRROR_ID
+            MOS_CENTOS_HOTFIX_MIRROR_ID=$MOS_CENTOS_HOTFIX_MIRROR_ID
+            MOS_CENTOS_SECURITY_MIRROR_ID=$MOS_CENTOS_SECURITY_MIRROR_ID
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.install_mu_no_ha_base_negative'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+            UBUNTU_MIRROR_ID=$UBUNTU_MIRROR_ID
+            CENTOS_MIRROR_ID=$CENTOS_MIRROR_ID
+            MOS_UBUNTU_MIRROR_ID=$MOS_UBUNTU_MIRROR_ID
+            MOS_CENTOS_OS_MIRROR_ID=$MOS_CENTOS_OS_MIRROR_ID
+            MOS_CENTOS_PROPOSED_MIRROR_ID=$MOS_CENTOS_PROPOSED_MIRROR_ID
+            MOS_CENTOS_UPDATES_MIRROR_ID=$MOS_CENTOS_UPDATES_MIRROR_ID
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=$MOS_CENTOS_HOLDBACK_MIRROR_ID
+            MOS_CENTOS_HOTFIX_MIRROR_ID=$MOS_CENTOS_HOTFIX_MIRROR_ID
+            MOS_CENTOS_SECURITY_MIRROR_ID=$MOS_CENTOS_SECURITY_MIRROR_ID
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.install_mu_ironic_ceilometer'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+            UBUNTU_MIRROR_ID=$UBUNTU_MIRROR_ID
+            CENTOS_MIRROR_ID=$CENTOS_MIRROR_ID
+            MOS_UBUNTU_MIRROR_ID=$MOS_UBUNTU_MIRROR_ID
+            MOS_CENTOS_OS_MIRROR_ID=$MOS_CENTOS_OS_MIRROR_ID
+            MOS_CENTOS_PROPOSED_MIRROR_ID=$MOS_CENTOS_PROPOSED_MIRROR_ID
+            MOS_CENTOS_UPDATES_MIRROR_ID=$MOS_CENTOS_UPDATES_MIRROR_ID
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=$MOS_CENTOS_HOLDBACK_MIRROR_ID
+            MOS_CENTOS_HOTFIX_MIRROR_ID=$MOS_CENTOS_HOTFIX_MIRROR_ID
+            MOS_CENTOS_SECURITY_MIRROR_ID=$MOS_CENTOS_SECURITY_MIRROR_ID
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.install_mu_murano_ha'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+            UBUNTU_MIRROR_ID=$UBUNTU_MIRROR_ID
+            CENTOS_MIRROR_ID=$CENTOS_MIRROR_ID
+            MOS_UBUNTU_MIRROR_ID=$MOS_UBUNTU_MIRROR_ID
+            MOS_CENTOS_OS_MIRROR_ID=$MOS_CENTOS_OS_MIRROR_ID
+            MOS_CENTOS_PROPOSED_MIRROR_ID=$MOS_CENTOS_PROPOSED_MIRROR_ID
+            MOS_CENTOS_UPDATES_MIRROR_ID=$MOS_CENTOS_UPDATES_MIRROR_ID
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=$MOS_CENTOS_HOLDBACK_MIRROR_ID
+            MOS_CENTOS_HOTFIX_MIRROR_ID=$MOS_CENTOS_HOTFIX_MIRROR_ID
+            MOS_CENTOS_SECURITY_MIRROR_ID=$MOS_CENTOS_SECURITY_MIRROR_ID
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.install_mu_no_ha_scale_90'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+            UBUNTU_MIRROR_ID=$UBUNTU_MIRROR_ID
+            CENTOS_MIRROR_ID=$CENTOS_MIRROR_ID
+            MOS_UBUNTU_MIRROR_ID=$MOS_UBUNTU_MIRROR_ID
+            MOS_CENTOS_OS_MIRROR_ID=$MOS_CENTOS_OS_MIRROR_ID
+            MOS_CENTOS_PROPOSED_MIRROR_ID=$MOS_CENTOS_PROPOSED_MIRROR_ID
+            MOS_CENTOS_UPDATES_MIRROR_ID=$MOS_CENTOS_UPDATES_MIRROR_ID
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=$MOS_CENTOS_HOLDBACK_MIRROR_ID
+            MOS_CENTOS_HOTFIX_MIRROR_ID=$MOS_CENTOS_HOTFIX_MIRROR_ID
+            MOS_CENTOS_SECURITY_MIRROR_ID=$MOS_CENTOS_SECURITY_MIRROR_ID
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.install_mu_sahara_ha'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+            UBUNTU_MIRROR_ID=$UBUNTU_MIRROR_ID
+            CENTOS_MIRROR_ID=$CENTOS_MIRROR_ID
+            MOS_UBUNTU_MIRROR_ID=$MOS_UBUNTU_MIRROR_ID
+            MOS_CENTOS_OS_MIRROR_ID=$MOS_CENTOS_OS_MIRROR_ID
+            MOS_CENTOS_PROPOSED_MIRROR_ID=$MOS_CENTOS_PROPOSED_MIRROR_ID
+            MOS_CENTOS_UPDATES_MIRROR_ID=$MOS_CENTOS_UPDATES_MIRROR_ID
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=$MOS_CENTOS_HOLDBACK_MIRROR_ID
+            MOS_CENTOS_HOTFIX_MIRROR_ID=$MOS_CENTOS_HOTFIX_MIRROR_ID
+            MOS_CENTOS_SECURITY_MIRROR_ID=$MOS_CENTOS_SECURITY_MIRROR_ID
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.mos_mu_customization_included'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+            UBUNTU_MIRROR_ID=$UBUNTU_MIRROR_ID
+            CENTOS_MIRROR_ID=$CENTOS_MIRROR_ID
+            MOS_UBUNTU_MIRROR_ID=$MOS_UBUNTU_MIRROR_ID
+            MOS_CENTOS_OS_MIRROR_ID=$MOS_CENTOS_OS_MIRROR_ID
+            MOS_CENTOS_PROPOSED_MIRROR_ID=$MOS_CENTOS_PROPOSED_MIRROR_ID
+            MOS_CENTOS_UPDATES_MIRROR_ID=$MOS_CENTOS_UPDATES_MIRROR_ID
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=$MOS_CENTOS_HOLDBACK_MIRROR_ID
+            MOS_CENTOS_HOTFIX_MIRROR_ID=$MOS_CENTOS_HOTFIX_MIRROR_ID
+            MOS_CENTOS_SECURITY_MIRROR_ID=$MOS_CENTOS_SECURITY_MIRROR_ID
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.mos_mu_customization_pkg'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+            UBUNTU_MIRROR_ID=$UBUNTU_MIRROR_ID
+            CENTOS_MIRROR_ID=$CENTOS_MIRROR_ID
+            MOS_UBUNTU_MIRROR_ID=$MOS_UBUNTU_MIRROR_ID
+            MOS_CENTOS_OS_MIRROR_ID=$MOS_CENTOS_OS_MIRROR_ID
+            MOS_CENTOS_PROPOSED_MIRROR_ID=$MOS_CENTOS_PROPOSED_MIRROR_ID
+            MOS_CENTOS_UPDATES_MIRROR_ID=$MOS_CENTOS_UPDATES_MIRROR_ID
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=$MOS_CENTOS_HOLDBACK_MIRROR_ID
+            MOS_CENTOS_HOTFIX_MIRROR_ID=$MOS_CENTOS_HOTFIX_MIRROR_ID
+            MOS_CENTOS_SECURITY_MIRROR_ID=$MOS_CENTOS_SECURITY_MIRROR_ID
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.mos_mu_customization_excluded'
+          current-parameters: false
+          predefined-parameters: |
+            CUSTOM_VERSION=$CUSTOM_VERSION
+            FUEL_QA_COMMIT=$FUEL_QA_COMMIT
+            MAGNET_LINK=$MAGNET_LINK
+            UBUNTU_MIRROR_ID=$UBUNTU_MIRROR_ID
+            CENTOS_MIRROR_ID=$CENTOS_MIRROR_ID
+            MOS_UBUNTU_MIRROR_ID=$MOS_UBUNTU_MIRROR_ID
+            MOS_CENTOS_OS_MIRROR_ID=$MOS_CENTOS_OS_MIRROR_ID
+            MOS_CENTOS_PROPOSED_MIRROR_ID=$MOS_CENTOS_PROPOSED_MIRROR_ID
+            MOS_CENTOS_UPDATES_MIRROR_ID=$MOS_CENTOS_UPDATES_MIRROR_ID
+            MOS_CENTOS_HOLDBACK_MIRROR_ID=$MOS_CENTOS_HOLDBACK_MIRROR_ID
+            MOS_CENTOS_HOTFIX_MIRROR_ID=$MOS_CENTOS_HOTFIX_MIRROR_ID
+            MOS_CENTOS_SECURITY_MIRROR_ID=$MOS_CENTOS_SECURITY_MIRROR_ID
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.tests_configdb_api'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.acceptance.ubuntu.test_multiqueue_acceptance'
+          current-parameters: true
+          kill-phase-on: NEVER
+
+    publishers:
+    - description-setter:
+        regexp: "'Description string: (.*)'"
+    - email-default:
+        mail-to: 'ci+alert@mirantis.com'
