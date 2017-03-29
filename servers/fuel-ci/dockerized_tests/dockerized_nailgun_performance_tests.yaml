@@ -4,7 +4,7 @@
     volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
     gerrit_project_pattern: openstack/fuel-web
     test_variables:
-      ENVVARS=-e JENKINS_URL=$JENKINS_URL
+      ENVVARS=JENKINS_URL=$JENKINS_URL
     jobs:
       - 'dockerized-{name}':
           name: docker-nailgun_performance_tests

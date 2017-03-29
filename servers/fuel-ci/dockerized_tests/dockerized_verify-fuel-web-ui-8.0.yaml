@@ -5,7 +5,7 @@
     gerrit_project_pattern: 'openstack/fuel-web'
     non_voting: false
     test_variables: |
-      ENVVARS=-e PIP_OPTION= -e VENV_CLEANUP=true -e RUNNER_ARGS='--webui'
+      ENVVARS=PIP_OPTION= VENV_CLEANUP=true RUNNER_ARGS='--webui'
     gerrit_branches:
       - branch-compare-type: PLAIN
         branch-pattern: 'stable/8.0'

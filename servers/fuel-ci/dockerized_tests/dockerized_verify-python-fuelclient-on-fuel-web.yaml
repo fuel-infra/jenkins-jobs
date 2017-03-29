@@ -3,7 +3,7 @@
     docker_image: 'fuel-ci/python-fuelclient-on-fuel-web'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
     test_variables: |
-       ENVVARS='-e JENKINS_URL=$JENKINS_URL'
+       ENVVARS=JENKINS_URL=$JENKINS_URL
     gerrit_project_pattern: 'openstack/fuel-web'
     timed: '0 13 * * *'
     gerrit_branches:

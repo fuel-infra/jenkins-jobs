@@ -54,6 +54,6 @@ bash -exc "docker pull ${REGISTRY}/${IMAGE}:${LATEST_IMAGE}"
 restore_user_permissions
 EXIT_CODE=0
 # shellcheck disable=2086
-docker run --rm ${CMD_VOLUMES} ${ENVVARS} -t ${REGISTRY}/${IMAGE}:${LATEST_IMAGE} /bin/bash -exc "${SCRIPT_PATH} ${SCRIPT_ARGS}" || EXIT_CODE=1
+docker run --rm ${CMD_VOLUMES} -t ${REGISTRY}/${IMAGE}:${LATEST_IMAGE} /bin/bash -exc "${ENVVARS} ${SCRIPT_PATH} ${SCRIPT_ARGS}" || EXIT_CODE=1
 restore_user_permissions
 exit ${EXIT_CODE}
