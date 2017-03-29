@@ -73,3 +73,14 @@
           path-to-publish: mcp
           publish-name: 'MCP Docs build results'
           timer: 'H 3,15 * * *'
+      - '{version-id}.build-{project}':
+          project: mcp-docs
+          version-id: 1.0
+          branch: stable/1.0
+          docs-root: '/var/www/mcp/'
+          results-dir: 'publish-docs'
+          shell: !include-raw-escape: builders/build-docs.sh
+          repository: mcp/mcp-docs
+          path-to-publish: mcp
+          publish-name: 'MCP Docs build results'
+          timer: 'H 3,22 * * *'
