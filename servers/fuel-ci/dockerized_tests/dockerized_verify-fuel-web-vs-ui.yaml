@@ -36,8 +36,7 @@
           latest-only: false
     fail_fast: true
     ui_test_group: 'test'
-    test_variables: |
-      ENVVARS='-e UI_TEST_GROUP={ui_test_group} -e NPM_CONFIG=/home/jenkins/npm -e FAIL_FAST={fail_fast}'
+    test_variables: 'ENVVARS=UI_TEST_GROUP={ui_test_group} NPM_CONFIG=/home/jenkins/npm FAIL_FAST={fail_fast}'
     gerrit_branches:
       - branch-compare-type: PLAIN
         branch-pattern: 'master'
