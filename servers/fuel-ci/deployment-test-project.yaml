@@ -24,6 +24,7 @@
             BUILD_IMAGES=true
             IRONIC_ENABLED=true
             IRONIC_NODES_COUNT=1
+            DEVOPS_SETTINGS_TEMPLATE=system_test/tests_templates/devops_configs/ironic.yaml
 
       - fuel-astute:
           projectpackage: astute
@@ -131,6 +132,7 @@
             BUILD_IMAGES=true
             IRONIC_ENABLED=true
             IRONIC_NODES_COUNT=1
+            DEVOPS_SETTINGS_TEMPLATE=system_test/tests_templates/devops_configs/ironic.yaml
 
       - fuel-astute:
           projectpackage: astute
@@ -230,6 +232,7 @@
             BUILD_IMAGES=true
             IRONIC_ENABLED=true
             IRONIC_NODES_COUNT=1
+            DEVOPS_SETTINGS_TEMPLATE=system_test/tests_templates/devops_configs/ironic.yaml
 
       - fuel-astute:
           projectpackage: astute
