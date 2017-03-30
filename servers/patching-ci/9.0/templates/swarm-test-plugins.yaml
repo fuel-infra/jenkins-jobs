@@ -67,7 +67,7 @@
           TEST_GROUP={testgroup}
           VENV_PATH={swarm-test-plugins/venvpath}
           CLASSIC_PROVISIONING=false
-          KEEP_ENV=true
+          KEEP_ENV=false
 
     - inject: # Overrides
         properties-content: '{swarm-test-plugins/custom-overrides-plain-properties}'
