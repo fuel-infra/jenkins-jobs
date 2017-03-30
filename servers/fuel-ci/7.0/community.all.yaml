@@ -30,6 +30,10 @@
       - string:
           name: FUEL_COMMITS
           description: Path to version.yaml with commit ids of Fuel components.
+      - string:
+          name: EXTRA_RPM_REPOS
+          default: 'security,http://mirror.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel/security/x86_64/'
+          description: 'Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path. Repos must be separated by space, for example: xxxxx1,url_for_xxxxx1 yyyyy2,url_for_yyyyy2'
     publishers:
       - archive:
           allow-empty: true
