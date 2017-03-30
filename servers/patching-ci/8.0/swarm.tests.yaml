@@ -12,6 +12,8 @@
    properties: |
      SLAVE_NODE_CPU=3
      SLAVE_NODE_MEMORY=4096
+     ADMIN_NODE_CPU=4
+     ADMIN_NODE_MEMORY=6144
    weight: '7'
    jobs:
      - '8.0.{test-type}.{dist}.{testgroup}':
@@ -92,42 +94,36 @@
          testgroup: 'ha_neutron_destructive'
          properties: |
            NEUTRON_ENABLE=true
-           ADMIN_NODE_MEMORY=3072
            SLAVE_NODE_CPU=3
            SLAVE_NODE_MEMORY=4096
      - '8.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive_gre'
          properties: |
            NEUTRON_ENABLE=true
-           ADMIN_NODE_MEMORY=3072
            SLAVE_NODE_CPU=3
            SLAVE_NODE_MEMORY=4096
      - '8.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive_vlan'
          properties: |
            NEUTRON_ENABLE=true
-           ADMIN_NODE_MEMORY=3072
            SLAVE_NODE_CPU=3
            SLAVE_NODE_MEMORY=4096
      - '8.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'ha_neutron_destructive_vxlan'
          properties: |
            NEUTRON_ENABLE=true
-           ADMIN_NODE_MEMORY=3072
            SLAVE_NODE_CPU=3
            SLAVE_NODE_MEMORY=4096
      - '8.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'command_line'
          properties: |
            NEUTRON_ENABLE=true
-           ADMIN_NODE_MEMORY=3072
            SLAVE_NODE_CPU=3
            SLAVE_NODE_MEMORY=4096
      - '8.0.{test-type}.{dist}.{testgroup}':
          testgroup: 'logrotate'
          properties: |
            NEUTRON_ENABLE=true
-           ADMIN_NODE_MEMORY=3072
            SLAVE_NODE_CPU=3
            SLAVE_NODE_MEMORY=4096
      - '8.0.{test-type}.{dist}.{testgroup}':

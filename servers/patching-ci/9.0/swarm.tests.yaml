@@ -53,7 +53,7 @@
             swarm-test/timeout: '600'
 
         - thread_3:
-            swarm-test/node: 'huge-systest'
+            swarm-test/node: 'services-systest'
             swarm-test/custom-overrides-plain-properties: |
               SLAVE_NODE_MEMORY=5632
 
@@ -391,14 +391,14 @@
               NODES_COUNT=8
 
         - detach-rabbitmq-ci-group:
-            swarm-test-plugins/job-weight: '20'
-            swarm-test-plugins/node: 'huge-systest'
-            swarm-test-plugins/timeout: '600'
+            swarm-test-plugins/job-weight: '11'
+            swarm-test-plugins/node: 'services-systest'
+            swarm-test-plugins/timeout: '900'
 
         - thread_separate_haproxy:
-            swarm-test-plugins/job-weight: '20'
-            swarm-test-plugins/node: 'huge-systest'
-            swarm-test-plugins/timeout: '600'
+            swarm-test-plugins/job-weight: '11'
+            swarm-test-plugins/node: 'services-systest'
+            swarm-test-plugins/timeout: '900'
             swarm-test-plugins/custom-overrides-plain-properties: |
               MULTIPLE_NETWORKS=true
               USE_HAPROXY_TEMPLATE=true
