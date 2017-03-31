@@ -110,7 +110,7 @@
             system_tests/timeout: '600'
 
         - ha_neutron_destructive:
-            system_tests/timeout: '600'
+            system_tests/timeout: '900'
             system_tests/custom-overrides-plain-properties: |
               NEUTRON_ENABLE=true
               ENV_SLAVE_LOGIN=root
