@@ -77,8 +77,8 @@
           KEEP_ENV=false
           SLAVE_NODE_MEMORY=4096
           SLAVE_NODE_CPU=2
-          ADMIN_NODE_MEMORY=6144
-          ADMIN_NODE_CPU=4
+          ADMIN_NODE_MEMORY=4096
+          ADMIN_NODE_CPU=2
 
     - inject: # Overrides
         properties-content: '{swarm-test/custom-overrides-plain-properties}'
