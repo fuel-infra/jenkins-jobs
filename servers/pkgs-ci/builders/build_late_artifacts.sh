@@ -24,6 +24,8 @@
 #       :type JOB_NAME: str
 #       :var  WORKSPACE: Location where build is started, defaults to ``.``
 #       :type WORKSPACE: path
+#       :var  CENTOS_MIRROR_ID: Id of snapshot on mirror.fuel-infra.org
+#       :type CENTOS_MIRROR_ID: str
 #
 #   .. requirements::
 #
@@ -50,6 +52,21 @@ export LOCAL_MIRROR="$(readlink -m "${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror
 export ARTS_DIR="${WORKSPACE}/artifacts"
 export DEPS_DIR="${BUILD_DIR}/deps"
 export DESTINATION_DIR="$(readlink -m "${WORKSPACE}/../tmp/${JOB_NAME}/late-artifacts")"
+
+##################################################
+# Prepare environment for make file.
+# See config.mk for reference.
+##################################################
+# Split CENTOS_MIRROR_ID (centos-7.3.1611-2017-01-31-170059) to get values
+if [[ -n ${CENTOS_MIRROR_ID} ]]; then
+    export IFS='.'; array_version=($(echo "${CENTOS_MIRROR_ID}" | cut -d'-' -f 2)); unset IFS;
+    export CENTOS_MAJOR="${array_version[0]}"
+    export CENTOS_MINOR="${array_version[1]}"
+    export CENTOS_BUILD="${array_version[2]}"
+    export MIRROR_CENTOS="http://mirror.fuel-infra.org/pkgs/snapshots/${CENTOS_MIRROR_ID}"
+# else
+    # See default values defined in config.mk from fuel-main.
+fi
 
 main () {
     #   .. function:: main

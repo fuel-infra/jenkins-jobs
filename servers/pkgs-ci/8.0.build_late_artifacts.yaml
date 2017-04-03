@@ -65,6 +65,11 @@
           description: >
             Build fuel packages locally( 0 - yes; 1 - use fuel packages from upstream )
       - string:
+          name: CENTOS_MIRROR_ID
+          default: 'centos-latest'
+          description: >
+            Id of CentOS snapshot on http://mirror.fuel-infra.org/pkgs/
+      - string:
           name: EXTRA_RPM_REPOS
           default: >-
             mos-security,http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos8.0-centos7-fuel/security/x86_64/
