@@ -4,24 +4,36 @@
     volumes: '$WORKSPACE/{proj_main}:/opt/jenkins/{proj_main} $WORKSPACE/{proj_helper}:/opt/jenkins/{proj_helper}'
     scm:
       - git:
-          basedir: '{proj_main}'
-          remotes:
-            - gerrit:
-                refspec: $GERRIT_REFSPEC
-                url: https://review.openstack.org/openstack/{proj_main}.git
-          choosing-strategy: gerrit
-          branches:
-            - $GERRIT_BRANCH
+         basedir: '{proj_main}'
+         remotes:
+           - gerrit:
+               refspec: $GERRIT_REFSPEC
+               url: https://review.openstack.org/openstack/{proj_main}.git
+         choosing-strategy: gerrit
+         branches:
+           - $GERRIT_BRANCH
       - git:
-          basedir: '{proj_helper}'
-          url: https://git.openstack.org/openstack/{proj_helper}.git
-          branches:
-            - $GERRIT_BRANCH
+         basedir: '{proj_helper}'
+         url: https://git.openstack.org/openstack/{proj_helper}.git
+         branches:
+           - $GERRIT_BRANCH
     gerrit_trigger_on:
       - patchset-created-event
       - comment-added-contains-event:
           comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
-    gerrit_project_pattern: '{proj_main}'
+    gerrit_project_pattern: 'openstack/{proj_main}'
+    job_parameters:
+      - string:
+          name: GERRIT_REFSPEC
+          default: 'refs/heads/master'
+          description: Refs used in the test
+      - string:
+          name: GERRIT_BRANCH
+          default: master
+      - text:
+          name: TEST_VARIABLES
+          default: '{test_variables}'
+          description: Test variables
     job_wrappers:
       - ansicolor:
           colormap: css
@@ -49,14 +61,14 @@
     jobs:
       - 'dockerized-{name}':
           name: 'verify-fuel-web-on-fuel-ui'
-          proj_main: 'fuel-web'
-          proj_helper: 'fuel-ui'
+          proj_main: 'fuel-ui'
+          proj_helper: 'fuel-web'
 
 
       - 'dockerized-{name}':
           name: 'verify-fuel-ui-on-fuel-web'
-          proj_main: 'fuel-ui'
-          proj_helper: 'fuel-web'
+          proj_main: 'fuel-web'
+          proj_helper: 'fuel-ui'
 
       - 'dockerized-{name}':
           name: 'nightly-verify-fuel-web-on-fuel-ui'

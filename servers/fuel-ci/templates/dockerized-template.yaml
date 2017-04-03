@@ -19,7 +19,7 @@
       - email-default
 
     # job parameters
-    parameters:
+    job_parameters:
       - string:
           name: GERRIT_REFSPEC
           default: 'refs/heads/master'
@@ -28,7 +28,7 @@
           name: TEST_VARIABLES
           default: '{test_variables}'
           description: Test variables
-
+    parameters: '{obj:job_parameters}'
     scm: '{obj:scm}'
     publishers: '{obj:job_publishers}'
     wrappers: '{obj:job_wrappers}'
