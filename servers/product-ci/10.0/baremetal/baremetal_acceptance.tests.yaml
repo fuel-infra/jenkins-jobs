@@ -36,13 +36,13 @@
         testgroup:
         - 'sriov'
 
-    # alpha group
+    # beta group
     - common/system_tests:
 
         system_tests/custom-overrides-plain-properties: |
-          BAREMETAL_ENV_NAME=alpha
+          BAREMETAL_ENV_NAME=beta
           NIC_FOR_ADMIN_BRIDGE=eno2
-          ADMIN_VLAN=270
+          ADMIN_VLAN=223
           ENV_NAME={test-type}.${{BAREMETAL_ENV_NAME}}
           BAREMETAL_ADMIN_IFACE=${{NIC_FOR_ADMIN_BRIDGE}}.${{ADMIN_VLAN}}
           DEVOPS_SETTINGS_TEMPLATE=/home/jenkins/devops_templates/baremetal_${{BAREMETAL_ENV_NAME}}.yaml
@@ -59,19 +59,6 @@
         - 'ceph_volumes_ephemeral'
         - 'safe_reboot_primary_controller_ceph'
         - 'shutdown_cinder_cluster'
-
-    # beta group
-    - common/system_tests:
-
-        system_tests/custom-overrides-plain-properties: |
-          BAREMETAL_ENV_NAME=beta
-          NIC_FOR_ADMIN_BRIDGE=eno2
-          ADMIN_VLAN=223
-          ENV_NAME={test-type}.${{BAREMETAL_ENV_NAME}}
-          BAREMETAL_ADMIN_IFACE=${{NIC_FOR_ADMIN_BRIDGE}}.${{ADMIN_VLAN}}
-          DEVOPS_SETTINGS_TEMPLATE=/home/jenkins/devops_templates/baremetal_${{BAREMETAL_ENV_NAME}}.yaml
-
-        testgroup:
         - 'four_controllers'
         - 'add_ceph_stop'
         - 'ceph_for_images_ephemeral_rados'
