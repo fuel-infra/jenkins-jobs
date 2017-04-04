@@ -126,6 +126,7 @@
               PERESTROIKA_REPO=http://perestroika-repo-tst.infra.mirantis.net/mos-repos/centos/mos-master-centos7/os/x86_64/
 
         - test_multiqueue_acceptance:
+            system_tests/node: 'huge-systest'
             system_tests/custom-overrides-plain-properties: |
               SLAVE_NODE_CPU=6
               SLAVE_NODE_MEMORY=6144
