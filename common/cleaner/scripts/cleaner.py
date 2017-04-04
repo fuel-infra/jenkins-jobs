@@ -40,7 +40,7 @@ tests_list = [
     # SWARM tests, executed every day,
     # should be deleted before next swarm run
     ('swarm', {
-        'env_regexp': '.*system_test.*',
+        'env_regexp': '.*(system_test|ldap_deploy_test).*',
         'lifetime': int(os.environ.get('LIFETIME_SWARM', 22)),
         'protect_latest': False,
     }),
