@@ -5,6 +5,9 @@
     project-name: 'mos'
     mos_version: '8.0'
 
+    # overwrite for using slaves with 'fuel-devops' v2.9 installed
+    systest-node: 'systest_8.0'
+
     master-mos-version: '9.0'
     main_ubuntu_release: 'trusty'
     openstack_release: 'ubuntu'
