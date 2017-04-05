@@ -52,7 +52,7 @@
     name: openstack-gerrit
     scm:
       - git:
-          url: 'git://git.openstack.org/${{GERRIT_PROJECT}}.git'
+          url: 'https://review.openstack.org/${{GERRIT_PROJECT}}.git'
           basedir: '{scm-basedir}'
           branches:
             - 'FETCH_HEAD'
