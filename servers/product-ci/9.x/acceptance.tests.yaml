@@ -13,6 +13,10 @@
 
     swarm-test-plugins/node: 'acceptance'
 
+    swarm-test/project-parametrize-build: 9.x.{test-type}.test-reports
+    swarm-test/condition-parametrize-build: ALWAYS
+    swarm-test/predef-parameters-parametrize-build: TEST_JOB_NAME=$JOB_NAME
+
     jobs:
     - product-ci/9.x/templates/swarm-test:
 

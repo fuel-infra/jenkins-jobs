@@ -21,6 +21,11 @@
                  <b>Contacts:</b> aheczko, fuel-qa'
 
     swarm-test/job-weight: '7'
+    swarm-test/project-parametrize-build: nessus_security_scan_upload
+    swarm-test/condition-parametrize-build: SUCCESS
+    swarm-test/predef-parameters-parametrize-build: |
+       SCAN__JOB_NAME=$JOB_NAME
+       SCAN_JOB_BUILD_NUMBER=$BUILD_NUMBER
 
     jobs:
     - product-ci/9.x/templates/swarm-test:
@@ -39,6 +44,7 @@
               SECURITY_TEST=true
               NESSUS_IMAGE_PATH=/var/lib/libvirt/images/$NESSUS_IMAGE_NAME.qcow2
               DEVOPS_SETTINGS_TEMPLATE=$WORKSPACE/system_test/tests_templates/devops_configs/security_scan.yaml
+              RELEASE_VERSION=9.x
             swarm-test/pre-script: |
               set -ex
               source "${{VENV_PATH}}/bin/activate"

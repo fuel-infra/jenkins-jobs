@@ -1,0 +1,32 @@
+- job:
+    name: 'nessus_security_scan_upload_results'
+
+    builders:
+      - copyartifact:
+          project: $SCAN_JOB_NAME
+          build-number: $SCAN_JOB_BUILD_NUMBER
+          filter: "*.html"
+          target: $WORKSPACE/reports
+      - shell:
+          !include-raw: builders/nessus_upload_results.sh
+
+    description: 'Job for uploading results of Nessus security scan jobs via rsync'
+
+    node: 'security'
+
+    parameters:
+      - string:
+          name: RELEASE
+      - string:
+          name: BUILD
+
+    wrappers:
+      - ssh-agent-credentials:
+          users:
+            - '6600583f-253b-46d9-9c18-c9210a451d77'  #nessus-archive for upload Nessus reports
+
+    publishers:
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'ci+alert@mirantis.com, aheczko@mirantis.com'
+          send-to-individuals: false
