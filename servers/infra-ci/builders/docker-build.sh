@@ -69,8 +69,8 @@ docker_build_image() {
     DOCKER_CLI_OPTS=${4}
     pushd .
     cd "${DOCKERFILE_PATH}"
-    # needs for passing shellcheck. docker_cli_opts usualy is an empty string
-    eval "docker build ${DOCKER_CLI_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+    # shellcheck disable=SC2086
+    docker build --pull ${DOCKER_CLI_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} .
     popd
 }
 
@@ -132,6 +132,7 @@ docker_push() {
       done
     done
 }
+
 main() {
     if [ "${REBUILD}" == "true" ]; then
         BUILD_OPTS="--no-cache"
