@@ -61,6 +61,7 @@
     - 'oslo.messaging'
     - 'oslo.middleware'
     - 'oslo.policy'
+    - 'oslo.privsep'
     - 'oslo.reports'
     - 'oslo.rootwrap'
     - 'oslo.serialization'
