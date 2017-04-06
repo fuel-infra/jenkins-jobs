@@ -2,7 +2,8 @@
     name: docker-multi-linkcheck
     docker_image: 'fuel-ci/linkcheck'
     volumes: '$WORKSPACE:/opt/jenkins/{prefix}'
-    test_variables: 'ENVVARS=PREFIX={prefix} REQUIREMENTS={requirements} MAKEDIR={makedir} REGEX={exclude_regex}'
+    test_variables: |
+      ENVVARS=PREFIX={prefix} REQUIREMENTS={requirements} MAKEDIR={makedir} REGEX="{exclude_regex}"
     gerrit_branches:
       - branch-compare-type: ANT
         branch-pattern: '**'

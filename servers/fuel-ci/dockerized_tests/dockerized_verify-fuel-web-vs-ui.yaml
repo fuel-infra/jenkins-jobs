@@ -22,21 +22,9 @@
       - comment-added-contains-event:
           comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
     gerrit_project_pattern: 'openstack/{proj_main}'
-    job_parameters:
-      - string:
-          name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
-          description: Refs used in the test
-      - string:
-          name: GERRIT_BRANCH
-          default: master
-      - text:
-          name: TEST_VARIABLES
-          default: '{test_variables}'
-          description: Test variables
     job_wrappers:
       - ansicolor:
-          colormap: css
+          colormap: xterm
       - timeout:
           fail: true
           write-description: true

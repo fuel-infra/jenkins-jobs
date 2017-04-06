@@ -17,18 +17,21 @@
           colormap: css
     job_publishers:
       - email-default
-
+    refspec_branch: 'master'
     # job parameters
-    job_parameters:
+    parameters:
       - string:
           name: GERRIT_REFSPEC
-          default: 'refs/heads/master'
+          default: 'refs/heads/{refspec_branch}'
           description: Refs used in the test
+      - string:
+          name: GERRIT_BRANCH
+          default: 'master'
+          description: used only in fuel-web-vs-ui tests
       - text:
           name: TEST_VARIABLES
           default: '{test_variables}'
           description: Test variables
-    parameters: '{obj:job_parameters}'
     scm: '{obj:scm}'
     publishers: '{obj:job_publishers}'
     wrappers: '{obj:job_wrappers}'
