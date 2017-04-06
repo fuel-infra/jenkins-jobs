@@ -3,12 +3,13 @@
     docker_image: 'fuel-ci/fuel-web-ui-8.0'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-web'
     gerrit_project_pattern: 'openstack/fuel-web'
+    refspec_branch: 'stable/8.0'
     non_voting: false
     test_variables: |
       ENVVARS=PIP_OPTION= VENV_CLEANUP=true RUNNER_ARGS='--webui'
     gerrit_branches:
       - branch-compare-type: PLAIN
-        branch-pattern: 'stable/8.0'
+        branch-pattern: '{refspec_branch}'
     suffix: docker-fuel-web-ui-8.0
     job_publishers:
       - 'email-{email-type}'
