@@ -20,9 +20,9 @@
     rpm-repo-path: '/mcp-repos'
 
     # MOS repositories (build/test dependencies)
-    mos-deb-dist-name: 'mos10.0'
-    mos-deb-repo-path: '/mos-repos/ubuntu/10.0'
-    mos-rpm-repo-path: '/mos-repos/centos/mos10.0-centos7'
+    mos-deb-dist-name: '{deb-dist-name}'
+    mos-deb-repo-path: '/mcp-repos/{project-version}/{distro}'
+    mos-rpm-repo-path: '/mcp-repos'
 
     distro:
     - xenial:
