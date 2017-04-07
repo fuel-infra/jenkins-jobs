@@ -1,86 +1,9 @@
-- job:
+- project:
     name: '8.0.custom.ubuntu.bvt_2'
-    builders:
-      - inject:
-          properties-content: |
-            SLAVE_NODE_CPU=2
-            SLAVE_NODE_MEMORY=3072
-      - shell:
-          !include-raw: builders/run_system_test.sh
-    concurrent: true
-    description:
-      !include-raw: descriptions/custom.ubuntu.bvt_2
-    logrotate:
-      artifactDaysToKeep: 90
-      daysToKeep: 90
-    node: custom_bvt
-    properties:
-      - authorization-allow-authorized
-      - heavy-job:
-          weight: 8
-    parameters:
-      - string:
-          name: MAGNET_LINK
-      - string:
-          name: TEST_GROUP
-          default: 'bvt_2'
-      - string:
-          name: OPENSTACK_RELEASE
-          default: 'Ubuntu'
-      - string:
-          name: NEUTRON_ENABLE
-          default: 'true'
-      - string:
-          name: UBUNTU_MIRROR_ID
-          default: latest
-          description: |
-            'latest' - latest available; 'latest-stable' - mirror from successful run of 8.0.test_all job; 'ubuntu-2015-01-01-030500' for exact snapshot
-      - string:
-          name: MIRROR_UBUNTU
-          default:
-          description: |
-            If empty, it will be set automatically based on UBUNTU_MIRROR_ID value.
-            <p>
-            deb http://../ubuntu trusty main universe multiverse|deb http://../ubuntu trusty-updates main universe multiverse|deb http://../ubuntu trusty-security main universe multiverse|deb http://../ubuntu trusty-proposed main universe multiverse
-      - string:
-          name: EXTRA_DEB_REPOS
-          default: ''
-          description: 'deb http://... trusty main'
-      - string:
-          name: EXTRA_DEB_REPOS_PRIORITY
-          default: '1052'
-
-      - string:
-          name: ENV_PREFIX
-          default: 8.0.custom.ubuntu.bvt_2
-          description: Define env prefix name. This parameter should not be changed
-    scm:
-      - git:
-          url: 'https://git.openstack.org/openstack/fuel-qa.git'
-          branches:
-            - 'origin/stable/8.0'
-    wrappers:
-      - ansicolor:
-          colormap: xterm
-      - timeout:
-          fail: true
-          timeout: 210
-    publishers:
-      - archive:
-          allow-empty: true
-          artifacts: '**/nosetests.xml,logs/*'
-          latest-only: false
-      - logparser:
-          parse-rules: '/var/lib/jenkins/fuellib.parser'
-          unstable-on-warning: false
-          fail-on-error: false
-      - junit:
-          keep-long-stdio: false
-          results: '**/nosetests.xml'
-      - post-destroy-vms(build-timeout)
-      - email-ext:
-          default-subject: '$DEFAULT_SUBJECT'
-          failure: true
-          success: true
-          send-to:
-            - requester
+    projectbranch: 'origin/stable/8.0'
+    mos: '8.0'
+    venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    test_iso_job_url: 'https://product-ci.infra.mirantis.net/job/{mos}.test_all/'
+#    custom_systest_script: !include-raw: builders/run_system_test_old.sh
+    jobs:
+      - '{mos}.custom.ubuntu.bvt_2'
