@@ -24,6 +24,8 @@
             - branch-compare-type: PLAIN
               branch-pattern: 'master'
             - branch-compare-type: PLAIN
+              branch-pattern: 'stable/7.0'
+            - branch-compare-type: PLAIN
               branch-pattern: 'stable/8.0'
             - branch-compare-type: PLAIN
               branch-pattern: 'stable/mitaka'
