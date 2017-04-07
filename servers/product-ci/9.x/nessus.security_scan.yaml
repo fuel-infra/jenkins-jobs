@@ -26,6 +26,7 @@
     swarm-test/predef-parameters-parametrize-build: |
        SCAN__JOB_NAME=$JOB_NAME
        SCAN_JOB_BUILD_NUMBER=$BUILD_NUMBER
+       RELEASE_VERSION=$RELEASE_VERSION
 
     jobs:
     - product-ci/9.x/templates/swarm-test:

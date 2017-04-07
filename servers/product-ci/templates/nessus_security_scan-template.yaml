@@ -124,5 +124,6 @@
             predefined-parameters: |
               SCAN_JOB_NAME=$JOB_NAME
               SCAN_JOB_BUILD_NUMBER=$BUILD_NUMBER
+              RELEASE_VERSION=$RELEASE_VERSION
             triggerWithNoParameters: false
 
