@@ -108,7 +108,7 @@
         regexp-for-failed: "'Description string: (.*)'"
 
     - trigger-parameterized-builds:
-        - project: '9.x.{test-type}.test-reports'
-          condition: ALWAYS
-          predefined-parameters: TEST_JOB_NAME=$JOB_NAME
+        - project: '{swarm-test/project-parametrize-build}'  #'9.x.{test-type}.test-reports'
+          condition: '{swarm-test/condition-parametrize-build}' #ALWAYS
+          predefined-parameters: '{swarm-test/predef-parameters-parametrize-build}' # TEST_JOB_NAME=$JOB_NAME
           triggerWithNoParameters: false

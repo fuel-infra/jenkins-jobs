@@ -80,6 +80,7 @@
             NESSUS_IMAGE_PATH=/var/lib/libvirt/images/$NESSUS_IMAGE_NAME.qcow2
             DEVOPS_SETTINGS_TEMPLATE=$WORKSPACE/system_test/tests_templates/devops_configs/security_scan.yaml
             NEUTRON_ENABLE=true
+            RELEASE_VERSION={version-id}
             SECURITY_TEST=true
 
       - shell:
@@ -118,8 +119,10 @@
           - requester
           - recipients
       - trigger-parameterized-builds:
-          - project: '{testrail-report-job}'
-            condition: ALWAYS
-            property-file: links.txt
-            predefined-parameters: TEST_JOB_NAME=$JOB_NAME
+          - project: nessus_security_scan_upload
+            condition: SUCCESS
+            predefined-parameters: |
+              SCAN_JOB_NAME=$JOB_NAME
+              SCAN_JOB_BUILD_NUMBER=$BUILD_NUMBER
             triggerWithNoParameters: false
+
