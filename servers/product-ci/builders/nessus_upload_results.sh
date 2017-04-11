@@ -25,21 +25,22 @@ UPLOAD_USER="${UPLOAD_USER}"
 UPLOAD_HOST="${UPLOAD_HOST}"
 UPLOAD_PATH="${UPLOAD_PATH}"
 TARGET_DIRECTORY="${WORKSPACE}/reports"
-DATE=$(date +%F-%H)
+SSH_PARAMS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+DATE=${DATE:-$(date +%F-%H)}
 TMPDIR=$(mktemp -d)
 
-if rsync -l -e 'ssh' --protocol=29 "$UPLOAD_USER@$UPLOAD_HOST:$UPLOAD_PATH/${RELEASE_VERSION}"; then
+if rsync -l -e "ssh $SSH_PARAMS" --protocol=29 "$UPLOAD_USER@$UPLOAD_HOST:$UPLOAD_PATH/${RELEASE_VERSION}"; then
     echo "${RELEASE_VERSION} directory already exists"
 else
     echo "${RELEASE_VERSION} directory will be created"
-    rsync -av -e 'ssh' --protocol=29 "${TMPDIR}" "$UPLOAD_USER@$UPLOAD_HOST:${UPLOAD_PATH}/${RELEASE_VERSION}"
+    rsync -av -e "ssh $SSH_PARAMS" --protocol=29 "${TMPDIR}" "$UPLOAD_USER@$UPLOAD_HOST:${UPLOAD_PATH}/${RELEASE_VERSION}"
 fi
-if rsync -l -e 'ssh' --protocol=29 "$UPLOAD_USER@$UPLOAD_HOST:${UPLOAD_PATH}/${RELEASE_VERSION}/${DATE}"; then
+if rsync -l -e "ssh $SSH_PARAMS" --protocol=29 "$UPLOAD_USER@$UPLOAD_HOST:${UPLOAD_PATH}/${RELEASE_VERSION}/${DATE}"; then
     echo "${RELEASE_VERSION}/${DATE} directory already exists"
 else
     echo "${RELEASE_VERSION}/${DATE} directory will be created"
-    rsync -av -e 'ssh' --protocol=29 "${TMPDIR}" "$UPLOAD_USER@$UPLOAD_HOST:${UPLOAD_PATH}/${RELEASE_VERSION}/${DATE}"
+    rsync -av -e "ssh $SSH_PARAMS" --protocol=29 "${TMPDIR}" "$UPLOAD_USER@$UPLOAD_HOST:${UPLOAD_PATH}/${RELEASE_VERSION}/${DATE}"
 fi
-rsyc -avP -e 'ssh' --protocol=29 "${TARGET_DIRECTORY}/*.html" "$UPLOAD_USER@$UPLOAD_HOST:${UPLOAD_PATH}/${RELEASE_VERSION}/${DATE}/"
+rsync -avP -e "ssh $SSH_PARAMS" --protocol=29 "${TARGET_DIRECTORY}/logs/" "$UPLOAD_USER@$UPLOAD_HOST:${UPLOAD_PATH}/${RELEASE_VERSION}/${DATE}/"
 rm -rf "${TMPDIR}"
 rm -rf "${TARGET_DIRECTORY}"

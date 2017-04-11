@@ -5,8 +5,14 @@
       - copyartifact:
           project: $SCAN_JOB_NAME
           build-number: $SCAN_JOB_BUILD_NUMBER
-          filter: "*.html"
+          filter: "logs/*.html"
           target: $WORKSPACE/reports
+      - inject:
+          properties-content: |
+             UPLOAD_HOST=172.18.170.60
+             UPLOAD_USER=nessus-archive
+             UPLOAD_PATH=/home/$UPLOAD_USER/reports
+
       - shell:
           !include-raw: builders/nessus_upload_results.sh
 
@@ -16,9 +22,17 @@
 
     parameters:
       - string:
-          name: RELEASE
+          name: SCAN_JOB_NAME
+          description: "Use this option to manually build"
       - string:
-          name: BUILD
+          name: SCAN_JOB_BUILD_NUMBER
+          description: "Use this option to manually build"
+      - string:
+          name: DATE
+          description: "Format: 'Year-month-day-hour'. Use this option to manually build"
+      - string:
+          name: RELEASE_VERSION
+          description: "MOS version"
 
     wrappers:
       - ssh-agent-credentials:
