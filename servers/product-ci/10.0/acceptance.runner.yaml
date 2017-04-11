@@ -102,12 +102,6 @@
         - name: '10.0.acceptance.ubuntu.multirole_group_1'
           current-parameters: true
           kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.mixed_os_components'
-          current-parameters: true
-          kill-phase-on: NEVER
-        - name: '10.0.acceptance.ubuntu.murano_os_component'
-          current-parameters: true
-          kill-phase-on: NEVER
         - name: '10.0.acceptance.ubuntu.sahara_os_component'
           current-parameters: true
           kill-phase-on: NEVER

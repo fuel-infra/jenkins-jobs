@@ -82,10 +82,6 @@
 
         - multirole_group_1
 
-        - mixed_os_components
-
-        - murano_os_component
-
         - sahara_os_component
 
         - cli_acceptance_deployment_tests
