@@ -1,0 +1,29 @@
+- project:
+    name: 'old.fuellib_syntax_check'
+    docker_image: 'fuel-ci/fuellib_noop'
+    volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
+    gerrit_project_pattern: openstack/fuel-library
+    refspec_branch: 'stable/7.0'
+    non_voting: false
+    gerrit_trigger_on:
+      - patchset-created-event
+      - comment-added-contains-event:
+          comment-contains-value: '{gerrit_trigger_on_recheck_regexp}'
+    timed: 'H 2 * * *'
+    scm:
+      - gerrit-openstack:
+          repo: '{gerrit_project_pattern}'
+    job_wrappers:
+      - ansicolor:
+          colormap: xterm
+      - timeout:
+          fail: true
+          timeout: 90
+          write-description: true
+    jobs:
+      - 'dockerized-{name}':
+          gerrit_branches:
+            - branch-compare-type: PLAIN
+              branch-pattern: '{refspec_branch}'
+          test_variables: |
+            ENVVARS=RUNNER_SCRIPT='utils/jenkins/fuel_syntax_check.sh -a'
