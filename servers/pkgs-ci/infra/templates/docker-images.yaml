@@ -1,0 +1,50 @@
+- job-template:
+    name: 'infra-trigger-docker-image-{os}-{distro}'
+    disabled: '{is-disabled}'
+    node: '{maintain-node}'
+    concurrent: False
+    description: |
+        This job triggers building of a docker image(s) on all
+        slaves having label <i>{maintain-node}</i>
+
+    triggers:
+    - timed: '@midnight'
+
+    builders:
+    - trigger-builds:
+      - project: 'infra-build-docker-image-{os}-{distro}'
+        parameter-factories:
+        - factory: allnodesforlabel
+          name: 'infra-docker-build-hosts'
+          node-label: '{maintain-node}'
+          ignore-offline-nodes: True
+        block: False
+
+- job-template:
+    name: 'infra-build-docker-image-{os}-{distro}'
+    disabled: '{is-disabled}'
+    node: ''
+    concurrent: True
+
+    description: |
+        This job builds a docker image to be used
+        in MOS Infra CI for python jobs
+
+    wrappers:
+    - timeout:
+        timeout: 10
+    - timestamps
+    - ansicolor
+
+    parameters:
+    - label:
+        name: 'infra-docker-build-hosts'
+        default: 'none'
+
+    builders:
+    - inject:
+        properties-content: |
+            DOCKER_IMAGE_TAG=infra-{os}-{distro}
+            UBUNTU_DISTRO={distro}
+    - shell:
+        !include-raw-escape: ../builders/docker-build-ubuntu.sh

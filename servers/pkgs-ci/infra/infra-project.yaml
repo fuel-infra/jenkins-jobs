@@ -1,0 +1,29 @@
+- project:
+    name: 'infra'
+    is-disabled: ''
+
+    maintain-node: 'new-builder'
+
+    distro:
+    - trusty:
+        os: ubuntu
+    - xenial:
+        os: ubuntu
+
+    jobs:
+    - 'infra-trigger-docker-image-{os}-{distro}'
+
+    - 'infra-build-docker-image-{os}-{distro}'
+
+    - 'infra-run-docker-tox-{tox-env}':
+        tox-env:
+        - pep8:
+            image-tag: infra-ubuntu-trusty
+        - py27:
+            image-tag: infra-ubuntu-trusty
+        - py34:
+            image-tag: infra-ubuntu-trusty
+        - py35:
+            image-tag: infra-ubuntu-xenial
+        - functional:
+            image-tag: infra-ubuntu-trusty
