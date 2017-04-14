@@ -60,14 +60,20 @@ if "${REMOVE_PROJECTS}" ; then
     [ $? = 0 ] && exit 0 || exit 1
 fi
 
-[ ! -d "packages" ] && mkdir packages
-[ ! -d packages/centos-fuel-"${RELEASE}-stable${UPDATES_SUFFIX}"/ ] && mkdir packages/centos-fuel-"${RELEASE}-stable${UPDATES_SUFFIX}"/
-[ ! -d packages/ubuntu-fuel-"${RELEASE}-stable${UPDATES_SUFFIX}"/ ] && mkdir packages/ubuntu-fuel-"${RELEASE}-stable${UPDATES_SUFFIX}"/
+if [ "$JOB_NAME" == "create-mos-compliance-reports" ] ; then
+    [ ! -d "packages" ] && mkdir packages
+    [ ! -d packages/centos-fuel-"${RELEASE}-stable${UPDATES_SUFFIX}"/ ] && mkdir packages/centos-fuel-"${RELEASE}-stable${UPDATES_SUFFIX}"/
+    [ ! -d packages/ubuntu-fuel-"${RELEASE}-stable${UPDATES_SUFFIX}"/ ] && mkdir packages/ubuntu-fuel-"${RELEASE}-stable${UPDATES_SUFFIX}"/
 
-# Prepare for analysis & analyses
-bash -ex full_analyse_rpm.sh centos"${RELEASE}${UPDATES_SUFFIX}".csv
-bash -ex full_analyse_deb.sh ubuntu"${RELEASE}${UPDATES_SUFFIX}".csv
+    # Prepare for analysis & analyses
+    bash -ex full_analyse_rpm.sh "centos${RELEASE}${UPDATES_SUFFIX}.csv"
+    bash -ex full_analyse_deb.sh "ubuntu${RELEASE}${UPDATES_SUFFIX}.csv"
 
-create_artifacts "${PATH_TO_PROJECT_CENTOS}" "${PROJECT_CENTOS}".txt
-create_artifacts "${PATH_TO_PROJECT_UBUNTU}" "${PROJECT_UBUNTU}".txt
+    create_artifacts "${PATH_TO_PROJECT_CENTOS}" "${PROJECT_CENTOS}.txt"
+    create_artifacts "${PATH_TO_PROJECT_UBUNTU}" "${PROJECT_UBUNTU}.txt"
+elif [ "$JOB_NAME" == "create-compliance-reports" ] ; then
+    PATH_TO_PROJECT="projects/${RELEASE}-${BRANCH}"
+    bash -ex analyse_gerrit_project.sh "${RELEASE}-${BRANCH}.csv"
+    create_artifacts "${PATH_TO_PROJECT}" "${RELEASE}-${BRANCH}.txt"
+fi
 tar -czf projects.tar.gz ./*.txt

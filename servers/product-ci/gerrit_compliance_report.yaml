@@ -1,0 +1,85 @@
+- job:
+    name: 'create-compliance-reports'
+    builders:
+      - inject:
+          properties-content: |
+            BLACKDUCK_HOST=blackduck.infra.mirantis.net
+            GERRIT_USER=openstack-ci-jenkins
+            GERRIT_HOST=https://review.fuel-infra.org
+            JENKINS_PRODUCT=https://product-ci.infra.mirantis.net
+            SDKPATH=/home/jenkins/Export-6.1.1-SDK-V6.1/
+            CUSTOMCLASS=/usr/local/bin
+            KEYPATH=/etc/blackduck/credentials.json
+            MIRROR_HOST=mirror.fuel-infra.org
+      - copyartifact:
+          project: create-compliance-reports
+          filter: "projects.tar.gz"
+          target:
+          which-build: last-successful
+          build-number:
+          optional: true
+          flatten:
+          parameter-filters:
+      - shell:
+          !include-raw: builders/encryption_report.sh
+    node: blackduck
+    description:
+      !include-raw: descriptions/gerrit_compliance_report.html
+    parameters:
+      - string:
+          name: RELEASE
+      - string:
+          name: GERRIT_HOST
+          description: "gerrit.mcp.mirantis.net or review.fuel-infra.org or gerrit.mirantis.com"
+      - string:
+          name: GERRIT_USER
+          description: "If it not defined will be used anonymous"
+      - text:
+          name: PROJECTS
+          description: "Use full path to project, with namespace"
+      - string:
+          name: BRANCH
+          default: master
+      - string:
+          name: BLACKDUCK_USER
+          default: testuser@mirantis.com
+      - bool:
+          name: FORCE_ANALYSIS
+          default:
+      - bool:
+          name: REMOVE_PROJECTS
+          default:
+          description: ATTENTION! Run with this flag remove projects in BlackDuck and clear local storage if exist.
+                        If you want simple rescan exist projects please use FORCE_ANALYSIS parameter.
+    properties:
+    - authorization-allow-security-group
+    scm:
+      - git:
+          url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/license-compliance.git'
+          basedir: 'license-compliance'
+          credentials-id: '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'
+          skip-tag: true
+          branches:
+            - 'origin/master'
+          wipe-workspace: true
+      - git:
+          url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/encryption-compliance.git'
+          basedir: ''
+          credentials-id: '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'
+          skip-tag: true
+          branches:
+            - 'origin/master'
+          wipe-workspace: true
+    publishers:
+      - email:
+          notify-every-unstable-build: true
+          recipients: 'fuel-build@mirantis.com'
+          send-to-individuals: false
+      - archive:
+          allow-empty: false
+          artifacts: '*.csv, projects.tar.gz'
+          latest-only: false
+    wrappers:
+       - openstack-ci-jenkins
+       - inject-passwords:
+           global: true
