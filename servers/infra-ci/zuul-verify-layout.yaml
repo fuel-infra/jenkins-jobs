@@ -22,25 +22,27 @@
           pip install --upgrade pip setuptools packaging
 
           # Install zuul
-          pip install --upgrade pytz "${{WORKSPACE}}/zuul"
+          pip install --upgrade pytz git+git://git.openstack.org/openstack-infra/zuul
 
           # Create directory for output files
           mkdir "${{WORKSPACE}}/output"
 
-          # Create fake zuul.conf
-          cat > "${{WORKSPACE}}/zuul.conf" <<EOF
-          [zuul]
-          [gerrit]
-          server=localhost
-          user=user
-          EOF
-
           # Run Zuul in test mode for each modified layout
           for FILE in $(git diff --name-only --diff-filter=ACMR HEAD~1); do
               if [ "${{FILE##*/}}" = "layout.yaml" ]; then
-                  ZUUL_SERVER="${{FILE%/*}}"
-                  ZUUL_SERVER="${{ZUUL_SERVER##*/}}"
-                  zuul-server -t -c "${{WORKSPACE}}/zuul.conf" -l "${{WORKSPACE}}/${{FILE}}" |& tee "${{WORKSPACE}}/output/${{ZUUL_SERVER}}.out.txt"
+                  ZUUL_SERVER_PATH="${{FILE%/*}}"
+                  ZUUL_SERVER_NAME="${{ZUUL_SERVER_PATH##*/}}"
+                  ZUUL_CONF="${{WORKSPACE}}/${{ZUUL_SERVER_PATH}}/zuul.conf"
+                  if [ ! -f "${{ZUUL_CONF}}" ]; then
+                      # Create fake zuul.conf
+                      cat > "${{ZUUL_CONF}}" <<-EOF
+          		[zuul]
+          		[gerrit]
+          		server=localhost
+          		user=user
+          		EOF
+                  fi
+                  zuul-server -t -c "${{ZUUL_CONF}}" -l "${{WORKSPACE}}/${{FILE}}" |& tee "${{WORKSPACE}}/output/${{ZUUL_SERVER_NAME}}.out.txt"
               fi
           done
 
@@ -53,19 +55,6 @@
       - main:
           reponame: '{reponame}'
           repobranch: '$GERRIT_BRANCH'
-      - git:
-          url: 'https://git.openstack.org/openstack-infra/zuul.git'
-          basedir: 'zuul'
-          branches:
-            - 'FETCH_HEAD'
-          # FIXME: Report job status 'QUEUED' for queued jobs
-          #        Required to pass layout validation because Mirantis' layouts
-          #        has additional field containing pre-start message
-          #        Remove when merged: https://review.openstack.org/272967
-          refspec: 'refs/changes/67/272967/7'
-          skip-tag: true
-          browser: gitweb
-          browser-url: 'https://review.openstack.org/gitweb?p=openstack-infra/zuul.git'
 
     triggers:
       - main:
