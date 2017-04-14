@@ -40,6 +40,7 @@
               if [ "${{FILE##*/}}" = "layout.yaml" ]; then
                   ZUUL_SERVER="${{FILE%/*}}"
                   ZUUL_SERVER="${{ZUUL_SERVER##*/}}"
+                  sed -ri 's/(source:\s*)?gerrit(-[^:]+)/\1gerrit/' "${{WORKSPACE}}/${{FILE}}"
                   zuul-server -t -c "${{WORKSPACE}}/zuul.conf" -l "${{WORKSPACE}}/${{FILE}}" |& tee "${{WORKSPACE}}/output/${{ZUUL_SERVER}}.out.txt"
               fi
           done
