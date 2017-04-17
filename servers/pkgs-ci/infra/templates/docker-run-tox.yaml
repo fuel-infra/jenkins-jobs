@@ -1,0 +1,41 @@
+- job-template:
+    name: 'infra-run-docker-tox-{tox-env}'
+    disabled: '{is-disabled}'
+    node: '{build-node}'
+    concurrent: True
+    description: |
+        This job run tox env <i>{tox-env}</i> inside a docker image <i>{image-tag}</i>
+
+    wrappers:
+    - timeout:
+        timeout: 30
+    - timestamps
+    - ansicolor
+
+    triggers:
+    - zuul
+
+    scm:
+    - git:
+        url: $ZUUL_URL/$ZUUL_PROJECT
+        branches:
+        - FETCH_HEAD
+        refspec: $ZUUL_REF
+
+    builders:
+    - inject:
+        properties-content: |
+            DOCKER_IMAGE_TAG={image-tag}
+            TOX_ENV={tox-env}
+    - shell:
+        !include-raw-escape: ../builders/docker-run-tox.sh
+
+    publishers:
+    - archive:
+        artifacts: .tox/{tox-env}/log/*.log
+        allow-empty: True
+### FIXME(aevseev) JUnit publisher prior to version 1.10 does not have option to skip non-existent reports
+### Packaging CI has 1.2-beta-4 (!)
+###    - junit:
+###        results: .tox/{tox-env}/log/junit.xml
+###        allow-empty-results: true
