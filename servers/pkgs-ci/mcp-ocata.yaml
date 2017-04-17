@@ -1,21 +1,21 @@
 - project:
 
-    name: 'mcp-1.1'
+    name: 'mcp-ocata'
 
     project-name: 'mcp'
-    project-version: '1.1'
+    project-version: 'ocata'
 
     main_ubuntu_release: 'xenial'
     openstack_release: 'ubuntu'
 
-    fuel-main-branch: 'stable/newton'
-    fuel-qa-branch: 'stable/newton'
+    fuel-main-branch: 'stable/ocata'
+    fuel-qa-branch: 'stable/ocata'
 
-    perestroika-branch: 'stable/newton'
+    perestroika-branch: 'stable/ocata'
     install-scm-branch: 'origin/master'
 
     # Repository parameters for project
-    deb-dist-name: 'newton'
+    deb-dist-name: 'ocata'
     deb-repo-path: '/mcp-repos/{project-version}/{distro}'
     rpm-repo-path: '/mcp-repos'
 

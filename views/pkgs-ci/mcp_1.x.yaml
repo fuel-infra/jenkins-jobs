@@ -1,7 +1,7 @@
 - view:
     type: list
-    name: 'MCP 1.x'
-    regex: '^1\.\d-pkg-mcp-.+'
+    name: 'MCP'
+    regex: '^.+-pkg-mcp-.+'
     columns:
       - status
       - weather
