@@ -51,15 +51,6 @@ LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
 LOCATION=${LOCATION_FACT:-msk}
 
 case "${LOCATION}" in
-    srt)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-srt.srt.mirantis.net
-        ;;
-    msk)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
-        ;;
-    hrk)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-kha.kha.mirantis.net
-        ;;
     poz|bud|bud-ext|cz)
         LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
         ;;
@@ -67,7 +58,7 @@ case "${LOCATION}" in
         LATEST_MIRROR_ID_URL=http://mirror.seed-us1.fuel-infra.org
         ;;
     *)
-        LATEST_MIRROR_ID_URL=http://osci-mirror-msk.msk.mirantis.net
+        LATEST_MIRROR_ID_URL=http://mirror.seed-cz1.fuel-infra.org
 esac
 
 # define closest stable ubuntu mirror snapshot
