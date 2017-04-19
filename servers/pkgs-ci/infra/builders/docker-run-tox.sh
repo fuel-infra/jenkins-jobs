@@ -43,6 +43,7 @@ export LANG=en_US.utf8
 if [ -n "$MOS_RELEASE" ]; then
     MOS_RELEASE=$MOS_RELEASE mos-requirements/scripts/prepare-env.sh venv
 fi
+rm -rf mos-requirements
 # Set log path
 export OS_LOG_PATH="$(pwd -P)/.tox/$TOX_ENV/log"
 tox -v -e "$TOX_ENV"
