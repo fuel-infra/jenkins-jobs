@@ -15,6 +15,8 @@ dockerfile=$(cat << 'EODockerfile'
 ARG JENKINS_UID=1000
 ARG JENKINS_GID=1000
 
+ARG MOS_VERSION=master
+
 ENV DB_ROOT_PW insecure_slave
 ENV DB_USER openstack_citest
 ENV DB_PW openstack_citest
@@ -38,6 +40,8 @@ RUN \
   echo 'APT::Install-Suggests "false";' >> /etc/apt/apt.conf.d/99local ; \
   echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf.d/99local ; \
   echo 'APT::Get::AllowUnauthenticated "true";' >> /etc/apt/apt.conf.d/99local ; \
+  test "$MOS_VERSION" = 'master' && MOS_DEB_DIST='mos-master' || MOS_DEB_DIST="mos$MOS_VERSION" ; \
+  echo "deb http://mirror.fuel-infra.org/mos-repos/ubuntu/$MOS_VERSION/ $MOS_DEB_DIST main" > /etc/apt/sources.list.d/$MOS_DEB_DIST.list ; \
   apt-get update ; \
   apt-get install lsb-release apt-transport-https ca-certificates curl git openssh-client python python3 sudo \
     bridge-utils iproute2 iptables iputils-ping net-tools strace qemu-utils keepalived ; \
@@ -48,7 +52,7 @@ RUN \
   pip2 install -U tox virtualenv ; \
   virtualenv /usr/bindep-env ; \
   /usr/bindep-env/bin/pip install bindep ; \
-  sed -ri '/libj?erasure/ d' /tmp/bindep-fallback.txt ; \
+  sed -ri '/libjerasure/ d' /tmp/bindep-fallback.txt ; \
   bash -xe /tmp/install-distro-packages.sh ; \
   \
   groupadd -g $JENKINS_GID jenkins || : ; \
@@ -86,6 +90,7 @@ EODockerfile
 docker build \
   --build-arg JENKINS_UID="$JENKINS_UID" \
   --build-arg JENKINS_GID="$JENKINS_GID" \
+  --build-arg MOS_VERSION="$MOS_VERSION" \
   --no-cache \
   --tag "${DOCKER_IMAGE_TAG:-infra-ubuntu-$UBUNTU_DISTRO}" \
   - << EOF

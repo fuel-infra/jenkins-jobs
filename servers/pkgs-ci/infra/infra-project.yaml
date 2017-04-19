@@ -7,8 +7,10 @@
     distro:
     - trusty:
         os: ubuntu
+        mos_version: '9.0'
     - xenial:
         os: ubuntu
+        mos_version: '10.0'
 
     jobs:
     - 'infra-trigger-docker-image-{os}-{distro}'

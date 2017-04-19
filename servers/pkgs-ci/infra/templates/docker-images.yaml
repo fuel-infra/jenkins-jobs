@@ -46,5 +46,6 @@
         properties-content: |
             DOCKER_IMAGE_TAG=infra-{os}-{distro}
             UBUNTU_DISTRO={distro}
+            MOS_VERSION={mos_version}
     - shell:
         !include-raw-escape: ../builders/docker-build-ubuntu.sh
