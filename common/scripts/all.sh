@@ -149,6 +149,7 @@ echo "STEP 2. Publish everything"
 
 cp "${LOCAL_MIRROR}"/*changelog "${ARTS_DIR}/" || true
 cp "${BUILD_DIR}/listing-package-changelog.txt" "${ARTS_DIR}/listing-package-changelog.txt" || true
+cp "${BUILD_DIR}/listing_git_source_versions.txt" "${ARTS_DIR}/listing_git_source_versions.txt" || true
 (cd "${BUILD_DIR}/iso/isoroot" && find . | sed -s 's/\.\///') > "${ARTS_DIR}/listing.txt" || true
 
 ############
