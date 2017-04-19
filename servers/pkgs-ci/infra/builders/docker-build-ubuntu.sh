@@ -43,8 +43,8 @@ RUN \
   test "$MOS_VERSION" = 'master' && MOS_DEB_DIST='mos-master' || MOS_DEB_DIST="mos$MOS_VERSION" ; \
   echo "deb http://mirror.fuel-infra.org/mos-repos/ubuntu/$MOS_VERSION/ $MOS_DEB_DIST main" > /etc/apt/sources.list.d/$MOS_DEB_DIST.list ; \
   apt-get update ; \
-  apt-get install lsb-release apt-transport-https ca-certificates curl git openssh-client python python3 sudo \
-    bridge-utils iproute2 iptables iputils-ping net-tools strace qemu-utils keepalived ; \
+  apt-get install lsb-release apt-transport-https ca-certificates curl git openssh-client python python3 python-yaml \
+    sudo bridge-utils iproute2 iptables iputils-ping net-tools strace qemu-utils keepalived ; \
   \
   python2 /tmp/get-pip.py ; \
   python3 /tmp/get-pip.py ; \

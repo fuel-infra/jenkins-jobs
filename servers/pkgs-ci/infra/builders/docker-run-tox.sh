@@ -8,11 +8,17 @@ set -o xtrace
 UPSTREAM_BRANCH="stable/${ZUUL_BRANCH##*/}"
 UPSTREAM_BRANCH="${UPSTREAM_BRANCH%%-*}"
 
-# Fixup for old branch names
-# openstack/requirements down't have branch stable/juno, thus use stable/kilo
+unset MOS_RELEASE
+CONSTRAINTS_REV="h=$UPSTREAM_BRANCH"
+
+# Guess MOS_RELEASE for mos-requirements
+# Override CONSTRAINTS_REV for EOL branches
 case "$UPSTREAM_BRANCH" in
-  'stable/2014.2')   UPSTREAM_BRANCH='stable/kilo' ;;
-  'stable/2015.1.0') UPSTREAM_BRANCH='stable/kilo' ;;
+  'stable/2014.2')   MOS_RELEASE=6.1; CONSTRAINTS_REV='t=juno-eol'    ;;
+  'stable/2015.1.0') MOS_RELEASE=7.0; CONSTRAINTS_REV='t=liberty-eol' ;;
+  'stable/liberty')  MOS_RELEASE=8.0                                  ;;
+  'stable/mitaka')   MOS_RELEASE=9.0                                  ;;
+  'stable/newton')   MOS_RELEASE=10.0                                 ;;
 esac
 
 docker run -i --rm -v "$WORKSPACE:$WORKSPACE" "$DOCKER_IMAGE_TAG" /bin/bash -xe <<EODockerRun
@@ -20,7 +26,7 @@ set -o pipefail
 
 # (Re-)Install tox and virtualenv considering release-specific constraints
 pip2 install -U tox virtualenv \
-  -c "https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=$UPSTREAM_BRANCH"
+  -c "https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?$CONSTRAINTS_REV"
 
 # Start MySQL database
 start-stop-daemon --start --background --user mysql --exec /usr/sbin/mysqld
@@ -33,11 +39,13 @@ sudo -i -u jenkins /bin/bash -xe <<EOJenkins
 cd "$WORKSPACE"
 # Set locale to avoid unicode issues
 export LANG=en_US.utf8
-# Tox virtualenv contains only pip, setuptools and wheel - no need to upgrade
-sed -ri '/pip.+install/ s/ -(U|-upgrade) / /' tox.ini
+# Prepare mos-requirements
+if [ -n "$MOS_RELEASE" ]; then
+    MOS_RELEASE=$MOS_RELEASE mos-requirements/scripts/prepare-env.sh venv
+fi
 # Set log path
 export OS_LOG_PATH="$(pwd -P)/.tox/$TOX_ENV/log"
-tox -e "$TOX_ENV"
+tox -v -e "$TOX_ENV"
 
 ### FIXME(aevseev) JUnit publisher prior to version 1.10 does not have option to skip non-existent reports
 ### Packaging CI has 1.2-beta-4 (!)

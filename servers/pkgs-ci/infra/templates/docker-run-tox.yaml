@@ -21,6 +21,13 @@
         branches:
         - FETCH_HEAD
         refspec: $ZUUL_REF
+        browser-url: https://review.fuel-infra.org/gitweb?a=commit;p=$ZUUL_PROJECT.git;h=ZUUL_COMMIT
+    - git:
+        url: 'ssh://{username-openstack-ci-jenkins}@review.fuel-infra.org:29418/mos-infra/mos-requirements'
+        credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+        basedir: mos-requirements
+        wipe-workspace: false
+        browser-url: https://review.fuel-infra.org/gitweb?a=summary;p=mos-infra/mos-requirements.git
 
     builders:
     - inject:
