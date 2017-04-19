@@ -30,6 +30,8 @@ set -ex
 
 VENV="${WORKSPACE}_VENV"
 SOURCE_DIR="publish-docs"
+LANDING_PAGE_DIR="www/landing_page"
+INTERNAL_DOCS_ROOT="${DOCS_ROOT}/internal"
 
 [[ ! -d "${VENV}" ]] && virtualenv "${VENV}"
 
@@ -44,9 +46,12 @@ if [ -z "${GERRIT_EVENT_TYPE}" -o "${GERRIT_EVENT_TYPE}" == "change-merged" ]; t
     # Publishing after merge
     # DOCS_HOST DOCS_ROOT and DOCS_USER variables are injected
     # shellcheck disable=SC2029
-    ssh "${DOCS_USER}@${DOCS_HOST}" "mkdir -p ${DOCS_ROOT}"
+    ssh "${DOCS_USER}@${DOCS_HOST}" "mkdir -p ${INTERNAL_DOCS_ROOT}"
 
-    DOCS_PATH="${DOCS_USER}@${DOCS_HOST}:${DOCS_ROOT}"
+    DOCS_PATH="${DOCS_USER}@${DOCS_HOST}:${INTERNAL_DOCS_ROOT}"
+    LANDING_PAGE_PATH="${DOCS_USER}@${DOCS_HOST}:${DOCS_ROOT}"
 
     rsync -rv "${SOURCE_DIR}/" "${DOCS_PATH}"
+    # Upload the landing page docs.mirantis.com
+    rsync -rv  "${LANDING_PAGE_DIR}/" "${LANDING_PAGE_PATH}"
 fi
