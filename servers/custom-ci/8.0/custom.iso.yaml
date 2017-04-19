@@ -7,5 +7,9 @@
     defaults: '{version}.custom.iso'
     description:
       !include-raw: descriptions/custom.iso
+
+    overridden_parameters: |
+      CENTOS_MIRROR_ID=centos-7.3.1611
+
     jobs:
       - '{version}.custom.iso'
