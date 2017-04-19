@@ -9,7 +9,13 @@
       !include-raw: descriptions/custom.iso
 
     overridden_parameters: |
-      CENTOS_MIRROR_ID=centos-7.3.1611
+      # MOS 8.0 requres some specific parameters
+      CENTOS_MAJOR=7
+      CENTOS_MINOR=3
+      CENTOS_BUILD=1611
+      CENTOS_VERSION=7.3.1611
+      CENTOS_MIRROR_ID=latest
+      MOS_CENTOS_ROOT=/mos-repos/centos/mos{version}-centos7-fuel/
 
     jobs:
       - '{version}.custom.iso'
