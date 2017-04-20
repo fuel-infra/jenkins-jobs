@@ -8,6 +8,11 @@ set -o xtrace
 UPSTREAM_BRANCH="stable/${ZUUL_BRANCH##*/}"
 UPSTREAM_BRANCH="${UPSTREAM_BRANCH%%-*}"
 
+# Murano-specific branch(es)
+if [ "$ZUUL_BRANCH" = '9.0/plugin' ] || [ "${ZUUL_BRANCH%/*}" = '9.0/release' ]; then
+  UPSTREAM_BRANCH='stable/mitaka'
+fi
+
 unset MOS_RELEASE
 CONSTRAINTS_REV="h=$UPSTREAM_BRANCH"
 
@@ -40,7 +45,7 @@ cd "$WORKSPACE"
 # Set locale to avoid unicode issues
 export LANG=en_US.utf8
 # Prepare mos-requirements
-if [ -n "$MOS_RELEASE" ]; then
+if [ -n "$MOS_RELEASE" ] && [ -f 'test-requirements.txt' ]; then
     MOS_RELEASE=$MOS_RELEASE mos-requirements/scripts/prepare-env.sh venv
 fi
 rm -rf mos-requirements
