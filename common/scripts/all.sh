@@ -141,7 +141,7 @@ if [ "${ISO_TYPE}" = "custom" ]; then
 fi
 ############
 # shellcheck disable=SC2086
-make $make_args iso listing
+make $make_args all
 
 #########################################
 
