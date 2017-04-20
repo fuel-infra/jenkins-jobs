@@ -12,8 +12,8 @@
     concurrent: false
     node: docs
     logrotate:
-      daysToKeep: 15
-      artifactDaysToKeep: 15
+      daysToKeep: 10
+      artifactDaysToKeep: 10
 
     properties:
       - heavy-job:

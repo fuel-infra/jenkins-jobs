@@ -4,7 +4,8 @@
       Check patchsets in '{repository}' repository
       <p>Contacts: ci-team at #infra</p>
     logrotate:
-      daysToKeep: 30
+      daysToKeep: 10
+      artifactDaysToKeep: 10
     node: docs
     concurrent: false
 
