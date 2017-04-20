@@ -21,7 +21,7 @@
                  <b>Contacts:</b> aheczko, fuel-qa'
 
     swarm-test/job-weight: '7'
-    swarm-test/project-parametrize-build: nessus_security_scan_upload
+    swarm-test/project-parametrize-build: nessus_security_scan_upload_results
     swarm-test/condition-parametrize-build: SUCCESS
     swarm-test/predef-parameters-parametrize-build: |
        SCAN__JOB_NAME=$JOB_NAME
