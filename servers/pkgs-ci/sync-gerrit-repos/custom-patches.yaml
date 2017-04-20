@@ -2,16 +2,25 @@
     name: 'custom-patches'
 
     version:
-    - '9.0':
+    - 'mos9.0':
         old-branch: openstack-ci/fuel-8.0/liberty
         new-branch: 9.0/mitaka
         gerrit-topic: custom/patches/9.0
         is-disabled: true
-    - '10.0':
+    - 'mos10.0':
         old-branch: 9.0/mitaka
         new-branch: 10.0/newton
         gerrit-topic: custom/patches/10.0
-
+    - 'mcp-newton':
+        old-branch: mcp/1.0/mitaka
+        new-branch: mcp/newton
+        gerrit-topic: custom/patches/mcp/newton
+    - 'mcp-ocata':
+        old-branch: mcp/1.0/mitaka
+        #FIXME(rpodolyaka): use the following branch name when packages are ready
+        #new-branch: mcp/ocata
+        new-branch: 11.0/ocata
+        gerrit-topic: custom/patches/mcp/ocata
 
     # Gerrit parameters
     gerrit-host: 'review.fuel-infra.org'
@@ -20,26 +29,41 @@
     gerrit-creds: '{ssh-creds-openstack-ci-mirrorer-jenkins}'
 
     gerrit-project-name:
+    - aodh
     - ceilometer
     - ceilometermiddleware
     - cinder
+    - designate
     - django_openstack_auth
     - glance
     - glance_store
     - heat
     - horizon
     - ironic
+    - ironic-inspector
+    - ironic-lib
+    - ironic-staging-drivers
+    - ironic-ui
     - keystone
     - keystoneauth
     - keystonemiddleware
     - murano
     - murano-dashboard
+    - networking-generic-switch
     - neutron
     - neutron-fwaas
     - neutron-lbaas
+    - neutron-lib
     - neutron-vpnaas
     - nova
+    - openstack-doc-tools
+    - openstackdocstheme
     - os-brick
+    - os-client-config
+    - os-testr
+    - os-vif
+    - os-win
+    - osc-lib
     - oslo.cache
     - oslo.concurrency
     - oslo.config
@@ -50,31 +74,41 @@
     - oslo.messaging
     - oslo.middleware
     - oslo.policy
+    - oslo.privsep
     - oslo.reports
     - oslo.rootwrap
     - oslo.serialization
     - oslo.service
     - oslo.utils
-    - oslo.version
     - oslo.versionedobjects
     - oslo.vmware
     - oslosphinx
     - oslotest
+    - panko
+    - python-aodhclient
+    - python-brick-cinderclient-ext
     - python-ceilometerclient
     - python-cinderclient
+    - python-congressclient
     - python-glanceclient
+    - python-gnocchiclient
     - python-heatclient
+    - python-ironic-inspector-client
     - python-ironicclient
     - python-keystoneclient
+    - python-magnumclient
+    - python-mistralclient
     - python-muranoclient
     - python-neutronclient
     - python-novaclient
     - python-openstackclient
+    - python-pankoclient
     - python-saharaclient
     - python-swiftclient
+    - requestsexceptions
     - sahara
     - sahara-dashboard
     - swift
 
     jobs:
-    - 'mos{version}-{gerrit-project-name}-custom-patches'
+    - '{version}-{gerrit-project-name}-custom-patches'
