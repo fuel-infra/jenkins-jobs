@@ -21,7 +21,8 @@
          #trigger: '5 4 * * 7'
          #
          #
-         trigger: '0 21 * * *'
+         #trigger: '0 21 * * *'
+         trigger: ''
          enable_proposed: false
       - '{version-id}.{test-type}.timer.{repo_type}':
          repo_type: proposed
