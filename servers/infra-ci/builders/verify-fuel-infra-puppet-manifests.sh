@@ -20,7 +20,8 @@ BEGIN {
   }
 }'
 
-find . -name '*.pp' -print0 | xargs -0 -P1 -L1 puppet parser validate --verbose
+find . -name '*.pp' -print0 | xargs -0 -P1 -L1 puppet parser validate \
+          --verbose --parser future
 
 find . -name '*.pp' -print0 | xargs -0 -P1 -L1 puppet-lint \
           --fail-on-warnings \
