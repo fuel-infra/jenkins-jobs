@@ -19,19 +19,21 @@ CONSTRAINTS_REV="h=$UPSTREAM_BRANCH"
 # Guess MOS_RELEASE for mos-requirements
 # Override CONSTRAINTS_REV for EOL branches
 case "$UPSTREAM_BRANCH" in
-  'stable/2014.2')   MOS_RELEASE=6.1; CONSTRAINTS_REV='t=juno-eol'    ;;
-  'stable/2015.1.0') MOS_RELEASE=7.0; CONSTRAINTS_REV='t=liberty-eol' ;;
-  'stable/liberty')  MOS_RELEASE=8.0                                  ;;
-  'stable/mitaka')   MOS_RELEASE=9.0                                  ;;
-  'stable/newton')   MOS_RELEASE=10.0                                 ;;
+  'stable/2014.2')   MOS_RELEASE=6.1;  VIRTUALENV_VER='<15.1'; CONSTRAINTS_REV='t=juno-eol'    ;;
+  'stable/2015.1.0') MOS_RELEASE=7.0;  VIRTUALENV_VER='<15.1'; CONSTRAINTS_REV='t=liberty-eol' ;;
+  'stable/liberty')  MOS_RELEASE=8.0;  VIRTUALENV_VER='<15.1'                                  ;;
+  'stable/mitaka')   MOS_RELEASE=9.0;  VIRTUALENV_VER='<15.1'                                  ;;
+  'stable/newton')   MOS_RELEASE=10.0; VIRTUALENV_VER='<15.1'                                  ;;
 esac
 
 docker run -i --rm -v "$WORKSPACE:$WORKSPACE" "$DOCKER_IMAGE_TAG" /bin/bash -xe <<EODockerRun
 set -o pipefail
 
+# Download constraints
+curl -fLsS -o /tmp/upper-constraints.txt "https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?$CONSTRAINTS_REV"
+
 # (Re-)Install tox and virtualenv considering release-specific constraints
-pip2 install -U tox virtualenv \
-  -c "https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?$CONSTRAINTS_REV"
+pip2 install -U "virtualenv$VIRTUALENV_VER"
 
 # Start MySQL database
 start-stop-daemon --start --background --user mysql --exec /usr/sbin/mysqld
@@ -51,6 +53,8 @@ fi
 rm -rf mos-requirements
 # Set log path
 export OS_LOG_PATH="$(pwd -P)/.tox/$TOX_ENV/log"
+# Use downloaded constraints
+export UPPER_CONSTRAINTS_FILE='/tmp/upper-constraints.txt'
 tox -v -e "$TOX_ENV"
 
 ### FIXME(aevseev) JUnit publisher prior to version 1.10 does not have option to skip non-existent reports
