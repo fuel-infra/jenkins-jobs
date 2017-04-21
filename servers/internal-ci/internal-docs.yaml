@@ -6,7 +6,7 @@
           properties-content: |
             DOCS_USER=docs
             DOCS_HOST=docs.fuel-infra.org
-            DOCS_ROOT=/var/www/internal
+            DOCS_ROOT=/var/www
       - shell:
           !include-raw: builders/internal-docs.sh
     description: |
@@ -68,6 +68,12 @@
       - html-publisher:
           name: 'Docs build results'
           dir: 'publish-docs'
+          files: 'index.html'
+          keep-all: true
+          allow-missing: true
+      - html-publisher:
+          name: 'Docs landing page'
+          dir: 'www/landing_page'
           files: 'index.html'
           keep-all: true
           allow-missing: true
