@@ -119,7 +119,7 @@
           - requester
           - recipients
       - trigger-parameterized-builds:
-          - project: nessus_security_scan_upload
+          - project: nessus_security_scan_upload_results
             condition: SUCCESS
             predefined-parameters: |
               SCAN_JOB_NAME=$JOB_NAME
