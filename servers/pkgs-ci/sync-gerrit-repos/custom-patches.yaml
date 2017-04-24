@@ -17,9 +17,7 @@
         gerrit-topic: custom/patches/mcp/newton
     - 'mcp-ocata':
         old-branch: mcp/1.0/mitaka
-        #FIXME(rpodolyaka): use the following branch name when packages are ready
-        #new-branch: mcp/ocata
-        new-branch: 11.0/ocata
+        new-branch: mcp/ocata
         gerrit-topic: custom/patches/mcp/ocata
 
     # Gerrit parameters
