@@ -1,0 +1,16 @@
+<!-- Managed by Jenkins Job Builder -->
+<p>Automate Export Compliance Reporting.</p>
+
+<p>
+Workflow:
+<ol>
+  <li>Clone scripts
+      <a href="https://review.fuel-infra.org/#/admin/projects/infra/encryption-compliance">infra/encryption-compliance</a></p>
+  </li>
+  <li>Clone projects with source code from git repositories;</li>
+  <li>Checkout to required branch and upload project to Black Duck;</li>
+  <li>Create Export Compliance report via Black Duck Export. For rescan exist projects use FORCE_ANALYSIS;</li>
+  <li>For remove exist project in Black Duck use REMOVE_PROJECTS;</li>
+  <li>Currently this job does not publish report on drive.google.com</li>
+</ol>
+
