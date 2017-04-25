@@ -57,6 +57,9 @@ DOCKER_IMAGE="infra-ubuntu-$UBUNTU_DIST"
 docker run -i --rm -v "$WORKSPACE:$WORKSPACE" "$DOCKER_IMAGE" /bin/bash -xe <<EODockerRun
 set -o pipefail
 
+# Generate host UUID
+openssl rand -hex 16 > /etc/machine-id
+
 # Download constraints
 curl -fLsS -o /tmp/upper-constraints.txt "https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?$CONSTRAINTS_REV"
 
