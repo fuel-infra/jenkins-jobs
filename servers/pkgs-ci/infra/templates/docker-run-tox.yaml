@@ -6,9 +6,11 @@
     description: |
         This job run tox env <i>{tox-env}</i> inside a docker image
 
+    timeout: 30
+
     wrappers:
     - timeout:
-        timeout: 30
+        timeout: '{timeout}'
     - timestamps
     - ansicolor
 
