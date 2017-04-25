@@ -13,20 +13,48 @@ if [ "$ZUUL_BRANCH" = '9.0/plugin' ] || [ "${ZUUL_BRANCH%/*}" = '9.0/release' ];
   UPSTREAM_BRANCH='stable/mitaka'
 fi
 
+# Defaults
 unset MOS_RELEASE
+UBUNTU_DIST='xenial'
 CONSTRAINTS_REV="h=$UPSTREAM_BRANCH"
 
-# Guess MOS_RELEASE for mos-requirements
-# Override CONSTRAINTS_REV for EOL branches
+# Configure test:
+#  - guess MOS_RELEASE for mos-requirements
+#  - set virtualenv version constraint
+#  - choose Ubuntu release
+#  - override CONSTRAINTS_REV for EOL branches
 case "$UPSTREAM_BRANCH" in
-  'stable/2014.2')   MOS_RELEASE=6.1;  VIRTUALENV_VER='<15.1'; CONSTRAINTS_REV='t=juno-eol'    ;;
-  'stable/2015.1.0') MOS_RELEASE=7.0;  VIRTUALENV_VER='<15.1'; CONSTRAINTS_REV='t=liberty-eol' ;;
-  'stable/liberty')  MOS_RELEASE=8.0;  VIRTUALENV_VER='<15.1'                                  ;;
-  'stable/mitaka')   MOS_RELEASE=9.0;  VIRTUALENV_VER='<15.1'                                  ;;
-  'stable/newton')   MOS_RELEASE=10.0; VIRTUALENV_VER='<15.1'                                  ;;
+  'stable/2014.2')
+    MOS_RELEASE=6.1
+    VIRTUALENV_VER='<15.1'
+    UBUNTU_DIST='trusty'
+    CONSTRAINTS_REV='t=juno-eol'
+    ;;
+  'stable/2015.1.0')
+    MOS_RELEASE=7.0
+    VIRTUALENV_VER='<15.1'
+    UBUNTU_DIST='trusty'
+    CONSTRAINTS_REV='t=liberty-eol'
+    ;;
+  'stable/liberty')
+    MOS_RELEASE=8.0
+    VIRTUALENV_VER='<15.1'
+    UBUNTU_DIST='trusty'
+    ;;
+  'stable/mitaka')
+    MOS_RELEASE=9.0
+    VIRTUALENV_VER='<15.1'
+    UBUNTU_DIST='trusty'
+    ;;
+  'stable/newton')
+    MOS_RELEASE=10.0
+    VIRTUALENV_VER='<15.1'
+    ;;
 esac
 
-docker run -i --rm -v "$WORKSPACE:$WORKSPACE" "$DOCKER_IMAGE_TAG" /bin/bash -xe <<EODockerRun
+DOCKER_IMAGE="infra-ubuntu-$UBUNTU_DIST"
+
+docker run -i --rm -v "$WORKSPACE:$WORKSPACE" "$DOCKER_IMAGE" /bin/bash -xe <<EODockerRun
 set -o pipefail
 
 # Download constraints

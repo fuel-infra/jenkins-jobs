@@ -19,13 +19,8 @@
 
     - 'infra-run-docker-tox-{tox-env}':
         tox-env:
-        - pep8:
-            image-tag: infra-ubuntu-trusty
-        - py27:
-            image-tag: infra-ubuntu-trusty
-        - py34:
-            image-tag: infra-ubuntu-trusty
-        - py35:
-            image-tag: infra-ubuntu-xenial
-        - functional:
-            image-tag: infra-ubuntu-trusty
+        - pep8
+        - py27
+        - py34
+        - py35
+        - functional
