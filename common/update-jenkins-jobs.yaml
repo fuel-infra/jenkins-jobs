@@ -4,8 +4,12 @@
       <p>Update jenkins jobs configuration on fuel-infra/jenkins-jobs merge or manually</p>
       <p>Requires python-tox package and user credentials stored as JJB_USER and JJB_PASS using Jenkins Global Passwords feature</p>
 
+    jobs-update-node: 'jjb_update'
+    jobs-update-timer: 'H * * * *'
+    jobs-update-timeout: 30
+
     concurrent: false
-    node: 'jjb_update'
+    node: '{jobs-update-node}'
 
     parameters:
     - string:
@@ -22,7 +26,7 @@
         choosing-strategy: default
 
     triggers:
-    - timed: 'H * * * *'
+    - timed: '{jobs-update-timer}'
     - gerrit:
         trigger-on:
         - change-merged-event
@@ -44,7 +48,7 @@
         global: true
     - timeout:
         fail: true
-        timeout: 30
+        timeout: '{jobs-update-timeout}'
 
     builders:
     - inject:
