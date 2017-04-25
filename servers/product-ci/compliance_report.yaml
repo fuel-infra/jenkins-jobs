@@ -32,7 +32,12 @@
       !include-raw: descriptions/compliance_report.html
     parameters:
       - string:
+          name: PROJECT_NAME
+          description: "Name of product: mos|mcp, need to define path to package"
+      - string:
           name: RELEASE
+      - string:
+          name: OPENSTACK_VERSION
       - bool:
           name: DIRECT_LINKS
           description: "Use this option for scan via direct links to snapshots"
@@ -77,18 +82,22 @@
             - job-read
             - job-build
     scm:
-      - fuel-infra:
-          scm-user: 'openstack-ci-jenkins'
-          scm-repo: 'infra/license-compliance'
-          scm-basedir: 'license-compliance'
-          scm-credentials-id: '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'
-          scm-branch: 'origin/master'
-      - fuel-infra:
-          scm-user: 'openstack-ci-jenkins'
-          scm-repo: 'infra/encryption-compliance'
-          scm-basedir: ''
-          scm-credentials-id: '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'
-          scm-branch: 'origin/master'
+      - git:
+          url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/license-compliance.git'
+          basedir: 'license-compliance'
+          credentials-id: '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'
+          skip-tag: true
+          branches:
+            - 'origin/master'
+          wipe-workspace: true
+      - git:
+          url: 'ssh://openstack-ci-jenkins@review.fuel-infra.org:29418/infra/encryption-compliance.git'
+          basedir: ''
+          credentials-id: '6fa3dffe-2f91-4a9b-a011-68e29f1b2468'
+          skip-tag: true
+          branches:
+            - 'origin/master'
+          wipe-workspace: true
     publishers:
       - email:
           notify-every-unstable-build: true

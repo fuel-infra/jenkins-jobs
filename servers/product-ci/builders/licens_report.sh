@@ -5,11 +5,18 @@ create_deb_repos () {
     DSC_DIR=$1
     SNAPSHOT=$2
     PROJECT_VERSION="${RELEASE}"
-    REMOTE_PATH=/mos-repos/ubuntu/${PROJECT_VERSION}
+    case $PROJECT_NAME in
+       "mos")
+        REMOTE_PATH=/${PROJECT_NAME}-repos/ubuntu/${PROJECT_VERSION}
+        SUITE="${PROJECT_NAME}${PROJECT_VERSION}"
+        ;;
+        "mcp")
+        REMOTE_PATH=/${PROJECT_NAME}-repos/${OPENSTACK_VERSION}/
+        SUITE="${OPENSTACK_VERSION}"
+        ;;
+    esac
     FILES_DIR=snapshots
-    PROJECT_NAME=mos
     UPDATES=${UPDATES:-''}
-    SUITE="${PROJECT_NAME}${PROJECT_VERSION}"
     REPO_NAME="${PROJECT_NAME}${PROJECT_VERSION}"
     [[ "$UPDATES" == "true" ]] && SUITE="${SUITE}-${UPDATES_REPO_NAME}" && REPO_NAME="${UPDATES_REPO_NAME}" && DSC_DIR="${DSC_DIR}"
     # Getting copy of proposed repository of given snapshot
@@ -58,19 +65,26 @@ export CENTOS_REPO=mirror/"${RELEASE}_rpm_packages${UPDATES_SUFFIX}"
 RSYNC_OPTIONS="-avPzt --delete --chmod=a+rx"
 
 if [ "${DIRECT_LINKS}" != true ] ; then
-    DEB_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/mos-repos/ubuntu/${RELEASE}" | awk '{print $7}' | cut -d'/' -f2)
-    RPM_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/mos-repos/centos/mos${RELEASE}-${RPM_DIST_NAME}/${BASE}" | awk '{print $7}' | cut -d'/' -f2)
+    DEB_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/${PROJECT_NAME}-repos/ubuntu/${RELEASE}" | awk '{print $7}' | cut -d'/' -f2)
+    RPM_SNAPSHOT=$(rsync -l "rsync://${MIRROR_HOST}/mirror/${PROJECT_NAME}-repos/centos/${PROJECT_NAME}${RELEASE}-${RPM_DIST_NAME}/${BASE}" | awk '{print $7}' | cut -d'/' -f2)
 else
-    DEB_SNAPSHOT=$(echo "${DEB_URL}" | awk -F'/' '{print $(NF-1)}')
-    RPM_SNAPSHOT=$(echo "${RPM_URL}" | awk -F'/' '{print $(NF-1)}')
+    if [ -n "${DEB_URL}" ] ; then
+       DEB_SNAPSHOT=$(echo "${DEB_URL}" | awk -F'/' '{print $(NF-1)}')
+    fi
+    if [ -n "${RPM_URL}" ] ; then
+       RPM_SNAPSHOT=$(echo "${RPM_URL}" | awk -F'/' '{print $(NF-1)}')
+    fi
 fi
 
 # Copy src and bin packages for analyse from mirrors
-create_deb_repos "${UBUNTU_REPO}" "${DEB_SNAPSHOT}"
+if [ -n "${DEB_URL}" ] ; then
+   create_deb_repos "${UBUNTU_REPO}" "${DEB_SNAPSHOT}"
+   license-compliance/deb_license.sh "${UBUNTU_REPO}"/public/pool/main/* > "license_${PROJECT_NAME}_${RELEASE}${UPDATES_SUFFIX}_ubuntu"
+fi
 # need pass all components as separate arguments
-# shellcheck disable=SC2086
-rsync ${RSYNC_OPTIONS} rsync://"${MIRROR_HOST}/mirror/mos-repos/centos/mos${RELEASE}-${RPM_DIST_NAME}/snapshots/${RPM_SNAPSHOT}"/ "${CENTOS_REPO}"
-
-# Create License Report with delimited |||
-license-compliance/rpm_license.sh "${CENTOS_REPO}"/x86_64/Packages/* > license_mos_"${RELEASE}${UPDATES_SUFFIX}"_centos
-license-compliance/deb_license.sh "${UBUNTU_REPO}"/public/pool/main/* > license_mos_"${RELEASE}${UPDATES_SUFFIX}"_ubuntu
+if [ -n "${RPM_URL}" ] ; then
+   # shellcheck disable=SC2086
+   rsync ${RSYNC_OPTIONS} rsync://"${MIRROR_HOST}/mirror/${PROJECT_NAME}-repos/centos/${PROJECT_NAME}${RELEASE}-${RPM_DIST_NAME}/snapshots/${RPM_SNAPSHOT}"/ "${CENTOS_REPO}"
+   # Create License Report with delimited |||
+   license-compliance/rpm_license.sh "${CENTOS_REPO}"/x86_64/Packages/* > "license_${PROJECT_NAME}_${RELEASE}${UPDATES_SUFFIX}_centos"
+fi
