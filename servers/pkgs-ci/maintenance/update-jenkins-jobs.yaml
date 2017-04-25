@@ -1,5 +1,6 @@
 - project:
     name: pkgs-ci.update-jenkins-jobs
     ci-name: pkgs-ci
+    jobs-update-timeout: 60
     jobs:
       - update-jenkins-jobs
