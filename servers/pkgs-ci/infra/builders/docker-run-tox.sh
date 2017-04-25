@@ -77,6 +77,8 @@ sudo -i -u jenkins /bin/bash -xe <<EOJenkins
 cd "$WORKSPACE"
 # Set locale to avoid unicode issues
 export LANG=en_US.utf8
+# Set default PATH doesn't contain sbin's
+export PATH=$PATH:/usr/sbin:/sbin
 # Prepare mos-requirements
 if [ -n "$MOS_RELEASE" ] && [ -f 'test-requirements.txt' ]; then
     MOS_RELEASE=$MOS_RELEASE mos-requirements/scripts/prepare-env.sh venv
