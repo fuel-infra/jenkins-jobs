@@ -163,7 +163,7 @@ tr = '<tr><td>{project}</td>'
 for distro in distros:
     tr += ('<td>'
            '<a href="' + GERRIT_URL + 'gitweb?p={' + distro + '_project}.git;'
-           'a=commitdiff;h={' + distro + '_refsha}">{' + distro + '_version}'
+           'a=shortlog;h={' + distro + '_refsha}">{' + distro + '_version}'
            '</a>{' + distro + '_timestamp}</td>')
     th += '<th>' + distro + '</th>'
 th += '</tr></thead>'
