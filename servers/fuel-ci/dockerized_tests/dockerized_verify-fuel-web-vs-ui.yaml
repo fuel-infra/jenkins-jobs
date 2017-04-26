@@ -60,6 +60,8 @@
 
       - 'dockerized-{name}':
           name: 'nightly-verify-fuel-web-on-fuel-ui'
+          triggers:
+            - timed: '{timed}'
           proj_main: 'fuel-web'
           proj_helper: 'fuel-ui'
           timed: '@midnight'
