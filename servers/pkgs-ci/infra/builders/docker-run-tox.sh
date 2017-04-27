@@ -71,6 +71,9 @@ start-stop-daemon --start --background --user mysql --exec /usr/sbin/mysqld
 # Start PostgreSQL database
 pg_lsclusters -h | ( read PG_VERSION PG_CLUSTER _OTHERS; pg_ctlcluster \$PG_VERSION \$PG_CLUSTER start )
 
+# Start MongoDB
+start-stop-daemon --start --background --chuid mongodb --exec /usr/bin/mongod -- --config /etc/mongodb.conf
+
 # Run tox as jenkins user
 sudo -i -u jenkins /bin/bash -xe <<EOJenkins
 cd "$WORKSPACE"
