@@ -1,0 +1,54 @@
+- job-template:
+    name: 'debug_session_{weight}'
+    builders:
+      - shell:
+          !include-raw-escape: './builders/debug_session.sh'
+    concurrent: true
+    description:
+      !include-raw: './descriptions/debug_session'
+    parameters:
+      - node:
+          name: NODE
+          allowed-multiselect: true
+      - string:
+          name: DURATION
+          default: '1'
+          description: |
+            Duration in hours. Note that build will be aborted in 48 hours anyway.
+    properties:
+      - heavy-job:
+          weight: '{weight}'
+      - authorization:
+          authenticated:
+            - job-read
+            - job-build
+    publishers:
+      - description-setter:
+          description: '$NODE - $DURATION h'
+          description-for-failed: '$NODE - $DURATION h'
+      - email-ext:
+          body: |
+            '$DEFAULT_CONTENT
+            Comment:
+
+            $COMMENT
+
+            See https://mirantis.jira.com/wiki/display/PRD/Debug+session+workflow for details.'
+          recipients: ci+alert@mirantis.com
+    wrappers:
+      - timeout:
+          timeout: 2880
+          write-description: true
+
+- project:
+    name: debug_session
+    jobs:
+      - 'debug_session_{weight}':
+          weight: 4
+      - 'debug_session_{weight}':
+          weight: 8
+      - 'debug_session_{weight}':
+          weight: 12
+      - 'debug_session_{weight}':
+          weight: 24
+
