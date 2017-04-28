@@ -16,7 +16,7 @@
             SPEC_PREFIX_PATH=/{deb-dist-env}
             DIST={deb-dist-env}
             IS_OPENSTACK=true
-            IS_SECURITY=true
+            IS_SECURITY=false
             IS_HOTFIX=false
             IS_UPDATES={is-updates}
             REMOTE_REPO_HOST={repo-host}
