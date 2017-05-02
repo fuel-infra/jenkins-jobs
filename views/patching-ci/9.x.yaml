@@ -1,0 +1,21 @@
+- view:
+      type: list
+      name: '9.x'
+      jobs:
+        - 9.x.swarm.runner
+        - 9.x.system_test.test-reports
+        - 9.x.acceptance.runner
+        - 9.x.acceptance.test-reports
+        - 9.x.backup-restore.test-reports
+        - 9.x.baremetal.test-reports
+        - 9.0.proposed-to-updates
+      columns:
+        - status
+        - weather
+        - job
+        - last_success
+        - last_failure
+        - last_duration
+        - build_button
+      recurse: False
+
