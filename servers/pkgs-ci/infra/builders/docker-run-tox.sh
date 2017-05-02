@@ -34,6 +34,7 @@ case "$UPSTREAM_BRANCH" in
     MOS_RELEASE=7.0
     VIRTUALENV_VER='<15.1'
     UBUNTU_DIST='trusty'
+    CONSTRAINTS_REV='h=stable/kilo'
     ;;
   'stable/liberty')
     MOS_RELEASE=8.0
