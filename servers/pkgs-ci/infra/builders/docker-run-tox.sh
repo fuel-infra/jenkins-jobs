@@ -32,7 +32,7 @@ case "$UPSTREAM_BRANCH" in
     ;;
   'stable/2015.1.0')
     MOS_RELEASE=7.0
-    VIRTUALENV_VER='<15.1'
+    VIRTUALENV_VER='<13.1.1'
     UBUNTU_DIST='trusty'
     CONSTRAINTS_REV='h=stable/kilo'
     ;;
@@ -83,9 +83,10 @@ export LANG=en_US.utf8
 # Set default PATH doesn't contain sbin's
 export PATH=$PATH:/usr/sbin:/sbin
 # Prepare mos-requirements
-if [ -n "$MOS_RELEASE" ] && [ -f 'test-requirements.txt' ]; then
-    MOS_RELEASE=$MOS_RELEASE mos-requirements/scripts/prepare-env.sh venv
-fi
+# NOTE(dmeltsaykin): this breaks upstream constraints
+#if [ -n "$MOS_RELEASE" ] && [ -f 'test-requirements.txt' ]; then
+#    MOS_RELEASE=$MOS_RELEASE mos-requirements/scripts/prepare-env.sh venv
+#fi
 rm -rf mos-requirements
 # Set log path
 export OS_LOG_PATH="$(pwd -P)/.tox/$TOX_ENV/log"
