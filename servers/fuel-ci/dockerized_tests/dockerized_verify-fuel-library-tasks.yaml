@@ -3,7 +3,10 @@
     docker_image: 'fuel-ci/fuel-library-tasks'
     volumes: '$WORKSPACE:/opt/jenkins/fuel-library'
     gerrit_project_pattern: 'openstack/fuel-library'
+    non_voting: false
     gerrit_branches:
+      - branch-compare-type: PLAIN
+        branch-pattern: 'stable/7.0'
       - branch-compare-type: PLAIN
         branch-pattern: 'stable/8.0'
       - branch-compare-type: PLAIN
@@ -23,7 +26,7 @@
           timeout: 45
     jobs:
       - 'dockerized-{name}':
-          name: verify-docker-fuel-library-tasks
+          name: verify-fuel-library-tasks
           email-type: default
           timed: '0 9 * * *'
           gerrit_trigger_on:
@@ -34,7 +37,7 @@
             - gerrit-openstack:
                 repo: '{gerrit_project_pattern}'
       - 'dockerized-{name}':
-          name: gate-docker-fuel-library-tasks
+          name: gate-fuel-library-tasks
           email-type: alert-on-merge
           timed: ''
           gerrit_trigger_on:
