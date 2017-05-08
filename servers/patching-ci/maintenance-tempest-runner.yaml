@@ -1,0 +1,65 @@
+- job:
+    name: maintenance-tempest-runner
+    project-type: freestyle
+    defaults: global
+    description: 'Runs Tempest tests'
+    disabled: false
+    display-name: 'Rally Tempest Testing for 2FLOW'
+    concurrent: true
+    browser: githubweb
+    retry-count: 3
+    logrotate:
+      daysToKeep: 5
+      numToKeep: 20
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+    scm:
+      - fuel-infra-dockerfiles
+      - mirantis:
+          reponame: 'mos-ci-deployment-scripts'
+          repobranch: 'origin/master'
+          basedir: 'mos-ci-deployment-scripts'
+    parameters:
+      - string:
+          name: ENV_NAME
+      - string:
+          name: SNAPSHOT_NAME
+      - string:
+          name: REPORT_PREFIX
+          default: /home/jenkins/rally-tempest
+      - string:
+          name: VENV_PATH
+          default: /home/jenkins/qa-venv-7.0
+      - choice:
+          name: TEMPEST_RUNNER
+          choices:
+            - 'mos-tempest-runner'
+            - 'rally'
+      - string:
+          name: MILESTONE
+          default: '7.0'
+    builders:
+      - shell:
+          !include-raw: 'builders/maintenance-tempest-runner.sh'
+    publishers:
+      - archive:
+          artifacts: 'log.log'
+          allow-empty: 'true'
+          fingerprint: true
+      - archive:
+          artifacts: 'verification.xml'
+          allow-empty: 'true'
+          fingerprint: true
+      - junit:
+          results: verification.xml
+      - email:
+          recipients: vjigulin@mirantis.com
+      - postbuildscript:
+          script-only-if-succeeded: false
+          builders:
+            - shell: |
+                set -e
+                REPORT_PATH="${REPORT_PREFIX}/${ENV_NAME}_${SNAPSHOT_NAME}/"
+                sudo mkdir -p "$REPORT_PATH"
+                sudo cp build_url "$REPORT_PATH"
+                sudo cp verification.xml "$REPORT_PATH"

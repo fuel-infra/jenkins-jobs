@@ -1,0 +1,65 @@
+- job:
+    name: 'maintenance-tempest-reports-Testrail'
+    parameters:
+      - string:
+          name: ENV_NAME
+      - string:
+          name: SNAPSHOT_NAME
+      - string:
+          name: TESTRAIL_PLAN_NAME
+      - string:
+          name: TEST_GROUP
+      - string:
+          name: TESTRAIL_FILE
+          default: /var/www/test_rail/user.sh
+      - string:
+          name: REPORT_PREFIX
+          default: /home/jenkins/neutron
+      - string:
+          name: REPORT_FILE
+          default: report.xml
+      - string:
+          name: SUITE
+      - string:
+          name: MILESTONE
+      - bool:
+          name: ADD_TIMESTAMP
+          default: true
+      - bool:
+          name: USE_TEMPLATE
+          default: true
+      - node:
+          name: NODE_LABELS
+          default: maintenance-tempest
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
+    builders:
+        - shell:
+            !include-raw: 'builders/maintenance-tempest-reports-Testrail.sh'
+    scm:
+      - test-rail-reporter
+    project-type: freestyle
+    defaults: global
+    description: 'Send XUnit reports to TestRail'
+    disabled: false
+    display-name: 'Report To TestRail. Maintenance.'
+    concurrent: true
+    browser: githubweb
+    retry-count: 3
+    logrotate:
+      daysToKeep: 14
+      numToKeep: 50
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+    publishers:
+      - email:
+          recipients: vjigulin@mirantis.com
+      - workspace-cleanup:
+          fail-build: false
+      - description-setter:
+          regexp: ^.*\[TestRun URL\]\s*(.*)
+          regexp-for-failed: ^.*\[TestRun URL\]\s*(.*)
+          description: <a href="\1">TestRail Report URL</a>
+          description-for-failed: <a href="\1">TestRail Report URL</a>

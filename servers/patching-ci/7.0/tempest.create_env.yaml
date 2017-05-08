@@ -1,0 +1,101 @@
+- job:
+    name: 7.0.tempest.create_env
+    project-type: freestyle
+    node: maintenance
+    defaults: global
+    description: 'Create environment with parameters. Usable for tempest.'
+    disabled: false
+    display-name: 'Create Parameterized Environment (7.0 maintenance)'
+    concurrent: true
+    browser: githubweb
+    retry-count: 3
+    logrotate:
+      daysToKeep: 14
+      numToKeep: 50
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+    scm:
+      - main-git:
+          reponame: 'fuel-qa'
+          repobranch: "$FUEL_QA_VER"
+          basedir: ''
+      - mirantis:
+          reponame: 'mos-ci-deployment-scripts'
+          repobranch: 'origin/master'
+          basedir: 'mos-ci-deployment-scripts'
+    publishers:
+      - email:
+          recipients: vjigulin@mirantis.com
+      - workspace-cleanup:
+          fail-build: false
+    parameters:
+      - string:
+          name: MAGNET_LINK
+          default: 'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
+          description: 'ISO magnet link'
+      - string:
+          name: ENV_NAME
+          default: 'maintenance_env_7.0'
+          description: 'devops environment name'
+      - string:
+          name: UPGRADE_TARBALL_MAGNET_LINK
+          default: 'magnet:?xt=urn:btih:e4521941a159cbbf345884c7c7ec6a484a139d3b&dn=MirantisOpenStack-7.0-upgrade.tar.lrz&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0-upgrade.tar.lrz'
+          description: 'Upgrade tarball magnet link'
+      - string:
+          name: DEB_LATEST
+          default: 'latest'
+          description: "Snapshot timestamp without version id. E.g.: '2015-09-27-173001' or 'latest'"
+      - string:
+          name: RPM_LATEST
+          default: 'latest'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          default: 'latest'
+      - bool:
+          name: ENABLE_PROPOSED
+          default: false
+      - bool:
+          name: ENABLE_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_UPDATE_CENTOS
+          default: false
+      - bool:
+          name: ERASE_PREV_ENV
+          default: true
+          description: 'Erase all environments'
+      - bool:
+          name: DISABLE_SSL
+          default: false
+      - string:
+          name: FUEL_QA_VER
+          default: "origin/stable-mu/7.0"
+      - string:
+          name: FILE
+          description: 'File for fuel-qa copyed from mos-ci-deployment-scripts maintenance helpers'
+      - string:
+          name: GROUP
+          description: 'Test group for deploy'
+      - bool:
+          name: SKIP_INSTALL_ENV
+          default: false
+          description: 'Do not install env, job been ignored'
+      - bool:
+          name: BONDING
+          default: false
+      - string:
+          name: VENV_PATH
+          default: "/home/jenkins/qa-venv-7.0"
+      - string:
+          name: OPENSTACK_RELEASE
+          default: 'ubuntu'
+      - string:
+          name: SLAVE_NODE_MEMORY
+          default: '10240'
+          description: 'Slaves memory in Mb'
+    builders:
+      - shell:
+          !include-raw: 'builders/tempest.create_env.sh'
