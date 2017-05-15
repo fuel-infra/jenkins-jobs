@@ -82,6 +82,36 @@
           wipe-workspace: false
 
 - scm:
+    name: mirantis
+    scm:
+      - git:
+          url: 'https://github.com/Mirantis/{reponame}.git'
+          branches:
+            - '{repobranch}'
+          basedir: '{basedir}'
+          wipe-workspace: false
+          clean:
+            before: true
+
+- scm:
+    name: test-rail-reporter
+    scm:
+      - git:
+          url: https://github.com/gdyuldin/testrail_reporter.git
+          branches:
+            - origin/stable
+          skip-tag: true
+
+- scm:
+    name: fuel-infra-dockerfiles
+    scm:
+      - git:
+         url: https://review.fuel-infra.org/fuel-infra/dockerfiles
+         branches:
+           - origin/master
+         skip-tag: true
+
+- scm:
     name: osci-mirrors
     scm:
       - git:
