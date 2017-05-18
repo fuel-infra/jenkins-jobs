@@ -1,5 +1,6 @@
 - job:
     name: 'publish-packages-database'
+    node: 'publish_packages'
     description: |
        <p>Publish databases file from repository metadata to /mcv on mirror.fuel-infra.org</p>
        <p><b>Ownership:</b> Issues with this job are tracked by Fuel Build team.</p>
