@@ -10,11 +10,8 @@
       - string:
           name: TEST_GROUP
       - string:
-          name: TESTRAIL_FILE
-          default: /var/www/test_rail/user.sh
-      - string:
           name: REPORT_PREFIX
-          default: /home/jenkins/neutron
+          default: /home/jenkins/report-rally-tempest
       - string:
           name: REPORT_FILE
           default: report.xml

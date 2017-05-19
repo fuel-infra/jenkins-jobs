@@ -7,14 +7,14 @@
     # group
     #     Test group used as --group parameter in system_test.sh
     #     For tempest used groups from mos-ci-deployment-scripts
+    # test-group
+    #     Human readable description of configuration (for testrail)
     # description
     #     Job description
     # node
     #     Jenkins slave label
     # venvpath
     #     Path to virtual env with fuel-devops installed (VENV_PATH)
-    # weight
-    #     Job weight
     # display-name
     #     Job display-name
 
@@ -24,7 +24,9 @@
     disabled: false
     concurrent: false
     node: '{node}'
-    description: '{description}'
+    description: |
+      DO NOT TRIGGER THIS JOB. Use 7.0.tempest.on_node instead
+      {description}
     display-name: '{display-name}'
     retry-count: 2
     logrotate:
@@ -34,7 +36,7 @@
       artifactNumToKeep: -1
     properties:
     - heavy-job:
-        weight: '{weight}'
+        weight: 7
     builders:
       - trigger-builds:
         - project: '7.0.tempest.create_env'
@@ -45,6 +47,7 @@
             ENABLE_PROPOSED=$ENABLE_PROPOSED
             ENABLE_SECURITY=$ENABLE_SECURITY
             ENABLE_UPDATES=$ENABLE_UPDATES
+            ENABLE_UPDATE_CENTOS=$ENABLE_UPDATE_CENTOS
             ERASE_PREV_ENV=$ERASE_PREV_ENV
             SKIP_INSTALL_ENV=$SKIP_INSTALL_ENV
             DISABLE_SSL=$DISABLE_SSL
@@ -60,12 +63,12 @@
           block-thresholds:
             build-step-failure-threshold: 'never'
           predefined-parameters: |
+            REPORT_PREFIX=/home/jenkins/report-rally-tempest
             ENV_NAME=7.0.tempest.{specification}.$BUILD_ID
             SNAPSHOT_NAME={group}
-            REPORT_PREFIX=/home/jenkins/report-rally-tempest
+            MILESTONE=7.0
             VENV_PATH=/home/jenkins/qa-venv-7.0
             TEMPEST_RUNNER=$TEMPEST_RUNNER
-            MILESTONE=7.0
       - trigger-builds:
         - project: 'maintenance-tempest-reports-Testrail'
           same-node: true
@@ -76,10 +79,10 @@
             REPORT_PREFIX=/home/jenkins/report-rally-tempest
             ENV_NAME=7.0.tempest.{specification}.$BUILD_ID
             SNAPSHOT_NAME={group}
+            MILESTONE=7.0
             REPORT_FILE=verification.xml
             TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
-            TEST_GROUP={test_group}
-            MILESTONE=7.0
+            TEST_GROUP={test-group}
             SUITE=Tempest 7.0
             ADD_TIMESTAMP=$ADD_TIMESTAMP
 
@@ -88,10 +91,9 @@
     display-name: 7.0.tempest.vlan.ceph
     specification: vlan.ceph
     group: tempest_ceph_services_vlan
-    test_group: VLAN+ENABLED_CEPH+ENABLED+SERVICES
+    test-group: VLAN+ENABLED_CEPH+ENABLED+SERVICES
     description: VLAN+CEPH+SERVICES UBUNTU TEMPEST tests (7.0 maintenance)
     node: maintenance-tempest
-    weight: 7
     jobs:
       - '7.0.tempest.{specification}'
 
@@ -100,10 +102,9 @@
     display-name: 7.0.tempest.tun.ceph
     specification: tun.ceph
     group: tempest_ceph_services_tun
-    test_group: TUN+ENABLED_CEPH+ENABLED+SERVICES
+    test-group: TUN+ENABLED_CEPH+ENABLED+SERVICES
     description: TUN+CEPH+SERVICES UBUNTU TEMPEST tests (7.0 maintenance)
     node: maintenance-tempest
-    weight: 7
     jobs:
       - '7.0.tempest.{specification}'
 
@@ -112,10 +113,9 @@
     display-name: 7.0.tempest.vlan.non_ceph
     specification: vlan.non_ceph
     group: tempest_cinder_glance_swift_vlan
-    test_group: VLAN+DISABLED_CEPH
+    test-group: VLAN+DISABLED_CEPH
     description: VLAN+DISABLED_CEPH UBUNTU TEMPEST tests (7.0 maintenance)
     node: maintenance-tempest
-    weight: 7
     jobs:
       - '7.0.tempest.{specification}'
 
@@ -124,9 +124,9 @@
     display-name: 7.0.tempest.tun.non_ceph
     specification: tun.non_ceph
     group: tempest_cinder_glance_swift_tun
-    test_group: TUN+DISABLED_CEPH
+    test-group: TUN+DISABLED_CEPH
     description: TUN+DISABLED_CEPH UBUNTU TEMPEST tests (7.0 maintenance)
     node: maintenance-tempest
-    weight: 7
     jobs:
       - '7.0.tempest.{specification}'
+

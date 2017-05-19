@@ -90,6 +90,9 @@
           name: ENABLE_UPDATES
           default: true
       - bool:
+          name: ENABLE_UPDATE_CENTOS
+          default: true
+      - bool:
           name: ERASE_PREV_ENV
           default: true
       - bool:
@@ -126,3 +129,4 @@
             ADD_TIMESTAMP=$ADD_TIMESTAMP
             TEMPEST_RUNNER=$TEMPEST_RUNNER
             FUEL_QA_VER=$FUEL_QA_VER
+
