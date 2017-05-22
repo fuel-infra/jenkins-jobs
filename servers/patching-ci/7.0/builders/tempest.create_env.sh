@@ -17,11 +17,11 @@ if $SKIP_INSTALL_ENV ; then
     exit 0
 fi
 
-# Activate virtualenv
-source "${VENV_PATH}/bin/activate"
-
 # Download and link ISO
 ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
+
+# Activate virtualenv
+source "${VENV_PATH}/bin/activate"
 
 if [ -z "$ISO_PATH" ]
 then
@@ -140,3 +140,4 @@ export BONDING=$BONDING
 export OPENSTACK_RELEASE=$OPENSTACK_RELEASE
 
 ./utils/jenkins/system_tests.sh -k -K -j fuelweb_test -t test -w "$(pwd)" -e "$ENV_NAME" -o --group="$GROUP" -i "$ISO_PATH"
+
