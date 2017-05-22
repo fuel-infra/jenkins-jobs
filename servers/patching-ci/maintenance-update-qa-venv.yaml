@@ -1,0 +1,34 @@
+- job:
+    name: 'maintenance-update-qa-venv'
+    display-name: 'Update maintenance venvs.'
+    description: |
+      Update venv using requirements.txt and requirements-devops-source.txt from fuel-qa
+
+    concurrent: true
+
+    parameters:
+      - node:
+          name: NODE
+          allowed-multiselect: true
+      - string:
+          name: VIRTUAL_ENV
+          default: /home/jenkins/qa-venv-7.0
+      - string:
+          name: BRANCH
+          default: stable-mu/7.0
+      - string:
+          name: ADDITIONAL_REQUIREMENTS
+          description: been added to requirements.txt file
+      - bool:
+          name: CLEAN_VIRTUAL_ENV
+          default: true
+          description: remove venv and make clean install instead of update
+
+    builders:
+      - shell:
+          !include-raw: 'builders/maintenance-update-qa-venv.sh'
+
+    publishers:
+      - email:
+          recipients: vjigulin@mirantis.com
+
