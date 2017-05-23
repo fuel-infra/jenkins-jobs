@@ -1,32 +1,28 @@
 #!/bin/bash -ex
 
-REPORT_XML="${REPORT_PREFIX}/${ENV_NAME}_${SNAPSHOT}/${REPORT_FILE}"
+# Input:
+# REPORT_FILE=xml report file name
+# TESTRAIL_PLAN_NAME=name of testplan on testrail (Tempest MU8 05-32-2017)
+# TEST_GROUP=tempest configuration group
+# TESTRAIL_SUITE=testrail suite (Tempest 7.0)
+# MILESTONE=7.0
+# SNAPSHOT=snapshot for describe env in testrail
+# ADD_TIMESTAMP=need add timestamp to plan name
+# USE_TEMPLATE=use testrail report template or not
 
-export TESTRAIL_PROJECT=${TESTRAIL_PROJECT:-'Mirantis OpenStack'}
-export TESTRAIL_TEST_SUITE=${TESTRAIL_TEST_SUITE:-"Tempest ${MILESTONE}"}
-export JENKINS_URL=${JENKINS_URL:-https://patching-ci.infra.mirantis.net/}
-
-if [ ! -f "$REPORT_XML" ]; then
-    echo "Can't find $REPORT_XML file"
+if [ ! -f "${REPORT_FILE}" ]; then
+    echo "Can't find \"${REPORT_FILE}\" report file"
     exit 1
 fi
 
-# if we need to change SUITE
-if [ -n "$SUITE" ]; then
-    TESTRAIL_SUITE="${SUITE}"
-fi
+TESTRAIL_SUITE=${TESTRAIL_SUITE:-"Tempest ${MILESTONE}"}
 
-# if we need to change MILESTONE
-if [ -n "${MILESTONE}" ]; then
-    TESTRAIL_MILESTONE="${MILESTONE}"
-fi
-
-if ${ADD_TIMESTAMP}; then
+if [[ "${ADD_TIMESTAMP}" == "true" ]]; then
     TESTRAIL_PLAN_NAME+="-$(date +%Y/%m/%d)"
 fi
 
 TEMPLATE=()
-if ${USE_TEMPLATE}; then
+if [[ "${USE_TEMPLATE}" == "true" ]]; then
     TEMPLATE=(--testrail-name-template '{custom_test_group}.{title}' --xunit-name-template '{classname}.{methodname}')
 fi
 
@@ -34,15 +30,17 @@ virtualenv report-venv
 source report-venv/bin/activate
 pip install -U pip setuptools
 python setup.py install
-report -v --testrail-plan-name "$TESTRAIL_PLAN_NAME" \
-          --env-description "$SNAPSHOT-$TEST_GROUP" \
-          --testrail-user  "${TESTRAIL_USER}" \
+
+report -v --testrail-plan-name "${TESTRAIL_PLAN_NAME}" \
+          --env-description "${SNAPSHOT}-${TEST_GROUP}" \
+          --testrail-user "${TESTRAIL_USER}" \
           --testrail-password "${TESTRAIL_PASSWORD}" \
-          --testrail-project "${TESTRAIL_PROJECT}" \
-          --testrail-milestone "${TESTRAIL_MILESTONE}" \
+          --testrail-project "Mirantis OpenStack" \
+          --testrail-milestone "${MILESTONE}" \
           --testrail-suite "${TESTRAIL_SUITE}" \
-          --test-results-link "$BUILD" "$REPORT_XML" \
-          "${TEMPLATE[@]}"
+          --test-results-link "${BUILD_URL}"\
+          "${TEMPLATE[@]}" \
+          "${REPORT_FILE}"
 
 deactivate
 rm -rf report-venv

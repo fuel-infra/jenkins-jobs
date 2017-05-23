@@ -16,7 +16,7 @@
       - string:
           name: BRANCH
           default: stable-mu/7.0
-      - string:
+      - text:
           name: ADDITIONAL_REQUIREMENTS
           description: been added to requirements.txt file
       - bool:

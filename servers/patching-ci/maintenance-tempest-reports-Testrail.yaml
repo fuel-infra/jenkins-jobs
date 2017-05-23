@@ -2,21 +2,14 @@
     name: 'maintenance-tempest-reports-Testrail'
     parameters:
       - string:
-          name: ENV_NAME
-      - string:
-          name: SNAPSHOT_NAME
+          name: REPORT_FILE
+          default: /home/jenkins/report.xml
       - string:
           name: TESTRAIL_PLAN_NAME
       - string:
           name: TEST_GROUP
       - string:
-          name: REPORT_PREFIX
-          default: /home/jenkins/report-rally-tempest
-      - string:
-          name: REPORT_FILE
-          default: report.xml
-      - string:
-          name: SUITE
+          name: TESTRAIL_SUITE
       - string:
           name: MILESTONE
       - bool:
@@ -41,7 +34,6 @@
     defaults: global
     description: 'Send XUnit reports to TestRail'
     disabled: false
-    display-name: 'Report To TestRail. Maintenance.'
     concurrent: true
     browser: githubweb
     retry-count: 3

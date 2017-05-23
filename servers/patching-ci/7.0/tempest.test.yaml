@@ -63,7 +63,7 @@
           block-thresholds:
             build-step-failure-threshold: 'never'
           predefined-parameters: |
-            REPORT_PREFIX=/home/jenkins/report-rally-tempest
+            REPORT_PREFIX=/home/jenkins/tempest-reports/{group}
             ENV_NAME=7.0.tempest.{specification}.$BUILD_ID
             SNAPSHOT_NAME={group}
             MILESTONE=7.0
@@ -76,15 +76,14 @@
           block-thresholds:
             build-step-failure-threshold: 'never'
           predefined-parameters: |
-            REPORT_PREFIX=/home/jenkins/report-rally-tempest
-            ENV_NAME=7.0.tempest.{specification}.$BUILD_ID
-            SNAPSHOT_NAME={group}
-            MILESTONE=7.0
-            REPORT_FILE=verification.xml
+            REPORT_FILE=/home/jenkins/tempest-reports/{group}/verification.xml
             TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
             TEST_GROUP={test-group}
-            SUITE=Tempest 7.0
+            TESTRAIL_SUITE=Tempest 7.0
+            MILESTONE=7.0
+            SNAPSHOT={group}
             ADD_TIMESTAMP=$ADD_TIMESTAMP
+            USE_TEMPLATE=true
 
 - project:
     name: 7.0.tempest.vlan.ceph

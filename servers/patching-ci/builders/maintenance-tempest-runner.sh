@@ -1,12 +1,13 @@
 #!/bin/bash -xe
 
-echo "$BUILD_URL" > ./build_url
-
-INSTALL_MOS_TEMPEST_RUNNER_LOG_NAME=${INSTALL_MOS_TEMPEST_RUNNER_LOG_NAME:-"install_mos_tempest_runner_log.txt"}
-export INSTALL_MOS_TEMPEST_RUNNER_LOG="${INSTALL_MOS_TEMPEST_RUNNER_LOG_NAME}"
-
-RUN_TEMPEST_LOG_NAME=${RUN_TEMPEST_LOG_NAME:-"run_tempest_log.txt"}
-export RUN_TEMPEST_LOG="${RUN_TEMPEST_LOG_NAME}"
+# Input:
+# REPORT_PREFIX=path to report directory
+# ENV_NAME=devops name
+# SNAPSHOT_NAME=tempest group name
+# MILESTONE=7.0
+# VENV_PATH=path to venv with devops
+# TEMPEST_RUNNER=tempest runner type
+#
 
 source "${VENV_PATH}/bin/activate"
 
@@ -15,10 +16,10 @@ if [ "$(echo "$MILESTONE" | cut -c 1)" -ge "7" ]; then
 else
     dos.py revert-resume "$ENV_NAME" --snapshot-name "$SNAPSHOT_NAME"
 fi
-
 VM_USERNAME="root"
 VM_PASSWORD="r00tme"
-VM_IP=$(dos.py list --ips|grep "$ENV_NAME"|awk '{print $2}')
+VM_IP=$(dos.py list --ips|grep "${ENV_NAME}"|awk '{print $2}')
+
 deactivate
 
 SSH_OPTIONS=(-o ConnectTimeout=20 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null)
@@ -33,7 +34,7 @@ scp_to_fuel_master() {
     SCP_ARGS=""
     case $1 in
         -r|--recursive)
-        SCP_ARGS+=" -r"
+        SCP_ARGS="-r"
         shift
         ;;
     esac
@@ -47,7 +48,7 @@ scp_from_fuel_master() {
     SCP_ARGS=""
     case $1 in
         -r|--recursive)
-        SCP_ARGS+=" -r"
+        SCP_ARGS="-r"
         shift
         ;;
     esac
@@ -70,21 +71,11 @@ enable_public_ip() {
     public_net=$(dos.py net-list "${ENV_NAME}" | awk -F/ '/public/{print $2}')
     deactivate
 
-    ssh_to_fuel_master <<EOF | cat
-iface=\$(ifconfig -a | grep -iB 1 "${public_mac}"| grep -v \"^\$\" | head -n 1 | awk -F':| ' '{print \$1}')
+    ssh_to_fuel_master <<EOF
+iface=\$(grep -i -l "${public_mac}" /sys/class/net/*/address|awk -F'/' '{print \$5}')
 ifconfig "\${iface}" up
 ip addr add "${public_ip}.31/${public_net}" dev "\${iface}"
 EOF
-
-#    cat <<EOF > print.sh
-##!/bin/bash
-#iface=\$(ifconfig -a | grep -iB 1 ${public_mac}| grep -v \"^\$\" | head -n 1 | awk -F':| ' '{print \$1}')
-#ifconfig "\${iface}" up
-#ip addr add ${public_ip}.31/${public_net} dev "\${iface}"
-#EOF
-#    chmod +x net_setup.sh
-#    scp_to_fuel_master net_setup.sh "$WORK_FLDR"
-#    ssh_to_fuel_master "$WORK_FLDR/net_setup.sh"
 }
 
 wait_up_env() {
@@ -110,7 +101,7 @@ ssh_to_fuel_master "chmod 777 $WORK_FLDR"
 enable_public_ip
 wait_up_env
 
-if [[ "$TEMPEST_RUNNER" == "mos-tempest-runner" ]]; then
+if [[ "${TEMPEST_RUNNER}" == "mos-tempest-runner" ]]; then
     env_id=$(ssh_to_fuel_master "fuel env" | tail -1 | awk '{print $1}')
     ssh_to_fuel_master "fuel --env ${env_id} settings --download"
     objects_ceph=$(ssh_to_fuel_master "cat settings_${env_id}.yaml" | grep -A 7 "ceilometer:" | awk '/value:/{print $2}')
@@ -121,21 +112,20 @@ if [[ "$TEMPEST_RUNNER" == "mos-tempest-runner" ]]; then
         sed -i '/test_list_no_containers/d' mos-tempest-runner/shouldfail/*/swift
         sed -i '/test_list_no_containers/d' mos-tempest-runner/shouldfail/default_shouldfail.yaml
     fi
-    scp_to_fuel_master -r mos-tempest-runner "$WORK_FLDR"
-    #ssh_to_fuel_master "ssh $(fuel nodes | grep controller | awk -F'|' '{print $5}' | head -1) \". openrc && keystone service-list 2>/dev/null | grep identity | awk '{print \$2}'\""
+    scp_to_fuel_master -r mos-tempest-runner "${WORK_FLDR}"
     ssh_to_fuel_master "/bin/bash -x $WORK_FLDR/mos-tempest-runner/setup_env.sh"
     check_return_code_after_command_execution $? "Install mos-tempest-runner is failure."
 
     echo "Run tempest tests"
     set +e
-    ssh_to_fuel_master <<EOF | tee "${RUN_TEMPEST_LOG}"
-/$WORK_FLDR/mos-tempest-runner/rejoin.sh
+    ssh_to_fuel_master <<EOF | tee tempest_run.log
+/${WORK_FLDR}/mos-tempest-runner/rejoin.sh
 . /home/developer/mos-tempest-runner/.venv/bin/activate
 . /home/developer/openrc
-run_tests > $WORK_FLDR/log.log
+run_tests > ${WORK_FLDR}/log.log
 EOF
 
-    echo "Store tempest result"
+    echo "download tempest result"
     scp_from_fuel_master -r /home/developer/mos-tempest-runner/tempest-reports/* .
     mv tempest-report.xml verification.xml
     echo "DONE"
@@ -156,12 +146,15 @@ elif [[ "$TEMPEST_RUNNER" == "rally" ]]; then
 
     scp_from_fuel_master /var/lib/rally-tempest-container-home-dir/verification.xml ./
 fi
+
 set +e
 scp_from_fuel_master "$WORK_FLDR/log.log" ./
 
+mkdir -p "${REPORT_PREFIX}"
+cp verification.xml "${REPORT_PREFIX}"
+
 source "${VENV_PATH}/bin/activate"
-SNAPSHOT_NAME="after-tempest-$(date +%d-%m-%Y_%Hh_%Mm)"
+SNAPSHOT_NAME="after-tempest-${BUILD_ID}-$(date +%d-%m-%Y_%Hh_%Mm)"
 dos.py snapshot "${ENV_NAME}" "${SNAPSHOT_NAME}"
 dos.py destroy "${ENV_NAME}" "${SNAPSHOT_NAME}"
 deactivate
-
