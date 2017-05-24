@@ -44,7 +44,8 @@ RUN \
   echo "deb http://mirror.fuel-infra.org/mos-repos/ubuntu/$MOS_VERSION/ $MOS_DEB_DIST main" > /etc/apt/sources.list.d/$MOS_DEB_DIST.list ; \
   apt-get update ; \
   apt-get install lsb-release apt-transport-https ca-certificates curl git openssh-client python python3 python-yaml \
-    sudo bridge-utils iproute2 iptables iputils-ping net-tools strace qemu-utils keepalived sasl2-bin genisoimage ; \
+    sudo bridge-utils iproute2 iptables iputils-ping net-tools strace qemu-utils keepalived sasl2-bin genisoimage \
+    python-bashate ; \
   \
   python2 /tmp/get-pip.py ; \
   python3 /tmp/get-pip.py ; \
