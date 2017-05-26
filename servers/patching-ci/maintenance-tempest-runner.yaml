@@ -10,8 +10,8 @@
     logrotate:
       daysToKeep: 5
       numToKeep: 20
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
+      artifactDaysToKeep: 5
+      artifactNumToKeep: 20
     scm:
       - fuel-infra-dockerfiles
       - mirantis:
