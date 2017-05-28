@@ -28,7 +28,7 @@
         description: 'Plugin branch to use'
 
     triggers:
-    - timed: '0 1 * * 1-7'
+    - timed: ''
 
     builders:
 
