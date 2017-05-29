@@ -12,6 +12,5 @@
         test-job-name: '{env-id}.test_all'
      - 'master':
         test-job-name: '11.0.test_all'
-        timer: 'H/30 * * * *'
     jobs:
       - devops.{env-id}.env_params:
