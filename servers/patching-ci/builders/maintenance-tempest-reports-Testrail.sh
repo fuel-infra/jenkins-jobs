@@ -44,3 +44,7 @@ report -v --testrail-plan-name "${TESTRAIL_PLAN_NAME}" \
 
 deactivate
 rm -rf report-venv
+
+if [ -f "${REPORT_FILE}" ]; then
+    mv -f "${REPORT_FILE}" "${REPORT_FILE}.reported"
+fi

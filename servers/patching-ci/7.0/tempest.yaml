@@ -3,7 +3,7 @@
     project-type: multijob
     description: 'Run 7.0 tempest tests'
     concurrent: false
-    node: 'master'
+    node: 'runner'
     properties:
       - heavy-job:
           weight: 1

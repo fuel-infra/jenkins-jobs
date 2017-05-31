@@ -7,7 +7,11 @@
 # MILESTONE=7.0
 # VENV_PATH=path to venv with devops
 # TEMPEST_RUNNER=tempest runner type
-#
+
+# clean previous results to prevent double-reporting of same run
+if [ -f "${REPORT_PREFIX}/verification.xml" ]; then
+    mv -f "${REPORT_PREFIX}/verification.xml" "${REPORT_PREFIX}/verification.xml.unreported"
+fi
 
 source "${VENV_PATH}/bin/activate"
 
@@ -156,5 +160,5 @@ cp verification.xml "${REPORT_PREFIX}"
 source "${VENV_PATH}/bin/activate"
 SNAPSHOT_NAME="after-tempest-${BUILD_ID}-$(date +%d-%m-%Y_%Hh_%Mm)"
 dos.py snapshot "${ENV_NAME}" "${SNAPSHOT_NAME}"
-dos.py destroy "${ENV_NAME}" "${SNAPSHOT_NAME}"
+dos.py destroy "${ENV_NAME}"
 deactivate

@@ -11,8 +11,6 @@
     #     Human readable description of configuration (for testrail)
     # description
     #     Job description
-    # node
-    #     Jenkins slave label
     # venvpath
     #     Path to virtual env with fuel-devops installed (VENV_PATH)
     # display-name
@@ -23,17 +21,18 @@
     defaults: global
     disabled: false
     concurrent: false
-    node: '{node}'
+    node: maintenance-tempest
     description: |
-      DO NOT TRIGGER THIS JOB. Use 7.0.tempest.on_node instead
+      DO NOT TRIGGER THIS JOB.
+      Use 7.0.tempest.on_node or 7.0.tempest instead
       {description}
     display-name: '{display-name}'
     retry-count: 2
     logrotate:
       daysToKeep: 5
       numToKeep: 20
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
+      artifactDaysToKeep: 5
+      artifactNumToKeep: 20
     properties:
     - heavy-job:
         weight: 7
@@ -92,7 +91,6 @@
     group: tempest_ceph_services_vlan
     test-group: VLAN+ENABLED_CEPH+ENABLED+SERVICES
     description: VLAN+CEPH+SERVICES UBUNTU TEMPEST tests (7.0 maintenance)
-    node: maintenance-tempest
     jobs:
       - '7.0.tempest.{specification}'
 
@@ -103,7 +101,6 @@
     group: tempest_ceph_services_tun
     test-group: TUN+ENABLED_CEPH+ENABLED+SERVICES
     description: TUN+CEPH+SERVICES UBUNTU TEMPEST tests (7.0 maintenance)
-    node: maintenance-tempest
     jobs:
       - '7.0.tempest.{specification}'
 
@@ -114,7 +111,6 @@
     group: tempest_cinder_glance_swift_vlan
     test-group: VLAN+DISABLED_CEPH
     description: VLAN+DISABLED_CEPH UBUNTU TEMPEST tests (7.0 maintenance)
-    node: maintenance-tempest
     jobs:
       - '7.0.tempest.{specification}'
 
@@ -125,7 +121,6 @@
     group: tempest_cinder_glance_swift_tun
     test-group: TUN+DISABLED_CEPH
     description: TUN+DISABLED_CEPH UBUNTU TEMPEST tests (7.0 maintenance)
-    node: maintenance-tempest
     jobs:
       - '7.0.tempest.{specification}'
 
