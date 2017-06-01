@@ -26,10 +26,15 @@ if [[ "${USE_TEMPLATE}" == "true" ]]; then
     TEMPLATE=(--testrail-name-template '{custom_test_group}.{title}' --xunit-name-template '{classname}.{methodname}')
 fi
 
-virtualenv report-venv
-source report-venv/bin/activate
-pip install -U pip setuptools
-python setup.py install
+if [ ! -f report-venb/bin/activate ]; then
+    rm -rf report-venv
+    virtualenv report-venv
+    source report-venv/bin/activate
+    pip install -U pip setuptools six # six need for workaround setup.py below
+    python setup.py install
+else
+    source report-venv/bin/activate
+fi
 
 report -v --testrail-plan-name "${TESTRAIL_PLAN_NAME}" \
           --env-description "${SNAPSHOT}-${TEST_GROUP}" \
@@ -43,7 +48,6 @@ report -v --testrail-plan-name "${TESTRAIL_PLAN_NAME}" \
           "${REPORT_FILE}"
 
 deactivate
-rm -rf report-venv
 
 if [ -f "${REPORT_FILE}" ]; then
     mv -f "${REPORT_FILE}" "${REPORT_FILE}.reported"
