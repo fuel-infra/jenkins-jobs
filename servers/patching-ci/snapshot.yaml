@@ -1,0 +1,73 @@
+
+- job-template:
+    name: '{version}.snapshot.params'
+
+    timer: ''
+    magnet-link: ''
+    mirror-host: 'mirror.seed-cz1.fuel-infra.org'
+    src-ubuntu-mirror: 'pkgs/snapshots/ubuntu-latest.target.txt'
+    src-centos-mirror: ''
+    src-mos-ubuntu-mirror: ''
+    src-mos-centos-repos-prefix: ''
+    src-centos-security-proposed: ''
+
+    triggers:
+      - timed: '{timer}'
+
+    builders:
+      - inject:
+          properties-content: |
+            MAGNET_LINK={magnet-link}
+            MIRROR_HOST={mirror-host}
+            SRC_UBUNTU_MIRROR={src-ubuntu-mirror}
+            SRC_CENTOS_MIRROR={src-centos-mirror}
+            SRC_MOS_UBUNTU_MIRROR={src-mos-ubuntu-mirror}
+            SRC_MOS_CENTOS_REPOS_PREFIX={src-mos-centos-repos-prefix}
+            SRC_CENTOS_SECURITY_PROPOSED={src-centos-security-proposed}
+      - shell:
+          !include-raw-escape:
+            'builders/snapshot.params.sh'
+      - inject-properties-file:
+          properties-file: 'snapshots.params'
+      - write-description:
+          description-string: $CUSTOM_VERSION
+
+    publishers:
+      - description-setter:
+          regexp: "'Description string: (.*)'"
+      - archive:
+          artifacts: 'snapshots.params'
+          allow-empty: false
+      - archive:
+          artifacts: 'snapshots.sh'
+          allow-empty: false
+      - archive:
+          artifacts: 'snapshots.export.sh'
+          allow-empty: false
+
+- project:
+    name: maintenance-snapshots.params
+
+    timer: '0 0,6,12,18 * * *'
+    jobs:
+      - '{version}.snapshot.params':
+          version: 9.x
+          magnet-link: 'magnet:?xt=urn:btih:bfec808dd71ff42c5613a3527733d9012bb1fabc&dn=MirantisOpenStack-9.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-9.0.iso'
+          src-centos-mirror: 'pkgs/snapshots/centos-7.3.1611-latest.target.txt'
+          src-mos-ubuntu-mirror: 'mos-repos/ubuntu/snapshots/9.0-latest.target.txt'
+          src-mos-centos-repos-prefix: 'mos-repos/centos/mos9.0-centos7/snapshots'
+
+      - '{version}.snapshot.params':
+          version: 8.0
+          magnet-link: 'magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
+          src-mos-ubuntu-mirror: 'mos-repos/ubuntu/snapshots/8.0-latest.target.txt'
+          src-mos-centos-repos-prefix: 'mos-repos/centos/mos8.0-centos7-fuel/snapshots'
+          src-centos-security-proposed: 'http://pkg-updates.fuel-infra.org/centos7/'
+
+      - '{version}.snapshot.params':
+          version: 7.0
+          magnet-link: 'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
+          src-mos-ubuntu-mirror: 'mos-repos/ubuntu/snapshots/7.0-latest.target.txt'
+          src-mos-centos-repos-prefix: 'mos-repos/centos/mos7.0-centos6-fuel/snapshots'
+          src-centos-security-proposed: 'http://pkg-updates.fuel-infra.org/centos6/'
+
