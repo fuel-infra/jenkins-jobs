@@ -2,36 +2,30 @@
 
 set -ex
 
-# Init default vars
-ENV_NAME=${ENV_NAME:-maintenance_env_7.0}
-FUEL_QA_VER=${FUEL_QA_VER:-stable/7.0}
-BONDING=${BONDING:-false}
-ERASE_PREV_ENV=${ERASE_PREV_ENV:-true}
-GROUP=${GROUP:-tempest_ceph_services}
-DISABLE_SSL=${DISABLE_SSL:-false}
-SLAVE_NODE_MEMORY=${SLAVE_NODE_MEMORY:-4096}
-OPENSTACK_RELEASE=${OPENSTACK_RELEASE:-ubuntu}
-SKIP_INSTALL_ENV=${SKIP_INSTALL_ENV:-false}
+# Input:
+# MAGNET_LINK
+# ENV_NAME
+# UPGRADE_TARBALL_MAGNET_LINK
+# {DEB,RPM}_LATEST
+# UBUNTU_MIRROR_ID
+# ENABLE_{PROPOSED,SECURITY,UPDATES,UPDATE_CENTOS}
+# ERASE_ENV_PREFIX
+# DISABLE_SSL
+# FUEL_QA_VER
+# FILE
+# GROUP
+# BONDING
+# UPDATE_CENTOS
+# OPENSTACK_RELEASE
+# SLAVE_NODE_MEMORY
 
-if $SKIP_INSTALL_ENV ; then
-    exit 0
-fi
-
-# Download and link ISO
 ISO_PATH=$(seedclient-wrapper -d -m "${MAGNET_LINK}" -v --force-set-symlink -o "${WORKSPACE}")
 
-# Activate virtualenv
-source "${VENV_PATH}/bin/activate"
+source "${VENV_PATH?}/bin/activate"
 
-if [ -z "$ISO_PATH" ]
-then
-    echo "Please download ISO and define env variable ISO_PATH"
-    exit 1
-fi
-
-# erase previous environments
-if ${ERASE_PREV_ENV} ; then
-    dos.py list | tail -n+3 | xargs -I {} dos.py erase {}
+dos.py list | tail -n+3 | xargs -I {} dos.py destroy {}
+if [[ -n "${ERASE_ENV_PREFIX}" ]]; then
+    dos.py list | tail -n+3 | grep "${ERASE_ENV_PREFIX}" | xargs -I {} dos.py erase {}
 fi
 
 if [ -n "${FILE}" ]; then
@@ -125,19 +119,18 @@ if [[ -n "${DEB_LATEST}" ]]; then
     export EXTRA_DEB_REPOS
 fi
 
-
-# create new environment
-# more time can be required to deploy env
 export DEPLOYMENT_TIMEOUT=10000
-export ENV_NAME=$ENV_NAME
+export ENV_NAME
 export ADMIN_NODE_MEMORY=4096
 export SLAVE_NODE_CPU=3
-export SLAVE_NODE_MEMORY=$SLAVE_NODE_MEMORY
-export DISABLE_SSL=$DISABLE_SSL
+export SLAVE_NODE_MEMORY
+export DISABLE_SSL
 export NOVA_QUOTAS_ENABLED=true
 export KVM_USE=true
-export BONDING=$BONDING
-export OPENSTACK_RELEASE=$OPENSTACK_RELEASE
+export BONDING
+export OPENSTACK_RELEASE
 
-./utils/jenkins/system_tests.sh -k -K -j fuelweb_test -t test -w "$(pwd)" -e "$ENV_NAME" -o --group="$GROUP" -i "$ISO_PATH"
+./utils/jenkins/system_tests.sh -k -K -j fuelweb_test -t test -w "$(pwd)" -e "${ENV_NAME}" -o --group="${GROUP}" -i "${ISO_PATH}"
+
+deactivate
 

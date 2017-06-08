@@ -6,11 +6,11 @@
 # TEST_GROUP=tempest configuration group
 # TESTRAIL_SUITE=testrail suite (Tempest 7.0)
 # MILESTONE=7.0
-# SNAPSHOT=snapshot for describe env in testrail
+# SPECIFICATION=snapshot for describe env in testrail
 # ADD_TIMESTAMP=need add timestamp to plan name
 # USE_TEMPLATE=use testrail report template or not
 
-if [ ! -f "${REPORT_FILE}" ]; then
+if [ ! -f "${REPORT_FILE?}" ]; then
     echo "Can't find \"${REPORT_FILE}\" report file"
     exit 1
 fi
@@ -31,16 +31,16 @@ source report-venv/bin/activate
 pip install -U pip setuptools
 python setup.py install
 
-report -v --testrail-plan-name "${TESTRAIL_PLAN_NAME}" \
-          --env-description "${SNAPSHOT}-${TEST_GROUP}" \
-          --testrail-user "${TESTRAIL_USER}" \
-          --testrail-password "${TESTRAIL_PASSWORD}" \
+report -v --testrail-plan-name "${TESTRAIL_PLAN_NAME?}" \
+          --env-description "${SPECIFICATION?}-${TEST_GROUP?}" \
+          --testrail-user "${TESTRAIL_USER?}" \
+          --testrail-password "${TESTRAIL_PASSWORD?}" \
           --testrail-project "Mirantis OpenStack" \
-          --testrail-milestone "${MILESTONE}" \
-          --testrail-suite "${TESTRAIL_SUITE}" \
+          --testrail-milestone "${MILESTONE?}" \
+          --testrail-suite "${TESTRAIL_SUITE?}" \
           --test-results-link "${BUILD_URL}"\
           "${TEMPLATE[@]}" \
-          "${REPORT_FILE}"
+          "${REPORT_FILE?}"
 
 deactivate
 rm -rf report-venv

@@ -10,7 +10,7 @@
     parameters:
       - string:
           name: TESTRAIL_PLAN_NAME
-          default: '7.0 MU-8 Tempest'
+          default: '7.0 MU-X Tempest'
       - bool:
           name: ENABLE_PROPOSED
           default: true
@@ -24,25 +24,17 @@
           name: ENABLE_UPDATE_CENTOS
           default: true
       - bool:
-          name: ERASE_PREV_ENV
-          default: true
-      - bool:
-          name: SKIP_INSTALL_ENV
-          default: false
-      - bool:
           name: DISABLE_SSL
           default: true
       - bool:
           name: ADD_TIMESTAMP
           default: true
-      - choice:
-          name: TEMPEST_RUNNER
-          choices:
-            - 'mos-tempest-runner'
-            - 'rally'
       - string:
           name: FUEL_QA_VER
           default: 'origin/stable-mu/7.0'
+      - string:
+          name: VENV_PATH
+          default: "/home/jenkins/qa-venv-7.0"
     builders:
       - multijob:
           name: 'Run 7.0 tempest'
@@ -60,73 +52,4 @@
             - name: '7.0.tempest.tun.non_ceph'
               current-parameters: true
               kill-phase-on: NEVER
-
-- job:
-    name: 7.0.tempest.on_node
-    concurrent: true
-    description: 'Run 7.0 tempest job on specified node'
-    parameters:
-      - node:
-          name: NODE_LABELS
-          description: Specify where this job and tested job should be ran on.
-          allowed-multiselect: true
-      - choice:
-          name: JOB_NAME
-          choices:
-            - '7.0.tempest.vlan.ceph'
-            - '7.0.tempest.tun.ceph'
-            - '7.0.tempest.vlan.non_ceph'
-            - '7.0.tempest.tun.non_ceph'
-      - string:
-          name: TESTRAIL_PLAN_NAME
-          default: 'TEMPEST-TEST-MU'
-      - bool:
-          name: ENABLE_PROPOSED
-          default: true
-      - bool:
-          name: ENABLE_SECURITY
-          default: true
-      - bool:
-          name: ENABLE_UPDATES
-          default: true
-      - bool:
-          name: ENABLE_UPDATE_CENTOS
-          default: true
-      - bool:
-          name: ERASE_PREV_ENV
-          default: true
-      - bool:
-          name: SKIP_INSTALL_ENV
-          default: false
-      - bool:
-          name: DISABLE_SSL
-          default: true
-      - bool:
-          name: ADD_TIMESTAMP
-          default: true
-      - choice:
-          name: TEMPEST_RUNNER
-          choices:
-            - 'mos-tempest-runner'
-            - 'rally'
-      - string:
-          name: FUEL_QA_VER
-          default: 'origin/stable-mu/7.0'
-    builders:
-      - trigger-builds:
-        - project: $JOB_NAME
-          same-node: true
-          block: false
-          predefined-parameters: |
-            TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
-            ENABLE_PROPOSED=$ENABLE_PROPOSED
-            ENABLE_SECURITY=$ENABLE_SECURITY
-            ENABLE_UPDATES=$ENABLE_UPDATES
-            ENABLE_UPDATE_CENTOS=$ENABLE_UPDATE_CENTOS
-            ERASE_PREV_ENV=$ERASE_PREV_ENV
-            SKIP_INSTALL_ENV=$SKIP_INSTALL_ENV
-            DISABLE_SSL=$DISABLE_SSL
-            ADD_TIMESTAMP=$ADD_TIMESTAMP
-            TEMPEST_RUNNER=$TEMPEST_RUNNER
-            FUEL_QA_VER=$FUEL_QA_VER
 

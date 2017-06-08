@@ -1,0 +1,230 @@
+- job-template:
+    name: 9.x.tempest.{specification}
+    project-type: freestyle
+    defaults: global
+    disabled: false
+    concurrent: false
+    description: "9.2 tempest {description}"
+    retry-count: 2
+    logrotate:
+      daysToKeep: 5
+      numToKeep: 20
+      artifactDaysToKeep: 5
+      artifactNumToKeep: 20
+    properties:
+    - heavy-job:
+        weight: 7
+    parameters:
+      - node:
+          name: NODE_LABELS
+          default-slaves:
+            - maintenance-tempest
+          description: Select node where env been created and tempest been running
+      - string:
+          name: TESTRAIL_PLAN_NAME
+          default: '9.2 MU-X Tempest'
+      - string:
+          name: SNAPSHOT_PARAMS_ID
+          default: lastSuccessfulBuild
+          description: |
+              Take from https://patching-ci.infra.mirantis.net/job/9.x.snapshot.params/
+              if you want use last build: lastSuccessfulBuild
+              Parameters that marked with '<snapshot.params' not been used and can be ommited if this parameter provided
+      - string:
+          name: MAGNET_LINK
+          description: 'ISO magnet link <snapshot.params'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          description: '<snapshot.params'
+      - string:
+          name: CENTOS_MIRROR_ID
+          description: '<snapshot.params'
+      - string:
+          name: MOS_UBUNTU_MIRROR_ID
+          description: '<snapshot.params'
+      - string:
+          name: MOS_CENTOS_OS_MIRROR_ID
+          description: '<snapshot.params'
+      - string:
+          name: MOS_CENTOS_PROPOSED_MIRROR_ID
+          description: '<snapshot.params'
+      - string:
+          name: MOS_CENTOS_UPDATES_MIRROR_ID
+          description: '<snapshot.params'
+      - string:
+          name: MOS_CENTOS_HOLDBACK_MIRROR_ID
+          description: '<snapshot.params'
+      - string:
+          name: MOS_CENTOS_SECURITY_MIRROR_ID
+          description: '<snapshot.params'
+      - string:
+          name: MOS_CENTOS_HOTFIX_MIRROR_ID
+          description: '<snapshot.params'
+      - bool:
+          name: ENABLE_UBUNTU_MIRROR_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_OS
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_HOLDBACK
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_HOTFIX
+          default: false
+      - bool:
+          name: ENABLE_MOS_UBUNTU_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_OS
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_HOLDBACK
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_HOTFIX
+          default: false
+      - bool:
+          name: ENABLE_MOS_UBUNTU_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_HOLDBACK
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_HOTFIX
+          default: false
+      - string:
+          name: INTERFACE_MODEL
+          default: virtio
+          description: 'virtio, e1000'
+      - bool:
+          name: ADD_TIMESTAMP
+          default: true
+      - string:
+          name: FUEL_QA_VER
+          default: "origin/stable/mitaka"
+      - string:
+          name: VENV_PATH
+          default: "/home/jenkins/qa-venv-9.2"
+    builders:
+      - trigger-builds:
+        - project: '9.x.tempest.create_env'
+          same-node: true
+          block: true
+          predefined-parameters: |
+            NODE_LABELS=$NODE_NAME
+            ENV_NAME=9.x.tempest.{specification}.$BUILD_ID
+            SNAPSHOT_PARAMS_ID=$SNAPSHOT_PARAMS_ID
+            ENABLE_UBUNTU_MIRROR_PROPOSED=$ENABLE_UBUNTU_MIRROR_PROPOSED
+            ENABLE_MOS_CENTOS_PROPOSED=$ENABLE_MOS_CENTOS_PROPOSED
+            ENABLE_MOS_CENTOS_UPDATES=$ENABLE_MOS_CENTOS_UPDATES
+            ENABLE_MOS_CENTOS_SECURITY=$ENABLE_MOS_CENTOS_SECURITY
+            ENABLE_MOS_CENTOS_HOLDBACK=$ENABLE_MOS_CENTOS_HOLDBACK
+            ENABLE_MOS_CENTOS_HOTFIX=$ENABLE_MOS_CENTOS_HOTFIX
+            ENABLE_MOS_UBUNTU_PROPOSED=$ENABLE_MOS_UBUNTU_PROPOSED
+            ENABLE_MOS_UBUNTU_UPDATES=$ENABLE_MOS_UBUNTU_UPDATES
+            ENABLE_MOS_UBUNTU_SECURITY=$ENABLE_MOS_UBUNTU_SECURITY
+            ENABLE_MOS_UBUNTU_HOLDBACK=$ENABLE_MOS_UBUNTU_HOLDBACK
+            ENABLE_MOS_UBUNTU_HOTFIX=$ENABLE_MOS_UBUNTU_HOTFIX
+            INTERFACE_MODEL=$INTERFACE_MODEL
+            ERASE_ENV_PREFIX=^9.x.tempest.{specification}
+            DISABLE_SSL={ssl_disabled}
+            CONFIG_PATH={config_path}
+            VENV_PATH=$VENV_PATH
+            SNAPSHOT_NAME={specification}
+            NOVA_QUOTAS=true
+      - trigger-builds:
+        - project: 'maintenance-tempest-runner'
+          same-node: true
+          block: true
+          block-thresholds:
+            build-step-failure-threshold: 'never'
+          predefined-parameters: |
+            NODE_LABELS=$NODE_NAME
+            ENV_NAME=9.x.tempest.{specification}.$BUILD_ID
+            SNAPSHOT_NAME={specification}
+            VENV_PATH=$VENV_PATH
+            TEMPEST_RUNNER=rally_without_docker
+            MILESTONE=9.2
+            REPORT_PREFIX=$WORKSPACE/
+      - trigger-builds:
+        - project: 'maintenance-tempest-reports-Testrail'
+          same-node: true
+          block: true
+          block-thresholds:
+            build-step-failure-threshold: 'never'
+          predefined-parameters: |
+            NODE_LABELS=$NODE_NAME
+            REPORT_FILE=$WORKSPACE/verification.xml
+            TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
+            TEST_GROUP={test-group}
+            TESTRAIL_SUITE=[9.2][MOSQA] Tempest 9.2
+            MILESTONE=9.2
+            SPECIFICATION={specification}
+            ADD_TIMESTAMP=$ADD_TIMESTAMP
+            USE_TEMPLATE=true
+
+- project:
+    name: 9.x.tempest.lvm.no_ssl
+    specification: ironic_cinder_nossl
+    config_path: templates/tempest/ironic_cinder.yaml
+    test-group: 'Tempest (LVM,Cinder,DVR,Sahara,Ceilometer,Ironic)'
+    description: 'Tempest-9.x_LVM_Cinder_DVR_Sahara_Ceilometer_Ironic'
+    ssl_disabled: true
+    jobs:
+      - '9.x.tempest.{specification}'
+
+- project:
+    name: 9.x.tempest.ceph.no_ssl
+    specification: ironic_ceph_nossl
+    config_path: templates/tempest/ironic_ceph.yaml
+    test-group: 'Tempest (Ceph,DVR,Sahara,Ceilometer)'
+    description: 'Tempest-9.x_Ceph_DVR_Sahara_Ceilometer_Ironic'
+    ssl_disabled: true
+    jobs:
+      - '9.x.tempest.{specification}'
+
+- project:
+    name: 9.x.tempest.lvm.ssl
+    specification: ironic_cinder_ssl
+    config_path: templates/tempest/ironic_cinder.yaml
+    test-group: 'Tempest (SSL,LVM,Cinder,DVR,Sahara,Ceilometer,Ironic)'
+    description: 'Tempest-9.x_LVM_Cinder_DVR_Sahara_Ceilometer_Ironic_SSL'
+    ssl_disabled: false
+    jobs:
+      - '9.x.tempest.{specification}'
+
+- project:
+    name: 9.x.tempest.ceph.ssl
+    specification: ironic_ceph_ssl
+    config_path: templates/tempest/ironic_ceph.yaml
+    test-group: 'Tempest (Ceph,SSL,DVR,Sahara,Ceilometer)'
+    description: 'Tempest-9.x_Ceph_DVR_Sahara_Ceilometer_Ironic_SSL'
+    ssl_disabled: false
+    jobs:
+      - '9.x.tempest.{specification}'
+

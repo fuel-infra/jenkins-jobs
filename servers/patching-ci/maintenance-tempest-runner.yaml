@@ -19,6 +19,8 @@
           repobranch: 'origin/master'
           basedir: 'mos-ci-deployment-scripts'
     parameters:
+      - node:
+          name: NODE_LABELS
       - string:
           name: ENV_NAME
       - string:
@@ -31,9 +33,17 @@
           choices:
             - 'mos-tempest-runner'
             - 'rally'
+            - 'rally_without_docker'
+          description: |
+            mos-tempest-runner for 7.0
+            rally for 8.0
+            rally_without_docker for 9.x
       - string:
           name: MILESTONE
           default: '7.0'
+      - string:
+          name: REPORT_PREFIX
+          description: directory, where verification.xml will been copyed
     builders:
       - shell:
           !include-raw: 'builders/maintenance-tempest-runner.sh'
@@ -44,6 +54,14 @@
           fingerprint: true
       - archive:
           artifacts: 'verification.xml'
+          allow-empty: 'true'
+          fingerprint: true
+      - archive:
+          artifacts: 'tempest.log'
+          allow-empty: 'true'
+          fingerprint: true
+      - archive:
+          artifacts: 'tempest.conf'
           allow-empty: 'true'
           fingerprint: true
       - junit:

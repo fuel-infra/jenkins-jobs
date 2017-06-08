@@ -1,4 +1,6 @@
-#!/bin/bash -xe
+#!/bin/bash
+
+set -xe
 
 # Input:
 # REPORT_PREFIX=path to report directory
@@ -9,24 +11,37 @@
 # TEMPEST_RUNNER=tempest runner type
 
 # clean previous results to prevent double-reporting of same run
+
 if [ -f "${REPORT_PREFIX}/verification.xml" ]; then
     mv -f "${REPORT_PREFIX}/verification.xml" "${REPORT_PREFIX}/verification.xml.unreported"
 fi
+rm -rf log.log verification.xml tmepest.log tempest.conf
 
 source "${VENV_PATH}/bin/activate"
 
-if [ "$(echo "$MILESTONE" | cut -c 1)" -ge "7" ]; then
-    dos.py revert-resume "$ENV_NAME" "$SNAPSHOT_NAME"
-else
-    dos.py revert-resume "$ENV_NAME" --snapshot-name "$SNAPSHOT_NAME"
-fi
+MILESTONE_MAJOR=$(echo "${MILESTONE}" | cut -c 1)
+
+# retry 3 times, because dos.py is not stable sometimes (ntp problem)
+for i in $(seq 3); do
+    if [ "${MILESTONE_MAJOR}" -ge "7" ]; then
+        dos.py revert-resume "${ENV_NAME}" "${SNAPSHOT_NAME}" && break
+    else
+        dos.py revert-resume "${ENV_NAME}" --snapshot-name "${SNAPSHOT_NAME}" && break
+    fi
+    echo "Revert-resume attempt $i is failed. Retrying..."
+    dos.py destroy "${ENV_NAME}"
+    sleep 15
+done
+
+sleep 600
+
 VM_USERNAME="root"
 VM_PASSWORD="r00tme"
 VM_IP=$(dos.py list --ips|grep "${ENV_NAME}"|awk '{print $2}')
 
 deactivate
 
-SSH_OPTIONS=(-o ConnectTimeout=20 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null)
+SSH_OPTIONS=(-o "ConnectTimeout=20" -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null")
 ssh_to_fuel_master() {
     #   $1 - command to execute
     sshpass -p "${VM_PASSWORD}" ssh "${SSH_OPTIONS[@]}" "${VM_USERNAME}@${VM_IP}" "$1"
@@ -35,28 +50,28 @@ ssh_to_fuel_master() {
 scp_to_fuel_master() {
     #   $1 - file, can be 'flagged' with --recursive
     #   $2 - target path
-    SCP_ARGS=""
+    SCP_ARGS=()
     case $1 in
         -r|--recursive)
-        SCP_ARGS="-r"
+        SCP_ARGS+="-r"
         shift
         ;;
     esac
     targetpath=$2
-    sshpass -p "${VM_PASSWORD}" scp "${SSH_OPTIONS[@]}" "${SCP_ARGS}" "$1" "${VM_USERNAME}@${VM_IP}:${targetpath:-\"/tmp/\"}"
+    sshpass -p "${VM_PASSWORD}" scp "${SSH_OPTIONS[@]}" "${SCP_ARGS[@]}" "$1" "${VM_USERNAME}@${VM_IP}:${targetpath:-\"/tmp/\"}"
 }
 
 scp_from_fuel_master() {
     #   $1 - remote file, can be 'flagged' with --recursive
     #   $2 - local path
-    SCP_ARGS=""
+    SCP_ARGS=()
     case $1 in
         -r|--recursive)
-        SCP_ARGS="-r"
+        SCP_ARGS+="-r"
         shift
         ;;
     esac
-    sshpass -p "${VM_PASSWORD}" scp "${SSH_OPTIONS[@]}" "${SCP_ARGS}" "${VM_USERNAME}@${VM_IP}:$1" "$2" 
+    sshpass -p "${VM_PASSWORD}" scp "${SSH_OPTIONS[@]}" "${SCP_ARGS[@]}" "${VM_USERNAME}@${VM_IP}:$1" "$2"
 }
 
 check_return_code_after_command_execution() {
@@ -102,8 +117,12 @@ wait_up_env() {
 
 WORK_FLDR=$(ssh_to_fuel_master "mktemp -d")
 ssh_to_fuel_master "chmod 777 $WORK_FLDR"
-enable_public_ip
+if [ "${MILESTONE_MAJOR}" -lt "9" ]; then
+   enable_public_ip
+fi
 wait_up_env
+
+echo "Used ${TEMPEST_RUNNER?} tempest runner"
 
 if [[ "${TEMPEST_RUNNER}" == "mos-tempest-runner" ]]; then
     env_id=$(ssh_to_fuel_master "fuel env" | tail -1 | awk '{print $1}')
@@ -129,11 +148,12 @@ if [[ "${TEMPEST_RUNNER}" == "mos-tempest-runner" ]]; then
 run_tests > ${WORK_FLDR}/log.log
 EOF
 
-    echo "download tempest result"
     scp_from_fuel_master -r /home/developer/mos-tempest-runner/tempest-reports/* .
+    scp_from_fuel_master "${WORK_FLDR}/log.log" ./
+
     mv tempest-report.xml verification.xml
-    echo "DONE"
-elif [[ "$TEMPEST_RUNNER" == "rally" ]]; then
+    set -e
+elif [[ "${TEMPEST_RUNNER}" == "rally" ]]; then
     sed -i 's|rally verify install --source /var/lib/tempest --no-tempest-venv|rally verify install --source /var/lib/tempest|g' rally-tempest/latest/setup_tempest.sh
     sed -i 's|FROM rallyforge/rally:latest|FROM rallyforge/rally:0.3.1|g' rally-tempest/latest/Dockerfile
     # Workaround for run on master node. install dependencies for tempest commit b39bbce80c69a57c708ed1b672319f111c79bdd5
@@ -146,16 +166,46 @@ elif [[ "$TEMPEST_RUNNER" == "rally" ]]; then
     ssh_to_fuel_master "ln -sf ${WORK_FLDR}/rally /root/rally"
     scp_to_fuel_master mos-ci-deployment-scripts/jenkins-job-builder/maintenance/helpers/rally_run.sh "${WORK_FLDR}"
     ssh_to_fuel_master "chmod +x ${WORK_FLDR}/rally_run.sh"
+    set +e
     ssh_to_fuel_master "/bin/bash -xe ${WORK_FLDR}/rally_run.sh > ${WORK_FLDR}/log.log"
 
     scp_from_fuel_master /var/lib/rally-tempest-container-home-dir/verification.xml ./
+    scp_from_fuel_master "${WORK_FLDR}/log.log" ./
+    set -e
+elif [[ "${TEMPEST_RUNNER}" == "rally_without_docker" ]]; then
+    scp_to_fuel_master mos-ci-deployment-scripts/jenkins-job-builder/shell_scripts/run_tempest_without_docker.sh "${WORK_FLDR}/tempest.sh"
+
+    CONTROLLER_ID=$(ssh_to_fuel_master "fuel node | grep -m1 controller | awk '{print \$1}'")
+    ssh_to_fuel_master "scp ${WORK_FLDR}/tempest.sh node-${CONTROLLER_ID}:/root/tempest.sh"
+
+    # Workaround for 'There are problems and -y was used without --force-yes problem'
+    ssh_to_fuel_master "ssh node-${CONTROLLER_ID} 'echo \"APT::Get::AllowUnauthenticated 1;\" >>  /etc/apt/apt.conf.d/02allow-unathenticated'"
+
+    set +e
+    # run tempest
+    ssh_to_fuel_master "ssh node-${CONTROLLER_ID} 'bash -xe /root/tempest.sh'"
+
+    # collect logs
+    ssh_to_fuel_master "scp node-${CONTROLLER_ID}:/root/rally/verification.xml ${WORK_FLDR}/verification.xml"
+    ssh_to_fuel_master "scp node-${CONTROLLER_ID}:/root/rally/log.log ${WORK_FLDR}/log.log"
+    ssh_to_fuel_master "scp node-${CONTROLLER_ID}:/root/rally/tempest.conf ${WORK_FLDR}/tempest.conf"
+    ssh_to_fuel_master "scp node-${CONTROLLER_ID}:/root/rally/tempest.log ${WORK_FLDR}/tempest.log"
+
+    scp_from_fuel_master "${WORK_FLDR}/verification.xml" ./
+    scp_from_fuel_master "${WORK_FLDR}/log.log" ./log.log
+    scp_from_fuel_master "${WORK_FLDR}/tempest.conf" ./tempest.conf
+    scp_from_fuel_master "${WORK_FLDR}/tempest.log" ./tempest.log
+    set -e
+else
+    echo "INVALID TEMPEST RUNNER '${TEMPEST_RUNNER}'"
 fi
 
 set +e
-scp_from_fuel_master "$WORK_FLDR/log.log" ./
 
-mkdir -p "${REPORT_PREFIX}"
-cp verification.xml "${REPORT_PREFIX}"
+if [[ -n "${REPORT_PREFIX}" ]]; then
+    mkdir -p "${REPORT_PREFIX}"
+    cp -f verification.xml "${REPORT_PREFIX}"
+fi
 
 source "${VENV_PATH}/bin/activate"
 SNAPSHOT_NAME="after-tempest-${BUILD_ID}-$(date +%d-%m-%Y_%Hh_%Mm)"

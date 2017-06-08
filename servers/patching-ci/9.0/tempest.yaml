@@ -1,0 +1,85 @@
+- job:
+    name: 9.x.tempest
+    project-type: multijob
+    description: 'Run 9.2 tempest tests'
+    concurrent: false
+    node: 'runner'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: TESTRAIL_PLAN_NAME
+          default: '9.2 MU-X Tempest'
+      - string:
+          name: SNAPSHOT_PARAMS_ID
+          default: lastSuccessfulBuild
+          description: |
+              Take from https://patching-ci.infra.mirantis.net/job/9.x.snapshot.params/
+      - bool:
+          name: ENABLE_UBUNTU_MIRROR_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_OS
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_HOLDBACK
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_HOTFIX
+          default: false
+      - bool:
+          name: ENABLE_MOS_UBUNTU_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_HOLDBACK
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_HOTFIX
+          default: false
+      - string:
+          name: INTERFACE_MODEL
+          default: virtio
+          description: 'virtio, e1000'
+      - bool:
+          name: ADD_TIMESTAMP
+          default: true
+      - string:
+          name: FUEL_QA_VER
+          default: "origin/stable/mitaka"
+      - string:
+          name: VENV_PATH
+          default: "/home/jenkins/qa-venv-9.2"
+    builders:
+      - multijob:
+          name: 'Run 9.x tempest'
+          condition: COMPLETED
+          projects:
+            - name: '9.x.tempest.ironic_ceph_nossl'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.x.tempest.ironic_cinder_nossl'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.x.tempest.ironic_ceph_ssl'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '9.x.tempest.ironic_cinder_ssl'
+              current-parameters: true
+              kill-phase-on: NEVER
+
