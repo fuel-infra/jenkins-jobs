@@ -8,32 +8,39 @@
 
           case {version} in
             7.0)
+              inject MAGNET_LINK       'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
               inject SLAVE_NODE_MEMORY 3072
               inject SLAVE_NODE_CPU    2
               ;;
             8.0)
+              inject MAGNET_LINK       'magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
               inject SLAVE_NODE_MEMORY 3072
               inject SLAVE_NODE_CPU    2
               ;;
             9.?|mitaka)
+              inject MAGNET_LINK       'magnet:?xt=urn:btih:bfec808dd71ff42c5613a3527733d9012bb1fabc&dn=MirantisOpenStack-9.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-9.0.iso'
               inject SLAVE_NODE_MEMORY 3968
               ;;
             10.0|newton)
+              inject MAGNET_LINK       'magnet:?xt=urn:btih:fe72698eb151fdd9df5309806b635a603f8e0d5b&dn=fuel-10.0-1783-2017-05-28%5F17-00-00.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fsrv52-bud.infra.mirantis.net%2Ffuelweb-iso%2Ffuel-10.0-1783-2017-05-28%5F17-00-00.iso'
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
               inject CENTOS_VERSION    7.3.1611
               ;;
             11.0|ocata)
+              inject MAGNET_LINK       'magnet:?xt=urn:btih:701ad10f16425a0a46668db270d0cbdee8f7a086&dn=fuel-11.0-562-2017-04-18%5F11-05-02.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fsrv52-bud.infra.mirantis.net%2Ffuelweb-iso%2Ffuel-11.0-562-2017-04-18%5F11-05-02.iso'
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
               inject CENTOS_VERSION    7.3.1611
               ;;
             12.0|pike)
+              inject MAGNET_LINK       'magnet:?xt=urn:btih:0c45b2f3768ba7285d52e5efa8f7bab4d82722f8&dn=fuel-12.0-353-2017-05-28%5F05-26-07.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fsrv52-bud.infra.mirantis.net%2Ffuelweb-iso%2Ffuel-12.0-353-2017-05-28%5F05-26-07.iso'
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
               inject CENTOS_VERSION    7.3.1611
               ;;
             master)
+              inject MAGNET_LINK       'magnet:?xt=urn:btih:0c45b2f3768ba7285d52e5efa8f7bab4d82722f8&dn=fuel-12.0-353-2017-05-28%5F05-26-07.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fsrv52-bud.infra.mirantis.net%2Ffuelweb-iso%2Ffuel-12.0-353-2017-05-28%5F05-26-07.iso'
               inject SLAVE_NODE_MEMORY 3968
               inject UBUNTU_DIST       xenial
               inject CENTOS_VERSION    7.3.1611

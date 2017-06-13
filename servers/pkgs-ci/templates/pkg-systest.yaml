@@ -98,6 +98,8 @@
             DEB_DIST_NAME={deb-dist-name}
             DEB_REPO_PATH={mos-deb-repo-path}
             RPM_REPO_PATH={mos-rpm-repo-path}/os/x86_64/
+
+            MOS_UBUNTU_MIRROR_ID={project-version}-latest
       - inject:
           # Set defaults which could be reinjected
           properties-content: |
@@ -117,20 +119,6 @@
       - inject-from-job(same-change):
           job-name: '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
           artifact-name: '{pkg_type}.publish.setenvfile'
-
-      - inject-devops-env:
-          # add FUEL_QA_COMMIT MAGNET_LINK UBUNTU_MIRROR_ID for tests
-          version: '{project-version}'
-
-      # FIXME(aevseev) Above macros does not injects variable MOS_UBUNTU_MIRROR_ID
-      # required by fuel-qa for mitaka
-      # This is workaround for LP bug: https://bugs.launchpad.net/fuel/+bug/1658069
-      - inject-from-job:
-          job-name: 'devops.{project-version}.env_params'
-          artifact-name: 'properties.txt'
-          which-build: 'last-successful'
-          parameter-filters: ''
-          optional: true
 
       - inject:
           properties-content: |
