@@ -1,9 +1,9 @@
 - view:
     type: list
-    name: '7.0.tempest'
-    regex: '7.0.tempest.*'
+    name: '9.x.tempest'
+    regex: '9.x.tempest.*'
     jobs:
-      - 7.0.tempest
+      - 9.x.tempest
       - maintenance-tempest-reports-Testrail
       - maintenance-tempest-runner
     columns:

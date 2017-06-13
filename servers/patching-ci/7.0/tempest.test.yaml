@@ -1,32 +1,10 @@
 - job-template:
-    # Downloads ISO image via magnet link
-    # deploing using group and runs tempest
-    #
-    # specification
-    #     Name of the job.
-    # group
-    #     Test group used as --group parameter in system_test.sh
-    #     For tempest used groups from mos-ci-deployment-scripts
-    # test-group
-    #     Human readable description of configuration (for testrail)
-    # description
-    #     Job description
-    # venvpath
-    #     Path to virtual env with fuel-devops installed (VENV_PATH)
-    # display-name
-    #     Job display-name
-
     name: 7.0.tempest.{specification}
     project-type: freestyle
     defaults: global
     disabled: false
     concurrent: false
-    node: maintenance-tempest
-    description: |
-      DO NOT TRIGGER THIS JOB.
-      Use 7.0.tempest.on_node or 7.0.tempest instead
-      {description}
-    display-name: '{display-name}'
+    description: "7.0 tempest {description}"
     retry-count: 2
     logrotate:
       daysToKeep: 5
@@ -36,24 +14,58 @@
     properties:
     - heavy-job:
         weight: 7
+    parameters:
+      - node:
+          name: NODE_LABELS
+          default-slaves:
+            - maintenance-tempest
+          description: Select node where env been created and tempest been running
+      - string:
+          name: TESTRAIL_PLAN_NAME
+          default: '7.0 MU-X Tempest'
+      - bool:
+          name: ENABLE_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_UPDATE_CENTOS
+          default: true
+      - bool:
+          name: DISABLE_SSL
+          default: false
+      - bool:
+          name: ADD_TIMESTAMP
+          default: true
+      - string:
+          name: FUEL_QA_VER
+          default: "origin/stable-mu/7.0"
+      - string:
+          name: VENV_PATH
+          default: "/home/jenkins/qa-venv-7.0"
     builders:
       - trigger-builds:
         - project: '7.0.tempest.create_env'
           same-node: true
           block: true
           predefined-parameters: |
-            OPENSTACK_RELEASE=ubuntu
+            NODE_LABELS=$NODE_NAME
+            ENV_NAME=7.0.tempest.{specification}.$BUILD_ID
             ENABLE_PROPOSED=$ENABLE_PROPOSED
             ENABLE_SECURITY=$ENABLE_SECURITY
             ENABLE_UPDATES=$ENABLE_UPDATES
             ENABLE_UPDATE_CENTOS=$ENABLE_UPDATE_CENTOS
-            ERASE_PREV_ENV=$ERASE_PREV_ENV
-            SKIP_INSTALL_ENV=$SKIP_INSTALL_ENV
+            ERASE_ENV_PREFIX=^7.0.tempest.{specification}
             DISABLE_SSL=$DISABLE_SSL
-            ENV_NAME=7.0.tempest.{specification}.$BUILD_ID
+            FUEL_QA_VER=$FUEL_QA_VER
             FILE=test_tempest_7_0.py
             GROUP={group}
-            FUEL_QA_VER=$FUEL_QA_VER
+            VENV_PATH=$VENV_PATH
+            OPENSTACK_RELEASE=ubuntu
             SLAVE_NODE_MEMORY=10240
       - trigger-builds:
         - project: 'maintenance-tempest-runner'
@@ -62,12 +74,13 @@
           block-thresholds:
             build-step-failure-threshold: 'never'
           predefined-parameters: |
-            REPORT_PREFIX=/home/jenkins/tempest-reports/{group}
+            NODE_LABELS=$NODE_NAME
             ENV_NAME=7.0.tempest.{specification}.$BUILD_ID
             SNAPSHOT_NAME={group}
+            VENV_PATH=$VENV_PATH
+            TEMPEST_RUNNER=mos-tempest-runner
             MILESTONE=7.0
-            VENV_PATH=/home/jenkins/qa-venv-7.0
-            TEMPEST_RUNNER=$TEMPEST_RUNNER
+            REPORT_PREFIX=$WORKSPACE/
       - trigger-builds:
         - project: 'maintenance-tempest-reports-Testrail'
           same-node: true
@@ -75,18 +88,18 @@
           block-thresholds:
             build-step-failure-threshold: 'never'
           predefined-parameters: |
-            REPORT_FILE=/home/jenkins/tempest-reports/{group}/verification.xml
+            NODE_LABELS=$NODE_NAME
+            REPORT_FILE=$WORKSPACE/verification.xml
             TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
             TEST_GROUP={test-group}
             TESTRAIL_SUITE=Tempest 7.0
             MILESTONE=7.0
-            SNAPSHOT={group}
+            SPECIFICATION={group}
             ADD_TIMESTAMP=$ADD_TIMESTAMP
             USE_TEMPLATE=true
 
 - project:
     name: 7.0.tempest.vlan.ceph
-    display-name: 7.0.tempest.vlan.ceph
     specification: vlan.ceph
     group: tempest_ceph_services_vlan
     test-group: VLAN+ENABLED_CEPH+ENABLED+SERVICES
@@ -96,7 +109,6 @@
 
 - project:
     name: 7.0.tempest.tun.ceph
-    display-name: 7.0.tempest.tun.ceph
     specification: tun.ceph
     group: tempest_ceph_services_tun
     test-group: TUN+ENABLED_CEPH+ENABLED+SERVICES
@@ -106,7 +118,6 @@
 
 - project:
     name: 7.0.tempest.vlan.non_ceph
-    display-name: 7.0.tempest.vlan.non_ceph
     specification: vlan.non_ceph
     group: tempest_cinder_glance_swift_vlan
     test-group: VLAN+DISABLED_CEPH
@@ -116,7 +127,6 @@
 
 - project:
     name: 7.0.tempest.tun.non_ceph
-    display-name: 7.0.tempest.tun.non_ceph
     specification: tun.non_ceph
     group: tempest_cinder_glance_swift_tun
     test-group: TUN+DISABLED_CEPH

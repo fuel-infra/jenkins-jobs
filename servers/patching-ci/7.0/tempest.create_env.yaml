@@ -1,19 +1,17 @@
 - job:
     name: 7.0.tempest.create_env
     project-type: freestyle
-    node: maintenance
     defaults: global
     description: 'Create environment with parameters. Usable for tempest.'
     disabled: false
-    display-name: 'Create Parameterized Environment (7.0 maintenance)'
     concurrent: true
     browser: githubweb
     retry-count: 3
     logrotate:
-      daysToKeep: 14
-      numToKeep: 50
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
+      daysToKeep: 7
+      numToKeep: 12
+      artifactDaysToKeep: 7
+      artifactNumToKeep: 12
     scm:
       - main-git:
           reponame: 'fuel-qa'
@@ -29,6 +27,10 @@
       - workspace-cleanup:
           fail-build: false
     parameters:
+      - node:
+          name: NODE_LABELS
+          default-slaves:
+            - maintenance-tempest
       - string:
           name: MAGNET_LINK
           default: 'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
@@ -53,7 +55,7 @@
           default: 'latest'
       - bool:
           name: ENABLE_PROPOSED
-          default: false
+          default: true
       - bool:
           name: ENABLE_SECURITY
           default: true
@@ -63,10 +65,9 @@
       - bool:
           name: ENABLE_UPDATE_CENTOS
           default: false
-      - bool:
-          name: ERASE_PREV_ENV
-          default: true
-          description: 'Erase all environments'
+      - string:
+          name: ERASE_ENV_PREFIX
+          description: 'If not empty, then erase all environments with this prefix'
       - bool:
           name: DISABLE_SSL
           default: false
@@ -79,10 +80,6 @@
       - string:
           name: GROUP
           description: 'Test group for deploy'
-      - bool:
-          name: SKIP_INSTALL_ENV
-          default: false
-          description: 'Do not install env, job been ignored'
       - bool:
           name: BONDING
           default: false
@@ -99,3 +96,4 @@
     builders:
       - shell:
           !include-raw: 'builders/tempest.create_env.sh'
+

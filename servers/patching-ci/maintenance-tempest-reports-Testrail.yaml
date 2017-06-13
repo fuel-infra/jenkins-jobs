@@ -1,6 +1,8 @@
 - job:
     name: 'maintenance-tempest-reports-Testrail'
     parameters:
+      - node:
+          name: NODE_LABELS
       - string:
           name: REPORT_FILE
           default: /home/jenkins/report.xml
@@ -12,15 +14,14 @@
           name: TESTRAIL_SUITE
       - string:
           name: MILESTONE
+      - string:
+          name: SPECIFICATION
       - bool:
           name: ADD_TIMESTAMP
           default: true
       - bool:
           name: USE_TEMPLATE
           default: true
-      - node:
-          name: NODE_LABELS
-          default: maintenance-tempest
     wrappers:
      - inject-passwords:
           global: true
@@ -31,17 +32,16 @@
     scm:
       - test-rail-reporter
     project-type: freestyle
-    defaults: global
     description: 'Send XUnit reports to TestRail'
     disabled: false
     concurrent: true
     browser: githubweb
     retry-count: 3
     logrotate:
-      daysToKeep: 7
-      numToKeep: 20
-      artifactDaysToKeep: 7
-      artifactNumToKeep: 20
+      daysToKeep: 5
+      numToKeep: 12
+      artifactDaysToKeep: 5
+      artifactNumToKeep: 12
     publishers:
       - email:
           recipients: vjigulin@mirantis.com
