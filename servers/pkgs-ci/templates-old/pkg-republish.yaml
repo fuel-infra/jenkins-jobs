@@ -15,7 +15,6 @@
           Branch to build package from
           <ul>
             <li>{mos_version}/&lt;codename&gt; for OpenStack projects
-            <li>mos/&lt;codename&gt; for Fuel projects having downstream (fuel-main, fuel-ui, fuel-web, python-fuelclient)
             <li>stable/&lt;codename&gt; for Fuel projects without downstream
             <li>{mos_version} for dependencies
           </ul>
