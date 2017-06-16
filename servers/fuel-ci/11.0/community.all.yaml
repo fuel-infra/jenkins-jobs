@@ -10,7 +10,7 @@
       - 'community-{version}{mod}.all':
           description: "Build: 11.0 iso"
           email: '{bvt-mail}'
-          timer: 'H 5-23/6 * * *'
+          timer: '0 12 * * 2'
           variables: |
             CENTOS_VERSION=7.3.1611
             MOS_CENTOS_ROOT=/mos-repos/centos/mos11.0-centos7/
