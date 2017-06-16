@@ -17,7 +17,7 @@
       - fuel-agent:
           projectpackage: fuel-agent
           testgroup: review_fuel_agent_ironic_deploy
-          timed: '30 */12 * * *'
+          timed: ''
           non_voting: true
           properties: |
             KEEP_BEFORE=yes
@@ -29,14 +29,14 @@
       - fuel-astute:
           projectpackage: astute
           testgroup: review_astute_patched
-          timed: '20 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
 
       - fuel-library:
           projectpackage: fuel-library10.0
           testgroup: smoke_neutron
-          timed: '0 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -44,7 +44,7 @@
       - fuel-library:
           projectpackage: fuel-library10.0
           testgroup: neutron_vlan_ha
-          timed: '59 */12 * * *'
+          timed: ''
           properties: |
             SYNC_DEPL_TASKS=true
 
@@ -52,7 +52,7 @@
           projectpackage: fuel-library10.0
           testgroup: review_in_fuel_library
           non_voting: true # override
-          timed: '30 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -61,7 +61,7 @@
           projectpackage: fuel-library10.0
           testgroup: uca_neutron_ha
           non_voting: true # override
-          timed: '30 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -69,7 +69,7 @@
       - fuel-nailgun-agent:
           projectpackage: nailgun-agent
           testgroup: review_nailgun_agent_one_node
-          timed: '25 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
             CUSTOM_ENV=false
@@ -77,7 +77,7 @@
       - fuel-ostf:
           projectpackage: fuel-ostf
           testgroup: gate_ostf_update
-          timed: '45 */12 * * *'
+          timed: ''
           timeout: 300  # override
           properties: |
             UPDATE_FUEL=true
@@ -87,7 +87,7 @@
       - fuel-web:
           projectpackage: fuel-nailgun
           testgroup: review_fuel_web_deploy
-          timed: '15 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -95,7 +95,7 @@
       - python-fuelclient:
           projectpackage: python-fuelclient
           testgroup: review_fuel_client
-          timed: '15 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
@@ -125,7 +125,7 @@
       - fuel-agent:
           projectpackage: fuel-agent
           testgroup: review_fuel_agent_ironic_deploy
-          timed: '30 */12 * * *'
+          timed: ''
           non_voting: true
           properties: |
             KEEP_BEFORE=yes
@@ -137,14 +137,14 @@
       - fuel-astute:
           projectpackage: astute
           testgroup: review_astute_patched
-          timed: '20 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
 
       - fuel-library:
           projectpackage: fuel-library11.0
           testgroup: smoke_neutron
-          timed: '0 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -152,7 +152,7 @@
       - fuel-library:
           projectpackage: fuel-library11.0
           testgroup: neutron_vlan_ha
-          timed: '59 */12 * * *'
+          timed: ''
           properties: |
             SYNC_DEPL_TASKS=true
 
@@ -160,7 +160,7 @@
           projectpackage: fuel-library11.0
           testgroup: review_in_fuel_library
           non_voting: true # override
-          timed: '30 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -168,7 +168,7 @@
       - fuel-nailgun-agent:
           projectpackage: nailgun-agent
           testgroup: review_nailgun_agent_one_node
-          timed: '25 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
             CUSTOM_ENV=false
@@ -176,7 +176,7 @@
       - fuel-ostf:
           projectpackage: fuel-ostf
           testgroup: gate_ostf_update
-          timed: '45 */12 * * *'
+          timed: ''
           timeout: 300  # override
           properties: |
             UPDATE_FUEL=true
@@ -186,7 +186,7 @@
       - fuel-web:
           projectpackage: fuel-nailgun
           testgroup: review_fuel_web_deploy
-          timed: '15 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -194,7 +194,7 @@
       - python-fuelclient:
           projectpackage: python-fuelclient
           testgroup: review_fuel_client
-          timed: '15 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
@@ -225,7 +225,7 @@
       - fuel-agent:
           projectpackage: fuel-agent
           testgroup: review_fuel_agent_ironic_deploy
-          timed: '30 */12 * * *'
+          timed: ''
           non_voting: true
           properties: |
             KEEP_BEFORE=yes
@@ -237,14 +237,14 @@
       - fuel-astute:
           projectpackage: astute
           testgroup: review_astute_patched
-          timed: '20 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
 
       - fuel-library:
           projectpackage: fuel-library10.0
           testgroup: smoke_neutron
-          timed: '0 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -252,7 +252,7 @@
       - fuel-library:
           projectpackage: fuel-library10.0
           testgroup: neutron_vlan_ha
-          timed: '59 */12 * * *'
+          timed: ''
           properties: |
             SYNC_DEPL_TASKS=true
 
@@ -260,7 +260,7 @@
           projectpackage: fuel-library10.0
           testgroup: review_in_fuel_library
           non_voting: true # override
-          timed: '30 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -268,7 +268,7 @@
       - fuel-nailgun-agent:
           projectpackage: nailgun-agent
           testgroup: review_nailgun_agent_one_node
-          timed: '25 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
             CUSTOM_ENV=false
@@ -276,7 +276,7 @@
       - fuel-ostf:
           projectpackage: fuel-ostf
           testgroup: gate_ostf_update
-          timed: '45 */12 * * *'
+          timed: ''
           timeout: 300  # override
           properties: |
             UPDATE_FUEL=true
@@ -286,7 +286,7 @@
       - fuel-web:
           projectpackage: fuel-nailgun
           testgroup: review_fuel_web_deploy
-          timed: '15 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -294,7 +294,7 @@
       - python-fuelclient:
           projectpackage: python-fuelclient
           testgroup: review_fuel_client
-          timed: '15 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
@@ -326,7 +326,7 @@
       - fuel-agent:
           projectpackage: fuel-agent
           testgroup: review_fuel_agent_ironic_deploy
-          timed: '30 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
@@ -337,7 +337,7 @@
       - fuel-astute:
           projectpackage: astute
           testgroup: review_astute_patched
-          timed: '20 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
             EXTRA_RPM_REPOS_PRIORITY=5
@@ -345,7 +345,7 @@
       - fuel-library:
           projectpackage: fuel-library9.0
           testgroup: smoke_neutron
-          timed: '0 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -354,7 +354,7 @@
       - fuel-library:
           projectpackage: fuel-library9.0
           testgroup: neutron_vlan_ha
-          timed: '59 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             SYNC_DEPL_TASKS=true
@@ -363,7 +363,7 @@
       - fuel-nailgun-agent:
           projectpackage: nailgun-agent
           testgroup: review_nailgun_agent_one_node
-          timed: '25 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
             CUSTOM_ENV=false
@@ -372,7 +372,7 @@
       - fuel-ostf:
           projectpackage: fuel-ostf
           testgroup: gate_ostf_update
-          timed: '45 */12 * * *'
+          timed: ''
           timeout: 300  # override
           properties: |
             UPDATE_FUEL=true
@@ -383,7 +383,7 @@
       - fuel-web:
           projectpackage: fuel-nailgun
           testgroup: review_fuel_web_deploy
-          timed: '15 */12 * * *'
+          timed: ''
           properties: |
             CUSTOM_ENV=true
             BUILD_IMAGES=true
@@ -393,7 +393,7 @@
       - python-fuelclient:
           projectpackage: python-fuelclient
           testgroup: review_fuel_client
-          timed: '15 */12 * * *'
+          timed: ''
           properties: |
             KEEP_BEFORE=yes
             BUILD_IMAGES=true
