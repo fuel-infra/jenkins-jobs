@@ -70,7 +70,7 @@
           default: '{job_age}'
       - string:
           name: JOB_DIR_SKIPLIST
-          description: 'Don't remove listed directories from workspace (comma and/or space separated list)'
+          description: 'Do not remove listed directories from workspace (comma and/or space separated list)'
           default: '{job_dir_skiplist}'
 
     wrappers:
