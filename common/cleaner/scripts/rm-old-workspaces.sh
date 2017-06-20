@@ -35,6 +35,10 @@ JOB_AGE="${JOB_AGE:-30}"
 JOB_DIR_SKIPLIST="${JOB_DIR_SKIPLIST:-}"
 WORKSPACE="${WORKSPACE:-.}"
 
+# ${WORKSPACE} contains a path to the _JOB_ workspace, not ~/workspace/
+# Get parent directory
+WORKSPACE=$(dirname "$WORKSPACE")
+
 main () {
     #   .. function:: main
     #
