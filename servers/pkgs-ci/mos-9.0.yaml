@@ -36,7 +36,6 @@
     distro: 'centos7'
     pkg_type: 'rpm'
     spec_path_prefix: '/{distro}'
-    timer: 'H */12 * * *'
     openstack_release: 'ubuntu'
     jobs:
       - '{mos_version}-pkg-pipeline-{os}'
@@ -52,7 +51,6 @@
     distro: 'trusty'
     pkg_type: 'deb'
     spec_path_prefix: '/{distro}'
-    timer: 'H */12 * * *'
     openstack_release: 'ubuntu'
     jobs:
       - '{mos_version}-pkg-pipeline-{os}'
