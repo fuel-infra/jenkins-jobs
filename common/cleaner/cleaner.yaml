@@ -13,6 +13,8 @@
     lifetime_package: '6'
     lifetime_other: '16'
     lifetime_custom: '72'
+    job_age: '30'
+    job_dir_skiplist: 'iso,tmp'
 
 - job-template:
     name: cleaner
@@ -62,6 +64,14 @@
           name: LIFETIME_OTHER
           description: 'Lifetime for other systests'
           default: '{lifetime_other}'
+      - string:
+          name: JOB_AGE
+          description: 'Age of job directories to remove (days)'
+          default: '{job_age}'
+      - string:
+          name: JOB_DIR_SKIPLIST
+          description: 'Don't remove listed directories from workspace (comma and/or space separated list)'
+          default: '{job_dir_skiplist}'
 
     wrappers:
       - timeout:
@@ -75,6 +85,8 @@
           which-build: workspace-latest
       - shell:
           !include-raw-escape: './scripts/cleaner.py'
+      - shell:
+          !include-raw-escape: './scripts/rm-old-workspaces.sh'
 
 
 - job-template:
