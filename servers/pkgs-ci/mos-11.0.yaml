@@ -37,6 +37,5 @@
     - '{project-version}-pkg-{project-name}-publish-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-install-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-repotest-{os}-{distro}'
-    - '{project-version}-pkg-{project-name}-systest-{os}-{distro}':
-        timer: 'H */12 * * *'
+    - '{project-version}-pkg-{project-name}-systest-{os}-{distro}'
     - '{project-version}-pkg-{project-name}-republish-{os}-{distro}'
