@@ -2,8 +2,7 @@
     name: 10.0-mos.repos
     mod: '-mos'
     jobs:
-    - 10.0{mod}.repos.snapshot:
-        timer: '0 */6 * * *'
+    - 10.0{mod}.repos.snapshot
     - 10.0{mod}.repos.main.{dist}.{testgroup}:
         dist: ubuntu
         testgroup: bvt_2

@@ -16,7 +16,7 @@
         basedir: ''
 
     triggers:
-    - timed: '30 20 * * *'
+    - timed: ''
 
     wrappers:
     - inject-passwords:

@@ -54,7 +54,7 @@
           repobranch: origin/{repo_branch}
           basedir: examples/fuel-plugin-external-lb
     triggers:
-      - timed: 'H 22 * * *'
+      - timed: ''
     wrappers:
       - ansicolor:
           colormap: xterm
