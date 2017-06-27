@@ -1,10 +1,10 @@
 - job-template:
-    name: 7.0.tempest.{specification}
+    name: 8.0.tempest.{specification}
     project-type: freestyle
     defaults: global
     disabled: false
     concurrent: false
-    description: "7.0 tempest {description}"
+    description: "8.0 tempest {description}"
     retry-count: 2
     logrotate:
       daysToKeep: 5
@@ -22,7 +22,7 @@
           description: Select node where env been created and tempest been running
       - string:
           name: TESTRAIL_PLAN_NAME
-          default: '7.0 MU-X Tempest'
+          default: '8.0 MU-X Tempest'
       - bool:
           name: ENABLE_PROPOSED
           default: true
@@ -43,26 +43,26 @@
           default: true
       - string:
           name: FUEL_QA_VER
-          default: "origin/stable-mu/7.0"
+          default: "origin/stable-mu/8.0"
       - string:
           name: VENV_PATH
-          default: "/home/jenkins/qa-venv-7.0"
+          default: "/home/jenkins/qa-venv-8.0"
     builders:
       - trigger-builds:
-        - project: '7.0.tempest.create_env'
+        - project: '8.0.tempest.create_env'
           same-node: true
           block: true
           predefined-parameters: |
             NODE_LABELS=$NODE_NAME
-            ENV_NAME=7.0.tempest.{specification}.$BUILD_ID
+            ENV_NAME=8.0.tempest.{specification}.$BUILD_ID
             ENABLE_PROPOSED=$ENABLE_PROPOSED
             ENABLE_SECURITY=$ENABLE_SECURITY
             ENABLE_UPDATES=$ENABLE_UPDATES
             ENABLE_UPDATE_CENTOS=$ENABLE_UPDATE_CENTOS
-            ERASE_ENV_PREFIX=^7.0.tempest.{specification}
+            ERASE_ENV_PREFIX=^8.0.tempest.{specification}
             DISABLE_SSL=$DISABLE_SSL
             FUEL_QA_VER=$FUEL_QA_VER
-            FILE=test_tempest_7_0.py
+            FILE=test_tempest_8_0.py
             GROUP={group}
             VENV_PATH=$VENV_PATH
             OPENSTACK_RELEASE=ubuntu
@@ -75,11 +75,11 @@
             build-step-failure-threshold: 'never'
           predefined-parameters: |
             NODE_LABELS=$NODE_NAME
-            ENV_NAME=7.0.tempest.{specification}.$BUILD_ID
+            ENV_NAME=8.0.tempest.{specification}.$BUILD_ID
             SNAPSHOT_NAME={group}
             VENV_PATH=$VENV_PATH
-            TEMPEST_RUNNER=mos-tempest-runner
-            MILESTONE=7.0
+            TEMPEST_RUNNER=rally
+            MILESTONE=8.0
             REPORT_PREFIX=$WORKSPACE/
       - trigger-builds:
         - project: 'maintenance-tempest-reports-Testrail'
@@ -92,45 +92,45 @@
             REPORT_FILE=$WORKSPACE/verification.xml
             TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
             TEST_GROUP={test-group}
-            TESTRAIL_SUITE=Tempest 7.0
-            MILESTONE=7.0
+            TESTRAIL_SUITE=Tempest 8.0
+            MILESTONE=8.0
             SPECIFICATION={group}
             ADD_TIMESTAMP=$ADD_TIMESTAMP
             USE_TEMPLATE=true
 
 - project:
-    name: 7.0.tempest.vlan.ceph
+    name: 8.0.tempest.vlan.ceph
     specification: vlan.ceph
     group: tempest_ceph_services_vlan
     test-group: VLAN+ENABLED_CEPH+ENABLED+SERVICES
-    description: VLAN+CEPH+SERVICES UBUNTU TEMPEST tests (7.0 maintenance)
+    description: VLAN+CEPH+SERVICES UBUNTU TEMPEST tests (8.0 maintenance)
     jobs:
-      - '7.0.tempest.{specification}'
+      - '8.0.tempest.{specification}'
 
 - project:
-    name: 7.0.tempest.tun.ceph
+    name: 8.0.tempest.tun.ceph
     specification: tun.ceph
     group: tempest_ceph_services_tun
     test-group: TUN+ENABLED_CEPH+ENABLED+SERVICES
-    description: TUN+CEPH+SERVICES UBUNTU TEMPEST tests (7.0 maintenance)
+    description: TUN+CEPH+SERVICES UBUNTU TEMPEST tests (8.0 maintenance)
     jobs:
-      - '7.0.tempest.{specification}'
+      - '8.0.tempest.{specification}'
 
 - project:
-    name: 7.0.tempest.vlan.non_ceph
+    name: 8.0.tempest.vlan.non_ceph
     specification: vlan.non_ceph
     group: tempest_cinder_glance_swift_vlan
     test-group: VLAN+DISABLED_CEPH
-    description: VLAN+DISABLED_CEPH UBUNTU TEMPEST tests (7.0 maintenance)
+    description: VLAN+DISABLED_CEPH UBUNTU TEMPEST tests (8.0 maintenance)
     jobs:
-      - '7.0.tempest.{specification}'
+      - '8.0.tempest.{specification}'
 
 - project:
-    name: 7.0.tempest.tun.non_ceph
+    name: 8.0.tempest.tun.non_ceph
     specification: tun.non_ceph
     group: tempest_cinder_glance_swift_tun
     test-group: TUN+DISABLED_CEPH
-    description: TUN+DISABLED_CEPH UBUNTU TEMPEST tests (7.0 maintenance)
+    description: TUN+DISABLED_CEPH UBUNTU TEMPEST tests (8.0 maintenance)
     jobs:
-      - '7.0.tempest.{specification}'
+      - '8.0.tempest.{specification}'
 

@@ -1,5 +1,5 @@
 - job:
-    name: 7.0.tempest.create_env
+    name: 8.0.tempest.create_env
     project-type: freestyle
     defaults: global
     description: 'Create environment with parameters. Usable for tempest.'
@@ -33,15 +33,15 @@
             - maintenance-tempest
       - string:
           name: MAGNET_LINK
-          default: 'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
+          default: 'magnet:?xt=urn:btih:bfec808dd71ff42c5613a3527733d9012bb1fabc&dn=MirantisOpenStack-9.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-9.0.iso'
           description: 'ISO magnet link'
       - string:
           name: ENV_NAME
-          default: 'maintenance_env_7.0'
+          default: 'maintenance_env_8.0'
           description: 'devops environment name'
       - string:
           name: UPGRADE_TARBALL_MAGNET_LINK
-          default: 'magnet:?xt=urn:btih:e4521941a159cbbf345884c7c7ec6a484a139d3b&dn=MirantisOpenStack-7.0-upgrade.tar.lrz&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0-upgrade.tar.lrz'
+          default: ''
           description: 'Upgrade tarball magnet link'
       - string:
           name: DEB_LATEST
@@ -73,7 +73,7 @@
           default: false
       - string:
           name: FUEL_QA_VER
-          default: "origin/stable-mu/7.0"
+          default: "origin/stable-mu/8.0"
       - string:
           name: FILE
           description: 'File for fuel-qa copyed from mos-ci-deployment-scripts maintenance helpers'
@@ -85,7 +85,7 @@
           default: false
       - string:
           name: VENV_PATH
-          default: "/home/jenkins/qa-venv-7.0"
+          default: "/home/jenkins/qa-venv-8.0"
       - string:
           name: OPENSTACK_RELEASE
           default: 'ubuntu'

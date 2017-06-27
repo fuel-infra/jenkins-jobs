@@ -1,9 +1,11 @@
 - view:
     type: list
-    name: '8.0.patching'
+    name: '8.0.tempest'
+    regex: '8.0.tempest.*'
     jobs:
-      - 8.0.snapshot.params
-      - 8.0.proposed-to-updates
+      - 8.0.tempest
+      - maintenance-tempest-reports-Testrail
+      - maintenance-tempest-runner
     columns:
       - status
       - weather
@@ -13,3 +15,4 @@
       - last_duration
       - build_button
     recurse: False
+
