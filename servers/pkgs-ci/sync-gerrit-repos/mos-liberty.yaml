@@ -1,0 +1,42 @@
+- project:
+    name: 'mos-sync-liberty'
+    sync-node: 'sync-mos-branch'
+
+    # Branches to sync (see also short names below)
+    upstream-branch: 'stable/8.0'
+    downstream-branch: 'openstack-ci/fuel-8.0/liberty'
+    fallback-branch: 'stable/8.0'
+
+    # Branch short names for jobs naming
+    src-branch: liberty
+    dst-branch: 8.0
+
+    # Syncronization schedule
+    timer: 'H */4 * * *'
+
+    # Gerrit parameters
+    gerrit-host: 'review.fuel-infra.org'
+    gerrit-port: '29418'
+    gerrit-user: '{username-openstack-ci-mirrorer-jenkins}'
+    gerrit-creds: '{ssh-creds-openstack-ci-mirrorer-jenkins}'
+    gerrit-topic: 'sync/stable/liberty'
+
+    # List of projects to sync
+    gerrit-project-name:
+    - 'fuel-agent'
+    - 'fuel-astute'
+    - 'fuel-library'
+    - 'fuel-main'
+    - 'fuel-menu'
+    - 'fuel-mirror'
+    - 'fuel-nailgun-agent'
+    - 'fuel-octane'
+    - 'fuel-ostf'
+    - 'fuel-upgrade'
+    - 'fuel-web'
+    - 'network-checker'
+    - 'python-fuelclient'
+    - 'shotgun'
+
+    jobs:
+    - 'sync-{gerrit-project-name}-{src-branch}-{dst-branch}'
