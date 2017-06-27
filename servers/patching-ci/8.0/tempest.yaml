@@ -1,0 +1,55 @@
+- job:
+    name: 8.0.tempest
+    project-type: multijob
+    description: 'Run 8.0 tempest tests'
+    concurrent: false
+    node: 'runner'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: TESTRAIL_PLAN_NAME
+          default: '8.0 MU-X Tempest'
+      - bool:
+          name: ENABLE_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_UPDATE_CENTOS
+          default: true
+      - bool:
+          name: DISABLE_SSL
+          default: true
+      - bool:
+          name: ADD_TIMESTAMP
+          default: true
+      - string:
+          name: FUEL_QA_VER
+          default: 'origin/stable-mu/8.0'
+      - string:
+          name: VENV_PATH
+          default: "/home/jenkins/qa-venv-8.0"
+    builders:
+      - multijob:
+          name: 'Run 8.0 tempest'
+          condition: COMPLETED
+          projects:
+            - name: '8.0.tempest.vlan.ceph'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.tempest.tun.ceph'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.tempest.vlan.non_ceph'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: '8.0.tempest.tun.non_ceph'
+              current-parameters: true
+              kill-phase-on: NEVER
+

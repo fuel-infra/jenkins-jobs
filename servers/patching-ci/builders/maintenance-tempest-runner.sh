@@ -166,6 +166,8 @@ elif [[ "${TEMPEST_RUNNER}" == "rally" ]]; then
     ssh_to_fuel_master "ln -sf ${WORK_FLDR}/rally /root/rally"
     scp_to_fuel_master mos-ci-deployment-scripts/jenkins-job-builder/maintenance/helpers/rally_run.sh "${WORK_FLDR}"
     ssh_to_fuel_master "chmod +x ${WORK_FLDR}/rally_run.sh"
+
+    echo "Run tempest tests"
     set +e
     ssh_to_fuel_master "/bin/bash -xe ${WORK_FLDR}/rally_run.sh > ${WORK_FLDR}/log.log"
 
@@ -181,8 +183,8 @@ elif [[ "${TEMPEST_RUNNER}" == "rally_without_docker" ]]; then
     # Workaround for 'There are problems and -y was used without --force-yes problem'
     ssh_to_fuel_master "ssh node-${CONTROLLER_ID} 'echo \"APT::Get::AllowUnauthenticated 1;\" >>  /etc/apt/apt.conf.d/02allow-unathenticated'"
 
+    echo "Run tempest tests"
     set +e
-    # run tempest
     ssh_to_fuel_master "ssh node-${CONTROLLER_ID} 'bash -xe /root/tempest.sh'"
 
     # collect logs

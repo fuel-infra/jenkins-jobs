@@ -2,6 +2,7 @@
     type: list
     name: '7.0.patching'
     jobs:
+      - 7.0.snapshot.params
       - 7.0-build.late.artifacts
       - 7.0.create_snapshot.centos-6
       - 7.0.create_snapshot.ubuntu
