@@ -5,7 +5,7 @@
     node: ''
     properties:
       - heavy-job:
-          weight: 4
+          weight: 8
     parameters:
       - label:
           name: 'reBuilder-build-hosts'

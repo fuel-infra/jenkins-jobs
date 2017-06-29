@@ -3,6 +3,7 @@
     # which are used by perestroika.
     name: 'maintenace'
     is-disabled: ''
+    timer: 'H */2 * * *'
     maintain-node: 'new-builder'
     mailto: 'fuel-build+ci-packaging@mirantis.com'
 
