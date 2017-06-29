@@ -4,7 +4,7 @@
     concurrent: false
     node: '{maintain-node}'
     triggers:
-      - timed: '@midnight'
+      - timed: '{timer}'
     builders:
       - trigger-builds:
           - project: 'maintain.worker'
