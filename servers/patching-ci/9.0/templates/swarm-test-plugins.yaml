@@ -1,6 +1,6 @@
 - job-template:
     name: '9.x.{test-type}.{dist}.plugins.{testgroup}'
-    id: product-ci/9.x/templates/swarm-test-plugins
+    id: patching-ci/9.x/templates/swarm-test-plugins
 
     swarm-test-plugins/email: 'ci+bvt@mirantis.com'
     swarm-test-plugins/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'

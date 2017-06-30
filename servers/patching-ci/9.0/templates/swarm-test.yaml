@@ -1,6 +1,6 @@
 - job-template:
     name: '9.x.{test-type}.{dist}.{testgroup}'
-    id: product-ci/9.x/templates/swarm-test
+    id: patching-ci/9.x/templates/swarm-test
 
     # swarm-test/node: ''
     swarm-test/email: 'ci+bvt@mirantis.com'

@@ -14,7 +14,7 @@
     swarm-test-plugins/node: 'acceptance'
 
     jobs:
-    - product-ci/9.x/templates/swarm-test:
+    - patching-ci/9.x/templates/swarm-test:
 
         testgroup:
 
@@ -428,7 +428,7 @@
               DRIVER_ENABLE_ACPI=true
               KVM_USE=true
 
-    - product-ci/9.x/templates/swarm-test-plugins:
+    - patching-ci/9.x/templates/swarm-test-plugins:
 
         testgroup:
 

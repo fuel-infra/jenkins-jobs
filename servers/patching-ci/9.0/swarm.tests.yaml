@@ -27,7 +27,7 @@
 
 
     jobs:
-    - product-ci/9.x/templates/swarm-test:
+    - patching-ci/9.x/templates/swarm-test:
 
 
         testgroup:
@@ -379,7 +379,7 @@
 
         - test_tags
 
-    - product-ci/9.x/templates/swarm-test-plugins:
+    - patching-ci/9.x/templates/swarm-test-plugins:
 
         testgroup:
 
