@@ -37,7 +37,6 @@
       - text:
           name: HOSTS
           default: |
-              rsync://eu.mirror.infra.mirantis.net
               rsync://eu.mirror.fuel-infra.org
               rsync://us.mirror.fuel-infra.org
           description: "Host list to update"
