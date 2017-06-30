@@ -7,6 +7,7 @@
    venvpath: '/home/jenkins/qa-venv-8.0'
    default_pool: '10.109.0.0/16:24'
    description: '8.0 acceptance test group'
+   swarm-test/logrotate/artifactNumToKeep: 5
    node: 'acceptance'
    timeout: '1200'
    properties: ''

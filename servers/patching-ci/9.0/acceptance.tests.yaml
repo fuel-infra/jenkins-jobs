@@ -10,7 +10,7 @@
     swarm-test/timeout: '480'
     dist: ubuntu
     swarm-test/job-weight: '7'
-
+    swarm-test/logrotate/artifactNumToKeep: 5
     swarm-test-plugins/node: 'acceptance'
 
     jobs:

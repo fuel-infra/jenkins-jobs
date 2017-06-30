@@ -20,16 +20,20 @@
         echo "-SKIP-"
     swarm-test/make-snapshot: 'false'
 
+    swarm-test/logrotate/artifactDaysToKeep: -1
+    swarm-test/logrotate/artifactNumToKeep: -1
+    swarm-test/logrotate/daysToKeep: 30
+    swarm-test/logrotate/numToKeep: 50
 
     description: '{swarm-test/description}'
     node: '{swarm-test/node}'
     concurrent: true
 
     logrotate:
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
-      daysToKeep: 30
-      numToKeep: 50
+      artifactDaysToKeep: '{swarm-test/logrotate/artifactDaysToKeep}'
+      artifactNumToKeep: '{swarm-test/logrotate/artifactNumToKeep}'
+      daysToKeep: '{swarm-test/logrotate/daysToKeep}'
+      numToKeep: '{swarm-test/logrotate/numToKeep}'
 
     parameters:
     - 9x-systest-params

@@ -8,6 +8,7 @@
    default_pool: '10.109.0.0/16:24'
    description: '8.0 test group with full list of tests'
    node: 'systest'
+   swarm-test/logrotate/artifactNumToKeep: 5
    timeout: '1200'
    properties: |
      SLAVE_NODE_CPU=2

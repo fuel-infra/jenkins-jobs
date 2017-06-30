@@ -18,6 +18,8 @@
 
     swarm-test/job-weight: '7'
 
+    swarm-test/logrotate/artifactNumToKeep: 5
+
     swarm-test-plugins/node: systest
     swarm-test-plugins/custom-overrides-plain-properties: |
       FUEL_STATS_HOST=fuel-collect-systest.infra.mirantis.net
@@ -26,6 +28,7 @@
 
     jobs:
     - product-ci/9.x/templates/swarm-test:
+
 
         testgroup:
 
