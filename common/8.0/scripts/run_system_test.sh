@@ -16,6 +16,20 @@ case "${LOCATION}" in
         MIRROR_HOST="http://eu.mirror.fuel-infra.org/"
 esac
 
+######## Install Upstream CentOS 7 repositories ########
+
+if [[ ! -z ${CENTOS_MIRROR_ID} ]]; then
+    for _repo in "os"      \
+                 "extras"  \
+                 "updates"
+    do
+       _url="http://${MIRROR_HOST}/pkgs/snapshots/${CENTOS_MIRROR_ID}/${_repo}/x86_64"
+       UPDATE_FUEL_MIRROR="${UPDATE_FUEL_MIRROR} ${_url}"
+    done
+    export UPDATE_FUEL_MIRROR
+    export UPDATE_MASTER=true
+fi
+
 ###################### Get MIRROR_UBUNTU ###############
 
 if [[ ! "${MIRROR_UBUNTU}" ]]; then
@@ -46,7 +60,7 @@ if [[ -n "${RPM_LATEST}" ]]; then
     if [[ "${ENABLE_PROPOSED}" == "true" ]]; then
         RPM_PROPOSED="mos-proposed,${RPM_MIRROR}proposed-${RPM_LATEST}/x86_64"
         EXTRA_RPM_REPOS+="${RPM_PROPOSED}"
-        UPDATE_FUEL_MIRROR="${RPM_MIRROR}proposed-${RPM_LATEST}/x86_64"
+        UPDATE_FUEL_MIRROR+="${RPM_MIRROR}proposed-${RPM_LATEST}/x86_64"
     fi
     if [[ "${ENABLE_UPDATES}" == "true" ]]; then
         RPM_UPDATES="mos-updates,${RPM_MIRROR}updates-${RPM_LATEST}/x86_64"

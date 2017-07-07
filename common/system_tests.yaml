@@ -98,6 +98,11 @@
         description: |
           'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
     - string:
+        name: CENTOS_MIRROR_ID
+        default: $CENTOS_MIRROR_ID
+        description: |
+          'Upstream CentOS mirror id: centos-timestamp'
+    - string:
         name: CUSTOM_VERSION
         default: $CUSTOM_VERSION
         description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'

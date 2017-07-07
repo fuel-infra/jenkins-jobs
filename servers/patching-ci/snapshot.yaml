@@ -60,6 +60,7 @@
       - '{version}.snapshot.params':
           version: 8.0
           magnet-link: 'magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
+          src-centos-mirror: 'pkgs/snapshots/centos-7.3.1611-latest.target.txt'
           src-mos-ubuntu-mirror: 'mos-repos/ubuntu/snapshots/8.0-latest.target.txt'
           src-mos-centos-repos-prefix: 'mos-repos/centos/mos8.0-centos7-fuel/snapshots'
           src-centos-security-proposed: 'http://pkg-updates.fuel-infra.org/centos7/'
@@ -70,4 +71,3 @@
           src-mos-ubuntu-mirror: 'mos-repos/ubuntu/snapshots/7.0-latest.target.txt'
           src-mos-centos-repos-prefix: 'mos-repos/centos/mos7.0-centos6-fuel/snapshots'
           src-centos-security-proposed: 'http://pkg-updates.fuel-infra.org/centos6/'
-
