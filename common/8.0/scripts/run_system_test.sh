@@ -23,7 +23,7 @@ if [[ ! -z ${CENTOS_MIRROR_ID} ]]; then
                  "extras"  \
                  "updates"
     do
-       _url="http://${MIRROR_HOST}/pkgs/snapshots/${CENTOS_MIRROR_ID}/${_repo}/x86_64"
+       _url="${MIRROR_HOST}/pkgs/snapshots/${CENTOS_MIRROR_ID}/${_repo}/x86_64"
        UPDATE_FUEL_MIRROR="${UPDATE_FUEL_MIRROR} ${_url}"
     done
     export UPDATE_FUEL_MIRROR
