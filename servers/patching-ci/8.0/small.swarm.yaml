@@ -29,8 +29,9 @@
             'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
       - string:
           name: CENTOS_MIRROR_ID
+          default: 'centos-7.3.1611-latest'
           description: |
-            'Upstream CentOS mirror id: centos-timestamp'
+            'Upstream CentOS mirror id: centos-timestamp or centos-7.3.1611-latest'
       - bool:
           name: ENABLE_PROPOSED
           default: false
