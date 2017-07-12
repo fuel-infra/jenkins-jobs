@@ -85,9 +85,13 @@
         default: $CUSTOM_VERSION
         description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
     - bool:
-        name: ENABLE_PROPOSED
-        default: $ENABLE_PROPOSED
-        description: 'If false only stable repositories are used'
+        name: ENABLE_UBUNTU_PROPOSED
+        default: $ENABLE_UBUNTU_PROPOSED
+        description: 'Enable for testing with Ubuntu proposed repos'
+    - bool:
+        name: ENABLE_MOS_PROPOSED
+        default: $ENABLE_MOS_PROPOSED
+        description: 'Enable for testing new MOS MU (should be true almost every run)'
     - bool:
         name: ENABLE_SECURITY
         default: $ENABLE_SECURITY

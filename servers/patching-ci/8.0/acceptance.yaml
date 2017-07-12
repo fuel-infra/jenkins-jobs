@@ -45,8 +45,13 @@
           description: |
             'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
       - bool:
-          name: ENABLE_PROPOSED
-          default: false
+          name: ENABLE_UBUNTU_PROPOSED
+          default: $ENABLE_UBUNTU_PROPOSED
+          description: 'Enable for testing with Ubuntu proposed repos'
+      - bool:
+          name: ENABLE_MOS_PROPOSED
+          default: $ENABLE_MOS_PROPOSED
+          description: 'Enable for testing new MOS MU (should be true almost every run)'
       - bool:
           name: ENABLE_SECURITY
           default: true
