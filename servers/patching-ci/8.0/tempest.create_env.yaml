@@ -54,8 +54,13 @@
           name: UBUNTU_MIRROR_ID
           default: 'latest'
       - bool:
-          name: ENABLE_PROPOSED
+          name: ENABLE_UBUNTU_PROPOSED
+          default: false
+          description: 'Enable for testing with Ubuntu proposed repos'
+      - bool:
+          name: ENABLE_MOS_PROPOSED
           default: true
+          description: 'Enable for testing new MOS MU (should be true almost every run)'
       - bool:
           name: ENABLE_SECURITY
           default: true
