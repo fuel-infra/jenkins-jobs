@@ -159,8 +159,8 @@ elif [[ "${TEMPEST_RUNNER}" == "rally" ]]; then
     # Workaround for run on master node. install dependencies for tempest commit b39bbce80c69a57c708ed1b672319f111c79bdd5
     sed -i 's|RUN git clone https://git.openstack.org/openstack/tempest |RUN git clone https://git.openstack.org/openstack/tempest; cd tempest; git checkout b39bbce80c69a57c708ed1b672319f111c79bdd5; cd - |g' rally-tempest/latest/Dockerfile
 
-    sudo docker build -t rally-tempest rally-tempest/latest
-    sudo docker save -o ./dimage rally-tempest
+    docker build -t rally-tempest rally-tempest/latest
+    docker save -o ./dimage rally-tempest
 
     scp_to_fuel_master dimage "${WORK_FLDR}/rally"
     ssh_to_fuel_master "ln -sf ${WORK_FLDR}/rally /root/rally"
