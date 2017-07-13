@@ -154,10 +154,12 @@ EOF
     mv tempest-report.xml verification.xml
     set -e
 elif [[ "${TEMPEST_RUNNER}" == "rally" ]]; then
-    sed -i 's|rally verify install --source /var/lib/tempest --no-tempest-venv|rally verify install --source /var/lib/tempest|g' rally-tempest/latest/setup_tempest.sh
-    sed -i 's|FROM rallyforge/rally:latest|FROM rallyforge/rally:0.3.1|g' rally-tempest/latest/Dockerfile
     # Workaround for run on master node. install dependencies for tempest commit b39bbce80c69a57c708ed1b672319f111c79bdd5
-    sed -i 's|RUN git clone https://git.openstack.org/openstack/tempest |RUN git clone https://git.openstack.org/openstack/tempest; cd tempest; git checkout b39bbce80c69a57c708ed1b672319f111c79bdd5; cd - |g' rally-tempest/latest/Dockerfile
+    sed -i 's|rally verify install --source /var/lib/tempest --no-tempest-venv|rally verify install --source /var/lib/tempest --system-wide --version b39bbce80c69a57c708ed1b672319f111c79bdd5|g' rally-tempest/latest/setup_tempest.sh
+
+    sed -i 's|FROM rallyforge/rally:latest|FROM rallyforge/rally:0.5.0|g' rally-tempest/latest/Dockerfile
+    sed -i 's|RUN git clone https://git.openstack.org/openstack/tempest|RUN git clone https://git.openstack.org/openstack/tempest && cd tempest && git checkout b39bbce80c69a57c708ed1b672319f111c79bdd5|g' rally-tempest/latest/Dockerfile
+    sed -i 's|pip install tempest|pip install -U -r tempest/requirements.txt|g' rally-tempest/latest/Dockerfile
 
     docker build -t rally-tempest rally-tempest/latest
     docker save -o ./dimage rally-tempest
