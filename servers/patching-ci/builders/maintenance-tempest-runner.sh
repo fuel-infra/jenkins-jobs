@@ -159,7 +159,7 @@ elif [[ "${TEMPEST_RUNNER}" == "rally" ]]; then
 
     sed -i 's|FROM rallyforge/rally:latest|FROM rallyforge/rally:0.5.0|g' rally-tempest/latest/Dockerfile
     sed -i 's|RUN git clone https://git.openstack.org/openstack/tempest|RUN git clone https://git.openstack.org/openstack/tempest; cd tempest; git checkout b39bbce80c69a57c708ed1b672319f111c79bdd5|g' rally-tempest/latest/Dockerfile
-    sed -i 's|pip install tempest/|pip install -U -r tempest/requirements.txt|g' rally-tempest/latest/Dockerfile
+    sed -i 's|pip install tempest/|pip install -U -r requirements.txt|g' rally-tempest/latest/Dockerfile
 
     docker build -t rally-tempest rally-tempest/latest
     docker save -o ./dimage rally-tempest
