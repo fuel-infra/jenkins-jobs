@@ -97,7 +97,7 @@
             REPORT_FILE=$WORKSPACE/verification.xml
             TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
             TEST_GROUP={test-group}
-            TESTRAIL_SUITE=Tempest 8.0
+            TESTRAIL_SUITE=[8.0][Maintenance] Tempest
             MILESTONE=8.0
             SPECIFICATION={group}
             ADD_TIMESTAMP=$ADD_TIMESTAMP
