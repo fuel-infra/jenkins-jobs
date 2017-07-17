@@ -90,6 +90,7 @@
             OPENSTACK_RELEASE={openstack_release}
             OS_TYPE={os}
             ENV_PREFIX={project-version}-pkg-{project-name}-fp-systest-{os}-{distro}
+            MOS_UBUNTU_MIRROR_ID={project-version}-latest
 
       - shell: |
           #!/bin/bash
@@ -109,10 +110,6 @@
       - inject-from-job(same-change):
           job-name: '{project-version}-pkg-{project-name}-fp-publish-{os}-{distro}'
           artifact-name: '{pkg_type}.publish.setenvfile'
-
-      - inject-devops-env:
-          # add FUEL_QA_COMMIT MAGNET_LINK UBUNTU_MIRROR_ID for tests
-          version: '{project-version}'
 
       - inject:
           properties-content: |
