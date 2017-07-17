@@ -166,12 +166,12 @@ elif [[ "${TEMPEST_RUNNER}" == "rally" ]]; then
 
     scp_to_fuel_master dimage "${WORK_FLDR}/rally"
     ssh_to_fuel_master "ln -sf ${WORK_FLDR}/rally /root/rally"
-    scp_to_fuel_master mos-ci-deployment-scripts/jenkins-job-builder/maintenance/helpers/rally_run.sh "${WORK_FLDR}"
-    ssh_to_fuel_master "chmod +x ${WORK_FLDR}/rally_run.sh"
+    ssh_to_fuel_master "cd ${WORK_FLDR} && wget https://raw.githubusercontent.com/fuel-infra/jenkins-jobs/master/servers/patching-ci/builders/maintenance-tempest-rally-runner.sh"
+    ssh_to_fuel_master "chmod +x ${WORK_FLDR}/maintenance-tempest-rally-runner.sh"
 
     echo "Run tempest tests"
     set +e
-    ssh_to_fuel_master "/bin/bash -xe ${WORK_FLDR}/rally_run.sh > ${WORK_FLDR}/log.log"
+    ssh_to_fuel_master "/bin/bash -xe ${WORK_FLDR}/maintenance-tempest-rally-runner.sh > ${WORK_FLDR}/log.log"
 
     scp_from_fuel_master /var/lib/rally-tempest-container-home-dir/verification.xml ./
     scp_from_fuel_master "${WORK_FLDR}/log.log" ./
@@ -216,3 +216,4 @@ SNAPSHOT_NAME="after-tempest-${BUILD_ID}-$(date +%d-%m-%Y_%Hh_%Mm)"
 dos.py snapshot "${ENV_NAME}" "${SNAPSHOT_NAME}"
 dos.py destroy "${ENV_NAME}"
 deactivate
+
