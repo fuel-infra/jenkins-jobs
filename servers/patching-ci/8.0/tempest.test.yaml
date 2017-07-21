@@ -23,32 +23,10 @@
       - string:
           name: TESTRAIL_PLAN_NAME
           default: '8.0 MU-X Tempest'
-      - bool:
-          name: ENABLE_UBUNTU_PROPOSED
-          default: false
-          description: 'Enable for testing with Ubuntu proposed repos'
-      - bool:
-          name: ENABLE_MOS_PROPOSED
-          default: true
-          description: 'Enable for testing new MOS MU (should be true almost every run)'
-      - bool:
-          name: ENABLE_SECURITY
-          default: true
-      - bool:
-          name: ENABLE_UPDATES
-          default: true
-      - bool:
-          name: ENABLE_UPDATE_CENTOS
-          default: true
+      - 80-systest-params
       - bool:
           name: DISABLE_SSL
           default: false
-      - bool:
-          name: ADD_TIMESTAMP
-          default: true
-      - string:
-          name: FUEL_QA_VER
-          default: "origin/stable-mu/8.0"
       - string:
           name: VENV_PATH
           default: "/home/jenkins/qa-venv-8.0"
@@ -57,19 +35,13 @@
         - project: '8.0.tempest.create_env'
           same-node: true
           block: true
+          current-parameters: true
           predefined-parameters: |
             NODE_LABELS=$NODE_NAME
             ENV_NAME=8.0.tempest.{specification}.$BUILD_ID
-            ENABLE_PROPOSED=$ENABLE_PROPOSED
-            ENABLE_SECURITY=$ENABLE_SECURITY
-            ENABLE_UPDATES=$ENABLE_UPDATES
-            ENABLE_UPDATE_CENTOS=$ENABLE_UPDATE_CENTOS
             ERASE_ENV_PREFIX=^8.0.tempest.{specification}
-            DISABLE_SSL=$DISABLE_SSL
-            FUEL_QA_VER=$FUEL_QA_VER
             FILE=test_tempest_8_0.py
             GROUP={group}
-            VENV_PATH=$VENV_PATH
             OPENSTACK_RELEASE=ubuntu
             SLAVE_NODE_MEMORY=16384
       - trigger-builds:
@@ -100,7 +72,7 @@
             TESTRAIL_SUITE=[8.0][Maintenance] Tempest
             MILESTONE=8.0
             SPECIFICATION={group}
-            ADD_TIMESTAMP=$ADD_TIMESTAMP
+            ADD_TIMESTAMP=false
             USE_TEMPLATE=true
 
 - project:
@@ -138,4 +110,3 @@
     description: TUN+DISABLED_CEPH UBUNTU TEMPEST tests (8.0 maintenance)
     jobs:
       - '8.0.tempest.{specification}'
-

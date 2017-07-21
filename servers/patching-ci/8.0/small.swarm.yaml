@@ -9,50 +9,7 @@
       - heavy-job:
           weight: 1
     parameters:
-      - string:
-          name: MAGNET_LINK
-          default: '{iso-magnet-link}'
-          description: 'ISO magnet link'
-      - string:
-          name: UPGRADE_TARBALL_MAGNET_LINK
-          description: 'Upgrade tarball magnet link'
-      - string:
-          name: DEB_LATEST
-          default: 'latest'
-      - string:
-          name: RPM_LATEST
-          default: 'latest'
-      - string:
-          name: UBUNTU_MIRROR_ID
-          default: 'ubuntu-latest'
-          description: |
-            'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
-      - string:
-          name: CENTOS_MIRROR_ID
-          default: 'centos-7.3.1611-latest'
-          description: |
-            'Upstream CentOS mirror id: centos-timestamp or centos-7.3.1611-latest'
-      - bool:
-          name: ENABLE_UBUNTU_PROPOSED
-          default: false
-          description: 'Enable for testing with Ubuntu proposed repos'
-      - bool:
-          name: ENABLE_MOS_PROPOSED
-          default: true
-          description: 'Enable for testing new MOS MU (should be true almost every run)'
-      - bool:
-          name: ENABLE_SECURITY
-          default: true
-      - bool:
-          name: ENABLE_UPDATES
-          default: true
-      - string:
-          name: CUSTOM_VERSION
-          default: ''
-          description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
-      - string:
-          name: FUEL_QA_COMMIT
-          default: 'origin/stable-mu/8.0'
+      - 80-systest-params
     publishers:
       - description-setter:
           regexp: "'Description string: (.*)'"
