@@ -36,6 +36,8 @@ else
   echo "EXTRA_RPM_REPOS=${EXTRA_RPM_REPOS}"
 fi
 
+# Print all configurathion
+printenv | sort -u
 #########################################
 
 echo "STEP 0. Clean before start"
