@@ -50,7 +50,7 @@
           description: Refspecs for commits in fuel-main gerrit separated with spaces.
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
       - string:
-          name: PATCHING_CI
+          name: BUILD_PACKAGES
           default: '1'
           description: Build fuel packages locally( 0 - yes; 1 - use fuel packages from upstream )
       - string:
