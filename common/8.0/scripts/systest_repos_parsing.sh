@@ -52,7 +52,7 @@ fi
 
 # Adding Ubuntu deb repos to
 # - MIRROR_UBUNTU - will be used for nodes in cluster
-UBUNTU_MIRROR_URL="${MIRROR_HOST}/pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
+UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
 for __dn in "trusty"         \
             "trusty-updates" \
             "trusty-security"; do
@@ -116,6 +116,7 @@ for _dn in  "proposed"  \
 done
 
 echo "<============> REPOS PARSING RESULTS <============>"
+echo "MAGNET_LINK: ${MAGNET_LINK}"
 echo "UPDATE_MASTER: ${UPDATE_MASTER}"
 echo "UPDATE_FUEL_MIRROR: ${UPDATE_FUEL_MIRROR}"
 echo "MIRROR_UBUNTU: ${MIRROR_UBUNTU}"
@@ -124,9 +125,10 @@ echo "EXTRA_DEB_REPOS: ${EXTRA_DEB_REPOS}"
 echo "<=================================================>"
 
 cat > systest_repos.jenkins-injectfile <<EOF
-UPDATE_MASTER="${UPDATE_MASTER}"
-UPDATE_FUEL_MIRROR="${UPDATE_FUEL_MIRROR}"
-MIRROR_UBUNTU="${MIRROR_UBUNTU}"
-EXTRA_RPM_REPOS="${EXTRA_RPM_REPOS}"
-EXTRA_DEB_REPOS="${EXTRA_DEB_REPOS}"
+MAGNET_LINK=${MAGNET_LINK}
+UPDATE_MASTER=${UPDATE_MASTER}
+UPDATE_FUEL_MIRROR=${UPDATE_FUEL_MIRROR}
+MIRROR_UBUNTU=${MIRROR_UBUNTU}
+EXTRA_RPM_REPOS=${EXTRA_RPM_REPOS}
+EXTRA_DEB_REPOS=${EXTRA_DEB_REPOS}
 EOF
