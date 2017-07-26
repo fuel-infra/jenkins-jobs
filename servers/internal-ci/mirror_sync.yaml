@@ -78,7 +78,7 @@
           mirror_path: pkgs
           mirror_name: ubuntu
           mirror_dir: '{mirror_name}'
-          src_url: 'rsync://cz.archive.ubuntu.com/{mirror_name}'
+          src_url: 'rsync://eu.archive.ubuntu.com/{mirror_name}'
           sync_locations: >
               rsync://seed01-bud.infra.mirantis.net/mirror-sync/{mirror_path}
               rsync://seed01-bud.fuel-infra.org/mirror-sync/{mirror_path}
