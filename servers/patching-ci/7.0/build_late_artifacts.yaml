@@ -51,8 +51,8 @@
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2
       - string:
           name: BUILD_PACKAGES
-          default: '1'
-          description: Build fuel packages locally( 0 - yes; 1 - use fuel packages from upstream )
+          default: '0'
+          description: Build fuel packages locally( 1 - yes; 0 - use fuel packages from upstream )
       - string:
           name: EXTRA_RPM_REPOS
           #  ">-" is used as space delimiters are required in the resulting string
