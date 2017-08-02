@@ -117,6 +117,7 @@ gzip -c "${BUILD_DIR}/docker/fuel-centos-build.log" > "${ARTS_DIR}/fuel-centos-b
 
 cp "${LOCAL_MIRROR}"/*changelog "${ARTS_DIR}/" || true
 cp "${BUILD_DIR}/iso/isoroot/version.yaml" "${ARTS_DIR}/version.yaml.txt" || true
+cp -rv "${BUILD_DIR}/mirror/centos/urls.list" "${ARTS_DIR}/rpm_pkgs.list.txt" || true
 (cd "${BUILD_DIR}/iso/isoroot" && find . | sed -s 's/\.\///') > "${ARTS_DIR}/listing.txt" || true
 
 grep MAGNET_LINK "${ARTS_DIR}"/*iso.data.txt > "${ARTS_DIR}/magnet_link.txt"
