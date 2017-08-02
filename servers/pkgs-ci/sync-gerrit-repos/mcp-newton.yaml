@@ -41,6 +41,8 @@
     - 'keystone'
     - 'keystoneauth'
     - 'keystonemiddleware'
+    - 'mistral'
+    - 'mistral-dashboard'
     - 'murano'
     - 'murano-dashboard'
     - 'networking-generic-switch'
