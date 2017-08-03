@@ -1,0 +1,44 @@
+- job:
+    name: prepare_mcp_env
+    concurrent: true
+
+    logrotate:
+      daysToKeep: 30
+
+    parameters:
+    - bool:
+        name: 'download_images'
+        default: false
+        description: 'Redownload images'
+    - bool:
+        name: 'update_mcp'
+        default: true
+        description: 'Create mcp venv with devops3'
+    - bool:
+        name: 'recreate_venv'
+        default: false
+        description: 'Force to recreating venv instead of update'
+    - node:
+        name: NODE
+        allowed-multiselect: true
+    - text:
+        name: VENV_REQUIREMENTS
+        default: ''
+        description: 'Use custom requirements for venv'
+    - string:
+        name: MCP_CLOUDINIT_IMAGE
+        default: 'https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img'
+        description:
+
+    wrappers:
+    - timeout:
+        timeout: 60
+
+    builders:
+    - shell:
+        !include-raw: 'builders/prepare_mcp_env.sh'
+
+    publishers:
+    - email:
+        notify-every-unstable-build: false
+        recipients: 'ci+alert@mirantis.com'
