@@ -50,4 +50,4 @@ BRANCH_ID="${GERRIT_BRANCH##*/}"
 
 DOCS_PATH="${DOCS_USER}@${DOCS_HOST}:${DOCS_ROOT}${BRANCH_ID}"
 
-  rsync -rv publish-docs/ "${DOCS_PATH}"
+  rsync -rv --delete publish-docs/ "${DOCS_PATH}"
