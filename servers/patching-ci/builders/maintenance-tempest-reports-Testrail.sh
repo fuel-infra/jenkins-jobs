@@ -4,6 +4,7 @@
 # REPORT_FILE=xml report file name
 # TESTRAIL_PLAN_NAME=name of testplan on testrail (Tempest MU8 05-32-2017)
 # TEST_GROUP=tempest configuration group
+# TESTRAIL_PROJECT=testrail project (Mirantis OpenStack)
 # TESTRAIL_SUITE=testrail suite (Tempest 7.0)
 # MILESTONE=7.0
 # SPECIFICATION=snapshot for describe env in testrail
@@ -21,9 +22,21 @@ if [[ "${ADD_TIMESTAMP}" == "true" ]]; then
     TESTRAIL_PLAN_NAME+="-$(date +%Y/%m/%d)"
 fi
 
-TEMPLATE=()
+ARGS=()
 if [[ "${USE_TEMPLATE}" == "true" ]]; then
-    TEMPLATE=(--testrail-name-template '{custom_test_group}.{title}' --xunit-name-template '{classname}.{methodname}')
+    ARGS+=(--testrail-name-template '{custom_test_group}.{title}' --xunit-name-template '{classname}.{methodname}')
+fi
+
+if [ -n "${TEST_GROUP}" ]; then
+    SPECIFICATION="${SPECIFICATION?}-${TEST_GROUP?}"
+fi
+
+if [ -z "${TEST_BUILD_URL}" ]; then
+    TEST_BUILD_URL="${BUILD_URL}"
+fi
+
+if [ -n "${SEND_SKIPPED}" ]; then
+    ARGS+=(--send-skipped)
 fi
 
 if [ ! -f report-venb/bin/activate ]; then
@@ -36,15 +49,16 @@ else
     source report-venv/bin/activate
 fi
 
-report -v --testrail-plan-name "${TESTRAIL_PLAN_NAME?}" \
-          --env-description "${SPECIFICATION?}-${TEST_GROUP?}" \
+report -v --testrail-run-update \
+          --testrail-plan-name "${TESTRAIL_PLAN_NAME?}" \
+          --env-description "${SPECIFICATION?}"\
           --testrail-user "${TESTRAIL_USER?}" \
           --testrail-password "${TESTRAIL_PASSWORD?}" \
-          --testrail-project "Mirantis OpenStack" \
+          --testrail-project "${TESTRAIL_PROJECT?}" \
           --testrail-milestone "${MILESTONE?}" \
           --testrail-suite "${TESTRAIL_SUITE?}" \
-          --test-results-link "${BUILD_URL}"\
-          "${TEMPLATE[@]}" \
+          --test-results-link "${TEST_BUILD_URL}"\
+          "${ARGS[@]}" \
           "${REPORT_FILE?}"
 
 deactivate

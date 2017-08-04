@@ -11,6 +11,11 @@
       - string:
           name: TEST_GROUP
       - string:
+          name: TESTRAIL_PROJECT
+          default: "Mirantis OpenStack"
+      - string:
+          name: TEST_BUILD_URL
+      - string:
           name: TESTRAIL_SUITE
       - string:
           name: MILESTONE
@@ -22,6 +27,9 @@
       - bool:
           name: USE_TEMPLATE
           default: true
+      - bool:
+          name: SEND_SKIPPED
+          default: false
     wrappers:
      - inject-passwords:
           global: true
