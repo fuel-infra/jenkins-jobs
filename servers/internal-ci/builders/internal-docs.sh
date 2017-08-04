@@ -53,5 +53,5 @@ if [ -z "${GERRIT_EVENT_TYPE}" -o "${GERRIT_EVENT_TYPE}" == "change-merged" ]; t
 
     rsync -rv --delete "${SOURCE_DIR}/" "${DOCS_PATH}"
     # Upload the landing page docs.mirantis.com
-    rsync -rv --delete "${LANDING_PAGE_DIR}/" "${LANDING_PAGE_PATH}"
+    rsync -rv "${LANDING_PAGE_DIR}/" "${LANDING_PAGE_PATH}"
 fi
