@@ -15,6 +15,11 @@ LC_ALL=en_US.UTF-8  py.test -vvv -s -k test_tcp_install_run_rally
 
 REPORT_FILE=$(find "$(pwd)" -name "report_*.xml")
 
+if [[ -n "${REPORT_PREFIX}" ]]; then
+    mkdir -p "${REPORT_PREFIX}"
+    cp -f "${REPORT_FILE?}" "${REPORT_PREFIX}"
+fi
+
 mv "${REPORT_FILE?}" "${WORKSPACE}/verification.xml"
 
 deactivate

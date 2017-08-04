@@ -1,5 +1,5 @@
-- job-template:
-    name: mcp11.virtual.tempest.{lab-config-name}
+- job:
+    name: mcp.virtual.tempest.test
     project-type: freestyle
     defaults: global
     disabled: false
@@ -12,38 +12,64 @@
       artifactNumToKeep: 9
     properties:
     - heavy-job:
-        weight: 7
+        weight: 4
     scm:
-      - main-git:
+      - mirantis:
           reponame: 'tcp-qa'
-          repobranch: 'master'
+          repobranch: 'origin/master'
           basedir: ''
     parameters:
-      - node:
-          name: NODE_LABELS
-          default-slaves:
-            - maintenance-tempest
-      - string:
-          name: TESTRAIL_PLAN_NAME
-          default: 'MCP Newtone Tempest MM/DD/YYYY'
-      - string:
-          name: ENV_NAME
-          default: $BUILD_TAG
+      - mcp.virtual.tempest-params
       - string:
           name: LAB_CONFIG_NAME
-          default: {lab-config-name}
-      - bool:
-          name: SHUTDOWN_ENV_ON_TEARDOWN
-          default: false
       - string:
-          name: REPOSITORY_SUITE
-          default: testing
+          name: ENV_NAME
       - string:
-          name: VENV_PATH
-          default: "/home/jenkins/qa-venv-mcp"
+          name: REPORT_PREFIX
     builders:
       - shell:
-          !include-raw-escape: 'builders/mcp.virtual.tempest.sh'
+          !include-raw: 'builders/mcp.virtual.tempest.sh'
+    publishers:
+      - archive:
+          artifacts: 'log.log'
+          allow-empty: 'true'
+          fingerprint: true
+      - archive:
+          artifacts: 'verification.xml'
+          allow-empty: 'true'
+          fingerprint: true
+      - junit:
+          results: verification.xml
+      - email:
+          recipients: vjigulin@mirantis.com
+
+- job-template:
+    name: mcp11.virtual.tempest.{lab-config-name}
+    project-type: freestyle
+    defaults: global
+    disabled: false
+    concurrent: false
+    retry-count: 2
+    logrotate:
+      daysToKeep: 5
+      numToKeep: 21
+      artifactDaysToKeep: 5
+      artifactNumToKeep: 21
+    properties:
+      - heavy-job:
+          weight: 4
+    parameters:
+      - mcp.virtual.tempest-params
+    builders:
+      - trigger-builds:
+        - project: 'mcp.virtual.tempest.test'
+          same-node: true
+          block: true
+          current-parameters: true
+          predefined-parameters: |
+            ENV_NAME=mcp.{lab-config-name}.$BUILD_ID
+            LAB_CONFIG_NAME={lab-config-name}
+            REPORT_PREFIX=$WORKSPACE/
       - trigger-builds:
         - project: 'maintenance-tempest-reports-Testrail'
           same-node: true
@@ -63,7 +89,7 @@
             USE_TEMPLATE=true
             SEND_SKIPPED=true
 
-- job-group:
+- project:
     name: mcp11.virtual.tempest
     jobs:
       - 'mcp11.virtual.tempest.{lab-config-name}':
