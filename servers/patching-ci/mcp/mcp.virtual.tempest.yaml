@@ -1,0 +1,74 @@
+- job-template:
+    name: mcp11.virtual.tempest.{lab-config-name}
+    project-type: freestyle
+    defaults: global
+    disabled: false
+    concurrent: false
+    retry-count: 2
+    logrotate:
+      daysToKeep: 7
+      numToKeep: 9
+      artifactDaysToKeep: 7
+      artifactNumToKeep: 9
+    properties:
+    - heavy-job:
+        weight: 7
+    scm:
+      - main-git:
+          reponame: 'tcp-qa'
+          repobranch: 'master'
+          basedir: ''
+    parameters:
+      - node:
+          name: NODE_LABELS
+          default-slaves:
+            - maintenance-tempest
+      - string:
+          name: TESTRAIL_PLAN_NAME
+          default: 'MCP Newtone Tempest MM/DD/YYYY'
+      - string:
+          name: ENV_NAME
+          default: $BUILD_TAG
+      - string:
+          name: LAB_CONFIG_NAME
+          default: {lab-config-name}
+      - bool:
+          name: SHUTDOWN_ENV_ON_TEARDOWN
+          default: false
+      - string:
+          name: REPOSITORY_SUITE
+          default: testing
+      - string:
+          name: VENV_PATH
+          default: "/home/jenkins/qa-venv-mcp"
+    builders:
+      - shell:
+          !include-raw-escape: 'builders/mcp.virtual.tempest.sh'
+      - trigger-builds:
+        - project: 'maintenance-tempest-reports-Testrail'
+          same-node: true
+          block: true
+          block-thresholds:
+            build-step-failure-threshold: 'never'
+          predefined-parameters: |
+            NODE_LABELS=$NODE_LABELS
+            REPORT_FILE=$WORKSPACE/verification.xml
+            TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
+            TEST_BUILD_URL=$BUILD_URL
+            TESTRAIL_SUITE=Tempest 15.0.0
+            MILESTONE=MCP1.1
+            SPECIFICATION={lab-config-name}
+            TESTRAIL_PROJECT=Mirantis Cloud Platform
+            ADD_TIMESTAMP=false
+            USE_TEMPLATE=true
+            SEND_SKIPPED=true
+
+- job-group:
+    name: mcp11.virtual.tempest
+    jobs:
+      - 'mcp11.virtual.tempest.{lab-config-name}':
+          lab-config-name: virtual-mcp11-ovs
+      - 'mcp11.virtual.tempest.{lab-config-name}':
+          lab-config-name: virtual-mcp11-dpdk
+      - 'mcp11.virtual.tempest.{lab-config-name}':
+          lab-config-name: virtual-mcp11-dvr
