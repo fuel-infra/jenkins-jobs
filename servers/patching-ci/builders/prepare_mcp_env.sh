@@ -61,6 +61,6 @@ if [[ ${update_mcp} == "true" ]]; then
     update_mcp
 fi
 
-if [[ ${update_images} == "true" ]]; then
+if [[ ${download_images} == "true" ]]; then
     download_images
 fi
