@@ -14,7 +14,7 @@
     lifetime_other: '16'
     lifetime_custom: '72'
     job_age: '30'
-    job_dir_skiplist: 'cloud-images,iso,tmp,systest'
+    job_dir_skiplist: 'cloud-images,fuel-main,iso,tmp,systest'
 
 - job-template:
     name: cleaner
