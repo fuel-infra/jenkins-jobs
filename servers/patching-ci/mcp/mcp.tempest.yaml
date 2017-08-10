@@ -1,0 +1,18 @@
+- job-group:
+    name: 'mcp11.tempest.tests-group'
+    timeout: 1200
+    weight: '8'
+    jobs:
+      - 'mcp.tempest.test.{name-suffix}':
+          name-suffix: ovs
+          lab-config-name: virtual-mcp11-ovs
+          test-group: test_mcp11_newton_ovs_install
+      - 'mcp.tempest.test.{name-suffix}':
+          name-suffix: dvr
+          lab-config-name: virtual-mcp11-dvr
+          test-group: test_mcp11_newton_dvr_install
+
+- project:
+    name: 'mcp11.tempest.tests-project'
+    jobs:
+      - 'mcp11.tempest.tests-group'

@@ -49,8 +49,7 @@ else
     source report-venv/bin/activate
 fi
 
-report -v --testrail-run-update \
-          --testrail-plan-name "${TESTRAIL_PLAN_NAME?}" \
+report -v --testrail-plan-name "${TESTRAIL_PLAN_NAME?}" \
           --env-description "${SPECIFICATION?}"\
           --testrail-user "${TESTRAIL_USER?}" \
           --testrail-password "${TESTRAIL_PASSWORD?}" \
