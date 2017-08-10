@@ -1,19 +1,19 @@
 - parameter:
-    name: mcp.virtual.tempest-params
+    name: mcp.tempest.test-params
     parameters:
       - node:
           name: NODE_LABELS
           default-slaves:
-            - maintenance-tempest
+            - 'mcp-tempest'
       - string:
           name: TESTRAIL_PLAN_NAME
-          default: 'MCP Newtone Tempest MM/DD/YYYY'
+          default: 'MCP11 Newtone Tempest MM/DD/YYYY'
       - bool:
           name: SHUTDOWN_ENV_ON_TEARDOWN
-          default: false
+          default: true
       - string:
           name: REPOSITORY_SUITE
-          default: testing
+          default: 'testing'
       - string:
           name: VENV_PATH
-          default: "/home/jenkins/qa-venv-mcp"
+          default: '/home/jenkins/qa-venv-mcp'

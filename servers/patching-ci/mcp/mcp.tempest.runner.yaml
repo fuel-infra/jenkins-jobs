@@ -1,0 +1,29 @@
+- job:
+    name: 'mcp11.tempest.runner'
+    project-type: multijob
+    concurrent: false
+    node: 'runner'
+    properties:
+      - heavy-job:
+          weight: 1
+    parameters:
+      - string:
+          name: TESTRAIL_PLAN_NAME
+          default: 'MCP11 Newtone Tempest MM/DD/YYYY'
+      - string:
+          name: VENV_PATH
+          default: '/home/jenkins/qa-venv-mcp'
+    publishers:
+      - email-default:
+          mail-to: 'mos-maintenance-qa@mirantis.com'
+    builders:
+      - multijob:
+          name: 'mcp11 tempest'
+          condition: COMPLETED
+          projects:
+            - name: 'mcp11.tempest.ovs'
+              current-parameters: true
+              kill-phase-on: NEVER
+            - name: 'mcp11.tempest.dvr'
+              current-parameters: true
+              kill-phase-on: NEVER

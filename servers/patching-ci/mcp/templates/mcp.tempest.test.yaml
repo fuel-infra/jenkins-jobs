@@ -1,0 +1,85 @@
+# name-suffix
+# timeout
+# weight
+# lab-config-name
+# test-group
+- job-template:
+    name: 'mcp.tempest.test.{name-suffix}'
+    project-type: freestyle
+    defaults: global
+    disabled: false
+    concurrent: true
+    retry-count: 2
+
+    logrotate:
+      daysToKeep: 7
+      numToKeep: 12
+      artifactDaysToKeep: 7
+      artifactNumToKeep: 12
+
+    scm:
+      - mirantis:
+          reponame: 'tcp-qa'
+          repobranch: 'origin/master'
+          basedir: ''
+
+    properties:
+    - heavy-job:
+        weight: '{weight}'
+
+    parameters:
+      - mcp.tempest.test-params
+      - string:
+          name: LAB_CONFIG_NAME
+          default: '{lab-config-name}'
+      - string:
+          name: TEST_GROUP
+          default: '{test-group}'
+      - string:
+          name: ENV_NAME
+          default: '$BUILD_ID'
+
+    wrappers:
+    - timeout:
+        fail: false
+        timeout: '{timeout}'
+        write-description: false
+    - ansicolor:
+        colormap: xterm
+
+    builders:
+      - shell:
+          !include-raw-escape: '../builders/mcp.virtual.tempest.sh'
+      - trigger-builds:
+        - project: 'maintenance-tempest-reports-Testrail'
+          same-node: true
+          block: true
+          block-thresholds:
+            build-step-failure-threshold: 'never'
+          predefined-parameters: |
+            NODE_LABELS=$NODE_LABELS
+            REPORT_FILE=$WORKSPACE/verification.xml
+            TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
+            TEST_BUILD_URL=$BUILD_URL
+            TESTRAIL_SUITE=Tempest 15.0.0
+            MILESTONE=MCP1.1
+            SPECIFICATION={lab-config-name}
+            TESTRAIL_PROJECT=Mirantis Cloud Platform
+            ADD_TIMESTAMP=false
+            USE_TEMPLATE=true
+            SEND_SKIPPED=true
+
+    publishers:
+      - archive:
+          artifacts: 'report_*.html'
+          allow-empty: 'true'
+      - archive:
+          artifacts: 'tests.log'
+          allow-empty: 'true'
+      - archive:
+          artifacts: 'verification'
+          allow-empty: 'true'
+      - junit:
+          results: verification.xml
+      - email:
+          recipients: vjigulin@mirantis.com
