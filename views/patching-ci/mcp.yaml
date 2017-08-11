@@ -4,10 +4,6 @@
       regex: 'mcp*'
       jobs:
         - prepare_mcp_env
-        - mcp.virtual.tempest.test
-        - mcp11.virtual.tempest.virtual-mcp11-dpdk
-        - mcp11.virtual.tempest.virtual-mcp11-dvr
-        - mcp11.virtual.tempest.virtual-mcp11-ovs
       columns:
         - status
         - weather

@@ -25,6 +25,7 @@
 
     properties:
     - heavy-job:
+        # TODO: leave place for reporter job
         weight: '{weight}'
 
     parameters:
@@ -37,7 +38,7 @@
           default: '{test-group}'
       - string:
           name: ENV_NAME
-          default: '$BUILD_ID'
+          default: '$BUILD_TAG'
 
     wrappers:
     - timeout:
@@ -51,7 +52,7 @@
       - shell:
           !include-raw-escape: '../builders/mcp.virtual.tempest.sh'
       - trigger-builds:
-        - project: 'maintenance-tempest-reports-Testrail'
+        - project: 'mcp.xunit-testrail-reporter'
           same-node: true
           block: true
           block-thresholds:
@@ -63,11 +64,7 @@
             TEST_BUILD_URL=$BUILD_URL
             TESTRAIL_SUITE=Tempest 15.0.0
             MILESTONE=MCP1.1
-            SPECIFICATION={lab-config-name}
-            TESTRAIL_PROJECT=Mirantis Cloud Platform
-            ADD_TIMESTAMP=false
-            USE_TEMPLATE=true
-            SEND_SKIPPED=true
+            ENV_DESCRIPTION={lab-config-name}
 
     publishers:
       - archive:
@@ -75,9 +72,6 @@
           allow-empty: 'true'
       - archive:
           artifacts: 'tests.log'
-          allow-empty: 'true'
-      - archive:
-          artifacts: 'verification'
           allow-empty: 'true'
       - junit:
           results: verification.xml

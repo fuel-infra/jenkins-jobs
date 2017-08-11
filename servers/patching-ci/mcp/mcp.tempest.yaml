@@ -1,7 +1,7 @@
 - job-group:
     name: 'mcp11.tempest.tests-group'
     timeout: 1200
-    weight: '8'
+    weight: '7'
     jobs:
       - 'mcp.tempest.test.{name-suffix}':
           name-suffix: ovs

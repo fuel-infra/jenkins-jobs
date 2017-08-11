@@ -21,9 +21,9 @@
           name: 'mcp11 tempest'
           condition: COMPLETED
           projects:
-            - name: 'mcp11.tempest.ovs'
+            - name: 'mcp.tempest.test.ovs'
               current-parameters: true
               kill-phase-on: NEVER
-            - name: 'mcp11.tempest.dvr'
+            - name: 'mcp.tempest.test.dvr'
               current-parameters: true
               kill-phase-on: NEVER

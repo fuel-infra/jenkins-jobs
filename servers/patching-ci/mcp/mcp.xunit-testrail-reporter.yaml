@@ -1,0 +1,63 @@
+- job:
+    name: 'mcp.xunit-testrail-reporter'
+    project-type: freestyle
+    disabled: false
+    concurrent: true
+    browser: githubweb
+
+    logrotate:
+      daysToKeep: 7
+      numToKeep: 16
+      artifactDaysToKeep: 7
+      artifactNumToKeep: 16
+
+    parameters:
+      - node:
+          name: NODE_LABELS
+      - string:
+          name: REPORT_FILE
+          default: /home/jenkins/report.xml
+      - string:
+          name: TESTRAIL_PLAN_NAME
+      - string:
+          name: TESTRAIL_PROJECT
+          default: 'Mirantis Cloud Platform'
+      - string:
+          name: TEST_BUILD_URL
+      - string:
+          name: TESTRAIL_SUITE
+      - string:
+          name: TESTRAIL_MILESTONE
+      - string:
+          name: ENV_DESCRIPTION
+      - string:
+          name: TESTRAIL_NAME_TEMPLATE
+          default: '{classname}.{methodname}'
+          description: 'omit empty if dont want use template'
+      - string:
+          name: XUNIT_NAME_TEMPLATE
+          default: '{title}'
+          description: 'omit empty if dont want use template'
+      - bool:
+          name: SEND_SKIPPED
+          default: false
+
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
+
+    builders:
+        - shell:
+            !include-raw: 'builders/mcp.xunit-testrail-reporter.sh'
+
+    publishers:
+      - email:
+          recipients: vjigulin@mirantis.com
+      - workspace-cleanup:
+          fail-build: false
+      - description-setter:
+          regexp: ^.*\[TestRun URL\]\s*(.*)
+          regexp-for-failed: ^.*\[TestRun URL\]\s*(.*)
+          description: <a href="\1">TestRail Report URL</a>
+          description-for-failed: <a href="\1">TestRail Report URL</a>
