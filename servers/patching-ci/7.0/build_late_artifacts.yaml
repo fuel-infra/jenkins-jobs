@@ -57,13 +57,16 @@
           name: EXTRA_RPM_REPOS
           #  ">-" is used as space delimiters are required in the resulting string
           default: >-
-            security,http://mirror.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel/security/x86_64/
-            updates,http://mirror.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel/updates/x86_64/
-            pkg-updates,http://pkg-updates.fuel-infra.org/centos6/
+            pkg_updates,http://pkg-updates.fuel-infra.org/centos6/,10,python-requests*,*.i?86,*.i686
+            fuel-updates,http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel/updates/x86_64/,1,wl*-firmware*,libertas-*-firmware,linux-firmware,kernel-firmware
           description: |
             Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
+            See full variable format in fuel-main/config.mk file<br>
             Repos must be separated by space, for example: <b> xxxxx1,url_for_xxxxx1  yyyyy2,url_for_yyyyy2 </b><br>
             Example: <b> foo,http://my.cool.repo/rpm   bar,ftp://repo.foo </b>
+            To build with latest centos packages, add:
+            <b>centos-os,http://mirror.fuel-infra.org/pkgs/snapshots/centos-6.9-2017-07-20-170000/os/x86_64/,10,python-requests*,*.i?86,*.i686
+            centos-updates,http://mirror.fuel-infra.org/pkgs/snapshots/centos-6.9-2017-07-20-170000/updates/x86_64/,10,python-requests*,*.i?86,*.i686 </b>
       - string:
           name: NOARTIFACT_MIRROR
           default: ''
