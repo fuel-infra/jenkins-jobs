@@ -58,7 +58,7 @@
           #  ">-" is used as space delimiters are required in the resulting string
           default: >-
             pkg_updates,http://pkg-updates.fuel-infra.org/centos6/,10,python-requests*,*.i?86,*.i686
-            fuel-updates,http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel/updates/x86_64/,1,wl*-firmware*,libertas-*-firmware,linux-firmware,kernel-firmware
+            fuel-updates,http://mirror.seed-cz1.fuel-infra.org/mos-repos/centos/mos7.0-centos6-fuel/updates/x86_64/,1,iwl*-firmware*,libertas-*-firmware,linux-firmware,kernel-firmware
           description: |
             Additional CentOS repos. Each repo must be comma separated tuple with repo-name and repo-path.<br>
             See full variable format in fuel-main/config.mk file<br>
