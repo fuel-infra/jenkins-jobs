@@ -32,11 +32,11 @@
           name: ENV_DESCRIPTION
       - string:
           name: TESTRAIL_NAME_TEMPLATE
-          default: '{classname}.{methodname}'
+          default: '{title}'
           description: 'omit empty if dont want use template'
       - string:
           name: XUNIT_NAME_TEMPLATE
-          default: '{title}'
+          default: '{classname}.{methodname}'
           description: 'omit empty if dont want use template'
       - bool:
           name: SEND_SKIPPED

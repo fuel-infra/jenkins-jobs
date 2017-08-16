@@ -58,7 +58,7 @@
           block-thresholds:
             build-step-failure-threshold: 'never'
           predefined-parameters: |
-            NODE_LABELS=$NODE_LABELS
+            NODE_LABELS=$NODE_NAME
             REPORT_FILE=$WORKSPACE/verification.xml
             TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
             TEST_BUILD_URL=$BUILD_URL
