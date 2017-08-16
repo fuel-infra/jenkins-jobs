@@ -1,7 +1,7 @@
 - view:
       type: list
       name: 'MCP'
-      regex: 'mcp*'
+      regex: 'mcp.*'
       jobs:
         - prepare_mcp_env
       columns:
