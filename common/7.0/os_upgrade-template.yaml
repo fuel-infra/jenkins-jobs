@@ -21,6 +21,7 @@
         name: ENV_PREFIX
         default: '7.0.{test-type}.{dist}.os_upgrade'
         description: 'Environment prefix'
+    - 70-systest-params
     - string:
         name: BASE_ISO_MAGNET_LINK
         default: '{base_iso_magnet_link}'
@@ -72,8 +73,7 @@
           SLAVE_NODE_MEMORY=3072
           OCTANE_PATH=fuel-octane
           NODE_VOLUME_SIZE=100
-    - shell:
-        !include-raw-escape: 'scripts/run_upgrade_system_test.sh'
+    - 70-systest-upgrade-builder
     - shell:
         !include-raw-escape: '../scripts/erase_env.sh'
 

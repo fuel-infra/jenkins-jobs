@@ -1,0 +1,88 @@
+- parameter:
+    name: 70-systest-params
+    parameters:
+      - string:
+          name: SNAPSHOT_PARAMS_ID
+          default: lastSuccessfulBuild
+          description: |
+              Take from https://patching-ci.infra.mirantis.net/job/7.0.snapshot.params/
+              for last build: lastSuccessfulBuild
+              Parameters that marked with '*snapshot.params' not been used and can be ommited if this parameter provided
+      - string:
+          name: MAGNET_LINK
+          default: '{iso-magnet-link}'
+          description: 'ISO magnet link *snapshot.params'
+      - string:
+          name: UBUNTU_MIRROR_ID
+          description: '*snapshot.params'
+      - string:
+          name: CENTOS_MIRROR_ID
+          description: '*snapshot.params'
+      - string:
+          name: MOS_UBUNTU_MIRROR_ID
+          description: '*snapshot.params'
+      - string:
+          name: MOS_CENTOS_OS_MIRROR_ID
+          description: '*snapshot.params'
+      - string:
+          name: MOS_CENTOS_PROPOSED_MIRROR_ID
+          description: '*snapshot.params'
+      - string:
+          name: MOS_CENTOS_UPDATES_MIRROR_ID
+          description: '*snapshot.params'
+      - string:
+          name: MOS_CENTOS_HOLDBACK_MIRROR_ID
+          description: '*snapshot.params'
+      - string:
+          name: MOS_CENTOS_SECURITY_MIRROR_ID
+          description: '*snapshot.params'
+      - string:
+          name: MOS_CENTOS_HOTFIX_MIRROR_ID
+          description: '*snapshot.params'
+      - bool:
+          name: ENABLE_UBUNTU_MIRROR_PROPOSED
+          default: false
+          description: 'Enable for testing with Ubuntu proposed repos'
+      - bool:
+          name: ENABLE_MOS_CENTOS_OS
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_HOLDBACK
+          default: true
+      - bool:
+          name: ENABLE_MOS_CENTOS_HOTFIX
+          default: false
+      - bool:
+          name: ENABLE_MOS_UBUNTU_PROPOSED
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_UPDATES
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_SECURITY
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_HOLDBACK
+          default: true
+      - bool:
+          name: ENABLE_MOS_UBUNTU_HOTFIX
+          default: false
+      - bool:
+          name: ENABLE_MOS_CENTOS_SECURITY_PROPOSED
+          default: true
+      - string:
+          name: CUSTOM_VERSION
+          default: ''
+          description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
+      - string:
+          name: FUEL_QA_COMMIT
+          default: 'stable-mu/7.0'

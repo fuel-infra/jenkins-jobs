@@ -1,0 +1,8 @@
+- builder:
+    name: 70-systest-repos-parsing
+
+    builders:
+      - shell:
+          !include-raw: '../scripts/systest_repos_parsing.sh'
+      - inject:
+          properties-file: systest_repos.jenkins-injectfile

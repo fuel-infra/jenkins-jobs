@@ -23,27 +23,10 @@
       - string:
           name: TESTRAIL_PLAN_NAME
           default: '7.0 MU-X Tempest'
-      - bool:
-          name: ENABLE_PROPOSED
-          default: true
-      - bool:
-          name: ENABLE_SECURITY
-          default: true
-      - bool:
-          name: ENABLE_UPDATES
-          default: true
-      - bool:
-          name: ENABLE_UPDATE_CENTOS
-          default: true
+      - 70-systest-params
       - bool:
           name: DISABLE_SSL
           default: false
-      - bool:
-          name: ADD_TIMESTAMP
-          default: true
-      - string:
-          name: FUEL_QA_VER
-          default: "origin/stable-mu/7.0"
       - string:
           name: VENV_PATH
           default: "/home/jenkins/qa-venv-7.0"
@@ -52,19 +35,13 @@
         - project: '7.0.tempest.create_env'
           same-node: true
           block: true
+          current-parameters: true
           predefined-parameters: |
             NODE_LABELS=$NODE_NAME
             ENV_NAME=7.0.tempest.{specification}.$BUILD_ID
-            ENABLE_PROPOSED=$ENABLE_PROPOSED
-            ENABLE_SECURITY=$ENABLE_SECURITY
-            ENABLE_UPDATES=$ENABLE_UPDATES
-            ENABLE_UPDATE_CENTOS=$ENABLE_UPDATE_CENTOS
             ERASE_ENV_PREFIX=^7.0.tempest.{specification}
-            DISABLE_SSL=$DISABLE_SSL
-            FUEL_QA_VER=$FUEL_QA_VER
             FILE=test_tempest_7_0.py
             GROUP={group}
-            VENV_PATH=$VENV_PATH
             OPENSTACK_RELEASE=ubuntu
             SLAVE_NODE_MEMORY=16384
       - trigger-builds:
@@ -95,7 +72,7 @@
             TESTRAIL_SUITE=Tempest 7.0
             MILESTONE=7.0
             SPECIFICATION={group}
-            ADD_TIMESTAMP=$ADD_TIMESTAMP
+            ADD_TIMESTAMP=false
             USE_TEMPLATE=true
 
 - project:

@@ -12,29 +12,12 @@
           name: TESTRAIL_PLAN_NAME
           default: '7.0 MU-X Tempest'
       - bool:
-          name: ENABLE_PROPOSED
-          default: true
-      - bool:
-          name: ENABLE_SECURITY
-          default: true
-      - bool:
-          name: ENABLE_UPDATES
-          default: true
-      - bool:
-          name: ENABLE_UPDATE_CENTOS
-          default: true
-      - bool:
           name: DISABLE_SSL
           default: true
-      - bool:
-          name: ADD_TIMESTAMP
-          default: true
-      - string:
-          name: FUEL_QA_VER
-          default: 'origin/stable-mu/7.0'
       - string:
           name: VENV_PATH
           default: "/home/jenkins/qa-venv-7.0"
+      - 70-systest-params
     builders:
       - multijob:
           name: 'Run 7.0 tempest'
