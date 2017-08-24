@@ -63,7 +63,7 @@
             TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
             TEST_BUILD_URL=$BUILD_URL
             TESTRAIL_SUITE=Tempest 15.0.0
-            MILESTONE=MCP1.1
+            TESTRAIL_MILESTONE=MCP1.1
             ENV_DESCRIPTION={lab-config-name}
 
     publishers:
