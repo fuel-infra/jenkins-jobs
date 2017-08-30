@@ -60,44 +60,10 @@
 
     parameters:
     - string:
-        name: MAGNET_LINK
-        description: "iso magnet link"
-    - string:
         name: ENV_PREFIX
         default: '7.0.{test-type}.{dist}.{testgroup}'
         description: 'Environment prefix'
-    - string:
-        name: UPGRADE_TARBALL_MAGNET_LINK
-        default: $UPGRADE_TARBALL_MAGNET_LINK
-        description: 'Upgrade tarball magnet link'
-    - string:
-        name: UBUNTU_MIRROR_ID
-        default: $UBUNTU_MIRROR_ID
-        description: |
-          'Upstream Ubuntu mirror id: ubuntu-timestamp or ubuntu-latest'
-    - string:
-        name: CUSTOM_VERSION
-        default: $CUSTOM_VERSION
-        description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'
-    - bool:
-        name: ENABLE_PROPOSED
-        default: $ENABLE_PROPOSED
-        description: 'If false only stable repositories are used'
-    - bool:
-        name: ENABLE_SECURITY
-        default: $ENABLE_SECURITY
-    - bool:
-        name: ENABLE_UPDATES
-        default: $ENABLE_UPDATES
-    - bool:
-        name: ENABLE_UPDATE_CENTOS
-        default: $ENABLE_UPDATE_CENTOS
-    - string:
-        name: DEB_LATEST
-        default: $DEB_LATEST
-    - string:
-        name: RPM_LATEST
-        default: $RPM_LATEST
+    - 70-systest-params
 
     scm:
     - main-git:
@@ -127,6 +93,7 @@
         properties-content: '{job-group-properties}'
     - inject: # overrides to job properties
         properties-content: '{properties}'
+    - 70-systest-repos-parsing
     - shell:
         !include-raw-escape: 'scripts/run_system_test.sh'
     - shell:

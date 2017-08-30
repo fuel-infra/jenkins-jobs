@@ -8,33 +8,7 @@
       - heavy-job:
           weight: 1
     parameters:
-      - string:
-          name: MAGNET_LINK
-          default: 'magnet:?xt=urn:btih:21b4d46c9f1cec02e336b1f9771d4f7c27ec724b&dn=MirantisOpenStack-7.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0.iso'
-          description: 'ISO magnet link'
-      - string:
-          name: UPGRADE_TARBALL_MAGNET_LINK
-          default: 'magnet:?xt=urn:btih:e4521941a159cbbf345884c7c7ec6a484a139d3b&dn=MirantisOpenStack-7.0-upgrade.tar.lrz&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-7.0-upgrade.tar.lrz'
-          description: 'Upgrade tarball magnet link'
-      - string:
-          name: DEB_LATEST
-          default: 'latest'
-          description: "Snapshot timestamp without version id. E.g.: '2015-09-27-173001' or 'latest'"
-      - string:
-          name: RPM_LATEST
-          default: 'latest'
-      - string:
-          name: UBUNTU_MIRROR_ID
-          default: 'latest-stable'
-      - bool:
-          name: ENABLE_PROPOSED
-          default: false
-      - bool:
-          name: ENABLE_SECURITY
-          default: true
-      - bool:
-          name: ENABLE_UPDATES
-          default: true
+      - 70-systest-params
     publishers:
       - description-setter:
           regexp: "'Description string: (.*)'"

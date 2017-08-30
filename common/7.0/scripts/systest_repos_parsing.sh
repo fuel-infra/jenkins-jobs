@@ -4,13 +4,13 @@ set -ex
 
 # Fetch params from snapshot job
 if [[ -n "${SNAPSHOT_PARAMS_ID}" ]]; then
-    source <(curl -s "https://patching-ci.infra.mirantis.net/job/8.0.snapshot.params/${SNAPSHOT_PARAMS_ID}/artifact/snapshots.sh")
+    source <(curl -s "https://patching-ci.infra.mirantis.net/job/7.0.snapshot.params/${SNAPSHOT_PARAMS_ID}/artifact/snapshots.sh")
 fi
 
 ###################### Get MIRROR HOST ###############
 LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
 LOCATION=${LOCATION_FACT:-bud}
-CENTOS_SECURITY_PROPOSED=${CENTOS_SECURITY_PROPOSED:-"http://pkg-updates.fuel-infra.org/centos7/"}
+CENTOS_SECURITY_PROPOSED=${CENTOS_SECURITY_PROPOSED:-"http://pkg-updates.fuel-infra.org/centos6/"}
 
 case "${LOCATION}" in
     mnv|scc)
@@ -78,7 +78,7 @@ for _dn in  "os"        \
     if [[ "${!__enable_ptr}" = true ]] ; then
         # a pointer to variable name which holds repo id
         __repo_id_ptr="MOS_CENTOS_$(to_uppercase "${_dn}")_MIRROR_ID"
-        __repo_url="${MIRROR_HOST}mos-repos/centos/mos8.0-centos7-fuel/snapshots/${!__repo_id_ptr}/x86_64"
+        __repo_url="${MIRROR_HOST}mos-repos/centos/mos7.0-centos6-fuel/snapshots/${!__repo_id_ptr}/x86_64"
         __repo_name="mos-${_dn},${__repo_url}"
         UPDATE_FUEL_MIRROR="$(join "${__space}" "${UPDATE_FUEL_MIRROR}" "${__repo_url}" )"
         EXTRA_RPM_REPOS="$(join "${__pipe}" "${EXTRA_RPM_REPOS}" "${__repo_name}" )"
@@ -110,7 +110,7 @@ for _dn in  "proposed"  \
     __repo_id_ptr="MOS_UBUNTU_MIRROR_ID"
     __repo_url="${MIRROR_HOST}mos-repos/ubuntu/snapshots/${!__repo_id_ptr}"
     if [[ "${!__enable_ptr}" = true ]] ; then
-        __repo_name="mos-${_dn},deb ${__repo_url} mos8.0-${_dn} main restricted"
+        __repo_name="mos-${_dn},deb ${__repo_url} mos7.0-${_dn} main restricted"
         EXTRA_DEB_REPOS="$(join "${__pipe}" "${EXTRA_DEB_REPOS}" "${__repo_name}")"
     fi
 done
