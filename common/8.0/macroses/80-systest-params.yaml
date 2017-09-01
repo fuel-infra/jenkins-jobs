@@ -10,8 +10,8 @@
               Parameters that marked with '*snapshot.params' not been used and can be ommited if this parameter provided
       - string:
           name: MAGNET_LINK
-          default: '{iso-magnet-link}'
-          description: 'ISO magnet link *snapshot.params'
+          default: 'magnet:?xt=urn:btih:4709616bca3e570a951c30b7cf9ffeb2c0359f5c&dn=MirantisOpenStack-8.0.iso&tr=http%3A%2F%2Ftracker01-bud.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-scc.infra.mirantis.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker01-msk.infra.mirantis.net%3A8080%2Fannounce&ws=http%3A%2F%2Fvault.infra.mirantis.net%2FMirantisOpenStack-8.0.iso'
+          description: 'ISO magnet link'
       - string:
           name: UBUNTU_MIRROR_ID
           description: '*snapshot.params'
