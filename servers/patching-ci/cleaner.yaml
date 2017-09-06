@@ -12,3 +12,10 @@
     jobs:
       - cleaner
       - cleaner-on-labels
+
+- project:
+    name: new-patching-ci-cleaner
+    env_lifetime: '72h'
+    jobs:
+      - new-cleaner-patching-ci
+      - new-cleaner-on-labels-patching-ci

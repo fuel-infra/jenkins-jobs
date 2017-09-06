@@ -1,0 +1,83 @@
+- defaults:
+    name: 'new-cleaner-defaults'
+    env_lifetime: '72h'
+    job_age: '30'
+    job_dir_skiplist: 'cloud-images,fuel-main,iso,tmp,systest'
+    venv_list: |
+       /home/jenkins/qa-venv-6.0
+       /home/jenkins/qa-venv-6.1
+       /home/jenkins/qa-venv-7.0
+       /home/jenkins/qa-venv-8.0
+       /home/jenkins/venv-nailgun-tests-2.9
+       /home/jenkins/qa-venv-mcp
+
+- job-template:
+    name: new-cleaner-patching-ci
+    description: |
+        This job will trigger deletion of devops enviromvents using fuel-devops itsels.
+
+    concurrent: true
+    defaults: 'new-cleaner-defaults'
+
+    parameters:
+      - node:
+          name: NODE
+          allowed-multiselect: true
+      - text:
+          name: VENV_LIST
+          description: |
+             List of python virtual enviromnents which contains
+             installed fuel-devops
+          default: 'venv_list'
+      - string:
+          name: ENV_LIFETIME
+          description: 'Lifetime for devops enviroments; format is XXh, where
+          "XX" is time, "h" is time multiplier:
+          "m" - minutes
+          "h" - hours
+          "d" - days.
+          All environments older than passed lifetime will be erased'
+          default: '{env_lifetime}'
+
+    wrappers:
+      - timeout:
+          fail: true
+          timeout: 5
+
+    builders:
+      - shell:
+          !include-raw-escape: './scripts/run-devops-erase-old.sh'
+      - shell:
+          !include-raw-escape: './scripts/rm-old-workspaces.sh'
+
+
+- job-template:
+    name: 'new-cleaner-on-labels-patching-ci'
+    description: 'Triggers cleaner job on slaves with given LABEL'
+
+    node: 'runner'
+
+    parameters:
+      - string:
+          name: 'LABEL'
+          default: 'cleanable'
+
+    triggers:
+      - timed: '' # '0 */5 * * *' will be enabled after testing
+
+    builders:
+
+      - trigger-builds:
+        - project: 'cleaner'
+          parameter-factories:
+            - factory: allnodesforlabel
+              node-label: $LABEL
+              name: 'NODE'
+
+    publishers:
+      - archive:
+          artifacts: '*.txt'
+          allow-empty: 'true'
+          fingerprint: true
+      - email:
+          recipients: ci+alert@mirantis.com
