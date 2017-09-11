@@ -1,11 +1,10 @@
----
 - job-template:
     name: '{version-id}.build-fuel-plugins'
     description: |
         Build {version-id}.plugins for Fuel plugins project: <a href=https://github.com/openstack/fuel-plugins>github.com/openstack/fuel-plugins</a>
     builders:
       - shell:
-          !include-raw-escape: builders/build-fuel-plugins.sh
+          !include-raw-escape: scripts/build-fuel-plugins.sh
     logrotate:
       artifactDaysToKeep: 30
       daysToKeep: 30
