@@ -31,7 +31,7 @@ esac
 ###################### Get MIRROR_CENTOS ###############
 
 CENTOS_MIRROR_ID=${CENTOS_MIRROR_ID:-latest}
-CENTOS_VERSION=${CENTOS_VERSION:-7.2.1511}
+CENTOS_VERSION=${CENTOS_VERSION:-7.4.1708}
 
 if [ -z "${MIRROR_CENTOS}" ]; then
     if [ "${CENTOS_MIRROR_ID}" == 'latest' ]; then
