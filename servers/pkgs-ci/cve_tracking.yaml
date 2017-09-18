@@ -12,11 +12,11 @@
         </ul>
       </p>
 
-#    parameters:
-#      - string:
-#          name: PACKAGE_NAME
-#          default: ''
-#          description: "Name of ported package"
+    parameters:
+      - string:
+          name: BRANCH
+          default: 'master'
+          description: "Branch for CVE tracking code"
 #      - string:
 #          name: RELEASE_NAME
 #          default: ''
@@ -51,9 +51,8 @@
           basedir: 'trsync'
 
     builders:
-      - shell: |
-           #!/bin/bash -ex
-           cve_tracking.sh
+      - shell:
+          !include-raw: builders/cve_tracking.sh
 
     publishers:
       - email:
