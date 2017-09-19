@@ -6,10 +6,14 @@
 
     description: |
       <h3> Tracking of CVE in Mirants forked packages <h3>
+      <p>
         <ul>
-          <li> <b> Owner: </b> Linux team </li>
-          <li> <b> Contacts: </b> #infra </li>
+          <li><b>Owner:</b>Linux team</li>
+          <li><b>Contacts:</b>#infra</li>
         </ul>
+      </p>
+      <p>
+        <a href="http://cve-slave01-bud.infra.mirantis.net/html">Generated HTML pages</a>
       </p>
 
     parameters:
@@ -17,10 +21,10 @@
           name: BRANCH
           default: 'master'
           description: "Branch for CVE tracking code"
-#      - string:
-#          name: RELEASE_NAME
-#          default: ''
-#          description: "Name of release"
+      - bool:
+          name: CLEAN
+          default: false
+          description: "Clean internal data structures, including database!"
 #      - string:
 #          name: CVE_NAME
 #          default: ''
@@ -28,12 +32,14 @@
 #      - file:
 #          name: packages_list
 #          description: "File with list of packages to check"
+
     wrappers:
       - build-timeout:
           timeout: 50
       - ssh-agent-credentials:
           users:
             - '{ssh-creds-openstack-ci-jenkins}'
+
     properties:
       - authorization:
            mos-security-eng:
@@ -43,12 +49,9 @@
              - job-discover
              - job-extended-read
              - job-read
-    scm:
-      - git:
-          url: 'https://review.fuel-infra.org/infra/trsync'
-          branches:
-             - 'v0.9'
-          basedir: 'trsync'
+
+    triggers:
+      - timed: "H */6 * * *"
 
     builders:
       - shell:
