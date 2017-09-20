@@ -22,8 +22,8 @@ on_exit() {
   exit
 }
 
-WORKDIR=/workspace
 BRANCH=${BRANCH:-master}
+WORKDIR=/workspace/${BRANCH}
 
 LOCKFILE=/var/run/cve-tracker.lock
 DROPLOCK=false
@@ -45,7 +45,7 @@ sudo apt install -y \
 sudo mkdir -p "${WORKDIR}"
 
 sudo chown "${USER}" "${WORKDIR}"
-sudo chown -R "${USER}" /var/www/html
+sudo chown "${USER}" /var/www
 
 mkdir -p "${WORKDIR}/html"
 mkdir -p "${WORKDIR}/persistent"
@@ -55,5 +55,7 @@ if [[ ! -f "${START_SH}" ]]; then
 fi
 
 cd "${WORKDIR}"
+export BRANCH
+export WORKDIR
 bash -o xtrace -o errexit "${START_SH}" once
 
