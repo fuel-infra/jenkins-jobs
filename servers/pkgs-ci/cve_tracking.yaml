@@ -6,15 +6,23 @@
 
     description: |
       <h3> Tracking of CVE in Mirants forked packages <h3>
+      <table border=1 cellpadding=5>
+        <tr>
+          <th bgcolor="grey">Owner</th>
+          <td>Linux Team</td>
+        </tr>
+        <tr>
+          <th bgcolor="grey">Contacts</th>
+          <td>#infra</td>
+        </tr>
+      </table>
       <p>
-        <ul>
-          <li><b>Owner:</b>Linux team</li>
-          <li><b>Contacts:</b>#infra</li>
-        </ul>
+      Generated HTML pages:
       </p>
-      <p>
-        <a href="http://cve-slave01-bud.infra.mirantis.net/html">Generated HTML pages</a>
-      </p>
+      <ul>
+        <li><a href="http://cve-slave01-bud.infra.mirantis.net/cve-tracker/stable">stable</a></li>
+        <li><a href="http://cve-slave01-bud.infra.mirantis.net/cve-tracker/master">master</a></li>
+      </ul>
 
     parameters:
       - string:
