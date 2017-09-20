@@ -80,6 +80,10 @@
           name: ENABLE_MOS_CENTOS_SECURITY_PROPOSED
           default: true
       - string:
+          name: ADDITIONAL_EXTRA_DEB_REPOS
+          default: ''
+          description: 'Add repos to EXTRA_DEB_REPOS variable. Use EXTRA_DEB_REPOS syntax.'
+      - string:
           name: CUSTOM_VERSION
           default: ''
           description: 'Label for TestPlan name (any string). It is used by TestRail reporter. Example: "MU-1".'

@@ -115,6 +115,11 @@ for _dn in  "proposed"  \
     fi
 done
 
+# Allow to pass additional repos via jenkins vars
+if [[ -n "${ADDITIONAL_EXTRA_DEB_REPOS}" ]] ; then
+    EXTRA_DEB_REPOS="$(join "${__pipe}" "${EXTRA_DEB_REPOS}" "${ADDITIONAL_EXTRA_DEB_REPOS}")"
+fi
+
 echo "<============> REPOS PARSING RESULTS <============>"
 echo "MAGNET_LINK: ${MAGNET_LINK}"
 echo "UPDATE_MASTER: ${UPDATE_MASTER}"
