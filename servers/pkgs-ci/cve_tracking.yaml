@@ -27,7 +27,7 @@
     parameters:
       - string:
           name: BRANCH
-          default: 'master'
+          default: 'stable'
           description: "Branch for CVE tracking code"
       - bool:
           name: CLEAN
