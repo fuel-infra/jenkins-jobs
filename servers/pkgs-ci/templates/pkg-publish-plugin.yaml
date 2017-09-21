@@ -21,6 +21,7 @@
     scm:
       - perestroika:
           branch: '{perestroika-branch}'
+          credentials-id: '{ssh-creds-pkgs-ci}'
 
     builders:
 
