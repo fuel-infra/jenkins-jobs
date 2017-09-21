@@ -58,7 +58,7 @@
     name: perestroika
     scm:
       - git:
-          url: 'https://git.openstack.org/openstack/fuel-mirror.git'
+          url: 'ssh://review.fuel-infra.org:29418/openstack/fuel-mirror'
           branches:
             - '{branch}'
           basedir: 'fuel-mirror'
