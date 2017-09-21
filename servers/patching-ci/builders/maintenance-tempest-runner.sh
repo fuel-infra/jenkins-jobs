@@ -102,7 +102,7 @@ wait_up_env() {
     env_id=$(ssh_to_fuel_master "fuel env" | tail -1 | awk '{print $1}')
     for testtype in ha sanity smoke; do
         for iteration in {1..60}; do
-            failure=$(ssh_to_fuel_master "fuel health --env ${env_id} --check ha" | grep failure)
+            failure=$(ssh_to_fuel_master "fuel health --env ${env_id} --check ${testtype}" | grep failure)
             if [[ -z "${failure}" ]]; then
                 echo "${testtype} tests are passed"
                 break
