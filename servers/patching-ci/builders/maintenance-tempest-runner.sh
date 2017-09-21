@@ -125,6 +125,8 @@ wait_up_env
 echo "Used ${TEMPEST_RUNNER?} tempest runner"
 
 if [[ "${TEMPEST_RUNNER}" == "mos-tempest-runner" ]]; then
+    # for some reasons there is no "virtualenv" package in some deployment configuration
+    ssh_to_fuel_master "pip install virtualenv"
     env_id=$(ssh_to_fuel_master "fuel env" | tail -1 | awk '{print $1}')
     ssh_to_fuel_master "fuel --env ${env_id} settings --download"
     objects_ceph=$(ssh_to_fuel_master "cat settings_${env_id}.yaml" | grep -A 7 "ceilometer:" | awk '/value:/{print $2}')
