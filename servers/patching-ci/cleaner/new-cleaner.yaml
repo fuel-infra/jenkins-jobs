@@ -72,7 +72,7 @@
           default: 'cleanable'
 
     triggers:
-      - timed: '' # '0 */5 * * *' will be enabled after testing
+      - timed: '30 */5 * * *'
 
     builders:
 
