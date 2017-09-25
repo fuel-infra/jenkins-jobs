@@ -12,6 +12,7 @@
     scm:
       - perestroika:
           branch: '{perestroika-branch}'
+          username: 'pkgs-ci'
           credentials-id: '{ssh-creds-pkgs-ci}'
 
     parameters:

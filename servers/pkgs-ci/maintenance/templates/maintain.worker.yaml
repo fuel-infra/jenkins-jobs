@@ -19,6 +19,7 @@
     scm:
       - perestroika:
           branch: 'master'
+          username: 'pkgs-ci'
           credentials-id: '{ssh-creds-pkgs-ci}'
     builders:
       - guess-mirror
