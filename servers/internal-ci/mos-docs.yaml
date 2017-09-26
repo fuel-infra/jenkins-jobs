@@ -98,7 +98,7 @@
       - '{version-id}.build-{project}':
           project: mcp-docs
           version-id: q3-17
-          branch: latest
+          branch: q3-17
           docs-root: '/var/www/mcp/'
           results-dir: 'publish-docs'
           shell: !include-raw-escape: builders/build-docs.sh
