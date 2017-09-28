@@ -2,10 +2,10 @@
     name: '9.0 custom iso'
     version: '9.0'
     mod: '-custom'
-    branch: 'origin/stable/mitaka'
-    default_commit: 'stable/mitaka'
+    branch: 'origin/mos/mitaka'
+    default_commit: 'mos/mitaka'
     defaults: '{version}.custom.iso'
     description:
-      !include-raw: descriptions/custom.iso
+      !include-raw-escape: descriptions/custom.iso
     jobs:
       - '{version}.custom.iso'

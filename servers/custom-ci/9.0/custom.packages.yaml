@@ -42,46 +42,46 @@
 
       - string:
           name: ASTUTE_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: FUEL_AGENT_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: FUEL_MAIN_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: FUEL_MIRROR_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: FUEL_NAILGUN_AGENT_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: FUELLIB_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: FUELMENU_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: FUELUPGRADE_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: NAILGUN_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: NETWORKCHECKER_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: OSTF_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: PYTHON_FUELCLIENT_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: SHOTGUN_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
       - string:
           name: FUEL_UI_COMMIT
-          default: 'stable/mitaka'
+          default: 'mos/mitaka'
 
       - string:
           name: GIT_BASE
@@ -221,7 +221,7 @@
           url: '{git_base}/openstack/fuel-mirror'
           credentials-id: '{git_creds}'
           branches:
-            - 'origin/stable/mitaka'
+            - 'origin/mos/mitaka'
 
     wrappers:
       - ssh-agent-credentials:

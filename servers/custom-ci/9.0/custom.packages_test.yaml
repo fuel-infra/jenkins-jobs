@@ -2,7 +2,7 @@
     name: 'custom 9.0 pkgs tests'
     version-id: 9.0
     latest_magnet_link: 'https://product-ci.infra.mirantis.net/job/{mos}.all/lastSuccessfulBuild/artifact/artifacts/magnet_link.txt'
-    projectbranch: stable/mitaka
+    projectbranch: mos/mitaka
     mos: '9.0'
     deb-mirror-base-name: '{version-id} mos{version-id}'
     rpm-mirror-base-name: 'mos{version-id}-centos7'
