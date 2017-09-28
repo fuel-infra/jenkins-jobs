@@ -120,7 +120,7 @@
 
     scm:
       - git:
-          url: 'https://git.openstack.org/openstack/fuel-qa.git'
+          url: 'https://review.fuel-infra.org/openstack/fuel-qa.git'
           branches:
             - $FUEL_QA_COMMIT
           basedir: fuel-qa

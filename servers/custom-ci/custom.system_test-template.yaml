@@ -123,7 +123,7 @@
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
       - string: # added for ability switch test framework
           name: TEST_FRAMEWORK_URL
-          default: https://github.com/openstack/fuel-qa.git
+          default: https://review.fuel-infra.org/openstack/fuel-qa.git
           description: |
                Test framework url. As alternative can use the following urls:
                https://github.com/openstack/stacklight-integration-tests.git

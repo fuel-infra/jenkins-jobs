@@ -46,7 +46,7 @@ if [ -z "${MIRROR_UBUNTU}" ]; then
 
 fi
 
-if [ "$TEST_FRAMEWORK_URL" != "https://github.com/openstack/fuel-qa.git" ] ; then
+if [ "$TEST_FRAMEWORK_URL" != "https://review.fuel-infra.org/openstack/fuel-qa.git" ] ; then
   # Redefine path to venv if use non standart test framework
   VENV_PATH="${WORKSPACE}/venv_test"
   export VENV_PATH="${VENV_PATH}"
@@ -70,7 +70,7 @@ fi
 # Checking gerrit commits for fuel-qa
 if [[ "${fuel_qa_gerrit_commit}" != "none" ]] ; then
   for commit in ${fuel_qa_gerrit_commit} ; do
-    git fetch https://review.openstack.org/openstack/fuel-qa "${commit}" && git cherry-pick FETCH_HEAD
+    git fetch https://review.fuel-infra.org/openstack/fuel-qa "${commit}" && git cherry-pick FETCH_HEAD
   done
 fi
 

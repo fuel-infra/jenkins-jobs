@@ -179,7 +179,7 @@
       - git:
           branches:
             - '$FUEL_QA_COMMIT'
-          url: 'https://github.com/openstack/fuel-qa.git'
+          url: 'https://review.fuel-infra.org/openstack/fuel-qa.git'
     wrappers:
       - ansicolor:
           colormap: xterm

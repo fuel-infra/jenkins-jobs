@@ -55,7 +55,7 @@
           description: Define env prefix name. This parameter should not be changed
     scm:
       - git:
-          url: 'https://git.openstack.org/openstack/fuel-qa.git'
+          url: 'https://review.fuel-infra.org/openstack/fuel-qa.git'
           branches:
             - '{projectbranch}'
     wrappers:

@@ -3,7 +3,7 @@
 set -ex
 
 # Run prepare environment script from test framework repository
-if [ "$TEST_FRAMEWORK_URL" != "https://github.com/openstack/fuel-qa.git" ] ; then
+if [ "$TEST_FRAMEWORK_URL" != "https://review.fuel-infra.org/openstack/fuel-qa.git" ] ; then
     # Redefine path to venv if use non standart test framework
     VENV_PATH="${WORKSPACE}/venv_test"
     export VENV_PATH="${VENV_PATH}"
