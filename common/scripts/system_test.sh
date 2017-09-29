@@ -304,7 +304,7 @@ env | sort
 
 ###################### Run test ###############
 
-# see defaults here: https://github.com/openstack/fuel-qa/blob/master/fuelweb_test/settings.py
+# see defaults here: fuel-qa/fuelweb_test/settings.py in following branch
 pushd fuel-qa
     sh  -x "utils/jenkins/system_tests.sh"  \
            -t test                          \

@@ -17,7 +17,7 @@ UPSTREAM_BUILD_URL="${UPSTREAM_JOB_URL}${REAL_UPSTREAM_BUILD_NUMBER}/"
 
 # Get last git commit in $FUEL_QA_BRANCH for bvt and smoke tests
 # $FUEL_QA_BRANCH - git branch in bvt and smoke jobs
-FUEL_QA_COMMIT=$(git ls-remote https://git.openstack.org/openstack/fuel-qa.git "refs/heads/${FUEL_QA_BRANCH}" | cut -f 1)
+FUEL_QA_COMMIT=$(git ls-remote https://review.fuel-infra.org/openstack/fuel-qa.git "refs/heads/${FUEL_QA_BRANCH}" | cut -f 1)
 
 # Create pretty description from UPSTREAM_JOB_URL and UPSTREAM_BUILD_NUMBER variables
 
