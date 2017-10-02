@@ -47,8 +47,7 @@
         weight: '{swarm-test-plugins/job-weight}'
 
     scm:
-    - main-git:
-        reponame: 'fuel-qa'
+    - fuel-qa-downstream:
         repobranch: '$FUEL_QA_COMMIT'
         basedir: ''
 
