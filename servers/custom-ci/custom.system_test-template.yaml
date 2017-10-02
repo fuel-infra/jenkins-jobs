@@ -112,6 +112,9 @@
             <p>
             deb http://../ubuntu trusty main universe multiverse|deb http://../ubuntu trusty-updates main universe multiverse|deb http://../ubuntu trusty-security main universe multiverse|deb http://../ubuntu trusty-proposed main universe multiverse
       - string:
+          name: GIT_BASE
+          default: '{git_base}'
+      - string:
           name: FUEL_QA_COMMIT
           default: 'origin/{projectbranch}'
           description: |
@@ -123,7 +126,7 @@
             For example, refs/changes/10/55310/1 refs/changes/10/55310/2'
       - string: # added for ability switch test framework
           name: TEST_FRAMEWORK_URL
-          default: https://review.fuel-infra.org/openstack/fuel-qa.git
+          default: '{git_base}/openstack/fuel-qa'
           description: |
                Test framework url. As alternative can use the following urls:
                https://github.com/openstack/stacklight-integration-tests.git
@@ -161,6 +164,7 @@
           branches:
             - '$TEST_FRAMEWORK_BRANCH'
           url: '$TEST_FRAMEWORK_URL'
+          credentials-id: '{git_creds}'
 
     builders:
       - inject-fuel-qa-global-defaults:
@@ -204,5 +208,8 @@
             - requester
 
     wrappers:
+      - ssh-agent-credentials:
+          users:
+          - '{git_creds}'
       - ansicolor:
           colormap: xterm

@@ -10,7 +10,7 @@ export MIRROR_UBUNTU=$(curl -sSf "${MIRROR_ARTIFACT}")
 if [[ "${FUEL_QA_GERRIT_COMMIT}" != "none" ]] ; then
   cd "${SYSTEST_ROOT}"
   for commit in ${FUEL_QA_GERRIT_COMMIT} ; do
-    git fetch https://review.fuel-infra.org/openstack/fuel-qa "${commit}" && git cherry-pick FETCH_HEAD
+    git fetch origin "${commit}" && git cherry-pick FETCH_HEAD
   done
 fi
 

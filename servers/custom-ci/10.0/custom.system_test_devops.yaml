@@ -1,4 +1,10 @@
-- job:
+- project:
+    name: 10.0.custom.system_test_devops
+    git_refspec: '{git_refspec}'
+    jobs:
+    - 10.0.custom.system_test_devops
+
+- job-template:
     name: 10.0.custom.system_test_devops
     concurrent: true
     description:
@@ -20,11 +26,11 @@
           set -ex
 
           PLUGINS_URLS_FILE='plugins_urls'
-          echo "${PLUGINS}" > "${WORKSPACE}/${PLUGINS_URLS_FILE}"
-          wget --no-verbose --input-file="${WORKSPACE}/${PLUGINS_URLS_FILE}" --directory-prefix="${PLUGINS_DIR}"
+          echo "$PLUGINS" > "$WORKSPACE/$PLUGINS_URLS_FILE"
+          wget --no-verbose --input-file="$WORKSPACE/$PLUGINS_URLS_FILE" --directory-prefix="$PLUGINS_DIR"
 
       - shell:
-          !include-raw: './builders/custom_system_test_devops.sh'
+          !include-raw-escape: './builders/custom_system_test_devops.sh'
     parameters:
       - string:
           name: MAGNET_LINK
@@ -102,7 +108,17 @@
       - git:
           branches:
             - '$FUEL_QA_COMMIT'
-          url: 'https://review.fuel-infra.org/openstack/fuel-qa.git'
+          url: '{git_base}/openstack/fuel-qa'
+          credentials-id: '{git_creds}'
+      - git:
+          url: '{git_base}/openstack/fuel-devops'
+          credentials-id: '{git_creds}'
+          basedir: fuel-devops
+          wipe-workspace: false
+
     wrappers:
+      - ssh-agent-credentials:
+          users:
+          - '{git_creds}'
       - ansicolor:
           colormap: xterm

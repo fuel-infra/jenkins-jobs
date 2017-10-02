@@ -1,5 +1,10 @@
 ---
-- job:
+- project:
+    name: custom.upgrade_system_test
+    jobs:
+    - custom.upgrade_system_test
+
+- job-template:
     name: 'custom.upgrade_system_test'
     concurrent: true
     description: |
@@ -18,6 +23,9 @@
     node: custom_upgrade_test
 
     parameters:
+      - string:
+          name: GIT_BASE
+          default: '{git_base}'
       - string:
           name: REPO_NAME
           default: 'fuel-qa'
@@ -113,14 +121,19 @@
               UPDATE_MASTER=true
 
     scm:
-      - main-git:
-          reponame: $REPO_NAME
-          repobranch: $BASE_REPO_BRANCH
-          basedir: '$REPO_NAME-base'
-      - main-git:
-          reponame: $REPO_NAME
-          repobranch: $UPGRADE_REPO_BRANCH
-          basedir: '$REPO_NAME-upgrade'
+      - git:
+          branches:
+            - '$BASE_REPO_BRANCH'
+          url: '{git_base}/openstack/$REPO_NAME'
+          credentials-id: '{git_creds}'
+          basedir: $REPO_NAME-base
+      - git:
+          branches:
+            - '$UPGRADE_REPO_BRANCH'
+          url: '{git_base}/openstack/$REPO_NAME'
+          credentials-id: '{git_creds}'
+          basedir: $REPO_NAME-upgrade
+          wipe-workspace: false
 
     builders:
       - guess-mirror
@@ -144,20 +157,20 @@
 
           mkdir -p $FILES_DIR
 
-          FILE_LIST='$WORKSPACE/files_to_download'
+          FILE_LIST="$WORKSPACE/files_to_download"
 
           if [ -z $ADDITIONAL_FILES ]; then
             echo "There are no additional files to download"
           else
             echo "Downloading additional files..."
-            echo $ADDITIONAL_FILES > ${FILE_LIST}"
+            echo "$ADDITIONAL_FILES" > "$FILE_LIST"
             wget --no-verbose \
-               --input-file="${FILE_LIST}" \
-               --directory-prefix=$FILES_DIR"
+               --input-file="$FILE_LIST" \
+               --directory-prefix="$FILES_DIR"
           fi
 
       - shell:
-          !include-raw: builders/custom_upgrade_system_test.sh
+          !include-raw-escape: builders/custom_upgrade_system_test.sh
 
     properties:
       - authorization-allow-authorized
@@ -181,5 +194,8 @@
             - requester
 
     wrappers:
+      - ssh-agent-credentials:
+          users:
+          - '{git_creds}'
       - ansicolor:
           colormap: xterm

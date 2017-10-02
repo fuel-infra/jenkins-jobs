@@ -55,10 +55,14 @@
           description: Define env prefix name. This parameter should not be changed
     scm:
       - git:
-          url: 'https://review.fuel-infra.org/openstack/fuel-qa.git'
+          url: '{git_base}/openstack/fuel-qa'
+          credentials-id: '{git_creds}'
           branches:
             - '{projectbranch}'
     wrappers:
+      - ssh-agent-credentials:
+          users:
+          - '{git_creds}'
       - ansicolor:
           colormap: xterm
       - timeout:

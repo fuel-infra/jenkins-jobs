@@ -149,12 +149,16 @@
         weight: '{weight}'
 
     scm:
-    - main-git:
-        reponame: 'fuel-qa'
-        repobranch: 'stable/mitaka'
-        basedir: ''
+    - git:
+        branches:
+        - 'stable/mitaka'
+        url: '{git_base}/openstack/fuel-qa'
+        credentials-id: '{git_creds}'
 
     wrappers:
+    - ssh-agent-credentials:
+        users:
+        - '{git_creds}'
     - timeout:
         fail: false
         timeout: '{timeout}'

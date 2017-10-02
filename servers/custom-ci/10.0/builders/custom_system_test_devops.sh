@@ -5,7 +5,7 @@ set -ex
 # Checking gerrit commits for fuel-qa
 if [[ "${fuel_qa_gerrit_commit}" != "none" ]] ; then
   for commit in ${fuel_qa_gerrit_commit} ; do
-    git fetch https://review.fuel-infra.org/openstack/fuel-qa "${commit}" && git cherry-pick FETCH_HEAD
+    git fetch origin "${commit}" && git cherry-pick FETCH_HEAD
   done
 fi
 
@@ -29,12 +29,11 @@ if [[ ${FUEL_DEVOPS_COMMIT} != "none" ]] ; then
   pip install -U pip
 
   # Install fuel-devops
-  git clone https://github.com/openstack/fuel-devops.git
   cd ./fuel-devops
   git checkout "${FUEL_DEVOPS_COMMIT}"
   if [[ "${fuel_devops_gerrit_commit}" != "none" ]] ; then
     for devops_commit in ${fuel_devops_gerrit_commit} ; do
-      git fetch https://review.openstack.org/openstack/fuel-devops "${devops_commit}" && git cherry-pick FETCH_HEAD
+      git fetch origin "${devops_commit}" && git cherry-pick FETCH_HEAD
     done
   fi
   pip install ./ --upgrade

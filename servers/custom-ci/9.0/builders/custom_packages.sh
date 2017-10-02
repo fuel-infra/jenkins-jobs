@@ -38,14 +38,15 @@ mkdir "${LOCAL_REPO_PATH}"
 # Checking gerrit commits for fuel-mirror
 if [ "${fuelmirror_gerrit_commit}" != "none" ] ; then
   for commit in ${fuelmirror_gerrit_commit} ; do
-    git fetch https://review.openstack.org/openstack/fuel-mirror "${commit}" && git cherry-pick FETCH_HEAD || false
+    # shellcheck disable=SC2015
+    git fetch origin "${commit}" && git cherry-pick FETCH_HEAD || false
   done
 fi
 
 echo "STEP 0. Clean before start"
 
 # remove exited containers
-docker rm $(docker ps -q -f status=exited) || true
+docker ps -q -f status=exited | xargs -r docker rm
 
 echo "STEP 1. Prepare build phase"
 # we don't need build packages in case:
@@ -88,7 +89,7 @@ unset EXTRAREPO
 if [ -n "${SIGKEYID}" ] ; then
 
   gpg --export -a "${SIGKEYID}" > RPM-GPG-KEY
-  if [ $(rpm -qa | grep gpg-pubkey | grep -ci "${SIGKEYID}") -eq 0 ]; then
+  if [ "$(rpm -qa | grep gpg-pubkey | grep -ci "${SIGKEYID}")" -eq 0 ]; then
     rpm --import RPM-GPG-KEY
   fi
 
@@ -209,26 +210,30 @@ for binary in ${LOCAL_REPO_UBUNTU_PATH}/* ; do
   esac
 done
 
-
+# shellcheck disable=SC2086
 SRC_NAME=$(awk '/^Source:/ {print $2}' ${BINSRCLIST})
 
 # Add .deb binaries
 if [ "${BINDEBLIST}" != "" ]; then
-    reprepro ${REPREPRO_COMP_OPTS} includedeb ${DEB_DIST_NAME} ${BINDEBLIST} \
+    # shellcheck disable=SC2086
+    reprepro ${REPREPRO_COMP_OPTS} includedeb "${DEB_DIST_NAME}" ${BINDEBLIST} \
         || error "Can't include packages"
 fi
 # Add .udeb binaries
 if [ "${BINUDEBLIST}" != "" ]; then
-    reprepro ${REPREPRO_COMP_OPTS} includeudeb ${DEB_DIST_NAME} ${BINUDEBLIST} \
+    # shellcheck disable=SC2086
+    reprepro ${REPREPRO_COMP_OPTS} includeudeb "${DEB_DIST_NAME}" ${BINUDEBLIST} \
         || error "Can't include packages"
 fi
 
 # Replace sources
 # TODO: Get rid of replacing. Just increase version properly
 if [ "${BINSRCLIST}" != "" ]; then
+    # shellcheck disable=SC2086
     reprepro "${REPREPRO_COMP_OPTS}" --architecture source \
-        remove ${DEB_DIST_NAME} ${SRC_NAME} || :
-    reprepro ${REPREPRO_COMP_OPTS} includedsc ${DEB_DIST_NAME} ${BINSRCLIST} \
+        remove "${DEB_DIST_NAME}" "${SRC_NAME}" || :
+    # shellcheck disable=SC2086
+    reprepro ${REPREPRO_COMP_OPTS} includedsc "${DEB_DIST_NAME}" ${BINSRCLIST} \
         || error "Can't include packages"
 fi
 
