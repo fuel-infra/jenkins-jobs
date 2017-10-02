@@ -75,11 +75,20 @@
     name: fuel-qa
     scm:
       - git:
-          url: 'https://github.com/openstack/fuel-qa.git'
+          url: 'https://review.fuel-infra.org/openstack/fuel-qa.git'
           basedir: 'fuel-qa'
           branches:
             - 'stable/6.1'
           wipe-workspace: false
+
+- scm:
+    name: fuel-qa-downstream
+    scm:
+      - git:
+         url: 'https://review.fuel-infra.org/openstack/fuel-qa.git'
+         branches:
+          - '{repobranch}'
+         basedir: '{basedir}'
 
 - scm:
     name: mirantis
