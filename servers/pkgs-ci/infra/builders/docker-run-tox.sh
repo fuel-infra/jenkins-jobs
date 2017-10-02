@@ -28,25 +28,25 @@ case "$UPSTREAM_BRANCH" in
     MOS_RELEASE=6.1
     VIRTUALENV_VER='<15.1'
     UBUNTU_DIST='trusty'
-    CONSTRAINTS_REV='t=juno-eol'
+    CONSTRAINTS_REV='h=juno-eol'
     ;;
   'stable/2015.1.0')
     MOS_RELEASE=7.0
     VIRTUALENV_VER='<13.1.1'
     UBUNTU_DIST='trusty'
-    CONSTRAINTS_REV='t=kilo-eol'
+    CONSTRAINTS_REV='h=kilo-eol'
     ;;
   'stable/liberty')
     MOS_RELEASE=8.0
     VIRTUALENV_VER='<15.1'
     UBUNTU_DIST='trusty'
-    CONSTRAINTS_REV='t=liberty-eol'
+    CONSTRAINTS_REV='h=liberty-eol'
     ;;
   'stable/mitaka')
     MOS_RELEASE=9.0
     VIRTUALENV_VER='<15.1'
     UBUNTU_DIST='trusty'
-    CONSTRAINTS_REV='t=mitaka-eol'
+    CONSTRAINTS_REV='h=mitaka-eol'
     ;;
   'stable/newton')
     MOS_RELEASE=10.0
