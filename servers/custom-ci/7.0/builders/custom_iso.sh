@@ -27,7 +27,7 @@ fi
 if [ "${fuelmain_gerrit_commit}" != "none" ] ; then
   for commit in ${fuelmain_gerrit_commit} ; do
     # shellcheck disable=SC2015
-    git fetch https://review.openstack.org/openstack/fuel-main "${commit}" && git cherry-pick FETCH_HEAD || false
+    git fetch origin "${commit}" && git cherry-pick FETCH_HEAD || false
   done
 fi
 

@@ -4,13 +4,10 @@
     - shell: |
         #!/bin/bash
         set -ex
-        if [ "${TEST_FRAMEWORK_URL}" != "https://review.fuel-infra.org/openstack/fuel-qa.git" ] ; then
-           exit 0
-        fi
         git checkout $FUEL_QA_COMMIT
         # Checking gerrit commits for fuel-mirror
         if [ "$FUEL_QA_PATCH_LIST" != "none" ] ; then
           for commit in $FUEL_QA_PATCH_LIST ; do
-            git fetch https://review.fuel-infra.org/openstack/fuel-qa.git $commit && git cherry-pick FETCH_HEAD
+            git fetch origin $commit && git cherry-pick FETCH_HEAD
           done
         fi

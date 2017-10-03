@@ -1,8 +1,13 @@
-- job:
+- project:
+    name: 6.1.custom.upgrade
+    jobs:
+    - 6.1.custom.upgrade
+
+- job-template:
     name: '6.1.custom.upgrade'
     builders:
       - shell:
-          !include-raw: builders/custom_upgrade.sh
+          !include-raw-escape: builders/custom_upgrade.sh
     concurrent: true
     description:
       !include-raw: descriptions/custom.upgrade
@@ -44,22 +49,22 @@
           default: 'stable/6.1'
       - string:
           name: FUELLIB_REPO
-          default: 'https://git.openstack.org/openstack/fuel-library.git'
+          default: '{git_base}/openstack/fuel-library'
       - string:
           name: NAILGUN_REPO
-          default: 'https://git.openstack.org/openstack/fuel-web.git'
+          default: '{git_base}/openstack/fuel-web'
       - string:
           name: ASTUTE_REPO
-          default: 'https://git.openstack.org/openstack/fuel-astute.git'
+          default: '{git_base}/openstack/fuel-astute'
       - string:
           name: OSTF_REPO
-          default: 'https://git.openstack.org/openstack/fuel-ostf.git'
+          default: '{git_base}/openstack/fuel-ostf'
       - string:
           name: PYTHON_FUELCLIENT_REPO
-          default: 'https://git.openstack.org/openstack/python-fuelclient.git'
+          default: '{git_base}/openstack/python-fuelclient'
       - string:
           name: FUELMAIN_REPO
-          default: 'https://git.openstack.org/openstack/fuel-main.git'
+          default: '{git_base}/openstack/fuel-main'
       - choice:
           name: USE_MIRROR
           choices:
@@ -120,9 +125,13 @@
     scm:
       - git:
           url: '$FUELMAIN_REPO'
+          credentials-id: '{git_creds}'
           branches:
             - 'origin/stable/6.1'
     wrappers:
+      - ssh-agent-credentials:
+          users:
+          - '{git_creds}'
       - ansicolor:
           colormap: xterm
     publishers:

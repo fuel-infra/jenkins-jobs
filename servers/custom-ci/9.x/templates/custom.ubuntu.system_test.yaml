@@ -169,7 +169,7 @@
         default: 'stable/mitaka'
     - string: # added for ability override test framewor url
         name: TEST_FRAMEWORK_URL
-        default: https://review.fuel-infra.org/openstack/fuel-qa.git
+        default: '{git_base}/openstack/fuel-qa'
         description: |
               Test framework url. As alternative can use the following urls:
               https://github.com/openstack/stacklight-integration-tests.git
@@ -187,11 +187,15 @@
     scm:
       - git:
           url: '$TEST_FRAMEWORK_URL'
+          credentials-id: '{git_creds}'
           branches:
              - '$TEST_FRAMEWORK_BRANCH'
           basedir: ''
 
     wrappers:
+    - ssh-agent-credentials:
+        users:
+        - '{git_creds}'
     - timeout:
         fail: false
         timeout: '{timeout}'
@@ -274,7 +278,7 @@
              # Fuel-plugin-murano-tests and stacklight-integration-tests are wrappers around fuel-qa
              # which run fuel-qa after customs prepare environment
              # Redefine path to venv if use non standart test framework
-             if [ "$TEST_FRAMEWORK_URL" != "https://review.fuel-infra.org/openstack/fuel-qa.git" ] ; then
+             if [ "$TEST_FRAMEWORK_URL" != "{git_base}/openstack/fuel-qa" ] ; then
                  VENV_PATH=${{VENV_PATH:-"${{WORKSPACE}}/venv_test"}}
                  inject VENV_PATH ${{VENV_PATH}}
                  export VENV_PATH=${{VENV_PATH}}

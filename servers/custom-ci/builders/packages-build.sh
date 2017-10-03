@@ -34,7 +34,7 @@ fi
 if [[ "${FUEL_MIRROR_GERRIT_COMMIT}" != "none" ]] ; then
   cd "${WORKSPACE}"/fuel-mirror
   for commit in ${FUEL_MIRROR_GERRIT_COMMIT} ; do
-    git fetch https://review.openstack.org/openstack/fuel-mirror "${commit}" && git cherry-pick FETCH_HEAD
+    git fetch origin "${commit}" && git cherry-pick FETCH_HEAD
   done
   cd "${WORKSPACE}"
 fi

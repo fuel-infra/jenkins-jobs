@@ -1,4 +1,9 @@
-- job:
+- project:
+    name: 9.0.custom.packages
+    jobs:
+    - 9.0.custom.packages
+
+- job-template:
     name: '9.0.custom.packages'
     description: |
       Build <b>custom fuel packages</b>. Job allows to build (using perestroika) fuel packages from:<br>
@@ -8,16 +13,16 @@
         <br>
         <b>Important:</b> This job will build the only packages that have explicitly defined: <br>
           <ul>
-            <li>{repo}_COMMIT</li>
-            <li>{repo}_gerrit_commit</li>
+            <li>{{repo}}_COMMIT</li>
+            <li>{{repo}}_gerrit_commit</li>
           </ul>
           If none of the gerrit patchset or commit was provided it's intended that the package should be taken from MOS mirror
 
     builders:
       - shell:
-          !include-raw: builders/custom_packages_prepare_repos.sh
+          !include-raw-escape: builders/custom_packages_prepare_repos.sh
       - shell:
-          !include-raw: builders/custom_packages.sh
+          !include-raw-escape: builders/custom_packages.sh
     concurrent: true
 
     logrotate:
@@ -79,47 +84,50 @@
           default: 'stable/mitaka'
 
       - string:
+          name: GIT_BASE
+          default: '{git_base}'
+      - string:
           name: ASTUTE_REPO
-          default: 'https://git.openstack.org/openstack/fuel-astute.git'
+          default: '{git_base}/openstack/fuel-astute'
       - string:
           name: FUEL_AGENT_REPO
-          default: 'https://git.openstack.org/openstack/fuel-agent.git'
+          default: '{git_base}/openstack/fuel-agent'
       - string:
           name: FUEL_MAIN_REPO
-          default: 'https://git.openstack.org/openstack/fuel-main.git'
+          default: '{git_base}/openstack/fuel-main'
       - string:
           name: FUEL_NAILGUN_AGENT_REPO
-          default: 'https://git.openstack.org/openstack/fuel-nailgun-agent.git'
+          default: '{git_base}/openstack/fuel-nailgun-agent'
       - string:
           name: FUEL_MIRROR_REPO
-          default: 'https://git.openstack.org/openstack/fuel-mirror.git'
+          default: '{git_base}/openstack/fuel-mirror'
       - string:
           name: FUELLIB_REPO
-          default: 'https://git.openstack.org/openstack/fuel-library.git'
+          default: '{git_base}/openstack/fuel-library'
       - string:
           name: FUELMENU_REPO
-          default: 'https://git.openstack.org/openstack/fuel-menu.git'
+          default: '{git_base}/openstack/fuel-menu'
       - string:
           name: FUELUPGRADE_REPO
-          default: 'https://git.openstack.org/openstack/fuel-upgrade.git'
+          default: '{git_base}/openstack/fuel-upgrade'
       - string:
           name: NAILGUN_REPO
-          default: 'https://git.openstack.org/openstack/fuel-web.git'
+          default: '{git_base}/openstack/fuel-web'
       - string:
           name: NETWORKCHECKER_REPO
-          default: 'https://git.openstack.org/openstack/network-checker.git'
+          default: '{git_base}/openstack/network-checker'
       - string:
           name: OSTF_REPO
-          default: 'https://git.openstack.org/openstack/fuel-ostf.git'
+          default: '{git_base}/openstack/fuel-ostf'
       - string:
           name: PYTHON_FUELCLIENT_REPO
-          default: 'https://git.openstack.org/openstack/python-fuelclient.git'
+          default: '{git_base}/openstack/python-fuelclient'
       - string:
           name: SHOTGUN_REPO
-          default: 'https://git.openstack.org/openstack/shotgun.git'
+          default: '{git_base}/openstack/shotgun'
       - string:
           name: FUE_UI_REPO
-          default: 'https://git.openstack.org/openstack/fuel-ui.git'
+          default: '{git_base}/openstack/fuel-ui'
 
       - string:
           name: ASTUTE_GERRIT_COMMIT
@@ -208,14 +216,17 @@
             uri distribution [component1] [component2] [...]<br>
             Repos must be separated by |, for example: <br>
             http://perestroika-repo-tst.infra.mirantis.net//mos-repos/ubuntu/9.0/ mos9.0 main restricted<br>
-
     scm:
       - git:
-          url: 'https://github.com/openstack/fuel-mirror'
+          url: '{git_base}/openstack/fuel-mirror'
+          credentials-id: '{git_creds}'
           branches:
             - 'origin/stable/mitaka'
 
     wrappers:
+      - ssh-agent-credentials:
+          users:
+          - '{git_creds}'
       - timeout:
           timeout: 120
           fail: true

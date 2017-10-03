@@ -1,8 +1,13 @@
-- job:
+- project:
+    name: 6.1.custom.centos.bvt_1
+    jobs:
+    - 6.1.custom.centos.bvt_1
+
+- job-template:
     name: '6.1.custom.centos.bvt_1'
     builders:
       - shell:
-          !include-raw: builders/run_system_test.sh
+          !include-raw-escape: builders/run_system_test.sh
     concurrent: true
     description:
       !include-raw: descriptions/custom.centos.bvt_1
@@ -35,10 +40,14 @@
               - 'true'
     scm:
       - git:
-          url: 'https://review.fuel-infra.org/openstack/fuel-qa.git'
+          url: '{git_base}/openstack/fuel-qa'
+          credentials-id: '{git_creds}'
           branches:
             - 'origin/stable/6.1'
     wrappers:
+      - ssh-agent-credentials:
+          users:
+          - '{git_creds}'
       - ansicolor:
           colormap: xterm
       - timeout:

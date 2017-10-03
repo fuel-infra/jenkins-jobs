@@ -1,0 +1,15 @@
+- defaults:
+    name: global
+
+    gerrit_host: 'review.fuel-infra.org'
+    gerrit_proto: 'ssh'
+    gerrit_port: '29418'
+
+    gerrit_user: 'mos-infra-ro'
+    gerrit_creds: '8a20b100-5b4b-408e-ba6f-e51e5b82f29a'
+
+    git_base: '{gerrit_proto}://{gerrit_user}@{gerrit_host}:{gerrit_port}'
+    git_branch: 'master'
+    git_refspec: 'HEAD'
+    git_creds: '{gerrit_creds}'
+    git_subdir: '.'

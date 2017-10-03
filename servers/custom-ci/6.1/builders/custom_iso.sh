@@ -5,7 +5,7 @@ set -ex
 export LANG="C"
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin:${PATH}
 
-PROD_VER=`grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2`
+PROD_VER=$(grep 'PRODUCT_VERSION:=' config.mk | cut -d= -f2)
 
 export ISO_NAME=fuel-gerrit-${PROD_VER}-${BUILD_NUMBER}-${BUILD_ID}
 export UPGRADE_TARBALL_NAME=fuel-gerrit-${PROD_VER}-upgrade-${BUILD_NUMBER}-${BUILD_ID}
@@ -14,20 +14,21 @@ export BUILD_DIR=${WORKSPACE}/../tmp/${JOB_NAME}/build
 export LOCAL_MIRROR=${WORKSPACE}/../tmp/${JOB_NAME}/local_mirror
 
 export ARTS_DIR=${WORKSPACE}/artifacts
-rm -rf ${ARTS_DIR}
+rm -rf "${ARTS_DIR}"
 
 export DEPS_DIR=${BUILD_DIR}/deps
 rm -rf "${DEPS_DIR}"
 
 # Checking gerrit commits for fuel-main
 if [ "${FUELMAIN_COMMIT}" != "stable/6.1" ] ; then
-    git checkout ${FUELMAIN_COMMIT}
+    git checkout "${FUELMAIN_COMMIT}"
 fi
 
 # Checking gerrit commits for fuel-main
 if [ "${fuelmain_gerrit_commit}" != "none" ] ; then
   for commit in ${fuelmain_gerrit_commit} ; do
-    git fetch https://review.openstack.org/openstack/fuel-main ${commit} && git cherry-pick FETCH_HEAD || false
+    # shellcheck disable=SC2015
+    git fetch origin "${commit}" && git cherry-pick FETCH_HEAD || false
   done
 fi
 
@@ -83,40 +84,47 @@ echo "STEP 1. Make everything"
 echo "ENV VARIABLES START"
 printenv
 echo "ENV VARIABLES END"
-
+# shellcheck disable=SC2086
 make $make_args iso version-yaml
 
 #########################################
 
 echo "STEP 2. Publish everything"
 
-cd ${ARTS_DIR}
-for artifact in `ls fuel-*`
+cd "${ARTS_DIR}"
+for artifact in fuel-*
 do
- ${WORKSPACE}/utils/jenkins/process_artifacts.sh ${artifact}
+ "${WORKSPACE}/utils/jenkins/process_artifacts.sh" "${artifact}"
 done
 
-cd ${WORKSPACE}
+cd "${WORKSPACE}"
 
-echo FUELMAIN_GERRIT_COMMIT="${fuelmain_gerrit_commit}" > ${ARTS_DIR}/gerrit_commits.txt
-echo NAILGUN_GERRIT_COMMIT="${nailgun_gerrit_commit}" >> ${ARTS_DIR}/gerrit_commits.txt
-echo ASTUTE_GERRIT_COMMIT="${astute_gerrit_commit}" >> ${ARTS_DIR}/gerrit_commits.txt
-echo OSTF_GERRIT_COMMIT="${ostf_gerrit_commit}" >> ${ARTS_DIR}/gerrit_commits.txt
-echo FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}" >> ${ARTS_DIR}/gerrit_commits.txt
-echo PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}" >> ${ARTS_DIR}/gerrit_commits.txt
+cat > "${ARTS_DIR}/gerrit_commits.txt" <<EOF
+FUELMAIN_GERRIT_COMMIT="${fuelmain_gerrit_commit}"
+NAILGUN_GERRIT_COMMIT="${nailgun_gerrit_commit}"
+ASTUTE_GERRIT_COMMIT="${astute_gerrit_commit}"
+OSTF_GERRIT_COMMIT="${ostf_gerrit_commit}"
+FUELLIB_GERRIT_COMMIT="${fuellib_gerrit_commit}"
+PYTHON_FUELCLIENT_GERRIT_COMMIT="${python_fuelclient_gerrit_commit}"
+EOF
 
-cp ${LOCAL_MIRROR}/*changelog ${ARTS_DIR}/ || true
-cp ${BUILD_DIR}/iso/isoroot/version.yaml ${ARTS_DIR}/version.yaml.txt || true
-(cd ${BUILD_DIR}/iso/isoroot && find . | sed -s 's/\.\///') > ${ARTS_DIR}/listing.txt || true
+# shellcheck disable=SC2086
+cp ${LOCAL_MIRROR}/*changelog "${ARTS_DIR}/" || true
+cp "${BUILD_DIR}/iso/isoroot/version.yaml" "${ARTS_DIR}/version.yaml.txt" || true
+(cd "${BUILD_DIR}/iso/isoroot" && find . | sed -s 's/\.\///') > "${ARTS_DIR}/listing.txt" || true
 
-grep MAGNET_LINK ${ARTS_DIR}/*iso.data.txt > ${ARTS_DIR}/magnet_link.txt
+# shellcheck disable=SC2086
+grep MAGNET_LINK ${ARTS_DIR}/*iso.data.txt > "${ARTS_DIR}/magnet_link.txt"
 
 # Generate build description
-ISO_MAGNET_LINK=`grep MAGNET_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/MAGNET_LINK=//'`
-ISO_HTTP_LINK=`grep HTTP_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_LINK=//'`
-ISO_HTTP_TORRENT=`grep HTTP_TORRENT ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_TORRENT=//'`
+# shellcheck disable=SC2086
+ISO_MAGNET_LINK=$(grep MAGNET_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/MAGNET_LINK=//')
+# shellcheck disable=SC2086
+ISO_HTTP_LINK=$(grep HTTP_LINK ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_LINK=//')
+# shellcheck disable=SC2086
+ISO_HTTP_TORRENT=$(grep HTTP_TORRENT ${ARTS_DIR}/*iso.data.txt | sed 's/HTTP_TORRENT=//')
 
-echo "<a href="${ISO_HTTP_LINK}">ISO download link</a> <a href="${ISO_HTTP_TORRENT}">ISO torrent link</a><br>${ISO_MAGNET_LINK}<br>"
+echo "<a href=\"${ISO_HTTP_LINK}\">ISO download link</a> <a href=\"${ISO_HTTP_TORRENT}\">ISO torrent link</a><br>${ISO_MAGNET_LINK}<br>"
 
 #########################################
 

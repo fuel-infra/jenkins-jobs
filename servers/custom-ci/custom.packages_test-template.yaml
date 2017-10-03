@@ -120,7 +120,8 @@
 
     scm:
       - git:
-          url: 'https://review.fuel-infra.org/openstack/fuel-qa.git'
+          url: '{git_base}/openstack/fuel-qa'
+          credentials-id: '{git_creds}'
           branches:
             - $FUEL_QA_COMMIT
           basedir: fuel-qa
@@ -130,15 +131,19 @@
           remotes:
             - gerrit:
                 refspec: $GERRIT_REFSPEC
-                url: https://review.openstack.org/openstack/$PROJECT.git
+                url: '{git_base}/openstack/$PROJECT'
+                credentials-id: '{git_creds}'
           basedir: $PROJECT
           timeout: 20
           choosing-strategy: gerrit
+          wipe-workspace: false
       - git:
-          url: 'https://git.openstack.org/openstack/fuel-mirror.git'
+          url: '{git_base}/openstack/fuel-mirror'
+          credentials-id: '{git_creds}'
           branches:
             - 'origin/{projectbranch}'
           basedir: 'fuel-mirror'
+          wipe-workspace: false
 
     builders:
       - inject:
@@ -189,6 +194,9 @@
           regexp-for-failed: "'Description string: (.*)'"
 
     wrappers:
+      - ssh-agent-credentials:
+          users:
+          - '{git_creds}'
       - timeout:
           fail: true
           timeout: '{timeout}'

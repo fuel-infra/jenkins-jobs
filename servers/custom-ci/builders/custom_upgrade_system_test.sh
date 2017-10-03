@@ -182,7 +182,7 @@ function apply_gerrit_commits(){
     if [[ "${gerrit_commit}" != "none" ]] ; then
         info_message "Applying fuel-qa gerrit commits from '${repo_branch}'..."
         for commit in ${gerrit_commit} ; do
-            git fetch "https://git.openstack.org/openstack/${REPO_NAME}" "${commit}" && git cherry-pick FETCH_HEAD
+            git fetch "${GIT_BASE:-https://git.openstack.org}/openstack/${REPO_NAME}" "${commit}" && git cherry-pick FETCH_HEAD
             if [ $? -ne -0 ] ; then
                 error_message "Failed to apply '${commit}'."
                 exit 1
@@ -253,6 +253,7 @@ function system_tests_wrapper(){
             -o --group="${TEST_GROUP}" \
             -i "${iso_path}"
 
+        # shellcheck disable=SC2181
         if [[ $? -ne 0 ]] ; then
             error_message "System tests from ${repo_branch} failed."
             error_message "Please check logs in ${LOGS_DIR} for details."

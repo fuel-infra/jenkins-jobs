@@ -2,6 +2,8 @@
 
 set -ex
 
+GIT_BASE=${GIT_BASE:-https://review.openstack.org}
+
 REPOS_PATH="${WORKSPACE}/build-fuel-packages/repos/"
 rm -rf "${REPOS_PATH}"
 mkdir -p "${REPOS_PATH}"
@@ -24,20 +26,20 @@ build_repo() {
 }
 
 # Gerrit URLs and commits
-ASTUTE_GERRIT_URL=https://review.openstack.org/openstack/fuel-astute
-FUEL_AGENT_GERRIT_URL=https://review.openstack.org/openstack/fuel-agent
-FUEL_MAIN_GERRIT_URL=https://review.openstack.org/openstack/fuel-main
-FUEL_MIRROR_GERRIT_URL=https://review.openstack.org/openstack/fuel-mirror
-FUEL_NAILGUN_AGENT_GERRIT_URL=https://review.openstack.org/openstack/fuel-nailgun-agent
-FUEL_UI_GERRIT_URL=https://review.openstack.org/openstack/fuel-ui
-FUELLIB_GERRIT_URL=https://review.openstack.org/openstack/fuel-library
-FUELMENU_GERRIT_URL=https://review.openstack.org/openstack/fuel-menu
-FUELUPGRADE_GERRIT_URL=https://review.openstack.org/openstack/fuel-upgrade
-NAILGUN_GERRIT_URL=https://review.openstack.org/openstack/fuel-web
-NETWORKCHECKER_GERRIT_URL=https://review.openstack.org/openstack/network-checker
-OSTF_GERRIT_URL=https://review.openstack.org/openstack/fuel-ostf
-PYTHON_FUELCLIENT_GERRIT_URL=https://review.openstack.org/openstack/python-fuelclient
-SHOTGUN_GERRIT_URL=https://review.openstack.org/openstack/shotgun
+ASTUTE_GERRIT_URL="$GIT_BASE/openstack/fuel-astute"
+FUEL_AGENT_GERRIT_URL="$GIT_BASE/openstack/fuel-agent"
+FUEL_MAIN_GERRIT_URL="$GIT_BASE/openstack/fuel-main"
+FUEL_MIRROR_GERRIT_URL="$GIT_BASE/openstack/fuel-mirror"
+FUEL_NAILGUN_AGENT_GERRIT_URL="$GIT_BASE/openstack/fuel-nailgun-agent"
+FUEL_UI_GERRIT_URL="$GIT_BASE/openstack/fuel-ui"
+FUELLIB_GERRIT_URL="$GIT_BASE/openstack/fuel-library"
+FUELMENU_GERRIT_URL="$GIT_BASE/openstack/fuel-menu"
+FUELUPGRADE_GERRIT_URL="$GIT_BASE/openstack/fuel-upgrade"
+NAILGUN_GERRIT_URL="$GIT_BASE/openstack/fuel-web"
+NETWORKCHECKER_GERRIT_URL="$GIT_BASE/openstack/network-checker"
+OSTF_GERRIT_URL="$GIT_BASE/openstack/fuel-ostf"
+PYTHON_FUELCLIENT_GERRIT_URL="$GIT_BASE/openstack/python-fuelclient"
+SHOTGUN_GERRIT_URL="$GIT_BASE/openstack/shotgun"
 
 
 {
