@@ -10,6 +10,6 @@
 
     git_base: '{gerrit_proto}://{gerrit_user}@{gerrit_host}:{gerrit_port}'
     git_branch: 'master'
-    git_refspec: 'HEAD'
+    git_refspec: '+refs/heads/*:refs/remotes/origin/*'
     git_creds: '{gerrit_creds}'
     git_subdir: '.'
