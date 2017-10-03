@@ -77,7 +77,7 @@
     builders:
 
       - trigger-builds:
-        - project: 'cleaner'
+        - project: 'new-cleaner-patching-ci'
           parameter-factories:
             - factory: allnodesforlabel
               node-label: $LABEL
