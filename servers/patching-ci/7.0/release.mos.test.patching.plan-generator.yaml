@@ -78,7 +78,7 @@
     scm:
       - patching-tests
       - git:
-          url: 'https://github.com/openstack/fuel-qa.git'
+          url: 'https://review.fuel-infra.org/openstack/fuel-qa.git'
           branches:
             - 'origin/stable/7.0'
           skip-tag: true
