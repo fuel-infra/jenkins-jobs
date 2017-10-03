@@ -3,6 +3,8 @@
     branch: 'origin/master'
     concurrent: true
     default_commit: 'master'
+    git_base: 'https://github.com'
+    git_creds: ''
     fuelmain_defaults: |
       FUELLIB_COMMIT={default_commit}
       NAILGUN_COMMIT={default_commit}
@@ -18,19 +20,19 @@
       FUELUPGRADE_COMMIT={default_commit}
       FUEL_UI_COMMIT={default_commit}
 
-      FUELLIB_REPO=https://github.com/openstack/fuel-library.git
-      NAILGUN_REPO=https://github.com/openstack/fuel-web.git
-      PYTHON_FUELCLIENT_REPO=https://github.com/openstack/python-fuelclient.git
-      FUEL_AGENT_REPO=https://github.com/openstack/fuel-agent.git
-      FUEL_NAILGUN_AGENT_REPO=https://github.com/openstack/fuel-nailgun-agent.git
-      ASTUTE_REPO=https://github.com/openstack/fuel-astute.git
-      OSTF_REPO=https://github.com/openstack/fuel-ostf.git
-      FUEL_MIRROR_REPO=https://github.com/openstack/fuel-mirror.git
-      FUELMENU_REPO=https://github.com/openstack/fuel-menu.git
-      SHOTGUN_REPO=https://github.com/openstack/shotgun.git
-      NETWORKCHECKER_REPO=https://github.com/openstack/network-checker.git
-      FUELUPGRADE_REPO=https://github.com/openstack/fuel-upgrade.git
-      FUEL_UI_REPO=https://github.com/openstack/fuel-ui.git
+      FUELLIB_REPO={git_base}/openstack/fuel-library
+      NAILGUN_REPO={git_base}/openstack/fuel-web
+      PYTHON_FUELCLIENT_REPO={git_base}/openstack/python-fuelclient
+      FUEL_AGENT_REPO={git_base}/openstack/fuel-agent
+      FUEL_NAILGUN_AGENT_REPO={git_base}/openstack/fuel-nailgun-agent
+      ASTUTE_REPO={git_base}/openstack/fuel-astute
+      OSTF_REPO={git_base}/openstack/fuel-ostf
+      FUEL_MIRROR_REPO={git_base}/openstack/fuel-mirror
+      FUELMENU_REPO={git_base}/openstack/fuel-menu
+      SHOTGUN_REPO={git_base}/openstack/shotgun
+      NETWORKCHECKER_REPO={git_base}/openstack/network-checker
+      FUELUPGRADE_REPO={git_base}/openstack/fuel-upgrade
+      FUEL_UI_REPO={git_base}/openstack/fuel-ui
 
       FUELLIB_GERRIT_COMMIT=none
       NAILGUN_GERRIT_COMMIT=none
@@ -45,6 +47,12 @@
       NETWORKCHECKER_GERRIT_COMMIT=none
       FUELUPGRADE_GERRIT_COMMIT=none
       FUEL_UI_GERRIT_COMMIT=none
+    custom_wrappers:
+    - timeout:
+        timeout: 120
+        fail: true
+    - ansicolor:
+        colormap: xterm
     node: custom_iso
     overridden_parameters: ''
     variables: ''
@@ -82,7 +90,7 @@
         description: Additional make arguments
     - string:
         name: FUELMAIN_REPO
-        default: 'https://git.openstack.org/openstack/fuel-main.git'
+        default: '{git_base}/openstack/fuel-main'
     - string:
         name: FUELMAIN_COMMIT
         default: '{default_commit}'
@@ -121,15 +129,11 @@
     scm:
     - git:
         url: '$FUELMAIN_REPO'
+        credentials-id: '{git_creds}'
         branches:
         - '{branch}'
 
-    wrappers:
-    - timeout:
-        timeout: 120
-        fail: true
-    - ansicolor:
-        colormap: xterm
+    wrappers: '{obj:custom_wrappers}'
 
     builders:
     - inject: # fuel-main parameters overridden by default

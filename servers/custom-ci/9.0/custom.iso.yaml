@@ -4,7 +4,18 @@
     mod: '-custom'
     branch: 'origin/mos/mitaka'
     default_commit: 'mos/mitaka'
+    git_base: 'ssh://mos-infra-ro@review.fuel-infra.org:29418'
+    git_creds: '8a20b100-5b4b-408e-ba6f-e51e5b82f29a'
     defaults: '{version}.custom.iso'
+    custom_wrappers:
+    - ssh-agent-credentials:
+        users:
+        - '{git_creds}'
+    - timeout:
+        timeout: 120
+        fail: true
+    - ansicolor:
+        colormap: xterm
     description:
       !include-raw-escape: descriptions/custom.iso
     jobs:
