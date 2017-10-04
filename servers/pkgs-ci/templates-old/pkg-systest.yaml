@@ -85,10 +85,13 @@
           branch: '{fuel-main-branch}'
           repo: fuel-main
           fuel-namespace: '{fuel-namespace}'
-      - upstream:
-          branch: '{fuel-qa-branch}'
-          repo: fuel-qa
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
           fuel-namespace: '{fuel-namespace}'
+          repo: 'fuel-qa'
+          branch: 'fuel-qa-branch'
+          basedir: 'fuel-qa'
     triggers:
       - zuul
       - timed: '{timer}'
