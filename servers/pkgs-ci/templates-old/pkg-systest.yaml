@@ -90,7 +90,7 @@
           credentials-id: '{ssh-creds-openstack-ci-jenkins}'
           fuel-namespace: '{fuel-namespace}'
           repo: 'fuel-qa'
-          branch: 'fuel-qa-branch'
+          branch: '{fuel-qa-branch}'
           basedir: 'fuel-qa'
     triggers:
       - zuul
