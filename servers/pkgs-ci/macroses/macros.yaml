@@ -50,7 +50,7 @@
       - git:
           url: 'https://git.openstack.org/{fuel-namespace}/{repo}.git'
           branches:
-            - 'origin/{branch}'
+            - '{branch}'
           basedir: '{repo}'
           wipe-workspace: false
 
