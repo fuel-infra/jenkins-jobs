@@ -96,7 +96,11 @@
     - 'python-neutronclient'
     - 'python-novaclient'
     - 'python-openstackclient'
-    - 'python-pankoclient'
+    # NOTE(pas-ha) Lacks stable/ocata branch, so we synced master->mcp/ocata
+    # need to stop it for ocata as the code has went far enough already
+    # (even further than stable/pike which is already present)
+    # TODO: please re-enable when creating sync jobs for stable/pike
+    # - 'python-pankoclient'
     - 'python-saharaclient'
     - 'python-swiftclient'
     - 'requestsexceptions'
