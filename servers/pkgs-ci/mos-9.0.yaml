@@ -8,7 +8,7 @@
     master-mos-version: '9.0'
     main_ubuntu_release: 'trusty'
     openstack_release: 'ubuntu'
-    fuel-main-branch: 'stable/mitaka'
+    fuel-main-branch: 'mitaka-eol'
     fuel-qa-branch: 'stable/mitaka'
     perestroika-branch: 'stable/mitaka'
     install-scm-branch: 'origin/master'
