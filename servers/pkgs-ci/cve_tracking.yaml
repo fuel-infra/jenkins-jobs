@@ -43,7 +43,7 @@
 
     wrappers:
       - build-timeout:
-          timeout: 50
+          timeout: 90
       - ssh-agent-credentials:
           users:
             - '{ssh-creds-openstack-ci-jenkins}'
