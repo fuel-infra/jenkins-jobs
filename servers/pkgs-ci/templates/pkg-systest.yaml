@@ -72,7 +72,7 @@
           username: '{username-openstack-ci-jenkins}'
           credentials-id: '{ssh-creds-openstack-ci-jenkins}'
           fuel-namespace: '{fuel-namespace}'
-          repo: 'fuel-qa'
+          repo: 'openstack/fuel-qa'
           branch: '{fuel-qa-branch}'
           basedir: 'fuel-qa'
     triggers:
