@@ -24,6 +24,7 @@
     # List of projects to sync
     gerrit-project-name:
     - 'aodh'
+    - 'barbican'
     - 'ceilometer'
     - 'ceilometermiddleware'
     - 'cinder'
@@ -80,10 +81,12 @@
     - 'oslotest'
     - 'panko'
     - 'python-aodhclient'
+    - 'python-barbicanclient'
     - 'python-brick-cinderclient-ext'
     - 'python-ceilometerclient'
     - 'python-cinderclient'
     - 'python-congressclient'
+    - 'python-designateclient'
     - 'python-glanceclient'
     - 'python-gnocchiclient'
     - 'python-heatclient'
