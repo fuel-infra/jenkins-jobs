@@ -65,6 +65,13 @@
       - string:
           name: VENV_PATH
           default: "/home/jenkins/qa-venv-9.2"
+      # Temporary spike - just to run tempest against custom repos once
+      - string:
+          name: EXTRA_DEB_REPOS
+          default: ""
+      - string:
+          name: UPDATE_FUEL_MIRROR
+          default: ""
     builders:
       - multijob:
           name: 'Run 9.x tempest'
