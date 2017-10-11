@@ -135,6 +135,7 @@
         - project: '9.x.tempest.create_env'
           same-node: true
           block: true
+          current-parameters: true
           predefined-parameters: |
             NODE_LABELS=$NODE_NAME
             ENV_NAME=9.x.tempest.{specification}.$BUILD_ID
