@@ -13,9 +13,8 @@
       artifactDaysToKeep: 7
       artifactNumToKeep: 12
     scm:
-      - main-git:
-          reponame: 'fuel-qa'
-          repobranch: "$FUEL_QA_VER"
+      - fuel-qa-downstream:
+          repobranch: '$FUEL_QA_VER'
           basedir: ''
       - mirantis:
           reponame: 'mos-ci-deployment-scripts'
