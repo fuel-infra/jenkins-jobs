@@ -17,6 +17,8 @@ if [ ! -f "${REPORT_FILE?}" ]; then
 fi
 
 TESTRAIL_SUITE=${TESTRAIL_SUITE:-"Tempest ${MILESTONE}"}
+SEND_SKIPPED=${SEND_SKIPPED:-false}
+USE_TEMPLATE=${USE_TEMPLATE:-false}
 
 if [[ "${ADD_TIMESTAMP}" == "true" ]]; then
     TESTRAIL_PLAN_NAME+="-$(date +%Y/%m/%d)"
@@ -35,11 +37,11 @@ if [ -z "${TEST_BUILD_URL}" ]; then
     TEST_BUILD_URL="${BUILD_URL}"
 fi
 
-if [ -n "${SEND_SKIPPED}" ]; then
+if [ "${SEND_SKIPPED}" == "true" ]; then
     ARGS+=(--send-skipped)
 fi
 
-if [ ! -f report-venb/bin/activate ]; then
+if [ ! -f report-venv/bin/activate ]; then
     rm -rf report-venv
     virtualenv report-venv
     source report-venv/bin/activate
