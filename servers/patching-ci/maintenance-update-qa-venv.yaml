@@ -24,6 +24,11 @@
           default: true
           description: remove venv and make clean install instead of update
 
+    scm:
+    - fuel-qa-downstream:
+        repobranch: '$BRANCH'
+        basedir: 'fuel-qa'
+
     builders:
       - shell:
           !include-raw: 'builders/maintenance-update-qa-venv.sh'
