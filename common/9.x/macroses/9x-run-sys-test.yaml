@@ -1,7 +1,5 @@
 - builder:
     name: 9x-run-sys-test
     builders:
-    - guess-mirror
-    - 9x-systest-repos-parsing
     - shell:
         !include-raw: '../builders/wrapped_system_tests.sh'
