@@ -1,0 +1,8 @@
+- builder:
+    name: 9x-systest-repos-parsing
+
+    builders:
+      - shell:
+          !include-raw: '../builders/systest_repos_parsing.sh'
+      - inject:
+          properties-file: systest_repos.jenkins-injectfile
