@@ -1,4 +1,57 @@
 - job:
+    name: '9.x.swarm.micro.runner'
+    description: 'Run several swarm test.'
+
+    concurrent: false
+    project-type: multijob
+    node: 'runner'
+
+    properties:
+    - heavy-job:
+        weight: 1
+
+    parameters:
+    - bool:
+        name: KEEP_AFTER
+        default: true
+        description: |
+          Keep virtual labs after test execution
+          (e.g. for job changes we could wipe env after execution)
+    - 9x-systest-params
+    - text:
+        name: EXTRA_OPTS
+        default: ""
+
+    wrappers:
+    - timeout:
+        fail: true
+        timeout: 1800
+
+    builders:
+
+    - write-description:
+        description-string: $CUSTOM_VERSION
+
+    - multijob:
+        name: 'Run system tests'
+        condition: COMPLETED
+        projects:
+        # Ubuntu
+        - name: '9.x.system_test.ubuntu.thread_1'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.system_test.ubuntu.bvt_2'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.system_test.ubuntu.thread_usb'
+          current-parameters: true
+          kill-phase-on: NEVER
+        - name: '9.x.system_test.ubuntu.network_templates'
+          current-parameters: true
+          kill-phase-on: NEVER
+
+
+- job:
     name: '9.x.swarm.runner'
     description: 'Run all system tests'
 
