@@ -13,21 +13,18 @@ fi
 
 source "${VIRTUAL_ENV}/bin/activate"
 
-{
-    echo "# Requirements for ${VIRTUAL_ENV} ${BRANCH}"
-    curl -fsS "https://raw.githubusercontent.com/openstack/fuel-qa/${BRANCH}/fuelweb_test/requirements.txt"
-    curl -fsS "https://raw.githubusercontent.com/openstack/fuel-qa/${BRANCH}/fuelweb_test/requirements-devops-source.txt"
-    echo "${ADDITIONAL_REQUIREMENTS}"
-} > requirements.txt
+if [[ "${ADDITIONAL_REQUIREMENTS}" ]]; then
+  echo "===> Using ADDITIONAL_REQUIREMENTS variable"
+  echo "${ADDITIONAL_REQUIREMENTS}" > requirements.txt
+  pip install -r requirements.txt
+  rm requirements.txt
+fi
+pushd fuel-qa/fuelweb_test
+  echo "===> Installing/updating packages"
+  pip install -U pip
+  pip install -U -r requirements-devops-source.txt -r requirements.txt
+popd
 
-echo "===> Generated requirements list:"
-cat requirements.txt
-
-echo "===> Installing/updating packages"
-pip install -U pip
-pip install -U -r requirements.txt
-
-rm requirements.txt
 echo "===> Installed packages:"
 pip freeze
 
