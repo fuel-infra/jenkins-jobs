@@ -18,6 +18,7 @@
     - string:
         name: MAGNET_LINK
         description: "Which ISO to use in tests"
+        default: !include-raw: ../../data/9.0-iso
 
     - string:
         name: FUEL_QA_COMMIT
