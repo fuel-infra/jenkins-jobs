@@ -26,7 +26,7 @@ if [[ ! "${SNAPSHOT_PARAMS_ID}" ]]; then
     SNAPSHOT_PARAMS_ID="lastSuccessfulBuild"
 fi
 
-curl -s "https://patching-ci.infra.mirantis.net/job/9.x.snapshot.params/${SNAPSHOT_PARAMS_ID}/artifact/snapshots.sh" > snapshot.sh
+curl -s "https://patching-ci.infra.mirantis.net/job/9.x.snapshot.params/${SNAPSHOT_PARAMS_ID}/artifact/snapshots.sh" > snapshots.sh
 
 while read line ; do
  var=$(echo "${line}" | awk -F '=' '{print $1}')
