@@ -33,7 +33,7 @@ while read line ; do
  var_overwrite="$(join "_" "${var_name}" "$(to_uppercase "overwrite")")"
  if [[ ! -z ${!var_overwrite} ]]
  then
-  declare ${var_name}="${var_overwrite}"
+  declare ${var_name}="${!var_overwrite}"
  else
   eval "${line}"
  fi
