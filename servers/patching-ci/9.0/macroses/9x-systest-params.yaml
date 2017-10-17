@@ -30,8 +30,9 @@
         default: !include-raw: ../../data/9.0-iso
 
     - string:
-        name: FUEL_QA_COMMIT_OVERWRITE
+        name: FUEL_QA_COMMIT
         description: "fuel-qa commit"
+        default: stable/mitaka
 
 
     # section for mos rpm repos
@@ -50,19 +51,19 @@
     # flags affect master node and cluster w/ centos servers
     - bool:
         name: ENABLE_MOS_CENTOS_OS
-        default: false
+        default: true
     - bool:
         name: ENABLE_MOS_CENTOS_PROPOSED
-        default: false
+        default: true
     - bool:
         name: ENABLE_MOS_CENTOS_UPDATES
-        default: false
+        default: true
     - bool:
         name: ENABLE_MOS_CENTOS_SECURITY
-        default: false
+        default: true
     - bool:
         name: ENABLE_MOS_CENTOS_HOLDBACK
-        default: false
+        default: true
     - bool:
         name: ENABLE_MOS_CENTOS_HOTFIX
         default: false
@@ -73,16 +74,16 @@
     # flags affect master node and cluster w/ ubuntu servers
     - bool:
         name: ENABLE_MOS_UBUNTU_PROPOSED
-        default: false
+        default: true
     - bool:
         name: ENABLE_MOS_UBUNTU_UPDATES
-        default: false
+        default: true
     - bool:
         name: ENABLE_MOS_UBUNTU_SECURITY
-        default: false
+        default: true
     - bool:
         name: ENABLE_MOS_UBUNTU_HOLDBACK
-        default: false
+        default: true
     - bool:
         name: ENABLE_MOS_UBUNTU_HOTFIX
         default: false
