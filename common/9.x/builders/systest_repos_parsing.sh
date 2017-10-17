@@ -29,10 +29,11 @@ fi
 curl -s "https://patching-ci.infra.mirantis.net/job/9.x.snapshot.params/${SNAPSHOT_PARAMS_ID}/artifact/snapshots.sh" > snapshots.sh
 
 while read line ; do
- var=$(echo "${line}" | awk -F '=' '{print $1}')
- if [[ ! -z ${!var} ]]
+ var_name=$(echo "${line}" | awk -F '=' '{print $1}')
+ var_overwrite="$(join "_" "${var_name}" "$(to_uppercase "overwrite")")"
+ if [[ ! -z ${!var_overwrite} ]]
  then
-  echo "${var} is already set; skipping"
+  declare ${var_name}="${var_overwrite}"
  else
   eval "${line}"
  fi
