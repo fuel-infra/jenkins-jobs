@@ -5,6 +5,7 @@
       jobs:
         - 9.x.snapshot.params
         - 9.x.swarm.runner
+        - 9.x.swarm.micro.runner
         - 9.x.acceptance.runner
         - 9.x.acceptance.test-reports
         - 9.x.backup-restore.test-reports
