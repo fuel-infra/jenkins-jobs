@@ -109,7 +109,7 @@
         keep-long-stdio: false
         results: '**/nosetests.xml'
     - trigger-parameterized-builds:
-      - project: '7.0-test-reports-Testrail'
+      - project: '7.0.system_test.test-reports'
         condition: ALWAYS
         property-file: links.txt
         predefined-parameters: TEST_JOB_NAME=$JOB_NAME

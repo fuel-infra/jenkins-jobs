@@ -3,15 +3,6 @@
     jobs:
       - '8.0-acceptance':
           dist: 'ubuntu'
-      - '{version}.{test-type}.test-reports':
-          version: '8.0'
-          repobranch: 'origin/stable/8.0'
-          test-type: 'acceptance'
-          properties: |
-            TESTS_RUNNER=8.0.acceptance.runner
-            TESTRAIL_TEST_SUITE=[8.0][Fuel] Release Acceptance
-            TESTRAIL_MILESTONE=8.0
-            LAUNCHPAD_MILESTONE=8.0
 
 - job:
     name: '8.0.acceptance.runner'

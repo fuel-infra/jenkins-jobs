@@ -1,44 +1,59 @@
-- defaults:
-    name: '{version}.{test-type}.test-reports'
-    venvpath: '/home/jenkins/qa-venv-8.0'
+- project:
+    name: patching-ci/testrail-reports
+    testrail_reporter/logrotate/artifactDaysToKeep: 14
+    testrail_reporter/logrotate/artifactNumToKeep: -1
+    testrail_reporter/logrotate/daysToKeep: 90
+    testrail_reporter/logrotate/numToKeep: 100
+    testrail_reporter/node: testrail
 
-- job-template:
-    name: '{version}.{test-type}.test-reports'
-    defaults: '{version}.{test-type}.test-reports'
-    builders:
-      - inject:
-          properties-content: |
-            VENV_PATH={venvpath}
-      - inject:
-          properties-content: |
-            {properties}
-      - shell:
-          !include-raw-escape: ./builders/testrail-upload-cases.sh
-      - shell:
-          !include-raw-escape: ./builders/testrail-report.sh
-    parameters:
-      - string:
-          name: TEST_JOB_NAME
-          description: 'Name of Jenkins job with tests results'
-          default: 'none'
-    node: testrail
-    publishers:
-      - email:
-          recipients: ci+alert@mirantis.com
+    jobs:
+    - patching-ci/templates/test-report:
 
-    scm:
-     - main-git:
-          reponame: 'fuel-qa'
-          repobranch: '{repobranch}'
-          basedir: ''
+        version:
+        - 9.x: # swarm
+            testrail_reporter/venv_path: '/home/jenkins/venv-nailgun-tests-2.9'
+            testrail_reporter/fuel-qa-branch: stable/mitaka
+            testrail_reporter/testrail_milestone: '9.2'
+            testrail_reporter/launchpad_milestone: '9.2'
 
+            test-type: 'system_test'
+            testrail_reporter/test_runner_job: '9.x.swarm.runner'
+            testrail_reporter/testrail_suite: '[9.1] Swarm'
+        - 9.x: # acceptance
+            testrail_reporter/venv_path: '/home/jenkins/venv-nailgun-tests-2.9'
+            testrail_reporter/fuel-qa-branch: stable/mitaka
+            testrail_reporter/testrail_milestone: '9.2'
+            testrail_reporter/launchpad_milestone: '9.2'
 
-    wrappers:
-     - inject-passwords:
-          global: true
-          mask-password-params: true
+            test-type: acceptance
+            testrail_reporter/test_runner_job: '9.x.acceptance.runner'
+            testrail_reporter/testrail_suite: '[9.1][Fuel] Auto Release Acceptance'
 
-    publishers:
-      - description-setter:
-          regexp: '^.*Report URL:\s*(.*)'
-          description: '<a href="\1">TestRail Report URL</a>'
+        - 8.0: # swarm
+            testrail_reporter/venv_path: '/home/jenkins/qa-venv-8.0'
+            testrail_reporter/fuel-qa-branch: stable-mu/8.0
+            testrail_reporter/testrail_milestone: '8.0'
+            testrail_reporter/launchpad_milestone: '8.0'
+
+            test-type: 'system_test'
+            testrail_reporter/test_runner_job: '8.0.full.runner'
+            testrail_reporter/testrail_suite: '[8.0] Swarm'
+        - 8.0: # acceptance
+            testrail_reporter/venv_path: '/home/jenkins/qa-venv-8.0'
+            testrail_reporter/fuel-qa-branch: stable-mu/8.0
+            testrail_reporter/testrail_milestone: '8.0'
+            testrail_reporter/launchpad_milestone: '8.0'
+
+            test-type: 'acceptance'
+            testrail_reporter/test_runner_job: '8.0.acceptance.runner'
+            testrail_reporter/testrail_suite: '[8.0][Fuel] Release Acceptance'
+
+        - 7.0: # swarm only
+            testrail_reporter/venv_path: '/home/jenkins/qa-venv-7.0'
+            testrail_reporter/fuel-qa-branch: stable-mu/7.0
+            testrail_reporter/testrail_milestone: '7.0'
+            testrail_reporter/launchpad_milestone: '7.0'
+
+            test-type: 'system_test'
+            testrail_reporter/test_runner_job: '7.0.full.runner'
+            testrail_reporter/testrail_suite: 'Swarm 7.0'

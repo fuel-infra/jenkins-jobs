@@ -1,0 +1,52 @@
+- job-template:
+    id: patching-ci/templates/test-report
+    name: '{version}.{test-type}.test-reports'
+
+    logrotate:
+      artifactDaysToKeep: '{testrail_reporter/logrotate/artifactDaysToKeep}'
+      artifactNumToKeep: '{testrail_reporter/logrotate/artifactNumToKeep}'
+      daysToKeep: '{testrail_reporter/logrotate/daysToKeep}'
+      numToKeep: '{testrail_reporter/logrotate/numToKeep}'
+
+    builders:
+      - inject:
+          properties-content: |
+            VENV_PATH={testrail_reporter/venv_path}
+      - inject:
+          properties-content: |
+            TESTS_RUNNER={testrail_reporter/test_runner_job}
+            TESTRAIL_TEST_SUITE={testrail_reporter/testrail_suite}
+            TESTRAIL_MILESTONE={testrail_reporter/testrail_milestone}
+            LAUNCHPAD_MILESTONE={testrail_reporter/launchpad_milestone}
+      - shell:
+          !include-raw-escape: ../builders/testrail-upload-cases.sh
+      - shell:
+          !include-raw-escape: ../builders/testrail-report.sh
+    parameters:
+      - string:
+          name: TEST_JOB_NAME
+          description: 'Name of Jenkins job with tests results'
+          default: 'none'
+    node: '{testrail_reporter/node}'
+    publishers:
+      - email:
+          recipients: mos-maintenance@mirantis.com
+
+    triggers:
+      - timed: ''
+
+    scm:
+     - fuel-qa-downstream:
+          repobranch: '{testrail_reporter/fuel-qa-branch}'
+          basedir: ''
+
+
+    wrappers:
+     - inject-passwords:
+          global: true
+          mask-password-params: true
+
+    publishers:
+      - description-setter:
+          regexp: '^.*Report URL:\s*(.*)'
+          description: '<a href="\1">TestRail Report URL</a>'
