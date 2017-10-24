@@ -44,7 +44,7 @@ done <snapshots.sh
 # Adding Ubuntu deb repos to
 # - MIRROR_UBUNTU - will be used for nodes in cluster
 # UBUNTU_MIRROR_ID comes from snapshot.sh file
-UBUNTU_MIRROR_URL="${MIRROR_HOST}pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
+UBUNTU_MIRROR_URL="http://${MIRROR_HOST}/pkgs/snapshots/${UBUNTU_MIRROR_ID}/"
 for __dn in "trusty"         \
             "trusty-updates" \
             "trusty-security"; do
