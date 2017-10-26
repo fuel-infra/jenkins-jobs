@@ -22,7 +22,7 @@
           default: 'https://raw.githubusercontent.com/openstack/fuel-qa/master/fuelweb_test/requirements.txt'
       - string:
           name: VENV_PATH
-          default: '/home/jenkins/venv-nailgun-tests-2.9'
+          default: '/home/jenkins/qa-venv-9.x'
 
     builders:
       - shell:

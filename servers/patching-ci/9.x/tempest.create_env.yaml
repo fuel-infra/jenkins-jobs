@@ -125,7 +125,7 @@
           description: 'Config for deploy from mos-ci-deployment-scripts'
       - string:
           name: VENV_PATH
-          default: "/home/jenkins/qa-venv-9.2"
+          default: "/home/jenkins/qa-venv-9.x"
       - string:
           name: SNAPSHOT_NAME
           default: "after_deploy"

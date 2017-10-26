@@ -3,7 +3,7 @@
 set -ex
 
 # Prepare venv
-source "${VENV_PATH:-/home/jenkins/venv-nailgun-tests-2.9/bin/activate}"
+source "${VENV_PATH:-/home/jenkins/qa-venv-9.x/bin/activate}"
 
 # Initialize variables
 export TESTRAIL_STATS_GENERATOR="fuelweb_test/testrail/generate_statistics.py"
@@ -46,4 +46,6 @@ if [ "${TEST_PLAN_ID:-none}" != "none" ]; then
     OPTIONS+=" ${TEST_PLAN_ID}"
 fi
 
-python "${TESTRAIL_STATS_GENERATOR}" ${OPTIONS}
+# Quoted OPTIONS below WILL NOT WORK; this file is not used anymore
+# so this is just for shell check. FIX THIS if one day we will need testrail statistic
+python "${TESTRAIL_STATS_GENERATOR}" "${OPTIONS}"

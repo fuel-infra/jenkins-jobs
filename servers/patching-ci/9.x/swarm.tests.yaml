@@ -3,7 +3,7 @@
     test-type: 'system_test'
     swarm-test/repobranch: 'origin/stable/mitaka'
     swarm-test/reponame: 'fuel-qa'
-    swarm-test/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    swarm-test/venvpath: '/home/jenkins/qa-venv-9.x'
     swarm-test/default_pool: '10.109.0.0/16:24'
     description: '9.1 swarm test group' # fixme!
     swarm-test/node: 'systest'
