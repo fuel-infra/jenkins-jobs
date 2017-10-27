@@ -1,0 +1,91 @@
+- job-template:
+    name: '{mcp_version}.resync-repos-to-mirrors'
+    id: 'sync-bin-repos/resync-mcp-repos-to-mirrors'
+    concurrent: false
+    node: '{trsync-node}'
+    logrotate:
+        daysToKeep: 10
+
+    description: |
+      <h3> Publish/synchronize internal repos to public mirrors <h3>
+      <p>
+        <b>Important note:</b> when starts at first time or at new server or
+        with additional repos in list then it possibly will fail on
+        timeout, because filling of repocache takes much time.
+        This will not brake destination mirrors.
+      <p>
+        If such issue happens, then manually disable timeout and restart
+        this job. It will fill repocache and next runs could be performed
+        normally
+      <p>
+        <ul>
+          <li> <b> Owner: </b> build-team </li>
+          <li> <b> Contacts: </b> #infra </li>
+        </ul>
+      </p>
+
+    timer: ''
+
+    properties:
+      - authorization: '{obj:authorization}'
+
+    parameters:
+      - string:
+          name: SRCURI
+          default: 'rsync://{repo-host}/mirror'
+          description: |
+            URI of rsync root of source repositories
+      - text:
+          name: SRCPATHS
+          default: '{obj:srcpaths}'
+          description: |
+            List of rsync root relative paths to the repositories
+      - bool:
+          name: FORCE
+          default: false
+          description: |
+              Run sync even if there are no changes in the repositories
+      - bool:
+          name: UPDATE_HEAD_SYMLINK
+          default: '{update-head}'
+          description: |
+              Point head symlink to new snapshot
+      - text:
+          name: HOSTS_TO_SYNC
+          default: |
+            rsync://eu.mirror.fuel-infra.org/mirror-sync
+            rsync://us.mirror.fuel-infra.org/mirror-sync
+          description: |
+            Host list sync to
+            Default:
+              rsync://eu.mirror.fuel-infra.org/mirror-sync
+              rsync://us.mirror.fuel-infra.org/mirror-sync
+    wrappers:
+      - build-timeout:
+          timeout: 50
+
+    scm:
+      - fuel-infra:
+          username: '{username-openstack-ci-jenkins}'
+          credentials-id: '{ssh-creds-openstack-ci-jenkins}'
+          repo: '{trsync-scm-repo}'
+          branch: '{trsync-scm-branch}'
+          basedir: '{trsync-scm-basedir}'
+
+    triggers:
+      - timed: '{timer}'
+
+    builders:
+
+      - inject:
+          properties-content: |
+            REPOCACHE_DIR=${{HOME}}/resync-repocache
+      - shell:
+          !include-raw-escape:
+            '../builders/resync-repo-to-mirrors.sh'
+
+    publishers:
+      - email:
+          recipients: '{mailto}'
+          notify-every-unstable-build: false
+          send-to-individuals: false

@@ -1,4 +1,29 @@
 - project:
+    name: 'resync-mcp-repos-to-mirrors'
+    repo-host: 'mirror.seed01-bud.infra.mirantis.net'
+
+    trsync-node: 'mirror-sync'
+    trsync-scm-repo: 'infra/trsync'
+    trsync-scm-branch: 'v0.9'
+    trsync-scm-basedir: 'trsync'
+    mailto: 'fuel-build+ci-packaging@mirantis.com'
+
+    mcp_version:
+      - 'mcp-pike':
+          authorization:
+            maintenance-mgmt:
+              - job-read
+              - job-build
+            ci:
+              - job-read
+              - job-build
+          srcpaths: |
+            mcp-repos/pike
+          update-head: true
+    jobs:
+        - 'sync-bin-repos/resync-mcp-repos-to-mirrors'
+
+- project:
     name: 'resync-repos-to-mirrors'
     repo-host: 'perestroika-repo-tst.infra.mirantis.net'
 
