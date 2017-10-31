@@ -29,10 +29,9 @@
           name: BRANCH
           default: 'stable'
           description: "Branch for CVE tracking code"
-      - bool:
-          name: CLEAN
-          default: false
-          description: "Clean internal data structures, including database!"
+      - text:
+          name: ADDITIONAL_PARAMETERS
+          description: "Additional environment variables, one per line!"
 #      - string:
 #          name: CVE_NAME
 #          default: ''
@@ -62,6 +61,8 @@
       - timed: "H */6 * * *"
 
     builders:
+      - inject:
+          properties-content: $ADDITIONAL_PARAMETERS
       - shell:
           !include-raw: builders/cve_tracking.sh
 
