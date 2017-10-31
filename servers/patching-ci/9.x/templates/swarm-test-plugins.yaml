@@ -3,7 +3,7 @@
     id: patching-ci/9.x/templates/swarm-test-plugins
 
     swarm-test-plugins/email: 'ci+bvt@mirantis.com'
-    swarm-test-plugins/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    swarm-test-plugins/venvpath: '/home/jenkins/qa-venv-9.x'
     swarm-test-plugins/env_suffix: $BUILD_ID
     swarm-test-plugins/custom-overrides-plain-properties: ''
     swarm-test-plugins/custom-overrides-properties-file: ''

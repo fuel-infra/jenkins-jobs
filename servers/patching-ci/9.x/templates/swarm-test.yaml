@@ -4,7 +4,7 @@
 
     # swarm-test/node: ''
     swarm-test/email: 'ci+bvt@mirantis.com'
-    swarm-test/venvpath: '/home/jenkins/venv-nailgun-tests-2.9'
+    swarm-test/venvpath: '/home/jenkins/qa-venv-9.x'
     swarm-test/env_suffix: $BUILD_ID
     # swarm-test/default_pool: ''
 

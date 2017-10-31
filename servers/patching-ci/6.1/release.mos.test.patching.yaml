@@ -55,7 +55,7 @@
           default: '{reviewer}'
       - string:
           name: PYTHON_VENV
-          default: '/home/jenkins/venv-nailgun-tests-2.9/'
+          default: '/home/jenkins/qa-venv-6.1/'
       - string:
           name: GERRIT_HOST1
           default: ''

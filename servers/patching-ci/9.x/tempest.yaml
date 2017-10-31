@@ -64,7 +64,7 @@
           default: "origin/stable/mitaka"
       - string:
           name: VENV_PATH
-          default: "/home/jenkins/qa-venv-9.2"
+          default: "/home/jenkins/qa-venv-9.x"
       # Temporary spike - just to run tempest against custom repos once
       - string:
           name: EXTRA_DEB_REPOS

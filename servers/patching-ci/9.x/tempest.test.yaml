@@ -129,7 +129,7 @@
           default: "origin/stable/mitaka"
       - string:
           name: VENV_PATH
-          default: "/home/jenkins/qa-venv-9.2"
+          default: "/home/jenkins/qa-venv-9.x"
     builders:
       - trigger-builds:
         - project: '9.x.tempest.create_env'
