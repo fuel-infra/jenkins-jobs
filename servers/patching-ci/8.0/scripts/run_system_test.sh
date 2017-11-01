@@ -14,3 +14,6 @@ VERSION_STRING=$(basename "${ISO_PATH}" | cut -d '-' -f 2-3)
 echo "Description string: $TEST_GROUP on $VERSION_STRING"
 
 sh -x "utils/jenkins/system_tests.sh" -w "${WORKSPACE}" -e "${ENV_NAME}" -o --group="${TEST_GROUP}" -i "${ISO_PATH}"
+
+# clean up if tests were successful
+dos.py erase "${ENV_NAME}"

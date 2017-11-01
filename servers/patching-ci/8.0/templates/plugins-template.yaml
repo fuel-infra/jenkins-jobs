@@ -57,9 +57,7 @@
           DEPLOYMENT_TIMEOUT=10800
     - 80-systest-repos-parsing
     - shell:
-        !include-raw-escape: 'scripts/run_plugin_example_system_test.sh'
-    - shell:
-        !include-raw-escape: '../scripts/erase_env.sh'
+        !include-raw-escape: '../scripts/run_plugin_example_system_test.sh'
 
     publishers:
     - archive:

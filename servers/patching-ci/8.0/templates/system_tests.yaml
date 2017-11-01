@@ -103,13 +103,11 @@
         {pre-script}
     - 80-systest-repos-parsing
     - shell:
-        !include-raw-escape: 'scripts/run_system_test.sh'
+        !include-raw-escape: '../scripts/run_system_test.sh'
     - shell: |
         #!/bin/bash
         echo "=== [systest POST-script] ==="
         {post-script}
-    - shell:
-        !include-raw-escape: '../scripts/erase_env.sh'
 
     publishers:
     - archive:
