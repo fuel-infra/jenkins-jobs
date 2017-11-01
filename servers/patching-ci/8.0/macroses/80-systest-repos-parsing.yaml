@@ -3,6 +3,6 @@
 
     builders:
       - shell:
-          !include-raw: '../scripts/systest_repos_parsing.sh'
+          !include-raw: '../builders/systest_repos_parsing.sh'
       - inject:
           properties-file: systest_repos.jenkins-injectfile

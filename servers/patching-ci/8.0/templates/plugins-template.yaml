@@ -25,9 +25,9 @@
     - 80-systest-params
 
     scm:
-    - openstack:
-        branch: 'stable/8.0'
-        repo: 'fuel-qa'
+    - fuel-qa-downstream:
+        repobranch: '{repobranch}'
+        basedir: 'fuel-qa'
 
     wrappers:
     - timeout:
@@ -57,7 +57,7 @@
           DEPLOYMENT_TIMEOUT=10800
     - 80-systest-repos-parsing
     - shell:
-        !include-raw-escape: '../scripts/run_plugin_example_system_test.sh'
+        !include-raw-escape: '../builders/run_plugin_example_system_test.sh'
 
     publishers:
     - archive:

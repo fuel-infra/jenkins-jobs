@@ -70,10 +70,9 @@
     - 80-systest-params
 
     scm:
-    - main-git:
-        reponame: '{reponame}'
+    - fuel-qa-downstream:
         repobranch: '{repobranch}'
-        basedir: ''
+        basedir: 'fuel-qa'
 
     wrappers:
     - timeout:
@@ -103,7 +102,7 @@
         {pre-script}
     - 80-systest-repos-parsing
     - shell:
-        !include-raw-escape: '../scripts/run_system_test.sh'
+        !include-raw-escape: '../builders/run_system_test.sh'
     - shell: |
         #!/bin/bash
         echo "=== [systest POST-script] ==="
