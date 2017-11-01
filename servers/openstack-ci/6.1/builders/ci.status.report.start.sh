@@ -32,4 +32,4 @@ elif echo "${JOB_NAME}" | grep build ; then
         export DISPLAY_NAME="Build ${DISTR} package on temporary repository"
     fi
 fi
-ci-status-client/ci-status-report.sh start
+#ci-status-client/ci-status-report.sh start
