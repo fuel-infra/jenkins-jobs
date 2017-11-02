@@ -4,12 +4,12 @@
     parameters:
 
     - string:
-          name: SNAPSHOT_PARAMS_ID
-          default: lastSuccessfulBuild
-          description: |
-              Take from https://patching-ci.infra.mirantis.net/job/9.x.snapshot.params/
-              for last build: lastSuccessfulBuild
-              Parameters that marked with '*snapshot.params' not been used and can be ommited if this parameter provided
+        name: SNAPSHOT_PARAMS_ID
+        default: lastSuccessfulBuild
+        description: |
+            Take from https://patching-ci.infra.mirantis.net/job/9.x.snapshot.params/
+            for last build: lastSuccessfulBuild
+            Parameters that marked with '*snapshot.params' not been used and can be ommited if this parameter provided
 
     - string:
         name: CUSTOM_VERSION

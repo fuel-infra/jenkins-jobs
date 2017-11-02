@@ -13,10 +13,9 @@
       artifactDaysToKeep: 7
       artifactNumToKeep: 12
     scm:
-      - main-git:
-          reponame: 'fuel-qa'
+      - fuel-qa-downstream:
           repobranch: "$FUEL_QA_COMMIT"
-          basedir: ''
+          basedir: 'fuel-qa'
       - mirantis:
           reponame: 'mos-ci-deployment-scripts'
           repobranch: 'origin/master'
@@ -62,6 +61,7 @@
           default: '16384'
           description: 'Slaves memory in Mb'
     builders:
+      - guess-mirror
       - 80-systest-repos-parsing
       - shell:
           !include-raw: 'builders/tempest.create_env.sh'

@@ -3,22 +3,28 @@
 set -ex
 
 # Fetch params from snapshot job
-if [[ -n "${SNAPSHOT_PARAMS_ID}" ]]; then
-    source <(curl -s "https://patching-ci.infra.mirantis.net/job/8.0.snapshot.params/${SNAPSHOT_PARAMS_ID}/artifact/snapshots.sh")
+if [[ ! "${SNAPSHOT_PARAMS_ID}" ]]; then
+    SNAPSHOT_PARAMS_ID="lastSuccessfulBuild"
 fi
 
-###################### Get MIRROR HOST ###############
-LOCATION_FACT=$(facter --external-dir /etc/facter/facts.d/ location)
-LOCATION=${LOCATION_FACT:-bud}
+curl -s "https://patching-ci.infra.mirantis.net/job/8.0.snapshot.params/${SNAPSHOT_PARAMS_ID}/artifact/snapshots.sh" > snapshots.sh
+
+
+while read line ; do
+ var_name=$(echo "${line}" | awk -F '=' '{print $1}')
+ var_overwrite="$(join "_" "${var_name}" "$(to_uppercase "overwrite")")"
+ if [[ ! -z ${!var_overwrite} ]]
+ then
+  declare ${var_name}="${!var_overwrite}"
+ else
+  eval "${line}"
+ fi
+done <snapshots.sh
+
 CENTOS_SECURITY_PROPOSED=${CENTOS_SECURITY_PROPOSED:-"http://pkg-updates.fuel-infra.org/centos7/"}
 
-case "${LOCATION}" in
-    mnv|scc)
-        MIRROR_HOST="http://us.mirror.fuel-infra.org/"
-        ;;
-    *)
-        MIRROR_HOST="http://eu.mirror.fuel-infra.org/"
-esac
+### LOCATION CODE - use "guess-mirror builder"
+
 
 function join() {
     local __sep="${1}"

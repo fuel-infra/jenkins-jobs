@@ -100,9 +100,7 @@
         #!/bin/bash
         echo "=== [systest PRE-script] ==="
         {pre-script}
-    - 80-systest-repos-parsing
-    - shell:
-        !include-raw-escape: '../builders/run_system_test.sh'
+    - 80-run-sys-test
     - shell: |
         #!/bin/bash
         echo "=== [systest POST-script] ==="

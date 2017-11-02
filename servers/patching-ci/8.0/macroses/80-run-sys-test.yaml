@@ -1,0 +1,7 @@
+- builder:
+    name: 80-run-sys-test
+    builders:
+    - guess-mirror
+    - 80-systest-repos-parsing
+    - shell:
+        !include-raw: '../builders/run_system_test.sh'
