@@ -2,6 +2,25 @@
 
 set -ex
 
+function join() {
+    local __sep="${1}"
+    local __head="${2}"
+    local __tail="${3}"
+
+    if [[ -n "${__head}" ]]; then
+        echo "${__head}${__sep}${__tail}"
+    else
+        echo "${__tail}"
+    fi
+}
+
+function to_uppercase() {
+    echo "$1" | awk '{print toupper($0)}'
+}
+
+__space=' '
+__pipe='|'
+
 # Fetch params from snapshot job
 if [[ ! "${SNAPSHOT_PARAMS_ID}" ]]; then
     SNAPSHOT_PARAMS_ID="lastSuccessfulBuild"
@@ -25,25 +44,6 @@ CENTOS_SECURITY_PROPOSED=${CENTOS_SECURITY_PROPOSED:-"http://pkg-updates.fuel-in
 
 ### LOCATION CODE - use "guess-mirror builder"
 
-
-function join() {
-    local __sep="${1}"
-    local __head="${2}"
-    local __tail="${3}"
-
-    if [[ -n "${__head}" ]]; then
-        echo "${__head}${__sep}${__tail}"
-    else
-        echo "${__tail}"
-    fi
-}
-
-function to_uppercase() {
-    echo "$1" | awk '{print toupper($0)}'
-}
-
-__space=' '
-__pipe='|'
 
 # Adding CentOS rpm repos to
 # - UPDATE_FUEL_MIRROR - will replace the default upstream repositories in cluster
