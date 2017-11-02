@@ -27,7 +27,7 @@
     scm:
     - fuel-qa-downstream:
         repobranch: '{repobranch}'
-        basedir: 'fuel-qa'
+        basedir: ''
 
     wrappers:
     - timeout:
