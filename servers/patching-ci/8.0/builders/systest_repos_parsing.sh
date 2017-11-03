@@ -51,7 +51,7 @@ if [[ ! -z ${CENTOS_MIRROR_ID} ]]; then
     for _repo in "os"      \
                  "extras"  \
                  "updates"; do
-        __repo_url="${MIRROR_HOST}pkgs/snapshots/${CENTOS_MIRROR_ID}/${_repo}/x86_64"
+        __repo_url="http://${MIRROR_HOST}/pkgs/snapshots/${CENTOS_MIRROR_ID}/${_repo}/x86_64"
         UPDATE_FUEL_MIRROR="$(join "${__space}" "${UPDATE_FUEL_MIRROR}" "${__repo_url}" )"
     done
 fi
@@ -84,10 +84,8 @@ for _dn in  "os"        \
     if [[ "${!__enable_ptr}" = true ]] ; then
         # a pointer to variable name which holds repo id
         __repo_id_ptr="MOS_CENTOS_$(to_uppercase "${_dn}")_MIRROR_ID"
-        __repo_url="${MIRROR_HOST}mos-repos/centos/mos8.0-centos7-fuel/snapshots/${!__repo_id_ptr}/x86_64"
-        __repo_name="mos-${_dn},${__repo_url}"
+        __repo_url="http://${MIRROR_HOST}mos-repos/centos/mos8.0-centos7-fuel/snapshots/${!__repo_id_ptr}/x86_64"
         UPDATE_FUEL_MIRROR="$(join "${__space}" "${UPDATE_FUEL_MIRROR}" "${__repo_url}" )"
-        EXTRA_RPM_REPOS="$(join "${__pipe}" "${EXTRA_RPM_REPOS}" "${__repo_name}" )"
     fi
 done
 # Add separate mos rpm security repo
@@ -114,7 +112,7 @@ for _dn in  "proposed"  \
     __enable_ptr="ENABLE_MOS_UBUNTU_$(to_uppercase "${_dn}")"
     # a pointer to variable name which holds repo id
     __repo_id_ptr="MOS_UBUNTU_MIRROR_ID"
-    __repo_url="${MIRROR_HOST}mos-repos/ubuntu/snapshots/${!__repo_id_ptr}"
+    __repo_url="http://${MIRROR_HOST}/mos-repos/ubuntu/snapshots/${!__repo_id_ptr}"
     if [[ "${!__enable_ptr}" = true ]] ; then
         __repo_name="mos-${_dn},deb ${__repo_url} mos8.0-${_dn} main restricted"
         EXTRA_DEB_REPOS="$(join "${__pipe}" "${EXTRA_DEB_REPOS}" "${__repo_name}")"
