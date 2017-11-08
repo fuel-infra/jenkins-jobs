@@ -11,7 +11,7 @@
     master-mos-version: '9.0'
     main_ubuntu_release: 'trusty'
     openstack_release: 'ubuntu'
-    fuel-main-branch: 'liberty-eol'
+    fuel-main-branch: 'stable/8.0'
     fuel-qa-branch: 'stable/8.0'
     perestroika-branch: 'stable/8.0'
     install-scm-branch: 'origin/master'
