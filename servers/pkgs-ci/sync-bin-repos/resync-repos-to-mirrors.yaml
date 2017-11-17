@@ -18,8 +18,9 @@
               - job-read
               - job-build
           srcpaths: |
-            mcp-repos/pike
+            mcp-repos/pike/xenial
           update-head: true
+          timer: 'H/20 * * * *'
     jobs:
         - 'sync-bin-repos/resync-mcp-repos-to-mirrors'
 
