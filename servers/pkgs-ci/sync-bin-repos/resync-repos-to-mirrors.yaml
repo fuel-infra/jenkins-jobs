@@ -18,6 +18,7 @@
               - job-read
               - job-build
           srcpaths: |
+            mcp/pike
             mcp-repos/pike/xenial
           update-head: true
           timer: 'H/20 * * * *'
