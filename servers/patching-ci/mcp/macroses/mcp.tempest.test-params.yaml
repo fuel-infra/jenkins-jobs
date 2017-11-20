@@ -17,3 +17,6 @@
       - string:
           name: VENV_PATH
           default: '/home/jenkins/qa-venv-mcp'
+      - bool:
+          name: RUN_TEMPEST
+          default: true

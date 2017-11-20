@@ -13,6 +13,9 @@
       - string:
           name: VENV_PATH
           default: '/home/jenkins/qa-venv-mcp'
+      - bool:
+          name: RUN_TEMPEST
+          default: true
     publishers:
       - email-default:
           mail-to: 'mos-maintenance-qa@mirantis.com'
