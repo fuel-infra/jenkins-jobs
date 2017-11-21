@@ -16,6 +16,12 @@
       - bool:
           name: RUN_TEMPEST
           default: true
+      - string:
+          name: DOCKER_REGISTRY
+          default: 'docker-sandbox.sandbox.mirantis.net'
+      - string:
+          name: DOCKER_NAME
+          default: 'rally-tempest/rally-tempest:mcp1.1_newton'
     publishers:
       - email-default:
           mail-to: 'mos-maintenance-qa@mirantis.com'
