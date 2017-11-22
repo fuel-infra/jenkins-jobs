@@ -41,3 +41,6 @@
               current-parameters: true
               kill-phase-on: NEVER
               predefined-parameters:
+            - name: '8.0.system_test.ubuntu.plugins.fuel_plugin_example'
+              current-parameters: true
+              kill-phase-on: NEVER
