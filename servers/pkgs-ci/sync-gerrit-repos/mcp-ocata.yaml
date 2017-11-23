@@ -51,11 +51,13 @@
     - 'neutron-lib'
     - 'neutron-vpnaas'
     - 'nova'
-    - 'openstack-doc-tools'
-    - 'openstackdocstheme'
+    # (astupnikov) THERE IS NO stable/ocata BRANCH IN UPSTREAM
+    # - 'openstack-doc-tools'
+    # - 'openstackdocstheme'
     - 'os-brick'
     - 'os-client-config'
-    - 'os-testr'
+    # (astupnikov) THERE IS NO stable/ocata BRANCH IN UPSTREAM
+    # - 'os-testr'
     - 'os-vif'
     - 'os-win'
     - 'osc-lib'
@@ -88,7 +90,8 @@
     - 'python-congressclient'
     - 'python-designateclient'
     - 'python-glanceclient'
-    - 'python-gnocchiclient'
+    # (astupnikov) THERE IS NO stable/ocata BRANCH IN UPSTREAM
+    # - 'python-gnocchiclient'
     - 'python-heatclient'
     - 'python-ironic-inspector-client'
     - 'python-ironicclient'
