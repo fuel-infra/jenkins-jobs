@@ -1,5 +1,6 @@
 - project:
     name: 'repo-monitors'
+    is-disabled: true
     ns-repo-monitor: ''
     version-id:
       - '7.0':

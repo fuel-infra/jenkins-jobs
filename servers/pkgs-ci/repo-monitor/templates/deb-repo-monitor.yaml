@@ -3,6 +3,7 @@
     project-type: freestyle
     description: "Repo monitor for {version-id} ubuntu repository"
     node: '{build-node}'
+    disabled: '{is-disabled}'
     triggers:
       - timed: "H 10 * * *"
     builders:
