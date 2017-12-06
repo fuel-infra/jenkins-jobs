@@ -75,17 +75,6 @@
     name: mirror-sync
     jobs:
       - 'mirror-{mirror_path}-{mirror_name}':
-          mirror_path: pkgs
-          mirror_name: ubuntu
-          mirror_dir: '{mirror_name}'
-          src_url: 'rsync://eu.archive.ubuntu.com/{mirror_name}'
-          sync_locations: >
-              rsync://tpi-s2.bud.mirantis.net/mirror-sync/{mirror_path}
-              rsync://seed01-bud.fuel-infra.org/mirror-sync/{mirror_path}
-              rsync://seed01-scc.fuel-infra.org/mirror-sync/{mirror_path}
-          updated_symlinks: '{mirror_name}'
-          pull_rsync_extra_params: ''
-      - 'mirror-{mirror_path}-{mirror_name}':
           mirror_path: mirrors
           mirror_name: docker
           mirror_dir: '{mirror_name}'

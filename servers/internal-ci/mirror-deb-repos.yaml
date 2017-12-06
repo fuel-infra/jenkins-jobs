@@ -1,0 +1,78 @@
+- project:
+    name: 'mirror-pkgs-repos'
+
+    trsync-scm: 'https://review.fuel-infra.org/infra/trsync'
+    trsync-scm-branch: 'stable/0.9'
+    trsync-scm-basedir: 'trsync'
+    mirror-node: 'mirror-pkgs-seed'
+
+    mirror:
+    - ubuntu:
+        mirror-path: 'ubuntu'
+        mirror-host: 'cz.archive.ubuntu.com'
+        mirror-root: 'ubuntu'
+        mirror-dists: 'trusty,trusty-proposed,trusty-updates,trusty-security,trusty-backports,xenial,xenial-proposed,xenial-updates,xenial-security,xenial-backports'
+        mirror-sections: 'main,universe,multiverse,restricted,main/debian-installer,universe/debian-installer,multiverse/debian-installer,restricted/debian-installer'
+        mirror-method: 'rsync'
+
+    jobs:
+    - 'packaging/mirror-deb-repo'
+
+- job-template:
+    name: mirror-pkgs-{mirror}
+    id: packaging/mirror-deb-repo
+    description: |
+      Mirror upstream package repository<br/>
+      Source: {mirror-method}://{mirror-host}/{mirror-root}<br/>
+      Distributions: {mirror-dists}<br/>
+      Components: {mirror-sections}<br/>
+      Owner: MCP CI team, #mcp-cicd-product channel at Slack.<br/>
+    concurrent: False
+    node: '{mirror-node}'
+
+    mirror-host: ''
+    mirror-root: ''
+    mirror-dists: ''
+    mirror-sections: ''
+    mirror-arches: 'amd64'
+    mirror-method: 'http'
+    mirror-rsync-module: ''
+
+    properties:
+    - build-discarder:
+        days-to-keep: 15
+
+    - inject:
+        properties-content: |
+          MIRRORS_DIR=${{HOME}}/deb-mirrors
+          UPDATE_HEAD_SYMLINK=true
+          SNAPSHOT_LIFETIME=31
+          TRSYNC_DIR={trsync-scm-basedir}
+          TRSYNC_SCM={trsync-scm}
+          TRSYNC_SCM_BRANCH={trsync-scm-branch}
+
+    parameters:
+    - string:
+        name: HOSTS_TO_SYNC
+        default: >
+            rsync://tpi-s2.bud.mirantis.net/mirror-sync/pkgs
+            rsync://seed01-bud.fuel-infra.org/mirror-sync/pkgs
+            rsync://seed01-scc.fuel-infra.org/mirror-sync/pkgs
+        description: |
+          Space separated list of locations to sync to. E.g. `rsync://host/module/path/to /srv/mirror`
+    - string:
+        name: MIRROR_LIST
+        default: '{mirror-path}|{mirror-host}|{mirror-root}|{mirror-dists}|{mirror-sections}|{mirror-arches}|{mirror-method}|{mirror-rsync-module}'
+        description: |
+          Space separated list of mirrors
+    - bool:
+        name: FORCE
+        default: false
+        description: |
+            Run sync even if there are no changes in the repositories
+
+    triggers:
+    - timed: '0 0 * * *'
+
+    builders:
+    - shell: !include-raw-escape: builders/mirror-deb-repos.sh
