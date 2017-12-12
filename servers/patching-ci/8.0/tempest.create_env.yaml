@@ -15,7 +15,7 @@
     scm:
       - fuel-qa-downstream:
           repobranch: "$FUEL_QA_COMMIT"
-          basedir: 'fuel-qa'
+          basedir: ''
       - mirantis:
           reponame: 'mos-ci-deployment-scripts'
           repobranch: 'origin/master'
