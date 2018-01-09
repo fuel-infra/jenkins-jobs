@@ -12,6 +12,8 @@
         os: ubuntu
         mos_version: '10.0'
 
+    timeout: 60
+
     jobs:
     - 'infra-trigger-docker-image-{os}-{distro}'
 
@@ -20,8 +22,7 @@
     - 'infra-run-docker-tox-{tox-env}':
         tox-env:
         - pep8
-        - py27:
-            timeout: 60
+        - py27
         - py34
         - py35
         - functional
