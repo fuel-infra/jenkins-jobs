@@ -12,8 +12,9 @@ export ANALYTICS_IP="${ANALYTICS_IP}"
 
 rm -rf logs/*
 
+ENV_PREFIX="${ENV_PREFIX:0:56}" # libvirt cant handle VM name >60 length
 ENV_NAME="${ENV_PREFIX?}.${ENV_SUFFIX?}"
-ENV_NAME="${ENV_NAME:0:68}"
+ENV_NAME="${ENV_NAME:0:60}"
 
 # done for destroy step
 echo "export ENV_NAME=\"${ENV_NAME}\"" > "${WORKSPACE}/${DOS_ENV_NAME_PROPS_FILE:=.dos_environment_name}"
