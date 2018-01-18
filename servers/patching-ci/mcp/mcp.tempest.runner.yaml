@@ -29,3 +29,5 @@
             - name: 'mcp.tempest.test.dvr'
               current-parameters: true
               kill-phase-on: NEVER
+    triggers:
+      - timed: 'H H(0-5) * * *'
