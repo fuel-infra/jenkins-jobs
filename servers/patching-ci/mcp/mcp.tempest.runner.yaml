@@ -7,25 +7,18 @@
       - heavy-job:
           weight: 1
     parameters:
-      - string:
-          name: TESTRAIL_PLAN_NAME
-          default: 'MCP11 Newtone Tempest MM/DD/YYYY'
-      - string:
-          name: VENV_PATH
-          default: '/home/jenkins/qa-venv-mcp'
-      - bool:
-          name: RUN_TEMPEST
-          default: true
-      - string:
-          name: DOCKER_REGISTRY
-          default: 'docker-sandbox.sandbox.mirantis.net'
-      - string:
-          name: DOCKER_NAME
-          default: 'rally-tempest/rally-tempest:mcp1.1_newton'
+      - mcp.tempest.test-params
+
     publishers:
       - email-default:
           mail-to: 'mos-maintenance-qa@mirantis.com'
     builders:
+      - trigger-builds:
+        - project: 'cleaner-on-label-patching-ci'
+          predefined-parametes: |
+            LABEL=$NODE_LABELS
+            ENV_LIFETIME=24h
+
       - multijob:
           name: 'mcp11 tempest'
           condition: COMPLETED
