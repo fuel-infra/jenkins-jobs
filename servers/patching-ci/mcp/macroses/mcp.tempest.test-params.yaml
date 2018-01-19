@@ -1,10 +1,9 @@
 - parameter:
     name: mcp.tempest.test-params
     parameters:
-      - node:
+      - label:
           name: NODE_LABELS
-          default-slaves:
-            - 'mcp-tempest'
+          default: 'mcp-tempest'
       - string:
           name: TESTRAIL_PLAN_NAME
           default: 'MCP11 Newtone Tempest MM/DD/YYYY'
