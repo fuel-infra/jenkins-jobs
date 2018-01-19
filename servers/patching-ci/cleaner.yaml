@@ -1,21 +1,6 @@
 - project:
-    name: patching-ci-cleaner
-    devops_25: false
-    devops_29: false
-    devops_upgrades: false
-    release_60: false
-    release_61: true
-    lifetime_bvt: '24'
-    lifetime_swarm: '96'
-    lifetime_acceptance: '96'
-    lifetime_other: '24'
-    jobs:
-      - cleaner
-      - cleaner-on-labels
-
-- project:
-    name: new-patching-ci-cleaner
+    name: cleaner-patching-ci
     env_lifetime: '72h'
     jobs:
-      - new-cleaner-patching-ci
-      - new-cleaner-on-labels-patching-ci
+      - cleaner-patching-ci
+      - cleaner-on-labels-patching-ci
