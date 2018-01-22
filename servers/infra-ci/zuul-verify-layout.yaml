@@ -22,7 +22,7 @@
           pip install --upgrade pip setuptools packaging
 
           # Install zuul
-          pip install --upgrade pytz git+git://git.openstack.org/openstack-infra/zuul
+          pip install --upgrade pytz git+git://git.openstack.org/openstack-infra/zuul@2.5.2
 
           # Create directory for output files
           mkdir "${{WORKSPACE}}/output"
