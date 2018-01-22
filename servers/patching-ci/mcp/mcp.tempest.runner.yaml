@@ -8,16 +8,23 @@
           weight: 1
     parameters:
       - mcp.tempest.test-params
+      - string:
+          name: ENV_LIFETIME
+          default: '24h'
+          description: Cleanup all envs older than given interval before running tests
 
     publishers:
       - email-default:
           mail-to: 'mos-maintenance-qa@mirantis.com'
     builders:
       - trigger-builds:
-        - project: 'cleaner-on-labels-patching-ci'
-          predefined-parametes: |
-            LABEL=$NODE_LABELS
-            ENV_LIFETIME=24h
+        - project: 'cleaner-patching-ci'
+          block: true
+          current-parameters: true
+          parameter-factories:
+            - factory: allnodesforlabel
+              node-label: $NODE_LABELS
+              name: 'NODE'
 
       - multijob:
           name: 'mcp11 tempest'
