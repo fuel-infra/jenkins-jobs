@@ -14,7 +14,7 @@
           mail-to: 'mos-maintenance-qa@mirantis.com'
     builders:
       - trigger-builds:
-        - project: 'cleaner-on-label-patching-ci'
+        - project: 'cleaner-on-labels-patching-ci'
           predefined-parametes: |
             LABEL=$NODE_LABELS
             ENV_LIFETIME=24h
