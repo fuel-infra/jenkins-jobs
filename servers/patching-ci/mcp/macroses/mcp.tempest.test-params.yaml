@@ -4,9 +4,16 @@
       - label:
           name: NODE_LABELS
           default: 'mcp-tempest'
+      - dynamic-string:
+          name: TIMESTAMP
+          script: |
+              TimeZone.setDefault(TimeZone.getTimeZone('UTC'))
+              def now = new Date()
+              return now.format("yyyy-MM-dd")
+          remote: false
       - string:
           name: TESTRAIL_PLAN_NAME
-          default: 'MCP11 Newtone Tempest MM/DD/YYYY'
+          default: '[MCP1.1]System_Newtone-${TIMESTAMP}'
       - bool:
           name: SHUTDOWN_ENV_ON_TEARDOWN
           default: true
