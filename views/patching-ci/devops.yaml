@@ -10,8 +10,8 @@
       - verify-slave-on-label
       - update-jenkins-jobs
       - update-jenkins-views
-      - new-cleaner-patching-ci
-      - new-cleaner-on-labels-patching-ci
+      - cleaner-patching-ci
+      - cleaner-on-labels-patching-ci
     columns:
       - status
       - weather

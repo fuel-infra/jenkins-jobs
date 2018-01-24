@@ -92,6 +92,8 @@
 
       - trigger-builds:
         - project: 'cleaner-patching-ci'
+          predefined-parameters:
+            ENV_LIFETIME=$ENV_LIFETIME
           parameter-factories:
             - factory: allnodesforlabel
               node-label: $LABEL
