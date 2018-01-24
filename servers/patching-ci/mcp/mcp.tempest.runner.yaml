@@ -10,7 +10,7 @@
       - mcp.tempest.test-params
       - string:
           name: ENV_LIFETIME
-          default: '24h'
+          default: '10h'
           description: Cleanup all envs older than given interval before running tests
 
     publishers:
