@@ -62,7 +62,7 @@
             REPORT_FILE=$WORKSPACE/verification.xml
             TESTRAIL_PLAN_NAME=$TESTRAIL_PLAN_NAME
             TEST_BUILD_URL=$BUILD_URL
-            TESTRAIL_SUITE=Tempest 15.0.0
+            TESTRAIL_SUITE=Tempest 16.0.0 base
             TESTRAIL_MILESTONE=MCP1.1
             ENV_DESCRIPTION={lab-config-name}
 
