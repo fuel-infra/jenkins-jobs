@@ -169,6 +169,7 @@ REPOSITORIES_WHITELIST = {
     'openstack-build/glance_store-build',
     'openstack/django_openstack_auth',
     'openstack/glance_store',
+    'oss/SimianArmy',
     'packages/centos6/Cython',
     'packages/centos6/Django',
     'packages/centos6/Django14',
