@@ -45,7 +45,7 @@
           repobranch: 'origin/stable/7.0'
           basedir: 'examples/fuel-plugin-detach-keystone'
     triggers:
-      - timed: '0 22 * * *'
+      - timed: ''
     wrappers:
       - ansicolor:
           colormap: xterm
