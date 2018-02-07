@@ -17,6 +17,7 @@
       - mirantis:
           reponame: 'mos-ci-deployment-scripts'
           repobranch: 'origin/master'
+          refspec: '+refs/heads/*:refs/remotes/origin/*'
           basedir: 'mos-ci-deployment-scripts'
     parameters:
       - node:

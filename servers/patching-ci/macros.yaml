@@ -97,6 +97,7 @@
           url: 'https://github.com/Mirantis/{reponame}.git'
           branches:
             - '{repobranch}'
+          refspec: '{refspec}'
           basedir: '{basedir}'
           wipe-workspace: false
           clean:
