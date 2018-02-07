@@ -32,3 +32,12 @@
       - string:
           name: DOCKER_NAME
           default: 'mirantis/oscore/rally-tempest:latest'
+      - string:
+          name: TCP_QA_GERRIT_BRANCH
+          default: 'origin/master'
+      - string:
+          name: TCP_QA_GERRIT_REFSPEC
+          default: ''
+      - string:
+          name: SALT_MODELS_REF_CHANGE
+          default: ''

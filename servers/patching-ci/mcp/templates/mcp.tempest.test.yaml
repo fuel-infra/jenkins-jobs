@@ -22,6 +22,9 @@
           reponame: 'tcp-qa'
           repobranch: 'origin/master'
           basedir: ''
+          branches:
+            - '$TCP_QA_GERRIT_BRANCH'
+          refspec: '$TCP_QA_GERRIT_REFSPEC:$TCP_QA_GERRIT_REFSPEC'
 
     properties:
     - heavy-job:
