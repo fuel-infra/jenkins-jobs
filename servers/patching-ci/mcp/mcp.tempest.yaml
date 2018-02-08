@@ -4,12 +4,20 @@
     weight: '7'
     jobs:
       - 'mcp.tempest.test.{name-suffix}':
-          name-suffix: ovs
-          lab-config-name: virtual-mcp11-ovs
+          name-suffix: mitaka_ovs
+          lab-config-name: virtual-mcp-mitaka-ovs
+          test-group: test_mcp11_mitaka_ovs_install
+      - 'mcp.tempest.test.{name-suffix}':
+          name-suffix: mitaka_dvr
+          lab-config-name: virtual-mcp-mitaka-dvr
+          test-group: test_mcp11_mitaka_dvr_install
+      - 'mcp.tempest.test.{name-suffix}':
+          name-suffix: newton_ovs
+          lab-config-name: virtual-mcp-newton-ovs
           test-group: test_mcp11_newton_ovs_install
       - 'mcp.tempest.test.{name-suffix}':
-          name-suffix: dvr
-          lab-config-name: virtual-mcp11-dvr
+          name-suffix: newton_dvr
+          lab-config-name: virtual-mcp-newton-dvr
           test-group: test_mcp11_newton_dvr_install
 
 - project:
