@@ -31,7 +31,7 @@ else
     source report-venv/bin/activate
 fi
 
-pip install -U xunit2testrail
+pip install -U git+https://github.com/gdyuldin/testrail_reporter
 
 report -v --testrail-plan-name "${TESTRAIL_PLAN_NAME?}" \
           --env-description "${ENV_DESCRIPTION?}"\
