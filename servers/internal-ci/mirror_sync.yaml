@@ -80,7 +80,6 @@
           mirror_dir: '{mirror_name}'
           src_url: 'rsync://mirror.yandex.ru/mirrors/docker/'
           sync_locations: >
-              rsync://tpi-s2.bud.mirantis.net/mirror-sync/{mirror_path}
               rsync://seed01-bud.fuel-infra.org/mirror-sync/{mirror_path}
               rsync://seed01-scc.fuel-infra.org/mirror-sync/{mirror_path}
           updated_symlinks: '{mirror_name}'
@@ -93,7 +92,6 @@
           mirror_dir: '{mirror_name}%symlink_target%'
           src_url: 'rsync://ftp.fi.muni.cz/pub/linux/{mirror_name}/{mirror_version}'
           sync_locations: >
-              rsync://tpi-s2.bud.mirantis.net/mirror-sync/{mirror_path}
               rsync://seed01-bud.fuel-infra.org/mirror-sync/{mirror_path}
               rsync://seed01-scc.fuel-infra.org/mirror-sync/{mirror_path}
           updated_symlinks: '{mirror_name}-%symlink_target% {mirror_name}/{mirror_version} {mirror_name}/%symlink_target%'
@@ -105,7 +103,6 @@
           mirror_dir: '{mirror_name}%symlink_target%'
           src_url: 'rsync://ftp.fi.muni.cz/pub/linux/{mirror_name}/{mirror_version}'
           sync_locations: >
-              rsync://tpi-s2.bud.mirantis.net/mirror-sync/{mirror_path}
               rsync://seed01-bud.fuel-infra.org/mirror-sync/{mirror_path}
               rsync://seed01-scc.fuel-infra.org/mirror-sync/{mirror_path}
           updated_symlinks: '{mirror_name}-%symlink_target% {mirror_name}/{mirror_version} {mirror_name}/%symlink_target%'

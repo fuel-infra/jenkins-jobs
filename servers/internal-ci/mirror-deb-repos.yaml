@@ -55,7 +55,6 @@
     - string:
         name: HOSTS_TO_SYNC
         default: >
-            rsync://tpi-s2.bud.mirantis.net/mirror-sync/pkgs
             rsync://seed01-bud.fuel-infra.org/mirror-sync/pkgs
             rsync://seed01-scc.fuel-infra.org/mirror-sync/pkgs
         description: |
