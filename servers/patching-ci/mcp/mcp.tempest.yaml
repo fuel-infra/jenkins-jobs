@@ -5,18 +5,22 @@
     jobs:
       - 'mcp.tempest.test.{name-suffix}':
           name-suffix: mitaka_ovs
+          cluster-name: virtual-mcp-mitaka-ovs
           lab-config-name: virtual-mcp-mitaka-ovs
           test-group: test_mcp11_mitaka_ovs_install
       - 'mcp.tempest.test.{name-suffix}':
           name-suffix: mitaka_dvr
+          cluster-name: virtual-mcp-mitaka-dvr
           lab-config-name: virtual-mcp-mitaka-dvr
           test-group: test_mcp11_mitaka_dvr_install
       - 'mcp.tempest.test.{name-suffix}':
           name-suffix: newton_ovs
+          cluster-name: virtual-mcp-newton-ovs
           lab-config-name: virtual-mcp-newton-ovs
           test-group: test_mcp11_newton_ovs_install
       - 'mcp.tempest.test.{name-suffix}':
           name-suffix: newton_dvr
+          cluster-name: virtual-mcp-newton-dvr
           lab-config-name: virtual-mcp-newton-dvr
           test-group: test_mcp11_newton_dvr_install
 

@@ -32,6 +32,9 @@
     parameters:
       - mcp.tempest.test-params
       - string:
+          name: CLUSTER_NAME
+          default: '{cluster-name}'
+      - string:
           name: LAB_CONFIG_NAME
           default: '{lab-config-name}'
       - string:
