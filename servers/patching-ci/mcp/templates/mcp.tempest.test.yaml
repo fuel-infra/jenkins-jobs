@@ -42,7 +42,7 @@
           default: '{test-group}'
       - string:
           name: ENV_NAME
-          default: '$BUILD_TAG'
+          default: '{env-name}$BUILD_ID'
 
     wrappers:
     - timeout:

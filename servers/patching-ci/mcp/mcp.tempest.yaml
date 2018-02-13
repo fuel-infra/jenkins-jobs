@@ -6,23 +6,27 @@
       - 'mcp.tempest.test.{name-suffix}':
           name-suffix: mitaka_ovs
           cluster-name: virtual-mcp-mitaka-ovs
-          lab-config-name: virtual-mcp-mitaka-ovs
-          test-group: test_mcp11_mitaka_ovs_install
+          lab-config-name: virtual-mcp-sl-os
+          test-group: test_mcp_os_install
+          env-name: mcp.mitaka_ovs
       - 'mcp.tempest.test.{name-suffix}':
           name-suffix: mitaka_dvr
           cluster-name: virtual-mcp-mitaka-dvr
-          lab-config-name: virtual-mcp-mitaka-dvr
-          test-group: test_mcp11_mitaka_dvr_install
+          lab-config-name: virtual-mcp-sl-os
+          test-group: test_mcp_os_install
+          env-name: mcp.mitaka_dvr
       - 'mcp.tempest.test.{name-suffix}':
           name-suffix: newton_ovs
           cluster-name: virtual-mcp-newton-ovs
-          lab-config-name: virtual-mcp-newton-ovs
-          test-group: test_mcp11_newton_ovs_install
+          lab-config-name: virtual-mcp-sl-os
+          test-group: test_mcp_os_install
+          env-name: mcp.newton_ovs
       - 'mcp.tempest.test.{name-suffix}':
           name-suffix: newton_dvr
           cluster-name: virtual-mcp-newton-dvr
-          lab-config-name: virtual-mcp-newton-dvr
-          test-group: test_mcp11_newton_dvr_install
+          lab-config-name: virtual-mcp-sl-os
+          test-group: test_mcp_os_install
+          env-name: mcp.newton_dvr
 
 - project:
     name: 'mcp11.tempest.tests-project'
