@@ -68,7 +68,7 @@
             TEST_BUILD_URL=$BUILD_URL
             TESTRAIL_SUITE=Tempest 16.0.0 base
             TESTRAIL_MILESTONE=MCP1.1
-            ENV_DESCRIPTION={lab-config-name}
+            ENV_DESCRIPTION={cluster-name}
 
     publishers:
       - archive:
