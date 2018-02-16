@@ -99,7 +99,7 @@
             - '{repobranch}'
           refspec: '{refspec}'
           basedir: '{basedir}'
-          wipe-workspace: false
+          wipe-workspace: true
           clean:
             before: true
 
