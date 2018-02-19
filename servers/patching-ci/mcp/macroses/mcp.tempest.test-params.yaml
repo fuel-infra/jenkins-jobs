@@ -13,7 +13,7 @@
           remote: false
       - string:
           name: TESTRAIL_PLAN_NAME
-          default: '[MCP1.1]System_Newtone-${TIMESTAMP}'
+          default: '[MCP1.1]System_Maintenance-${TIMESTAMP}'
       - bool:
           name: SHUTDOWN_ENV_ON_TEARDOWN
           default: true
